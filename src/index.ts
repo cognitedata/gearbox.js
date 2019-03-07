@@ -1,1 +1,2 @@
-export { Component } from './Component';
+export { default } from './TenantSelector';
+export * from './TenantSelector';
