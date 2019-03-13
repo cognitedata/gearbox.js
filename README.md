@@ -2,36 +2,14 @@
     <img src="./cognite_logo.png" alt="Cognite logo" title="Cognite" align="right" height="80" />
 </a>
 
-TenantSelector
+Gearbox.js
 
-Provide a reusable component to allow the user to choose their CDP tenant.
-This component's functionality is described in the storybook, but supports the following options:
-
-```javascript
-<TenantSelector
-  onTenantSelected={(tenant, durationMillis) => void}
-  title="Title of the application"
-  validateTenant={tenant => Promise.resolve(tenant.length % 2 === 0)}
-
-  // All of these are optional.
-  header="Some header text"
-  initialTenant="cognite"
-  loginText="Text on the login button"
-  onInvalidTenant={(tenant, durationMillis) => void}
-  placeholder="Enter some tenant name"
-  unknownMessage="You entered an unknown tenant"
-/>
-```
 
 ==========================
 
 ## Setup
 
 Run `yarn`
-
-## Run
-
-Run `yarn start`
 
 ## Storybook
 
