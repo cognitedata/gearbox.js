@@ -1,14 +1,17 @@
 {
   "name": "@cognite/gearbox",
-  "version": "1.0.0",
-  "description": "",
-  "contributors": [
-    ""
-  ],
+  "version": "0.0.0",
+  "description": "GearBox will be a place for application developers to contribute useful, reusable components across applications",
+  "contributors": [],
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "files": [
     "dist"
+  ],
+  "keywords": [
+    "cognite",
+    "react",
+    "components"
   ],
   "scripts": {
     "build": "yarn clean && rollup -c && yarn esCheck",
@@ -24,10 +27,8 @@
     "test:watch": "yarn jest --watchAll",
     "storybook": "start-storybook -p 6006"
   },
-  "repository": {
-    "type": "git",
-    "url": "gearbox.js"
-  },
+  "repository": "cognitedata/gearbox.js",
+  "homepage": "https://github.com/cognitedata/gearbox.js#readme",
   "license": "Apache-2.0",
   "dependencies": {},
   "devDependencies": {
@@ -90,5 +91,9 @@
   "engines": {
     "npm": ">=4",
     "node": ">=6"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
