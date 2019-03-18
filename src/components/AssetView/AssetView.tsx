@@ -1,5 +1,18 @@
 import React from 'react';
-import {Tag} from 'antd';
+import { Tag } from 'antd';
+
+export interface AssetViewProps {
+  asset: {
+    id: number;
+    name?: string;
+  };
+  onClick?: () => void;
+  // assetId => null
+  onClose?: () => void;
+  // If `true`, use a color based on the asset ID.
+  // If a string, treat it as a color.
+  color?: boolean | string;
+}
 
 const ColorList = [
   '#0097e6',
@@ -36,39 +49,25 @@ const hashCode = (a: string) =>
     .map(c => c.charCodeAt(0))
     .reduce((hash, char) => (31 * hash + char) | 0, 0);
 
-
 const getColor = (value: any) =>
   ColorList[
     // JS supports negative mods, so we need to force it to be positive. BOOOOO!
-  (((typeof value === 'number' ? value : hashCode(value)) %
-    ColorList.length) +
-    ColorList.length) %
-  ColorList.length
-    ];
-
-export interface AssetViewProps {
-  asset: {
-    id: number,
-    name: string,
-  },
-  onClick?: () => void,
-  // assetId => null
-  onClose?: () => void,
-  // If `true`, use a color based on the asset ID.
-  // If a string, treat it as a color.
-  color?: boolean | string,
-};
+    (((typeof value === 'number' ? value : hashCode(value)) %
+      ColorList.length) +
+      ColorList.length) %
+      ColorList.length
+  ];
 
 class AssetView extends React.Component<AssetViewProps> {
   onClick = () => {
     if (this.props.onClick) {
-      this.props.onClick;
+      this.props.onClick();
     }
   };
 
   onClose = () => {
     if (this.props.onClose) {
-      this.props.onClose;
+      this.props.onClose();
     }
   };
 
@@ -77,7 +76,7 @@ class AssetView extends React.Component<AssetViewProps> {
       return null;
     }
 
-    const {color} = this.props;
+    const { color } = this.props;
 
     let tagColor;
     if (typeof color === 'string') {
@@ -88,7 +87,7 @@ class AssetView extends React.Component<AssetViewProps> {
 
     return (
       <Tag
-        style={{display: 'inline-block'}}
+        style={{ display: 'inline-block' }}
         onClick={this.onClick}
         closable={!!this.props.onClose}
         afterClose={this.onClose}
