@@ -3,9 +3,9 @@
 </a>
 
 Gearbox.js
-
-
 ==========================
+[![Build Status](https://travis-ci.org/cognitedata/gearbox.js.svg?branch=master)](https://travis-ci.org/cognitedata/gearbox.js)
+[![codecov](https://codecov.io/gh/cognitedata/gearbox.js/branch/master/graph/badge.svg)](https://codecov.io/gh/cognitedata/gearbox.js)
 
 ## Setup
 
@@ -26,9 +26,3 @@ Run `yarn test`
 ## License
 
 [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
-
-## Release
-
-On a main brunch merge package will be automatically published to npm with updating patch version
-
-Run `yarn publish-module`
