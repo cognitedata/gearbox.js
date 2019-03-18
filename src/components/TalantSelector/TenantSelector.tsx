@@ -1,7 +1,7 @@
 import { Button, Form, Input, Spin } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { sanitizeTenant } from './sanitize';
+import { sanitizeTenant } from '../../sanitize';
 
 enum TenantValidity {
   CHECKING = 0,

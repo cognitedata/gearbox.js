@@ -1,2 +1,2 @@
-export { default } from './TenantSelector';
-export * from './TenantSelector';
+export { default } from './components/TalantSelector/TenantSelector';
+export * from './components/TalantSelector/TenantSelector';

@@ -3,3 +3,7 @@ coverage/
 dist/
 node_modules/
 yarn-error.log
+.yarnclean
+.idea/
+.vscode/
+storybook-static/

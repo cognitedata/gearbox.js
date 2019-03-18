@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 
-import TenantSelector from '../src';
+import TenantSelector from '../..';
 
 storiesOf('TenantSelector', module)
   .add('Success', () => (
