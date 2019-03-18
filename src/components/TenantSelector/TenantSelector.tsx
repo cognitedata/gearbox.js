@@ -49,7 +49,7 @@ class TenantSelector extends React.Component<
     };
   }
 
-  public render() {
+  render() {
     const {
       header,
       loginText,

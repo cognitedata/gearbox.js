@@ -47,7 +47,7 @@ const hashCode = (a: string) =>
   String(a)
     .split('')
     .map(c => c.charCodeAt(0))
-    .reduce((hash, char) => (31 * hash + char) | 0, 0);
+    .reduce((hash, char) => 31 * hash + char || 0, 0);
 
 const getColor = (value: any) =>
   ColorList[
