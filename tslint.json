@@ -5,6 +5,8 @@
     "tslint-react"
   ],
   "rules": {
+    "ordered-imports": [false],
+    "member-access": [true, "no-public"],
     "interface-name": [
       true,
       "never-prefix"

@@ -36,6 +36,7 @@
     "@cognite/metrics": "^0.0.14",
     "@cognite/release-manager": "^0.1.77",
     "@storybook/addon-actions": "^4.1.13",
+    "@storybook/addon-info": "^5.0.3",
     "@storybook/addon-links": "^4.1.13",
     "@storybook/addons": "^4.1.13",
     "@storybook/react": "^4.1.13",
