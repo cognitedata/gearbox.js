@@ -4,6 +4,7 @@ import AssetView from './AssetView';
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
+const INVALID_ASSET = { id: -1 };
 const IAA = {
   id: 7793176078609329,
   path: [7793176078609329],
@@ -34,6 +35,7 @@ storiesOf('AssetView', module)
       inline: true,
     },
   })
+  .add('Missing', () => <AssetView asset={INVALID_ASSET} />)
   .add('Basic', () => <AssetView asset={testAsset} />)
   .add('Colors', () => (
     <div>

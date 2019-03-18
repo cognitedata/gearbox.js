@@ -23,7 +23,7 @@
     "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c tslint.json -p tsconfig.json --fix",
     "prepublishOnly": "yarn build",
     "publish-module": "cognite-release-manager publish-module",
-    "test": "NODE_PATH=src yarn jest",
+    "test": "NODE_PATH=src/ yarn jest",
     "test:watch": "yarn jest --watchAll",
     "storybook": "start-storybook -p 6006"
   },
