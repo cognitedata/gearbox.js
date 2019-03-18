@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "10"
+sudo: false
+install:
+  - yarn
+  - npm install -g codecov
+script:
+  - yarn lint
+  - yarn build
+  - yarn test && codecov

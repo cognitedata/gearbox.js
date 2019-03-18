@@ -1,5 +1,5 @@
+import { Tag } from 'antd';
 import React from 'react';
-import {Tag} from 'antd';
 
 const ColorList = [
   '#0097e6',
@@ -36,48 +36,47 @@ const hashCode = (a: string) =>
     .map(c => c.charCodeAt(0))
     .reduce((hash, char) => (31 * hash + char) | 0, 0);
 
-
 const getColor = (value: any) =>
   ColorList[
     // JS supports negative mods, so we need to force it to be positive. BOOOOO!
-  (((typeof value === 'number' ? value : hashCode(value)) %
-    ColorList.length) +
-    ColorList.length) %
-  ColorList.length
-    ];
+    (((typeof value === 'number' ? value : hashCode(value)) %
+      ColorList.length) +
+      ColorList.length) %
+      ColorList.length
+  ];
 
 export interface AssetViewProps {
   asset: {
-    id: number,
-    name: string,
-  },
-  onClick?: () => void,
+    id: number;
+    name: string;
+  };
+  onClick?: () => void;
   // assetId => null
-  onClose?: () => void,
+  onClose?: () => void;
   // If `true`, use a color based on the asset ID.
   // If a string, treat it as a color.
-  color?: boolean | string,
-};
+  color?: boolean | string;
+}
 
 class AssetView extends React.Component<AssetViewProps> {
-  onClick = () => {
+  public onClick = () => {
     if (this.props.onClick) {
-      this.props.onClick;
+      this.props.onClick();
     }
   };
 
-  onClose = () => {
+  public onClose = () => {
     if (this.props.onClose) {
-      this.props.onClose;
+      this.props.onClose();
     }
   };
 
-  render() {
+  public render() {
     if (!this.props.asset) {
       return null;
     }
 
-    const {color} = this.props;
+    const { color } = this.props;
 
     let tagColor;
     if (typeof color === 'string') {
@@ -88,7 +87,7 @@ class AssetView extends React.Component<AssetViewProps> {
 
     return (
       <Tag
-        style={{display: 'inline-block'}}
+        style={{ display: 'inline-block' }}
         onClick={this.onClick}
         closable={!!this.props.onClose}
         afterClose={this.onClose}
