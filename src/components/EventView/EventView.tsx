@@ -1,11 +1,12 @@
-import React from 'react';
 import Metrics from '@cognite/metrics';
-import Validators from 'utils/Validators';
-import { translate, Trans } from 'react-i18next';
-import styled from 'styled-components';
 import { Button, Modal } from 'antd';
 import ViewEventSidebar from 'components/ViewEventSidebar';
+import React from 'react';
+import { Trans, translate } from 'react-i18next';
+import styled from 'styled-components';
 import { formatDatetime } from 'utils/formatters';
+// import { VApiEvent } from './../../utils/validators';
+import { VApiEvent } from 'utils/validators';
 
 const EventTitle = styled.div`
   font-size: 1.4rem;
@@ -31,32 +32,35 @@ const Container = styled.div`
   margin-top: 32px;
 `;
 
-const propTypes = {
-  event: Validators.apiEvent.isRequired,
-  // Populated by react-i18next.
-  t: Validators.trans.isRequired,
-};
-
 const defaultProps = {};
 
-class EventPreview extends React.Component {
-  state = {};
+export interface EventViewProps {
+  event: VApiEvent;
+  // Populated by react-i18next.
+  t: any;
+}
 
-  onShowDetails = () => {
+export interface EventViewState {
+  showDetails: boolean;
+}
+
+class EventPreview extends React.Component<EventViewProps, EventViewState> {
+  public state: EventViewState = { showDetails: false };
+  public metrics = Metrics.create('EventPreview');
+
+  public onShowDetails = () => {
     this.metrics.track('onShowDetails', {
       eventId: this.props.event.id,
     });
     this.setState({ showDetails: true });
   };
 
-  onCloseDetails = () => {
+  public onCloseDetails = () => {
     this.metrics.track('onCloseDetails');
     this.setState({ showDetails: false });
   };
 
-  metrics = Metrics.create('EventPreview');
-
-  render() {
+  public render() {
     const {
       t,
       event: { startTime, endTime, type, subtype, description, metadata = {} },
@@ -71,7 +75,7 @@ class EventPreview extends React.Component {
         <EventType>{[type, subtype].filter(Boolean).join(' / ')}</EventType>
         <EventTitle>
           {description ||
-          t('noDescription', { defaultValue: 'No description' })}
+            t('noDescription', { defaultValue: 'No description' })}
         </EventTitle>
         <EventDescription>
           <Trans i18nKey="start">Start: {{ startDate }}</Trans>

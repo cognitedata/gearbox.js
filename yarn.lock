@@ -823,6 +823,12 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
+"@cognite/metrics@^0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@cognite/metrics/-/metrics-0.0.14.tgz#b113764935e3efac063d2aa169adcb02277b9f61"
+  dependencies:
+    mixpanel-browser "^2.22.4"
+
 "@cognite/release-manager@^0.1.77":
   version "0.1.77"
   resolved "https://registry.yarnpkg.com/@cognite/release-manager/-/release-manager-0.1.77.tgz#63de36ddd2f7fc43ce35d3908d04b70603c329b8"
@@ -7109,6 +7115,10 @@ mixin-object@^2.0.1:
   dependencies:
     for-in "^0.1.3"
     is-extendable "^0.1.1"
+
+mixpanel-browser@^2.22.4:
+  version "2.27.1"
+  resolved "https://registry.yarnpkg.com/mixpanel-browser/-/mixpanel-browser-2.27.1.tgz#c78d9166802b7373b19096b45e64e45384364ea1"
 
 mkdirp@0.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkdirp@~0.5.1:
   version "0.5.1"
