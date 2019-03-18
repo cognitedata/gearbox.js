@@ -20,7 +20,8 @@
     "jsx-no-lambda": [
       false
     ],
-    "no-var-requires": false
+    "no-var-requires": false,
+    "no-bitwise": false
   },
   "rulesDirectory": [
     "tslint-plugin-prettier"
