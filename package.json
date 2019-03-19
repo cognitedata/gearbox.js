@@ -25,7 +25,7 @@
     "publish-module": "cognite-release-manager publish-module",
     "test": "NODE_PATH=src/ yarn jest",
     "test:watch": "yarn jest --watchAll",
-    "storybook": "start-storybook -p 6006"
+    "storybook": "NODE_PATH=./src start-storybook -p 6006"
   },
   "repository": "cognitedata/gearbox.js",
   "homepage": "https://github.com/cognitedata/gearbox.js#readme",
