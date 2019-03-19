@@ -1,6 +1,30 @@
 import { Tag } from 'antd';
 import React from 'react';
 
+export interface AssetViewProps {
+  asset: {
+    id: number;
+    name?: string;
+    path?: string[];
+    description?: string;
+    metadata?: {
+      ASSETSCOPENAME?: string;
+      DESCRIPTION?: string;
+      NAME?: string;
+      PARENTUID?: string;
+      SOURCE?: string;
+      SOURCEID?: string;
+      SOURCE_DB?: string;
+      SOURCE_TABLE?: string;
+      TYPE?: string;
+      UID?: string;
+    };
+  };
+  onClick?: (id: number) => void;
+  onClose?: () => void;
+  color?: boolean | string;
+}
+
 const ColorList = [
   '#0097e6',
   '#e1b12c',
@@ -34,7 +58,7 @@ const hashCode = (a: string) =>
   String(a)
     .split('')
     .map(c => c.charCodeAt(0))
-    .reduce((hash, char) => (31 * hash + char) | 0, 0);
+    .reduce((hash, char) => 31 * hash + char || 0, 0);
 
 const getColor = (value: any) =>
   ColorList[
@@ -45,23 +69,10 @@ const getColor = (value: any) =>
       ColorList.length
   ];
 
-export interface AssetViewProps {
-  asset: {
-    id: number;
-    name: string;
-  };
-  onClick?: () => void;
-  // assetId => null
-  onClose?: () => void;
-  // If `true`, use a color based on the asset ID.
-  // If a string, treat it as a color.
-  color?: boolean | string;
-}
-
 class AssetView extends React.Component<AssetViewProps> {
   public onClick = () => {
     if (this.props.onClick) {
-      this.props.onClick();
+      this.props.onClick(this.props.asset.id);
     }
   };
 
