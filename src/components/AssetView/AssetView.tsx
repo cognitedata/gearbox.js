@@ -1,16 +1,27 @@
-import React from 'react';
 import { Tag } from 'antd';
+import React from 'react';
 
 export interface AssetViewProps {
   asset: {
     id: number;
     name?: string;
+    path?: string[];
+    description?: string;
+    metadata?: {
+      ASSETSCOPENAME?: string;
+      DESCRIPTION?: string;
+      NAME?: string;
+      PARENTUID?: string;
+      SOURCE?: string;
+      SOURCEID?: string;
+      SOURCE_DB?: string;
+      SOURCE_TABLE?: string;
+      TYPE?: string;
+      UID?: string;
+    };
   };
-  onClick?: () => void;
-  // assetId => null
+  onClick?: (id: number) => void;
   onClose?: () => void;
-  // If `true`, use a color based on the asset ID.
-  // If a string, treat it as a color.
   color?: boolean | string;
 }
 
@@ -59,19 +70,19 @@ const getColor = (value: any) =>
   ];
 
 class AssetView extends React.Component<AssetViewProps> {
-  onClick = () => {
+  public onClick = () => {
     if (this.props.onClick) {
-      this.props.onClick();
+      this.props.onClick(this.props.asset.id);
     }
   };
 
-  onClose = () => {
+  public onClose = () => {
     if (this.props.onClose) {
       this.props.onClose();
     }
   };
 
-  render() {
+  public render() {
     if (!this.props.asset) {
       return null;
     }

@@ -1,4 +1,4 @@
-/* eslint-disable react/no-multi-comp */
+// @ts-ignore
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
@@ -6,8 +6,13 @@ import React from 'react';
 import TenantSelector from './TenantSelector';
 
 storiesOf('TenantSelector', module)
+  .addParameters({
+    info: {
+      inline: true,
+    },
+  })
   .add('Success', () => (
-    <React.Fragment>
+    <div>
       <TenantSelector
         title="Example app"
         onTenantSelected={action('onTenantSelected')}
@@ -25,10 +30,10 @@ storiesOf('TenantSelector', module)
         onTenantSelected={action('onTenantSelected')}
         validateTenant={() => Promise.resolve(true)}
       />
-    </React.Fragment>
+    </div>
   ))
   .add('Error', () => (
-    <React.Fragment>
+    <div>
       <TenantSelector
         title="Example app"
         onTenantSelected={action('onTenantSelected')}
@@ -40,7 +45,7 @@ storiesOf('TenantSelector', module)
         unknownMessage="ARE YOU NUTS?!"
         validateTenant={() => Promise.reject(new Error('Unknown'))}
       />
-    </React.Fragment>
+    </div>
   ))
   .add('Loads forever', () => (
     <TenantSelector
@@ -50,7 +55,7 @@ storiesOf('TenantSelector', module)
     />
   ))
   .add('Initial tenant', () => (
-    <React.Fragment>
+    <div>
       <TenantSelector
         title="Example app"
         initialTenant="sample-tenant"
@@ -63,10 +68,10 @@ storiesOf('TenantSelector', module)
         onTenantSelected={action('onTenantSelected')}
         validateTenant={() => Promise.resolve(true)}
       />
-    </React.Fragment>
+    </div>
   ))
   .add('Placeholder tenant', () => (
-    <React.Fragment>
+    <div>
       <TenantSelector
         title="Example app"
         placeholder="Enter your company's CDP project name"
@@ -80,5 +85,5 @@ storiesOf('TenantSelector', module)
         onTenantSelected={action('onTenantSelected')}
         validateTenant={() => Promise.resolve(true)}
       />
-    </React.Fragment>
+    </div>
   ));

@@ -6,7 +6,6 @@
   ],
   "rules": {
     "ordered-imports": [false],
-    "member-access": [true, "no-public"],
     "interface-name": [
       true,
       "never-prefix"
@@ -23,7 +22,7 @@
       false
     ],
     "no-var-requires": false,
-    "jsx-wrap-multiline": false
+    "no-bitwise": false
   },
   "rulesDirectory": [
     "tslint-plugin-prettier"

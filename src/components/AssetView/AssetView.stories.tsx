@@ -1,9 +1,9 @@
+// @ts-ignore
 import { action } from '@storybook/addon-actions';
 import AssetView from './AssetView';
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-const LOAD_FOREVER_ASSET = { id: 0 };
 const INVALID_ASSET = { id: -1 };
 const IAA = {
   id: 7793176078609329,
@@ -30,15 +30,19 @@ const testAsset = {
 };
 
 storiesOf('AssetView', module)
-  .add('Loading', () => <AssetView asset={LOAD_FOREVER_ASSET} />)
+  .addParameters({
+    info: {
+      inline: true,
+    },
+  })
   .add('Missing', () => <AssetView asset={INVALID_ASSET} />)
   .add('Basic', () => <AssetView asset={testAsset} />)
   .add('Colors', () => (
-    <React.Fragment>
+    <div>
       <AssetView asset={testAsset} color={false} />
       <AssetView asset={testAsset} color="orange" />
       <AssetView asset={testAsset} color={true} />
-    </React.Fragment>
+    </div>
   ))
   .add('Events', () => (
     <AssetView

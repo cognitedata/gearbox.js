@@ -1,7 +1,7 @@
 import { Button, Form, Input, Spin } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { sanitizeTenant } from '../../sanitize';
+import { sanitizeTests } from 'sanitize';
 
 enum TenantValidity {
   CHECKING = 0,
@@ -104,7 +104,7 @@ class TenantSelector extends React.Component<
 
   private onTenantChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
-      tenant: sanitizeTenant(e.target.value),
+      tenant: sanitizeTests(e.target.value),
       validity: TenantValidity.UNKNOWN,
     });
   };
