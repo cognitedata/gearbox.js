@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Button } from 'antd';
 import React from 'react';
-import { Trans, withTranslation, WithTranslation } from 'react-i18next';
+import { Trans, Translation, WithTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { formatDatetime } from 'utils/formatters';
 import { VApiEvent, VOnClick } from 'utils/validators';
@@ -30,14 +30,13 @@ const Container = styled.div`
   margin-top: 32px;
 `;
 
-export interface EventPreviewProps extends WithTranslation {
+export interface EventPreviewProps {
   event: VApiEvent;
   onShowDetails: VOnClick;
 }
 
 const EventPreview = (props: EventPreviewProps) => {
   const {
-    t,
     onShowDetails,
     event: { startTime, endTime, type, subtype, description, metadata = {} },
   } = props;
@@ -45,12 +44,12 @@ const EventPreview = (props: EventPreviewProps) => {
   const endDate = formatDatetime(endTime, 'Ongoing');
   const metadataCount = Object.keys(metadata).length;
 
+  // todo: add proper translation for description
+
   return (
     <Container key="container">
       <EventType>{[type, subtype].filter(Boolean).join(' / ')}</EventType>
-      <EventTitle>
-        {description || t('noDescription', { defaultValue: 'No description' })}
-      </EventTitle>
+      <EventTitle>{description || 'No description'}</EventTitle>
       <EventDescription>
         <Trans i18nKey="start">Start: {startDate}</Trans>
         <br />
@@ -68,4 +67,4 @@ const EventPreview = (props: EventPreviewProps) => {
   );
 };
 
-export default withTranslation('EventView')(EventPreview);
+export default EventPreview;

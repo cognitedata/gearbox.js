@@ -27,6 +27,11 @@ const onShowDetails: VOnClick = (e: SyntheticEvent) => {
 };
 
 storiesOf('EventPreview', module)
+  .addParameters({
+    info: {
+      inline: true,
+    },
+  })
   .add('Base', () => (
     <EventPreview event={EVENTS[0]} onShowDetails={onShowDetails} />
   ))
