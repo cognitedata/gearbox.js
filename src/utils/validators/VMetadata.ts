@@ -1,3 +1,3 @@
-export default interface VMetadata {
+export interface VMetadata {
   [name: string]: string;
 }

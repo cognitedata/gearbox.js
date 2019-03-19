@@ -1,4 +1,4 @@
-import VApiEvent from './VApiEvent';
-import VMetadata from './VMetadata';
-
-export { VApiEvent, VMetadata };
+export * from './VApiEvent';
+export * from './VMetadata';
+export * from './VAnnotation';
+export * from './VUserActions';

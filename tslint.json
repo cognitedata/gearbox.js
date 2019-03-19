@@ -22,7 +22,8 @@
     "jsx-no-lambda": [
       false
     ],
-    "no-var-requires": false
+    "no-var-requires": false,
+    "jsx-wrap-multiline": false
   },
   "rulesDirectory": [
     "tslint-plugin-prettier"

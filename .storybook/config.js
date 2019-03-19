@@ -2,7 +2,6 @@ import React from 'react';
 import { addDecorator, configure } from '@storybook/react';
 import 'antd/dist/antd.css';
 
-
 const styles = {
   margin: '1em',
 };

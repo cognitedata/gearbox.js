@@ -1,6 +1,6 @@
-import VMetadata from './VMetadata';
+import { VMetadata } from './VMetadata';
 
-export default interface VApiEvent {
+export interface VApiEvent {
   id: number | string;
   startTime: number;
   endTime: number;
