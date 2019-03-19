@@ -44,12 +44,12 @@ const EventPreview = (props: EventPreviewProps) => {
   const endDate = formatDatetime(endTime, 'Ongoing');
   const metadataCount = Object.keys(metadata).length;
 
-  // todo: add proper translation for description
-
   return (
     <Container key="container">
       <EventType>{[type, subtype].filter(Boolean).join(' / ')}</EventType>
-      <EventTitle>{description || 'No description'}</EventTitle>
+      <EventTitle>
+        {description || <Trans i18nKey="noDescription">No description</Trans>}
+      </EventTitle>
       <EventDescription>
         <Trans i18nKey="start">Start: {startDate}</Trans>
         <br />
