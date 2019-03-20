@@ -17,12 +17,10 @@
     "build": "yarn clean && rollup -c && yarn esCheck",
     "build-storybook": "build-storybook",
     "clean": "rm -rf dist",
-    "deploy-storybook": "cognite-release-manager deploy-storybook -z storybook.tar.gz --output=storybook.md --repo gearbox.js",
     "esCheck": "es-check es5 './dist/index.js'",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c tslint.json -p tsconfig.json --fix",
     "prepublishOnly": "yarn build",
-    "publish-module": "cognite-release-manager publish-module",
     "test": "yarn jest",
     "test:watch": "yarn jest --watchAll",
     "storybook": "start-storybook -p 6006"
