@@ -1,4 +1,5 @@
 import { VMetadata } from './VMetadata';
+import { id } from './AssetTypes';
 
 export interface VApiEvent {
   id: number | string;
