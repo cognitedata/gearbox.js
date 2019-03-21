@@ -9,3 +9,11 @@ script:
   - yarn lint
   - yarn build
   - yarn test && codecov
+  - yarn build-storybook
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: .storybook
+  on:
+    branch: master
