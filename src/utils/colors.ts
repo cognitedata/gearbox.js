@@ -35,7 +35,7 @@ const hashCode = (a: string) =>
 
 export const getColor = (value: number | string) =>
   ColorList[
-    // JS supports negative mods, so we need to force it to be positive. BOOOOO!
+    // JS supports negative mods, so we need to force it to be positive.
     (((typeof value === 'number' ? value : hashCode(value)) %
       ColorList.length) +
       ColorList.length) %
