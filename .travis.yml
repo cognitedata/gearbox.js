@@ -2,14 +2,20 @@ language: node_js
 node_js:
   - "10"
 sudo: false
+before_install:
+  - openssl aes-256-cbc -K $encrypted_662eeefc1dcf_key -iv $encrypted_662eeefc1dcf_iv
+    -in gcs-service-account.json.enc -out gcs-service-account.json
+    -d
 install:
   - yarn
   - npm install -g codecov
+  - yarn global add @cognite/preview-cli@0.0.6
 script:
   - yarn lint
   - yarn build
   - yarn test && codecov
   - yarn build-storybook
+  - '[ "${TRAVIS_PULL_REQUEST}" != "false" ] && GOOGLE_APPLICATION_CREDENTIALS=gcs-service-account.json preview upload storybook-static "gearboxjs/pr-${TRAVIS_PULL_REQUEST}" || true'
 deploy:
   provider: pages
   skip_cleanup: true
