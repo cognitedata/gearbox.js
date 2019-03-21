@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Button } from 'antd';
 import React from 'react';
-import { Trans, Translation, WithTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import styled from 'styled-components';
 import { formatDatetime } from 'utils/formatters';
 import { VApiEvent, VOnClick } from 'utils/validators';
