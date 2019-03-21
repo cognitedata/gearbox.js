@@ -15,7 +15,6 @@ interface EventAddonsProp extends VApiEvent {
 interface AssetEventsPanelProps extends TableDesignType {
   columns?: TableColumnType[];
   events: VApiEvent[];
-  toggleSelectedEvent?: () => void;
 }
 
 const StyledTable = styled(Table)`
@@ -122,7 +121,6 @@ class AssetEventsPanel extends Component<
     const {
       columns = defaultColumns,
       events,
-      toggleSelectedEvent,
       pagination = { pageSize: 12 },
       scroll,
       bordered = false,
