@@ -1,7 +1,8 @@
 import { Tag } from 'antd';
 import React from 'react';
+import { VOnClick } from 'utils/validators';
 
-export interface AssetViewProps {
+interface AssetViewProps {
   asset: {
     id: number;
     name?: string;
@@ -20,7 +21,7 @@ export interface AssetViewProps {
       UID?: string;
     };
   };
-  onClick?: (id: number) => void;
+  onClick?: VOnClick;
   onClose?: () => void;
   color?: boolean | string;
 }
@@ -69,45 +70,31 @@ const getColor = (value: any) =>
       ColorList.length
   ];
 
-class AssetView extends React.Component<AssetViewProps> {
-  public onClick = () => {
-    if (this.props.onClick) {
-      this.props.onClick(this.props.asset.id);
-    }
-  };
+const AssetView = (props: AssetViewProps) => {
+  const { asset, onClick, onClose, color } = props;
 
-  public onClose = () => {
-    if (this.props.onClose) {
-      this.props.onClose();
-    }
-  };
-
-  public render() {
-    if (!this.props.asset) {
-      return null;
-    }
-
-    const { color } = this.props;
-
-    let tagColor;
-    if (typeof color === 'string') {
-      tagColor = color;
-    } else if (typeof color === 'boolean' && color) {
-      tagColor = getColor(+this.props.asset.id);
-    }
-
-    return (
-      <Tag
-        style={{ display: 'inline-block' }}
-        onClick={this.onClick}
-        closable={!!this.props.onClose}
-        afterClose={this.onClose}
-        color={tagColor}
-      >
-        {this.props.asset.name || ''}
-      </Tag>
-    );
+  if (!props.asset) {
+    return null;
   }
-}
+
+  let tagColor;
+  if (typeof color === 'string') {
+    tagColor = color;
+  } else if (typeof color === 'boolean' && color) {
+    tagColor = getColor(+asset.id);
+  }
+
+  return (
+    <Tag
+      style={{ display: 'inline-block' }}
+      onClick={onClick}
+      closable={!!onClose}
+      afterClose={onClose}
+      color={tagColor}
+    >
+      {asset.name || ''}
+    </Tag>
+  );
+};
 
 export default AssetView;
