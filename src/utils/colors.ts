@@ -27,22 +27,22 @@ export const ColorList = [
   '#5574A6',
 ];
 
-const hashCode = a =>
+const hashCode = (a: string) =>
   String(a)
     .split('')
     .map(c => c.charCodeAt(0))
     .reduce((hash, char) => (31 * hash + char) | 0, 0);
 
-export const getColor = value =>
+export const getColor = (value: number | string) =>
   ColorList[
-    // JS supports negative mods, so we need to force it to be positive. BOOOOO!
-  (((typeof value === 'number' ? value : hashCode(value)) %
-    ColorList.length) +
-    ColorList.length) %
-  ColorList.length
-    ];
+    // JS supports negative mods, so we need to force it to be positive.
+    (((typeof value === 'number' ? value : hashCode(value)) %
+      ColorList.length) +
+      ColorList.length) %
+      ColorList.length
+  ];
 
-export const getColorFromPercentage = value => {
+export const getColorFromPercentage = (value: number) => {
   const hue = (value * 120).toString(10);
   return ['hsl(', hue, ',69%,72%)'].join('');
 };
