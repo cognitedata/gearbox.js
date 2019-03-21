@@ -7,7 +7,9 @@ configure({ adapter: new Adapter() });
 
 describe('TenantSelector', () => {
   it('Renders without exploding', done => {
-    const wrapper = mount(<AssetView asset={{ id: 123, name: 'AAI' }} onClose={done.fail} />);
+    const wrapper = mount(
+      <AssetView asset={{ id: 123, name: 'AAI' }} onClose={done.fail} />
+    );
     expect(wrapper).toHaveLength(1);
     done();
   });

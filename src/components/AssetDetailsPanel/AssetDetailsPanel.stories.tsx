@@ -36,9 +36,7 @@ storiesOf('AssetDetailsPanel', module)
   .add('Empty', () => (
     <AssetDetailsPanel dataSource={[]} columns={AssetDetailsColumns} />
   ))
-  .add(
-    'No borders',
-    () => (
+  .add('No borders', () => (
     <AssetDetailsPanel
       dataSource={ASSET_META_DATA_SOURCE}
       columns={AssetDetailsColumns}
