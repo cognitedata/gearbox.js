@@ -238,22 +238,6 @@ const AssetSearchFormHOC = Form.create({
       onChange(allValues);
     }
   },
-  mapPropsToFields(props: AssetSearchFormProps) {
-    const { value } = props;
-
-    if (!value) {
-      return {};
-    }
-    const { name, description, metadata } = value;
-
-    return {
-      name: Form.createFormField({ value: name }),
-      description: Form.createFormField({ value: description }),
-      metadata: Form.createFormField({
-        value: metadata,
-      }),
-    };
-  },
 })(AssetSearchForm);
 
 AssetSearchFormHOC.displayName = 'AssetSearchForm';

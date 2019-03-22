@@ -168,7 +168,6 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
               }
             />
           )}
-          {/*</Input.Group>*/}
         </InputGroup>
         <Modal
           align={null}
