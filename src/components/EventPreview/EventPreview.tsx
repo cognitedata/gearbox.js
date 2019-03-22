@@ -1,10 +1,10 @@
 // @ts-ignore
 import { Button } from 'antd';
 import React from 'react';
-import { Trans } from 'react-i18next';
 import styled from 'styled-components';
 import { formatDatetime } from 'utils/formatters';
-import { VApiEvent, VOnClick } from 'utils/validators';
+import { VApiEvent, VMetadata, VOnClick } from 'utils/validators';
+import { ComplexString } from 'utils/helpers';
 
 const EventTitle = styled.div`
   font-size: 1.4rem;
@@ -18,6 +18,9 @@ const EventType = styled.div`
 const EventDescription = styled.div`
   font-size: 1.1rem;
   padding-bottom: 16px;
+  p {
+    margin: 0;
+  }
 `;
 
 const Container = styled.div`
@@ -33,13 +36,29 @@ const Container = styled.div`
 export interface EventPreviewProps {
   event: VApiEvent;
   onShowDetails: VOnClick;
+  strings: VMetadata;
 }
 
-const EventPreview = (props: EventPreviewProps) => {
+const EventPreview = ({
+  onShowDetails,
+  event,
+  strings = {
+    noDescription: 'No description',
+    start: 'Start',
+    end: 'End',
+    details: 'Explore event details',
+    metadataSummary: 'Contains {{count}} additional pieces of data',
+  },
+}: EventPreviewProps) => {
   const {
-    onShowDetails,
-    event: { startTime, endTime, type, subtype, description, metadata = {} },
-  } = props;
+    startTime,
+    endTime,
+    type,
+    subtype,
+    description,
+    metadata = {},
+  } = event;
+  const { noDescription, start, end, details, metadataSummary } = strings;
   const startDate = formatDatetime(startTime, 'Unknown');
   const endDate = formatDatetime(endTime, 'Ongoing');
   const metadataCount = Object.keys(metadata).length;
@@ -47,21 +66,20 @@ const EventPreview = (props: EventPreviewProps) => {
   return (
     <Container key="container">
       <EventType>{[type, subtype].filter(Boolean).join(' / ')}</EventType>
-      <EventTitle>
-        {description || <Trans i18nKey="noDescription">No description</Trans>}
-      </EventTitle>
+      <EventTitle>{description || noDescription}</EventTitle>
       <EventDescription>
-        <Trans i18nKey="start">Start: {startDate}</Trans>
-        <br />
-        <Trans i18nKey="end">End: {endDate}</Trans>
+        <p>
+          {start}: {startDate}
+        </p>
+        <p>
+          {end}: {endDate}
+        </p>
       </EventDescription>
       <EventDescription>
-        <Trans i18nKey="metadataSummary" count={metadataCount}>
-          Contains {metadataCount} additional pieces of data
-        </Trans>
+        <ComplexString input={metadataSummary} count={metadataCount} />
       </EventDescription>
-      <Button type="primary" onClick={onShowDetails}>
-        <Trans i18nKey="details">Explore event details</Trans>
+      <Button htmlType="button" type="primary" onClick={onShowDetails}>
+        {details}
       </Button>
     </Container>
   );
