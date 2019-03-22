@@ -16,7 +16,7 @@ const CenterDecorator = storyFn => <div style={styles}>{storyFn()}</div>;
 addDecorator(CenterDecorator);
 
 const infoDecorator = (storyFn, options) => {
-  if (!options.parameters.info) return storyFn();
+  if (!options.parameters.info) options.parameters.info = {};
 
   const component = Components[options.kind];
 

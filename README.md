@@ -13,9 +13,7 @@ Run `yarn`
 
 ## Storybook
 
-To showcase your component you can use storybooks by introducing different stories for your component
-
-Run `yarn storybook`
+See the up-to-date storybook [here](https://cognitedata.github.io/gearbox.js).
 
 ## Tests
 

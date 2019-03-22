@@ -1,6 +1,6 @@
 // @ts-ignore
 import { action } from '@storybook/addon-actions';
-import AssetView from './AssetView';
+import AssetView from 'components/AssetView/AssetView';
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
