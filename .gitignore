@@ -7,3 +7,4 @@ yarn-error.log
 .idea/
 .vscode/
 storybook-static/
+package-lock.json
