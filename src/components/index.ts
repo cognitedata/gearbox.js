@@ -6,6 +6,7 @@ import AssetDetailsPanel from './AssetDetailsPanel/AssetDetailsPanel';
 import AssetSearch from './AssetSearch/AssetSearch';
 import AssetSearchForm from './AssetSearchForm/AssetSearchForm';
 import RootAssetSelect from './RootAssetSelect/RootAssetSelect';
+import EventTimeline from './EventTimeline/EventTimeline';
 
 export {
   TenantSelector,
@@ -15,4 +16,5 @@ export {
   AssetSearchForm,
   RootAssetSelect,
   AssetDetailsPanel,
+  EventTimeline,
 };
