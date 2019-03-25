@@ -28,16 +28,23 @@ const RootAssetSelectStyled = styled(RootAssetSelect)`
   width: 35%;
 `;
 
+export const defaultStrings: VMetadata = {
+  changeSearch: 'Change search',
+  clear: 'Clear',
+  searchPlaceholder: 'Search for an asset',
+  search: 'Search',
+};
+
 export interface AssetSearchProps {
-  onSearchResults: VOnAssetSearchResult;
-  onSearch: VOnAssetSearch;
-  onAssetSelected: VIdCallback;
-  onFilterIconClick: VEmptyCallback;
   fetchingLimit: number;
   debounceTime: number;
   boostName: boolean;
   assets: VAsset[];
   strings: VMetadata;
+  onSearchResults?: VOnAssetSearchResult;
+  onSearch?: VOnAssetSearch;
+  onAssetSelected?: VIdCallback;
+  onFilterIconClick?: VEmptyCallback;
 }
 
 export interface AssetSearchState {
@@ -52,12 +59,7 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
     fetchingLimit: 25,
     debounceTime: 200,
     boostName: true,
-    strings: {
-      changeSearch: 'Change search',
-      clear: 'Clear',
-      searchPlaceholder: 'Search for an asset',
-      search: 'Search',
-    },
+    strings: {},
   };
 
   onSearch = debounce(() => {
@@ -73,13 +75,15 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
       query,
     };
 
-    if (!query && !advancedSearch) {
+    if (!query && !advancedSearch && onSearchResults) {
       onSearchResults(null, apiQuery);
 
       return;
     }
 
-    onSearch(apiQuery);
+    if (onSearch) {
+      onSearch(apiQuery);
+    }
   }, this.props.debounceTime);
 
   constructor(props: AssetSearchProps) {
@@ -95,7 +99,9 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
   onFilterIconClick = () => {
     const { onFilterIconClick } = this.props;
 
-    onFilterIconClick();
+    if (onFilterIconClick) {
+      onFilterIconClick();
+    }
 
     this.setState({
       isModalOpen: true,
@@ -111,7 +117,9 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
       query: '',
     });
 
-    onSearchResults(null);
+    if (onSearchResults) {
+      onSearchResults(null);
+    }
   };
 
   onModalOk = () => {
@@ -121,17 +129,18 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
   onAssetSelected = (assetId: VId) => {
     const { onAssetSelected } = this.props;
 
-    onAssetSelected(assetId);
+    if (onAssetSelected) {
+      onAssetSelected(assetId);
+    }
 
     this.setState({ assetId }, this.onSearch);
   };
 
   render() {
     const { assetId, query, isModalOpen, advancedSearch } = this.state;
-    const {
-      assets,
-      strings: { changeSearch, clear, searchPlaceholder, search },
-    } = this.props;
+    const { assets, strings } = this.props;
+    const lang = { ...defaultStrings, ...strings };
+    const { changeSearch, clear, searchPlaceholder, search } = lang;
 
     return (
       <React.Fragment>

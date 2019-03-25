@@ -33,35 +33,31 @@ const Container = styled.div`
   margin-top: 32px;
 `;
 
+export const defaultStrings: VMetadata = {
+  noDescription: 'No description',
+  start: 'Start',
+  end: 'End',
+  details: 'Explore event details',
+  metadataSummary: 'Contains {{count}} additional pieces of data',
+};
+
 export interface EventPreviewProps {
   event: VApiEvent;
   onShowDetails: VOnClick;
-  strings: VMetadata;
+  strings?: VMetadata;
 }
 
 const EventPreview = ({
   onShowDetails,
   event,
-  strings = {
-    noDescription: 'No description',
-    start: 'Start',
-    end: 'End',
-    details: 'Explore event details',
-    metadataSummary: 'Contains {{count}} additional pieces of data',
-  },
+  strings = {},
 }: EventPreviewProps) => {
-  const {
-    startTime,
-    endTime,
-    type,
-    subtype,
-    description,
-    metadata = {},
-  } = event;
-  const { noDescription, start, end, details, metadataSummary } = strings;
+  const lang = { ...defaultStrings, ...strings };
+  const { startTime, endTime, type, subtype, description, metadata } = event;
+  const { noDescription, start, end, details, metadataSummary } = lang;
   const startDate = formatDatetime(startTime, 'Unknown');
   const endDate = formatDatetime(endTime, 'Ongoing');
-  const metadataCount = Object.keys(metadata).length;
+  const metadataCount = metadata ? Object.keys(metadata).length : 0;
 
   return (
     <Container key="container">

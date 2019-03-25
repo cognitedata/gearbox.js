@@ -2,6 +2,11 @@ import React from 'react';
 import { Select } from 'antd';
 import { VId, VAsset, VMetadata, VIdCallback } from 'utils/validators';
 
+export const defaultStrings: VMetadata = {
+  loading: 'Loading',
+  all: '-- all --',
+};
+
 export interface RootAssetSelectProps {
   assetId: VId;
   assets: VAsset[];
@@ -23,10 +28,7 @@ class RootAssetSelect extends React.Component<
     assetId: 0,
     allowAll: true,
     className: '',
-    strings: {
-      loading: 'Loading',
-      all: '-- all --',
-    },
+    strings: {},
   };
 
   constructor(props: RootAssetSelectProps) {
@@ -47,12 +49,10 @@ class RootAssetSelect extends React.Component<
   };
 
   render() {
-    const {
-      allowAll,
-      assets,
-      className,
-      strings: { loading, all },
-    } = this.props;
+    const { allowAll, assets, className, strings } = this.props;
+
+    const lang = { ...defaultStrings, ...strings };
+    const { all, loading } = lang;
     const { current } = this.state;
 
     if (assets === null || !assets.length) {

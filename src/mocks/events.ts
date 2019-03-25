@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 const TEMPLATE = {
   id: 33965918626,
@@ -157,38 +157,26 @@ export const EVENTS = [
   },
 ];
 
-export const DUMMY_EVENTS = [
-  {
-    assetIds: [1],
-    description: '#1',
-    id: 1,
-    startTime: +moment().subtract(5, 'd'),
-    endTime: +moment().subtract(2, 'd'),
-    type: 'Work Order',
-    subtype: 'VAL',
-  },
-  {
-    assetIds: [2],
-    description: '#2',
-    id: 2,
-    startTime: +moment().subtract(9, 'd'),
-    type: 'Work Order',
-    subtype: 'SKA',
-    metadata: {
-      KEY: 'VALUE',
-      ANOTHER_KEY: 'ANOTHER VALUE',
-    },
-  },
-  {
-    assetIds: [3],
-    description: '#3',
-    id: 3,
-    startTime: +moment().subtract(75, 'd'),
-    endTime: +moment().subtract(4, 'd'),
-    type: 'RULE_BROKEN',
-    subtype: '-4HG5N4R@$Y5Y',
-  },
+export const eventTimelineDataSrc = [
+  [1, 1553423807995, 1553510207995, 'red', 0.2, 0.0],
+  [2, +moment().subtract(1, 'd'), +moment().add(1, 'd'), 'blue', 1.0, 1.0],
+  [3, +moment(), +moment().add(1, 'd'), 'green', 0.8, 1.0],
+  [4, +moment(), +moment(), 'orange', 1, 1],
 ];
+
+export const eventTimelineDataObject = {
+  id: 1,
+  min: 1553423807995,
+  max: 1553510207995,
+  color: 'red',
+  fillOpacity: 0.2,
+  strokeOpacity: 0.0,
+};
+
+export const eventPreviewStrings = {
+  metadataSummary: 'Contains {{count}} additional pieces of data',
+  noDescription: 'No description',
+};
 
 export const generateEventTimelineData = (
   id: number,

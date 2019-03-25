@@ -27,6 +27,16 @@ const formItemLayoutWithoutLabel = {
   },
 };
 
+export const defaultStrings: VMetadata = {
+  metadataLabel: 'Metadata',
+  metadataKey: 'Key',
+  metadataValue: 'Value',
+  nameField: 'Name',
+  descriptionField: 'Description',
+  addMetadata: 'Add more metadata to search',
+  search: 'Search',
+};
+
 export interface AssetSearchFormProps {
   form: WrappedFormUtils;
   value: VAdvancedSearch | null;
@@ -48,17 +58,10 @@ export const AssetSearchForm = ({
   onPressEnter,
   onChange,
   value,
-  strings = {
-    metadataLabel: 'Metadata',
-    metadataKey: 'Key',
-    metadataValue: 'Value',
-    nameField: 'Name',
-    descriptionField: 'Description',
-    addMetadata: 'Add more metadata to search',
-    search: 'Search',
-  },
+  strings = {},
 }: AssetSearchFormProps) => {
   const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
+  const lang = { ...defaultStrings, ...strings };
   const {
     metadataLabel,
     metadataKey,
@@ -67,7 +70,7 @@ export const AssetSearchForm = ({
     descriptionField,
     addMetadata,
     search,
-  } = strings;
+  } = lang;
 
   const submit = () => {
     if (onSubmit) {
