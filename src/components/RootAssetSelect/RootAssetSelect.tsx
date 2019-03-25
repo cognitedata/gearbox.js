@@ -1,11 +1,11 @@
 import React from 'react';
 import { Select } from 'antd';
-import { VId, VAsset, VMetadata, VOnAssetSelected } from 'utils/validators';
+import { VId, VAsset, VMetadata, VIdCallback } from 'utils/validators';
 
 export interface RootAssetSelectProps {
   assetId: VId;
   assets: VAsset[];
-  onAssetSelected: VOnAssetSelected;
+  onAssetSelected: VIdCallback;
   className: string;
   allowAll: boolean;
   strings: VMetadata;

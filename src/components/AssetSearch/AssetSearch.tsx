@@ -12,7 +12,7 @@ import {
   VApiQuery,
   VOnAssetSearchResult,
   VOnAssetSearch,
-  VOnAssetSelected,
+  VIdCallback,
   VEmptyCallback,
 } from 'utils/validators';
 
@@ -31,7 +31,7 @@ const RootAssetSelectStyled = styled(RootAssetSelect)`
 export interface AssetSearchProps {
   onSearchResults: VOnAssetSearchResult;
   onSearch: VOnAssetSearch;
-  onAssetSelected: VOnAssetSelected;
+  onAssetSelected: VIdCallback;
   onFilterIconClick: VEmptyCallback;
   fetchingLimit: number;
   debounceTime: number;

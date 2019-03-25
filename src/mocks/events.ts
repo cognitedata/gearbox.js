@@ -189,3 +189,19 @@ export const DUMMY_EVENTS = [
     subtype: '-4HG5N4R@$Y5Y',
   },
 ];
+
+export const generateEventTimelineData = (
+  id: number,
+  min: number,
+  max: number,
+  color: string,
+  fillOpacity: number,
+  strokeOpacity: number
+) => ({
+  id,
+  min,
+  max,
+  color,
+  fillOpacity,
+  strokeOpacity,
+});

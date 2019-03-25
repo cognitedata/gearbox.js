@@ -29,6 +29,7 @@
   "homepage": "https://github.com/cognitedata/gearbox.js#readme",
   "license": "Apache-2.0",
   "dependencies": {
+    "d3": "^5.9.2",
     "lodash": "^4.17.11",
     "moment-timezone": "^0.5.23",
     "uuid": "^3.3.2"
@@ -42,6 +43,7 @@
     "@storybook/addon-links": "^4.1.13",
     "@storybook/addons": "^4.1.13",
     "@storybook/react": "^4.1.13",
+    "@types/d3": "^5.7.1",
     "@types/enzyme": "^3.9.0",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/jest": "^24.0.6",
