@@ -3,6 +3,7 @@ import TenantSelector from './TenantSelector/TenantSelector';
 import AssetView from './AssetView/AssetView';
 import EventPreview from './EventPreview/EventPreview';
 import AssetDetailsPanel from './AssetDetailsPanel/AssetDetailsPanel';
+import AssetEventsPanel from './AssetEventsPanel/AssetEventsPanel';
 import AssetSearch from './AssetSearch/AssetSearch';
 import AssetSearchForm from './AssetSearchForm/AssetSearchForm';
 import RootAssetSelect from './RootAssetSelect/RootAssetSelect';
@@ -16,5 +17,6 @@ export {
   AssetSearchForm,
   RootAssetSelect,
   AssetDetailsPanel,
+  AssetEventsPanel,
   EventTimeline,
 };

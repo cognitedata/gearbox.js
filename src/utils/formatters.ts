@@ -12,3 +12,7 @@ export function formatDatetime(
         .format(format)
     : defaultValue;
 }
+
+export function momentFromTimestamp(timestamp: number) {
+  return moment(timestamp).tz('utc');
+}

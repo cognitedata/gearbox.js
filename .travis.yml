@@ -23,9 +23,17 @@ script:
       "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/comments"
     fi
 deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  local_dir: storybook-static
-  on:
-    branch: master
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    local_dir: storybook-static
+    on:
+      branch: master
+  - provider: npm
+    skip_cleanup: true
+    email: cicd@cognite.com
+    on:
+      branch: master
+    api_key:
+      secure: PW6SpFUDbnTFaMG7ie/N9gzyT+FaVNK1QcMbpYPP/0ou86FJPjDvLoNEhDVB5rUw45+6aZ2Cn0cgyofTQp34yFEAroAgdtGFp6N9PTn9tjbRRY4RHGyR4eCcj4NXYHa32H/tFRV/gIJARsQ6FD6pjq3fukvQFkM1QzCVl9JioemFoTBKHlInVgId79NP5QgI1eaFUfKZ99GQj7wCgI9MjAiF5KN8+Z2dCJz3Yx866+sxvSZ7e/PRJ8P22R4fmxsM3H+7wMGB8vL3wdiNfEPP14Vm322K0o9oGosTBrsH4siGTOFTQTP5tPyJmJ0NmtflOxoYCaQ30cb9Row9wiil1uyofHET4qBrix6YgxPBhUpv3OuIJeh/4uSbQCKzrVez4u3Lox57Fv4KQ28CszXuR0Wc0YscnioHOGLxEwCeoctIDHS5GxNUP0Wliqe/mVKh0YZqOolwmsfT+nEQQoPICNVCR6/y7QYiP6W/ZGST7IbzZZYcoNJDk9ZkSCFKF4gd4qGXU1R6wWOOeLIMKsnAAL0UfHNLRNJwm/RI8vMx1bDg7LWu0Wk26ITTfDTMkj8Dj9CnHmD4TavwrZW0nMr85bKFfPYG8WsXpUSmDj9IDN+5SLzI6OWCsDKIDtYnxdim4YN59Gq0WOTfSXexPBykVUDpJqJ0tZXD49R2KRhX580=
+
