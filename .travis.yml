@@ -15,7 +15,13 @@ script:
   - yarn build
   - yarn test && codecov
   - yarn build-storybook
-  - '[ "${TRAVIS_PULL_REQUEST}" != "false" ] && GOOGLE_APPLICATION_CREDENTIALS=gcs-service-account.json preview upload storybook-static "gearboxjs/pr-${TRAVIS_PULL_REQUEST}" || true'
+  - |
+    if [ "${TRAVIS_PULL_REQUEST}" != "false" ] ; then
+      GOOGLE_APPLICATION_CREDENTIALS=gcs-service-account.json preview upload storybook-static "gearboxjs/pr-${TRAVIS_PULL_REQUEST}" && \
+      curl -H "Authorization: token ${GITHUB_TOKEN}" -X POST \
+      -d "{\"body\": \"This PR's storybook can now be previewed at the following URL: https://pr-${TRAVIS_PULL_REQUEST}.gearboxjs.preview.cogniteapp.com\"}" \
+      "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/comments"
+    fi
 deploy:
   provider: pages
   skip_cleanup: true
