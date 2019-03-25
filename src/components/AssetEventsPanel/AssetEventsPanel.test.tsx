@@ -7,7 +7,7 @@ import { EVENTS } from 'mocks/events';
 
 configure({ adapter: new Adapter() });
 
-describe('TenantSelector', () => {
+describe('AssetEventsPanel', () => {
   it('renders correctly', () => {
     const tree = renderer.create(<AssetEventsPanel events={EVENTS} />).toJSON();
     expect(tree).toMatchSnapshot();
