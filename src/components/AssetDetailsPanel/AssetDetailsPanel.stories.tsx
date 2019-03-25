@@ -3,13 +3,7 @@ import { storiesOf } from '@storybook/react';
 import AssetDetailsPanel, {
   AssetDetailsColumns,
 } from 'components/AssetDetailsPanel/AssetDetailsPanel';
-import { ASSET_DATA } from 'mocks/assets';
-
-const ASSET_META_DATA_SOURCE = Object.keys(ASSET_DATA.metadata).map(dp => ({
-  key: dp,
-  name: dp,
-  value: (ASSET_DATA.metadata as any)[dp],
-}));
+import { ASSET_META_DATA_SOURCE } from 'mocks/assets';
 
 storiesOf('AssetDetailsPanel', module)
   .addParameters({
