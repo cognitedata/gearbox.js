@@ -53,5 +53,6 @@ const AssetView = (props: AssetViewProps) => {
     </Tag>
   );
 };
+AssetView.displayName = 'AssetView';
 
 export default AssetView;

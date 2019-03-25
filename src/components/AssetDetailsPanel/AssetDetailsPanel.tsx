@@ -64,5 +64,6 @@ const AssetDetailsPanel = (props: AssetDetailsPanelProps) => {
     />
   );
 };
+AssetDetailsPanel.displayName = 'AssetDetailsPanel';
 
 export default AssetDetailsPanel;
