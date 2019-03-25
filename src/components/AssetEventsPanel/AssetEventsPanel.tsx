@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Table, Modal, Icon } from 'antd';
-import moment from 'moment';
 import { TableColumnType, TableDesignType } from 'utils/validators/AssetTypes';
 import { VApiEvent } from 'utils/validators';
 import styled from 'styled-components';
+import { momentFromTimestamp } from 'utils/formatters';
 
 interface EventAddonsProp extends VApiEvent {
   typeAndSubtype: React.ReactNode;
@@ -103,8 +103,10 @@ class AssetEventsPanel extends Component<
       </span>
     ),
     description: event.description || 'No description',
-    start: moment(event.startTime).format('LLL'),
-    end: event.endTime ? moment(event.endTime).format('LLL') : 'Ongoing',
+    start: momentFromTimestamp(event.startTime).format('LLL'),
+    end: event.endTime
+      ? momentFromTimestamp(event.endTime).format('LLL')
+      : 'Ongoing',
   });
 
   onEventClick = (record: any) => {

@@ -15,3 +15,7 @@ export function formatDatetime(
         .format('MMM D, YYYY HH:mm:ss')
     : defaultValue;
 }
+
+export function momentFromTimestamp(timestamp: number) {
+  return moment(timestamp).tz('utc');
+}

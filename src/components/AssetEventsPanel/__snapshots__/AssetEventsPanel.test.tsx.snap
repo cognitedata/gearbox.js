@@ -162,13 +162,13 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                     className=""
                     onClick={[Function]}
                   >
-                    April 27, 2018 9:00 AM
+                    April 27, 2018 7:00 AM
                   </td>
                   <td
                     className=""
                     onClick={[Function]}
                   >
-                    April 22, 2018 7:08 AM
+                    April 22, 2018 5:08 AM
                   </td>
                 </tr>
                 <tr
@@ -229,13 +229,13 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                     className=""
                     onClick={[Function]}
                   >
-                    March 29, 2018 9:00 AM
+                    March 29, 2018 7:00 AM
                   </td>
                   <td
                     className=""
                     onClick={[Function]}
                   >
-                    April 16, 2018 1:19 PM
+                    April 16, 2018 11:19 AM
                   </td>
                 </tr>
                 <tr
@@ -296,13 +296,13 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                     className=""
                     onClick={[Function]}
                   >
-                    February 8, 2018 8:00 AM
+                    February 8, 2018 7:00 AM
                   </td>
                   <td
                     className=""
                     onClick={[Function]}
                   >
-                    February 16, 2018 12:50 PM
+                    February 16, 2018 11:50 AM
                   </td>
                 </tr>
               </tbody>
