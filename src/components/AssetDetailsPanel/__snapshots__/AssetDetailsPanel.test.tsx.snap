@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TenantSelector renders correctly 1`] = `
+exports[`AssetDetailsPanel renders correctly 1`] = `
 <div>
   <div
     className="ant-table-wrapper"

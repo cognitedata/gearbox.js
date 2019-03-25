@@ -7,7 +7,7 @@ import AssetDetailsPanel, { AssetDetailsColumns } from './AssetDetailsPanel';
 
 configure({ adapter: new Adapter() });
 
-describe('TenantSelector', () => {
+describe('AssetDetailsPanel', () => {
   it('renders correctly', () => {
     const tree = renderer
       .create(
