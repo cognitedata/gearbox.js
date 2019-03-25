@@ -84,5 +84,6 @@ const EventPreview = ({
     </Container>
   );
 };
+EventPreview.displayName = 'EventPreview';
 
 export default EventPreview;
