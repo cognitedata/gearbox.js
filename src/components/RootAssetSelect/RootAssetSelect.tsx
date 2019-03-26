@@ -10,10 +10,10 @@ export const defaultStrings: VMetadata = {
 export interface RootAssetSelectProps {
   assetId: VId;
   assets: VAsset[];
-  onAssetSelected: VIdCallback;
   className: string;
   allowAll: boolean;
   strings: VMetadata;
+  onAssetSelected?: VIdCallback;
 }
 
 export interface RootAssetSelectState {
@@ -43,9 +43,11 @@ class RootAssetSelect extends React.Component<
   onSelectAsset = (selectedAssetId: VId) => {
     const { onAssetSelected } = this.props;
 
-    this.setState({ current: selectedAssetId }, () =>
-      onAssetSelected(selectedAssetId)
-    );
+    this.setState({ current: selectedAssetId });
+
+    if (onAssetSelected) {
+      onAssetSelected(selectedAssetId);
+    }
   };
 
   render() {

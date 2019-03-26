@@ -72,7 +72,9 @@ export const AssetSearchForm = ({
     search,
   } = lang;
 
-  const submit = () => {
+  const submit = (e: SyntheticEvent) => {
+    e.preventDefault();
+
     if (onSubmit) {
       onSubmit({ ...form.getFieldsValue() });
     }
@@ -181,6 +183,7 @@ export const AssetSearchForm = ({
         {getFieldDecorator('name')(
           <Input
             className="name"
+            name="name"
             maxLength={50}
             placeholder={nameField}
             onPressEnter={pressEnter}
@@ -191,6 +194,7 @@ export const AssetSearchForm = ({
         {getFieldDecorator('description')(
           <Input
             className="description"
+            name="description"
             maxLength={500}
             placeholder={descriptionField}
             onPressEnter={pressEnter}
@@ -214,10 +218,9 @@ export const AssetSearchForm = ({
       {onSubmit && (
         <Form.Item {...formItemLayoutWithoutLabel}>
           <Button
-            htmlType="button"
+            htmlType="submit"
             className="submit"
             type="primary"
-            onClick={submit}
             style={{ float: 'right' }}
           >
             {search}
@@ -240,6 +243,20 @@ const AssetSearchFormHOC = Form.create({
     if (onChange) {
       onChange(allValues);
     }
+  },
+  mapPropsToFields(props) {
+    if (!props.value) {
+      return {};
+    }
+    const { name, description, metadata } = props.value;
+
+    return {
+      name: Form.createFormField({ value: name }),
+      description: Form.createFormField({ value: description }),
+      metadata: Form.createFormField({
+        value: metadata,
+      }),
+    };
   },
 })(AssetSearchForm);
 
