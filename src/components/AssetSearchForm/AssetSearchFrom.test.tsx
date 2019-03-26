@@ -8,6 +8,10 @@ configure({ adapter: new Adapter() });
 describe('AssetSearchForm', () => {
   it('Renders without exploding', () => {
     const wrapper = mount(<AssetSearchForm value={null} />);
-    expect(wrapper).toHaveLength(1);
+    expect(wrapper.exists()).toBe(true);
   });
+
+  it('Triggers onSubmit callback on form submit', () => {
+
+  })
 });

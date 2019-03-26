@@ -2,7 +2,7 @@ import { Button, Icon, Input, Modal } from 'antd';
 import AssetSearchForm from 'components/AssetSearchForm/AssetSearchForm';
 import RootAssetSelect from 'components/RootAssetSelect/RootAssetSelect';
 import { debounce } from 'lodash';
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import styled from 'styled-components';
 import {
   VAsset,
@@ -41,6 +41,7 @@ export interface AssetSearchProps {
   boostName: boolean;
   assets: VAsset[];
   strings: VMetadata;
+  assetId?: VId;
   onSearchResults?: VOnAssetSearchResult;
   onSearch?: VOnAssetSearch;
   onAssetSelected?: VIdCallback;
@@ -62,7 +63,19 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
     strings: {},
   };
 
-  onSearch = debounce(() => {
+  onSearch = debounce(this.debouncedSearch.bind(this), this.props.debounceTime);
+
+  constructor(props: AssetSearchProps) {
+    super(props);
+    this.state = {
+      assetId: props.assetId || 0,
+      query: '',
+      isModalOpen: false,
+      advancedSearch: null,
+    };
+  }
+
+  debouncedSearch() {
     const { onSearch, boostName, fetchingLimit, onSearchResults } = this.props;
     const { query, advancedSearch, assetId } = this.state;
     const assetSubtrees = assetId ? [assetId] : null;
@@ -84,16 +97,6 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
     if (onSearch) {
       onSearch(apiQuery);
     }
-  }, this.props.debounceTime);
-
-  constructor(props: AssetSearchProps) {
-    super(props);
-    this.state = {
-      assetId: 0,
-      query: '',
-      isModalOpen: false,
-      advancedSearch: null,
-    };
   }
 
   onFilterIconClick = () => {
@@ -136,6 +139,14 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
     this.setState({ assetId }, this.onSearch);
   };
 
+  onAssetSearchChange = (value: VAdvancedSearch) =>
+    this.setState({ advancedSearch: value, query: '' });
+
+  onSearchQueryInput = (e: SyntheticEvent) => {
+    const target = e.target as HTMLInputElement;
+    this.setState({ query: target.value }, this.onSearch);
+  };
+
   render() {
     const { assetId, query, isModalOpen, advancedSearch } = this.state;
     const { assets, strings } = this.props;
@@ -164,14 +175,12 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
               placeholder={searchPlaceholder}
               disabled={!!advancedSearch}
               value={query}
-              onChange={e =>
-                this.setState({ query: e.target.value }, this.onSearch)
-              }
+              onChange={this.onSearchQueryInput}
               allowClear={true}
               suffix={
                 <Icon
                   type="filter"
-                  onClick={() => this.onFilterIconClick()}
+                  onClick={this.onFilterIconClick}
                   style={{ opacity: 0.6, marginLeft: 8 }}
                 />
               }
@@ -199,9 +208,7 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
           <AssetSearchForm
             value={advancedSearch}
             onPressEnter={this.onModalOk}
-            onChange={(value: VAdvancedSearch) =>
-              this.setState({ advancedSearch: value, query: '' })
-            }
+            onChange={this.onAssetSearchChange}
           />
         </Modal>
       </React.Fragment>
