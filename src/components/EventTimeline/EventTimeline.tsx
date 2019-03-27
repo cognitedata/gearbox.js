@@ -15,6 +15,7 @@ import { VEventTimeline, VIdCallback } from 'utils/validators';
 
 interface EventTimelineProps {
   barHeight: number;
+  className: string;
   data: VEventTimeline[];
   isLoading: boolean;
   onEventClicked?: VIdCallback;
@@ -23,11 +24,13 @@ interface EventTimelineProps {
 class EventTimeline extends React.Component<EventTimelineProps> {
   static defaultProps = {
     data: [],
+    className: '',
     barHeight: 16,
     isLoading: false,
   };
 
-  private node: RefObject<SVGSVGElement> = createRef<SVGSVGElement>();
+  // node: RefObject<SVGSVGElement> = createRef<SVGSVGElement>();
+  node: SVGSVGElement | null = null;
   private xAxis: RefObject<SVGSVGElement> = createRef<SVGSVGElement>();
   private currentX: ScaleTime<number, number> = d3ScaleTime();
   private chart: any;
@@ -74,9 +77,9 @@ class EventTimeline extends React.Component<EventTimelineProps> {
 
   createChart = () => {
     const { data, onEventClicked, barHeight } = this.props;
-    const width = (this.node.current && this.node.current.clientWidth) || 0;
+    const width = (this.node && this.node.clientWidth) || 0;
 
-    d3Select(this.node.current)
+    d3Select(this.node)
       .selectAll('*')
       .remove();
 
@@ -88,7 +91,7 @@ class EventTimeline extends React.Component<EventTimelineProps> {
       .range([0, width]);
 
     this.currentX = x0.copy();
-    this.chart = d3Select(this.node.current).attr(
+    this.chart = d3Select(this.node).attr(
       'height',
       barHeight * data.length + (4 * data.length - 1)
     );
@@ -104,6 +107,7 @@ class EventTimeline extends React.Component<EventTimelineProps> {
         'transform',
         (eventData: VEventTimeline, i: number) => `translate(0, ${i * 4})`
       )
+      .attr('class', 'bar')
       .on(
         'click',
         (eventData: VEventTimeline) =>
@@ -172,7 +176,7 @@ class EventTimeline extends React.Component<EventTimelineProps> {
   };
 
   render() {
-    const { isLoading } = this.props;
+    const { isLoading, className } = this.props;
 
     return (
       <Spin spinning={isLoading}>
@@ -187,8 +191,8 @@ class EventTimeline extends React.Component<EventTimelineProps> {
             cursor: 'move',
           }}
         />
-        <div key="chart">
-          <svg ref={this.node} style={{ width: '100%' }} />
+        <div className={className} key="chart">
+          <svg ref={ref => (this.node = ref)} style={{ width: '100%' }} />
         </div>
       </Spin>
     );
