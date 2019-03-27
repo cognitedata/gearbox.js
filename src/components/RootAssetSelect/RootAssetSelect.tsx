@@ -2,13 +2,18 @@ import React from 'react';
 import { Select } from 'antd';
 import { VId, VAsset, VMetadata, VIdCallback } from 'utils/validators';
 
+export const defaultStrings: VMetadata = {
+  loading: 'Loading',
+  all: '-- all --',
+};
+
 export interface RootAssetSelectProps {
   assetId: VId;
   assets: VAsset[];
-  onAssetSelected: VIdCallback;
   className: string;
   allowAll: boolean;
   strings: VMetadata;
+  onAssetSelected?: VIdCallback;
 }
 
 export interface RootAssetSelectState {
@@ -23,10 +28,7 @@ class RootAssetSelect extends React.Component<
     assetId: 0,
     allowAll: true,
     className: '',
-    strings: {
-      loading: 'Loading',
-      all: '-- all --',
-    },
+    strings: {},
   };
 
   constructor(props: RootAssetSelectProps) {
@@ -41,18 +43,18 @@ class RootAssetSelect extends React.Component<
   onSelectAsset = (selectedAssetId: VId) => {
     const { onAssetSelected } = this.props;
 
-    this.setState({ current: selectedAssetId }, () =>
-      onAssetSelected(selectedAssetId)
-    );
+    this.setState({ current: selectedAssetId });
+
+    if (onAssetSelected) {
+      onAssetSelected(selectedAssetId);
+    }
   };
 
   render() {
-    const {
-      allowAll,
-      assets,
-      className,
-      strings: { loading, all },
-    } = this.props;
+    const { allowAll, assets, className, strings } = this.props;
+
+    const lang = { ...defaultStrings, ...strings };
+    const { all, loading } = lang;
     const { current } = this.state;
 
     if (assets === null || !assets.length) {

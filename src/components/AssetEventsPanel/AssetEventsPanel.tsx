@@ -88,7 +88,7 @@ class AssetEventsPanel extends Component<
       {Object.keys(event.metadata || {}).map(key => (
         <div key={key} className="event-metadata">
           <strong>{key}</strong> <br />
-          <span>{event.metadata[key]}</span>
+          <span>{event.metadata && event.metadata[key]}</span>
         </div>
       ))}
     </EventMetadataList>
