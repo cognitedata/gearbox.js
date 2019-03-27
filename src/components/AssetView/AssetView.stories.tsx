@@ -5,25 +5,6 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 
 const INVALID_ASSET = { id: -1 };
-const IAA = {
-  id: 7793176078609329,
-  path: [7793176078609329],
-  name: 'IAA',
-  description: 'IAA Root node',
-  metadata: {
-    ASSETSCOPENAME: 'IAA',
-    DESCRIPTION: 'IAA Root node',
-    NAME: 'IAA',
-    PARENTUID: '',
-    SOURCE: 'Valid',
-    SOURCEID: 'Valid.dbo.AkerBP_UNION_ALL_TAG',
-    SOURCE_DB: 'valid',
-    SOURCE_TABLE: 'iaaassethierarchy',
-    TYPE: 'AssetHierarchy',
-    UID: 'IAA',
-  },
-};
-
 const testAsset = {
   id: 123,
   name: 'AAI',
