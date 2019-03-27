@@ -4,3 +4,4 @@ export * from './components/TenantSelector/TenantSelector';
 export * from './components/EventPreview/EventPreview';
 export * from './components/AssetEventsPanel/AssetEventsPanel';
 export * from './components/AssetDetailsPanel/AssetDetailsPanel';
+export * from './components/DocumentTable/DocumentTable';
