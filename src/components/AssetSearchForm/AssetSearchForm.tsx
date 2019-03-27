@@ -56,8 +56,6 @@ export const AssetSearchForm = ({
   onSubmit,
   form,
   onPressEnter,
-  onChange,
-  value,
   strings = {},
 }: AssetSearchFormProps) => {
   const { getFieldDecorator, getFieldValue, setFieldsValue } = form;

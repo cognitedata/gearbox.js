@@ -9,8 +9,6 @@ const data = eventTimelineDataSrc.map(event =>
   generateEventTimelineData(...event)
 );
 
-const onEventClicked = jest.fn();
-
 configure({ adapter: new Adapter() });
 
 describe('EventTimeline', () => {
