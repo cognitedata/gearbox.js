@@ -5,7 +5,7 @@
  *
  * @return the sanitized CDP project name
  */
-export const sanitizeTests = (input: string): string =>
+export const sanitizeTenant = (input: string): string =>
   input
     // CDP projects cannot have upper-case characters
     .toLowerCase()

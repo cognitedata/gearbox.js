@@ -105,7 +105,7 @@ class EventTimeline extends React.Component<EventTimelineProps> {
       .append('g')
       .attr(
         'transform',
-        (eventData: VEventTimeline, i: number) => `translate(0, ${i * 4})`
+        (_: VEventTimeline, i: number) => `translate(0, ${i * 4})`
       )
       .attr('class', 'bar')
       .on(
@@ -119,7 +119,7 @@ class EventTimeline extends React.Component<EventTimelineProps> {
       .attr('class', 'event')
       .attr('style', 'cursor: pointer')
       .attr('x', (eventData: VEventTimeline) => this.currentX(eventData.min))
-      .attr('y', (eventData: VEventTimeline, i: number) => i * barHeight)
+      .attr('y', (_: VEventTimeline, i: number) => i * barHeight)
       .attr('width', (eventData: VEventTimeline) =>
         this.calculateWidth(this.currentX, eventData)
       )
