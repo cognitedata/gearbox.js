@@ -2,7 +2,11 @@ import 'antd/dist/antd.css';
 import Collapse, { CollapseProps } from 'antd/lib/collapse';
 import React from 'react';
 import styled from 'styled-components';
-import { Document, JsonDocTypes } from 'utils/validators/documentTypes';
+import {
+  Document,
+  JsonDocTypes,
+  DocumentRenderer,
+} from 'utils/validators/documentTypes';
 import {
   getCategoryByPriority,
   getDocumentsByCategory,
@@ -11,12 +15,6 @@ import {
 } from 'utils/helpers/documenthelpers';
 
 const { Panel } = Collapse;
-
-export type DocumentRenderer = (
-  document: Document,
-  i: number,
-  documents: Document[]
-) => React.ReactNode;
 
 interface DocumentTableProps {
   docs: Document[];
@@ -37,6 +35,7 @@ interface DocumentTableProps {
 
 interface DocumentTableState {
   stateParam?: string;
+  handleDocumentClick: () => null;
 }
 
 class DocumentTable extends React.PureComponent<

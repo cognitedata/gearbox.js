@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface Document {
   id: number;
   fileName: string;
@@ -27,3 +29,9 @@ export interface DocumentsByCategory {
 export interface Priority {
   [s: string]: number;
 }
+
+export type DocumentRenderer = (
+  document: Document,
+  i: number,
+  documents: Document[]
+) => React.ReactNode;
