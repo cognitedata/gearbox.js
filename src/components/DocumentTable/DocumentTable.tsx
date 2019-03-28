@@ -1,12 +1,8 @@
 import 'antd/dist/antd.css';
-import Collapse, { CollapseProps } from 'antd/lib/collapse';
+import Collapse from 'antd/lib/collapse';
 import React from 'react';
 import styled from 'styled-components';
-import {
-  Document,
-  JsonDocTypes,
-  DocumentRenderer,
-} from 'utils/validators/documentTypes';
+import { Document, DocumentTableProps } from 'utils/validators/documentTypes';
 import {
   getCategoryByPriority,
   getDocumentsByCategory,
@@ -16,26 +12,8 @@ import {
 
 const { Panel } = Collapse;
 
-interface DocumentTableProps {
-  docs: Document[];
-  handleDocumentClick: (
-    document: Document,
-    category: string,
-    description: string
-  ) => void;
-  collapseProps?: CollapseProps;
-  categoryPriorityList?: string[];
-  unknownCategoryName?: string;
-  documentTitleField?: string;
-  documentTypeField?: string;
-  docTypes?: JsonDocTypes;
-  noDocumentsSign?: string;
-  documentRenderer?: DocumentRenderer;
-}
-
 interface DocumentTableState {
   stateParam?: string;
-  handleDocumentClick: () => null;
 }
 
 class DocumentTable extends React.PureComponent<
@@ -63,7 +41,11 @@ class DocumentTable extends React.PureComponent<
         <LinkStyle
           key={document.id}
           data-test-id="file-name"
-          onClick={() => handleDocumentClick(document, category, description)}
+          onClick={() =>
+            handleDocumentClick
+              ? handleDocumentClick(document, category, description)
+              : null
+          }
           tabIndex={-1}
         >
           {document.fileName}

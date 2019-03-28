@@ -1,8 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import AssetDetailsPanel, {
-  AssetDetailsColumns,
-} from 'components/AssetDetailsPanel/AssetDetailsPanel';
+import AssetDetailsPanel from 'components/AssetDetailsPanel/AssetDetailsPanel';
 import { ASSET_META_DATA_SOURCE } from 'mocks/assets';
 
 storiesOf('AssetDetailsPanel', module)
@@ -14,12 +12,7 @@ storiesOf('AssetDetailsPanel', module)
   })
   .add(
     'Standard',
-    () => (
-      <AssetDetailsPanel
-        dataSource={ASSET_META_DATA_SOURCE}
-        columns={AssetDetailsColumns}
-      />
-    ),
+    () => <AssetDetailsPanel dataSource={ASSET_META_DATA_SOURCE} />,
     {
       info: {
         text:
@@ -27,61 +20,25 @@ storiesOf('AssetDetailsPanel', module)
       },
     }
   )
-  .add('Empty', () => (
-    <AssetDetailsPanel dataSource={[]} columns={AssetDetailsColumns} />
-  ))
+  .add('Empty', () => <AssetDetailsPanel dataSource={[]} />)
   .add('No borders', () => (
-    <AssetDetailsPanel
-      dataSource={ASSET_META_DATA_SOURCE}
-      columns={AssetDetailsColumns}
-      bordered={false}
-    />
+    <AssetDetailsPanel dataSource={ASSET_META_DATA_SOURCE} bordered={false} />
   ))
   .add('Show headers', () => (
-    <AssetDetailsPanel
-      dataSource={ASSET_META_DATA_SOURCE}
-      columns={AssetDetailsColumns}
-      showHeader={true}
-    />
+    <AssetDetailsPanel dataSource={ASSET_META_DATA_SOURCE} showHeader={true} />
   ))
   .add('Scroll lines', () => (
     <AssetDetailsPanel
       dataSource={ASSET_META_DATA_SOURCE}
-      columns={AssetDetailsColumns}
       scroll={{ y: '75vh', x: '100' }}
     />
   ))
   .add('Custom design', () => (
     <AssetDetailsPanel
       dataSource={ASSET_META_DATA_SOURCE}
-      columns={AssetDetailsColumns}
       style={{
         border: '4px solid grey',
         margin: '16px',
       }}
-    />
-  ))
-  .add('Repeating same column', () => (
-    <AssetDetailsPanel
-      dataSource={ASSET_META_DATA_SOURCE}
-      columns={[
-        ...AssetDetailsColumns,
-        ...[{ title: 'name', dataIndex: 'name', key: 'name' }],
-      ]}
-    />
-  ))
-  .add('Column with no matching data', () => (
-    <AssetDetailsPanel
-      dataSource={ASSET_META_DATA_SOURCE}
-      columns={[
-        ...AssetDetailsColumns,
-        ...[{ title: 'nomatch', dataIndex: 'nomatch', key: 'nomatch' }],
-      ]}
-    />
-  ))
-  .add('Only one column defined', () => (
-    <AssetDetailsPanel
-      dataSource={ASSET_META_DATA_SOURCE}
-      columns={[{ title: 'name', dataIndex: 'name', key: 'name' }]}
     />
   ));

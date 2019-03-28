@@ -12,6 +12,7 @@ storiesOf('AssetEventsPanel', module)
   })
   .add('Minimal', () => <AssetEventsPanel events={EVENTS} />)
   .add('Empty table', () => <AssetEventsPanel events={[]} />)
+  .add('Events not set', () => <AssetEventsPanel />)
   .add('Pagination on top', () => (
     <AssetEventsPanel events={EVENTS} pagination={{ position: 'top' }} />
   ))
