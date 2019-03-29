@@ -19,6 +19,8 @@ describe('TenantSelector', () => {
     done();
   });
 
+  const tenantName = 'example-tenant';
+  const tenantInputDataId = 'input[data-id="tenant-input"]';
   it('Handles invalid tenants', done => {
     const validateTenant = sinon.fake.rejects(new Error('Testing'));
     const wrapper = mount(
@@ -32,14 +34,14 @@ describe('TenantSelector', () => {
     expect(wrapper).toHaveLength(1);
     const button = wrapper.find('button');
     button.simulate('click');
-    const input = wrapper.find('input[data-id="tenant-input"]');
+    const input = wrapper.find(tenantInputDataId);
 
     // Without any text entered, clicking the button doesn't do anything.
     expect(validateTenant.callCount).toEqual(0);
-    input.simulate('change', { target: { value: 'example-tenant' } });
+    input.simulate('change', { target: { value: tenantName } });
     button.simulate('click');
     expect(validateTenant.callCount).toEqual(1);
-    expect(validateTenant.lastCall.args[0]).toEqual('example-tenant');
+    expect(validateTenant.lastCall.args[0]).toEqual(tenantName);
 
     done();
   });
@@ -59,17 +61,17 @@ describe('TenantSelector', () => {
     expect(wrapper).toHaveLength(1);
     const button = wrapper.find('button');
     button.simulate('click');
-    const input = wrapper.find('input[data-id="tenant-input"]');
+    const input = wrapper.find(tenantInputDataId);
 
     // Without any text entered, clicking the button doesn't do anything.
     expect(validateTenant.callCount).toEqual(0);
-    input.simulate('change', { target: { value: 'example-tenant' } });
+    input.simulate('change', { target: { value: tenantName } });
     button.simulate('click');
     expect(validateTenant.callCount).toEqual(1);
-    expect(validateTenant.lastCall.args[0]).toEqual('example-tenant');
+    expect(validateTenant.lastCall.args[0]).toEqual(tenantName);
     process.nextTick(() => {
       expect(onInvalidTenant.callCount).toEqual(1);
-      expect(onInvalidTenant.lastCall.args[0]).toEqual('example-tenant');
+      expect(onInvalidTenant.lastCall.args[0]).toEqual(tenantName);
       done();
     });
   });
@@ -89,7 +91,7 @@ describe('TenantSelector', () => {
     expect(wrapper).toHaveLength(1);
     const button = wrapper.find('button');
     button.simulate('click');
-    const input = wrapper.find('input[data-id="tenant-input"]');
+    const input = wrapper.find(tenantInputDataId);
 
     // Without any text entered, clicking the button doesn't do anything.
     expect(validateTenant.callCount).toEqual(0);
@@ -115,17 +117,17 @@ describe('TenantSelector', () => {
     expect(wrapper).toHaveLength(1);
     const button = wrapper.find('button');
     button.simulate('click');
-    const input = wrapper.find('input[data-id="tenant-input"]');
+    const input = wrapper.find(tenantInputDataId);
 
     // Without any text entered, clicking the button doesn't do anything.
     expect(validateTenant.callCount).toEqual(0);
-    input.simulate('change', { target: { value: 'example-tenant' } });
+    input.simulate('change', { target: { value: tenantName } });
     button.simulate('click');
     expect(validateTenant.callCount).toEqual(1);
-    expect(validateTenant.lastCall.args[0]).toEqual('example-tenant');
+    expect(validateTenant.lastCall.args[0]).toEqual(tenantName);
     process.nextTick(() => {
       expect(onTenantSelected.callCount).toEqual(1);
-      expect(onTenantSelected.lastCall.args[0]).toEqual('example-tenant');
+      expect(onTenantSelected.lastCall.args[0]).toEqual(tenantName);
       done();
     });
   });

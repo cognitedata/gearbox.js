@@ -1,6 +1,7 @@
 {
   "extends": [
     "tslint:recommended",
+    "tslint-sonarts",
     "tslint-config-prettier",
     "tslint-react"
   ],

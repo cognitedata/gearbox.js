@@ -1,68 +1,15 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import DocumentTable from 'components/DocumentTable/DocumentTable';
+import { DOCUMENTS } from 'mocks/documents';
 
 storiesOf('DocumentTable', module)
-  .add('Basic', () => (
-    <DocumentTable
-      docs={[
-        {
-          id: 1,
-          fileName: 'file name 1',
-          metadata: {
-            DOC_TITLE: 'document title 1',
-            DOC_TYPE: 'XG',
-          },
-        },
-        {
-          id: 2,
-          fileName: 'file name 2',
-          metadata: {
-            DOC_TITLE: 'document title 2',
-            DOC_TYPE: 'XB',
-          },
-        },
-        {
-          id: 3,
-          fileName: 'file name 3',
-          metadata: {
-            DOC_TITLE: 'document title 3',
-            DOC_TYPE: 'XG',
-          },
-        },
-      ]}
-    />
-  ))
+  .add('Basic', () => <DocumentTable docs={DOCUMENTS} />)
   .add(
     'Custom renderer',
     () => (
       <DocumentTable
-        docs={[
-          {
-            id: 1,
-            fileName: 'file name 1',
-            metadata: {
-              DOC_TITLE: 'document title 1',
-              DOC_TYPE: 'XG',
-            },
-          },
-          {
-            id: 2,
-            fileName: 'file name 2',
-            metadata: {
-              DOC_TITLE: 'document title 2',
-              DOC_TYPE: 'XB',
-            },
-          },
-          {
-            id: 3,
-            fileName: 'file name 3',
-            metadata: {
-              DOC_TITLE: 'document title 3',
-              DOC_TYPE: 'XG',
-            },
-          },
-        ]}
+        docs={DOCUMENTS}
         documentRenderer={(document, i) => (
           <div>
             <h2>Document #{i + 1}</h2>
@@ -86,33 +33,5 @@ storiesOf('DocumentTable', module)
     }
   )
   .add('No borders', () => (
-    <DocumentTable
-      docs={[
-        {
-          id: 1,
-          fileName: 'file name 1',
-          metadata: {
-            DOC_TITLE: 'document title 1',
-            DOC_TYPE: 'XG',
-          },
-        },
-        {
-          id: 2,
-          fileName: 'file name 2',
-          metadata: {
-            DOC_TITLE: 'document title 2',
-            DOC_TYPE: 'XB',
-          },
-        },
-        {
-          id: 3,
-          fileName: 'file name 3',
-          metadata: {
-            DOC_TITLE: 'document title 3',
-            DOC_TYPE: 'XG',
-          },
-        },
-      ]}
-      collapseProps={{ bordered: false }}
-    />
+    <DocumentTable docs={DOCUMENTS} collapseProps={{ bordered: false }} />
   ));
