@@ -5,9 +5,13 @@ export interface VApiEvent {
   id: VId;
   startTime: number;
   endTime: number;
-  type: string;
-  subtype: string;
-  assetIds: VId[];
+  type?: string;
+  subtype?: string;
+  assetIds?: VId[];
   description?: string;
   metadata?: VMetadata;
+  source?: string;
+  sourceId?: string;
+  createdTime?: number;
+  lastUpdatedTime?: number;
 }

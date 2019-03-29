@@ -1,20 +1,6 @@
 import React from 'react';
 import { Table } from 'antd';
-import {
-  TableDataSourceType,
-  TableColumnType,
-  TableDesignType,
-} from 'utils/validators/AssetTypes';
-
-export const AssetDetailsColumns = [
-  { title: 'name', dataIndex: 'name', key: 'name' },
-  { title: 'value', dataIndex: 'value', key: 'value' },
-];
-
-interface AssetDetailsPanelProps extends TableDesignType {
-  dataSource: TableDataSourceType[];
-  columns: TableColumnType[];
-}
+import { AssetDetailsPanelProps } from 'utils/validators/AssetTypes';
 
 const AssetDetailsPanel = (props: AssetDetailsPanelProps) => {
   const defaultStyle = {
@@ -23,14 +9,14 @@ const AssetDetailsPanel = (props: AssetDetailsPanelProps) => {
     color: 'rgba(0, 0, 0, 0.45)',
   };
 
-  const defaultColumns = [
+  const columns = [
     {
-      title: 'name',
+      title: 'Name',
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'value',
+      title: 'Value',
       dataIndex: 'value',
       key: 'value',
     },
@@ -38,7 +24,6 @@ const AssetDetailsPanel = (props: AssetDetailsPanelProps) => {
 
   const {
     dataSource,
-    columns = defaultColumns,
     style = defaultStyle,
     showHeader = false,
     bordered = true,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Modal, Icon } from 'antd';
-import { TableColumnType, TableDesignType } from 'utils/validators/AssetTypes';
+import { AssetEventsPanelProps } from 'utils/validators/AssetTypes';
 import { VApiEvent } from 'utils/validators';
 import styled from 'styled-components';
 import { momentFromTimestamp } from 'utils/formatters';
@@ -10,11 +10,6 @@ interface EventAddonsProp extends VApiEvent {
   description: string;
   start: number;
   end: number;
-}
-
-interface AssetEventsPanelProps extends TableDesignType {
-  columns?: TableColumnType[];
-  events: VApiEvent[];
 }
 
 const StyledTable = styled(Table)`
@@ -141,7 +136,7 @@ class AssetEventsPanel extends Component<
 
     const {
       columns = defaultColumns,
-      events,
+      events = [],
       pagination = { pageSize: 12 },
       scroll,
       bordered = false,

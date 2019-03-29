@@ -4,9 +4,9 @@ import {
   DocumentsByCategory,
   DocumentType,
   JsonDocTypes,
-  Metadata,
   Priority,
 } from 'utils/validators/documentTypes';
+import { VMetadata } from 'utils/validators/index';
 
 const maxDocumentTitleLength = 56;
 const documentTypesOptions = ['DOC_TYPE', 'doc_type'];
@@ -19,7 +19,7 @@ const sortDocsByPriority = (a: string, b: string, priority: Priority) =>
   (priority[a] || Number.MAX_SAFE_INTEGER) -
   (priority[b] || Number.MAX_SAFE_INTEGER);
 
-const getValueFromObject = (metadata?: Metadata, arr?: string[]): string => {
+const getValueFromObject = (metadata?: VMetadata, arr?: string[]): string => {
   if (!metadata || !arr) {
     return '';
   }
@@ -32,16 +32,16 @@ const getValueFromObject = (metadata?: Metadata, arr?: string[]): string => {
   }, '');
 };
 
-const objKeysToLowerCase = (obj?: Metadata): Metadata =>
+const objKeysToLowerCase = (obj?: VMetadata): VMetadata =>
   obj
-    ? Object.keys(obj).reduce((acc: Metadata, key) => {
+    ? Object.keys(obj).reduce((acc: VMetadata, key) => {
         acc[key.toLowerCase()] = obj[key];
         return acc;
       }, {})
     : {};
 
 const getDocumentType = (
-  metadata?: Metadata,
+  metadata?: VMetadata,
   documentTypeField?: string
 ): string => {
   const names = documentTypeField ? [documentTypeField] : documentTypesOptions;
@@ -99,7 +99,7 @@ export const getDocumentsByCategory = (
   }, {});
 
 export const getDocumentTitle = (
-  metadata?: Metadata,
+  metadata?: VMetadata,
   documentTitleField?: string
 ): string => {
   const names = documentTitleField
