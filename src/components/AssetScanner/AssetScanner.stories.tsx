@@ -7,7 +7,7 @@ import { VOnAssetListCallback, VCallbackStrings } from '../../utils/validators';
 
 const PROJECT_NAME = 'publicdata';
 const onAssetFind: VOnAssetListCallback = assets =>
-  action('pnAssetFind')(assets);
+  action('onAssetFind')(assets);
 const onStringRecognize: VCallbackStrings = strings =>
   action('onStringRecognize')(strings);
 
