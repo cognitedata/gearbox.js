@@ -1,4 +1,4 @@
-import { VAdvancedSearch } from '../utils/validators';
+import { VAdvancedSearch } from 'utils/validators';
 
 export const SKA = {
   id: 8129784932439587,
