@@ -14,10 +14,11 @@
     "noUnusedParameters": true,
     "baseUrl": "src",
     "downlevelIteration": true,
-    "rootDirs": [
-      "src",
-      "stories"
-    ],
+    "paths": {
+      "utils/*": [ "utils/*" ],
+      "mocks/*": [ "mocks/*" ],
+      "components/*": [ "components/*" ]
+    },
     "allowSyntheticDefaultImports": true,
     "lib": [
       "es2015",

@@ -3,7 +3,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
 import { ASSET_META_DATA_SOURCE } from 'mocks/assets';
-import AssetDetailsPanel, { AssetDetailsColumns } from './AssetDetailsPanel';
+import AssetDetailsPanel from './AssetDetailsPanel';
 
 configure({ adapter: new Adapter() });
 
@@ -12,11 +12,8 @@ describe('AssetDetailsPanel', () => {
     const tree = renderer
       .create(
         <div>
-          <AssetDetailsPanel
-            dataSource={ASSET_META_DATA_SOURCE}
-            columns={AssetDetailsColumns}
-          />
-          <AssetDetailsPanel dataSource={[]} columns={AssetDetailsColumns} />
+          <AssetDetailsPanel dataSource={ASSET_META_DATA_SOURCE} />
+          <AssetDetailsPanel dataSource={[]} />
         </div>
       )
       .toJSON();

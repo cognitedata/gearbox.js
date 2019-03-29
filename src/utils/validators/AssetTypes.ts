@@ -1,4 +1,18 @@
+import { VApiEvent, VMetadata } from './index';
+
 export type id = number | string;
+
+export type assetPanels = 'details' | 'events' | 'documents';
+
+export interface AssetType {
+  id: id;
+  name?: string;
+  description?: string;
+  path?: id[];
+  depth?: number;
+  metadata?: VMetadata;
+  [propName: string]: any;
+}
 
 export interface TableDataSourceType {
   key?: string;
@@ -25,4 +39,13 @@ export interface TableDesignType {
   bordered?: boolean;
   showHeader?: boolean;
   style?: object;
+}
+
+export interface AssetEventsPanelProps extends TableDesignType {
+  columns?: TableColumnType[];
+  events?: VApiEvent[];
+}
+
+export interface AssetDetailsPanelProps extends TableDesignType {
+  dataSource?: TableDataSourceType[];
 }

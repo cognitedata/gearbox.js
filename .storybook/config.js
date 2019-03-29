@@ -5,7 +5,7 @@ import * as Components from '../src/components';
 import { withInfo } from '@storybook/addon-info';
 import 'antd/dist/antd.css';
 
-addDecorator(withInfo);
+addDecorator(withInfo({maxPropsIntoLine: 1}));
 
 const styles = {
   margin: '1em',
