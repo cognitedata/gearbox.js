@@ -68,5 +68,6 @@ const AssetMeta = (props: AssetMetaTypes) => {
     </>
   );
 };
+AssetMeta.displayName = 'AssetMeta';
 
 export default AssetMeta;
