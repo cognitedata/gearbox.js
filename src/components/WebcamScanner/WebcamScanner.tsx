@@ -1,8 +1,10 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 import Webcam from 'components/Webcam/Webcam';
-// import WithLoading from 'components/WithLoading/WithLoading';
+import { WebcamScreenshot } from 'components/WebcamScreenshot/WebcamScreenshot';
+import { LoadingOverlay } from 'components/LoadingOverlay/LoadingOverlay';
+import { VSetVideoRefCallback, VEmptyCallback } from 'utils/validators';
 
 const CameraButton = styled.button`
   position: absolute;
@@ -10,6 +12,7 @@ const CameraButton = styled.button`
   border-radius: 100%;
   width: 75px;
   height: 75px;
+  outline: none;
 
   @media (orientation: landscape) and (max-width: 1000px) {
     top: 50%;
@@ -30,41 +33,10 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-// const FreezeFrame = styled.img`
-//   width: 30%;
-//   max-width: 300px;
-//   position: absolute;
-//   bottom: 10px;
-//   right: 10px;
-//   min-width: 150px;
-// `;
-
-const animation = keyframes`
-    0% {
-      transform: scale(1) translate(0, 0);
-      border-radius: 0;
-    }
-    100% {
-      transform: scale(0.25) translate(-20px, -20px);
-      border-radius: 5%;
-    }`;
-
-const FreezeFrame = styled.img`
-  width: 100%;
-  max-width: 100%;
-  position: absolute;
-  min-width: 150px;
-  top: 0;
-  transform: scale(0.25) translate(-20px, -20px);
-  border-radius: 5%;
-  transform-origin: right bottom;
-  animation: 0.5s ${animation} linear;
-`;
-
 interface WebcamScannerProps {
   isLoading: boolean;
-  capture: any;
-  setRef: any;
+  capture: VEmptyCallback;
+  setRef: VSetVideoRefCallback;
   imageSrc?: string;
 }
 
@@ -74,17 +46,6 @@ function WebcamScanner({
   isLoading = false,
   setRef,
 }: WebcamScannerProps) {
-  const renderScreen = () => {
-    return imageSrc && isLoading ? (
-      <FreezeFrame
-        src={`data:image/png;base64,${imageSrc}`}
-        alt="Captured from webcam"
-        id="freezeFrame"
-        className=""
-      />
-    ) : null;
-  };
-
   const onCaptureClick = () => {
     if (capture) {
       capture();
@@ -93,10 +54,10 @@ function WebcamScanner({
 
   return (
     <Wrapper>
-      {/*<WithLoading isLoading={isLoading && !!imageSrc} size="large"></WithLoading>*/}
-      {renderScreen()}
+      <LoadingOverlay size={'large'} isLoading={isLoading} />
+      {imageSrc && isLoading && <WebcamScreenshot src={imageSrc} />}
       <Webcam audio={false} setRef={setRef} className="camera" />
-      {!imageSrc && (
+      {!imageSrc && !isLoading && (
         <CameraButton
           onClick={onCaptureClick}
           data-test-id="scanner-camera-button"

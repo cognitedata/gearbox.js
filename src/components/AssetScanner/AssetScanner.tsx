@@ -1,43 +1,52 @@
 import React from 'react';
 import styled from 'styled-components';
-// import moment from 'moment';
-import axios from 'axios';
-import { Assets, getMetadata } from '@cognite/sdk';
 
-// import { VAsset } from 'utils/validators';
 import WebcamScanner from 'components/WebcamScanner/WebcamScanner';
-// import TagList from 'components/TagList/TagList';
-// import CircleButton from 'components/CircleButton/CircleButton';
-import { getCanvas, extractValidStrings } from 'utils/utils';
+import { getCanvas } from 'utils/utils';
+import {
+  VEmptyCallback,
+  VCallbackStrings,
+  VOnAssetListCallback,
+  VAsset,
+  VSetVideoRefCallback,
+} from 'utils/validators';
+import { getAssetList, ocrRecognize } from 'utils/api/api';
+import notification, {
+  ocrSuccess,
+  ocrAssetFind,
+  ocrAssetNotFind,
+  ocrNoTextFound,
+  ocrError,
+  ocrErrorVideo,
+} from 'utils/notifications';
 
-const MainWrapperExtended = styled('div')`
+const Wrapper = styled.div`
   padding: 0;
   display: flex;
   flex-direction: row;
 `;
 
-// const Results = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   overflow: auto;
-//   padding: 20px 0px;
-//   height: 100%;
-// `;
+export enum ASNotifyTypes {
+  recognizeSuccess = 'recognizeSuccess',
+  recognizeFails = 'recognizeFails',
+  assetsFind = 'assetsFind',
+  assetsEmpty = 'assetsEmpty',
+  errorVideoAccess = 'errorVideoAccess',
+  errorOccurred = 'errorOccurred',
+}
 
-const ocrURL = 'https://opin-api.cognite.ai/do_ocr';
+type ASNotification = (type: ASNotifyTypes) => void;
 
 export interface AssetScannerProps {
-  onStringRecognize?: any;
-  onStartLoading?: any;
-  onEndLoading?: any;
-  onAssetFind?: any;
-  notifySuccessRecognize?: any;
-  notifyFailRecognize?: any;
-  notifyErrorOccurred?: any;
+  customNotification?: ASNotification;
+  onStringRecognize?: VCallbackStrings;
+  onStartLoading?: VEmptyCallback;
+  onEndLoading?: VEmptyCallback;
+  onAssetFails?: VEmptyCallback;
+  onAssetFind?: VOnAssetListCallback;
 }
 
 export interface AssetScannerState {
-  notificationStatus: string;
   isLoading: boolean;
   scannedImageSrc: string;
 }
@@ -47,78 +56,55 @@ class AssetScanner extends React.Component<
   AssetScannerState
 > {
   static defaultProps = {
+    customNotifications: false,
     isLoading: false,
     currentScanResults: [],
     envPath: '',
   };
-  static doOCRRequest = async (image: string) => {
-    const options = {
-      method: 'POST',
-      url: ocrURL,
-      data: {
-        image,
-      },
-    };
 
-    try {
-      const result = (await axios(options)).data;
-
-      return extractValidStrings(result.responses[0].textAnnotations);
-    } catch (err) {
-      return err;
-    }
-  };
+  notification: ASNotification = this.prepareNotifications();
 
   state: AssetScannerState = {
-    notificationStatus: '',
     isLoading: false,
     scannedImageSrc: '',
   };
   video: HTMLVideoElement | null = null;
 
-  setRefBound = this.setRef.bind(this);
-  captureBound = this.capture.bind(this);
+  setRefBound: VSetVideoRefCallback = this.setRef.bind(this);
+  captureBound: VEmptyCallback = this.capture.bind(this);
+
+  constructor(props: AssetScannerProps) {
+    super(props);
+
+    this.prepareNotifications();
+  }
 
   componentDidMount() {
     this.resetSearch();
   }
 
-  componentDidUpdate() {
-    const { notificationStatus, isLoading } = this.state;
-
-    if (notificationStatus === 'textFound' && !isLoading) {
-      this.setState({
-        notificationStatus: '',
-      });
-    }
-  }
-
-  setRef(video: HTMLVideoElement) {
+  setRef(video: HTMLVideoElement | null) {
     this.video = video;
-  }
-
-  resetSearch() {
-    this.setState({
-      notificationStatus: '',
-      scannedImageSrc: '',
-      isLoading: false,
-    });
   }
 
   async capture() {
     const {
+      onAssetFind,
+      onAssetFails,
       onStartLoading,
       onStringRecognize,
       onEndLoading,
-      notifySuccessRecognize,
-      notifyFailRecognize,
-      notifyErrorOccurred,
     } = this.props;
 
+    const {
+      errorOccurred,
+      errorVideoAccess,
+      recognizeSuccess,
+      recognizeFails,
+    } = ASNotifyTypes;
+
     if (!this.video) {
-      if (notifyErrorOccurred) {
-        notifyErrorOccurred({ message: 'No video provided' });
-      }
+      this.notification(errorVideoAccess);
 
       return;
     }
@@ -145,11 +131,9 @@ class AssetScanner extends React.Component<
 
       try {
         // do api call to ocr
-        strings = await AssetScanner.doOCRRequest(imageSrc);
+        strings = await ocrRecognize(imageSrc);
       } catch (error) {
-        if (notifyErrorOccurred) {
-          notifyErrorOccurred({ error, message: 'OCR request failed' });
-        }
+        this.notification(errorOccurred);
 
         return;
       }
@@ -160,84 +144,48 @@ class AssetScanner extends React.Component<
           onStringRecognize(strings);
         }
 
-        if (notifySuccessRecognize) {
-          notifySuccessRecognize();
-        }
+        this.notification(recognizeSuccess);
 
-        this.setState({
-          notificationStatus: 'textFound',
-        });
+        const assets = await this.getAssets(strings);
+
+        if (!assets.length && onAssetFails) {
+          onAssetFails();
+        } else if (onAssetFind) {
+          onAssetFind(assets);
+        }
       } else {
-        this.setScannedImageSrc('');
-
-        if (notifyFailRecognize) {
-          notifyFailRecognize();
-        }
+        this.notification(recognizeFails);
       }
 
       if (onEndLoading) {
         onEndLoading();
       }
 
+      this.setScannedImageSrc();
       this.endLoading();
     }
   }
-
-  // mapAssetsToCardList(assets: VAsset[]) {
-  //   return assets.map(asset => {
-  //     const { id, name, description, createdTime } = asset;
-  //     const detail = createdTime
-  //       ? moment(createdTime || 0)
-  //           .startOf('day')
-  //           .fromNow()
-  //       : '';
-  //
-  //     return {
-  //       id,
-  //       title: name,
-  //       description,
-  //       detail,
-  //     };
-  //   });
-  // }
 
   render() {
     const { isLoading, scannedImageSrc } = this.state;
 
     return (
-      <MainWrapperExtended>
+      <Wrapper>
         <WebcamScanner
           isLoading={isLoading}
           imageSrc={scannedImageSrc}
           capture={this.captureBound}
           setRef={this.setRefBound}
         />
-
-        {/*{this.props.currentScanResults.length > 0 && (*/}
-        {/*  <Results data-test-id="scanner-results">*/}
-        {/*    <TagList*/}
-        {/*      envPath={envPath}*/}
-        {/*      listTitle={'Current Results'}*/}
-        {/*      listData={this.mapAssetsToCardList(currentScanResults)}*/}
-        {/*      renderActions={*/}
-        {/*        process.env.REACT_APP_ENV !== 'production'*/}
-        {/*          ? () => (*/}
-        {/*              <CircleButton*/}
-        {/*                onClick={e => {*/}
-        {/*                  e.stopPropagation();*/}
-        {/*                }}*/}
-        {/*                iconType="plus"*/}
-        {/*                type="success"*/}
-        {/*              />*/}
-        {/*            )*/}
-        {/*          : () => null*/}
-        {/*      }*/}
-        {/*      key={123123123}*/}
-        {/*    />*/}
-        {/*  </Results>*/}
-        {/*)}*/}
-      </MainWrapperExtended>
+      </Wrapper>
     );
+  }
+
+  private resetSearch() {
+    this.setState({
+      scannedImageSrc: '',
+      isLoading: false,
+    });
   }
 
   private startLoading() {
@@ -248,8 +196,35 @@ class AssetScanner extends React.Component<
     this.setState({ isLoading: false });
   }
 
-  private setScannedImageSrc(scannedImageSrc: string) {
+  private setScannedImageSrc(scannedImageSrc: string = '') {
     this.setState({ scannedImageSrc });
+  }
+
+  private prepareNotifications(): ASNotification {
+    const { customNotification } = this.props;
+
+    return customNotification || this.embeddedNotification;
+  }
+
+  private embeddedNotification(type: ASNotifyTypes) {
+    const notifications: { [name in ASNotifyTypes]: any } = {
+      [ASNotifyTypes.recognizeSuccess]: () => notification(ocrSuccess),
+      [ASNotifyTypes.recognizeFails]: () => notification(ocrNoTextFound),
+      [ASNotifyTypes.assetsFind]: () => notification(ocrAssetFind),
+      [ASNotifyTypes.assetsEmpty]: () => notification(ocrAssetNotFind),
+      [ASNotifyTypes.errorVideoAccess]: () => notification(ocrErrorVideo),
+      [ASNotifyTypes.errorOccurred]: () => notification(ocrError),
+    };
+
+    return notifications[type]();
+  }
+
+  private async getAssets(strings: string[]): Promise<VAsset[]> {
+    return (await Promise.all(
+      strings.map((s: string) => getAssetList({ query: s }))
+    ))
+      .filter(asset => asset.length)
+      .reduce((res, current) => res.concat(current));
   }
 }
 

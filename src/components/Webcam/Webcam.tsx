@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { VSetVideoRefCallback } from 'utils/validators';
 
 function hasGetUserMedia() {
   return !!(
@@ -15,16 +16,13 @@ function hasGetUserMedia() {
 
 interface WebcamProps {
   audio?: boolean;
-  setRef: any;
+  setRef: VSetVideoRefCallback;
   height?: number | string;
   width?: number | string;
-  // screenshotFormat?: 'image/webp' | 'image/png' | 'image/jpeg';
-  screenshotFormat?: ['image/webp', 'image/png', 'image/jpeg'];
   className?: string;
   audioSource?: string | null;
   videoSource?: string | null;
   isDesktop?: boolean;
-  onUserMedia?: any;
 }
 
 interface WebcamState {
@@ -39,7 +37,6 @@ class Webcam extends Component<WebcamProps, WebcamState> {
     audio: true,
     className: '',
     height: 480,
-    screenshotFormat: 'image/webp',
     width: 640,
     audioSource: null,
     videoSource: null,
@@ -177,8 +174,6 @@ class Webcam extends Component<WebcamProps, WebcamState> {
   }
 
   handleUserMedia(stream: MediaStream | null, error?: MediaStreamError) {
-    const { onUserMedia } = this.props;
-
     if (error) {
       this.setState({
         hasUserMedia: false,
@@ -196,10 +191,6 @@ class Webcam extends Component<WebcamProps, WebcamState> {
       this.setState({
         hasUserMedia: true,
       });
-
-      if (onUserMedia) {
-        onUserMedia();
-      }
     } catch (err) {
       const src = window.URL.createObjectURL(stream);
 

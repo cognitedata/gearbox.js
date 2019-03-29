@@ -16,11 +16,14 @@ const CenterDecorator = storyFn => <div style={styles}>{storyFn()}</div>;
 addDecorator(CenterDecorator);
 
 const infoDecorator = (storyFn, options) => {
-  if (!options.parameters.info) options.parameters.info = {};
+  if (!options.parameters.info) { options.parameters.info = {}; }
 
   const component = Components[options.kind];
+  const {parameters: {info: {propTablesExclude}}} = options;
 
-  options.parameters.info.propTablesExclude = component ? [component] : [];
+  if (!propTablesExclude) { options.parameters.info.propTablesExclude = [] }
+  if (component) { options.parameters.info.propTablesExclude.push(component) }
+
   options.parameters.info.inline = true;
 
   return storyFn();

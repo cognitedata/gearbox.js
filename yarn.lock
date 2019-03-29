@@ -931,6 +931,11 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@cognite/react-auth@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@cognite/react-auth/-/react-auth-2.1.2.tgz#d6058a0ea19f3d0bf7ada128bde7e852744e0182"
+  integrity sha512-wZ79m8Z+4GAKrDOKEXb9dBYITdeShW5sD+4j31JNgmpHLFzWEVoyWBek2yexEDm4rydt37yY3DNtl+xy9GXq8Q==
+
 "@cognite/sdk@^1.5.6":
   version "1.5.6"
   resolved "https://registry.yarnpkg.com/@cognite/sdk/-/sdk-1.5.6.tgz#41eb0314b735b28a941a4152452f5223886044fd"
