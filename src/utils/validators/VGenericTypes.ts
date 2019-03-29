@@ -10,6 +10,11 @@ type VOnAdvancedSearchChange = (searchFields: VAdvancedSearch) => void;
 type VEmptyCallback = () => void;
 type VIdCallback = (id: VId) => void;
 
+interface VError {
+  error?: any;
+  message: 'string';
+}
+
 export {
   VId,
   VOnClick,
@@ -18,4 +23,5 @@ export {
   VIdCallback,
   VOnAdvancedSearchChange,
   VEmptyCallback,
+  VError,
 };

@@ -8,6 +8,7 @@ import AssetSearch from './AssetSearch/AssetSearch';
 import AssetSearchForm from './AssetSearchForm/AssetSearchForm';
 import RootAssetSelect from './RootAssetSelect/RootAssetSelect';
 import EventTimeline from './EventTimeline/EventTimeline';
+import AssetScanner from './AssetScanner/AssetScanner';
 
 export {
   TenantSelector,
@@ -19,4 +20,5 @@ export {
   AssetDetailsPanel,
   AssetEventsPanel,
   EventTimeline,
+  AssetScanner,
 };
