@@ -13,9 +13,16 @@ type VCallbackStrings = (strings: string[]) => void;
 type VIdCallback = (id: VId) => void;
 type VSetVideoRefCallback = (element: HTMLVideoElement | null) => void;
 
-interface VError {
-  error?: any;
-  message: 'string';
+interface VOcrRequest {
+  image: string;
+  url?: string;
+  key?: string;
+}
+
+interface VErrorResponse {
+  status: number;
+  message: string;
+  error?: Error;
 }
 
 export {
@@ -29,5 +36,6 @@ export {
   VCallbackStrings,
   VOnAssetListCallback,
   VSetVideoRefCallback,
-  VError,
+  VErrorResponse,
+  VOcrRequest,
 };

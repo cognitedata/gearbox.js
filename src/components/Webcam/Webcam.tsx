@@ -85,10 +85,10 @@ class Webcam extends Component<WebcamProps, WebcamState> {
         this.stream.stop();
       } else {
         if (this.stream.getVideoTracks) {
-          this.stream.getVideoTracks().map(track => track.stop());
+          this.stream.getVideoTracks().forEach(track => track.stop());
         }
         if (this.stream.getAudioTracks) {
-          this.stream.getAudioTracks().map(track => track.stop());
+          this.stream.getAudioTracks().forEach(track => track.stop());
         }
       }
       Webcam.userMediaRequested = false;
@@ -97,50 +97,10 @@ class Webcam extends Component<WebcamProps, WebcamState> {
   }
 
   requestUserMedia() {
-    navigator.getUserMedia =
-      navigator.getUserMedia ||
-      // @ts-ignore
-      navigator.webkitGetUserMedia ||
-      // @ts-ignore
-      navigator.mozGetUserMedia ||
-      // @ts-ignore
-      navigator.msGetUserMedia ||
-      navigator.mediaDevices.getUserMedia;
-
-    const sourceSelected = (audioSource: string, videoSource: string) => {
-      const constraints: MediaStreamConstraints = {
-        video: { facingMode: 'environment' },
-      };
-
-      if (videoSource) {
-        constraints.video = {
-          deviceId: videoSource,
-        };
-      }
-
-      if (this.props.audio) {
-        constraints.audio = {
-          deviceId: audioSource,
-        };
-      }
-
-      navigator.getUserMedia(
-        constraints,
-        stream => {
-          Webcam.mountedInstances.forEach(instance =>
-            instance.handleUserMedia(stream)
-          );
-        },
-        e => {
-          Webcam.mountedInstances.forEach(instance =>
-            instance.handleUserMedia(null, e)
-          );
-        }
-      );
-    };
+    this.setGlobalUserMediaInterface();
 
     if (this.props.audioSource && this.props.videoSource) {
-      sourceSelected(this.props.audioSource, this.props.videoSource);
+      this.sourceSelected(this.props.audioSource, this.props.videoSource);
     } else if ('mediaDevices' in navigator) {
       navigator.mediaDevices
         .enumerateDevices()
@@ -162,7 +122,7 @@ class Webcam extends Component<WebcamProps, WebcamState> {
             videoSource = this.props.videoSource;
           }
 
-          sourceSelected(audioSource, videoSource);
+          this.sourceSelected(audioSource, videoSource);
         })
         .catch(error => {
           // todo: add error handling
@@ -199,8 +159,6 @@ class Webcam extends Component<WebcamProps, WebcamState> {
         hasUserMedia: true,
         src,
       });
-
-      console.error(err);
     }
   }
 
@@ -225,6 +183,50 @@ class Webcam extends Component<WebcamProps, WebcamState> {
           }
         }}
       />
+    );
+  }
+
+  private setGlobalUserMediaInterface() {
+    navigator.getUserMedia =
+      navigator.getUserMedia ||
+      // @ts-ignore
+      navigator.webkitGetUserMedia ||
+      // @ts-ignore
+      navigator.mozGetUserMedia ||
+      // @ts-ignore
+      navigator.msGetUserMedia ||
+      navigator.mediaDevices.getUserMedia;
+  }
+
+  private sourceSelected(audioSource: string, videoSource: string) {
+    const constraints: MediaStreamConstraints = {
+      video: { facingMode: 'environment' },
+    };
+
+    if (videoSource) {
+      constraints.video = {
+        deviceId: videoSource,
+      };
+    }
+
+    if (this.props.audio) {
+      constraints.audio = {
+        deviceId: audioSource,
+      };
+    }
+
+    navigator.getUserMedia(
+      constraints,
+      stream => {
+        Webcam.mountedInstances.forEach(instance =>
+          instance.handleUserMedia(stream)
+        );
+      },
+      e => {
+        Webcam.mountedInstances.forEach(instance =>
+          instance.handleUserMedia(null, e)
+        );
+      }
     );
   }
 }

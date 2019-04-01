@@ -38,12 +38,15 @@ export enum ASNotifyTypes {
 type ASNotification = (type: ASNotifyTypes) => void;
 
 export interface AssetScannerProps {
+  ocrUrl?: string;
+  ocrKey?: string;
   customNotification?: ASNotification;
   onStringRecognize?: VCallbackStrings;
   onStartLoading?: VEmptyCallback;
   onEndLoading?: VEmptyCallback;
-  onAssetFails?: VEmptyCallback;
+  onAssetEmpty?: VEmptyCallback;
   onAssetFind?: VOnAssetListCallback;
+  onUnauthorized?: any;
 }
 
 export interface AssetScannerState {
@@ -51,7 +54,7 @@ export interface AssetScannerState {
   scannedImageSrc: string;
 }
 
-class AssetScanner extends React.Component<
+export default class AssetScanner extends React.Component<
   AssetScannerProps,
   AssetScannerState
 > {
@@ -75,8 +78,6 @@ class AssetScanner extends React.Component<
 
   constructor(props: AssetScannerProps) {
     super(props);
-
-    this.prepareNotifications();
   }
 
   componentDidMount() {
@@ -88,82 +89,43 @@ class AssetScanner extends React.Component<
   }
 
   async capture() {
-    const {
-      onAssetFind,
-      onAssetFails,
-      onStartLoading,
-      onStringRecognize,
-      onEndLoading,
-    } = this.props;
+    const { onStartLoading, onStringRecognize, onEndLoading } = this.props;
+    const { recognizeSuccess, recognizeFails } = ASNotifyTypes;
+    const imageString = this.getImageFromCanvas();
 
-    const {
-      errorOccurred,
-      errorVideoAccess,
-      recognizeSuccess,
-      recognizeFails,
-    } = ASNotifyTypes;
-
-    if (!this.video) {
-      this.notification(errorVideoAccess);
-
+    if (!imageString) {
       return;
     }
-
-    const aspectRatio = this.video.videoWidth / this.video.videoHeight;
-    const canvas = getCanvas(
-      this.video,
-      this.video.clientWidth,
-      this.video.clientWidth / aspectRatio
-    );
-    const imageString = canvas.toDataURL();
 
     if (onStartLoading) {
       onStartLoading();
     }
 
-    if (imageString !== null) {
-      const imageSrc = imageString.split(',')[1];
+    const imageSrc = imageString.split(',')[1];
 
-      this.startLoading();
-      this.setScannedImageSrc(imageSrc);
+    this.startLoading();
+    this.setScannedImageSrc(imageSrc);
 
-      let strings: any[] = [];
+    const strings = await this.recognizeImage(imageSrc);
 
-      try {
-        // do api call to ocr
-        strings = await ocrRecognize(imageSrc);
-      } catch (error) {
-        this.notification(errorOccurred);
-
-        return;
+    if (strings !== null && strings.length >= 1) {
+      if (onStringRecognize) {
+        onStringRecognize(strings);
       }
 
-      if (strings.length >= 1) {
-        // strings found in image
-        if (onStringRecognize) {
-          onStringRecognize(strings);
-        }
+      await this.getAssetsHandler(strings);
 
-        this.notification(recognizeSuccess);
-
-        const assets = await this.getAssets(strings);
-
-        if (!assets.length && onAssetFails) {
-          onAssetFails();
-        } else if (onAssetFind) {
-          onAssetFind(assets);
-        }
-      } else {
-        this.notification(recognizeFails);
-      }
-
-      if (onEndLoading) {
-        onEndLoading();
-      }
-
-      this.setScannedImageSrc();
-      this.endLoading();
+      this.notification(recognizeSuccess);
+    } else if (strings !== null) {
+      this.notification(recognizeFails);
     }
+
+    if (onEndLoading) {
+      onEndLoading();
+    }
+
+    this.setScannedImageSrc();
+    this.endLoading();
   }
 
   render() {
@@ -226,6 +188,67 @@ class AssetScanner extends React.Component<
       .filter(asset => asset.length)
       .reduce((res, current) => res.concat(current));
   }
-}
 
-export default AssetScanner;
+  private getImageFromCanvas(): string {
+    const { errorVideoAccess } = ASNotifyTypes;
+
+    if (!this.video) {
+      this.notification(errorVideoAccess);
+
+      return '';
+    }
+
+    const aspectRatio = this.video.videoWidth / this.video.videoHeight;
+    const canvas = getCanvas(
+      this.video,
+      this.video.clientWidth,
+      this.video.clientWidth / aspectRatio
+    );
+
+    return canvas.toDataURL();
+  }
+
+  private async recognizeImage(image: string): Promise<string[] | null> {
+    const { ocrUrl, ocrKey, onUnauthorized } = this.props;
+    const { errorOccurred } = ASNotifyTypes;
+    let strings: string[] = [];
+
+    try {
+      strings = await ocrRecognize({
+        image,
+        url: ocrUrl,
+        key: ocrKey,
+      });
+    } catch (error) {
+      if (onUnauthorized) {
+        onUnauthorized(error);
+      }
+
+      this.notification(errorOccurred);
+
+      return null;
+    }
+
+    return strings;
+  }
+
+  private async getAssetsHandler(strings: string[]) {
+    const { onAssetEmpty, onAssetFind, onUnauthorized } = this.props;
+
+    try {
+      const assets = await this.getAssets(strings);
+
+      if (assets.length === 0 && onAssetEmpty) {
+        onAssetEmpty();
+      } else if (assets.length && onAssetFind) {
+        onAssetFind(assets);
+      }
+    } catch (error) {
+      if (error.status && onUnauthorized) {
+        const { status, message } = error;
+
+        onUnauthorized({ status, message, error });
+      }
+    }
+  }
+}

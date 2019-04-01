@@ -1,12 +1,7 @@
 import { VAsset } from './validators';
 
 export function getCanvas(
-  img:
-    | ImageBitmap
-    | HTMLImageElement
-    | SVGImageElement
-    | HTMLCanvasElement
-    | HTMLVideoElement,
+  img: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement,
   width: number,
   height: number
 ) {

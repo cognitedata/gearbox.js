@@ -1,9 +1,8 @@
-import axios from 'axios';
 import { Assets } from '@cognite/sdk';
-import { VAsset, VApiAssetList } from 'utils/validators';
+import { VAsset, VApiAssetList, VOcrRequest } from 'utils/validators';
 import { extractValidStrings } from 'utils/utils';
 
-const ocrURL = 'https://opin-api.cognite.ai/do_ocr';
+const ocrVisionURL = 'https://vision.googleapis.com/v1/images:annotate';
 
 export async function getAssetList({
   query,
@@ -25,20 +24,50 @@ export async function getAssetList({
   return response.items;
 }
 
-export async function ocrRecognize(image: string): Promise<string[]> {
-  const options = {
-    method: 'POST',
-    url: ocrURL,
-    data: {
-      image,
-    },
+export async function ocrRecognize({
+  image,
+  url,
+  key,
+}: VOcrRequest): Promise<string[]> {
+  const headers = new Headers();
+
+  headers.append('Content-Type', 'application/json');
+
+  let ocrUrl = url ? url : ocrVisionURL;
+  ocrUrl += key ? `?key=${key}` : '';
+
+  const body = {
+    requests: [
+      {
+        image: {
+          content: image,
+        },
+        features: [
+          {
+            type: 'TEXT_DETECTION',
+          },
+        ],
+      },
+    ],
   };
 
-  try {
-    const result = (await axios(options)).data;
+  const options = {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body),
+  };
 
-    return extractValidStrings(result.responses[0].textAnnotations);
-  } catch (err) {
-    return err;
+  const response = await fetch(ocrUrl, options);
+
+  if (response.status !== 200) {
+    const { status } = response;
+    const errorResponse = await response.json();
+    const message = errorResponse.error ? errorResponse.error.message : '';
+
+    throw { error: response, status, message };
   }
+
+  const result = await response.json();
+
+  return extractValidStrings(result.responses[0].textAnnotations);
 }

@@ -14,8 +14,6 @@ export interface NotificationProps {
   [name: string]: any;
 }
 
-export type NotificationFunc = (opt: NotificationProps) => void;
-
 export default ({
   type = NotificationTypes.INFO,
   message,
@@ -33,7 +31,7 @@ export default ({
 export const ocrError = {
   type: NotificationTypes.ERROR,
   message: 'Failed to scan image',
-  description: 'If this problem persists, please contact Cognite.',
+  description: 'Check your API key configuration for Google Vision',
 };
 
 export const ocrNoTextFound = {

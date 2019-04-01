@@ -101,21 +101,6 @@ describe('AssetSearch', () => {
     expect(wrapper.state('isModalOpen')).toEqual(false);
   });
 
-  it('Check input field change', () => {
-    const { onSearch, onSearchResults } = propsCallbacks;
-    const props = { assets: assetsList, onSearch, onSearchResults };
-    const wrapper = mount(<AssetSearch {...props} />);
-    const instance: AssetSearch = wrapper.instance() as AssetSearch;
-    const onSearchQueryInput = jest.spyOn(instance, 'onSearchQueryInput');
-    const input = 'test';
-
-    instance.forceUpdate();
-
-    wrapper.find('input').simulate('change', { target: { value: input } });
-    expect(onSearchQueryInput).toHaveBeenCalledTimes(1);
-    expect(wrapper.state('query')).toEqual(input);
-  });
-
   // We have to check it directly because of debounce wrapper
   it('Check debounced search function', () => {
     const { onSearch, onSearchResults } = propsCallbacks;

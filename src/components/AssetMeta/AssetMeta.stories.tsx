@@ -3,6 +3,7 @@ import React from 'react';
 import AssetMeta from './AssetMeta';
 import { ASSET_DATA } from 'mocks/assets';
 import { EVENTS } from 'mocks/events';
+import { DOCUMENTS } from 'mocks/documents';
 
 storiesOf('AssetMeta', module)
   .add('Minimal', () => <AssetMeta asset={{ id: 123 }} />)
@@ -12,24 +13,7 @@ storiesOf('AssetMeta', module)
       <AssetMeta
         asset={ASSET_DATA}
         docsProps={{
-          docs: [
-            {
-              id: 1,
-              fileName: 'file name 1',
-              metadata: {
-                DOC_TITLE: 'document title 1',
-                DOC_TYPE: 'XG',
-              },
-            },
-            {
-              id: 2,
-              fileName: 'file name 2',
-              metadata: {
-                DOC_TITLE: 'document title 2',
-                DOC_TYPE: 'XB',
-              },
-            },
-          ],
+          docs: DOCUMENTS,
         }}
         eventProps={{ events: EVENTS }}
       />
@@ -48,24 +32,7 @@ storiesOf('AssetMeta', module)
       asset={ASSET_DATA}
       tab="events"
       docsProps={{
-        docs: [
-          {
-            id: 1,
-            fileName: 'file name 1',
-            metadata: {
-              DOC_TITLE: 'document title 1',
-              DOC_TYPE: 'XG',
-            },
-          },
-          {
-            id: 2,
-            fileName: 'file name 2',
-            metadata: {
-              DOC_TITLE: 'document title 2',
-              DOC_TYPE: 'XB',
-            },
-          },
-        ],
+        docs: DOCUMENTS,
       }}
       eventProps={{ events: EVENTS }}
     />
@@ -77,24 +44,7 @@ storiesOf('AssetMeta', module)
         asset={ASSET_DATA}
         tab="events"
         docsProps={{
-          docs: [
-            {
-              id: 1,
-              fileName: 'file name 1',
-              metadata: {
-                DOC_TITLE: 'document title 1',
-                DOC_TYPE: 'XG',
-              },
-            },
-            {
-              id: 2,
-              fileName: 'file name 2',
-              metadata: {
-                DOC_TITLE: 'document title 2',
-                DOC_TYPE: 'XB',
-              },
-            },
-          ],
+          docs: DOCUMENTS,
         }}
         eventProps={{ events: EVENTS }}
         hidePanels={['details']}

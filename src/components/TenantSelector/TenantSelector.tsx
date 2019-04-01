@@ -64,7 +64,7 @@ class TenantSelector extends React.Component<
     const invalidTenant = validity === TenantValidity.INVALID;
 
     const formItemProps: {
-      validateStatus?: 'error' | undefined;
+      validateStatus?: 'error';
       help?: string;
     } = {};
 

@@ -931,11 +931,6 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@cognite/react-auth@^2.1.2":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@cognite/react-auth/-/react-auth-2.1.2.tgz#d6058a0ea19f3d0bf7ada128bde7e852744e0182"
-  integrity sha512-wZ79m8Z+4GAKrDOKEXb9dBYITdeShW5sD+4j31JNgmpHLFzWEVoyWBek2yexEDm4rydt37yY3DNtl+xy9GXq8Q==
-
 "@cognite/sdk@^1.5.6":
   version "1.5.6"
   resolved "https://registry.yarnpkg.com/@cognite/sdk/-/sdk-1.5.6.tgz#41eb0314b735b28a941a4152452f5223886044fd"
@@ -6444,7 +6439,7 @@ immer@^1.12.0:
   resolved "https://registry.yarnpkg.com/immer/-/immer-1.12.1.tgz#40c6e5b292c00560836c2993bda3a24379d466f5"
   integrity sha512-3fmKM6ovaqDt0CdC9daXpNi5x/YCYS3i4cwLdTVkhJdk5jrDXoPs7lCm3IqM3yhfSnz4tjjxbRG2CziQ7m8ztg==
 
-immutable@^3.7.4, immutable@^3.8.1:
+immutable@^3.7.4, immutable@^3.8.1, immutable@^3.8.2:
   version "3.8.2"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
   integrity sha1-wkOZUUVbs5kT2vKBN28VMOEErfM=
@@ -11974,6 +11969,13 @@ tslint-react@^3.6.0:
   integrity sha512-AIv1QcsSnj7e9pFir6cJ6vIncTqxfqeFF3Lzh8SuuBljueYzEAtByuB6zMaD27BL0xhMEqsZ9s5eHuCONydjBw==
   dependencies:
     tsutils "^2.13.1"
+
+tslint-sonarts@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/tslint-sonarts/-/tslint-sonarts-1.9.0.tgz#feb593e92db328c0328b430b838adbe65d504de9"
+  integrity sha512-CJWt+IiYI8qggb2O/JPkS6CkC5DY1IcqRsm9EHJ+AxoWK70lvtP7jguochyNDMP2vIz/giGdWCfEM39x/I/Vnw==
+  dependencies:
+    immutable "^3.8.2"
 
 tslint@^5.12.1:
   version "5.14.0"

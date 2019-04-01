@@ -2,8 +2,17 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import DocumentTable from 'components/DocumentTable/DocumentTable';
+import {
+  DOCUMENT_WITHOUT_TYPE,
+  DOCUMENT_WITHOUT_METADATA,
+  DOCUMENT_WITH_CUSTOM_TYPE_FIELD,
+  DOCUMENT_WITH_CUSTOM_TITLE_FIELD,
+  generateDocumentWithDocType,
+} from 'mocks/documents';
 
 configure({ adapter: new Adapter() });
+
+const ANT_COLLAPSE_HEADER = '.ant-collapse-header';
 
 describe('DocumentTable', () => {
   it('Renders without exploding', () => {
@@ -12,22 +21,10 @@ describe('DocumentTable', () => {
   });
 
   it('Correctly renders unknown category', () => {
-    const wrapper = mount(
-      <DocumentTable
-        docs={[
-          {
-            id: 1,
-            fileName: 'file name 1',
-            metadata: {
-              DOC_TITLE: 'document title 1',
-            },
-          },
-        ]}
-      />
-    );
+    const wrapper = mount(<DocumentTable docs={[DOCUMENT_WITHOUT_TYPE]} />);
     expect(
       wrapper
-        .find('.ant-collapse-header')
+        .find(ANT_COLLAPSE_HEADER)
         .hostNodes()
         .text()
     ).toBe('Unknown document type (1)');
@@ -36,40 +33,23 @@ describe('DocumentTable', () => {
   it('Correctly renders custom unknown category', () => {
     const wrapper = mount(
       <DocumentTable
-        docs={[
-          {
-            id: 1,
-            fileName: 'file name 1',
-            metadata: {
-              DOC_TITLE: 'document title 1',
-            },
-          },
-        ]}
+        docs={[DOCUMENT_WITHOUT_TYPE]}
         unknownCategoryName="Unknown"
       />
     );
     expect(
       wrapper
-        .find('.ant-collapse-header')
+        .find(ANT_COLLAPSE_HEADER)
         .hostNodes()
         .text()
     ).toBe('Unknown (1)');
   });
 
   it('Correctly renders without metadata', () => {
-    const wrapper = mount(
-      <DocumentTable
-        docs={[
-          {
-            id: 1,
-            fileName: 'file name 1',
-          },
-        ]}
-      />
-    );
+    const wrapper = mount(<DocumentTable docs={[DOCUMENT_WITHOUT_METADATA]} />);
     expect(
       wrapper
-        .find('.ant-collapse-header')
+        .find(ANT_COLLAPSE_HEADER)
         .hostNodes()
         .text()
     ).toBe('Unknown document type (1)');
@@ -88,7 +68,7 @@ describe('DocumentTable', () => {
     );
     expect(
       wrapper
-        .find('.ant-collapse-header')
+        .find(ANT_COLLAPSE_HEADER)
         .hostNodes()
         .text()
     ).toBe('P&ID (1)');
@@ -97,21 +77,13 @@ describe('DocumentTable', () => {
   it('Correctly finds category from custom field', () => {
     const wrapper = mount(
       <DocumentTable
-        docs={[
-          {
-            id: 1,
-            fileName: 'file name 1',
-            metadata: {
-              Type: 'XB',
-            },
-          },
-        ]}
+        docs={[DOCUMENT_WITH_CUSTOM_TYPE_FIELD]}
         documentTypeField="Type"
       />
     );
     expect(
       wrapper
-        .find('.ant-collapse-header')
+        .find(ANT_COLLAPSE_HEADER)
         .hostNodes()
         .text()
     ).toBe('P&ID (1)');
@@ -120,20 +92,12 @@ describe('DocumentTable', () => {
   it('Correctly finds title from custom field', () => {
     const wrapper = mount(
       <DocumentTable
-        docs={[
-          {
-            id: 1,
-            fileName: 'file name 1',
-            metadata: {
-              Title: 'Document title',
-            },
-          },
-        ]}
+        docs={[DOCUMENT_WITH_CUSTOM_TITLE_FIELD]}
         documentTitleField="Title"
       />
     );
     wrapper
-      .find('.ant-collapse-header')
+      .find(ANT_COLLAPSE_HEADER)
       .hostNodes()
       .simulate('click');
     expect(
@@ -164,7 +128,7 @@ describe('DocumentTable', () => {
     );
     expect(
       wrapper
-        .find('.ant-collapse-header')
+        .find(ANT_COLLAPSE_HEADER)
         .hostNodes()
         .text()
     ).toBe('foo (1)');
@@ -174,36 +138,22 @@ describe('DocumentTable', () => {
     const wrapper = mount(
       <DocumentTable
         docs={[
-          {
-            id: 1,
-            fileName: 'file name 1',
-            metadata: {
-              DOC_TITLE: 'document title 1',
-              DOC_TYPE: 'XB',
-            },
-          },
-          {
-            id: 1,
-            fileName: 'file name 2',
-            metadata: {
-              DOC_TITLE: 'document title 2',
-              DOC_TYPE: 'FA',
-            },
-          },
+          generateDocumentWithDocType(1, 'a', 'XB'),
+          generateDocumentWithDocType(2, 'b', 'FA'),
         ]}
         categoryPriorityList={['FA', 'XB']}
       />
     );
     expect(
       wrapper
-        .find('.ant-collapse-header')
+        .find(ANT_COLLAPSE_HEADER)
         .hostNodes()
         .first()
         .text()
     ).toBe('Project manual, e.g. principal decisions (1)');
     expect(
       wrapper
-        .find('.ant-collapse-header')
+        .find(ANT_COLLAPSE_HEADER)
         .hostNodes()
         .last()
         .text()
@@ -214,20 +164,12 @@ describe('DocumentTable', () => {
     const handleDocumentClick = jest.fn();
     const wrapper = mount(
       <DocumentTable
-        docs={[
-          {
-            id: 1,
-            fileName: 'file name 1',
-            metadata: {
-              DOC_TYPE: 'XB',
-            },
-          },
-        ]}
+        docs={[generateDocumentWithDocType(1, null, 'XB')]}
         handleDocumentClick={handleDocumentClick}
       />
     );
     wrapper
-      .find('.ant-collapse-header')
+      .find(ANT_COLLAPSE_HEADER)
       .hostNodes()
       .simulate('click');
     wrapper
@@ -252,22 +194,14 @@ describe('DocumentTable', () => {
     const handleCategoryClick = jest.fn();
     const wrapper = mount(
       <DocumentTable
-        docs={[
-          {
-            id: 1,
-            fileName: 'file name 1',
-            metadata: {
-              DOC_TYPE: 'XB',
-            },
-          },
-        ]}
+        docs={[generateDocumentWithDocType(1, null, 'XB')]}
         collapseProps={{
           onChange: handleCategoryClick,
         }}
       />
     );
     wrapper
-      .find('.ant-collapse-header')
+      .find(ANT_COLLAPSE_HEADER)
       .hostNodes()
       .simulate('click');
     expect(handleCategoryClick.mock.calls[0][0]).toEqual(['XB']);
