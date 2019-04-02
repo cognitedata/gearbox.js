@@ -13,9 +13,9 @@ export function AssetScannerDescription() {
       <p>
         Component depends on few third-part APIs, which is provided by Google
         Vision (to recognize text on picture) and Cognite (to grep all available
-        information related to recognized string). User has to set in props of
-        component valid API key for Google Vision. How to get one you could
-        check out here:
+        information related to recognized asset). The user has to insert props
+        to the component with a valid API key for Google Vision. Follow this
+        guide to generate an api-key:
       </p>
       <h3>Google Vision API</h3>
       <p>
@@ -49,7 +49,8 @@ export function AssetScannerDescription() {
       <h3>Cognite SDK API usage</h3>
       <p>
         Usage of this component is available in all apps related to Cognite SDK.
-        For success asset list call you need to be logged in Cognite SDK API via{' '}
+        Make sure that the SDK is authenticated before you use this components.
+        See the guide here on how to authenticate the SDK:
         <a
           href="https://github.com/cognitedata/cognitesdk-js#web-application---tokens"
           target="_blank"
