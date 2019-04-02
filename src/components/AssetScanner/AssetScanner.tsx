@@ -75,7 +75,6 @@ export default class AssetScanner extends React.Component<
 
   setRefBound: VSetVideoRefCallback = this.setRef.bind(this);
   captureBound: VEmptyCallback = this.capture.bind(this);
-  unmount: boolean = false;
 
   constructor(props: AssetScannerProps) {
     super(props);
@@ -83,10 +82,6 @@ export default class AssetScanner extends React.Component<
 
   componentDidMount() {
     this.resetSearch();
-  }
-
-  componentWillUnmount() {
-    this.unmount = true;
   }
 
   setRef(video: HTMLVideoElement | null) {
@@ -148,7 +143,7 @@ export default class AssetScanner extends React.Component<
   }
 
   private resetSearch() {
-    if (this.unmount) {
+    if (!this.video) {
       return;
     }
 
