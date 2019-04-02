@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import { VSetVideoRefCallback } from 'utils/validators';
+import styled from 'styled-components';
+
+const StyledVideo = styled.video`
+  background: rgba(0, 0, 0, 0.5);
+`;
 
 function hasGetUserMedia() {
   return !!(
@@ -166,7 +171,7 @@ class Webcam extends Component<WebcamProps, WebcamState> {
     const { isDesktop, setRef } = this.props;
     const videoStyles = isDesktop ? {} : { objectFit: 'cover' as 'cover' };
     return (
-      <video
+      <StyledVideo
         autoPlay={true}
         width="100%"
         height="100%"
