@@ -7,3 +7,4 @@ export * from './VApiQuery';
 export * from './VEventTimeline';
 export * from './AssetTypes';
 export * from './documentTypes';
+export * from './VApiProps';

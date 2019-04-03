@@ -23,7 +23,8 @@
     "prepublishOnly": "yarn build",
     "test": "yarn jest",
     "test:watch": "yarn jest --watchAll",
-    "storybook": "start-storybook -p 6006"
+    "storybook": "start-storybook -p 6006",
+    "storybook-ssl": "start-storybook -p 6006 --https --ssl-cert ./server.cert --ssl-key ./server.key"
   },
   "repository": "cognitedata/gearbox.js",
   "homepage": "https://github.com/cognitedata/gearbox.js#readme",
@@ -38,6 +39,7 @@
     "@babel/core": "^7.3.3",
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
+    "@cognite/sdk": "^1.5.6",
     "@storybook/addon-actions": "^4.1.13",
     "@storybook/addon-info": "^5.0.3",
     "@storybook/addon-links": "^4.1.13",
@@ -69,7 +71,6 @@
     "lint-staged": "^8.1.4",
     "prettier": "^1.16.4",
     "react": "^16.8.3",
-    "react-dom": "^16.8.3",
     "react-test-renderer": "^16.8.5",
     "rollup": "^1.2.0",
     "rollup-plugin-json": "^3.1.0",
@@ -85,9 +86,9 @@
     "typescript": "^3.3.3333"
   },
   "peerDependencies": {
+    "@cognite/sdk": "^1.5.6",
     "antd": "^3.14.1",
     "react": "16",
-    "react-dom": "16",
     "styled-components": "^4.1.3"
   },
   "lint-staged": {
