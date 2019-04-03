@@ -9,7 +9,6 @@ import {
   assetPanels,
   DocumentTableProps,
 } from 'utils/validators';
-import { mapMetaData } from 'utils/helpers/ArrayMapHelpers';
 
 const { TabPane } = Tabs;
 
@@ -46,7 +45,7 @@ const AssetMeta = (props: AssetMetaTypes) => {
       <Tabs defaultActiveKey={tab} onChange={onPaneChange}>
         {asset.metadata && includesPanel('details') && (
           <TabPane tab="Details" key="details">
-            <DescriptionList valueSet={mapMetaData(asset.metadata)} />
+            <DescriptionList valueSet={asset.metadata} />
           </TabPane>
         )}
         {docsProps && includesPanel('documents') && (

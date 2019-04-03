@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { mapMetaData } from 'utils/helpers/ArrayMapHelpers';
 import { ValueListType } from 'utils/validators/AssetTypes';
 
 const DL = styled('dl')`
@@ -14,7 +15,6 @@ const DL = styled('dl')`
     padding: 16px;
     width: 50%;
     margin: 0;
-    border-radius: 5px;
     background-color: white;
   }
 
@@ -34,7 +34,6 @@ const DL = styled('dl')`
       width: 100%;
       border: 1px solid #e8e8e8;
       border-bottom: unset;
-      border-radius: 0;
     }
 
     dt {
@@ -58,20 +57,22 @@ interface DescriptionListType {
     descriptionId: string;
     descriptionText: string;
   };
-  valueSet: ValueListType[];
+  valueSet: { [name: string]: any };
 }
 
 const DescriptionList = (props: DescriptionListType) => {
   const { description, valueSet } = props;
+
+  const arrayValues = mapMetaData(valueSet);
 
   return (
     <>
       {description && (
         <p id={description.descriptionId}>{description.descriptionText}</p>
       )}
-      {valueSet.length >= 1 ? (
+      {arrayValues.length >= 1 ? (
         <DL aria-describedby={description ? description.descriptionId : ''}>
-          {valueSet.map(valSet => (
+          {arrayValues.map((valSet: ValueListType) => (
             <React.Fragment key={valSet.key || valSet.name}>
               <dt>{valSet.name}</dt>
               <dl>{valSet.value}</dl>

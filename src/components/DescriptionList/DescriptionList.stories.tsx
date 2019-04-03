@@ -1,31 +1,18 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import DescriptionList from 'components/DescriptionList/DescriptionList';
-import { ASSET_META_DATA_SOURCE } from 'mocks/assets';
-
-const values = [
-  {
-    name: 'name 1',
-    value: 'value 1',
-  },
-  {
-    name: 'name 2',
-    value: 'value 2',
-    key: 'key2',
-  },
-];
+import { ASSET_DATA } from 'mocks/assets';
 
 storiesOf('DescriptionList', module)
-  .add('Basic example', () => <DescriptionList valueSet={values} />)
-  .add('No data', () => <DescriptionList valueSet={[]} />)
-  .add('With Asset data', () => (
-    <DescriptionList valueSet={ASSET_META_DATA_SOURCE} />
+  .add('Basic example', () => (
+    <DescriptionList valueSet={ASSET_DATA.metadata} />
   ))
+  .add('No data', () => <DescriptionList valueSet={[]} />)
   .add(
-    'With description',
+    'With description text',
     () => (
       <DescriptionList
-        valueSet={values}
+        valueSet={ASSET_DATA.metadata}
         description={{
           descriptionId: 'list1',
           descriptionText: 'List with interesting data you might like to know.',
