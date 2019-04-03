@@ -1,7 +1,7 @@
 // For purposes of published npm package
 export {
-  default as AssetDetailsPanel,
-} from './components/AssetDetailsPanel/AssetDetailsPanel';
+  default as DescriptionList,
+} from './components/DescriptionList/DescriptionList';
 export {
   default as AssetEventsPanel,
 } from './components/AssetEventsPanel/AssetEventsPanel';

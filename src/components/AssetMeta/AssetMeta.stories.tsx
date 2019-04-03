@@ -1,9 +1,12 @@
 import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import React from 'react';
 import AssetMeta from './AssetMeta';
 import { ASSET_DATA } from 'mocks/assets';
 import { EVENTS } from 'mocks/events';
 import { DOCUMENTS } from 'mocks/documents';
+
+const onPaneChange = (key: string) => action('onPaneChange')(key);
 
 storiesOf('AssetMeta', module)
   .add('Minimal', () => <AssetMeta asset={{ id: 123 }} />)
@@ -16,6 +19,7 @@ storiesOf('AssetMeta', module)
           docs: DOCUMENTS,
         }}
         eventProps={{ events: EVENTS }}
+        onPaneChange={onPaneChange}
       />
     ),
     {

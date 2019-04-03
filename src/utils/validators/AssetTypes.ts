@@ -14,7 +14,7 @@ export interface AssetType {
   [propName: string]: any;
 }
 
-export interface TableDataSourceType {
+export interface ValueListType {
   key?: string;
   name: string;
   value: string;
@@ -44,8 +44,4 @@ export interface TableDesignType {
 export interface AssetEventsPanelProps extends TableDesignType {
   columns?: TableColumnType[];
   events?: VApiEvent[];
-}
-
-export interface AssetDetailsPanelProps extends TableDesignType {
-  dataSource?: TableDataSourceType[];
 }

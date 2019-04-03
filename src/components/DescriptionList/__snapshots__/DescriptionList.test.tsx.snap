@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AssetDetailsPanel renders correctly 1`] = `
+<div>
+  <dl
+    aria-describedby=""
+    className="sc-bdVaJa bAmtDI"
+  >
+    <dt>
+      SOURCE_DB
+    </dt>
+    <dl>
+      workmate
+    </dl>
+    <dt>
+      SOURCE_TABLE
+    </dt>
+    <dl>
+      wmate_dba.wmt_location
+    </dl>
+    <dt>
+      WMT_LOCATION_ID
+    </dt>
+    <dl>
+      1004
+    </dl>
+    <dt>
+      WMT_LOCATION_WORKSTART
+    </dt>
+    <dl>
+      1999-09-01 07:00:00
+    </dl>
+    <dt>
+      latestUpdateTimeSource
+    </dt>
+    <dl>
+      1552471210000
+    </dl>
+  </dl>
+  <p
+    className="sc-bwzfXH dRhhuI"
+  >
+    No data
+  </p>
+</div>
+`;
