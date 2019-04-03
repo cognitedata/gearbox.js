@@ -85,5 +85,6 @@ const DescriptionList = (props: DescriptionListType) => {
     </>
   );
 };
+DescriptionList.displayName = 'DescriptionList';
 
 export default DescriptionList;
