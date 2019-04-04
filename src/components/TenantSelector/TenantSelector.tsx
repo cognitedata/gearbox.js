@@ -1,7 +1,10 @@
-import { Button, Form, Input, Spin } from 'antd';
+import { Button, Form, Input, Spin, Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { sanitizeTenant } from 'sanitize';
+import { sanitizeTenant, isEmptyString } from 'sanitize';
+import { VPureObject } from 'utils/validators';
+
+const Panel = Collapse.Panel;
 
 enum TenantValidity {
   CHECKING = 0,
@@ -14,11 +17,17 @@ enum TenantValidity {
  * resolves, then the tenant is valid. If it throws an error or returns
  * {@code false} then the tenant is invalid.
  */
-export type OnTenantValidationFunction = (tenant: string) => Promise<boolean>;
+export type OnTenantValidationFunction = (
+  tenant: string,
+  advancedOptions: VPureObject | null
+) => Promise<boolean>;
 
 export type OnInvalidTenantFunction = (tenant: string) => void;
 
-export type OnTenantSelectionFunction = (tenant: string) => void;
+export type OnTenantSelectionFunction = (
+  tenant: string,
+  advancedOptions: VPureObject | null
+) => void;
 
 export interface TenantSelectorProps {
   header?: string | React.ReactNode;
@@ -30,23 +39,63 @@ export interface TenantSelectorProps {
   title: string | React.ReactNode;
   unknownMessage?: string;
   validateTenant: OnTenantValidationFunction | any;
+  advancedOptions?: VPureObject;
 }
 
 interface TenantSelectorState {
   tenant: string;
   validity: TenantValidity;
+  advanced: VPureObject;
 }
 
 class TenantSelector extends React.Component<
   TenantSelectorProps,
   TenantSelectorState
 > {
+  static defaultProps = {
+    advancedOptions: {},
+  };
+
   constructor(props: TenantSelectorProps) {
     super(props);
+
+    const { advancedOptions } = props;
+
     this.state = {
       tenant: sanitizeTenant(props.initialTenant || ''),
       validity: TenantValidity.UNKNOWN,
+      advanced: Object.assign({}, advancedOptions),
     };
+  }
+
+  renderAdvancedOptions() {
+    const { advanced } = this.state;
+    const keys = Object.keys(advanced);
+
+    if (!keys.length) {
+      return null;
+    }
+
+    const inputs = Object.keys(advanced).map(option => {
+      return (
+        <Form.Item key={option}>
+          <Input
+            name={option}
+            onChange={e => this.onAdvancedOptionChange(e, option)}
+            value={advanced[option]}
+            placeholder={option}
+          />
+        </Form.Item>
+      );
+    });
+
+    return (
+      <CollapseWrapper bordered={false} data-id="collapse-container">
+        <Panel key={'0'} header={'Advanced options'}>
+          {inputs}
+        </Panel>
+      </CollapseWrapper>
+    );
   }
 
   render() {
@@ -90,8 +139,10 @@ class TenantSelector extends React.Component<
               placeholder={placeholder || 'cognite'}
             />
           </Form.Item>
+          {this.renderAdvancedOptions()}
         </Form>
         <Button
+          htmlType="button"
           disabled={checkingValidity || invalidTenant || tenant === ''}
           onClick={this.checkTenantValidity}
           className="uppercase tenant-selector-login-button"
@@ -100,6 +151,19 @@ class TenantSelector extends React.Component<
         </Button>
       </LoginWrapper>
     );
+  }
+
+  private onAdvancedOptionChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+    option: string
+  ) {
+    const advanced = Object.assign({}, this.state.advanced);
+
+    advanced[option] = e.target.value;
+
+    this.setState({
+      advanced,
+    });
   }
 
   private onTenantChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +175,11 @@ class TenantSelector extends React.Component<
 
   private checkTenantValidity = () => {
     const { onInvalidTenant, onTenantSelected, validateTenant } = this.props;
-    const { tenant } = this.state;
+    const { tenant, advanced } = this.state;
+
+    const advancedOptions = Object.keys(advanced).length
+      ? this.getNonEmptyAdvancedFields(advanced)
+      : null;
     if (tenant.length === 0) {
       this.setState({
         validity: TenantValidity.INVALID,
@@ -124,9 +192,9 @@ class TenantSelector extends React.Component<
     this.setState({
       validity: TenantValidity.CHECKING,
     });
-    validateTenant(tenant)
+    validateTenant(tenant, advancedOptions)
       .then(() => {
-        onTenantSelected(tenant);
+        onTenantSelected(tenant, advancedOptions);
       })
       .catch(() => {
         this.setState({
@@ -137,6 +205,20 @@ class TenantSelector extends React.Component<
         }
       });
   };
+
+  private getNonEmptyAdvancedFields(advanced: VPureObject): VPureObject | null {
+    const advancedOptions: VPureObject = Object.assign({}, advanced);
+
+    Object.keys(advanced).forEach(option => {
+      const value = advanced[option];
+
+      if (isEmptyString(value)) {
+        delete advancedOptions[option];
+      }
+    });
+
+    return Object.keys(advancedOptions).length ? advancedOptions : null;
+  }
 }
 
 const LoginWrapper = styled.div`
@@ -188,6 +270,24 @@ const LoginWrapper = styled.div`
 
 const Title = styled.h1`
   font-weight: bold;
+`;
+
+const CollapseWrapper = styled(Collapse)`
+  .ant-collapse-item {
+    border-bottom: none !important;
+  }
+  .ant-collapse-header {
+    font-size: 1.17em;
+    font-weight: 500;
+    padding-left: 20px !important;
+
+    .ant-collapse-arrow {
+      left: 0 !important;
+    }
+  }
+  .ant-collapse-content-box {
+    padding: 5px 0 0 0 !important;
+  }
 `;
 
 export default TenantSelector;

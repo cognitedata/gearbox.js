@@ -25,6 +25,10 @@ interface VErrorResponse {
   error?: Error;
 }
 
+interface VPureObject {
+  [name: string]: VId;
+}
+
 export {
   VId,
   VOnClick,
@@ -38,4 +42,5 @@ export {
   VSetVideoRefCallback,
   VErrorResponse,
   VOcrRequest,
+  VPureObject,
 };

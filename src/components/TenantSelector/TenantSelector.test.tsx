@@ -131,4 +131,48 @@ describe('TenantSelector', () => {
       done();
     });
   });
+
+  it('Advanced options rendering', () => {
+    const apiUrlString = 'api';
+    const advancedOptions = {
+      apiUrl: '',
+      comment: 'Comment',
+    };
+    const validateTenant = sinon.fake.resolves(true);
+    const onTenantSelected = sinon.fake();
+    const wrapper = mount(
+      <TenantSelector
+        title="Unit Test"
+        onTenantSelected={onTenantSelected}
+        validateTenant={validateTenant}
+        advancedOptions={advancedOptions}
+      />
+    );
+
+    expect(wrapper).toHaveLength(1);
+
+    const collapseHeader = wrapper.find('.ant-collapse-header');
+
+    collapseHeader.simulate('click');
+
+    expect(wrapper.find('input')).toHaveLength(3);
+
+    const button = wrapper.find('button');
+    const input = wrapper.find(tenantInputDataId);
+    input.simulate('change', { target: { value: tenantName } });
+
+    button.simulate('click');
+
+    expect(validateTenant.lastCall.args[1]).toMatchObject({
+      comment: 'Comment',
+    });
+
+    const optionApiInput = wrapper.find('input[name="apiUrl"]');
+
+    optionApiInput.simulate('change', { target: { value: apiUrlString } });
+
+    const { apiUrl } = wrapper.state('advanced');
+
+    expect(apiUrl).toEqual(apiUrlString);
+  });
 });
