@@ -11,20 +11,27 @@ const onSearch = (apiQuery: VApiQuery) => action('onSearch')(apiQuery);
 const onAssetSelected = (assetId: VId) => action('onAssetSelected')(assetId);
 const onFilterIconClick = () => action('onFilterIconClick')();
 
-storiesOf('AssetSearch', module).add(
-  'Search',
-  () => (
+storiesOf('AssetSearch', module)
+  .add('Basic', () => (
+    <AssetSearch
+      onSearchResults={onSearchResults}
+      onSearch={onSearch}
+    />
+  ))
+  .add('With advanced search', () => (
+    <AssetSearch
+      onSearchResults={onSearchResults}
+      onSearch={onSearch}
+      onFilterIconClick={onFilterIconClick}
+      enableAdvancedSearch
+    />
+  ))
+  .add('With asset root selection', () => (
     <AssetSearch
       onSearchResults={onSearchResults}
       onSearch={onSearch}
       onAssetSelected={onAssetSelected}
-      onFilterIconClick={onFilterIconClick}
+      enableRootAssetSelect
       assets={assetsList}
     />
-  ),
-  {
-    info: {
-      maxPropObjectKeys: 5,
-    },
-  }
-);
+  ));

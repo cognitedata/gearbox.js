@@ -16,6 +16,8 @@ import {
   VEmptyCallback,
 } from 'utils/validators';
 
+const { Search } = Input;
+
 const InputGroup = styled(Input.Group)`
   display: flex !important;
   flex-grow: 1;
@@ -44,6 +46,8 @@ export interface AssetSearchProps {
   assetId?: VId;
   onSearchResults?: VOnAssetSearchResult;
   onSearch?: VOnAssetSearch;
+  enableRootAssetSelect: boolean;
+  enableAdvancedSearch: boolean;
   onAssetSelected?: VIdCallback;
   onFilterIconClick?: VEmptyCallback;
 }
@@ -60,6 +64,8 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
     fetchingLimit: 25,
     debounceTime: 200,
     boostName: true,
+    enableAdvancedSearch: false,
+    enableRootAssetSelect: false,
     strings: {},
   };
 
@@ -149,18 +155,20 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
 
   render() {
     const { assetId, query, isModalOpen, advancedSearch } = this.state;
-    const { assets, strings } = this.props;
+    const { assets, strings, enableAdvancedSearch, enableRootAssetSelect } = this.props;
     const lang = { ...defaultStrings, ...strings };
     const { changeSearch, clear, searchPlaceholder, search } = lang;
 
     return (
       <React.Fragment>
         <InputGroup compact={true}>
-          <RootAssetSelectStyled
-            onAssetSelected={this.onAssetSelected}
-            assets={assets}
-            assetId={assetId}
-          />
+          {enableRootAssetSelect &&
+            <RootAssetSelectStyled
+              onAssetSelected={this.onAssetSelected}
+              assets={assets}
+              assetId={assetId}
+            />
+          }
           {advancedSearch ? (
             <React.Fragment>
               <ButtonBlock type="primary" onClick={this.onFilterIconClick}>
@@ -171,20 +179,30 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
               </Button>
             </React.Fragment>
           ) : (
-            <Input
-              placeholder={searchPlaceholder}
-              disabled={!!advancedSearch}
-              value={query}
-              onChange={this.onSearchQueryInput}
-              allowClear={true}
-              suffix={
-                <Icon
-                  type="filter"
-                  onClick={this.onFilterIconClick}
-                  style={{ opacity: 0.6, marginLeft: 8 }}
-                />
-              }
-            />
+            enableAdvancedSearch ? (
+              <Input
+                placeholder={searchPlaceholder}
+                disabled={!!advancedSearch}
+                value={query}
+                onChange={this.onSearchQueryInput}
+                allowClear={true}
+                suffix={
+                  <Icon
+                    type="filter"
+                    onClick={this.onFilterIconClick}
+                    style={{ opacity: 0.6, marginLeft: 8 }}
+                  />
+                }
+              />
+            ) : (
+              <Search
+                placeholder={searchPlaceholder}
+                disabled={!!advancedSearch}
+                value={query}
+                onChange={this.onSearchQueryInput}
+                allowClear={true}
+              />
+            )
           )}
         </InputGroup>
         <Modal
