@@ -76,7 +76,7 @@ class TenantSelector extends React.Component<
       return null;
     }
 
-    const inputs = Object.keys(advanced).map(option => {
+    const inputs = keys.map(option => {
       return (
         <Form.Item key={option}>
           <Input
