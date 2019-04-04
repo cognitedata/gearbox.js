@@ -10,3 +10,14 @@ export const sanitizeTenant = (input: string): string =>
     // CDP projects cannot have upper-case characters
     .toLowerCase()
     .replace(/[^a-z0-9-]+/g, '');
+
+/**
+ * Check if input empty, consist of spaces or its a number
+ * @param input – checked value
+ * @return <true> if input empty, <false> otherwise
+ */
+export function isEmptyString(input: string | number): boolean {
+  return typeof input === 'number'
+    ? false
+    : !Boolean(input && input.replace(/\s/gi, ''));
+}
