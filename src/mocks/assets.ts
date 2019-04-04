@@ -15,11 +15,3 @@ export const ASSET_DATA = {
   createdTime: 0,
   lastUpdatedTime: 1553076017185,
 };
-
-export const ASSET_META_DATA_SOURCE = Object.keys(ASSET_DATA.metadata).map(
-  dp => ({
-    key: dp,
-    name: dp,
-    value: (ASSET_DATA.metadata as any)[dp],
-  })
-);
