@@ -2,7 +2,7 @@
 import TenantSelector from './TenantSelector/TenantSelector';
 import AssetView from './AssetView/AssetView';
 import EventPreview from './EventPreview/EventPreview';
-import AssetDetailsPanel from './AssetDetailsPanel/AssetDetailsPanel';
+import DescriptionList from './DescriptionList/DescriptionList';
 import AssetEventsPanel from './AssetEventsPanel/AssetEventsPanel';
 import AssetSearch from './AssetSearch/AssetSearch';
 import AssetSearchForm from './AssetSearchForm/AssetSearchForm';
@@ -18,7 +18,7 @@ export {
   AssetSearch,
   AssetSearchForm,
   RootAssetSelect,
-  AssetDetailsPanel,
+  DescriptionList,
   AssetEventsPanel,
   EventTimeline,
   DocumentTable,
