@@ -7,7 +7,7 @@ import {
 } from 'utils/validators';
 import { Form, Input, Icon, Button } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 const formItemLayout = {
   labelCol: {

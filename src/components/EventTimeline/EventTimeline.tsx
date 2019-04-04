@@ -9,7 +9,7 @@ import {
   event as d3Event,
   ScaleTime,
 } from 'd3';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Spin } from 'antd';
 import { VEventTimeline, VIdCallback } from 'utils/validators';
 
