@@ -41,13 +41,13 @@ export interface AssetSearchProps {
   fetchingLimit: number;
   debounceTime: number;
   boostName: boolean;
+  rootAssetSelect: boolean;
+  advancedSearch: boolean;
   assets: VAsset[];
   strings: VMetadata;
   assetId?: VId;
   onSearchResults?: VOnAssetSearchResult;
   onSearch?: VOnAssetSearch;
-  enableRootAssetSelect: boolean;
-  enableAdvancedSearch: boolean;
   onAssetSelected?: VIdCallback;
   onFilterIconClick?: VEmptyCallback;
 }
@@ -56,7 +56,7 @@ export interface AssetSearchState {
   assetId: VId;
   query: string;
   isModalOpen: boolean;
-  advancedSearch: VAdvancedSearch | null;
+  advancedSearchQuery: VAdvancedSearch | null;
 }
 
 class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
@@ -64,8 +64,8 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
     fetchingLimit: 25,
     debounceTime: 200,
     boostName: true,
-    enableAdvancedSearch: false,
-    enableRootAssetSelect: false,
+    advancedSearch: false,
+    rootAssetSelect: false,
     strings: {},
   };
 
@@ -77,24 +77,24 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
       assetId: props.assetId || 0,
       query: '',
       isModalOpen: false,
-      advancedSearch: null,
+      advancedSearchQuery: null,
     };
   }
 
   debouncedSearch() {
     const { onSearch, boostName, fetchingLimit, onSearchResults } = this.props;
-    const { query, advancedSearch, assetId } = this.state;
+    const { query, advancedSearchQuery, assetId } = this.state;
     const assetSubtrees = assetId ? [assetId] : null;
 
     const apiQuery: VApiQuery = {
-      advancedSearch,
+      advancedSearch: advancedSearchQuery,
       fetchingLimit,
       assetSubtrees,
       boostName,
       query,
     };
 
-    if (!query && !advancedSearch && onSearchResults) {
+    if (!query && !advancedSearchQuery && onSearchResults) {
       onSearchResults(null, apiQuery);
 
       return;
@@ -121,7 +121,7 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
     const { onSearchResults } = this.props;
 
     this.setState({
-      advancedSearch: null,
+      advancedSearchQuery: null,
       isModalOpen: false,
       query: '',
     });
@@ -146,7 +146,7 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
   };
 
   onAssetSearchChange = (value: VAdvancedSearch) =>
-    this.setState({ advancedSearch: value, query: '' });
+    this.setState({ advancedSearchQuery: value, query: '' });
 
   onSearchQueryInput = (e: SyntheticEvent) => {
     const target = e.target as HTMLInputElement;
@@ -154,22 +154,22 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
   };
 
   render() {
-    const { assetId, query, isModalOpen, advancedSearch } = this.state;
-    const { assets, strings, enableAdvancedSearch, enableRootAssetSelect } = this.props;
+    const { assetId, query, isModalOpen, advancedSearchQuery } = this.state;
+    const { assets, strings, advancedSearch, rootAssetSelect } = this.props;
     const lang = { ...defaultStrings, ...strings };
     const { changeSearch, clear, searchPlaceholder, search } = lang;
 
     return (
       <React.Fragment>
         <InputGroup compact={true}>
-          {enableRootAssetSelect &&
+          {rootAssetSelect &&
             <RootAssetSelectStyled
               onAssetSelected={this.onAssetSelected}
               assets={assets}
               assetId={assetId}
             />
           }
-          {advancedSearch ? (
+          {advancedSearchQuery ? (
             <React.Fragment>
               <ButtonBlock type="primary" onClick={this.onFilterIconClick}>
                 {changeSearch}
@@ -179,10 +179,10 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
               </Button>
             </React.Fragment>
           ) : (
-            enableAdvancedSearch ? (
+            advancedSearch ? (
               <Input
                 placeholder={searchPlaceholder}
-                disabled={!!advancedSearch}
+                disabled={!!advancedSearchQuery}
                 value={query}
                 onChange={this.onSearchQueryInput}
                 allowClear={true}
@@ -197,7 +197,7 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
             ) : (
               <Search
                 placeholder={searchPlaceholder}
-                disabled={!!advancedSearch}
+                disabled={!!advancedSearchQuery}
                 value={query}
                 onChange={this.onSearchQueryInput}
                 allowClear={true}
@@ -224,7 +224,7 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
           ]}
         >
           <AssetSearchForm
-            value={advancedSearch}
+            value={advancedSearchQuery}
             onPressEnter={this.onModalOk}
             onChange={this.onAssetSearchChange}
           />

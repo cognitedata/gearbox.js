@@ -23,7 +23,7 @@ storiesOf('AssetSearch', module)
       onSearchResults={onSearchResults}
       onSearch={onSearch}
       onFilterIconClick={onFilterIconClick}
-      enableAdvancedSearch
+      advancedSearch
     />
   ))
   .add('With asset root selection', () => (
@@ -31,7 +31,7 @@ storiesOf('AssetSearch', module)
       onSearchResults={onSearchResults}
       onSearch={onSearch}
       onAssetSelected={onAssetSelected}
-      enableRootAssetSelect
+      rootAssetSelect
       assets={assetsList}
     />
   ));
