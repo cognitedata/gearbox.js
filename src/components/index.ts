@@ -10,6 +10,7 @@ import RootAssetSelect from './RootAssetSelect/RootAssetSelect';
 import EventTimeline from './EventTimeline/EventTimeline';
 import DocumentTable from './DocumentTable/DocumentTable';
 import AssetScanner from './AssetScanner/AssetScanner';
+import SensorOverlay from './SensorOverlay/SensorOverlay';
 
 export {
   TenantSelector,
@@ -23,4 +24,5 @@ export {
   EventTimeline,
   DocumentTable,
   AssetScanner,
+  SensorOverlay,
 };
