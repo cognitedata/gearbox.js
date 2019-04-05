@@ -13,17 +13,14 @@ const onFilterIconClick = () => action('onFilterIconClick')();
 
 storiesOf('AssetSearch', module)
   .add('Basic', () => (
-    <AssetSearch
-      onSearchResults={onSearchResults}
-      onSearch={onSearch}
-    />
+    <AssetSearch onSearchResults={onSearchResults} onSearch={onSearch} />
   ))
   .add('With advanced search', () => (
     <AssetSearch
       onSearchResults={onSearchResults}
       onSearch={onSearch}
       onFilterIconClick={onFilterIconClick}
-      advancedSearch
+      advancedSearch={true}
     />
   ))
   .add('With asset root selection', () => (
@@ -31,7 +28,7 @@ storiesOf('AssetSearch', module)
       onSearchResults={onSearchResults}
       onSearch={onSearch}
       onAssetSelected={onAssetSelected}
-      rootAssetSelect
+      rootAssetSelect={true}
       assets={assetsList}
     />
   ));

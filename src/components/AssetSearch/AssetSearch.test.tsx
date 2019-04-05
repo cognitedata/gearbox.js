@@ -44,7 +44,11 @@ describe('AssetSearch', () => {
 
   it('On filter icon click', () => {
     const { onFilterIconClick } = propsCallbacks;
-    const props = { assets: assetsList, advancedSearch: true, onFilterIconClick };
+    const props = {
+      assets: assetsList,
+      advancedSearch: true,
+      onFilterIconClick,
+    };
     const wrapper = mount(<AssetSearch {...props} />);
 
     wrapper.find('.anticon.anticon-filter').simulate('click');
@@ -54,11 +58,18 @@ describe('AssetSearch', () => {
 
   it('On root asset select', () => {
     const { onAssetSelected } = propsCallbacks;
-    const props = { assets: assetsList, rootAssetSelect: true, onAssetSelected };
+    const props = {
+      assets: assetsList,
+      rootAssetSelect: true,
+      onAssetSelected,
+    };
     const wrapper = mount(<AssetSearch {...props} />);
 
     wrapper.find('.ant-select').simulate('click');
-    wrapper.find('.ant-select-dropdown-menu-item').last().simulate('click');
+    wrapper
+      .find('.ant-select-dropdown-menu-item')
+      .last()
+      .simulate('click');
     expect(onAssetSelected).toHaveBeenCalledTimes(1);
   });
 
@@ -81,7 +92,7 @@ describe('AssetSearch', () => {
 
   it('Check on modal callbacks', () => {
     const { onSearchResults } = propsCallbacks;
-    const props = { assets: assetsList, onSearchResults, advancedSearch: true};
+    const props = { assets: assetsList, onSearchResults, advancedSearch: true };
     const wrapper = mount(<AssetSearch {...props} />);
     const instance = wrapper.instance() as AssetSearch;
     const onSearchClear = jest.spyOn(instance, 'onModalCancel');
@@ -144,7 +155,9 @@ describe('AssetSearch', () => {
     const instance = wrapper.instance() as AssetSearch;
 
     instance.onAssetSearchChange(AssetSearchFormValue);
-    expect(wrapper.state('advancedSearchQuery')).toMatchObject(AssetSearchFormValue);
+    expect(wrapper.state('advancedSearchQuery')).toMatchObject(
+      AssetSearchFormValue
+    );
   });
 
   it('Check asset value change', () => {

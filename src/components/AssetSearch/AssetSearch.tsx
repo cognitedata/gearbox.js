@@ -162,13 +162,13 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
     return (
       <React.Fragment>
         <InputGroup compact={true}>
-          {rootAssetSelect &&
+          {rootAssetSelect && (
             <RootAssetSelectStyled
               onAssetSelected={this.onAssetSelected}
               assets={assets}
               assetId={assetId}
             />
-          }
+          )}
           {advancedSearchQuery ? (
             <React.Fragment>
               <ButtonBlock type="primary" onClick={this.onFilterIconClick}>
@@ -178,31 +178,29 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
                 {clear}
               </Button>
             </React.Fragment>
+          ) : advancedSearch ? (
+            <Input
+              placeholder={searchPlaceholder}
+              disabled={!!advancedSearchQuery}
+              value={query}
+              onChange={this.onSearchQueryInput}
+              allowClear={true}
+              suffix={
+                <Icon
+                  type="filter"
+                  onClick={this.onFilterIconClick}
+                  style={{ opacity: 0.6, marginLeft: 8 }}
+                />
+              }
+            />
           ) : (
-            advancedSearch ? (
-              <Input
-                placeholder={searchPlaceholder}
-                disabled={!!advancedSearchQuery}
-                value={query}
-                onChange={this.onSearchQueryInput}
-                allowClear={true}
-                suffix={
-                  <Icon
-                    type="filter"
-                    onClick={this.onFilterIconClick}
-                    style={{ opacity: 0.6, marginLeft: 8 }}
-                  />
-                }
-              />
-            ) : (
-              <Search
-                placeholder={searchPlaceholder}
-                disabled={!!advancedSearchQuery}
-                value={query}
-                onChange={this.onSearchQueryInput}
-                allowClear={true}
-              />
-            )
+            <Search
+              placeholder={searchPlaceholder}
+              disabled={!!advancedSearchQuery}
+              value={query}
+              onChange={this.onSearchQueryInput}
+              allowClear={true}
+            />
           )}
         </InputGroup>
         <Modal
