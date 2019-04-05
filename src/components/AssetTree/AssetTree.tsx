@@ -86,7 +86,7 @@ class AssetTree extends Component<AssetTreeType> {
           </TreeNode>
         );
       }
-      return <TreeNode title={item.title} key={item.title} dataRef={item}/>;
+      return <TreeNode title={item.title} key={item.title} dataRef={item} />;
     });
 
   render() {
