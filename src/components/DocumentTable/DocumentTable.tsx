@@ -1,5 +1,4 @@
-import 'antd/dist/antd.css';
-import Collapse from 'antd/lib/collapse';
+import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import { Document, DocumentTableProps } from 'utils/validators/documentTypes';

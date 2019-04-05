@@ -3,6 +3,10 @@ import json from 'rollup-plugin-json';
 import pkg from './package.json';
 
 export default {
+  external: [
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(pkg.peerDependencies || {}),
+  ],
   input: 'src/index.ts',
   output: [
     {
@@ -13,10 +17,6 @@ export default {
       file: pkg.module,
       format: 'es',
     },
-  ],
-  external: [
-    ...Object.keys(pkg.dependencies || {}),
-    ...Object.keys(pkg.peerDependencies || {}),
   ],
   plugins: [
     typescript({
