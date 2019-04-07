@@ -49,7 +49,7 @@ const PointContainer = styled.div<{
   z-index: ${({ zIndex }) => zIndex};
 `;
 
-interface LabelPosition {
+export interface LabelPosition {
   left: number;
   top: number;
   pointer: {
@@ -59,7 +59,7 @@ interface LabelPosition {
   distToCamera: number;
 }
 
-interface LabelPositionMap {
+export interface LabelPositionMap {
   [labelName: string]: LabelPosition;
 }
 
@@ -79,7 +79,7 @@ interface SensorValues {
   [key: string]: number;
 }
 
-interface EventConstantsMap {
+export interface EventConstantsMap {
   [key: string]: {
     description: string;
     nodeId: number;
@@ -88,7 +88,7 @@ interface EventConstantsMap {
   };
 }
 
-interface SensorOverlayProps {
+export interface SensorOverlayProps {
   eventPositions: LabelPositionMap;
   eventConstants: EventConstantsMap;
   eventNames: string[];

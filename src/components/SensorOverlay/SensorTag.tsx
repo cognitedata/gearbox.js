@@ -26,7 +26,7 @@ const SensorTagContainer = styled.div<{
   z-index: ${({ z }) => z};
 `;
 
-const Tag = styled.div`
+export const Tag = styled.div`
   background: ${props => props.color};
   border-radius: 30px;
   color: white;

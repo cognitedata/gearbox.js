@@ -15,7 +15,7 @@ const TagContainer = styled.div<{
   z-index: ${({ z }) => z};
 `;
 
-const Tag = styled.div`
+export const Tag = styled.div`
   background: ${props => props.color};
   border-radius: 30px;
   color: white;
@@ -30,9 +30,9 @@ const Tag = styled.div`
   }
 `;
 
-const TagValue = styled.div<{ flipped: boolean }>`
+export const TagValue = styled.div<{ flipped: boolean }>`
   font-size: 1.4rem;
-  padding: 4px 0;
+  padding: 4px;
   display: flex;
   position: relative;
   top: 1px;
