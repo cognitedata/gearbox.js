@@ -9,7 +9,9 @@ export interface AssetType {
   path?: VId[];
   depth?: number;
   metadata?: VMetadata;
-  [propName: string]: any;
+  parentId?: number;
+  createdTime?: number;
+  lastUpdatedTime?: number;
 }
 
 export interface ValueListType {

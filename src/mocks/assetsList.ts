@@ -1,11 +1,11 @@
-import { VAdvancedSearch } from 'utils/validators';
+import { VAdvancedSearch, AssetType } from 'utils/validators';
 
 export const vmateDba = 'wmate_dba.wmt_location';
 export const randomTime = '1999-09-01 07:00:00';
 export const valDescription = 'Valhall plattform';
 export const gasCompressionString = 'GAS COMPRESSION AND RE-INJECTION (PH)';
 
-export const SKA = {
+export const SKA: AssetType = {
   id: 8129784932439587,
   path: [8129784932439587],
   name: 'SKA',
@@ -30,7 +30,7 @@ export const SKA = {
   },
 };
 
-export const IAA = {
+export const IAA: AssetType = {
   id: 7793176078609329,
   path: [7793176078609329],
   name: 'IAA',
@@ -49,8 +49,7 @@ export const IAA = {
   },
 };
 
-
-export const VAL = {
+export const VAL: AssetType = {
   id: 3623339785663936,
   path: [3623339785663936],
   name: 'VAL',
@@ -87,7 +86,7 @@ export const AssetSearchFormValue: VAdvancedSearch = {
 
 export const assetsList = [SKA, IAA, VAL];
 
-export const ASSET_ZERO_DEPTH_ARRAY = [
+export const ASSET_ZERO_DEPTH_ARRAY: AssetType[] = [
   {
     id: 6687602007296940,
     path: [6687602007296940],
@@ -127,7 +126,7 @@ export const ASSET_ZERO_DEPTH_ARRAY = [
   },
 ];
 
-export const ASSET_LIST_CHILD = [
+export const ASSET_LIST_CHILD: AssetType[] = [
   {
     id: 6687602007296940,
     path: [6687602007296940],
