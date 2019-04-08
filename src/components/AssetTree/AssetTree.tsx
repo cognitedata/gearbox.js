@@ -67,6 +67,7 @@ class AssetTree extends Component<AssetTreeType> {
     title: `${asset.name}: ${asset.description}`,
     key: asset.id,
     node: asset,
+    isLeaf: true,
   });
 
   onLoadData = async (treeNode: AntTreeNode) => {
@@ -81,7 +82,6 @@ class AssetTree extends Component<AssetTreeType> {
       const query = {
         depth: 2,
         limit: 1000,
-        isLeaf: true,
       };
 
       const loadedData = loadData(assetId, query);
