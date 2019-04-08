@@ -34,20 +34,43 @@ describe('AssetSearch', () => {
     expect(wrapper.prop('fetchingLimit')).toEqual(25);
     expect(wrapper.prop('debounceTime')).toEqual(200);
     expect(wrapper.prop('strings')).toMatchObject({});
+    expect(wrapper.prop('advancedSearch')).toEqual(false);
+    expect(wrapper.prop('rootAssetSelect')).toEqual(false);
     expect(wrapper.state('assetId')).toEqual(0);
     expect(wrapper.state('query')).toEqual('');
     expect(wrapper.state('isModalOpen')).toEqual(false);
-    expect(wrapper.state('advancedSearch')).toEqual(null);
+    expect(wrapper.state('advancedSearchQuery')).toEqual(null);
   });
 
   it('On filter icon click', () => {
     const { onFilterIconClick } = propsCallbacks;
-    const props = { assets: assetsList, onFilterIconClick };
+    const props = {
+      assets: assetsList,
+      advancedSearch: true,
+      onFilterIconClick,
+    };
     const wrapper = mount(<AssetSearch {...props} />);
 
     wrapper.find('.anticon.anticon-filter').simulate('click');
     expect(onFilterIconClick).toHaveBeenCalledTimes(1);
     expect(wrapper.state('isModalOpen')).toEqual(true);
+  });
+
+  it('On root asset select', () => {
+    const { onAssetSelected } = propsCallbacks;
+    const props = {
+      assets: assetsList,
+      rootAssetSelect: true,
+      onAssetSelected,
+    };
+    const wrapper = mount(<AssetSearch {...props} />);
+
+    wrapper.find('.ant-select').simulate('click');
+    wrapper
+      .find('.ant-select-dropdown-menu-item')
+      .last()
+      .simulate('click');
+    expect(onAssetSelected).toHaveBeenCalledTimes(1);
   });
 
   it('Check input field change', () => {
@@ -68,8 +91,8 @@ describe('AssetSearch', () => {
   });
 
   it('Check on modal callbacks', () => {
-    const { onFilterIconClick, onSearchResults } = propsCallbacks;
-    const props = { assets: assetsList, onFilterIconClick, onSearchResults };
+    const { onSearchResults } = propsCallbacks;
+    const props = { assets: assetsList, onSearchResults, advancedSearch: true };
     const wrapper = mount(<AssetSearch {...props} />);
     const instance = wrapper.instance() as AssetSearch;
     const onSearchClear = jest.spyOn(instance, 'onModalCancel');
@@ -91,7 +114,7 @@ describe('AssetSearch', () => {
     expect(onSearchClear).toHaveBeenCalled();
     expect(onSearchResults).toHaveBeenCalled();
     expect(wrapper.state()).toMatchObject({
-      advancedSearch: null,
+      advancedSearchQuery: null,
       isModalOpen: false,
       query: '',
     });
@@ -132,7 +155,9 @@ describe('AssetSearch', () => {
     const instance = wrapper.instance() as AssetSearch;
 
     instance.onAssetSearchChange(AssetSearchFormValue);
-    expect(wrapper.state('advancedSearch')).toMatchObject(AssetSearchFormValue);
+    expect(wrapper.state('advancedSearchQuery')).toMatchObject(
+      AssetSearchFormValue
+    );
   });
 
   it('Check asset value change', () => {
