@@ -41,13 +41,17 @@ class AssetTree extends Component<AssetTreeType> {
 
     assets.forEach(asset => {
       const { parentId } = asset;
-      if (parentId && nodes[parentId]) {
-        nodes[parentId].children
-          ? nodes[parentId].children.push(nodes[asset.id])
-          : (nodes[parentId].children = [nodes[asset.id]]);
-        addedAsChildren.push(asset.id);
-        nodes[parentId].isLeaf = false;
+      const node = nodes[parentId as number]; // casting is not a problem. It will return undefined if not found
+      if (!node) {
+        return;
       }
+      if (node.children) {
+        node.children.push(nodes[asset.id]);
+      } else {
+        node.children = [nodes[asset.id]];
+      }
+      addedAsChildren.push(asset.id);
+      node.isLeaf = false;
     });
 
     addedAsChildren.forEach(id => {
