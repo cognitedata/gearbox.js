@@ -2,6 +2,14 @@ import { VApiEvent, VId, VMetadata } from './index';
 
 export type assetPanels = 'details' | 'events' | 'documents';
 
+export interface TreeNodeData {
+  title: string;
+  key: number | string;
+  children?: TreeNodeData[];
+  isLeaf?: boolean;
+  [name: string]: any;
+}
+
 export interface AssetType {
   id: VId;
   name: string;
@@ -70,5 +78,5 @@ export interface AssetTreeType {
   assets?: AssetType[];
   loadData?: (assetId: VId, query: AssetQuery) => AssetType[];
   onSelect?: (onSelect: OnSelectReturnType) => void;
-  selectedKeys?: string[];
+  defaultExpandedKeys?: string[];
 }

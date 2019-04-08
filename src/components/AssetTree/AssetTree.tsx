@@ -6,6 +6,7 @@ import {
   TreeNodeType,
   AssetType,
   OnSelectReturnType,
+  TreeNodeData,
 } from 'utils/validators';
 
 const { TreeNode } = Tree;
@@ -13,24 +14,56 @@ const { TreeNode } = Tree;
 class AssetTree extends Component<AssetTreeType> {
   state = {
     treeData: [],
+    expandedKeys: {},
   };
 
   async componentDidMount() {
-    const { assets } = this.props;
+    const { assets, defaultExpandedKeys } = this.props;
 
     if (assets && assets.length > 0) {
-      this.setState({ treeData: this.sortAndMapAssets(assets) });
+      this.setState({
+        treeData: this.mapDataAssets(assets),
+        expandedKeys: defaultExpandedKeys
+          ? this.toKeys(defaultExpandedKeys)
+          : {},
+      });
     }
   }
 
-  sortAndMapAssets = (assets: AssetType[]) => {
-    assets.sort((a, b) => a.name.localeCompare(b.name));
+  mapDataAssets = (assets: AssetType[]) => {
+    const nodes: { [name: string]: TreeNodeData } = {};
 
-    return assets.map(x => ({
-      title: `${x.name}: ${x.description}`,
-      key: x.id,
-    }));
+    assets.forEach(asset => {
+      nodes[asset.id] = this.returnPretty(asset);
+    });
+
+    const addedAsChildren: (number | string)[] = [];
+
+    assets.forEach(asset => {
+      const { parentId } = asset;
+      if (parentId && nodes[parentId]) {
+        nodes[parentId].children
+          ? nodes[parentId].children.push(nodes[asset.id])
+          : (nodes[parentId].children = [nodes[asset.id]]);
+        addedAsChildren.push(asset.id);
+        nodes[parentId].isLeaf = false;
+      }
+    });
+
+    addedAsChildren.forEach(id => {
+      delete nodes[id];
+    });
+
+    return Object.keys(nodes).map(id => {
+      return nodes[id];
+    });
   };
+
+  returnPretty = (asset: AssetType) => ({
+    title: `${asset.name}: ${asset.description}`,
+    key: asset.id,
+    node: asset,
+  });
 
   onLoadData = async (treeNode: AntTreeNode) => {
     const { loadData } = this.props;
@@ -44,6 +77,7 @@ class AssetTree extends Component<AssetTreeType> {
       const query = {
         depth: 2,
         limit: 1000,
+        isLeaf: true,
       };
 
       const loadedData = loadData(assetId, query);
@@ -77,27 +111,36 @@ class AssetTree extends Component<AssetTreeType> {
     }
   };
 
+  toKeys = (path: string[], initial = {}) =>
+    path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
+
+  onExpand = (expandedKeys: string[]) => {
+    this.setState({
+      expandedKeys: this.toKeys(expandedKeys),
+    });
+  };
+
   renderTreeNode = (nodes: TreeNodeType[]) =>
     nodes.map(item => {
       if (item.children) {
         return (
-          <TreeNode title={item.title} key={item.title} dataRef={item}>
+          <TreeNode title={item.title} key={item.key} dataRef={item}>
             {this.renderTreeNode(item.children)}
           </TreeNode>
         );
       }
-      return <TreeNode title={item.title} key={item.title} dataRef={item} />;
+      return <TreeNode title={item.title} key={item.key} dataRef={item} />;
     });
 
   render() {
-    const { selectedKeys } = this.props;
-    const { treeData } = this.state;
+    const { treeData, expandedKeys } = this.state;
 
     return (
       <Tree
         loadData={this.onLoadData}
-        selectedKeys={selectedKeys}
         onSelect={(_, e) => this.onSelectNode(e.node.props.dataRef)}
+        expandedKeys={Object.keys(expandedKeys)}
+        onExpand={this.onExpand}
       >
         {this.renderTreeNode(treeData)}
       </Tree>
