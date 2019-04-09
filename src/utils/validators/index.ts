@@ -5,3 +5,5 @@ export * from './VAdvancedSearch';
 export * from './VEventTimeline';
 export * from './AssetTypes';
 export * from './documentTypes';
+export * from './VTimeseries';
+export * from './VTimeseriesQuery';
