@@ -15,6 +15,13 @@ storiesOf('AssetSearch', module)
   .add('Basic', () => (
     <AssetSearch onSearchResults={onSearchResults} onSearch={onSearch} />
   ))
+  .add('With custom placeholder', () => (
+    <AssetSearch
+      onSearchResults={onSearchResults}
+      onSearch={onSearch}
+      strings={{ searchPlaceholder: 'custom text' }}
+    />
+  ))
   .add('With advanced search', () => (
     <AssetSearch
       onSearchResults={onSearchResults}
