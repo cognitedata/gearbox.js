@@ -10,9 +10,10 @@ Gearbox.js
 ## Setup
 
 Run `yarn`.
+
 Install additional dependencies:
-1.  AntD by running `npm i antd --save`.
-2.  Styled-components via `npm i styled-components --save`.
+1.  AntD by running `yarn add antd` or `npm i antd --save`.
+2.  Styled-components via `yarn add styled-components` or `npm i styled-components --save`.
 
 
 ## Storybook
