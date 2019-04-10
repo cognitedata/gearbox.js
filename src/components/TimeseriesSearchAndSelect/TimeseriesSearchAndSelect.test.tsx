@@ -14,8 +14,8 @@ configure({ adapter: new Adapter() });
 
 const { Search } = Input;
 const propsCallbacks: { [name: string]: Mock } = {
-  onSearch: jest.fn().mockResolvedValue({ items: timeseriesList }),
-  filterRule: jest.fn().mockReturnValueOnce(true),
+  onSearch: jest.fn(),
+  filterRule: jest.fn(),
   onTimeserieSelectionChange: jest.fn(),
   onError: jest.fn(),
 };
@@ -23,6 +23,10 @@ const propsCallbacks: { [name: string]: Mock } = {
 // ignore debounce
 jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
   return f;
+});
+
+beforeEach(() => {
+  propsCallbacks.onSearch.mockResolvedValue({ items: timeseriesList });
 });
 
 afterEach(() => {
@@ -274,6 +278,7 @@ describe('TimeserieSearchAndSelect', () => {
 
   it('should use filterRule if defined', done => {
     const { onSearch, filterRule } = propsCallbacks;
+    filterRule.mockReturnValueOnce(true);
     const props = { assets: assetsList, onSearch, filterRule };
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
 
