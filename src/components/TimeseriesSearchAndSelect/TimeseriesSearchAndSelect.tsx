@@ -2,15 +2,10 @@ import { Spin } from 'antd';
 import AssetSearch from 'components/AssetSearch/AssetSearch';
 import DetailCheckbox from 'components/DetailCheckbox/DetailCheckbox';
 import { debounce } from 'lodash';
+import * as sdk from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
-import {
-  VApiQuery,
-  VTimeseriesQuery,
-  VAsset,
-  VId,
-  VTimeseries,
-} from 'utils/validators';
+import { VApiQuery, VAsset, VId } from 'utils/validators';
 
 const Wrapper = styled.div`
   display: flex;
@@ -38,24 +33,21 @@ export const CenteredSpin = styled(Spin)`
 `;
 
 export interface TimeserieSearchAndSelectProps {
-  assets: VAsset[];
   selectedTimeseries: string[];
   single?: boolean;
-  onSearch: (
-    timeserieQuery: VTimeseriesQuery
-  ) => Promise<{ items: VTimeseries[] }>;
   allowStrings?: boolean;
   onTimeserieSelectionChange?: (
     newTimeseries: string[],
-    selectedTimeserie: VTimeseries
+    selectedTimeserie: sdk.Timeseries
   ) => void;
   rootAsset?: VId;
-  filterRule?: (timeseries: VTimeseries) => boolean;
+  filterRule?: (timeseries: sdk.Timeseries) => boolean;
   onError?: (error: Error) => void;
 }
 
 export interface TimeserieSearchAndSelectState {
   assetId?: VId;
+  assets: VAsset[];
   fetching: boolean;
   searchResults: any;
   selectedTimeseries: string[];
@@ -68,7 +60,7 @@ class TimeserieSearchAndSelect extends React.Component<
 > {
   static defaultProps = {
     selectedTimeseries: [],
-    filterRule: (_: VTimeseries) => true,
+    filterRule: (_: sdk.Timeseries) => true,
   };
 
   static getDerivedStateFromProps(
@@ -89,6 +81,7 @@ class TimeserieSearchAndSelect extends React.Component<
       searchResults: [],
       selectedTimeseries: props.selectedTimeseries || [],
       lastFetchId: 0,
+      assets: [],
     };
     this.fetchTimeseries = debounce(this.fetchTimeseries, 200, {
       leading: false,
@@ -96,11 +89,17 @@ class TimeserieSearchAndSelect extends React.Component<
     });
   }
 
+  async componentDidMount() {
+    const assets = await sdk.Assets.list({ depth: 0 });
+    this.setState({ assets: assets.items });
+  }
+
   onSelectAsset = (assetId: VId): void => {
+    console.log('102');
     this.setState({ assetId, searchResults: [] });
   };
 
-  onTimeSerieClicked = (timeseries: VTimeseries): void => {
+  onTimeSerieClicked = (timeseries: sdk.Timeseries): void => {
     let newTimeseries: string[] = [];
 
     if (this.props.single) {
@@ -133,19 +132,24 @@ class TimeserieSearchAndSelect extends React.Component<
       });
       return;
     }
-    this.props
-      .onSearch({
-        assetSubtrees,
-        query,
-        limit: 100,
-      })
+    const assetSubtreeNumbers =
+      assetSubtrees == null
+        ? undefined
+        : assetSubtrees.map(
+            (ast: VId): number => Number.parseInt(ast.toString(), 10)
+          );
+    sdk.TimeSeries.search({
+      assetSubtrees: assetSubtreeNumbers,
+      query,
+      limit: 100,
+    })
       .then(
-        (data: { [items: string]: VTimeseries[] }): void => {
+        (data: sdk.TimeseriesWithCursor): void => {
           if (fetchId !== this.state.lastFetchId) {
             // for fetch callback order
             return;
           }
-          
+
           const { items } = data;
           if (this.props.filterRule) {
             const resultsFiltered = items.filter(this.props.filterRule);
@@ -181,8 +185,8 @@ class TimeserieSearchAndSelect extends React.Component<
     ].findIndex(timeseries => timeseries === name) !== -1;
 
   render() {
-    const { allowStrings, assets, single } = this.props;
-    const { assetId, fetching, searchResults } = this.state;
+    const { allowStrings, single } = this.props;
+    const { assetId, fetching, searchResults, assets } = this.state;
 
     return (
       <Wrapper>
@@ -196,7 +200,7 @@ class TimeserieSearchAndSelect extends React.Component<
         />
         <TagList style={{ marginTop: '8px' }}>
           {fetching ? <CenteredSpin /> : null}
-          {searchResults.map((timeseries: VTimeseries) => (
+          {searchResults.map((timeseries: sdk.Timeseries) => (
             <DetailCheckbox
               className={`tag-search-result result-${timeseries.id}`}
               key={`detail-checkbox--${timeseries.id}`}
@@ -207,7 +211,7 @@ class TimeserieSearchAndSelect extends React.Component<
               checkable={!single}
               checked={this.isChecked(timeseries.name)}
               onContainerClick={() => this.onTimeSerieClicked(timeseries)}
-              disabled={!allowStrings && timeseries.isString}
+              disabled={!allowStrings && !!timeseries.isString}
             />
           ))}
         </TagList>

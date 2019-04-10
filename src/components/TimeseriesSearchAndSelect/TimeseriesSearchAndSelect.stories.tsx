@@ -1,39 +1,57 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import * as sdk from '@cognite/sdk';
 import TimeserieSearchAndSelect from 'components/TimeseriesSearchAndSelect/TimeseriesSearchAndSelect';
 import { assetsList } from 'mocks/assetsList';
-import {
-  VApiQuery,
-  VId,
-  VOnTimeserieSelectionChangeResult,
-  VTimeseries,
-} from 'utils/validators';
 import { timeseriesList } from 'mocks/timeseriesList';
+import { VAsset } from 'utils/validators';
 
 const timeseriesNames = timeseriesList.map(ts => ts.name).join(', ');
 const infoText = `Names you can search for : ${timeseriesNames}.`;
 
-const onSearch = async (apiQuery: VApiQuery) => {
-  action('onSearch')(apiQuery);
-  if (!apiQuery.query) {
+// Mock the SDK calls
+sdk.Assets.list = async (
+  input: sdk.AssetListParams
+): Promise<sdk.AssetDataWithCursor> => {
+  action('sdk.Assets.list')(input);
+  return {
+    items: assetsList.map(
+      (a: VAsset): sdk.Asset => {
+        return {
+          id: Number.parseInt(a.id.toString(), 10),
+          name: a.name,
+          description: a.description,
+        };
+      }
+    ),
+  };
+};
+
+sdk.TimeSeries.search = async (
+  input: sdk.TimeseriesSearchParams
+): Promise<sdk.TimeseriesWithCursor> => {
+  action('sdk.TimeSeries.search')(input);
+  if (!input.query) {
     return {
       items: timeseriesList,
     };
   }
   return {
     items: timeseriesList.filter(
-      ts => ts.name.toUpperCase().indexOf(apiQuery.query.toUpperCase()) >= 0
+      ts => ts.name.toUpperCase().indexOf(input.query.toUpperCase()) >= 0
     ),
   };
 };
 
-const filterRule = (timeseries: VTimeseriess): boolean => !timeseries.isString;
+const filterRule = (timeseries: sdk.Timeseries): boolean =>
+  !timeseries.isString;
 
 const onTimeserieSelectionChange = (
-  selectionResult: VOnTimeserieSelectionChangeResult
+  newTimeseries: string[],
+  timeseries: sdk.Timeseries
 ) => {
-  action('onTimeserieSelectionChange')(selectionResult);
+  action('onTimeserieSelectionChange')(newTimeseries, timeseries);
 };
 
 storiesOf('TimeserieSearchAndSelect', module)
@@ -41,8 +59,6 @@ storiesOf('TimeserieSearchAndSelect', module)
     'Basic',
     () => (
       <TimeserieSearchAndSelect
-        onSearch={onSearch}
-        assets={assetsList}
         onTimeserieSelectionChange={onTimeserieSelectionChange}
       />
     ),
@@ -56,8 +72,6 @@ storiesOf('TimeserieSearchAndSelect', module)
     'Single selection',
     () => (
       <TimeserieSearchAndSelect
-        onSearch={onSearch}
-        assets={assetsList}
         onTimeserieSelectionChange={onTimeserieSelectionChange}
         single={true}
       />
@@ -72,8 +86,6 @@ storiesOf('TimeserieSearchAndSelect', module)
     'Allow strings',
     () => (
       <TimeserieSearchAndSelect
-        onSearch={onSearch}
-        assets={assetsList}
         onTimeserieSelectionChange={onTimeserieSelectionChange}
         allowStrings={true}
       />
@@ -88,15 +100,13 @@ storiesOf('TimeserieSearchAndSelect', module)
     'Custom filter rule',
     () => (
       <TimeserieSearchAndSelect
-        onSearch={onSearch}
-        assets={assetsList}
         onTimeserieSelectionChange={onTimeserieSelectionChange}
         filterRule={filterRule}
       />
     ),
     {
       info: {
-        text: `const filterRule = (timeseries: VTimeseriess) : boolean =>
+        text: `const filterRule = (timeseries: sdk.Timeseries) : boolean =>
       !timeseries.isString;`,
       },
     }

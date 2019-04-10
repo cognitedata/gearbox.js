@@ -1,7 +1,7 @@
 /* tslint:disable */
-import { VTimeseries } from 'utils/validators';
+import { Timeseries } from '@cognite/sdk';
 
-export const IAA_21PT1019: VTimeseries[] = [
+export const IAA_21PT1019: Timeseries[] = [
   {
     id: 8681821313339919,
     name: 'IA_21PT1019.AlarmByte',

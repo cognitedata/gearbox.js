@@ -1,8 +1,8 @@
-// tslint:disable
 import React from 'react';
 import { mount, configure } from 'enzyme';
 import { Input } from 'antd';
 import lodash from 'lodash';
+import * as sdk from '@cognite/sdk';
 import TimeserieSearchAndSelect from './TimeseriesSearchAndSelect';
 import DetailCheckbox from 'components/DetailCheckbox/DetailCheckbox';
 import { assetsList } from 'mocks/assetsList';
@@ -12,9 +12,11 @@ import Mock = jest.Mock;
 
 configure({ adapter: new Adapter() });
 
+sdk.TimeSeries.search = jest.fn();
+sdk.Assets.list = jest.fn();
+
 const { Search } = Input;
 const propsCallbacks: { [name: string]: Mock } = {
-  onSearch: jest.fn(),
   filterRule: jest.fn(),
   onTimeserieSelectionChange: jest.fn(),
   onError: jest.fn(),
@@ -26,27 +28,30 @@ jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
 });
 
 beforeEach(() => {
-  propsCallbacks.onSearch.mockResolvedValue({ items: timeseriesList });
+  // @ts-ignore
+  sdk.TimeSeries.search.mockResolvedValue({ items: timeseriesList });
+  // @ts-ignore
+  sdk.Assets.list.mockResolvedValue({ items: assetsList });
 });
 
 afterEach(() => {
   Object.keys(propsCallbacks).forEach((key: string) =>
     propsCallbacks[key].mockClear()
   );
+  // @ts-ignore
+  sdk.TimeSeries.search.mockClear();
 });
 
-// @ts-ignore
-describe('TimeserieSearchAndSelect', () => {
+
+describe('TimeserieSearchAndSelect', () => { // tslint:disable-line
   it('Renders without exploding', () => {
-    const { onSearch } = propsCallbacks;
-    const props = { assets: assetsList, onSearch };
+    const props = {};
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
     expect(wrapper.exists()).toBe(true);
   });
 
   it('Checks default values', () => {
-    const { onSearch } = propsCallbacks;
-    const props = { assets: assetsList, onSearch };
+    const props = {};
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
 
     expect(wrapper.prop('selectedTimeseries')).toEqual([]);
@@ -58,8 +63,7 @@ describe('TimeserieSearchAndSelect', () => {
   });
 
   it('should search with when input changes', () => {
-    const { onSearch } = propsCallbacks;
-    const props = { assets: assetsList, onSearch };
+    const props = {};
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
 
     wrapper
@@ -67,51 +71,54 @@ describe('TimeserieSearchAndSelect', () => {
       .find('input')
       .simulate('change', { target: { value: 'value' } });
 
-    expect(onSearch).toHaveBeenCalledTimes(1);
-    expect(onSearch).toHaveBeenCalledWith({
+    expect(sdk.TimeSeries.search).toHaveBeenCalledTimes(1);
+    expect(sdk.TimeSeries.search).toHaveBeenCalledWith({
       query: 'value',
       limit: 100,
-      assetSubtrees: null,
+      assetSubtrees: undefined,
     });
   });
 
-  it('should update assetId with user-selected root asset id', () => {
-    const { onSearch } = propsCallbacks;
-    const props = { assets: assetsList, onSearch };
+  it('should update assetId with user-selected root asset id', done => {
+    const props = {};
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
 
     wrapper
       .find(Search)
       .find('input')
       .simulate('change', { target: { value: 'value' } });
-    expect(onSearch).toHaveBeenCalledTimes(1);
+    expect(sdk.TimeSeries.search).toHaveBeenCalledTimes(1);
 
-    wrapper.find('.ant-select').simulate('click');
-    wrapper
-      .find('.ant-select-dropdown-menu-item')
-      .last()
-      .simulate('click');
+    // need this to wait for promise to complete
+    setImmediate(() => {
+      wrapper.update();
+      wrapper.find('.ant-select').simulate('click');
+      wrapper
+        .find('.ant-select-dropdown-menu-item')
+        .last()
+        .simulate('click');
 
-    expect(onSearch).toHaveBeenCalledTimes(2);
-    expect(onSearch).toHaveBeenNthCalledWith(2, {
-      query: 'value',
-      limit: 100,
-      assetSubtrees: [assetsList[assetsList.length - 1].id],
+      expect(sdk.TimeSeries.search).toHaveBeenCalledTimes(2);
+      expect(sdk.TimeSeries.search).toHaveBeenNthCalledWith(2, {
+        query: 'value',
+        limit: 100,
+        assetSubtrees: [assetsList[assetsList.length - 1].id],
+      });
+      done();
     });
   });
 
   it('should render search results', done => {
-    const { onSearch } = propsCallbacks;
-    const props = { assets: assetsList, onSearch };
+    const props = { assets: assetsList };
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
 
     wrapper
       .find(Search)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
-    expect(onSearch).toHaveBeenCalledTimes(1);
+    expect(sdk.TimeSeries.search).toHaveBeenCalledTimes(1);
 
-    // need this to wait for onSearch promise to complete
+    // need this to wait for promise to complete
     setImmediate(() => {
       wrapper.update();
       expect(wrapper.find(DetailCheckbox)).toHaveLength(timeseriesList.length);
@@ -120,40 +127,38 @@ describe('TimeserieSearchAndSelect', () => {
   });
 
   it('should clear search results when input is cleared', done => {
-    const { onSearch } = propsCallbacks;
-    const props = { assets: assetsList, onSearch };
+    const props = { assets: assetsList };
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
 
     wrapper
       .find(Search)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
-    expect(onSearch).toHaveBeenCalledTimes(1);
+    expect(sdk.TimeSeries.search).toHaveBeenCalledTimes(1);
 
-    // need this to wait for onSearch promise to complete
+    // need this to wait for promise to complete
     setImmediate(() => {
       wrapper.update();
       wrapper
-      .find(Search)
-      .find('input')
-      .simulate('change', { target: { value: '' } });
+        .find(Search)
+        .find('input')
+        .simulate('change', { target: { value: '' } });
       expect(wrapper.find(DetailCheckbox)).toHaveLength(0);
       done();
     });
   });
 
   it('should select clicked search result', done => {
-    const { onSearch, onTimeserieSelectionChange } = propsCallbacks;
-    const props = { assets: assetsList, onSearch, onTimeserieSelectionChange };
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = { onTimeserieSelectionChange };
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
 
     wrapper
       .find(Search)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
-    expect(onSearch).toHaveBeenCalledTimes(1);
 
-    // need this to wait for onSearch promise to complete
+    // need this to wait for promise to complete
     setImmediate(() => {
       wrapper.update();
       wrapper
@@ -187,17 +192,16 @@ describe('TimeserieSearchAndSelect', () => {
   });
 
   it('should give all checked results', done => {
-    const { onSearch, onTimeserieSelectionChange } = propsCallbacks;
-    const props = { assets: assetsList, onSearch, onTimeserieSelectionChange };
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = { assets: assetsList, onTimeserieSelectionChange };
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
 
     wrapper
       .find(Search)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
-    expect(onSearch).toHaveBeenCalledTimes(1);
 
-    // need this to wait for onSearch promise to complete
+    // need this to wait for promise to complete
     setImmediate(() => {
       wrapper.update();
       wrapper
@@ -236,17 +240,16 @@ describe('TimeserieSearchAndSelect', () => {
   });
 
   it('should unselect when clicking selected search result', done => {
-    const { onSearch, onTimeserieSelectionChange } = propsCallbacks;
-    const props = { assets: assetsList, onSearch, onTimeserieSelectionChange };
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = { assets: assetsList, onTimeserieSelectionChange };
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
 
     wrapper
       .find(Search)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
-    expect(onSearch).toHaveBeenCalledTimes(1);
 
-    // need this to wait for onSearch promise to complete
+    // need this to wait for promise to complete
     setImmediate(() => {
       wrapper.update();
       wrapper
@@ -277,18 +280,17 @@ describe('TimeserieSearchAndSelect', () => {
   });
 
   it('should use filterRule if defined', done => {
-    const { onSearch, filterRule } = propsCallbacks;
+    const { filterRule } = propsCallbacks;
     filterRule.mockReturnValueOnce(true);
-    const props = { assets: assetsList, onSearch, filterRule };
+    const props = { assets: assetsList, filterRule };
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
 
     wrapper
       .find(Search)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
-    expect(onSearch).toHaveBeenCalledTimes(1);
 
-    // need this to wait for onSearch promise to complete
+    // need this to wait for promise to complete
     setImmediate(() => {
       wrapper.update();
       expect(filterRule).toHaveBeenCalledTimes(timeseriesList.length);
@@ -298,18 +300,18 @@ describe('TimeserieSearchAndSelect', () => {
   });
 
   it('should call onError when api call fails', done => {
-    const { onSearch, onError } = propsCallbacks;
-    onSearch.mockRejectedValue(new Error('Error'));
-    const props = { assets: assetsList, onSearch, onError };
+    const { onError } = propsCallbacks;
+    // @ts-ignore
+    sdk.TimeSeries.search.mockRejectedValue(new Error('Error'));
+    const props = { assets: assetsList, onError };
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
 
     wrapper
       .find(Search)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
-    expect(onSearch).toHaveBeenCalledTimes(1);
 
-    // need this to wait for onSearch promise to complete
+    // need this to wait for promise to complete
     setImmediate(() => {
       wrapper.update();
       expect(onError).toHaveBeenCalledTimes(1);
@@ -319,17 +321,15 @@ describe('TimeserieSearchAndSelect', () => {
   });
 
   it('should not render checkboxes when single is true', done => {
-    const { onSearch } = propsCallbacks;
-    const props = { assets: assetsList, onSearch, single: true };
+    const props = { assets: assetsList, single: true };
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
 
     wrapper
       .find(Search)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
-    expect(onSearch).toHaveBeenCalledTimes(1);
 
-    // need this to wait for onSearch promise to complete
+    // need this to wait for promise to complete
     setImmediate(() => {
       wrapper.update();
       expect(wrapper.find({ type: 'checkbox' })).toHaveLength(0);
@@ -338,17 +338,20 @@ describe('TimeserieSearchAndSelect', () => {
   });
 
   it('should always return selected when single is true', done => {
-    const { onSearch, onTimeserieSelectionChange } = propsCallbacks;
-    const props = { assets: assetsList, onSearch, onTimeserieSelectionChange, single: true };
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = {
+      assets: assetsList,
+      onTimeserieSelectionChange,
+      single: true,
+    };
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
 
     wrapper
       .find(Search)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
-    expect(onSearch).toHaveBeenCalledTimes(1);
 
-    // need this to wait for onSearch promise to complete
+    // need this to wait for promise to complete
     setImmediate(() => {
       wrapper.update();
       wrapper
