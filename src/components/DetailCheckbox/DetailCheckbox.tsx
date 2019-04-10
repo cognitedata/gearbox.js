@@ -35,9 +35,11 @@ export interface DetailCheckboxProps {
   onContainerClick: any;
   title: string;
   className: string;
+  checkable: boolean;
 }
 
 const defaultProps = {
+  checkable: true,
   onContainerClick: null,
   disabled: false,
   checked: false,
@@ -51,6 +53,7 @@ const DetailCheckbox: React.SFC<DetailCheckboxProps> = ({
   onContainerClick,
   title,
   className,
+  checkable,
 }) => (
   <Container
     className={className}
@@ -80,11 +83,13 @@ const DetailCheckbox: React.SFC<DetailCheckboxProps> = ({
         {description}
       </Description>
     </div>
-    <Checkbox
-      checked={checked}
-      disabled={disabled}
-      onClick={e => e.preventDefault()}
-    />
+    {checkable && (
+      <Checkbox
+        checked={checked}
+        disabled={disabled}
+        onClick={e => e.preventDefault()}
+      />
+    )}
   </Container>
 );
 

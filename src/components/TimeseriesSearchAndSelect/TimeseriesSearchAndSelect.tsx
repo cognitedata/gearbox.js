@@ -40,6 +40,7 @@ export const CenteredSpin = styled(Spin)`
 export interface TimeserieSearchAndSelectProps {
   assets: VAsset[];
   selectedTimeseries: string[];
+  single?: boolean;
   onSearch: (
     timeserieQuery: VTimeseriesQuery
   ) => Promise<{ items: VTimeseries[] }>;
@@ -101,7 +102,10 @@ class TimeserieSearchAndSelect extends React.Component<
 
   onTimeSerieClicked = (timeseries: VTimeseries): void => {
     let newTimeseries: string[] = [];
-    if (!this.isChecked(timeseries.name)) {
+
+    if (this.props.single) {
+      newTimeseries = [timeseries.name];
+    } else if (!this.isChecked(timeseries.name)) {
       newTimeseries = [...this.state.selectedTimeseries, timeseries.name];
     } else {
       newTimeseries = [...this.state.selectedTimeseries].filter(
@@ -177,7 +181,7 @@ class TimeserieSearchAndSelect extends React.Component<
     ].findIndex(timeseries => timeseries === name) !== -1;
 
   render() {
-    const { allowStrings, assets } = this.props;
+    const { allowStrings, assets, single } = this.props;
     const { assetId, fetching, searchResults } = this.state;
 
     return (
@@ -200,6 +204,7 @@ class TimeserieSearchAndSelect extends React.Component<
               description={
                 timeseries.description || timeseries.name || 'No description'
               }
+              checkable={!single}
               checked={this.isChecked(timeseries.name)}
               onContainerClick={() => this.onTimeSerieClicked(timeseries)}
               disabled={!allowStrings && timeseries.isString}

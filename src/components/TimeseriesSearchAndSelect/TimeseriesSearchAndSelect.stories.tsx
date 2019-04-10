@@ -53,6 +53,22 @@ storiesOf('TimeserieSearchAndSelect', module)
     }
   )
   .add(
+    'Single selection',
+    () => (
+      <TimeserieSearchAndSelect
+        onSearch={onSearch}
+        assets={assetsList}
+        onTimeserieSelectionChange={onTimeserieSelectionChange}
+        single={true}
+      />
+    ),
+    {
+      info: {
+        text: infoText,
+      },
+    }
+  )
+  .add(
     'Allow strings',
     () => (
       <TimeserieSearchAndSelect

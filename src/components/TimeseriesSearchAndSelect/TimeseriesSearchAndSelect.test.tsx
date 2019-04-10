@@ -317,4 +317,61 @@ describe('TimeserieSearchAndSelect', () => {
       done();
     });
   });
+
+  it('should not render checkboxes when single is true', done => {
+    const { onSearch } = propsCallbacks;
+    const props = { assets: assetsList, onSearch, single: true };
+    const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
+
+    wrapper
+      .find(Search)
+      .find('input')
+      .simulate('change', { target: { value: 'a' } });
+    expect(onSearch).toHaveBeenCalledTimes(1);
+
+    // need this to wait for onSearch promise to complete
+    setImmediate(() => {
+      wrapper.update();
+      expect(wrapper.find({ type: 'checkbox' })).toHaveLength(0);
+      done();
+    });
+  });
+
+  it('should always return selected when single is true', done => {
+    const { onSearch, onTimeserieSelectionChange } = propsCallbacks;
+    const props = { assets: assetsList, onSearch, onTimeserieSelectionChange, single: true };
+    const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
+
+    wrapper
+      .find(Search)
+      .find('input')
+      .simulate('change', { target: { value: 'a' } });
+    expect(onSearch).toHaveBeenCalledTimes(1);
+
+    // need this to wait for onSearch promise to complete
+    setImmediate(() => {
+      wrapper.update();
+      wrapper
+        .find(DetailCheckbox)
+        .first()
+        .simulate('click');
+      wrapper
+        .find(DetailCheckbox)
+        .at(1)
+        .simulate('click');
+
+      expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(2);
+      expect(onTimeserieSelectionChange).toHaveBeenNthCalledWith(
+        1,
+        [timeseriesList[0].name],
+        timeseriesList[0]
+      );
+      expect(onTimeserieSelectionChange).toHaveBeenNthCalledWith(
+        2,
+        [timeseriesList[1].name],
+        timeseriesList[1]
+      );
+      done();
+    });
+  });
 });
