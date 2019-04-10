@@ -88,7 +88,7 @@ class DocumentTable extends React.PureComponent<
     }
 
     return (
-      <React.Fragment>
+      <>
         <TableWrapper>
           <CollapseContainer {...collapseProps}>
             {categoryByPriority.map(category => {
@@ -104,7 +104,7 @@ class DocumentTable extends React.PureComponent<
             })}
           </CollapseContainer>
         </TableWrapper>
-      </React.Fragment>
+      </>
     );
   }
 }

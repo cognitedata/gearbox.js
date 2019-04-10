@@ -4,7 +4,7 @@ import { AntTreeNode } from 'antd/lib/tree';
 import {
   AssetTreeType,
   TreeNodeType,
-  AssetType,
+  VAsset,
   OnSelectReturnType,
   TreeNodeData,
 } from 'utils/validators';
@@ -30,7 +30,7 @@ class AssetTree extends Component<AssetTreeType> {
     }
   }
 
-  mapDataAssets = (assets: AssetType[]) => {
+  mapDataAssets = (assets: VAsset[]) => {
     const nodes: { [name: string]: TreeNodeData } = {};
 
     assets.forEach(asset => {
@@ -63,7 +63,7 @@ class AssetTree extends Component<AssetTreeType> {
     });
   };
 
-  returnPretty = (asset: AssetType) => ({
+  returnPretty = (asset: VAsset) => ({
     title: `${asset.name}: ${asset.description}`,
     key: asset.id,
     node: asset,
@@ -88,7 +88,7 @@ class AssetTree extends Component<AssetTreeType> {
       if (loadedData.length > 1) {
         treeNode.props.dataRef.children = loadedData
           .slice(1)
-          .sort((a, b) => a.name.localeCompare(b.name))
+          .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
           .filter(x => x.parentId && x.parentId === treeNode.props.dataRef.key)
           .map(x => ({
             title: `${x.name} ${x.description ? ':' : ''} ${x.description ||
