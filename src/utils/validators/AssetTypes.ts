@@ -1,17 +1,25 @@
-import { VApiEvent, VMetadata } from './index';
-
-export type id = number | string;
+import { VApiEvent, VId, VMetadata } from './index';
 
 export type assetPanels = 'details' | 'events' | 'documents';
 
+export interface TreeNodeData {
+  title: string;
+  key: number | string;
+  children?: TreeNodeData[];
+  isLeaf?: boolean;
+  [name: string]: any;
+}
+
 export interface AssetType {
-  id: id;
-  name?: string;
+  id: VId;
+  name: string;
   description?: string;
-  path?: id[];
+  path?: VId[];
   depth?: number;
   metadata?: VMetadata;
-  [propName: string]: any;
+  parentId?: number;
+  createdTime?: number;
+  lastUpdatedTime?: number;
 }
 
 export interface ValueListType {
@@ -44,4 +52,31 @@ export interface TableDesignType {
 export interface AssetEventsPanelProps extends TableDesignType {
   columns?: TableColumnType[];
   events?: VApiEvent[];
+}
+
+export interface TreeNodeType {
+  title: string;
+  description?: string;
+  children?: TreeNodeType[];
+  [name: string]: any;
+}
+
+export interface AssetQuery {
+  limit: number;
+  depth: number;
+  [name: string]: any;
+}
+
+export interface OnSelectReturnType {
+  key: VId;
+  title: string;
+  isLeaf?: boolean;
+  node?: AssetType;
+}
+
+export interface AssetTreeType {
+  assets?: AssetType[];
+  loadData?: (assetId: VId, query: AssetQuery) => AssetType[];
+  onSelect?: (onSelect: OnSelectReturnType) => void;
+  defaultExpandedKeys?: string[];
 }
