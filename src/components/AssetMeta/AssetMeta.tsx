@@ -5,7 +5,7 @@ import AssetEventsPanel from 'components/AssetEventsPanel/AssetEventsPanel';
 import DocumentTable from 'components/DocumentTable/DocumentTable';
 import {
   AssetEventsPanelProps,
-  AssetType,
+  VAsset,
   assetPanels,
   DocumentTableProps,
 } from 'utils/validators';
@@ -13,7 +13,7 @@ import {
 const { TabPane } = Tabs;
 
 interface AssetMetaTypes {
-  asset: AssetType;
+  asset: VAsset;
   tab?: string;
   docsProps?: DocumentTableProps;
   eventProps?: AssetEventsPanelProps;
