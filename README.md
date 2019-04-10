@@ -18,12 +18,14 @@ Install additional dependencies:
 
 ## Setup
 
-Run `yarn`.
+Run `yarn`
 
 ## Examples
 ```
 import { %Component_name% } from "@cognite/gearbox";
+```
 or
+```
 import * as gearbox from "@cognite/gearbox";
 ```
 
