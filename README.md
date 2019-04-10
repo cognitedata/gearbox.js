@@ -7,14 +7,25 @@ Gearbox.js
 [![Build Status](https://travis-ci.org/cognitedata/gearbox.js.svg?branch=master)](https://travis-ci.org/cognitedata/gearbox.js)
 [![codecov](https://codecov.io/gh/cognitedata/gearbox.js/branch/master/graph/badge.svg)](https://codecov.io/gh/cognitedata/gearbox.js)
 
+## Install package
+
+Run `yarn add @cognite/gearbox` or `npm install @cognite/gearbox --save`.
+
+Install additional dependencies:
+1.  Cognite SDK (JS) `yarn add @cognite/sdk` or `npm install @cognite/sdk --save`
+2.  AntD by running `yarn add antd` or `npm i antd --save`.
+3.  Styled-components via `yarn add styled-components` or `npm i styled-components --save`.
+
 ## Setup
 
 Run `yarn`.
 
-Install additional dependencies:
-1.  AntD by running `yarn add antd` or `npm i antd --save`.
-2.  Styled-components via `yarn add styled-components` or `npm i styled-components --save`.
-
+## Examples
+```
+import { %Component_name% } from "@cognite/gearbox";
+or
+import * as gearbox from "@cognite/gearbox";
+```
 
 ## Storybook
 
