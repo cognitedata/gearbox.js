@@ -9,7 +9,7 @@ import { DOCUMENTS } from 'mocks/documents';
 const onPaneChange = (key: string) => action('onPaneChange')(key);
 
 storiesOf('AssetMeta', module)
-  .add('Minimal', () => <AssetMeta asset={{ id: 123 }} />)
+  .add('Minimal', () => <AssetMeta asset={{ id: 123, name: '' }} />)
   .add(
     'Basic send data',
     () => (
