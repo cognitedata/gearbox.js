@@ -278,6 +278,35 @@ describe('TimeserieSearchAndSelect', () => {
     });
   });
 
+  it('should preselect', done => {
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = {
+      assets: assetsList,
+      onTimeserieSelectionChange,
+      selectedTimeseries: [timeseriesList[1].name],
+    };
+    const wrapper = mount(<TimeserieSearchAndSelect {...props} />);
+
+    wrapper
+      .find(Search)
+      .find('input')
+      .simulate('change', { target: { value: 'a' } });
+
+    // need this to wait for promise to complete
+    setImmediate(() => {
+      wrapper.update();
+      expect(
+        wrapper
+          .find(DetailCheckbox)
+          .at(1)
+          .find({ type: 'checkbox' })
+          .first()
+          .props().checked
+      ).toBe(true);
+      done();
+    });
+  });
+
   it('should use filterRule if defined', done => {
     const { filterRule } = propsCallbacks;
     filterRule.mockReturnValueOnce(true);

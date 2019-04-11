@@ -178,10 +178,9 @@ class TimeserieSearchAndSelect extends React.Component<
   };
 
   isChecked = (name: string): boolean =>
-    [
-      ...this.props.selectedTimeseries,
-      ...this.state.selectedTimeseries,
-    ].findIndex(timeseries => timeseries === name) !== -1;
+    [...this.state.selectedTimeseries].findIndex(
+      timeseries => timeseries === name
+    ) !== -1;
 
   render() {
     const { allowStrings, single } = this.props;

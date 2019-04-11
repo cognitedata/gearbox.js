@@ -7,8 +7,8 @@ import { assetsList } from 'mocks/assetsList';
 import { timeseriesList } from 'mocks/timeseriesList';
 import { VAsset } from 'utils/validators';
 
-const timeseriesNames = timeseriesList.map(ts => ts.name).join(', ');
-const infoText = `Names you can search for : ${timeseriesNames}.`;
+const timeseriesNames = timeseriesList.map(ts => ts.name);
+const infoText = `Names you can search for : ${timeseriesNames.join(', ')}.`;
 
 // Mock the SDK calls
 sdk.Assets.list = async (
@@ -88,6 +88,20 @@ storiesOf('TimeserieSearchAndSelect', module)
       <TimeserieSearchAndSelect
         onTimeserieSelectionChange={onTimeserieSelectionChange}
         allowStrings={true}
+      />
+    ),
+    {
+      info: {
+        text: infoText,
+      },
+    }
+  )
+  .add(
+    'Preselected',
+    () => (
+      <TimeserieSearchAndSelect
+        onTimeserieSelectionChange={onTimeserieSelectionChange}
+        selectedTimeseries={[timeseriesNames[1], timeseriesNames[3]]}
       />
     ),
     {
