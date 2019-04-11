@@ -88,7 +88,7 @@ class AssetTree extends Component<AssetTreeType> {
       if (loadedData.length > 1) {
         treeNode.props.dataRef.children = loadedData
           .slice(1)
-          .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+          .sort((a, b) => a.name.localeCompare(b.name))
           .filter(x => x.parentId && x.parentId === treeNode.props.dataRef.key)
           .map(x => ({
             title: `${x.name} ${x.description ? ':' : ''} ${x.description ||
