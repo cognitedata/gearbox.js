@@ -1,4 +1,4 @@
-import { VId } from './VGenericTypes';
+import { VId } from './index';
 
 export interface VMetadata {
   [name: string]: string;

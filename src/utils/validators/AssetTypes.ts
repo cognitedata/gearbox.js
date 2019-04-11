@@ -10,7 +10,7 @@ export interface TreeNodeData {
   [name: string]: any;
 }
 
-export interface AssetType {
+export interface VAsset {
   id: VId;
   name: string;
   description?: string;
@@ -71,12 +71,12 @@ export interface OnSelectReturnType {
   key: VId;
   title: string;
   isLeaf?: boolean;
-  node?: AssetType;
+  node?: VAsset;
 }
 
 export interface AssetTreeType {
-  assets?: AssetType[];
-  loadData?: (assetId: VId, query: AssetQuery) => AssetType[];
+  assets?: VAsset[];
+  loadData?: (assetId: VId, query: AssetQuery) => VAsset[];
   onSelect?: (onSelect: OnSelectReturnType) => void;
   defaultExpandedKeys?: string[];
 }

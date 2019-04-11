@@ -1,4 +1,4 @@
-import { VMetadataId } from './VMetadata';
+import { VMetadataId } from './index';
 
 export interface VAdvancedSearch {
   name?: string;
