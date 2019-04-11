@@ -76,9 +76,10 @@ class AssetTree extends Component<AssetTreeType> {
     if (treeNode.props.children) {
       return;
     }
-    const assetId = treeNode.props.eventKey;
+    const eventKey = treeNode.props.eventKey;
+    const assetId = eventKey ? Number.parseInt(eventKey, 10) : undefined;
 
-    if (loadData && assetId) {
+    if (loadData && assetId && !Number.isNaN(assetId)) {
       const query = {
         depth: 2,
         limit: 1000,

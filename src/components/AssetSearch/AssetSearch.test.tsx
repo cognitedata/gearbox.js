@@ -165,7 +165,7 @@ describe('AssetSearch', () => {
     const props = { assets: assetsList, onAssetSelected };
     const wrapper = mount(<AssetSearch {...props} />);
     const instance = wrapper.instance() as AssetSearch;
-    const assetId = 'na-1';
+    const assetId = 2;
 
     instance.onAssetSelected(assetId);
     expect(onAssetSelected).toHaveBeenCalled();

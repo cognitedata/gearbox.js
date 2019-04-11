@@ -1,20 +1,20 @@
-import { VMetadata, VId, VAdvancedSearch } from './index';
+import { VMetadata, VAdvancedSearch } from './index';
 
 export interface VApiQuery {
   fetchingLimit: number;
-  assetSubtrees: VId[] | null;
+  assetSubtrees: number[] | null;
   boostName: boolean;
   query: string;
   advancedSearch: VAdvancedSearch | null;
 }
 
 export interface VApiEvent {
-  id: VId;
+  id: number;
   startTime: number;
   endTime: number;
   type?: string;
   subtype?: string;
-  assetIds?: VId[];
+  assetIds?: number[];
   description?: string;
   metadata?: VMetadata;
   source?: string;
