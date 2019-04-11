@@ -49,7 +49,7 @@ export interface TimeserieSearchAndSelectState {
   assetId?: VId;
   assets: VAsset[];
   fetching: boolean;
-  searchResults: any;
+  searchResults: sdk.Timeseries[];
   selectedTimeseries: string[];
   lastFetchId: number;
 }
@@ -60,7 +60,7 @@ class TimeserieSearchAndSelect extends React.Component<
 > {
   static defaultProps = {
     selectedTimeseries: [],
-    filterRule: (_: sdk.Timeseries) => true,
+    filterRule: () => true,
   };
 
   static getDerivedStateFromProps(
@@ -95,7 +95,6 @@ class TimeserieSearchAndSelect extends React.Component<
   }
 
   onSelectAsset = (assetId: VId): void => {
-    console.log('102');
     this.setState({ assetId, searchResults: [] });
   };
 

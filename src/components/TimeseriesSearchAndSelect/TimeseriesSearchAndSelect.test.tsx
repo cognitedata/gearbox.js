@@ -8,7 +8,6 @@ import DetailCheckbox from 'components/DetailCheckbox/DetailCheckbox';
 import { assetsList } from 'mocks/assetsList';
 import { timeseriesList } from 'mocks/timeseriesList';
 import Adapter from 'enzyme-adapter-react-16';
-import Mock = jest.Mock;
 
 configure({ adapter: new Adapter() });
 
@@ -16,7 +15,7 @@ sdk.TimeSeries.search = jest.fn();
 sdk.Assets.list = jest.fn();
 
 const { Search } = Input;
-const propsCallbacks: { [name: string]: Mock } = {
+const propsCallbacks = {
   filterRule: jest.fn(),
   onTimeserieSelectionChange: jest.fn(),
   onError: jest.fn(),
@@ -35,15 +34,15 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  Object.keys(propsCallbacks).forEach((key: string) =>
-    propsCallbacks[key].mockClear()
-  );
+  propsCallbacks.filterRule.mockClear();
+  propsCallbacks.onTimeserieSelectionChange.mockClear();
+  propsCallbacks.onError.mockClear();
   // @ts-ignore
   sdk.TimeSeries.search.mockClear();
 });
 
-
-describe('TimeserieSearchAndSelect', () => { // tslint:disable-line
+// tslint:disable:no-big-function
+describe('TimeserieSearchAndSelect', () => {
   it('Renders without exploding', () => {
     const props = {};
     const wrapper = mount(<TimeserieSearchAndSelect {...props} />);

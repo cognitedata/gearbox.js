@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* tslint:disable:no-duplicate-string */
 import { Timeseries } from '@cognite/sdk';
 
 export const IAA_21PT1019: Timeseries[] = [
