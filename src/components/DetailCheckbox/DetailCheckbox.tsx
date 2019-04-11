@@ -4,28 +4,14 @@ import { Checkbox } from 'antd';
 
 const Container = styled.div`
   background: white;
-  border-radius: 3px;
-  position: relative;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 'none';
   display: inline-flex;
   justify-content: space-between;
-  padding: 16px;
+  padding: 8px;
   margin-right: 'inherit';
   cursor: pointer;
-  margin-bottom: 16px;
-  transition: 0.3s all;
-
-  label {
-    margin: auto 16px auto 32px;
-  }
-`;
-
-const Title = styled.div`
-  font-size: 18px;
-`;
-
-const Description = styled.div`
-  font-size: 14px;
+  margin-bottom: 4px;
+  width: 100%;
 `;
 
 export interface DetailCheckboxProps {
@@ -55,33 +41,23 @@ const DetailCheckbox: React.SFC<DetailCheckboxProps> = ({
   className,
   checkable,
 }) => (
-  <Container
-    className={className}
-    onClick={disabled ? null : onContainerClick}
-    style={{
-      borderColor: `${checked ? '#1890ff' : 'rgba(0, 0, 0, 0.2)'}`,
-      width: '100%',
-      border: 'none',
-      padding: '8px',
-      marginBottom: '4px',
-    }}
-  >
+  <Container className={className} onClick={disabled ? null : onContainerClick}>
     <div style={{ wordBreak: 'break-all' }}>
-      <Title
+      <p
         style={{
           fontSize: '14px',
         }}
       >
         {title}
-      </Title>
-      <Description
+      </p>
+      <p
         style={{
           fontSize: '12px',
           opacity: 0.6,
         }}
       >
         {description}
-      </Description>
+      </p>
     </div>
     {checkable && (
       <Checkbox
