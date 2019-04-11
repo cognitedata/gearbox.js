@@ -26,3 +26,6 @@ export {
 export {
   default as TenantSelector,
 } from './components/TenantSelector/TenantSelector';
+export {
+  default as TimeseriesSearchAndSelect,
+} from './components/TimeseriesSearchAndSelect/TimeseriesSearchAndSelect';
