@@ -95,7 +95,7 @@ class TimeserieSearchAndSelect extends React.Component<
       (apiAsset: sdk.Asset): VAsset => {
         return {
           id: apiAsset.id,
-          name: apiAsset.name,
+          name: apiAsset.name || '',
           description: apiAsset.description,
           path: apiAsset.path,
           depth: apiAsset.depth,
