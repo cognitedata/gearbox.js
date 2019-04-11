@@ -12,7 +12,7 @@ export interface TreeNodeData {
 
 export interface VAsset {
   id: VId;
-  name: string;
+  name?: string;
   description?: string;
   path?: VId[];
   depth?: number;

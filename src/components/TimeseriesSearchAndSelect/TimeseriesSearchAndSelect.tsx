@@ -90,8 +90,23 @@ class TimeserieSearchAndSelect extends React.Component<
   }
 
   async componentDidMount() {
-    const assets = await sdk.Assets.list({ depth: 0 });
-    this.setState({ assets: assets.items });
+    const apiAssets = await sdk.Assets.list({ depth: 0 });
+    const assets = apiAssets.items.map(
+      (apiAsset: sdk.Asset): VAsset => {
+        return {
+          id: apiAsset.id,
+          name: apiAsset.name,
+          description: apiAsset.description,
+          path: apiAsset.path,
+          depth: apiAsset.depth,
+          metadata: apiAsset.metadata,
+          parentId: apiAsset.parentId,
+          createdTime: apiAsset.createdTime,
+          lastUpdatedTime: apiAsset.lastUpdatedTime,
+        };
+      }
+    );
+    this.setState({ assets });
   }
 
   onSelectAsset = (assetId: VId): void => {
