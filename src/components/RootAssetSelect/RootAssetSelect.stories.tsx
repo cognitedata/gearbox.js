@@ -4,9 +4,8 @@ import { action } from '@storybook/addon-actions';
 import RootAssetSelect from 'components/RootAssetSelect/RootAssetSelect';
 
 import { assetsList } from 'mocks/assetsList';
-import { VId } from 'utils/validators';
 
-const onAssetSelected = (assetId: VId) => action('onAssetSelected')(assetId);
+const onAssetSelected = (assetId: number) => action('onAssetSelected')(assetId);
 
 storiesOf('RootAssetSelect', module)
   .add('Basic', () => (

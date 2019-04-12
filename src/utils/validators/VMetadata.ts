@@ -1,11 +1,9 @@
-import { VId } from './index';
-
 export interface VMetadata {
   [name: string]: string;
 }
 
 export interface VMetadataId {
-  id: VId;
+  id: number;
   key: string;
-  value: VId;
+  value: number | string;
 }

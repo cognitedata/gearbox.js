@@ -5,7 +5,7 @@ import { debounce } from 'lodash';
 import * as sdk from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
-import { VApiQuery, VAsset, VId } from 'utils/validators';
+import { VApiQuery, VAsset } from 'utils/validators';
 
 const Wrapper = styled.div`
   display: flex;
@@ -40,13 +40,13 @@ export interface TimeserieSearchAndSelectProps {
     newTimeseries: string[],
     selectedTimeserie: sdk.Timeseries
   ) => void;
-  rootAsset?: VId;
+  rootAsset?: number;
   filterRule?: (timeseries: sdk.Timeseries) => boolean;
   onError?: (error: Error) => void;
 }
 
 export interface TimeserieSearchAndSelectState {
-  assetId?: VId;
+  assetId?: number;
   assets: VAsset[];
   fetching: boolean;
   searchResults: sdk.Timeseries[];
@@ -109,7 +109,7 @@ class TimeserieSearchAndSelect extends React.Component<
     this.setState({ assets });
   }
 
-  onSelectAsset = (assetId: VId): void => {
+  onSelectAsset = (assetId: number): void => {
     this.setState({ assetId, searchResults: [] });
   };
 
@@ -146,14 +146,9 @@ class TimeserieSearchAndSelect extends React.Component<
       });
       return;
     }
-    const assetSubtreeNumbers =
-      assetSubtrees == null
-        ? undefined
-        : assetSubtrees.map(
-            (ast: VId): number => Number.parseInt(ast.toString(), 10)
-          );
+
     sdk.TimeSeries.search({
-      assetSubtrees: assetSubtreeNumbers,
+      assetSubtrees: assetSubtrees == null ? undefined : assetSubtrees,
       query,
       limit: 100,
     })

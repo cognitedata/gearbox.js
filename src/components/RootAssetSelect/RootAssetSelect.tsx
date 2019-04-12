@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select } from 'antd';
-import { VId, VAsset, VMetadata, VIdCallback } from 'utils/validators';
+import { VAsset, VMetadata, VIdCallback } from 'utils/validators';
 
 export const defaultStrings: VMetadata = {
   loading: 'Loading',
@@ -8,7 +8,7 @@ export const defaultStrings: VMetadata = {
 };
 
 export interface RootAssetSelectProps {
-  assetId: VId;
+  assetId: number;
   assets: VAsset[];
   className: string;
   allowAll: boolean;
@@ -17,7 +17,7 @@ export interface RootAssetSelectProps {
 }
 
 export interface RootAssetSelectState {
-  current: VId;
+  current: number;
 }
 
 class RootAssetSelect extends React.Component<
@@ -40,7 +40,7 @@ class RootAssetSelect extends React.Component<
       current: assetId,
     };
   }
-  onSelectAsset = (selectedAssetId: VId) => {
+  onSelectAsset = (selectedAssetId: number) => {
     const { onAssetSelected } = this.props;
 
     this.setState({ current: selectedAssetId });

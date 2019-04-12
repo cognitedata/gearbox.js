@@ -6,7 +6,6 @@ import React, { SyntheticEvent } from 'react';
 import styled from 'styled-components';
 import {
   VAsset,
-  VId,
   VMetadata,
   VAdvancedSearch,
   VApiQuery,
@@ -45,7 +44,7 @@ export interface AssetSearchProps {
   advancedSearch: boolean;
   assets: VAsset[];
   strings: VMetadata;
-  assetId?: VId;
+  assetId?: number;
   onSearchResults?: VOnAssetSearchResult;
   onSearch?: VOnAssetSearch;
   onAssetSelected?: VIdCallback;
@@ -53,7 +52,7 @@ export interface AssetSearchProps {
 }
 
 export interface AssetSearchState {
-  assetId: VId;
+  assetId: number;
   query: string;
   isModalOpen: boolean;
   advancedSearchQuery: VAdvancedSearch | null;
@@ -135,7 +134,7 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
     this.setState({ isModalOpen: false }, this.onSearch);
   };
 
-  onAssetSelected = (assetId: VId) => {
+  onAssetSelected = (assetId: number) => {
     const { onAssetSelected } = this.props;
 
     if (onAssetSelected) {
