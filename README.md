@@ -18,10 +18,12 @@ Install additional dependencies:
 ## Examples
 ```
 import { %Component_name% } from "@cognite/gearbox";
+import 'antd/dist/antd.css';
 ```
 or
 ```
 import * as gearbox from "@cognite/gearbox";
+import 'antd/dist/antd.css';
 ```
 
 ## Storybook
