@@ -133,8 +133,12 @@ describe('SensorOverlay', () => {
         <div style={{ width: 1000, height: 500 }} />
       </SensorOverlay>
     );
-    // @ts-ignore
-    const backend = wrapper.instance().getManager().getBackend() as DNDTestBackend;
+
+    const backend = wrapper
+      .instance()
+      // @ts-ignore
+      .getManager()
+      .getBackend();
     const dragSourceBox = wrapper.find('DragSource(DraggableBox)');
     const dragSourcePoint = wrapper.find('DragSource(DraggablePoint)');
     const dragTarget = wrapper.find('DropTarget(SensorOverlay)');
@@ -151,14 +155,14 @@ describe('SensorOverlay', () => {
      * Simulate tag/box drag and drop
      */
     backend.simulateBeginDrag([boxHandlerId]);
-    backend.simulateHover([targetHandlerId])
+    backend.simulateHover([targetHandlerId]);
     backend.simulateDrop();
     backend.simulateEndDrag();
     /**
      * Simulate pointer drag and drop
      */
     backend.simulateBeginDrag([pointHandlerId]);
-    backend.simulateHover([targetHandlerId])
+    backend.simulateHover([targetHandlerId]);
     backend.simulateDrop();
     backend.simulateEndDrag();
     expect(propsCallbacks.onSensorPositionChange).toHaveBeenCalledTimes(2);
