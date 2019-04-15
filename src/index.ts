@@ -11,6 +11,7 @@ export {
   default as AssetSearchForm,
 } from './components/AssetSearchForm/AssetSearchForm';
 export { default as AssetView } from './components/AssetView/AssetView';
+export { default as AssetTree } from './components/AssetTree/AssetTree';
 export {
   default as DocumentTable,
 } from './components/DocumentTable/DocumentTable';
