@@ -33,6 +33,11 @@
     "d3": "^5.9.2",
     "lodash": "^4.17.11",
     "moment-timezone": "^0.5.23",
+    "numeral": "^2.0.6",
+    "react-dnd": "^7.4.5",
+    "react-dnd-html5-backend": "^7.4.4",
+    "react-odometerjs": "^2.1.1",
+    "react-sizeme": "^2.5.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
@@ -56,7 +61,7 @@
     "@types/sinon": "^7.0.9",
     "@types/storybook__addon-actions": "^3.4.2",
     "@types/storybook__react": "^4.0.1",
-    "@types/styled-components": "^4.1.12",
+    "@types/styled-components": "4.1.13",
     "@types/uuid": "^3.4.4",
     "antd": "^3.14.1",
     "babel-jest": "^24.1.0",
@@ -71,6 +76,7 @@
     "lint-staged": "^8.1.4",
     "prettier": "^1.16.4",
     "react": "^16.8.3",
+    "react-dnd-test-backend": "^7.4.4",
     "react-test-renderer": "^16.8.5",
     "rollup": "^1.2.0",
     "rollup-plugin-json": "^3.1.0",
