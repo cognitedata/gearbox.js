@@ -200,12 +200,12 @@ class TenantSelector extends React.Component<
 
       if (isTenantValid) {
         onTenantSelected(tenant, advancedOptions);
+      } else {
+        throw new Error('Tenant is invalid');
       }
 
       this.setState({
-        validity: isTenantValid
-          ? TenantValidity.UNKNOWN
-          : TenantValidity.INVALID,
+        validity: TenantValidity.UNKNOWN,
       });
     } catch (e) {
       this.setState({
