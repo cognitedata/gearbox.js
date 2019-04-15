@@ -92,7 +92,6 @@ storiesOf('TenantSelector', module)
       title="Example app"
       placeholder="Enter your company's CDP project name"
       onTenantSelected={action('onTenantSelected')}
-      validateTenant={() => Promise.resolve(true)}
       advancedOptions={{ apiUrl: '', comment: 'Comment' }}
     />
   ));

@@ -38,7 +38,7 @@ export interface TenantSelectorProps {
   placeholder?: string;
   title: string | React.ReactNode;
   unknownMessage?: string;
-  validateTenant: OnTenantValidationFunction | any;
+  validateTenant?: OnTenantValidationFunction | any;
   advancedOptions?: VPureObject;
 }
 
@@ -173,7 +173,7 @@ class TenantSelector extends React.Component<
     });
   };
 
-  private checkTenantValidity = () => {
+  private checkTenantValidity = async () => {
     const { onInvalidTenant, onTenantSelected, validateTenant } = this.props;
     const { tenant, advanced } = this.state;
 
@@ -192,18 +192,29 @@ class TenantSelector extends React.Component<
     this.setState({
       validity: TenantValidity.CHECKING,
     });
-    validateTenant(tenant, advancedOptions)
-      .then(() => {
+
+    try {
+      const isTenantValid = validateTenant
+        ? await validateTenant(tenant, advancedOptions)
+        : true;
+
+      if (isTenantValid) {
         onTenantSelected(tenant, advancedOptions);
-      })
-      .catch(() => {
-        this.setState({
-          validity: TenantValidity.INVALID,
-        });
-        if (onInvalidTenant) {
-          onInvalidTenant(tenant);
-        }
+      }
+
+      this.setState({
+        validity: isTenantValid
+          ? TenantValidity.UNKNOWN
+          : TenantValidity.INVALID,
       });
+    } catch (e) {
+      this.setState({
+        validity: TenantValidity.INVALID,
+      });
+      if (onInvalidTenant) {
+        onInvalidTenant(tenant);
+      }
+    }
   };
 
   private getNonEmptyAdvancedFields(advanced: VPureObject): VPureObject | null {
