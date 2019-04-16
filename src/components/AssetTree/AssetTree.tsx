@@ -5,36 +5,47 @@ import { Asset } from '@cognite/sdk';
 import {
   AssetTreeType,
   TreeNodeType,
+  VAsset,
   OnSelectReturnType,
   TreeNodeData,
 } from '../../interfaces';
 
 const { TreeNode } = Tree;
 
-export class AssetTree extends Component<AssetTreeType> {
-  state = {
-    treeData: [],
-    expandedKeys: {},
-  };
+interface ExpandedKeysMap {
+  [key: string]: true;
+}
 
-  async componentDidMount() {
-    const { assets, defaultExpandedKeys } = this.props;
+interface AssetTreeState {
+  assets?: VAsset[]; // reference to assets in props
+  treeData: TreeNodeData[];
+  expandedKeys: ExpandedKeysMap;
+}
 
-    if (assets && assets.length > 0) {
-      this.setState({
-        treeData: this.mapDataAssets(assets),
-        expandedKeys: defaultExpandedKeys
-          ? this.toKeys(defaultExpandedKeys)
-          : {},
-      });
+class AssetTree extends Component<AssetTreeType, AssetTreeState> {
+  static getDerivedStateFromProps(props: AssetTreeType, state: AssetTreeState) {
+    if (props.assets !== state.assets) {
+      return AssetTree.getStateFromProps(props);
+    } else {
+      return null;
     }
   }
 
-  mapDataAssets = (assets: Asset[]) => {
+  static getStateFromProps(props: AssetTreeType): AssetTreeState {
+    const { assets, defaultExpandedKeys } = props;
+    return {
+      assets,
+      treeData:
+        assets && assets.length > 0 ? AssetTree.mapDataAssets(assets) : [],
+      expandedKeys: defaultExpandedKeys ? this.toKeys(defaultExpandedKeys) : {},
+    };
+  }
+
+  static mapDataAssets(assets: VAsset[]): TreeNodeData[] {
     const nodes: { [name: string]: TreeNodeData } = {};
 
     assets.forEach(asset => {
-      nodes[asset.id] = this.returnPretty(asset);
+      nodes[asset.id] = AssetTree.returnPretty(asset);
     });
 
     const addedAsChildren: (number | string)[] = [];
@@ -61,14 +72,25 @@ export class AssetTree extends Component<AssetTreeType> {
     return Object.keys(nodes).map(id => {
       return nodes[id];
     });
-  };
+  }
 
-  returnPretty = (asset: Asset) => ({
-    title: `${asset.name}: ${asset.description}`,
-    key: asset.id,
-    node: asset,
-    isLeaf: true,
-  });
+  static returnPretty(asset: VAsset) {
+    return {
+      title: `${asset.name}: ${asset.description}`,
+      key: asset.id,
+      node: asset,
+      isLeaf: true,
+    };
+  }
+
+  static toKeys(path: string[], initial = {}): ExpandedKeysMap {
+    return path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
+  }
+
+  constructor(props: AssetTreeType) {
+    super(props);
+    this.state = AssetTree.getStateFromProps(props);
+  }
 
   onLoadData = async (treeNode: AntTreeNode) => {
     const { loadData } = this.props;
@@ -89,7 +111,6 @@ export class AssetTree extends Component<AssetTreeType> {
       if (loadedData.length > 1) {
         treeNode.props.dataRef.children = loadedData
           .slice(1)
-          // @ts-ignore
           .sort((a, b) => a.name.localeCompare(b.name))
           .filter(x => x.parentId && x.parentId === treeNode.props.dataRef.key)
           .map(x => ({
@@ -117,12 +138,9 @@ export class AssetTree extends Component<AssetTreeType> {
     }
   };
 
-  toKeys = (path: string[], initial = {}) =>
-    path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
-
   onExpand = (expandedKeys: string[]) => {
     this.setState({
-      expandedKeys: this.toKeys(expandedKeys),
+      expandedKeys: AssetTree.toKeys(expandedKeys),
     });
   };
 
@@ -153,3 +171,5 @@ export class AssetTree extends Component<AssetTreeType> {
     );
   }
 }
+
+export default AssetTree;

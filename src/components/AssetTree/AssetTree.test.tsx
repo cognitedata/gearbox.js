@@ -33,4 +33,20 @@ describe('AssetTree', () => {
     expect(jestTest).toBeCalled();
     expect(typeof jestTest.mock.results).toBe('object');
   });
+
+  it('Should update tree on assets props change', done => {
+    const rootNodes = ASSET_LIST_CHILD.filter(o => o.depth === 0);
+    const AssetTreeModal = mount(<AssetTree assets={rootNodes} />);
+    expect(AssetTreeModal.find('TreeNode')).toHaveLength(2);
+
+    AssetTreeModal.setProps(
+      {
+        assets: [rootNodes[0]],
+      },
+      () => {
+        expect(AssetTreeModal.find('TreeNode')).toHaveLength(1);
+        done();
+      }
+    );
+  });
 });

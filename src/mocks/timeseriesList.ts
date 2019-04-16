@@ -6,6 +6,7 @@ export const IAA_21PT1019: Timeseries[] = [
     id: 8681821313339919,
     name: 'IA_21PT1019.AlarmByte',
     isString: false,
+    unit: 'bar',
     metadata: {
       tag: 'IA_21PT1019.AlarmByte',
       scan: '1',

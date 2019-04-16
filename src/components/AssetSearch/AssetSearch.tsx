@@ -22,9 +22,6 @@ const InputGroup = styled(Input.Group)`
   flex-grow: 1;
 `;
 
-const ButtonBlock = styled(Button)`
-  width: 100%;
-`;
 const RootAssetSelectStyled = styled(RootAssetSelect)`
   width: 35%;
 `;
@@ -174,9 +171,13 @@ export class AssetSearch extends React.Component<
           )}
           {advancedSearchQuery ? (
             <React.Fragment>
-              <ButtonBlock type="primary" onClick={this.onFilterIconClick}>
+              <Button
+                style={{ width: '100%' }}
+                type="primary"
+                onClick={this.onFilterIconClick}
+              >
                 {changeSearch}
-              </ButtonBlock>
+              </Button>
               <Button htmlType="button" onClick={this.onModalCancel}>
                 {clear}
               </Button>
