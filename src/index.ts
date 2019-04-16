@@ -30,3 +30,6 @@ export {
 export {
   default as TimeseriesSearchAndSelect,
 } from './components/TimeseriesSearchAndSelect/TimeseriesSearchAndSelect';
+export {
+  default as SensorOverlay,
+} from './components/SensorOverlay/SensorOverlay';
