@@ -16,6 +16,4 @@ export { TenantSelector } from './components/TenantSelector/TenantSelector';
 export {
   TimeseriesSearchAndSelect,
 } from './components/TimeseriesSearchAndSelect/TimeseriesSearchAndSelect';
-export {
-  default as SensorOverlay,
-} from './components/SensorOverlay/SensorOverlay';
+export { SensorOverlay } from './components/SensorOverlay/SensorOverlay';

@@ -5,7 +5,6 @@ import { Asset } from '@cognite/sdk';
 import {
   AssetTreeType,
   TreeNodeType,
-  VAsset,
   OnSelectReturnType,
   TreeNodeData,
 } from '../../interfaces';
@@ -17,12 +16,12 @@ interface ExpandedKeysMap {
 }
 
 interface AssetTreeState {
-  assets?: VAsset[]; // reference to assets in props
+  assets?: Asset[]; // reference to assets in props
   treeData: TreeNodeData[];
   expandedKeys: ExpandedKeysMap;
 }
 
-class AssetTree extends Component<AssetTreeType, AssetTreeState> {
+export class AssetTree extends Component<AssetTreeType, AssetTreeState> {
   static getDerivedStateFromProps(props: AssetTreeType, state: AssetTreeState) {
     if (props.assets !== state.assets) {
       return AssetTree.getStateFromProps(props);
@@ -41,7 +40,7 @@ class AssetTree extends Component<AssetTreeType, AssetTreeState> {
     };
   }
 
-  static mapDataAssets(assets: VAsset[]): TreeNodeData[] {
+  static mapDataAssets(assets: Asset[]): TreeNodeData[] {
     const nodes: { [name: string]: TreeNodeData } = {};
 
     assets.forEach(asset => {
@@ -74,7 +73,7 @@ class AssetTree extends Component<AssetTreeType, AssetTreeState> {
     });
   }
 
-  static returnPretty(asset: VAsset) {
+  static returnPretty(asset: Asset) {
     return {
       title: `${asset.name}: ${asset.description}`,
       key: asset.id,
@@ -111,6 +110,7 @@ class AssetTree extends Component<AssetTreeType, AssetTreeState> {
       if (loadedData.length > 1) {
         treeNode.props.dataRef.children = loadedData
           .slice(1)
+          // @ts-ignore
           .sort((a, b) => a.name.localeCompare(b.name))
           .filter(x => x.parentId && x.parentId === treeNode.props.dataRef.key)
           .map(x => ({
@@ -171,5 +171,3 @@ class AssetTree extends Component<AssetTreeType, AssetTreeState> {
     );
   }
 }
-
-export default AssetTree;

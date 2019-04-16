@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount, configure } from 'enzyme';
-import { DraggablePoint } from './DraggablePoint';
 import Adapter from 'enzyme-adapter-react-16';
+import { DraggablePoint } from './DraggablePoint';
 
 configure({ adapter: new Adapter() });
 
