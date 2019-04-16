@@ -1,26 +1,27 @@
 import React from 'react';
 import { Select } from 'antd';
-import { VAsset, VMetadata, VIdCallback } from 'utils/validators';
+import { Asset } from '@cognite/sdk';
+import { PureObject, IdCallback } from '../../interfaces';
 
-export const defaultStrings: VMetadata = {
+export const defaultStrings: PureObject = {
   loading: 'Loading',
   all: '-- all --',
 };
 
 export interface RootAssetSelectProps {
   assetId: number;
-  assets: VAsset[];
+  assets: Asset[];
   className: string;
   allowAll: boolean;
-  strings: VMetadata;
-  onAssetSelected?: VIdCallback;
+  strings: PureObject;
+  onAssetSelected?: IdCallback;
 }
 
 export interface RootAssetSelectState {
   current: number;
 }
 
-class RootAssetSelect extends React.Component<
+export class RootAssetSelect extends React.Component<
   RootAssetSelectProps,
   RootAssetSelectState
 > {
@@ -93,5 +94,3 @@ class RootAssetSelect extends React.Component<
     );
   }
 }
-
-export default RootAssetSelect;

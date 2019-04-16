@@ -11,17 +11,17 @@ import {
 } from 'd3';
 import moment from 'moment-timezone';
 import { Spin } from 'antd';
-import { VEventTimeline, VIdCallback } from 'utils/validators';
+import { EventTimelineType, IdCallback } from '../../interfaces';
 
 interface EventTimelineProps {
   barHeight: number;
   className: string;
-  data: VEventTimeline[];
+  data: EventTimelineType[];
   isLoading: boolean;
-  onEventClicked?: VIdCallback;
+  onEventClicked?: IdCallback;
 }
 
-class EventTimeline extends React.Component<EventTimelineProps> {
+export class EventTimeline extends React.Component<EventTimelineProps> {
   static defaultProps = {
     data: [],
     className: '',
@@ -55,7 +55,7 @@ class EventTimeline extends React.Component<EventTimelineProps> {
 
   calculateWidth = (
     scale: ScaleTime<number, number>,
-    eventData: VEventTimeline
+    eventData: EventTimelineType
   ): number => {
     const { barHeight: height } = this.props;
 
@@ -105,12 +105,12 @@ class EventTimeline extends React.Component<EventTimelineProps> {
       .append('g')
       .attr(
         'transform',
-        (_: VEventTimeline, i: number) => `translate(0, ${i * 4})`
+        (_: EventTimelineType, i: number) => `translate(0, ${i * 4})`
       )
       .attr('class', 'bar')
       .on(
         'click',
-        (eventData: VEventTimeline) =>
+        (eventData: EventTimelineType) =>
           onEventClicked && onEventClicked(eventData.id)
       );
 
@@ -118,27 +118,27 @@ class EventTimeline extends React.Component<EventTimelineProps> {
       .append('rect')
       .attr('class', 'event')
       .attr('style', 'cursor: pointer')
-      .attr('x', (eventData: VEventTimeline) => this.currentX(eventData.min))
-      .attr('y', (_: VEventTimeline, i: number) => i * barHeight)
-      .attr('width', (eventData: VEventTimeline) =>
+      .attr('x', (eventData: EventTimelineType) => this.currentX(eventData.min))
+      .attr('y', (_: EventTimelineType, i: number) => i * barHeight)
+      .attr('width', (eventData: EventTimelineType) =>
         this.calculateWidth(this.currentX, eventData)
       )
       .attr('height', barHeight)
-      .attr('fill', (eventData: VEventTimeline) => eventData.color)
+      .attr('fill', (eventData: EventTimelineType) => eventData.color)
       .attr(
         'fill-opacity',
-        (eventData: VEventTimeline) => eventData.fillOpacity || 1
+        (eventData: EventTimelineType) => eventData.fillOpacity || 1
       )
-      .attr('stroke', (eventData: VEventTimeline) => eventData.color)
+      .attr('stroke', (eventData: EventTimelineType) => eventData.color)
       .attr(
         'stroke-opacity',
-        (eventData: VEventTimeline) => eventData.strokeOpacity || 1
+        (eventData: EventTimelineType) => eventData.strokeOpacity || 1
       )
       .attr('stroke-width', 2)
-      .attr('rx', (eventData: VEventTimeline) =>
+      .attr('rx', (eventData: EventTimelineType) =>
         this.instantaneous(eventData) ? 0 : barHeight / 2
       )
-      .attr('ry', (eventData: VEventTimeline) =>
+      .attr('ry', (eventData: EventTimelineType) =>
         this.instantaneous(eventData) ? 0 : barHeight / 2
       );
 
@@ -168,8 +168,8 @@ class EventTimeline extends React.Component<EventTimelineProps> {
     const xt = t.rescaleX(this.currentX);
     this.chart
       .selectAll('.event')
-      .attr('x', (eventData: VEventTimeline) => xt(eventData.min))
-      .attr('width', (eventData: VEventTimeline) =>
+      .attr('x', (eventData: EventTimelineType) => xt(eventData.min))
+      .attr('width', (eventData: EventTimelineType) =>
         this.calculateWidth(xt, eventData)
       );
     this.axis.select('.x-axis').call(d3AxisTop(xt));
@@ -198,8 +198,6 @@ class EventTimeline extends React.Component<EventTimelineProps> {
     );
   }
 
-  private instantaneous = (eventData: VEventTimeline) =>
+  private instantaneous = (eventData: EventTimelineType) =>
     Math.abs(eventData.max - eventData.min) < 1000;
 }
-
-export default EventTimeline;

@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { Tree } from 'antd';
 import { AntTreeNode } from 'antd/lib/tree';
+import { Asset } from '@cognite/sdk';
 import {
   AssetTreeType,
   TreeNodeType,
-  VAsset,
   OnSelectReturnType,
   TreeNodeData,
-} from 'utils/validators';
+} from '../../interfaces';
 
 const { TreeNode } = Tree;
 
-class AssetTree extends Component<AssetTreeType> {
+export class AssetTree extends Component<AssetTreeType> {
   state = {
     treeData: [],
     expandedKeys: {},
@@ -30,7 +30,7 @@ class AssetTree extends Component<AssetTreeType> {
     }
   }
 
-  mapDataAssets = (assets: VAsset[]) => {
+  mapDataAssets = (assets: Asset[]) => {
     const nodes: { [name: string]: TreeNodeData } = {};
 
     assets.forEach(asset => {
@@ -63,7 +63,7 @@ class AssetTree extends Component<AssetTreeType> {
     });
   };
 
-  returnPretty = (asset: VAsset) => ({
+  returnPretty = (asset: Asset) => ({
     title: `${asset.name}: ${asset.description}`,
     key: asset.id,
     node: asset,
@@ -89,6 +89,7 @@ class AssetTree extends Component<AssetTreeType> {
       if (loadedData.length > 1) {
         treeNode.props.dataRef.children = loadedData
           .slice(1)
+          // @ts-ignore
           .sort((a, b) => a.name.localeCompare(b.name))
           .filter(x => x.parentId && x.parentId === treeNode.props.dataRef.key)
           .map(x => ({
@@ -152,5 +153,3 @@ class AssetTree extends Component<AssetTreeType> {
     );
   }
 }
-
-export default AssetTree;

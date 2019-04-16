@@ -1,6 +1,12 @@
 import React from 'react';
 import { CollapseProps } from 'antd/lib/collapse';
-import { VMetadata } from './index';
+import { PureObject } from './index';
+
+export type OnDocumentClick = (
+  document: Document,
+  category: string,
+  description: string
+) => void;
 
 export interface Document {
   id: number;
@@ -9,7 +15,7 @@ export interface Document {
   source?: string;
   sourceId?: string;
   fileType?: string;
-  metadata?: VMetadata;
+  metadata?: PureObject;
   assetIds?: number[];
   uploaded?: boolean;
   uploadedAt?: number;
@@ -45,11 +51,7 @@ export type DocumentRenderer = (
 
 export interface DocumentTableProps {
   docs: Document[];
-  handleDocumentClick?: (
-    document: Document,
-    category: string,
-    description: string
-  ) => void;
+  handleDocumentClick?: OnDocumentClick;
   collapseProps?: CollapseProps;
   categoryPriorityList?: string[];
   unknownCategoryName?: string;

@@ -12,18 +12,13 @@
     "esModuleInterop": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "baseUrl": "src",
     "downlevelIteration": true,
-    "paths": {
-      "utils/*": [ "utils/*" ],
-      "mocks/*": [ "mocks/*" ],
-      "components/*": [ "components/*" ]
-    },
     "allowSyntheticDefaultImports": true,
     "lib": [
       "es2015",
       "dom"
     ],
+    "typeRoots": ["node_modules/@types","src/@types"],
     "jsx": "react"
   },
   "include": [

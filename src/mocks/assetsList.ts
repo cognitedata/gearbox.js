@@ -1,4 +1,5 @@
-import { VAdvancedSearch, VAsset } from 'utils/validators';
+import { Asset } from '@cognite/sdk';
+import { AdvancedAssetSearch } from '../interfaces';
 
 export const vmateDba = 'wmate_dba.wmt_location';
 export const randomTime = '1999-09-01 07:00:00';
@@ -6,7 +7,7 @@ export const valDescription = 'Valhall plattform';
 export const gasCompressionString = 'GAS COMPRESSION AND RE-INJECTION (PH)';
 export const wmtag = 'wmate_dba.wmt_tag';
 
-export const SKA: VAsset = {
+export const SKA: Asset = {
   id: 8129784932439587,
   path: [8129784932439587],
   name: 'SKA',
@@ -31,7 +32,7 @@ export const SKA: VAsset = {
   },
 };
 
-export const IAA: VAsset = {
+export const IAA: Asset = {
   id: 7793176078609329,
   path: [7793176078609329],
   name: 'IAA',
@@ -50,7 +51,7 @@ export const IAA: VAsset = {
   },
 };
 
-export const VAL: VAsset = {
+export const VAL: Asset = {
   id: 3623339785663936,
   path: [3623339785663936],
   name: 'VAL',
@@ -76,7 +77,7 @@ export const VAL: VAsset = {
   },
 };
 
-export const AssetSearchFormValue: VAdvancedSearch = {
+export const AssetSearchFormValue: AdvancedAssetSearch = {
   name: '20-PA-001A',
   description: 'Crude pump',
   metadata: [
@@ -87,7 +88,7 @@ export const AssetSearchFormValue: VAdvancedSearch = {
 
 export const assetsList = [SKA, IAA, VAL];
 
-export const ASSET_ZERO_DEPTH_ARRAY: VAsset[] = [
+export const ASSET_ZERO_DEPTH_ARRAY: Asset[] = [
   {
     id: 6687602007296940,
     path: [6687602007296940],
@@ -127,7 +128,7 @@ export const ASSET_ZERO_DEPTH_ARRAY: VAsset[] = [
   },
 ];
 
-export const ASSET_LIST_CHILD: VAsset[] = [
+export const ASSET_LIST_CHILD: Asset[] = [
   {
     id: 3111454725058294,
     path: [6687602007296940, 4650652196144007, 3111454725058294],

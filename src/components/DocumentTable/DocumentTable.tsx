@@ -1,13 +1,13 @@
 import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { Document, DocumentTableProps } from 'utils/validators/documentTypes';
+import { Document, DocumentTableProps } from '../../interfaces';
 import {
   getCategoryByPriority,
   getDocumentsByCategory,
   getDocumentTitle,
   getShortDescription,
-} from 'utils/helpers/documenthelpers';
+} from '../../utils';
 
 const { Panel } = Collapse;
 
@@ -15,7 +15,7 @@ interface DocumentTableState {
   stateParam?: string;
 }
 
-class DocumentTable extends React.PureComponent<
+export class DocumentTable extends React.PureComponent<
   DocumentTableProps,
   DocumentTableState
 > {
@@ -108,8 +108,6 @@ class DocumentTable extends React.PureComponent<
     );
   }
 }
-
-export default DocumentTable;
 
 const TableWrapper = styled.div`
   width: 100%;

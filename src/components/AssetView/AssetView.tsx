@@ -1,7 +1,7 @@
 import { Tag } from 'antd';
 import React from 'react';
-import { VOnClick } from 'utils/validators';
-import { getColor } from 'utils/colors';
+import { OnClick } from '../../interfaces';
+import { getColor } from '../../utils';
 
 interface AssetViewProps {
   asset: {
@@ -22,12 +22,12 @@ interface AssetViewProps {
       UID?: string;
     };
   };
-  onClick?: VOnClick;
+  onClick?: OnClick;
   onClose?: () => void;
   color?: boolean | string;
 }
 
-const AssetView = (props: AssetViewProps) => {
+export const AssetView = (props: AssetViewProps) => {
   const { asset, onClick, onClose, color } = props;
 
   if (!props.asset) {
@@ -37,7 +37,7 @@ const AssetView = (props: AssetViewProps) => {
   let tagColor;
   if (typeof color === 'string') {
     tagColor = color;
-  } else if (typeof color === 'boolean' && color) {
+  } else if (color) {
     tagColor = getColor(+asset.id);
   }
 
@@ -53,6 +53,5 @@ const AssetView = (props: AssetViewProps) => {
     </Tag>
   );
 };
-AssetView.displayName = 'AssetView';
 
-export default AssetView;
+AssetView.displayName = 'AssetView';

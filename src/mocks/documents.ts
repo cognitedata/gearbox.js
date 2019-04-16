@@ -1,3 +1,5 @@
+import { PureObject } from '../interfaces';
+
 function generateDocumentBase(id: number) {
   return {
     id,
@@ -5,11 +7,7 @@ function generateDocumentBase(id: number) {
   };
 }
 
-interface Metadata {
-  [key: string]: string;
-}
-
-export function generateDocumentWithMetadata(id: number, metadata: Metadata) {
+export function generateDocumentWithMetadata(id: number, metadata: PureObject) {
   return {
     ...generateDocumentBase(id),
     metadata,
@@ -21,7 +19,7 @@ export function generateDocumentWithDocType(
   title: null | string,
   type: null | string
 ) {
-  const metadata: Metadata = {};
+  const metadata: PureObject = {};
   if (title) {
     metadata.DOC_TITLE = title;
   }

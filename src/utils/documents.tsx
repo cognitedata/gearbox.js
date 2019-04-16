@@ -1,12 +1,12 @@
-import docTypes from 'utils/helpers/docTypes.json';
+import docTypes from './resources/docTypes.json';
 import {
   Document,
   DocumentsByCategory,
   DocumentType,
   JsonDocTypes,
   Priority,
-} from 'utils/validators/documentTypes';
-import { VMetadata } from 'utils/validators/index';
+  PureObject,
+} from '../interfaces';
 
 const maxDocumentTitleLength = 56;
 const documentTypesOptions = ['DOC_TYPE', 'doc_type'];
@@ -19,29 +19,32 @@ const sortDocsByPriority = (a: string, b: string, priority: Priority) =>
   (priority[a] || Number.MAX_SAFE_INTEGER) -
   (priority[b] || Number.MAX_SAFE_INTEGER);
 
-const getValueFromObject = (metadata?: VMetadata, arr?: string[]): string => {
+const getValueFromObject = (metadata?: PureObject, arr?: string[]): string => {
   if (!metadata || !arr) {
     return '';
   }
   const data = objKeysToLowerCase(metadata);
-  return arr.reduce((acc, name) => {
+
+  return arr.reduce((acc: string, name: string): string => {
     if (!acc) {
-      return data[name.toLowerCase()] || '';
+      return data[name.toLowerCase()]
+        ? data[name.toLowerCase()].toString()
+        : '';
     }
     return acc;
   }, '');
 };
 
-const objKeysToLowerCase = (obj?: VMetadata): VMetadata =>
+const objKeysToLowerCase = (obj?: PureObject): PureObject =>
   obj
-    ? Object.keys(obj).reduce((acc: VMetadata, key) => {
+    ? Object.keys(obj).reduce((acc: PureObject, key) => {
         acc[key.toLowerCase()] = obj[key];
         return acc;
       }, {})
     : {};
 
 const getDocumentType = (
-  metadata?: VMetadata,
+  metadata?: PureObject,
   documentTypeField?: string
 ): string => {
   const names = documentTypeField ? [documentTypeField] : documentTypesOptions;
@@ -99,7 +102,7 @@ export const getDocumentsByCategory = (
   }, {});
 
 export const getDocumentTitle = (
-  metadata?: VMetadata,
+  metadata?: PureObject,
   documentTitleField?: string
 ): string => {
   const names = documentTitleField

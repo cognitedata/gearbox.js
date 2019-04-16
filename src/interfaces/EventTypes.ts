@@ -1,4 +1,4 @@
-export interface VEventTimeline {
+export interface EventTimelineType {
   id: number;
   min: number;
   max: number;

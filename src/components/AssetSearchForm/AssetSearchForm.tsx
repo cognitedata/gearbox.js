@@ -1,10 +1,10 @@
 import React, { SyntheticEvent } from 'react';
 import {
-  VAdvancedSearch,
-  VMetadata,
-  VOnAdvancedSearchChange,
-  VEmptyCallback,
-} from 'utils/validators';
+  AdvancedAssetSearch,
+  PureObject,
+  OnAdvancedSearchChange,
+  EmptyCallback,
+} from '../../interfaces';
 import { Form, Input, Icon, Button } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { v4 as uuid } from 'uuid';
@@ -27,7 +27,7 @@ const formItemLayoutWithoutLabel = {
   },
 };
 
-export const defaultStrings: VMetadata = {
+export const defaultStrings: PureObject = {
   metadataLabel: 'Metadata',
   metadataKey: 'Key',
   metadataValue: 'Value',
@@ -39,11 +39,11 @@ export const defaultStrings: VMetadata = {
 
 export interface AssetSearchFormProps {
   form: WrappedFormUtils;
-  value: VAdvancedSearch | null;
-  onChange?: VOnAdvancedSearchChange;
-  onPressEnter?: VEmptyCallback;
-  onSubmit?: VOnAdvancedSearchChange;
-  strings?: VMetadata;
+  value: AdvancedAssetSearch | null;
+  onChange?: OnAdvancedSearchChange;
+  onPressEnter?: EmptyCallback;
+  onSubmit?: OnAdvancedSearchChange;
+  strings?: PureObject;
 }
 
 export interface MetadataField {
@@ -52,7 +52,7 @@ export interface MetadataField {
   value: string;
 }
 
-export const AssetSearchForm = ({
+const AssetSearchForm = ({
   onSubmit,
   form,
   onPressEnter,
@@ -135,7 +135,7 @@ export const AssetSearchForm = ({
         <Input
           className={`meta-key ${data.id}`}
           style={{ width: '45%', borderRight: 0 }}
-          placeholder={metadataKey}
+          placeholder={metadataKey as string}
           value={data.key}
           onPressEnter={pressEnter}
           onChange={onChangeInput('key', index)}
@@ -155,7 +155,7 @@ export const AssetSearchForm = ({
           className={`meta-value ${data.id}`}
           style={{ width: '45%', borderLeft: 0 }}
           value={data.value}
-          placeholder={metadataValue}
+          placeholder={metadataValue as string}
           onPressEnter={pressEnter}
           onChange={onChangeInput('value', index)}
         />
@@ -183,7 +183,7 @@ export const AssetSearchForm = ({
             className="name"
             name="name"
             maxLength={50}
-            placeholder={nameField}
+            placeholder={nameField as string}
             onPressEnter={pressEnter}
           />
         )}
@@ -194,7 +194,7 @@ export const AssetSearchForm = ({
             className="description"
             name="description"
             maxLength={500}
-            placeholder={descriptionField}
+            placeholder={descriptionField as string}
             onPressEnter={pressEnter}
           />
         )}
@@ -234,7 +234,7 @@ const AssetSearchFormHOC = Form.create({
   onValuesChange(
     props: AssetSearchFormProps,
     _,
-    allValues: VAdvancedSearch = {}
+    allValues: AdvancedAssetSearch = {}
   ) {
     const { onChange } = props;
 
@@ -260,4 +260,4 @@ const AssetSearchFormHOC = Form.create({
 
 AssetSearchFormHOC.displayName = 'AssetSearchForm';
 
-export default AssetSearchFormHOC;
+export { AssetSearchFormHOC as AssetSearchForm };

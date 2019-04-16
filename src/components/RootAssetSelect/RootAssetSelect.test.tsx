@@ -1,8 +1,8 @@
 import React from 'react';
 import { mount, configure, shallow } from 'enzyme';
-import RootAssetSelect, { defaultStrings } from './RootAssetSelect';
-import { assetsList } from 'mocks/assetsList';
 import Adapter from 'enzyme-adapter-react-16';
+import { assetsList } from '../../mocks';
+import { RootAssetSelect, defaultStrings } from './RootAssetSelect';
 
 configure({ adapter: new Adapter() });
 

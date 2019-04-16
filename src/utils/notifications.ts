@@ -1,4 +1,4 @@
-import { notification } from 'antd';
+import { notification as antdNotification } from 'antd';
 
 export enum NotificationTypes {
   ERROR = 'error',
@@ -14,13 +14,13 @@ export interface NotificationProps {
   [name: string]: any;
 }
 
-export default ({
+export const notification = ({
   type = NotificationTypes.INFO,
   message,
   description,
   ...props
 }: NotificationProps) => {
-  notification[type]({
+  antdNotification[type]({
     message,
     key: message,
     description,

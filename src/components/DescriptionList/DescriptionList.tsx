@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { mapMetaData } from 'utils/helpers/ArrayMapHelpers';
-import { ValueListType } from 'utils/validators/AssetTypes';
+import { mapMetaData } from '../../utils';
+import { ValueListType } from '../../interfaces';
 
 const DL = styled('dl')`
   display: flex;
@@ -60,7 +60,7 @@ interface DescriptionListType {
   valueSet: { [name: string]: any };
 }
 
-const DescriptionList = (props: DescriptionListType) => {
+export const DescriptionList = (props: DescriptionListType) => {
   const { description, valueSet } = props;
 
   const arrayValues = mapMetaData(valueSet);
@@ -85,6 +85,5 @@ const DescriptionList = (props: DescriptionListType) => {
     </>
   );
 };
-DescriptionList.displayName = 'DescriptionList';
 
-export default DescriptionList;
+DescriptionList.displayName = 'DescriptionList';

@@ -1,8 +1,8 @@
 import React from 'react';
 import { mount, configure } from 'enzyme';
-import AssetSearch, { defaultStrings } from './AssetSearch';
-import { assetsList, AssetSearchFormValue } from 'mocks/assetsList';
 import Adapter from 'enzyme-adapter-react-16';
+import { AssetSearch, defaultStrings } from './AssetSearch';
+import { assetsList, AssetSearchFormValue } from '../../mocks';
 import Mock = jest.Mock;
 
 configure({ adapter: new Adapter() });

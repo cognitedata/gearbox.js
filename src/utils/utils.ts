@@ -1,4 +1,4 @@
-import { VAsset } from './validators';
+import { Asset } from '@cognite/sdk';
 
 export function getCanvas(
   img: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement,
@@ -20,12 +20,12 @@ export function getCanvas(
 }
 
 export function extractValidStrings(
-  textAnnotations: VAsset[] = [],
+  textAnnotations: Asset[] = [],
   maxLen: number = 20,
   minLen: number = 5
 ) {
   const validStrings = textAnnotations
-    .map((annotation: VAsset) =>
+    .map((annotation: Asset) =>
       annotation.description ? annotation.description.trim() : ''
     )
     .filter(word => word.length > minLen && word.length < maxLen);

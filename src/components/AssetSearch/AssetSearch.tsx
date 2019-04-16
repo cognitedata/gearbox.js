@@ -1,19 +1,19 @@
 import { Button, Icon, Input, Modal } from 'antd';
-import AssetSearchForm from 'components/AssetSearchForm/AssetSearchForm';
-import RootAssetSelect from 'components/RootAssetSelect/RootAssetSelect';
 import { debounce } from 'lodash';
 import React, { SyntheticEvent } from 'react';
 import styled from 'styled-components';
+import { Asset } from '@cognite/sdk';
+import { AssetSearchForm } from '../AssetSearchForm/AssetSearchForm';
+import { RootAssetSelect } from '../RootAssetSelect/RootAssetSelect';
 import {
-  VAsset,
-  VMetadata,
-  VAdvancedSearch,
-  VApiQuery,
-  VOnAssetSearchResult,
-  VOnAssetSearch,
-  VIdCallback,
-  VEmptyCallback,
-} from 'utils/validators';
+  PureObject,
+  AdvancedAssetSearch,
+  ApiQuery,
+  OnAssetSearchResult,
+  OnAssetSearch,
+  IdCallback,
+  EmptyCallback,
+} from '../../interfaces';
 
 const { Search } = Input;
 
@@ -29,7 +29,7 @@ const RootAssetSelectStyled = styled(RootAssetSelect)`
   width: 35%;
 `;
 
-export const defaultStrings: VMetadata = {
+export const defaultStrings: PureObject = {
   changeSearch: 'Change search',
   clear: 'Clear',
   searchPlaceholder: 'Search for an asset',
@@ -42,24 +42,28 @@ export interface AssetSearchProps {
   boostName: boolean;
   rootAssetSelect: boolean;
   advancedSearch: boolean;
-  assets: VAsset[];
-  strings: VMetadata;
+  strings: PureObject;
+  assets: Asset[];
   assetId?: number;
-  onSearchResults?: VOnAssetSearchResult;
-  onSearch?: VOnAssetSearch;
-  onAssetSelected?: VIdCallback;
-  onFilterIconClick?: VEmptyCallback;
+  onSearchResults?: OnAssetSearchResult;
+  onSearch?: OnAssetSearch;
+  onAssetSelected?: IdCallback;
+  onFilterIconClick?: EmptyCallback;
 }
 
 export interface AssetSearchState {
   assetId: number;
   query: string;
   isModalOpen: boolean;
-  advancedSearchQuery: VAdvancedSearch | null;
+  advancedSearchQuery: AdvancedAssetSearch | null;
 }
 
-class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
+export class AssetSearch extends React.Component<
+  AssetSearchProps,
+  AssetSearchState
+> {
   static defaultProps = {
+    assets: [],
     fetchingLimit: 25,
     debounceTime: 200,
     boostName: true,
@@ -85,7 +89,7 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
     const { query, advancedSearchQuery, assetId } = this.state;
     const assetSubtrees = assetId ? [assetId] : null;
 
-    const apiQuery: VApiQuery = {
+    const apiQuery: ApiQuery = {
       advancedSearch: advancedSearchQuery,
       fetchingLimit,
       assetSubtrees,
@@ -144,7 +148,7 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
     this.setState({ assetId }, this.onSearch);
   };
 
-  onAssetSearchChange = (value: VAdvancedSearch) =>
+  onAssetSearchChange = (value: AdvancedAssetSearch) =>
     this.setState({ advancedSearchQuery: value, query: '' });
 
   onSearchQueryInput = (e: SyntheticEvent) => {
@@ -179,7 +183,7 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
             </React.Fragment>
           ) : advancedSearch ? (
             <Input
-              placeholder={searchPlaceholder}
+              placeholder={searchPlaceholder as string}
               disabled={!!advancedSearchQuery}
               value={query}
               onChange={this.onSearchQueryInput}
@@ -194,7 +198,7 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
             />
           ) : (
             <Search
-              placeholder={searchPlaceholder}
+              placeholder={searchPlaceholder as string}
               disabled={!!advancedSearchQuery}
               value={query}
               onChange={this.onSearchQueryInput}
@@ -203,7 +207,6 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
           )}
         </InputGroup>
         <Modal
-          align={null}
           visible={isModalOpen}
           onCancel={this.onModalCancel}
           footer={[
@@ -230,5 +233,3 @@ class AssetSearch extends React.Component<AssetSearchProps, AssetSearchState> {
     );
   }
 }
-
-export default AssetSearch;

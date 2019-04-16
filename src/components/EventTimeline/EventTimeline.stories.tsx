@@ -2,9 +2,9 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { generateEventTimelineData, eventTimelineDataSrc } from 'mocks/events';
+import { generateEventTimelineData, eventTimelineDataSrc } from '../../mocks';
 
-import EventTimeline from 'components/EventTimeline/EventTimeline';
+import { EventTimeline } from './EventTimeline';
 
 const data = eventTimelineDataSrc.map(event =>
   // @ts-ignore – reason – support of spread operator in tslint

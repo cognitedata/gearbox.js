@@ -1,11 +1,11 @@
 import { Spin } from 'antd';
-import AssetSearch from 'components/AssetSearch/AssetSearch';
-import DetailCheckbox from 'components/DetailCheckbox/DetailCheckbox';
 import { debounce } from 'lodash';
 import * as sdk from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
-import { VApiQuery, VAsset } from 'utils/validators';
+import { AssetSearch } from '../AssetSearch/AssetSearch';
+import { DetailCheckbox } from '../DetailCheckbox/DetailCheckbox';
+import { ApiQuery } from '../../interfaces';
 
 const Wrapper = styled.div`
   display: flex;
@@ -47,14 +47,14 @@ export interface TimeserieSearchAndSelectProps {
 
 export interface TimeserieSearchAndSelectState {
   assetId?: number;
-  assets: VAsset[];
+  assets: sdk.Asset[];
   fetching: boolean;
   searchResults: sdk.Timeseries[];
   selectedTimeseries: string[];
   lastFetchId: number;
 }
 
-class TimeserieSearchAndSelect extends React.Component<
+export class TimeseriesSearchAndSelect extends React.Component<
   TimeserieSearchAndSelectProps,
   TimeserieSearchAndSelectState
 > {
@@ -92,7 +92,7 @@ class TimeserieSearchAndSelect extends React.Component<
   async componentDidMount() {
     const apiAssets = await sdk.Assets.list({ depth: 0 });
     const assets = apiAssets.items.map(
-      (apiAsset: sdk.Asset): VAsset => {
+      (apiAsset: sdk.Asset): sdk.Asset => {
         return {
           id: apiAsset.id,
           name: apiAsset.name || '',
@@ -132,7 +132,7 @@ class TimeserieSearchAndSelect extends React.Component<
     }
   };
 
-  fetchTimeseries = (apiQuery: VApiQuery): void => {
+  fetchTimeseries = (apiQuery: ApiQuery): void => {
     const { query, assetSubtrees } = apiQuery;
     let { lastFetchId } = this.state;
     lastFetchId += 1;
@@ -227,5 +227,3 @@ class TimeserieSearchAndSelect extends React.Component<
     );
   }
 }
-
-export default TimeserieSearchAndSelect;

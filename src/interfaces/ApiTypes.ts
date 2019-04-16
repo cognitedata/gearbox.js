@@ -1,14 +1,14 @@
-import { VMetadata, VAdvancedSearch } from './index';
+import { PureObject, AdvancedAssetSearch } from './index';
 
-export interface VApiQuery {
+export interface ApiQuery {
   fetchingLimit: number;
   assetSubtrees: number[] | null;
   boostName: boolean;
   query: string;
-  advancedSearch: VAdvancedSearch | null;
+  advancedSearch: AdvancedAssetSearch | null;
 }
 
-export interface VApiEvent {
+export interface ApiEvent {
   id: number;
   startTime: number;
   endTime: number;
@@ -16,14 +16,14 @@ export interface VApiEvent {
   subtype?: string;
   assetIds?: number[];
   description?: string;
-  metadata?: VMetadata;
+  metadata?: PureObject;
   source?: string;
   sourceId?: string;
   createdTime?: number;
   lastUpdatedTime?: number;
 }
 
-export interface VApiAssetList {
+export interface ApiAssetList {
   query: string;
   fuzziness?: number;
   fuzzLimit?: number;

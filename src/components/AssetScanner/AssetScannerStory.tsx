@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import AssetScanner, { AssetScannerProps } from './AssetScanner';
+import { AssetScanner, AssetScannerProps } from './AssetScanner';
 import { AssetScannerDescription } from './AssetScannerDescription';
-import { VErrorResponse } from 'utils/validators';
+import { ErrorResponse } from '../../interfaces';
 
-const AssetScannerStory = (props: AssetScannerProps) => {
+export const AssetScannerStory = (props: AssetScannerProps) => {
   const [showHelper, toggleHelper] = useState(false);
   const { onUnauthorized } = props;
 
-  const showHelperFunc = (error: VErrorResponse) => {
+  const showHelperFunc = (error: ErrorResponse) => {
     toggleHelper(true);
     onUnauthorized(error);
   };
@@ -24,5 +24,3 @@ const AssetScannerStory = (props: AssetScannerProps) => {
 };
 
 AssetScannerStory.displayName = 'AssetScanner';
-
-export { AssetScannerStory };
