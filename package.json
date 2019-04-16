@@ -61,7 +61,7 @@
     "@types/sinon": "^7.0.9",
     "@types/storybook__addon-actions": "^3.4.2",
     "@types/storybook__react": "^4.0.1",
-    "@types/styled-components": "4.1.13",
+    "@types/styled-components": "^4.1.13",
     "@types/uuid": "^3.4.4",
     "antd": "^3.14.1",
     "babel-jest": "^24.1.0",

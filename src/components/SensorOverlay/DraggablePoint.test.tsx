@@ -76,4 +76,33 @@ describe('SensorOverlay - DraggablePoint', () => {
     point.simulate('dblclick');
     expect(propsCallbacks.onPointDoubleClick).toHaveBeenCalled();
   });
+
+  it('Should render nothing while dragging', () => {
+    const wrapper = mount(
+      <div
+        style={{
+          position: 'relative',
+          ...containerSize,
+        }}
+      >
+        <DraggablePoint
+          id={123}
+          left={0.4 * containerSize.width}
+          top={0.2 * containerSize.height}
+          color={'green'}
+          isDraggable={true}
+          onClick={propsCallbacks.onClick}
+          onDragHandleDoubleClick={propsCallbacks.onPointDoubleClick}
+          isDragging={true}
+          connectDragSource={(v: any) => v}
+          connectDragPreview={(v: any) => v}
+        />
+      </div>
+    );
+
+    const draggablePoint = wrapper.find(DraggablePoint);
+    expect(draggablePoint).toHaveLength(1);
+    const innerDiv = draggablePoint.find('div');
+    expect(innerDiv).toHaveLength(0);
+  });
 });

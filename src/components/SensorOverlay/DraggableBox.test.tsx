@@ -158,4 +158,34 @@ describe('SensorOverlay - DraggableBox', () => {
       done();
     });
   });
+
+  it('Should render nothing while dragging', () => {
+    const wrapper = mount(
+      <div
+        style={{
+          position: 'relative',
+          ...containerSize,
+        }}
+      >
+        <DraggableBox
+          id={testTimeserie.id}
+          left={0.2 * containerSize.width}
+          top={0.2 * containerSize.height}
+          color={'green'}
+          sticky={false}
+          isDraggable={true}
+          flipped={false}
+          onDragHandleDoubleClick={propsCallbacks.onDragHandleDoubleClick}
+          isDragging={true}
+          connectDragSource={(v: any) => v}
+          connectDragPreview={(v: any) => v}
+        />
+      </div>
+    );
+
+    const draggableBox = wrapper.find(DraggableBox);
+    expect(draggableBox).toHaveLength(1);
+    const innerDiv = draggableBox.find('div');
+    expect(innerDiv).toHaveLength(0);
+  });
 });

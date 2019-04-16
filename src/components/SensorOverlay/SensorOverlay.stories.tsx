@@ -31,6 +31,11 @@ storiesOf('SensorOverlay', module)
       <div style={{ width: '100%', height: '500px', background: '#DDDDDD' }} />
     </SensorOverlay>
   ))
+  .add('Basic with two', () => (
+    <SensorOverlay timeserieIds={[8681821313339919, 4536015939766876]}>
+      <div style={{ width: '100%', height: '500px', background: '#DDDDDD' }} />
+    </SensorOverlay>
+  ))
   .add('Default position and color', () => (
     <SensorOverlay
       timeserieIds={[8681821313339919]}

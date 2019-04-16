@@ -15,10 +15,7 @@ import { DragTargets } from 'components/SensorOverlay/constants';
 import DraggableBox from 'components/SensorOverlay/DraggableBox';
 import DraggablePoint from 'components/SensorOverlay/DraggablePoint';
 import SvgLine from 'components/SensorOverlay/SvgLine';
-
-function limitValue(v: number, maxValue: number) {
-  return Math.max(Math.min(v, maxValue), 0);
-}
+import { clampNumber } from '../../utils/helpers/clampNumber';
 
 const boxTarget: DropTargetSpec<SensorOverlayProps> = {
   hover(
@@ -28,31 +25,28 @@ const boxTarget: DropTargetSpec<SensorOverlayProps> = {
   ) {
     const item = monitor.getItem();
     const delta = monitor.getDifferenceFromInitialOffset();
-    if (!delta) {
-      return;
-    }
-    const left = Math.round(item.left + delta.x);
-    const top = Math.round(item.top + delta.y);
     if (
-      delta.x === component.previousDelta.x &&
-      delta.y === component.previousDelta.y
+      delta &&
+      (delta.x !== component.previousDelta.x ||
+        delta.y !== component.previousDelta.y)
     ) {
-      return;
-    }
-    component.previousDelta = delta;
-    const { size } = props;
-    if (item.type === 'box') {
-      component.moveBox(
-        item.id,
-        limitValue(left, size.width - 1),
-        limitValue(top, size.height - 1)
-      );
-    } else if (item.type === 'point') {
-      component.movePoint(
-        item.id,
-        limitValue(left, size.width - 1),
-        limitValue(top, size.height - 1)
-      );
+      const left = Math.round(item.left + delta.x);
+      const top = Math.round(item.top + delta.y);
+      component.previousDelta = delta;
+      const { size } = props;
+      if (item.type === 'box') {
+        component.moveBox(
+          item.id,
+          clampNumber(left, 0, size.width - 1),
+          clampNumber(top, 0, size.height - 1)
+        );
+      } else if (item.type === 'point') {
+        component.movePoint(
+          item.id,
+          clampNumber(left, 0, size.width - 1),
+          clampNumber(top, 0, size.height - 1)
+        );
+      }
     }
   },
   /**
@@ -157,6 +151,7 @@ export class SensorOverlay extends Component<
         },
       };
     }
+    let defaultsCounter = 0;
     const boxes = props.timeserieIds.map(id => {
       const oldBox = state.boxes.find(box => box.id === id);
       return {
@@ -167,11 +162,11 @@ export class SensorOverlay extends Component<
           ? props.defaultPositionMap[id.toString()]
           : {
               // default position of tag and pointer
-              left: 100 / props.size.width,
-              top: 100 / props.size.height,
+              left: (100 + defaultsCounter * 40) / props.size.width,
+              top: (40 + defaultsCounter * 20) / props.size.height,
               pointer: {
-                left: 200 / props.size.width,
-                top: 200 / props.size.height,
+                left: (200 + defaultsCounter * 40) / props.size.width,
+                top: (140 + defaultsCounter++ * 20) / props.size.height,
               },
             }),
       };
@@ -202,36 +197,34 @@ export class SensorOverlay extends Component<
 
   onDragHandleDoubleClick = (timeserieId: number) => {
     const box = this.state.boxes.find(b => b.id === timeserieId);
-    if (!box) {
-      return;
+    if (box) {
+      const { size } = this.props;
+      const newPosition = {
+        left: box.left * size.width + 50,
+        top: box.top * size.height + 50,
+      };
+      this.movePoint(timeserieId, newPosition.left, newPosition.top, true);
     }
-    const { size } = this.props;
-    const newPosition = {
-      left: box.left * size.width + 50,
-      top: box.top * size.height + 50,
-    };
-    this.movePoint(timeserieId, newPosition.left, newPosition.top, true);
   };
 
   onAnchorDoubleClick = (timeserieId: number) => {
     const box = this.state.boxes.find(b => b.id === timeserieId);
-    if (!box) {
-      return;
+    if (box) {
+      const { pointer } = box;
+      const { size } = this.props;
+      const newPosition = {
+        left: Math.max(20, pointer.left * size.width - 50),
+        top: Math.max(20, pointer.top * size.height - 50),
+      };
+      this.moveBox(timeserieId, newPosition.left, newPosition.top, true);
     }
-    const { pointer } = box;
-    const { size } = this.props;
-    const newPosition = {
-      left: Math.max(20, pointer.left * size.width - 50),
-      top: Math.max(20, pointer.top * size.height - 50),
-    };
-    this.moveBox(timeserieId, newPosition.left, newPosition.top, true);
   };
 
   moveBox = (
     id: number,
     left: number,
     top: number,
-    updateParent: boolean = false
+    notifyParent: boolean = false
   ) => {
     this.setState(
       (state: SensorOverlayState, props: SensorOverlayProps) => {
@@ -247,7 +240,7 @@ export class SensorOverlay extends Component<
           ),
         };
       },
-      () => updateParent && this.notifyParentOnPositionChange(id)
+      () => notifyParent && this.notifyParentOnPositionChange(id)
     );
   };
 
@@ -255,7 +248,7 @@ export class SensorOverlay extends Component<
     id: number,
     left: number,
     top: number,
-    updateParent: boolean = false
+    notifyParent: boolean = false
   ) => {
     this.setState(
       (state: SensorOverlayState, props: SensorOverlayProps) => {
@@ -273,17 +266,16 @@ export class SensorOverlay extends Component<
           ),
         };
       },
-      () => updateParent && this.notifyParentOnPositionChange(id)
+      () => notifyParent && this.notifyParentOnPositionChange(id)
     );
   };
 
   notifyParentOnPositionChange = (id: number) => {
     if (this.props.onSensorPositionChange) {
       const box = this.state.boxes.find(b => b.id === id);
-      if (!box) {
-        return;
+      if (box) {
+        this.props.onSensorPositionChange(id, omit(box, 'id'));
       }
-      this.props.onSensorPositionChange(id, omit(box, 'id'));
     }
   };
 

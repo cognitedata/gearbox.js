@@ -111,7 +111,7 @@ describe('SensorOverlay', () => {
     link.simulate('click');
     expect(propsCallbacks.onLinkClick).toHaveBeenCalled();
 
-    const pointer = wrapper.find(DraggablePoint).find('div');
+    const pointer = wrapper.find(DraggablePoint);
     expect(pointer).toHaveLength(1);
 
     pointer.simulate('click');
@@ -119,6 +119,10 @@ describe('SensorOverlay', () => {
 
     pointer.simulate('dblclick');
     expect(propsCallbacks.onSensorPositionChange).toHaveBeenCalled();
+
+    const boxHandle = tag.find('div').at(1);
+    boxHandle.simulate('dblclick');
+    expect(propsCallbacks.onSensorPositionChange).toHaveBeenCalledTimes(2);
   });
 
   it('Tag and pointer should be draggable', () => {
@@ -166,5 +170,50 @@ describe('SensorOverlay', () => {
     backend.simulateDrop();
     backend.simulateEndDrag();
     expect(propsCallbacks.onSensorPositionChange).toHaveBeenCalledTimes(2);
+  });
+
+  it('Should render nothing if there is no space in container', () => {
+    const wrapper = mount(
+      <SensorOverlay
+        timeserieIds={[8681821313339919]}
+        size={{ width: 1000, height: 0 }}
+      />
+    );
+
+    const draggableBox = wrapper.find(DraggableBox);
+    expect(draggableBox).toHaveLength(0);
+
+    const draggablePoint = wrapper.find(DraggablePoint);
+    expect(draggablePoint).toHaveLength(0);
+
+    const svgLine = wrapper.find(SvgLine);
+    expect(svgLine).toHaveLength(0);
+  });
+
+  it('Should render new sensors if they were added in props', done => {
+    const wrapper = mount(
+      <SensorOverlay
+        timeserieIds={[8681821313339919]}
+        size={{ width: 1000, height: 500 }}
+      />
+    );
+
+    wrapper.setProps(
+      {
+        timeserieIds: [8681821313339919, 4536015939766876],
+      },
+      () => {
+        const draggableBox = wrapper.find(DraggableBox);
+        expect(draggableBox).toHaveLength(2);
+
+        const draggablePoint = wrapper.find(DraggablePoint);
+        expect(draggablePoint).toHaveLength(2);
+
+        const svgLine = wrapper.find(SvgLine);
+        expect(svgLine).toHaveLength(2);
+
+        done();
+      }
+    );
   });
 });

@@ -215,48 +215,34 @@ export class DraggableBox extends Component<
     }
   };
 
-  fetchTimeSeries = (id: number) => {
-    sdk.TimeSeries.retrieve(id, true)
-      .then(timeserie => {
-        this.setState({
-          tag: timeserie,
-        });
-
-        if (!this.interval) {
-          this.updateValue();
-          this.interval = setInterval(
-            this.updateValue,
-            this.props.updateInterval
-          );
-        }
-      })
-      .catch(() => {
-        // TODO handle error here
-      });
+  fetchTimeSeries = async (id: number) => {
+    const timeserie = await sdk.TimeSeries.retrieve(id, true);
+    this.setState({
+      tag: timeserie,
+    });
+    if (!this.interval) {
+      this.updateValue();
+      this.interval = setInterval(this.updateValue, this.props.updateInterval);
+    }
   };
 
-  updateValue = () => {
-    sdk.Datapoints.retrieveLatest(this.state.tag!.name)
-      .then(data => {
-        if (!data) {
-          this.setState({
-            dataPoint: null,
-          });
-          return;
-        }
-        if (
-          this.state.dataPoint &&
-          data.timestamp < this.state.dataPoint.timestamp
-        ) {
-          return; // got old data point - skip it
-        }
-        this.setState({
-          dataPoint: data,
-        });
-      })
-      .catch(() => {
-        // TODO handle error here
+  updateValue = async () => {
+    const data = await sdk.Datapoints.retrieveLatest(this.state.tag!.name);
+    if (!data) {
+      this.setState({
+        dataPoint: null,
       });
+      return;
+    }
+    if (
+      this.state.dataPoint &&
+      data.timestamp < this.state.dataPoint.timestamp
+    ) {
+      return; // got old data point - skip it
+    }
+    this.setState({
+      dataPoint: data,
+    });
   };
 
   handleClick = () => {
