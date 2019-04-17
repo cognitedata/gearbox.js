@@ -1,6 +1,6 @@
 {
   "name": "@cognite/gearbox",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "GearBox will be a place for application developers to contribute useful, reusable components across applications",
   "contributors": [],
   "main": "dist/index.js",
