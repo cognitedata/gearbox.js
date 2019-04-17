@@ -6,6 +6,7 @@ import { TimeseriesSearchAndSelect } from './TimeseriesSearchAndSelect';
 import { assetsList, timeseriesList } from '../../mocks';
 
 const timeseriesNames = timeseriesList.map(ts => ts.name);
+const timeseriesIds = timeseriesList.map(ts => ts.id);
 const infoText = `Names you can search for : ${timeseriesNames.join(', ')}.`;
 
 // Mock the SDK calls
@@ -47,7 +48,7 @@ const filterRule = (timeseries: sdk.Timeseries): boolean =>
   !timeseries.isString;
 
 const onTimeserieSelectionChange = (
-  newTimeseries: string[],
+  newTimeseries: number[],
   timeseries: sdk.Timeseries
 ) => {
   action('onTimeserieSelectionChange')(newTimeseries, timeseries);
@@ -100,7 +101,7 @@ storiesOf('TimeseriesSearchAndSelect', module)
     () => (
       <TimeseriesSearchAndSelect
         onTimeserieSelectionChange={onTimeserieSelectionChange}
-        selectedTimeseries={[timeseriesNames[1], timeseriesNames[3]]}
+        selectedTimeseries={[timeseriesIds[1], timeseriesIds[3]]}
       />
     ),
     {

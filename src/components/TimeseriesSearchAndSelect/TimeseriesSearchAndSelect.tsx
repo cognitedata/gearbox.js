@@ -33,11 +33,11 @@ export const CenteredSpin = styled(Spin)`
 `;
 
 export interface TimeserieSearchAndSelectProps {
-  selectedTimeseries: string[];
+  selectedTimeseries: number[];
   single?: boolean;
   allowStrings?: boolean;
   onTimeserieSelectionChange?: (
-    newTimeseries: string[],
+    newTimeseries: number[],
     selectedTimeserie: sdk.Timeseries
   ) => void;
   rootAsset?: number;
@@ -50,7 +50,7 @@ export interface TimeserieSearchAndSelectState {
   assets: sdk.Asset[];
   fetching: boolean;
   searchResults: sdk.Timeseries[];
-  selectedTimeseries: string[];
+  selectedTimeseries: number[];
   lastFetchId: number;
 }
 
@@ -114,15 +114,15 @@ export class TimeseriesSearchAndSelect extends React.Component<
   };
 
   onTimeSerieClicked = (timeseries: sdk.Timeseries): void => {
-    let newTimeseries: string[] = [];
+    let newTimeseries: number[] = [];
 
     if (this.props.single) {
-      newTimeseries = [timeseries.name];
-    } else if (!this.isChecked(timeseries.name)) {
-      newTimeseries = [...this.state.selectedTimeseries, timeseries.name];
+      newTimeseries = [timeseries.id];
+    } else if (!this.isChecked(timeseries.id)) {
+      newTimeseries = [...this.state.selectedTimeseries, timeseries.id];
     } else {
       newTimeseries = [...this.state.selectedTimeseries].filter(
-        existing => existing !== timeseries.name
+        existing => existing !== timeseries.id
       );
     }
     this.setState({ selectedTimeseries: newTimeseries });
@@ -187,10 +187,9 @@ export class TimeseriesSearchAndSelect extends React.Component<
       );
   };
 
-  isChecked = (name: string): boolean =>
-    [...this.state.selectedTimeseries].findIndex(
-      timeseries => timeseries === name
-    ) !== -1;
+  isChecked = (id: number): boolean =>
+    this.state.selectedTimeseries.findIndex(timeseries => timeseries === id) !==
+    -1;
 
   render() {
     const { allowStrings, single } = this.props;
@@ -217,7 +216,7 @@ export class TimeseriesSearchAndSelect extends React.Component<
                 timeseries.description || timeseries.name || 'No description'
               }
               checkable={!single}
-              checked={this.isChecked(timeseries.name)}
+              checked={this.isChecked(timeseries.id)}
               onContainerClick={() => this.onTimeSerieClicked(timeseries)}
               disabled={!allowStrings && !!timeseries.isString}
             />
