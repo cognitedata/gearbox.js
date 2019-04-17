@@ -112,10 +112,7 @@ interface SensorOverlayState {
   };
 }
 
-export class SensorOverlay extends Component<
-  SensorOverlayProps,
-  SensorOverlayState
-> {
+class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
   static defaultProps: Partial<SensorOverlayProps> = {
     isTagDraggable: true,
     isPointerDraggable: true,
@@ -355,4 +352,4 @@ const FinalSensorOverlay = DragDropContext(HTML5Backend)(SizeWrapper);
 
 FinalSensorOverlay.displayName = 'SensorOverlay';
 
-export default FinalSensorOverlay;
+export { FinalSensorOverlay as SensorOverlay };

@@ -5,7 +5,7 @@ import { DragDropContext } from 'react-dnd';
 import DNDTestBackend from 'react-dnd-test-backend';
 import Adapter from 'enzyme-adapter-react-16';
 import sizeMe from 'react-sizeme';
-import OriginalSensorOverlay from './SensorOverlay';
+import { SensorOverlay as OriginalSensorOverlay } from './SensorOverlay';
 import { DraggableBox, Tag } from './DraggableBox';
 import { DraggablePoint } from './DraggablePoint';
 import SvgLine from './SvgLine';
