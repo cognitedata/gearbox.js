@@ -13,7 +13,6 @@ configure({ adapter: new Adapter() });
 sdk.TimeSeries.search = jest.fn();
 sdk.Assets.list = jest.fn();
 
-const { Search } = Input;
 const propsCallbacks = {
   filterRule: jest.fn(),
   onTimeserieSelectionChange: jest.fn(),
@@ -65,7 +64,7 @@ describe('TimeseriesSearchAndSelect', () => {
     const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
 
     wrapper
-      .find(Search)
+      .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'value' } });
 
@@ -82,7 +81,7 @@ describe('TimeseriesSearchAndSelect', () => {
     const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
 
     wrapper
-      .find(Search)
+      .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'value' } });
     expect(sdk.TimeSeries.search).toHaveBeenCalledTimes(1);
@@ -111,7 +110,7 @@ describe('TimeseriesSearchAndSelect', () => {
     const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
 
     wrapper
-      .find(Search)
+      .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
     expect(sdk.TimeSeries.search).toHaveBeenCalledTimes(1);
@@ -129,7 +128,7 @@ describe('TimeseriesSearchAndSelect', () => {
     const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
 
     wrapper
-      .find(Search)
+      .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
     expect(sdk.TimeSeries.search).toHaveBeenCalledTimes(1);
@@ -138,7 +137,7 @@ describe('TimeseriesSearchAndSelect', () => {
     setImmediate(() => {
       wrapper.update();
       wrapper
-        .find(Search)
+        .find(Input)
         .find('input')
         .simulate('change', { target: { value: '' } });
       expect(wrapper.find(DetailCheckbox)).toHaveLength(0);
@@ -152,7 +151,7 @@ describe('TimeseriesSearchAndSelect', () => {
     const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
 
     wrapper
-      .find(Search)
+      .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
 
@@ -195,7 +194,7 @@ describe('TimeseriesSearchAndSelect', () => {
     const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
 
     wrapper
-      .find(Search)
+      .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
 
@@ -243,7 +242,7 @@ describe('TimeseriesSearchAndSelect', () => {
     const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
 
     wrapper
-      .find(Search)
+      .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
 
@@ -287,7 +286,7 @@ describe('TimeseriesSearchAndSelect', () => {
     const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
 
     wrapper
-      .find(Search)
+      .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
 
@@ -313,7 +312,7 @@ describe('TimeseriesSearchAndSelect', () => {
     const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
 
     wrapper
-      .find(Search)
+      .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
 
@@ -334,7 +333,7 @@ describe('TimeseriesSearchAndSelect', () => {
     const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
 
     wrapper
-      .find(Search)
+      .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
 
@@ -352,7 +351,7 @@ describe('TimeseriesSearchAndSelect', () => {
     const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
 
     wrapper
-      .find(Search)
+      .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
 
@@ -374,7 +373,7 @@ describe('TimeseriesSearchAndSelect', () => {
     const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
 
     wrapper
-      .find(Search)
+      .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
 

@@ -11,6 +11,7 @@ type OnAdvancedSearchChange = (searchFields: AdvancedAssetSearch) => void;
 
 type EmptyCallback = () => void;
 type StringsCallback = (strings: string[]) => void;
+type AnyTypeCallback = (item: any) => void;
 type IdCallback = (id: number) => void;
 type SetVideoRefCallback = (element: HTMLVideoElement | null) => void;
 
@@ -43,6 +44,7 @@ export {
   OnAssetSearch,
   IdCallback,
   OnAdvancedSearchChange,
+  AnyTypeCallback,
   EmptyCallback,
   StringsCallback,
   OnAssetListCallback,
