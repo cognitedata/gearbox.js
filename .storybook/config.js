@@ -1,11 +1,13 @@
 import React from 'react';
 import { addDecorator, configure } from '@storybook/react';
-import * as Components from '../src/components';
+import { addReadme } from 'storybook-readme';
+import * as Components from '../src';
 
 import { withInfo } from '@storybook/addon-info';
 import 'antd/dist/antd.css';
 
 addDecorator(withInfo({maxPropsIntoLine: 1}));
+addDecorator(addReadme);
 
 const styles = {
   margin: '1em',

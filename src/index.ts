@@ -1,35 +1,19 @@
 // For purposes of published npm package
+export { DescriptionList } from './components/DescriptionList/DescriptionList';
 export {
-  default as DescriptionList,
-} from './components/DescriptionList/DescriptionList';
-export {
-  default as AssetEventsPanel,
+  AssetEventsPanel,
 } from './components/AssetEventsPanel/AssetEventsPanel';
-export { default as AssetMeta } from './components/AssetMeta/AssetMeta';
-export { default as AssetSearch } from './components/AssetSearch/AssetSearch';
+export { AssetMeta } from './components/AssetMeta/AssetMeta';
+export { AssetSearch } from './components/AssetSearch/AssetSearch';
+export { AssetSearchForm } from './components/AssetSearchForm/AssetSearchForm';
+export { AssetView } from './components/AssetView/AssetView';
+export { AssetTree } from './components/AssetTree/AssetTree';
+export { DocumentTable } from './components/DocumentTable/DocumentTable';
+export { EventPreview } from './components/EventPreview/EventPreview';
+export { EventTimeline } from './components/EventTimeline/EventTimeline';
+export { RootAssetSelect } from './components/RootAssetSelect/RootAssetSelect';
+export { TenantSelector } from './components/TenantSelector/TenantSelector';
 export {
-  default as AssetSearchForm,
-} from './components/AssetSearchForm/AssetSearchForm';
-export { default as AssetView } from './components/AssetView/AssetView';
-export { default as AssetTree } from './components/AssetTree/AssetTree';
-export {
-  default as DocumentTable,
-} from './components/DocumentTable/DocumentTable';
-export {
-  default as EventPreview,
-} from './components/EventPreview/EventPreview';
-export {
-  default as EventTimeline,
-} from './components/EventTimeline/EventTimeline';
-export {
-  default as RootAssetSelect,
-} from './components/RootAssetSelect/RootAssetSelect';
-export {
-  default as TenantSelector,
-} from './components/TenantSelector/TenantSelector';
-export {
-  default as TimeseriesSearchAndSelect,
+  TimeseriesSearchAndSelect,
 } from './components/TimeseriesSearchAndSelect/TimeseriesSearchAndSelect';
-export {
-  default as SensorOverlay,
-} from './components/SensorOverlay/SensorOverlay';
+export { SensorOverlay } from './components/SensorOverlay/SensorOverlay';

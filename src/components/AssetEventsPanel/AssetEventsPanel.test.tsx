@@ -2,8 +2,8 @@ import { configure, mount } from 'enzyme';
 import React from 'react';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
-import AssetEventsPanel from 'components/AssetEventsPanel/AssetEventsPanel';
-import { EVENTS } from 'mocks/events';
+import { AssetEventsPanel } from './AssetEventsPanel';
+import { EVENTS } from '../../mocks';
 
 configure({ adapter: new Adapter() });
 
@@ -15,10 +15,10 @@ describe('AssetEventsPanel', () => {
   it('checks if the modal is opened', () => {
     const EventPanelModal = mount(<AssetEventsPanel events={EVENTS} />);
 
-    expect(typeof EventPanelModal.state('hasSelectedEvent')).toBe('boolean');
+    expect(EventPanelModal.state('selectedEvent')).toEqual(null);
 
     const clickableRow = EventPanelModal.find('td').first();
     clickableRow.simulate('click');
-    expect(typeof EventPanelModal.state('hasSelectedEvent')).toBe('object');
+    expect(typeof EventPanelModal.state('selectedEvent')).toBe('object');
   });
 });

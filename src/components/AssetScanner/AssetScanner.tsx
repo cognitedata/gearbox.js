@@ -1,24 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Asset } from '@cognite/sdk';
 
-import WebcamScanner from 'components/WebcamScanner/WebcamScanner';
-import { getCanvas } from 'utils/utils';
+import { WebcamScanner } from '../WebcamScanner/WebcamScanner';
+import { getCanvas } from '../../utils';
 import {
-  VEmptyCallback,
-  VCallbackStrings,
-  VOnAssetListCallback,
-  VAsset,
-  VSetVideoRefCallback,
-} from 'utils/validators';
-import { getAssetList, ocrRecognize } from 'utils/api/api';
-import notification, {
+  EmptyCallback,
+  StringsCallback,
+  OnAssetListCallback,
+  SetVideoRefCallback,
+} from '../../interfaces';
+import { getAssetList, ocrRecognize } from '../../api';
+import {
+  notification,
   ocrSuccess,
   ocrAssetFind,
   ocrAssetNotFind,
   ocrNoTextFound,
   ocrError,
   ocrErrorVideo,
-} from 'utils/notifications';
+} from '../../utils';
 
 const Wrapper = styled.div`
   padding: 0;
@@ -41,11 +42,11 @@ export interface AssetScannerProps {
   ocrUrl?: string;
   ocrKey?: string;
   customNotification?: ASNotification;
-  onStringRecognize?: VCallbackStrings;
-  onStartLoading?: VEmptyCallback;
-  onEndLoading?: VEmptyCallback;
-  onAssetEmpty?: VEmptyCallback;
-  onAssetFind?: VOnAssetListCallback;
+  onStringRecognize?: StringsCallback;
+  onStartLoading?: EmptyCallback;
+  onEndLoading?: EmptyCallback;
+  onAssetEmpty?: EmptyCallback;
+  onAssetFind?: OnAssetListCallback;
   onUnauthorized?: any;
 }
 
@@ -54,7 +55,7 @@ export interface AssetScannerState {
   scannedImageSrc: string;
 }
 
-export default class AssetScanner extends React.Component<
+export class AssetScanner extends React.Component<
   AssetScannerProps,
   AssetScannerState
 > {
@@ -73,8 +74,8 @@ export default class AssetScanner extends React.Component<
   };
   video: HTMLVideoElement | null = null;
 
-  setRefBound: VSetVideoRefCallback = this.setRef.bind(this);
-  captureBound: VEmptyCallback = this.capture.bind(this);
+  setRefBound: SetVideoRefCallback = this.setRef.bind(this);
+  captureBound: EmptyCallback = this.capture.bind(this);
 
   constructor(props: AssetScannerProps) {
     super(props);
@@ -180,7 +181,7 @@ export default class AssetScanner extends React.Component<
     return notifications[type]();
   }
 
-  private async getAssets(strings: string[]): Promise<VAsset[]> {
+  private async getAssets(strings: string[]): Promise<Asset[]> {
     return (await Promise.all(
       strings.map((s: string) => getAssetList({ query: s }))
     ))

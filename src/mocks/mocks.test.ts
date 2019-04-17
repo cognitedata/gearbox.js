@@ -3,7 +3,7 @@ import {
   generateEventTimelineData,
   eventTimelineDataSrc,
   eventTimelineDataObject,
-} from 'mocks/events';
+} from './index';
 
 describe('EventPreview mock data tests', () => {
   it('"eventWithout" function set < undefined > to expected field', () => {

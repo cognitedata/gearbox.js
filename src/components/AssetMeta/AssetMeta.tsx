@@ -1,27 +1,27 @@
 import React from 'react';
 import { Tabs } from 'antd';
-import DescriptionList from 'components/DescriptionList/DescriptionList';
-import AssetEventsPanel from 'components/AssetEventsPanel/AssetEventsPanel';
-import DocumentTable from 'components/DocumentTable/DocumentTable';
+import { Asset } from '@cognite/sdk';
+import { DescriptionList } from '../DescriptionList/DescriptionList';
+import { AssetEventsPanel } from '../AssetEventsPanel/AssetEventsPanel';
+import { DocumentTable } from '../DocumentTable/DocumentTable';
 import {
   AssetEventsPanelProps,
-  VAsset,
-  assetPanels,
+  AssetPanelType,
   DocumentTableProps,
-} from 'utils/validators';
+} from '../../interfaces';
 
 const { TabPane } = Tabs;
 
 interface AssetMetaTypes {
-  asset: VAsset;
+  asset: Asset;
   tab?: string;
   docsProps?: DocumentTableProps;
   eventProps?: AssetEventsPanelProps;
-  hidePanels?: assetPanels[];
+  hidePanels?: AssetPanelType[];
   onPaneChange?: (key: string) => void;
 }
 
-const AssetMeta = (props: AssetMetaTypes) => {
+export const AssetMeta = (props: AssetMetaTypes) => {
   const {
     asset,
     tab: propsTab,
@@ -34,7 +34,7 @@ const AssetMeta = (props: AssetMetaTypes) => {
   const tab =
     propsTab === 'docs' || propsTab === 'events' ? propsTab : 'details';
 
-  const includesPanel = (pane: assetPanels) =>
+  const includesPanel = (pane: AssetPanelType) =>
     hidePanels ? hidePanels.indexOf(pane) < 0 : true;
 
   return (
@@ -62,6 +62,5 @@ const AssetMeta = (props: AssetMetaTypes) => {
     </>
   );
 };
-AssetMeta.displayName = 'AssetMeta';
 
-export default AssetMeta;
+AssetMeta.displayName = 'AssetMeta';

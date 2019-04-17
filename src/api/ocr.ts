@@ -1,34 +1,13 @@
-import { Assets } from '@cognite/sdk';
-import { VAsset, VApiAssetList, VOcrRequest } from 'utils/validators';
-import { extractValidStrings } from 'utils/utils';
+import { OcrRequest } from '../interfaces';
+import { extractValidStrings } from '../utils';
 
 const ocrVisionURL = 'https://vision.googleapis.com/v1/images:annotate';
-
-export async function getAssetList({
-  query,
-  fuzziness = 0,
-  fuzzLimit = 3,
-}: VApiAssetList): Promise<VAsset[]> {
-  const response = await Assets.list({
-    name: query,
-    fuzziness,
-  });
-
-  if (response.items.length < 1 && fuzziness < fuzzLimit) {
-    return getAssetList({
-      query,
-      fuzziness: fuzziness + 1,
-    });
-  }
-
-  return response.items;
-}
 
 export async function ocrRecognize({
   image,
   url,
   key,
-}: VOcrRequest): Promise<string[]> {
+}: OcrRequest): Promise<string[]> {
   const headers = new Headers();
 
   headers.append('Content-Type', 'application/json');

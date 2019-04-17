@@ -1,4 +1,5 @@
 import moment from 'moment-timezone';
+import { PureObject } from '../interfaces';
 
 export function formatDatetime(
   time: number | string | Date,
@@ -16,3 +17,10 @@ export function formatDatetime(
 export function momentFromTimestamp(timestamp: number) {
   return moment(timestamp).tz('utc');
 }
+
+export const mapMetaData = (metaObject: PureObject) =>
+  Object.keys(metaObject).map(dp => ({
+    key: dp,
+    name: dp,
+    value: (metaObject as any)[dp],
+  }));

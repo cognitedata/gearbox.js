@@ -1,8 +1,9 @@
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import React from 'react';
-import AssetTree from 'components/AssetTree/AssetTree';
-import { ASSET_ZERO_DEPTH_ARRAY, ASSET_LIST_CHILD } from 'mocks/assetsList';
+import { AssetTree } from './AssetTree';
+import { OnSelectReturnType } from '../../interfaces';
+import { ASSET_ZERO_DEPTH_ARRAY, ASSET_LIST_CHILD } from '../../mocks';
 
 const returnLoadData = () => {
   return ASSET_LIST_CHILD;
@@ -36,7 +37,7 @@ storiesOf('AssetTree', module)
       <AssetTree
         assets={ASSET_ZERO_DEPTH_ARRAY}
         loadData={returnLoadData}
-        onSelect={e => action('onSelect')(e)}
+        onSelect={(e: OnSelectReturnType) => action('onSelect')(e)}
       />
     ),
     {

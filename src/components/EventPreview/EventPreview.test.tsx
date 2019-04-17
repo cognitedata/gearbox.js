@@ -1,7 +1,7 @@
 import React, { SyntheticEvent } from 'react';
 import { configure, mount } from 'enzyme';
-import EventPreview, { defaultStrings } from './EventPreview';
-import { EVENTS, eventWithout, eventPreviewStrings } from 'mocks/events';
+import { EventPreview, defaultStrings } from './EventPreview';
+import { EVENTS, eventWithout, eventPreviewStrings } from '../../mocks';
 import Adapter from 'enzyme-adapter-react-16';
 
 configure({ adapter: new Adapter() });
@@ -57,6 +57,6 @@ describe('EventPreview', () => {
     );
 
     const { noDescription } = defaultStrings;
-    expect(wrapper.contains(noDescription)).toBeTruthy();
+    expect(wrapper.contains(noDescription as string)).toBeTruthy();
   });
 });

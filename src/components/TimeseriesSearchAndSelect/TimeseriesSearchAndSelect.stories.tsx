@@ -2,10 +2,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import * as sdk from '@cognite/sdk';
-import TimeserieSearchAndSelect from 'components/TimeseriesSearchAndSelect/TimeseriesSearchAndSelect';
-import { assetsList } from 'mocks/assetsList';
-import { timeseriesList } from 'mocks/timeseriesList';
-import { VAsset } from 'utils/validators';
+import { TimeseriesSearchAndSelect } from './TimeseriesSearchAndSelect';
+import { assetsList, timeseriesList } from '../../mocks';
 
 const timeseriesNames = timeseriesList.map(ts => ts.name);
 const infoText = `Names you can search for : ${timeseriesNames.join(', ')}.`;
@@ -17,7 +15,7 @@ sdk.Assets.list = async (
   action('sdk.Assets.list')(input);
   return {
     items: assetsList.map(
-      (a: VAsset): sdk.Asset => {
+      (a: sdk.Asset): sdk.Asset => {
         return {
           id: Number.parseInt(a.id.toString(), 10),
           name: a.name,
@@ -39,6 +37,7 @@ sdk.TimeSeries.search = async (
   }
   return {
     items: timeseriesList.filter(
+      // @ts-ignore
       ts => ts.name.toUpperCase().indexOf(input.query.toUpperCase()) >= 0
     ),
   };
@@ -54,11 +53,11 @@ const onTimeserieSelectionChange = (
   action('onTimeserieSelectionChange')(newTimeseries, timeseries);
 };
 
-storiesOf('TimeserieSearchAndSelect', module)
+storiesOf('TimeseriesSearchAndSelect', module)
   .add(
     'Basic',
     () => (
-      <TimeserieSearchAndSelect
+      <TimeseriesSearchAndSelect
         onTimeserieSelectionChange={onTimeserieSelectionChange}
       />
     ),
@@ -71,7 +70,7 @@ storiesOf('TimeserieSearchAndSelect', module)
   .add(
     'Single selection',
     () => (
-      <TimeserieSearchAndSelect
+      <TimeseriesSearchAndSelect
         onTimeserieSelectionChange={onTimeserieSelectionChange}
         single={true}
       />
@@ -85,7 +84,7 @@ storiesOf('TimeserieSearchAndSelect', module)
   .add(
     'Allow strings',
     () => (
-      <TimeserieSearchAndSelect
+      <TimeseriesSearchAndSelect
         onTimeserieSelectionChange={onTimeserieSelectionChange}
         allowStrings={true}
       />
@@ -99,7 +98,7 @@ storiesOf('TimeserieSearchAndSelect', module)
   .add(
     'Preselected',
     () => (
-      <TimeserieSearchAndSelect
+      <TimeseriesSearchAndSelect
         onTimeserieSelectionChange={onTimeserieSelectionChange}
         selectedTimeseries={[timeseriesNames[1], timeseriesNames[3]]}
       />
@@ -113,7 +112,7 @@ storiesOf('TimeserieSearchAndSelect', module)
   .add(
     'Custom filter rule',
     () => (
-      <TimeserieSearchAndSelect
+      <TimeseriesSearchAndSelect
         onTimeserieSelectionChange={onTimeserieSelectionChange}
         filterRule={filterRule}
       />

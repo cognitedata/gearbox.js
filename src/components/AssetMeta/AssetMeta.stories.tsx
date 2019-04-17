@@ -1,10 +1,8 @@
+import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import React from 'react';
-import AssetMeta from './AssetMeta';
-import { ASSET_DATA } from 'mocks/assets';
-import { EVENTS } from 'mocks/events';
-import { DOCUMENTS } from 'mocks/documents';
+import { AssetMeta } from './AssetMeta';
+import { ASSET_DATA, EVENTS, DOCUMENTS } from '../../mocks';
 
 const onPaneChange = (key: string) => action('onPaneChange')(key);
 

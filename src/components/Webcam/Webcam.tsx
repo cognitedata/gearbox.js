@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { VSetVideoRefCallback } from 'utils/validators';
 import styled from 'styled-components';
+import { SetVideoRefCallback } from '../../interfaces';
 
 const StyledVideo = styled.video`
   background: rgba(0, 0, 0, 0.5);
@@ -21,7 +21,7 @@ function hasGetUserMedia() {
 
 interface WebcamProps {
   audio?: boolean;
-  setRef: VSetVideoRefCallback;
+  setRef: SetVideoRefCallback;
   height?: number | string;
   width?: number | string;
   className?: string;
@@ -35,7 +35,7 @@ interface WebcamState {
   src: string;
 }
 
-class Webcam extends Component<WebcamProps, WebcamState> {
+export class Webcam extends Component<WebcamProps, WebcamState> {
   static mountedInstances: Webcam[] = [];
   static userMediaRequested = false;
   static defaultProps = {
@@ -235,5 +235,3 @@ class Webcam extends Component<WebcamProps, WebcamState> {
     );
   }
 }
-
-export default Webcam;

@@ -11,11 +11,11 @@ import {
 import { withSize } from 'react-sizeme';
 import { Datapoint } from '@cognite/sdk';
 import { omit } from 'lodash';
-import { DragTargets } from 'components/SensorOverlay/constants';
-import DraggableBox from 'components/SensorOverlay/DraggableBox';
-import DraggablePoint from 'components/SensorOverlay/DraggablePoint';
-import SvgLine from 'components/SensorOverlay/SvgLine';
-import { clampNumber } from '../../utils/helpers/clampNumber';
+import { DragTargets } from './constants';
+import DraggableBox from './DraggableBox';
+import DraggablePoint from './DraggablePoint';
+import SvgLine from './SvgLine';
+import { clampNumber } from '../../utils';
 
 const boxTarget: DropTargetSpec<SensorOverlayProps> = {
   hover(

@@ -1,6 +1,7 @@
-import { VApiEvent, VMetadata } from './index';
+import { Asset } from '@cognite/sdk';
+import { ApiEvent, MetadataId } from './index';
 
-export type assetPanels = 'details' | 'events' | 'documents';
+export type AssetPanelType = 'details' | 'events' | 'documents';
 
 export interface TreeNodeData {
   title: string;
@@ -8,18 +9,6 @@ export interface TreeNodeData {
   children?: TreeNodeData[];
   isLeaf?: boolean;
   [name: string]: any;
-}
-
-export interface VAsset {
-  id: number;
-  name: string;
-  description?: string;
-  path?: number[];
-  depth?: number;
-  metadata?: VMetadata;
-  parentId?: number;
-  createdTime?: number;
-  lastUpdatedTime?: number;
 }
 
 export interface ValueListType {
@@ -51,7 +40,7 @@ export interface TableDesignType {
 
 export interface AssetEventsPanelProps extends TableDesignType {
   columns?: TableColumnType[];
-  events?: VApiEvent[];
+  events?: ApiEvent[];
 }
 
 export interface TreeNodeType {
@@ -71,12 +60,18 @@ export interface OnSelectReturnType {
   key: number | string;
   title: string;
   isLeaf?: boolean;
-  node?: VAsset;
+  node?: Asset;
 }
 
 export interface AssetTreeType {
-  assets?: VAsset[];
-  loadData?: (assetId: number, query: AssetQuery) => VAsset[];
+  assets?: Asset[];
+  loadData?: (assetId: number, query: AssetQuery) => Asset[];
   onSelect?: (onSelect: OnSelectReturnType) => void;
   defaultExpandedKeys?: string[];
+}
+
+export interface AdvancedAssetSearch {
+  name?: string;
+  description?: string;
+  metadata?: MetadataId[];
 }

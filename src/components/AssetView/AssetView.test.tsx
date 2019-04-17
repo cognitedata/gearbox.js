@@ -1,7 +1,7 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import AssetView from './AssetView';
+import { AssetView } from './AssetView';
 
 configure({ adapter: new Adapter() });
 

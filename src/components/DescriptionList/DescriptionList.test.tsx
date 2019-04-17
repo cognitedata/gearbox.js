@@ -2,8 +2,8 @@ import { configure } from 'enzyme';
 import React from 'react';
 import renderer from 'react-test-renderer';
 import Adapter from 'enzyme-adapter-react-16';
-import { ASSET_DATA } from 'mocks/assets';
-import DescriptionList from './DescriptionList';
+import { ASSET_DATA } from '../../mocks';
+import { DescriptionList } from './DescriptionList';
 
 configure({ adapter: new Adapter() });
 

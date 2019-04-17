@@ -32,7 +32,7 @@ const defaultProps = {
   className: 'detail-checkbox',
 };
 
-const DetailCheckbox: React.SFC<DetailCheckboxProps> = ({
+export const DetailCheckbox: React.SFC<DetailCheckboxProps> = ({
   checked,
   description,
   disabled,
@@ -70,5 +70,3 @@ const DetailCheckbox: React.SFC<DetailCheckboxProps> = ({
 );
 
 DetailCheckbox.defaultProps = defaultProps;
-
-export default DetailCheckbox;

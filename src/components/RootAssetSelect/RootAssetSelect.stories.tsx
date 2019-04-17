@@ -1,9 +1,9 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import RootAssetSelect from 'components/RootAssetSelect/RootAssetSelect';
+import { RootAssetSelect } from './RootAssetSelect';
 
-import { assetsList } from 'mocks/assetsList';
+import { assetsList } from '../../mocks';
 
 const onAssetSelected = (assetId: number) => action('onAssetSelected')(assetId);
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { AssetScannerStory } from 'components/AssetScanner/AssetScannerStory';
 import { action } from '@storybook/addon-actions';
-import { VErrorResponse } from 'utils/validators';
+import { AssetScannerStory } from './AssetScannerStory';
+import { ErrorResponse } from '../../interfaces';
 
-const onUnauthorized: any = (error: VErrorResponse) => {
+const onUnauthorized: any = (error: ErrorResponse) => {
   action('onUnauthorized')(error);
 };
 

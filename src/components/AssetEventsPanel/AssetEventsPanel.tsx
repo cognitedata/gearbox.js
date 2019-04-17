@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import { Table, Modal, Icon } from 'antd';
-import { AssetEventsPanelProps } from 'utils/validators/AssetTypes';
-import { VApiEvent } from 'utils/validators';
 import styled from 'styled-components';
-import { momentFromTimestamp } from 'utils/formatters';
+import { ApiEvent, AssetEventsPanelProps } from '../../interfaces';
+import { momentFromTimestamp } from '../../utils';
 
-interface EventAddonsProp extends VApiEvent {
+interface EventAddonsProp extends ApiEvent {
   typeAndSubtype: React.ReactNode;
   description: string;
-  start: number;
-  end: number;
+  start: string;
+  end: string;
+}
+
+interface AssetEventsPanelState {
+  selectedEvent: EventAddonsProp | null;
 }
 
 const StyledTable = styled(Table)`
@@ -49,14 +52,14 @@ const EventMetadataList = styled.div`
   }
 `;
 
-class AssetEventsPanel extends Component<
+export class AssetEventsPanel extends Component<
   AssetEventsPanelProps,
-  { hasSelectedEvent: false }
+  AssetEventsPanelState
 > {
   constructor(props: AssetEventsPanelProps) {
     super(props);
     this.state = {
-      hasSelectedEvent: false,
+      selectedEvent: null,
     };
   }
 
@@ -89,7 +92,7 @@ class AssetEventsPanel extends Component<
     </EventMetadataList>
   );
 
-  mapEvent = (event: VApiEvent) => ({
+  mapEvent = (event: ApiEvent): EventAddonsProp => ({
     ...event,
     typeAndSubtype: (
       <span>
@@ -104,9 +107,9 @@ class AssetEventsPanel extends Component<
       : 'Ongoing',
   });
 
-  onEventClick = (record: any) => {
+  onEventClick = (record: EventAddonsProp) => {
     this.setState({
-      hasSelectedEvent: record,
+      selectedEvent: record,
     });
   };
 
@@ -144,7 +147,7 @@ class AssetEventsPanel extends Component<
       style,
     } = this.props;
 
-    const { hasSelectedEvent } = this.state;
+    const { selectedEvent } = this.state;
 
     return (
       <>
@@ -159,19 +162,19 @@ class AssetEventsPanel extends Component<
           bordered={bordered}
           style={style}
           onRow={record => ({
-            onClick: () => this.onEventClick(record),
+            onClick: () => this.onEventClick(record as EventAddonsProp),
           })}
         />
-        {typeof hasSelectedEvent && (
+        {!!selectedEvent && (
           <Modal
             key="Modal"
-            visible={!!hasSelectedEvent}
+            visible={!!selectedEvent}
             footer={null}
-            onCancel={() => this.setState({ hasSelectedEvent: false })}
+            onCancel={() => this.setState({ selectedEvent: null })}
           >
-            {hasSelectedEvent !== false && [
-              this.renderEventDetails(hasSelectedEvent),
-              this.renderEventMetadata(hasSelectedEvent),
+            {!!selectedEvent && [
+              this.renderEventDetails(selectedEvent),
+              this.renderEventMetadata(selectedEvent),
             ]}
           </Modal>
         )}
@@ -179,5 +182,3 @@ class AssetEventsPanel extends Component<
     );
   }
 }
-
-export default AssetEventsPanel;

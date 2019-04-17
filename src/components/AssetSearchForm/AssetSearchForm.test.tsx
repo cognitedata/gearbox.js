@@ -1,8 +1,8 @@
 import { mount, configure } from 'enzyme';
-import AssetSearchForm, { defaultStrings } from './AssetSearchForm';
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
-import { AssetSearchFormValue } from 'mocks/assetsList';
+import { AssetSearchForm, defaultStrings } from './AssetSearchForm';
+import { AssetSearchFormValue } from '../../mocks';
 
 configure({ adapter: new Adapter() });
 

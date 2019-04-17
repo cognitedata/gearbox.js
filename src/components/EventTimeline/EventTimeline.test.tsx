@@ -1,8 +1,8 @@
 import { configure, mount } from 'enzyme';
-import EventTimeline from './EventTimeline';
+import { EventTimeline } from './EventTimeline';
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
-import { generateEventTimelineData, eventTimelineDataSrc } from 'mocks/events';
+import { generateEventTimelineData, eventTimelineDataSrc } from '../../mocks';
 
 const data = eventTimelineDataSrc.map(event =>
   // @ts-ignore – reason – support of spread operator in tslint

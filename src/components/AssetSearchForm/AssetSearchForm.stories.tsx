@@ -1,15 +1,15 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { AssetSearchFormValue } from 'mocks/assetsList';
+import { AssetSearchFormValue } from '../../mocks';
 
-import AssetSearchForm from 'components/AssetSearchForm/AssetSearchForm';
-import { VAdvancedSearch } from 'utils/validators';
+import { AssetSearchForm } from './AssetSearchForm';
+import { AdvancedAssetSearch } from '../../interfaces';
 
-const onChange = (searchFields: VAdvancedSearch) =>
+const onChange = (searchFields: AdvancedAssetSearch) =>
   action('onChange')(searchFields);
 const onPressEnter = () => action('onPressEnter')();
-const onSubmit = (searchFields: VAdvancedSearch) =>
+const onSubmit = (searchFields: AdvancedAssetSearch) =>
   action('onSubmit')(searchFields);
 
 storiesOf('AssetSearchForm', module)

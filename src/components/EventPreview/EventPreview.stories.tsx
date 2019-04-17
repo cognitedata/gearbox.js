@@ -2,11 +2,11 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import React, { SyntheticEvent } from 'react';
 
-import EventPreview from 'components/EventPreview/EventPreview';
-import { EVENTS, eventWithout } from 'mocks/events';
-import { VOnClick } from 'utils/validators';
+import { EventPreview } from './EventPreview';
+import { EVENTS, eventWithout } from '../../mocks';
+import { OnClick } from '../../interfaces';
 
-const onShowDetails: VOnClick = (e: SyntheticEvent) => {
+const onShowDetails: OnClick = (e: SyntheticEvent) => {
   action('onShowDetails')(e);
 };
 

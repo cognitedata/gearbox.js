@@ -1,8 +1,8 @@
 import { Button, Form, Input, Spin, Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { sanitizeTenant, isEmptyString } from 'sanitize';
-import { VPureObject } from 'utils/validators';
+import { sanitizeTenant, isEmptyString } from '../../utils';
+import { PureObject } from '../../interfaces';
 
 const Panel = Collapse.Panel;
 
@@ -19,14 +19,14 @@ enum TenantValidity {
  */
 export type OnTenantValidationFunction = (
   tenant: string,
-  advancedOptions: VPureObject | null
+  advancedOptions: PureObject | null
 ) => Promise<boolean>;
 
 export type OnInvalidTenantFunction = (tenant: string) => void;
 
 export type OnTenantSelectionFunction = (
   tenant: string,
-  advancedOptions: VPureObject | null
+  advancedOptions: PureObject | null
 ) => void;
 
 export interface TenantSelectorProps {
@@ -39,16 +39,16 @@ export interface TenantSelectorProps {
   title: string | React.ReactNode;
   unknownMessage?: string;
   validateTenant?: OnTenantValidationFunction | any;
-  advancedOptions?: VPureObject;
+  advancedOptions?: PureObject;
 }
 
 interface TenantSelectorState {
   tenant: string;
   validity: TenantValidity;
-  advanced: VPureObject;
+  advanced: PureObject;
 }
 
-class TenantSelector extends React.Component<
+export class TenantSelector extends React.Component<
   TenantSelectorProps,
   TenantSelectorState
 > {
@@ -217,8 +217,8 @@ class TenantSelector extends React.Component<
     }
   };
 
-  private getNonEmptyAdvancedFields(advanced: VPureObject): VPureObject | null {
-    const advancedOptions: VPureObject = Object.assign({}, advanced);
+  private getNonEmptyAdvancedFields(advanced: PureObject): PureObject | null {
+    const advancedOptions: PureObject = Object.assign({}, advanced);
 
     Object.keys(advanced).forEach(option => {
       const value = advanced[option];
@@ -300,5 +300,3 @@ const CollapseWrapper = styled(Collapse)`
     padding: 5px 0 0 0 !important;
   }
 `;
-
-export default TenantSelector;

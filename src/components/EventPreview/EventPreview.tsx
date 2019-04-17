@@ -2,9 +2,9 @@
 import { Button } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { formatDatetime } from 'utils/formatters';
-import { VApiEvent, VMetadata, VOnClick } from 'utils/validators';
-import { ComplexString } from 'utils/helpers';
+import { ComplexString } from '../ComplexString/ComplexString';
+import { formatDatetime } from '../../utils';
+import { ApiEvent, PureObject, OnClick } from '../../interfaces';
 
 const EventTitle = styled.div`
   font-size: 1.4rem;
@@ -33,7 +33,7 @@ const Container = styled.div`
   margin-top: 32px;
 `;
 
-export const defaultStrings: VMetadata = {
+export const defaultStrings: PureObject = {
   noDescription: 'No description',
   start: 'Start',
   end: 'End',
@@ -42,12 +42,12 @@ export const defaultStrings: VMetadata = {
 };
 
 export interface EventPreviewProps {
-  event: VApiEvent;
-  onShowDetails: VOnClick;
-  strings?: VMetadata;
+  event: ApiEvent;
+  onShowDetails: OnClick;
+  strings?: PureObject;
 }
 
-const EventPreview = ({
+export const EventPreview = ({
   onShowDetails,
   event,
   strings = {},
@@ -72,7 +72,10 @@ const EventPreview = ({
         </p>
       </EventDescription>
       <EventDescription>
-        <ComplexString input={metadataSummary} count={metadataCount} />
+        <ComplexString
+          input={metadataSummary as string}
+          count={metadataCount}
+        />
       </EventDescription>
       <Button htmlType="button" type="primary" onClick={onShowDetails}>
         {details}
@@ -80,6 +83,5 @@ const EventPreview = ({
     </Container>
   );
 };
-EventPreview.displayName = 'EventPreview';
 
-export default EventPreview;
+EventPreview.displayName = 'EventPreview';

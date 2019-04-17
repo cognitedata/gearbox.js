@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Webcam from 'components/Webcam/Webcam';
-import { WebcamScreenshot } from 'components/WebcamScreenshot/WebcamScreenshot';
-import { LoadingOverlay } from 'components/LoadingOverlay/LoadingOverlay';
-import { VSetVideoRefCallback, VEmptyCallback } from 'utils/validators';
+import { Webcam } from '../Webcam/Webcam';
+import { WebcamScreenshot } from '../WebcamScreenshot/WebcamScreenshot';
+import { LoadingOverlay } from '../LoadingOverlay/LoadingOverlay';
+import { SetVideoRefCallback, EmptyCallback } from '../../interfaces';
 
 const CameraButton = styled.button`
   position: absolute;
@@ -35,12 +35,12 @@ const Wrapper = styled.div`
 
 interface WebcamScannerProps {
   isLoading: boolean;
-  capture: VEmptyCallback;
-  setRef: VSetVideoRefCallback;
+  capture: EmptyCallback;
+  setRef: SetVideoRefCallback;
   imageSrc?: string;
 }
 
-function WebcamScanner({
+export function WebcamScanner({
   capture,
   imageSrc,
   isLoading = false,
@@ -66,5 +66,3 @@ function WebcamScanner({
     </Wrapper>
   );
 }
-
-export default WebcamScanner;
