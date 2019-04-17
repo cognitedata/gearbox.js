@@ -166,7 +166,7 @@ describe('TimeseriesSearchAndSelect', () => {
 
       expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(1);
       expect(onTimeserieSelectionChange).toHaveBeenCalledWith(
-        [timeseriesList[0].name],
+        [timeseriesList[0].id],
         timeseriesList[0]
       );
       expect(
@@ -214,7 +214,7 @@ describe('TimeseriesSearchAndSelect', () => {
       expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(2);
       expect(onTimeserieSelectionChange).toHaveBeenNthCalledWith(
         2,
-        [timeseriesList[0].name, timeseriesList[1].name],
+        [timeseriesList[0].id, timeseriesList[1].id],
         timeseriesList[1]
       );
       expect(
@@ -282,7 +282,7 @@ describe('TimeseriesSearchAndSelect', () => {
     const props = {
       assets: assetsList,
       onTimeserieSelectionChange,
-      selectedTimeseries: [timeseriesList[1].name],
+      selectedTimeseries: [timeseriesList[1].id],
     };
     const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
 
@@ -393,12 +393,12 @@ describe('TimeseriesSearchAndSelect', () => {
       expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(2);
       expect(onTimeserieSelectionChange).toHaveBeenNthCalledWith(
         1,
-        [timeseriesList[0].name],
+        [timeseriesList[0].id],
         timeseriesList[0]
       );
       expect(onTimeserieSelectionChange).toHaveBeenNthCalledWith(
         2,
-        [timeseriesList[1].name],
+        [timeseriesList[1].id],
         timeseriesList[1]
       );
       done();
