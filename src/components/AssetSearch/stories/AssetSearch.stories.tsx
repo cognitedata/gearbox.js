@@ -10,6 +10,7 @@ import * as full from './full.md';
 import * as placeholder from './placeholder.md';
 import * as advanceSearch from './advance-search.md';
 import * as assetSelcetion from './asset-selection.md';
+import * as liveSearch from './live-search.md';
 
 const onSearch = (apiQuery: ApiQuery) => action('onSearch')(apiQuery);
 const onAssetSelected = (assetId: ID) => action('onAssetSelected')(assetId);
@@ -88,33 +89,41 @@ storiesOf('AssetSearch/Examples', module)
       },
     }
   )
-  .add('Live search enabled', () => {
-    const Wrapper = () => {
-      const initial: any[] = [];
-      const [liveSearchResults, setResults] = useState(initial);
-      const [loading, setLoading] = useState(false);
+  .add(
+    'Live search enabled',
+    () => {
+      const Wrapper = () => {
+        const initial: any[] = [];
+        const [liveSearchResults, setResults] = useState(initial);
+        const [loading, setLoading] = useState(false);
 
-      const onSearchLive = debounce(apiQuery => {
-        action('onSearch')(apiQuery);
-        setLoading(false);
-        setResults(assetsList.slice());
-      }, 1000);
+        const onSearchLive = debounce(apiQuery => {
+          action('onSearch')(apiQuery);
+          setLoading(false);
+          setResults(assetsList.slice());
+        }, 1000);
 
-      return (
-        <AssetSearch
-          debounceTime={500}
-          onSearch={query => {
-            setLoading(true);
-            onSearchLive(query);
-          }}
-          liveSearch={true}
-          liveSearchResults={liveSearchResults}
-          onLiveSearchSelect={onLiveSearchSelect}
-          loading={loading}
-          strings={{ searchPlaceholder: 'Live search' }}
-        />
-      );
-    };
+        return (
+          <AssetSearch
+            debounceTime={500}
+            onSearch={query => {
+              setLoading(true);
+              onSearchLive(query);
+            }}
+            liveSearch={true}
+            liveSearchResults={liveSearchResults}
+            onLiveSearchSelect={onLiveSearchSelect}
+            loading={loading}
+            strings={{ searchPlaceholder: 'Live search' }}
+          />
+        );
+      };
 
-    return <Wrapper />;
-  });
+      return <Wrapper />;
+    },
+    {
+      readme: {
+        content: liveSearch,
+      },
+    }
+  );

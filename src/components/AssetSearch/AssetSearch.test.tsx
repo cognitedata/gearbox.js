@@ -3,6 +3,7 @@ import { mount, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { AssetSearch, defaultStrings } from './AssetSearch';
 import { assetsList, AssetSearchFormValue } from '../../mocks';
+import { ListElementObject } from '../../interfaces';
 import Mock = jest.Mock;
 
 configure({ adapter: new Adapter() });
@@ -11,6 +12,7 @@ const propsCallbacks: { [name: string]: Mock } = {
   onSearch: jest.fn(),
   onAssetSelected: jest.fn(),
   onFilterIconClick: jest.fn(),
+  onLiveSearchSelect: jest.fn(),
 };
 
 afterEach(() => {
@@ -20,13 +22,13 @@ afterEach(() => {
 });
 
 describe('AssetSearch', () => {
-  it('Renders without exploding', () => {
+  it('should renders without exploding', () => {
     const props = { assets: assetsList };
     const wrapper = mount(<AssetSearch {...props} />);
     expect(wrapper.exists()).toBe(true);
   });
 
-  it('Check default values', () => {
+  it('should get expected default values', () => {
     const props = { assets: assetsList };
     const wrapper = mount(<AssetSearch {...props} />);
 
@@ -41,7 +43,7 @@ describe('AssetSearch', () => {
     expect(wrapper.state('advancedSearchQuery')).toEqual(null);
   });
 
-  it('On filter icon click', () => {
+  it('should trigger filter icon callback on modal opening', () => {
     const { onFilterIconClick } = propsCallbacks;
     const props = {
       assets: assetsList,
@@ -55,7 +57,7 @@ describe('AssetSearch', () => {
     expect(wrapper.state('isModalOpen')).toEqual(true);
   });
 
-  it('On root asset select', () => {
+  it('should change selected asset ID on user action', () => {
     const { onAssetSelected } = propsCallbacks;
     const props = {
       assets: assetsList,
@@ -72,7 +74,7 @@ describe('AssetSearch', () => {
     expect(onAssetSelected).toHaveBeenCalledTimes(1);
   });
 
-  it('Check input field change', () => {
+  it('should trigger state change while changing input', () => {
     const { onSearch } = propsCallbacks;
     const props = { assets: assetsList, onSearch };
     const wrapper = mount(<AssetSearch {...props} />);
@@ -89,7 +91,7 @@ describe('AssetSearch', () => {
     expect(wrapper.state('query')).toEqual(input);
   });
 
-  it('Check on modal callbacks', () => {
+  it('should trigger modal callback on user actions', () => {
     const props = { assets: assetsList, advancedSearch: true };
     const wrapper = mount(<AssetSearch {...props} />);
     const instance = wrapper.instance() as AssetSearch;
@@ -122,7 +124,7 @@ describe('AssetSearch', () => {
   });
 
   // We have to check it directly because of debounce wrapper
-  it('Check debounced search function', () => {
+  it('should call debounceSearch function with right params', () => {
     const { onSearch } = propsCallbacks;
     const props = { onSearch };
     const wrapper = mount(<AssetSearch {...props} />);
@@ -140,7 +142,7 @@ describe('AssetSearch', () => {
     });
   });
 
-  it('Check onAssetSearchChange function', () => {
+  it('should change onAssetSearchChange state value', () => {
     const props = { assets: assetsList };
     const wrapper = mount(<AssetSearch {...props} />);
     const instance = wrapper.instance() as AssetSearch;
@@ -151,7 +153,7 @@ describe('AssetSearch', () => {
     );
   });
 
-  it('Check asset value change', () => {
+  it('should change asset value', () => {
     const { onAssetSelected } = propsCallbacks;
     const props = { assets: assetsList, onAssetSelected };
     const wrapper = mount(<AssetSearch {...props} />);
@@ -161,5 +163,27 @@ describe('AssetSearch', () => {
     instance.onAssetSelected(assetId);
     expect(onAssetSelected).toHaveBeenCalled();
     expect(wrapper.state('assetId')).toEqual(assetId);
+  });
+
+  it('should render live search feature', () => {
+    const { onLiveSearchSelect } = propsCallbacks;
+    const props = {
+      liveSearch: true,
+      liveSearchResults: assetsList as ListElementObject[],
+      onLiveSearchSelect,
+    };
+    const wrapper = mount(<AssetSearch {...props} />);
+    const list = wrapper.find('ul[data-id="live-search-list"]');
+
+    expect(list).toHaveLength(1);
+    expect(list.find('li')).toHaveLength(assetsList.length);
+
+    list
+      .find('li')
+      .first()
+      .simulate('mousedown');
+
+    expect(onLiveSearchSelect).toHaveBeenCalledTimes(1);
+    expect(wrapper.state('query')).toEqual(assetsList[0].name);
   });
 });

@@ -5,30 +5,28 @@
 #### Usage:
 
 ```typescript jsx
-import { AssetSearch, ApiQuery, ID } from '@cognite/gearbox';
+import React, { useState } from 'react';
+import { AssetSearch, ApiQuery } from '@cognite/gearbox';
+import { debounce } from 'lodash';
 
-function ExampleComponent(props) {
-  const loading = false;
-  const onSearch = (apiQuery: ApiQuery): void => {
-    
+function ExampleComponent() {
+  const strings = {
+    searchPlaceholder: 'Live search'
   };
-  const onLiveSearchSelect = (item: any): void => {};
-  
-  // this object will be set
-  const liveSearchResults = [
+  const resultsArray = [
     {
-        id: 8129784932439587,
-        path: [8129784932439587],
-        name: 'SKA',
-        description: 'Skarv',
-        metadata: {}
+      id: 8129784932439587,
+      path: [8129784932439587],
+      name: 'SKA',
+      description: 'Skarv',
+      metadata: {}
     },
     {
-        id: 7793176078609329,
-        path: [7793176078609329],
-        name: 'IAA',
-        description: 'IAA Root node',
-        metadata: { ... },
+      id: 7793176078609329,
+      path: [7793176078609329],
+      name: 'IAA',
+      description: 'IAA Root node',
+      metadata: { ... },
     }, {
       id: 3623339785663936,
       path: [3623339785663936],
@@ -37,6 +35,21 @@ function ExampleComponent(props) {
       metadata: { ... },
     }
   ];
+  const initial: any[] = [];
+  const [liveSearchResults, setResults] = useState(initial);
+  const [loading, setLoading] = useState(false);
+  const onLiveSearchSelect = (item: any): void => {};
+  const onSearch = (query: ApiQuery): void => {
+    setLoading(true);
+    onSearchLive(query);
+  };
+  
+  // modeling async request
+  const onSearchLive = debounce(apiQuery => {
+    setLoading(false);
+    setResults(resultsArray.slice());
+  }, 1000);
+
 
   return (
     <AssetSearch
@@ -46,9 +59,9 @@ function ExampleComponent(props) {
       liveSearchResults={liveSearchResults}
       onLiveSearchSelect={onLiveSearchSelect}
       loading={loading}
-      strings={{ searchPlaceholder: 'Live search' }}
+      strings={strings}
     />
-  );
-
+  
+    );
 }
 ```

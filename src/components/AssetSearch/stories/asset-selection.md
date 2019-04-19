@@ -13,18 +13,18 @@ function ExampleComponent(props) {
   
   const assetsList = [
     {
-        id: 8129784932439587,
-        path: [8129784932439587],
-        name: 'SKA',
-        description: 'Skarv',
-        metadata: {}
+      id: 8129784932439587,
+      path: [8129784932439587],
+      name: 'SKA',
+      description: 'Skarv',
+      metadata: {}
     },
     {
-        id: 7793176078609329,
-        path: [7793176078609329],
-        name: 'IAA',
-        description: 'IAA Root node',
-        metadata: { ... },
+      id: 7793176078609329,
+      path: [7793176078609329],
+      name: 'IAA',
+      description: 'IAA Root node',
+      metadata: { ... },
     }, {
       id: 3623339785663936,
       path: [3623339785663936],
@@ -36,11 +36,11 @@ function ExampleComponent(props) {
 
   return (
     <AssetSearch
-          onSearch={onSearch}
-          onAssetSelected={onAssetSelected}
-          rootAssetSelect={true}
-          assets={assetsList}
-        />
+      onSearch={onSearch}
+      onAssetSelected={onAssetSelected}
+      rootAssetSelect={true}
+      assets={assetsList}
+    />
   );
 
 }

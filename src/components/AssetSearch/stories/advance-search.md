@@ -13,10 +13,10 @@ function ExampleComponent(props) {
 
   return (
     <AssetSearch
-          onSearch={onSearch}
-          onFilterIconClick={onFilterIconClick}
-          advancedSearch={true}
-        />
+      onSearch={onSearch}
+      onFilterIconClick={onFilterIconClick}
+      advancedSearch={true}
+    />
   );
 
 }

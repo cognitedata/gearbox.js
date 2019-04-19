@@ -307,14 +307,14 @@ export class AssetSearch extends React.Component<
     }
 
     const list = liveSearchResults.map((item, index) => (
-      <li onMouseDown={e => this.onLiveSearchClick(e, item)} key={index}>
+      <li onMouseDown={() => this.onLiveSearchClick(item)} key={index}>
         {item.name}
       </li>
     ));
 
     return (
       <LiveSearchWrapper>
-        <ul>{list}</ul>
+        <ul data-id={'live-search-list'}>{list}</ul>
       </LiveSearchWrapper>
     );
   }
@@ -339,9 +339,7 @@ export class AssetSearch extends React.Component<
     );
   }
 
-  private onLiveSearchClick(e: SyntheticEvent, item: any) {
-    e.preventDefault();
-
+  private onLiveSearchClick(item: any) {
     const { onLiveSearchSelect } = this.props;
 
     if (onLiveSearchSelect) {

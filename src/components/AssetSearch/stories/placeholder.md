@@ -12,9 +12,9 @@ function ExampleComponent(props) {
 
   return (
     <AssetSearch
-          onSearch={onSearch}
-          strings={{ searchPlaceholder: 'Custom text' }}
-        />
+      onSearch={onSearch}
+      strings={{ searchPlaceholder: 'Custom text' }}
+    />
   );
 
 }

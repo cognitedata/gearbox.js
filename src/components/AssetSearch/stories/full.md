@@ -22,24 +22,28 @@ function ExampleComponent(props) {
 ```
 
 #### Available props:
+##### Required:
 
-| Property              | Description                                                                         | Type                  | Default |
-| --------------------- | ----------------------------------------------------------------------------------- | --------------------- | ------- |
-| `fetchingLimit`       | Limit of result array length                                                        | `number`              | `25`    |
-| `debounceTime`        | Debounce time between end of input to search field and triggering onSearch callback | `number`              | `200`   |
-| `loading`             | Flag to display loading process in search field                                     | `boolean`             | `false` |
-| `rootAssetSelect`     | Trigger RootAssetSelect component appearance                                        | `boolean`             | `false` |
-| `assets`              | Array of assets displaying in RootAssetSelect component                             | `Asset[]`             | `[]`    |
-| `advancedSearch`      | Trigger advance search filter button appearance                                     | `boolean`             | `false` |
-| `liveSearch`          | Trigger live search feature                                                         | `boolean`             | `false` |
-| `liveSearchResults`   | Array of live search results to display                                             | `ListElementObject[]` | `[]`    |
-| `strings`             |                                                                                     | `PureObject`          |
-| `assetId`?            | Selected asset in RootAssetSelect component                                         | `number`              |
-| `onSearchResults`?    |                                                                                     | `function`            |
-| `onSearch`?           |                                                                                     | `function`            |
-| `onAssetSelected`?    |                                                                                     | `function`            |
-| `onFilterIconClick`?  |                                                                                     | `function`            |
-| `onLiveSearchSelect`? |                                                                                     | `function`            |
+*No required properties*
+
+##### Optionals:
+
+| Property              | Description                                                                                                                      | Type                  | Default |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------- |
+| `advancedSearch`      | Trigger advance search filter button appearance                                                                                  | `boolean`             | `false` |
+| `assetId`             | Selected asset in RootAssetSelect component                                                                                      | `number`              |
+| `assets`              | Array of assets displaying in RootAssetSelect component                                                                          | `Asset[]`             | `[]`    |
+| `debounceTime`        | Debounce time between end of input to search field and triggering onSearch callback                                              | `number`              | `200`   |
+| `fetchingLimit`       | Limit of result array length                                                                                                     | `number`              | `25`    |
+| `liveSearch`          | Trigger live search feature                                                                                                      | `boolean`             | `false` |
+| `liveSearchResults`   | Array of live search results to display                                                                                          | `ListElementObject[]` | `[]`    |
+| `loading`             | Flag to display loading process in search field                                                                                  | `boolean`             | `false` |
+| `onAssetSelected`     | Callback that triggers after changing of asset in RootAssetSelectComponent (available only if `rootAssetSelect = true`)          | `function`            |
+| `onFilterIconClick`   | Callback that triggers after opening of advance search modal window (available only if `advancedSearch = true`)                  | `function`            |
+| `onLiveSearchSelect`  | Callback that triggers after clicking on one of items represented in live search results (available only if `liveSearch = true`) | `function`            |
+| `onSearch`            | Callback that triggers after end of input                                                                                        | `function`            |
+| `rootAssetSelect`     | Trigger RootAssetSelect component appearance                                                                                     | `boolean`             | `false` |
+| `strings`             | Object of strings to be placed in component                                                                                      | `PureObject`          |
 
 **strings** default fields is:
 
