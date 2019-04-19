@@ -10,12 +10,12 @@ import {
 } from 'react-dnd';
 import { withSize } from 'react-sizeme';
 import { Datapoint } from '@cognite/sdk';
-import { omit } from 'lodash';
+import { omit, sortedIndex } from 'lodash';
 import { DragTargets } from './constants';
 import DraggableBox from './DraggableBox';
 import DraggablePoint from './DraggablePoint';
 import SvgLine from './SvgLine';
-import { clampNumber } from '../../utils';
+import { clampNumber, getColor } from '../../utils';
 
 const boxTarget: DropTargetSpec<SensorOverlayProps> = {
   hover(
@@ -75,9 +75,11 @@ export interface SensorPosition {
 
 interface DraggableBoxPosition extends SensorPosition {
   id: number;
+  defaultSlot: number | null;
+  color: string;
 }
 
-interface SensorOverlayProps {
+export interface SensorOverlayProps {
   children: any;
   timeserieIds: number[];
   colorMap: {
@@ -87,6 +89,9 @@ interface SensorOverlayProps {
     [id: string]: SensorPosition;
   };
   linksMap: {
+    [id: string]: boolean;
+  };
+  stickyMap: {
     [id: string]: boolean;
   };
   isTagDraggable: boolean;
@@ -137,43 +142,91 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
     props: SensorOverlayProps,
     state: SensorOverlayState
   ): SensorOverlayState {
-    if (props.size.width === 0 || props.size.height === 0) {
-      // container is empty
-      return {
-        timeserieIds: props.timeserieIds,
-        boxes: [],
-        prevSize: {
-          width: props.size.width,
-          height: props.size.height,
-        },
-      };
-    }
-    let defaultsCounter = 0;
-    const boxes = props.timeserieIds.map(id => {
-      const oldBox = state.boxes.find(box => box.id === id);
-      return {
-        id,
-        ...(oldBox
-          ? oldBox
-          : props.defaultPositionMap && props.defaultPositionMap[id.toString()]
-          ? props.defaultPositionMap[id.toString()]
-          : {
-              // default position of tag and pointer
-              left: (100 + defaultsCounter * 40) / props.size.width,
-              top: (40 + defaultsCounter * 20) / props.size.height,
-              pointer: {
-                left: (200 + defaultsCounter * 40) / props.size.width,
-                top: (140 + defaultsCounter++ * 20) / props.size.height,
-              },
-            }),
-      };
+    return props.size.width === 0 || props.size.height === 0
+      ? {
+          // container is empty
+          timeserieIds: props.timeserieIds,
+          boxes: [],
+          prevSize: {
+            width: props.size.width,
+            height: props.size.height,
+          },
+        }
+      : {
+          timeserieIds: props.timeserieIds,
+          boxes: SensorOverlay.makeBoxesList(state.boxes, props),
+          prevSize: {
+            width: props.size.width,
+            height: props.size.height,
+          },
+        };
+  }
+
+  static makeBoxesList(
+    oldBoxes: DraggableBoxPosition[],
+    props: SensorOverlayProps
+  ): DraggableBoxPosition[] {
+    const closedSlots: number[] = oldBoxes
+      .map(box => box.defaultSlot)
+      .filter((v): v is number => typeof v === 'number')
+      .sort((a: number, b: number) => a - b);
+
+    return props.timeserieIds.map(id => {
+      const oldBox = oldBoxes.find(box => box.id === id);
+      if (oldBox) {
+        return oldBox;
+      } else {
+        const isDefaultPositionProvided = !!(
+          props.defaultPositionMap && props.defaultPositionMap[id]
+        );
+        const defaultSlot: number | null = isDefaultPositionProvided
+          ? null
+          : SensorOverlay.findFirstFreeSlot(closedSlots);
+        if (typeof defaultSlot === 'number') {
+          closedSlots.splice(
+            sortedIndex(closedSlots, defaultSlot),
+            0,
+            defaultSlot
+          );
+        }
+        return {
+          id,
+          defaultSlot,
+          color: (props.colorMap && props.colorMap[id]) || getColor(id),
+          ...(isDefaultPositionProvided
+            ? props.defaultPositionMap[id]
+            : SensorOverlay.getDefaultPosition(
+                defaultSlot as number,
+                props.size
+              )),
+        };
+      }
     });
+  }
+
+  static findFirstFreeSlot(closedSlots: number[]): number {
+    let freeSlot = 0;
+    for (const slot of closedSlots) {
+      if (slot !== freeSlot) {
+        return freeSlot;
+      } else {
+        freeSlot++;
+      }
+    }
+    return freeSlot;
+  }
+
+  static getDefaultPosition(
+    defaultsSlot: number,
+    size: { width: number; height: number }
+  ): SensorPosition {
     return {
-      timeserieIds: props.timeserieIds,
-      boxes,
-      prevSize: {
-        width: props.size.width,
-        height: props.size.height,
+      // default position of tag and pointer
+      left: (100 + defaultsSlot * 40) / size.width,
+      top: (40 + defaultsSlot * 20) / size.height,
+      pointer: {
+        left: (200 + defaultsSlot * 40) / size.width,
+        top: (140 + defaultsSlot * 20) / size.height,
       },
     };
   }
@@ -230,6 +283,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
             box.id === id
               ? {
                   ...box,
+                  defaultSlot: null,
                   left: left / props.size.width,
                   top: top / props.size.height,
                 }
@@ -271,13 +325,13 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
     if (this.props.onSensorPositionChange) {
       const box = this.state.boxes.find(b => b.id === id);
       if (box) {
-        this.props.onSensorPositionChange(id, omit(box, 'id'));
+        this.props.onSensorPositionChange(id, omit(box, ['id', 'defaultSlot']));
       }
     }
   };
 
   render() {
-    const { size, fixedWidth } = this.props;
+    const { size, fixedWidth, colorMap, stickyMap } = this.props;
     return this.props.connectDropTarget(
       <div
         style={{
@@ -289,8 +343,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
       >
         {this.props.children}
         {this.state.boxes.map(box => {
-          const color =
-            (this.props.colorMap && this.props.colorMap[box.id]) || 'red'; // red is default
+          const color: string = (colorMap && colorMap[box.id]) || box.color;
           return (
             <React.Fragment key={box.id}>
               <DraggableBox
@@ -298,7 +351,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
                 left={box.left * size.width}
                 top={box.top * size.height}
                 color={color}
-                sticky={false}
+                sticky={(stickyMap && stickyMap[box.id]) || false}
                 onLinkClick={
                   this.props.linksMap ? this.props.onLinkClick : undefined
                 }
@@ -344,9 +397,7 @@ const WrappedSensorOverlay = DropTarget(
   })
 )(SensorOverlay);
 
-export const SizeWrapper = withSize({ monitorHeight: true })(
-  WrappedSensorOverlay
-);
+const SizeWrapper = withSize({ monitorHeight: true })(WrappedSensorOverlay);
 
 const FinalSensorOverlay = DragDropContext(HTML5Backend)(SizeWrapper);
 
