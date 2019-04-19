@@ -9,12 +9,12 @@ import {
   PureObject,
   AdvancedAssetSearch,
   ApiQuery,
-  OnAssetSearchResult,
   OnAssetSearch,
   IdCallback,
   EmptyCallback,
   OnClick,
   AnyTypeCallback,
+  ListElementObject,
 } from '../../interfaces';
 
 const InputGroup = styled(Input.Group)`
@@ -68,27 +68,25 @@ export interface AssetSearchProps {
   fetchingLimit: number;
   debounceTime: number;
   loading: boolean;
-  boostName: boolean;
   rootAssetSelect: boolean;
   advancedSearch: boolean;
   liveSearch: boolean;
   strings: PureObject;
   assets: Asset[];
-  liveSearchResults: any[];
+  liveSearchResults: ListElementObject[];
   assetId?: number;
-  onSearchResults?: OnAssetSearchResult;
   onSearch?: OnAssetSearch;
   onAssetSelected?: IdCallback;
   onFilterIconClick?: EmptyCallback;
   onLiveSearchSelect?: AnyTypeCallback;
 }
 
-export interface AssetSearchState {
+interface AssetSearchState {
   assetId: number;
   query: string;
   isModalOpen: boolean;
   advancedSearchQuery: AdvancedAssetSearch | null;
-  liveSearchResults: any[];
+  liveSearchResults: ListElementObject[];
   liveSearchShow: boolean;
 }
 
@@ -102,7 +100,6 @@ export class AssetSearch extends React.Component<
     fetchingLimit: 25,
     debounceTime: 200,
     loading: false,
-    boostName: true,
     advancedSearch: false,
     rootAssetSelect: false,
     liveSearch: false,
@@ -149,7 +146,7 @@ export class AssetSearch extends React.Component<
   }
 
   debouncedSearch() {
-    const { onSearch, boostName, fetchingLimit, onSearchResults } = this.props;
+    const { onSearch, fetchingLimit } = this.props;
     const { query, advancedSearchQuery, assetId } = this.state;
     const assetSubtrees = assetId ? [assetId] : null;
 
@@ -157,15 +154,8 @@ export class AssetSearch extends React.Component<
       advancedSearch: advancedSearchQuery,
       fetchingLimit,
       assetSubtrees,
-      boostName,
       query,
     };
-
-    if (!query && !advancedSearchQuery && onSearchResults) {
-      onSearchResults(null, apiQuery);
-
-      return;
-    }
 
     if (onSearch) {
       onSearch(apiQuery);
@@ -185,17 +175,11 @@ export class AssetSearch extends React.Component<
   };
 
   onModalCancel = () => {
-    const { onSearchResults } = this.props;
-
     this.setState({
       advancedSearchQuery: null,
       isModalOpen: false,
       query: '',
     });
-
-    if (onSearchResults) {
-      onSearchResults(null);
-    }
   };
 
   onModalOk = () => {

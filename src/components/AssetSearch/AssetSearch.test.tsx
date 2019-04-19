@@ -8,7 +8,6 @@ import Mock = jest.Mock;
 configure({ adapter: new Adapter() });
 
 const propsCallbacks: { [name: string]: Mock } = {
-  onSearchResults: jest.fn(),
   onSearch: jest.fn(),
   onAssetSelected: jest.fn(),
   onFilterIconClick: jest.fn(),
@@ -74,8 +73,8 @@ describe('AssetSearch', () => {
   });
 
   it('Check input field change', () => {
-    const { onSearch, onSearchResults } = propsCallbacks;
-    const props = { assets: assetsList, onSearch, onSearchResults };
+    const { onSearch } = propsCallbacks;
+    const props = { assets: assetsList, onSearch };
     const wrapper = mount(<AssetSearch {...props} />);
     const instance: AssetSearch = wrapper.instance() as AssetSearch;
     const onSearchQueryInput = jest.spyOn(instance, 'onSearchQueryInput');
@@ -91,8 +90,7 @@ describe('AssetSearch', () => {
   });
 
   it('Check on modal callbacks', () => {
-    const { onSearchResults } = propsCallbacks;
-    const props = { assets: assetsList, onSearchResults, advancedSearch: true };
+    const props = { assets: assetsList, advancedSearch: true };
     const wrapper = mount(<AssetSearch {...props} />);
     const instance = wrapper.instance() as AssetSearch;
     const onSearchClear = jest.spyOn(instance, 'onModalCancel');
@@ -112,7 +110,6 @@ describe('AssetSearch', () => {
     clearButton.simulate('click');
 
     expect(onSearchClear).toHaveBeenCalled();
-    expect(onSearchResults).toHaveBeenCalled();
     expect(wrapper.state()).toMatchObject({
       advancedSearchQuery: null,
       isModalOpen: false,
@@ -126,15 +123,10 @@ describe('AssetSearch', () => {
 
   // We have to check it directly because of debounce wrapper
   it('Check debounced search function', () => {
-    const { onSearch, onSearchResults } = propsCallbacks;
-    const props = { assets: assetsList, onSearch, onSearchResults };
+    const { onSearch } = propsCallbacks;
+    const props = { onSearch };
     const wrapper = mount(<AssetSearch {...props} />);
     const instance: AssetSearch = wrapper.instance() as AssetSearch;
-
-    instance.debouncedSearch();
-
-    expect(onSearchResults).toHaveBeenCalledTimes(1);
-    expect(onSearch).toHaveBeenCalledTimes(0);
 
     wrapper.setState({ assetId: 1, query: 'test' });
     instance.debouncedSearch();
@@ -143,7 +135,6 @@ describe('AssetSearch', () => {
     expect(onSearch).toHaveBeenCalledWith({
       advancedSearch: null,
       assetSubtrees: [1],
-      boostName: true,
       fetchingLimit: 25,
       query: 'test',
     });

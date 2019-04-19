@@ -3,7 +3,6 @@ import { PureObject, AdvancedAssetSearch } from './index';
 export interface ApiQuery {
   fetchingLimit: number;
   assetSubtrees: number[] | null;
-  boostName: boolean;
   query: string;
   advancedSearch: AdvancedAssetSearch | null;
 }

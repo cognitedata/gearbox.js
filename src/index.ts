@@ -1,4 +1,3 @@
-// For purposes of published npm package
 export { DescriptionList } from './components/DescriptionList/DescriptionList';
 export {
   AssetEventsPanel,
@@ -17,3 +16,5 @@ export {
   TimeseriesSearchAndSelect,
 } from './components/TimeseriesSearchAndSelect/TimeseriesSearchAndSelect';
 export { SensorOverlay } from './components/SensorOverlay/SensorOverlay';
+
+export * from './interfaces';
