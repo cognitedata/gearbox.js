@@ -67,6 +67,7 @@ export const TagName = styled.div`
   opacity: 0;
   right: auto;
   margin-right: 0;
+  pointer-events: none;
 
   &.hovering {
     opacity: 1;
@@ -91,6 +92,7 @@ const TagDescription = styled.div`
   margin-bottom: 36px;
   right: auto;
   margin-right: 0;
+  pointer-events: none;
 
   &.hovering {
     opacity: 1;
@@ -220,10 +222,12 @@ export class DraggableBox extends Component<
     this.setState({
       tag: timeserie,
     });
-    if (!this.interval) {
-      this.updateValue();
-      this.interval = setInterval(this.updateValue, this.props.updateInterval);
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
     }
+    this.updateValue();
+    this.interval = setInterval(this.updateValue, this.props.updateInterval);
   };
 
   updateValue = async () => {
