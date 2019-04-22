@@ -1,236 +1,81 @@
-import { Button, Icon, Input, Modal } from 'antd';
-import { debounce } from 'lodash';
-import React, { SyntheticEvent } from 'react';
-import styled from 'styled-components';
-import { Asset } from '@cognite/sdk';
-import { AssetSearchForm } from '../AssetSearchForm/AssetSearchForm';
-import { RootAssetSelect } from '../RootAssetSelect/RootAssetSelect';
-import {
-  PureObject,
-  AdvancedAssetSearch,
-  ApiQuery,
-  OnAssetSearchResult,
-  OnAssetSearch,
-  IdCallback,
-  EmptyCallback,
-} from '../../interfaces';
+import React from 'react';
+import * as sdk from '@cognite/sdk';
+import { PureObject } from '../../interfaces';
+import { Search } from '../common/Search/Search';
+import { AnyTypeCallback } from '../../interfaces';
 
-const { Search } = Input;
+type onSearchCallback = (query: sdk.AssetSearchParams) => void;
 
-const InputGroup = styled(Input.Group)`
-  display: flex !important;
-  flex-grow: 1;
-`;
-
-const RootAssetSelectStyled = styled(RootAssetSelect)`
-  width: 35%;
-`;
+export type LiveSearchSelect = (asset: sdk.Asset) => void;
 
 export const defaultStrings: PureObject = {
-  changeSearch: 'Change search',
-  clear: 'Clear',
   searchPlaceholder: 'Search for an asset',
-  search: 'Search',
+  emptyLiveSearch: 'Nothing found',
 };
 
 export interface AssetSearchProps {
-  fetchingLimit: number;
-  debounceTime: number;
-  boostName: boolean;
-  rootAssetSelect: boolean;
-  advancedSearch: boolean;
-  strings: PureObject;
-  assets: Asset[];
-  assetId?: number;
-  onSearchResults?: OnAssetSearchResult;
-  onSearch?: OnAssetSearch;
-  onAssetSelected?: IdCallback;
-  onFilterIconClick?: EmptyCallback;
+  onLiveSearchSelect: LiveSearchSelect;
+  onError?: AnyTypeCallback;
+  strings?: PureObject;
 }
 
-export interface AssetSearchState {
-  assetId: number;
-  query: string;
-  isModalOpen: boolean;
-  advancedSearchQuery: AdvancedAssetSearch | null;
+interface AssetSearchState {
+  items: sdk.Asset[];
+  loading: boolean;
 }
 
 export class AssetSearch extends React.Component<
   AssetSearchProps,
   AssetSearchState
 > {
-  static defaultProps = {
-    assets: [],
-    fetchingLimit: 25,
-    debounceTime: 200,
-    boostName: true,
-    advancedSearch: false,
-    rootAssetSelect: false,
-    strings: {},
-  };
-
-  onSearch = debounce(this.debouncedSearch.bind(this), this.props.debounceTime);
+  onSearchBounded: onSearchCallback;
 
   constructor(props: AssetSearchProps) {
     super(props);
     this.state = {
-      assetId: props.assetId || 0,
-      query: '',
-      isModalOpen: false,
-      advancedSearchQuery: null,
-    };
-  }
-
-  debouncedSearch() {
-    const { onSearch, boostName, fetchingLimit, onSearchResults } = this.props;
-    const { query, advancedSearchQuery, assetId } = this.state;
-    const assetSubtrees = assetId ? [assetId] : null;
-
-    const apiQuery: ApiQuery = {
-      advancedSearch: advancedSearchQuery,
-      fetchingLimit,
-      assetSubtrees,
-      boostName,
-      query,
+      items: [],
+      loading: false,
     };
 
-    if (!query && !advancedSearchQuery && onSearchResults) {
-      onSearchResults(null, apiQuery);
-
-      return;
-    }
-
-    if (onSearch) {
-      onSearch(apiQuery);
-    }
+    this.onSearchBounded = this.onSearch.bind(this);
   }
 
-  onFilterIconClick = () => {
-    const { onFilterIconClick } = this.props;
+  async onSearch(query: sdk.AssetSearchParams) {
+    const { onError } = this.props;
 
-    if (onFilterIconClick) {
-      onFilterIconClick();
+    if (!query.query) {
+      return this.setState({ items: [] });
     }
 
-    this.setState({
-      isModalOpen: true,
-    });
-  };
+    this.setState({ loading: true });
 
-  onModalCancel = () => {
-    const { onSearchResults } = this.props;
+    try {
+      const { items } = await sdk.Assets.search(query);
 
-    this.setState({
-      advancedSearchQuery: null,
-      isModalOpen: false,
-      query: '',
-    });
+      this.setState({ items, loading: false });
+    } catch (e) {
+      if (onError) {
+        onError(e);
+      }
 
-    if (onSearchResults) {
-      onSearchResults(null);
+      this.setState({ items: [], loading: false });
     }
-  };
-
-  onModalOk = () => {
-    this.setState({ isModalOpen: false }, this.onSearch);
-  };
-
-  onAssetSelected = (assetId: number) => {
-    const { onAssetSelected } = this.props;
-
-    if (onAssetSelected) {
-      onAssetSelected(assetId);
-    }
-
-    this.setState({ assetId }, this.onSearch);
-  };
-
-  onAssetSearchChange = (value: AdvancedAssetSearch) =>
-    this.setState({ advancedSearchQuery: value, query: '' });
-
-  onSearchQueryInput = (e: SyntheticEvent) => {
-    const target = e.target as HTMLInputElement;
-    this.setState({ query: target.value }, this.onSearch);
-  };
+  }
 
   render() {
-    const { assetId, query, isModalOpen, advancedSearchQuery } = this.state;
-    const { assets, strings, advancedSearch, rootAssetSelect } = this.props;
-    const lang = { ...defaultStrings, ...strings };
-    const { changeSearch, clear, searchPlaceholder, search } = lang;
+    const { onLiveSearchSelect, strings } = this.props;
+    const resultStrings = { ...defaultStrings, ...strings };
+    const { items, loading } = this.state;
 
     return (
-      <React.Fragment>
-        <InputGroup compact={true}>
-          {rootAssetSelect && (
-            <RootAssetSelectStyled
-              onAssetSelected={this.onAssetSelected}
-              assets={assets}
-              assetId={assetId}
-            />
-          )}
-          {advancedSearchQuery ? (
-            <React.Fragment>
-              <Button
-                style={{ width: '100%' }}
-                type="primary"
-                onClick={this.onFilterIconClick}
-              >
-                {changeSearch}
-              </Button>
-              <Button htmlType="button" onClick={this.onModalCancel}>
-                {clear}
-              </Button>
-            </React.Fragment>
-          ) : advancedSearch ? (
-            <Input
-              placeholder={searchPlaceholder as string}
-              disabled={!!advancedSearchQuery}
-              value={query}
-              onChange={this.onSearchQueryInput}
-              allowClear={true}
-              suffix={
-                <Icon
-                  type="filter"
-                  onClick={this.onFilterIconClick}
-                  style={{ opacity: 0.6, marginLeft: 8 }}
-                />
-              }
-            />
-          ) : (
-            <Search
-              placeholder={searchPlaceholder as string}
-              disabled={!!advancedSearchQuery}
-              value={query}
-              onChange={this.onSearchQueryInput}
-              allowClear={true}
-            />
-          )}
-        </InputGroup>
-        <Modal
-          visible={isModalOpen}
-          onCancel={this.onModalCancel}
-          footer={[
-            <Button htmlType="button" key="cancel" onClick={this.onModalCancel}>
-              {clear}
-            </Button>,
-            <Button
-              htmlType="button"
-              key="search"
-              type="primary"
-              onClick={this.onModalOk}
-            >
-              {search}
-            </Button>,
-          ]}
-        >
-          <AssetSearchForm
-            value={advancedSearchQuery}
-            onPressEnter={this.onModalOk}
-            onChange={this.onAssetSearchChange}
-          />
-        </Modal>
-      </React.Fragment>
+      <Search
+        liveSearch={true}
+        onSearch={this.onSearchBounded}
+        liveSearchResults={items}
+        onLiveSearchSelect={onLiveSearchSelect}
+        strings={resultStrings}
+        loading={loading}
+      />
     );
   }
 }

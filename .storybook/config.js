@@ -1,12 +1,24 @@
 import React from 'react';
-import { addDecorator, configure } from '@storybook/react';
-import { addReadme } from 'storybook-readme';
+import styled from 'styled-components';
+import { addDecorator, addParameters, configure } from '@storybook/react';
+import { addReadme, configureReadme } from 'storybook-readme';
 import * as Components from '../src';
 
 import { withInfo } from '@storybook/addon-info';
 import 'antd/dist/antd.css';
 
 addDecorator(withInfo({maxPropsIntoLine: 1}));
+
+const Wrapper = styled.div`
+  table {
+    display: table!important;
+  }
+`;
+
+configureReadme({
+  DocPreview: ({children}) => <Wrapper>{children}</Wrapper>,
+});
+
 addDecorator(addReadme);
 
 const styles = {

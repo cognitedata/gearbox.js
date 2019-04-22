@@ -3,7 +3,7 @@ import { debounce } from 'lodash';
 import * as sdk from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
-import { AssetSearch } from '../AssetSearch/AssetSearch';
+import { Search } from '../common/Search/Search';
 import { DetailCheckbox } from '../DetailCheckbox/DetailCheckbox';
 import { ApiQuery } from '../../interfaces';
 
@@ -32,7 +32,7 @@ export const CenteredSpin = styled(Spin)`
   }
 `;
 
-export interface TimeserieSearchAndSelectProps {
+export interface TimeseriesSearchProps {
   selectedTimeseries: number[];
   single?: boolean;
   allowStrings?: boolean;
@@ -45,7 +45,7 @@ export interface TimeserieSearchAndSelectProps {
   onError?: (error: Error) => void;
 }
 
-export interface TimeserieSearchAndSelectState {
+export interface TimeseriesSearchState {
   assetId?: number;
   assets: sdk.Asset[];
   fetching: boolean;
@@ -54,9 +54,9 @@ export interface TimeserieSearchAndSelectState {
   lastFetchId: number;
 }
 
-export class TimeseriesSearchAndSelect extends React.Component<
-  TimeserieSearchAndSelectProps,
-  TimeserieSearchAndSelectState
+export class TimeseriesSearch extends React.Component<
+  TimeseriesSearchProps,
+  TimeseriesSearchState
 > {
   static defaultProps = {
     selectedTimeseries: [],
@@ -64,8 +64,8 @@ export class TimeseriesSearchAndSelect extends React.Component<
   };
 
   static getDerivedStateFromProps(
-    props: TimeserieSearchAndSelectProps,
-    state: TimeserieSearchAndSelectState
+    props: TimeseriesSearchProps,
+    state: TimeseriesSearchState
   ) {
     if (props.rootAsset !== null && props.rootAsset !== state.assetId) {
       return { assetId: props.rootAsset };
@@ -73,7 +73,7 @@ export class TimeseriesSearchAndSelect extends React.Component<
     return null;
   }
 
-  constructor(props: TimeserieSearchAndSelectProps) {
+  constructor(props: TimeseriesSearchProps) {
     super(props);
     this.state = {
       assetId: props.rootAsset || undefined,
@@ -197,7 +197,7 @@ export class TimeseriesSearchAndSelect extends React.Component<
 
     return (
       <Wrapper>
-        <AssetSearch
+        <Search
           rootAssetSelect={true}
           onAssetSelected={this.onSelectAsset}
           assets={assets}

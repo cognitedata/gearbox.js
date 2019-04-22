@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import * as sdk from '@cognite/sdk';
-import { TimeseriesSearchAndSelect } from './TimeseriesSearchAndSelect';
+import { TimeseriesSearch } from './TimeseriesSearch';
 import { assetsList, timeseriesList } from '../../mocks';
 
 const timeseriesNames = timeseriesList.map(ts => ts.name);
@@ -54,11 +54,11 @@ const onTimeserieSelectionChange = (
   action('onTimeserieSelectionChange')(newTimeseries, timeseries);
 };
 
-storiesOf('TimeseriesSearchAndSelect', module)
+storiesOf('TimeseriesSearch', module)
   .add(
     'Basic',
     () => (
-      <TimeseriesSearchAndSelect
+      <TimeseriesSearch
         onTimeserieSelectionChange={onTimeserieSelectionChange}
       />
     ),
@@ -71,7 +71,7 @@ storiesOf('TimeseriesSearchAndSelect', module)
   .add(
     'Single selection',
     () => (
-      <TimeseriesSearchAndSelect
+      <TimeseriesSearch
         onTimeserieSelectionChange={onTimeserieSelectionChange}
         single={true}
       />
@@ -85,7 +85,7 @@ storiesOf('TimeseriesSearchAndSelect', module)
   .add(
     'Allow strings',
     () => (
-      <TimeseriesSearchAndSelect
+      <TimeseriesSearch
         onTimeserieSelectionChange={onTimeserieSelectionChange}
         allowStrings={true}
       />
@@ -99,7 +99,7 @@ storiesOf('TimeseriesSearchAndSelect', module)
   .add(
     'Preselected',
     () => (
-      <TimeseriesSearchAndSelect
+      <TimeseriesSearch
         onTimeserieSelectionChange={onTimeserieSelectionChange}
         selectedTimeseries={[timeseriesIds[1], timeseriesIds[3]]}
       />
@@ -113,7 +113,7 @@ storiesOf('TimeseriesSearchAndSelect', module)
   .add(
     'Custom filter rule',
     () => (
-      <TimeseriesSearchAndSelect
+      <TimeseriesSearch
         onTimeserieSelectionChange={onTimeserieSelectionChange}
         filterRule={filterRule}
       />
