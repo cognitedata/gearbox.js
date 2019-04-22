@@ -54,7 +54,7 @@ _No required props_
 | `ocrUrl`             | URL of detect service (OCR) API                                            | `string`                         | https://vision.googleapis.com/v1/images:annotate |
 | `ocrKey`             | Key property for OCR service                                               | `{ [name: string]: string }`     |                                                  |
 | `customNotification` | Callback function to react on provided type of notification                   | `(type: ASNotifyTypes) => any`   |                                                  |
-| `onStringRecognize`  | Callback which is triggering when strings was recognised on image          | `(strings: string[]) => void;`   |                                                  |
+| `onStringRecognize`  | Callback which is triggering when strings was recognised in image          | `(strings: string[]) => void;`   |                                                  |
 | `onStartLoading`     | Callback which is triggering when sdk asset search call starts             | `() => void`                     |                                                  |
 | `onEndLoading`       | Callback which is triggering when sdk asset search call finished           | `() => void`                     |                                                  |
 | `onAssetEmpty`       | Callback which is triggering when sdk asset search response has no results | `() => void`                     |                                                  |
