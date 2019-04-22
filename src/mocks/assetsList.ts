@@ -1,5 +1,5 @@
 import { Asset } from '@cognite/sdk';
-import { AdvancedAssetSearch } from '../interfaces';
+import { AdvancedSearch } from '../interfaces';
 
 export const vmateDba = 'wmate_dba.wmt_location';
 export const randomTime = '1999-09-01 07:00:00';
@@ -77,7 +77,7 @@ export const VAL: Asset = {
   },
 };
 
-export const AssetSearchFormValue: AdvancedAssetSearch = {
+export const SearchValue: AdvancedSearch = {
   name: '20-PA-001A',
   description: 'Crude pump',
   metadata: [

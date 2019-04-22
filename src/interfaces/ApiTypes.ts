@@ -1,10 +1,10 @@
-import { PureObject, AdvancedAssetSearch } from './index';
+import { PureObject, AdvancedSearch } from './index';
 
 export interface ApiQuery {
   fetchingLimit: number;
   assetSubtrees: number[] | null;
   query: string;
-  advancedSearch: AdvancedAssetSearch | null;
+  advancedSearch: AdvancedSearch | null;
 }
 
 export interface ApiEvent {

@@ -3,7 +3,7 @@ import * as sdk from '@cognite/sdk';
 import { Datapoint, Timeseries } from '@cognite/sdk';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import SensorOverlay from './SensorOverlay';
+import { SensorOverlay } from './SensorOverlay';
 import { timeseriesList } from '../../mocks';
 
 sdk.TimeSeries.retrieve = (id: number, _): Promise<Timeseries> => {
@@ -27,21 +27,28 @@ sdk.Datapoints.retrieveLatest = async (name: string): Promise<Datapoint> => {
 
 storiesOf('SensorOverlay', module)
   .add('Basic', () => (
-    <SensorOverlay timeserieIds={[8681821313339919]}>
+    <SensorOverlay timeserieIds={[timeseriesList[0].id]}>
       <div style={{ width: '100%', height: '500px', background: '#DDDDDD' }} />
     </SensorOverlay>
   ))
-  .add('Basic with two', () => (
-    <SensorOverlay timeserieIds={[8681821313339919, 4536015939766876]}>
+  .add('With many sensors', () => (
+    <SensorOverlay
+      timeserieIds={[
+        timeseriesList[0].id,
+        timeseriesList[1].id,
+        timeseriesList[2].id,
+        timeseriesList[3].id,
+      ]}
+    >
       <div style={{ width: '100%', height: '500px', background: '#DDDDDD' }} />
     </SensorOverlay>
   ))
   .add('Default position and color', () => (
     <SensorOverlay
-      timeserieIds={[8681821313339919]}
-      colorMap={{ '8681821313339919': '#33AA33' }}
+      timeserieIds={[timeseriesList[0].id]}
+      colorMap={{ [timeseriesList[0].id]: '#33AA33' }}
       defaultPositionMap={{
-        '8681821313339919': {
+        [timeseriesList[0].id]: {
           left: 0.2,
           top: 0.2,
           pointer: {
@@ -59,12 +66,12 @@ storiesOf('SensorOverlay', module)
   ))
   .add('Disabled Dragging', () => (
     <SensorOverlay
-      timeserieIds={[8681821313339919]}
-      colorMap={{ '8681821313339919': '#33AA33' }}
+      timeserieIds={[timeseriesList[0].id]}
+      colorMap={{ [timeseriesList[0].id]: '#33AA33' }}
       isTagDraggable={false}
       isPointerDraggable={false}
       defaultPositionMap={{
-        '8681821313339919': {
+        [timeseriesList[0].id]: {
           left: 0.2,
           top: 0.2,
           pointer: {
@@ -81,11 +88,10 @@ storiesOf('SensorOverlay', module)
   ))
   .add('With link', () => (
     <SensorOverlay
-      timeserieIds={[8681821313339919]}
-      colorMap={{ '8681821313339919': '#33AA33' }}
-      linksMap={{ '8681821313339919': true }}
+      timeserieIds={[timeseriesList[0].id]}
+      linksMap={{ [timeseriesList[0].id]: true }}
       defaultPositionMap={{
-        '8681821313339919': {
+        [timeseriesList[0].id]: {
           left: 0.2,
           top: 0.2,
           pointer: {
@@ -102,12 +108,33 @@ storiesOf('SensorOverlay', module)
       <div style={{ width: '100%', height: '500px', background: '#DDDDDD' }} />
     </SensorOverlay>
   ))
+  .add('With sticky tooltips', () => (
+    <SensorOverlay
+      timeserieIds={[timeseriesList[0].id]}
+      stickyMap={{ [timeseriesList[0].id]: true }}
+      defaultPositionMap={{
+        [timeseriesList[0].id]: {
+          left: 0.2,
+          top: 0.2,
+          pointer: {
+            left: 0.3,
+            top: 0.4,
+          },
+        },
+      }}
+      onClick={action('onClick')}
+      onSettingsClick={action('onSettingsClick')}
+      onSensorPositionChange={action('onSensorPositionChange')}
+    >
+      <div style={{ width: '100%', height: '500px', background: '#DDDDDD' }} />
+    </SensorOverlay>
+  ))
   .add('With Image', () => (
     <SensorOverlay
-      timeserieIds={[8681821313339919]}
-      colorMap={{ '8681821313339919': 'orange' }}
+      timeserieIds={[timeseriesList[0].id]}
+      colorMap={{ [timeseriesList[0].id]: 'orange' }}
       defaultPositionMap={{
-        '8681821313339919': {
+        [timeseriesList[0].id]: {
           left: 0.2,
           top: 0.2,
           pointer: {
@@ -128,10 +155,10 @@ storiesOf('SensorOverlay', module)
   ))
   .add('With Fixed Image', () => (
     <SensorOverlay
-      timeserieIds={[8681821313339919]}
-      colorMap={{ '8681821313339919': 'orange' }}
+      timeserieIds={[timeseriesList[0].id]}
+      colorMap={{ [timeseriesList[0].id]: 'orange' }}
       defaultPositionMap={{
-        '8681821313339919': {
+        [timeseriesList[0].id]: {
           left: 0.2,
           top: 0.2,
           pointer: {
@@ -150,4 +177,42 @@ storiesOf('SensorOverlay', module)
         width="1000px"
       />
     </SensorOverlay>
-  ));
+  ))
+  .add('Add sensors dynamically', () => {
+    class WrapperComponent extends React.Component {
+      state = {
+        counter: 0,
+        timeserieIds: [],
+      };
+      render() {
+        return (
+          <div>
+            <button
+              style={{ marginBottom: 20 }}
+              onClick={() =>
+                this.setState({
+                  timeserieIds: [
+                    ...this.state.timeserieIds,
+                    timeseriesList[this.state.counter].id,
+                  ],
+                  counter: this.state.counter + 1,
+                })
+              }
+            >
+              Add Sensor
+            </button>
+            <SensorOverlay timeserieIds={this.state.timeserieIds}>
+              <div
+                style={{
+                  width: '100%',
+                  height: '500px',
+                  background: '#DDDDDD',
+                }}
+              />
+            </SensorOverlay>
+          </div>
+        );
+      }
+    }
+    return <WrapperComponent />;
+  });

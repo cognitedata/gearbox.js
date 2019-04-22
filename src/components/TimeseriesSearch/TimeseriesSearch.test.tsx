@@ -4,7 +4,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import { Input } from 'antd';
 import lodash from 'lodash';
 import * as sdk from '@cognite/sdk';
-import { TimeseriesSearchAndSelect } from './TimeseriesSearchAndSelect';
+import { TimeseriesSearch } from './TimeseriesSearch';
 import { DetailCheckbox } from '../DetailCheckbox/DetailCheckbox';
 import { assetsList, timeseriesList } from '../../mocks';
 
@@ -40,16 +40,16 @@ afterEach(() => {
 });
 
 // tslint:disable:no-big-function
-describe('TimeseriesSearchAndSelect', () => {
+describe('TimeseriesSearch', () => {
   it('Renders without exploding', () => {
     const props = {};
-    const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
+    const wrapper = mount(<TimeseriesSearch {...props} />);
     expect(wrapper.exists()).toBe(true);
   });
 
   it('Checks default values', () => {
     const props = {};
-    const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
+    const wrapper = mount(<TimeseriesSearch {...props} />);
 
     expect(wrapper.prop('selectedTimeseries')).toEqual([]);
     expect(wrapper.state('assetId')).toEqual(undefined);
@@ -61,7 +61,7 @@ describe('TimeseriesSearchAndSelect', () => {
 
   it('should search with when input changes', () => {
     const props = {};
-    const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
+    const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
       .find(Input)
@@ -78,7 +78,7 @@ describe('TimeseriesSearchAndSelect', () => {
 
   it('should update assetId with user-selected root asset id', done => {
     const props = {};
-    const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
+    const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
       .find(Input)
@@ -107,7 +107,7 @@ describe('TimeseriesSearchAndSelect', () => {
 
   it('should render search results', done => {
     const props = { assets: assetsList };
-    const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
+    const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
       .find(Input)
@@ -125,7 +125,7 @@ describe('TimeseriesSearchAndSelect', () => {
 
   it('should clear search results when input is cleared', done => {
     const props = { assets: assetsList };
-    const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
+    const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
       .find(Input)
@@ -148,7 +148,7 @@ describe('TimeseriesSearchAndSelect', () => {
   it('should select clicked search result', done => {
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = { onTimeserieSelectionChange };
-    const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
+    const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
       .find(Input)
@@ -165,7 +165,7 @@ describe('TimeseriesSearchAndSelect', () => {
 
       expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(1);
       expect(onTimeserieSelectionChange).toHaveBeenCalledWith(
-        [timeseriesList[0].name],
+        [timeseriesList[0].id],
         timeseriesList[0]
       );
       expect(
@@ -191,7 +191,7 @@ describe('TimeseriesSearchAndSelect', () => {
   it('should give all checked results', done => {
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = { assets: assetsList, onTimeserieSelectionChange };
-    const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
+    const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
       .find(Input)
@@ -213,7 +213,7 @@ describe('TimeseriesSearchAndSelect', () => {
       expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(2);
       expect(onTimeserieSelectionChange).toHaveBeenNthCalledWith(
         2,
-        [timeseriesList[0].name, timeseriesList[1].name],
+        [timeseriesList[0].id, timeseriesList[1].id],
         timeseriesList[1]
       );
       expect(
@@ -239,7 +239,7 @@ describe('TimeseriesSearchAndSelect', () => {
   it('should unselect when clicking selected search result', done => {
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = { assets: assetsList, onTimeserieSelectionChange };
-    const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
+    const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
       .find(Input)
@@ -281,9 +281,9 @@ describe('TimeseriesSearchAndSelect', () => {
     const props = {
       assets: assetsList,
       onTimeserieSelectionChange,
-      selectedTimeseries: [timeseriesList[1].name],
+      selectedTimeseries: [timeseriesList[1].id],
     };
-    const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
+    const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
       .find(Input)
@@ -309,7 +309,7 @@ describe('TimeseriesSearchAndSelect', () => {
     const { filterRule } = propsCallbacks;
     filterRule.mockReturnValueOnce(true);
     const props = { assets: assetsList, filterRule };
-    const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
+    const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
       .find(Input)
@@ -330,7 +330,7 @@ describe('TimeseriesSearchAndSelect', () => {
     // @ts-ignore
     sdk.TimeSeries.search.mockRejectedValue(new Error('Error'));
     const props = { assets: assetsList, onError };
-    const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
+    const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
       .find(Input)
@@ -348,7 +348,7 @@ describe('TimeseriesSearchAndSelect', () => {
 
   it('should not render checkboxes when single is true', done => {
     const props = { assets: assetsList, single: true };
-    const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
+    const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
       .find(Input)
@@ -370,7 +370,7 @@ describe('TimeseriesSearchAndSelect', () => {
       onTimeserieSelectionChange,
       single: true,
     };
-    const wrapper = mount(<TimeseriesSearchAndSelect {...props} />);
+    const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
       .find(Input)
@@ -392,12 +392,12 @@ describe('TimeseriesSearchAndSelect', () => {
       expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(2);
       expect(onTimeserieSelectionChange).toHaveBeenNthCalledWith(
         1,
-        [timeseriesList[0].name],
+        [timeseriesList[0].id],
         timeseriesList[0]
       );
       expect(onTimeserieSelectionChange).toHaveBeenNthCalledWith(
         2,
-        [timeseriesList[1].name],
+        [timeseriesList[1].id],
         timeseriesList[1]
       );
       done();

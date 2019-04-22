@@ -3,7 +3,7 @@ import { debounce } from 'lodash';
 import * as sdk from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
-import { AssetSearch } from '../AssetSearch/AssetSearch';
+import { Search } from '../common/Search/Search';
 import { DetailCheckbox } from '../DetailCheckbox/DetailCheckbox';
 import { ApiQuery } from '../../interfaces';
 
@@ -32,12 +32,12 @@ export const CenteredSpin = styled(Spin)`
   }
 `;
 
-export interface TimeserieSearchAndSelectProps {
-  selectedTimeseries: string[];
+export interface TimeseriesSearchProps {
+  selectedTimeseries: number[];
   single?: boolean;
   allowStrings?: boolean;
   onTimeserieSelectionChange?: (
-    newTimeseries: string[],
+    newTimeseries: number[],
     selectedTimeserie: sdk.Timeseries
   ) => void;
   rootAsset?: number;
@@ -45,18 +45,18 @@ export interface TimeserieSearchAndSelectProps {
   onError?: (error: Error) => void;
 }
 
-export interface TimeserieSearchAndSelectState {
+export interface TimeseriesSearchState {
   assetId?: number;
   assets: sdk.Asset[];
   fetching: boolean;
   searchResults: sdk.Timeseries[];
-  selectedTimeseries: string[];
+  selectedTimeseries: number[];
   lastFetchId: number;
 }
 
-export class TimeseriesSearchAndSelect extends React.Component<
-  TimeserieSearchAndSelectProps,
-  TimeserieSearchAndSelectState
+export class TimeseriesSearch extends React.Component<
+  TimeseriesSearchProps,
+  TimeseriesSearchState
 > {
   static defaultProps = {
     selectedTimeseries: [],
@@ -64,8 +64,8 @@ export class TimeseriesSearchAndSelect extends React.Component<
   };
 
   static getDerivedStateFromProps(
-    props: TimeserieSearchAndSelectProps,
-    state: TimeserieSearchAndSelectState
+    props: TimeseriesSearchProps,
+    state: TimeseriesSearchState
   ) {
     if (props.rootAsset !== null && props.rootAsset !== state.assetId) {
       return { assetId: props.rootAsset };
@@ -73,7 +73,7 @@ export class TimeseriesSearchAndSelect extends React.Component<
     return null;
   }
 
-  constructor(props: TimeserieSearchAndSelectProps) {
+  constructor(props: TimeseriesSearchProps) {
     super(props);
     this.state = {
       assetId: props.rootAsset || undefined,
@@ -114,15 +114,15 @@ export class TimeseriesSearchAndSelect extends React.Component<
   };
 
   onTimeSerieClicked = (timeseries: sdk.Timeseries): void => {
-    let newTimeseries: string[] = [];
+    let newTimeseries: number[] = [];
 
     if (this.props.single) {
-      newTimeseries = [timeseries.name];
-    } else if (!this.isChecked(timeseries.name)) {
-      newTimeseries = [...this.state.selectedTimeseries, timeseries.name];
+      newTimeseries = [timeseries.id];
+    } else if (!this.isChecked(timeseries.id)) {
+      newTimeseries = [...this.state.selectedTimeseries, timeseries.id];
     } else {
       newTimeseries = [...this.state.selectedTimeseries].filter(
-        existing => existing !== timeseries.name
+        existing => existing !== timeseries.id
       );
     }
     this.setState({ selectedTimeseries: newTimeseries });
@@ -187,10 +187,9 @@ export class TimeseriesSearchAndSelect extends React.Component<
       );
   };
 
-  isChecked = (name: string): boolean =>
-    [...this.state.selectedTimeseries].findIndex(
-      timeseries => timeseries === name
-    ) !== -1;
+  isChecked = (id: number): boolean =>
+    this.state.selectedTimeseries.findIndex(timeseries => timeseries === id) !==
+    -1;
 
   render() {
     const { allowStrings, single } = this.props;
@@ -198,7 +197,7 @@ export class TimeseriesSearchAndSelect extends React.Component<
 
     return (
       <Wrapper>
-        <AssetSearch
+        <Search
           rootAssetSelect={true}
           onAssetSelected={this.onSelectAsset}
           assets={assets}
@@ -217,7 +216,7 @@ export class TimeseriesSearchAndSelect extends React.Component<
                 timeseries.description || timeseries.name || 'No description'
               }
               checkable={!single}
-              checked={this.isChecked(timeseries.name)}
+              checked={this.isChecked(timeseries.id)}
               onContainerClick={() => this.onTimeSerieClicked(timeseries)}
               disabled={!allowStrings && !!timeseries.isString}
             />

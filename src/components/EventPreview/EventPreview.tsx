@@ -2,7 +2,7 @@
 import { Button } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { ComplexString } from '../ComplexString/ComplexString';
+import { ComplexString } from '../common/ComplexString/ComplexString';
 import { formatDatetime } from '../../utils';
 import { ApiEvent, PureObject, OnClick } from '../../interfaces';
 

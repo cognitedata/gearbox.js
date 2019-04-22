@@ -1,25 +1,58 @@
-import React, { useState } from 'react';
+import React from 'react';
+import * as sdk from '@cognite/sdk';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { debounce } from 'lodash';
 import { AssetSearch } from '../AssetSearch';
 import { assetsList } from '../../../mocks';
-import { ApiQuery, ID } from '../../../interfaces';
 
 import * as full from './full.md';
-import * as placeholder from './placeholder.md';
-import * as advanceSearch from './advance-search.md';
-import * as assetSelcetion from './asset-selection.md';
-import * as liveSearch from './live-search.md';
+import * as basic from './basic.md';
+import * as empty from './empty.md';
+import * as error from './error.md';
 
-const onSearch = (apiQuery: ApiQuery) => action('onSearch')(apiQuery);
-const onAssetSelected = (assetId: ID) => action('onAssetSelected')(assetId);
-const onFilterIconClick = () => action('onFilterIconClick')();
-const onLiveSearchSelect = (item: any) => action('onLiveSearchSelect')(item);
+// Mock the SDK calls
+sdk.Assets.search = async (
+  query: sdk.AssetSearchParams
+): Promise<sdk.AssetDataWithCursor> => {
+  if (query.query === 'empty') {
+    return { items: [] };
+  }
+
+  if (query.query === 'error') {
+    throw { message: 'sdk search request failed' };
+  }
+
+  return {
+    items: assetsList.map(
+      (a: sdk.Asset): sdk.Asset => {
+        return {
+          id: Number.parseInt(a.id.toString(), 10),
+          name: a.name,
+          description: a.description,
+        };
+      }
+    ),
+  };
+};
+
+const onLiveSearchSelect = (asset: sdk.Asset) =>
+  action('onLiveSearchSelect')(asset);
+const onError = (e: any) => action('onError')(e);
+const basicStrings = {
+  searchPlaceholder: 'Try to type name of asset',
+};
+const emptyStrings = {
+  emptyLiveSearch: 'No results',
+  searchPlaceholder: 'Type "empty" to test behaviour',
+};
+const errorStrings = {
+  emptyLiveSearch: 'No results',
+  searchPlaceholder: 'Type "error" to test behaviour',
+};
 
 storiesOf('AssetSearch', module).add(
   'Full description',
-  () => <AssetSearch onSearch={onSearch} />,
+  () => <AssetSearch onLiveSearchSelect={onLiveSearchSelect} />,
   {
     readme: {
       content: full,
@@ -45,85 +78,45 @@ storiesOf('AssetSearch/Examples', module)
     },
   })
   .add(
-    'With custom placeholder',
+    'Basic',
     () => (
       <AssetSearch
-        onSearch={onSearch}
-        strings={{ searchPlaceholder: 'Custom text' }}
+        onLiveSearchSelect={onLiveSearchSelect}
+        strings={basicStrings}
       />
     ),
     {
       readme: {
-        content: placeholder,
+        content: basic,
       },
     }
   )
   .add(
-    'With advanced search',
+    'Empty results',
     () => (
       <AssetSearch
-        onSearch={onSearch}
-        onFilterIconClick={onFilterIconClick}
-        advancedSearch={true}
+        onLiveSearchSelect={onLiveSearchSelect}
+        strings={emptyStrings}
       />
     ),
     {
       readme: {
-        content: advanceSearch,
+        content: empty,
       },
     }
   )
   .add(
-    'With asset root selection',
+    'Error handling',
     () => (
       <AssetSearch
-        onSearch={onSearch}
-        onAssetSelected={onAssetSelected}
-        rootAssetSelect={true}
-        assets={assetsList}
+        onError={onError}
+        onLiveSearchSelect={onLiveSearchSelect}
+        strings={errorStrings}
       />
     ),
     {
       readme: {
-        content: assetSelcetion,
-      },
-    }
-  )
-  .add(
-    'Live search enabled',
-    () => {
-      const Wrapper = () => {
-        const initial: any[] = [];
-        const [liveSearchResults, setResults] = useState(initial);
-        const [loading, setLoading] = useState(false);
-
-        const onSearchLive = debounce(apiQuery => {
-          action('onSearch')(apiQuery);
-          setLoading(false);
-          setResults(assetsList.slice());
-        }, 1000);
-
-        return (
-          <AssetSearch
-            debounceTime={500}
-            onSearch={query => {
-              setLoading(true);
-              onSearchLive(query);
-            }}
-            liveSearch={true}
-            liveSearchResults={liveSearchResults}
-            onLiveSearchSelect={onLiveSearchSelect}
-            loading={loading}
-            strings={{ searchPlaceholder: 'Live search' }}
-          />
-        );
-      };
-
-      return <Wrapper />;
-    },
-    {
-      readme: {
-        content: liveSearch,
+        content: error,
       },
     }
   );

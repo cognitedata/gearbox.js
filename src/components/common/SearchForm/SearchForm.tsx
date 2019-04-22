@@ -1,10 +1,10 @@
 import React, { SyntheticEvent } from 'react';
 import {
-  AdvancedAssetSearch,
+  AdvancedSearch,
   PureObject,
   OnAdvancedSearchChange,
   EmptyCallback,
-} from '../../interfaces';
+} from '../../../interfaces';
 import { Form, Input, Icon, Button } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { v4 as uuid } from 'uuid';
@@ -37,9 +37,9 @@ export const defaultStrings: PureObject = {
   search: 'Search',
 };
 
-export interface AssetSearchFormProps {
+export interface SearchProps {
   form: WrappedFormUtils;
-  value: AdvancedAssetSearch | null;
+  value: AdvancedSearch | null;
   onChange?: OnAdvancedSearchChange;
   onPressEnter?: EmptyCallback;
   onSubmit?: OnAdvancedSearchChange;
@@ -52,12 +52,12 @@ export interface MetadataField {
   value: string;
 }
 
-const AssetSearchForm = ({
+const SearchForm = ({
   onSubmit,
   form,
   onPressEnter,
   strings = {},
-}: AssetSearchFormProps) => {
+}: SearchProps) => {
   const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
   const lang = { ...defaultStrings, ...strings };
   const {
@@ -229,13 +229,9 @@ const AssetSearchForm = ({
   );
 };
 
-const AssetSearchFormHOC = Form.create({
+const SearchFormHOC = Form.create({
   name: 'asset-search',
-  onValuesChange(
-    props: AssetSearchFormProps,
-    _,
-    allValues: AdvancedAssetSearch = {}
-  ) {
+  onValuesChange(props: SearchProps, _, allValues: AdvancedSearch = {}) {
     const { onChange } = props;
 
     if (onChange) {
@@ -256,8 +252,8 @@ const AssetSearchFormHOC = Form.create({
       }),
     };
   },
-})(AssetSearchForm);
+})(SearchForm);
 
-AssetSearchFormHOC.displayName = 'AssetSearchForm';
+SearchFormHOC.displayName = 'SearchForm';
 
-export { AssetSearchFormHOC as AssetSearchForm };
+export { SearchFormHOC as SearchForm };

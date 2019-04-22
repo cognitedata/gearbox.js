@@ -3,18 +3,18 @@ export {
   AssetEventsPanel,
 } from './components/AssetEventsPanel/AssetEventsPanel';
 export { AssetMeta } from './components/AssetMeta/AssetMeta';
-export { AssetSearch } from './components/AssetSearch/AssetSearch';
-export { AssetSearchForm } from './components/AssetSearchForm/AssetSearchForm';
 export { AssetView } from './components/AssetView/AssetView';
 export { AssetTree } from './components/AssetTree/AssetTree';
 export { DocumentTable } from './components/DocumentTable/DocumentTable';
 export { EventPreview } from './components/EventPreview/EventPreview';
 export { EventTimeline } from './components/EventTimeline/EventTimeline';
-export { RootAssetSelect } from './components/RootAssetSelect/RootAssetSelect';
+export {
+  RootAssetSelect,
+} from './components/common/RootAssetSelect/RootAssetSelect';
 export { TenantSelector } from './components/TenantSelector/TenantSelector';
 export {
-  TimeseriesSearchAndSelect,
-} from './components/TimeseriesSearchAndSelect/TimeseriesSearchAndSelect';
+  TimeseriesSearch,
+} from './components/TimeseriesSearch/TimeseriesSearch';
 export { SensorOverlay } from './components/SensorOverlay/SensorOverlay';
 
 export * from './interfaces';

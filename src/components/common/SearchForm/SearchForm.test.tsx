@@ -1,8 +1,8 @@
 import { mount, configure } from 'enzyme';
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
-import { AssetSearchForm, defaultStrings } from './AssetSearchForm';
-import { AssetSearchFormValue } from '../../mocks';
+import { SearchForm, defaultStrings } from './SearchForm';
+import { SearchValue } from '../../../mocks';
 
 configure({ adapter: new Adapter() });
 
@@ -12,9 +12,9 @@ const propsCallbacks = {
   onSubmit: jest.fn(),
 };
 
-describe('AssetSearchForm', () => {
+describe('Search', () => {
   it('Renders without exploding', () => {
-    const wrapper = mount(<AssetSearchForm value={null} />);
+    const wrapper = mount(<SearchForm value={null} />);
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -22,7 +22,7 @@ describe('AssetSearchForm', () => {
     const { search } = defaultStrings;
     const { onSubmit } = propsCallbacks;
     const props = { value: null, onSubmit };
-    const wrapper = mount(<AssetSearchForm {...props} />);
+    const wrapper = mount(<SearchForm {...props} />);
 
     const submitBtn = wrapper.findWhere(
       n => n.text() === search && n.type() === 'button'
@@ -34,7 +34,7 @@ describe('AssetSearchForm', () => {
 
   it('Check metadata fields adding', () => {
     const props = { value: null };
-    const wrapper = mount(<AssetSearchForm {...props} />);
+    const wrapper = mount(<SearchForm {...props} />);
 
     const fieldsLenght = wrapper.find('form').children().length;
 
@@ -48,14 +48,14 @@ describe('AssetSearchForm', () => {
   });
 
   it('Check predefined data visualization', () => {
-    const props = { value: AssetSearchFormValue };
-    const wrapper = mount(<AssetSearchForm {...props} />);
+    const props = { value: SearchValue };
+    const wrapper = mount(<SearchForm {...props} />);
 
     expect(wrapper.find('input[name="name"]').prop('value')).toEqual(
-      AssetSearchFormValue.name
+      SearchValue.name
     );
     expect(wrapper.find('input[name="description"]').prop('value')).toEqual(
-      AssetSearchFormValue.description
+      SearchValue.description
     );
   });
 });

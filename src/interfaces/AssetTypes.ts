@@ -70,7 +70,7 @@ export interface AssetTreeType {
   defaultExpandedKeys?: string[];
 }
 
-export interface AdvancedAssetSearch {
+export interface AdvancedSearch {
   name?: string;
   description?: string;
   metadata?: MetadataId[];

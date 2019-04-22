@@ -1,5 +1,5 @@
 import React from 'react';
-import { ID } from '../../interfaces';
+import { ID } from '../../../interfaces';
 
 export interface ComplexStringProps {
   input: string;
