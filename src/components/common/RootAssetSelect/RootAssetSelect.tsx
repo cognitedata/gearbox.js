@@ -1,7 +1,7 @@
-import React from 'react';
-import { Select } from 'antd';
 import { Asset } from '@cognite/sdk';
-import { PureObject, IdCallback } from '../../../interfaces';
+import { Select } from 'antd';
+import React from 'react';
+import { IdCallback, PureObject } from '../../../interfaces';
 
 export const defaultStrings: PureObject = {
   loading: 'Loading',

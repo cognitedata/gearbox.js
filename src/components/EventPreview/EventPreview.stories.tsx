@@ -1,10 +1,10 @@
-import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { storiesOf } from '@storybook/react';
 import React, { SyntheticEvent } from 'react';
 
-import { EventPreview } from './EventPreview';
-import { EVENTS, eventWithout } from '../../mocks';
 import { OnClick } from '../../interfaces';
+import { EVENTS, eventWithout } from '../../mocks';
+import { EventPreview } from './EventPreview';
 
 const onShowDetails: OnClick = (e: SyntheticEvent) => {
   action('onShowDetails')(e);

@@ -1,7 +1,7 @@
-import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { AssetEventsPanel } from './AssetEventsPanel';
+import React from 'react';
 import { EVENTS } from '../../mocks';
+import { AssetEventsPanel } from './AssetEventsPanel';
 
 storiesOf('AssetEventsPanel', module)
   .addParameters({

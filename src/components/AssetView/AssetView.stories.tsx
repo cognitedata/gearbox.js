@@ -1,7 +1,7 @@
 // @ts-ignore
 import { action } from '@storybook/addon-actions';
-import React from 'react';
 import { storiesOf } from '@storybook/react';
+import React from 'react';
 import { AssetView } from './AssetView';
 
 const INVALID_ASSET = { id: -1 };

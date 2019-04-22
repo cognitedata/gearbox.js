@@ -1,6 +1,6 @@
+import { Spin } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { Spin } from 'antd';
 
 const SpinContainer = styled(Spin)`
   width: 100%;

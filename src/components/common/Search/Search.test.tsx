@@ -1,8 +1,8 @@
-import React from 'react';
-import { mount, configure } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { Search, defaultStrings } from './Search';
+import React from 'react';
 import { assetsList, SearchValue } from '../../../mocks';
+import { defaultStrings, Search } from './Search';
 import Mock = jest.Mock;
 
 configure({ adapter: new Adapter() });
