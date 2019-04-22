@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { DocumentTable } from './DocumentTable';
 import { DOCUMENTS } from '../../mocks';
+import { DocumentTable } from './DocumentTable';
 
 storiesOf('DocumentTable', module)
   .add('Basic', () => <DocumentTable docs={DOCUMENTS} />)

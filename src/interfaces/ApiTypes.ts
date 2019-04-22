@@ -1,4 +1,4 @@
-import { PureObject, AdvancedSearch } from './index';
+import { AdvancedSearch, PureObject } from './index';
 
 export interface ApiQuery {
   fetchingLimit: number;

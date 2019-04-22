@@ -1,9 +1,9 @@
-import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { AssetTree } from './AssetTree';
 import { OnSelectReturnType } from '../../interfaces';
-import { ASSET_ZERO_DEPTH_ARRAY, ASSET_LIST_CHILD } from '../../mocks';
+import { ASSET_LIST_CHILD, ASSET_ZERO_DEPTH_ARRAY } from '../../mocks';
+import { AssetTree } from './AssetTree';
 
 const returnLoadData = () => {
   return ASSET_LIST_CHILD;

@@ -1,8 +1,8 @@
-import React from 'react';
 import * as sdk from '@cognite/sdk';
+import React from 'react';
 import { PureObject } from '../../interfaces';
-import { Search } from '../common/Search/Search';
 import { AnyTypeCallback } from '../../interfaces';
+import { Search } from '../common/Search/Search';
 
 type onSearchCallback = (query: sdk.AssetSearchParams) => void;
 

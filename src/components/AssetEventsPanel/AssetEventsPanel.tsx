@@ -1,5 +1,5 @@
+import { Icon, Modal, Table } from 'antd';
 import React, { Component } from 'react';
-import { Table, Modal, Icon } from 'antd';
 import styled from 'styled-components';
 import { ApiEvent, AssetEventsPanelProps } from '../../interfaces';
 import { momentFromTimestamp } from '../../utils';

@@ -1,16 +1,16 @@
-import React, { RefObject, createRef } from 'react';
+import { Spin } from 'antd';
 import {
-  select as d3Select,
-  scaleTime as d3ScaleTime,
-  min as d3Min,
-  max as d3Max,
-  zoom as d3Zoom,
   axisTop as d3AxisTop,
   event as d3Event,
+  max as d3Max,
+  min as d3Min,
   ScaleTime,
+  scaleTime as d3ScaleTime,
+  select as d3Select,
+  zoom as d3Zoom,
 } from 'd3';
 import moment from 'moment-timezone';
-import { Spin } from 'antd';
+import React, { createRef, RefObject } from 'react';
 import { EventTimelineType, IdCallback } from '../../interfaces';
 
 interface EventTimelineProps {

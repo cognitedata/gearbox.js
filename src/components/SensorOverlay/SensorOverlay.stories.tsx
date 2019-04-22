@@ -1,10 +1,10 @@
-import React from 'react';
 import * as sdk from '@cognite/sdk';
 import { Datapoint, Timeseries } from '@cognite/sdk';
-import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { SensorOverlay } from './SensorOverlay';
+import { storiesOf } from '@storybook/react';
+import React from 'react';
 import { timeseriesList } from '../../mocks';
+import { SensorOverlay } from './SensorOverlay';
 
 sdk.TimeSeries.retrieve = (id: number, _): Promise<Timeseries> => {
   return new Promise(resolve => {

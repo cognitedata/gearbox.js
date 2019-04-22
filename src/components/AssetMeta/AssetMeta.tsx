@@ -1,14 +1,14 @@
-import React from 'react';
-import { Tabs } from 'antd';
 import { Asset } from '@cognite/sdk';
-import { DescriptionList } from '../DescriptionList/DescriptionList';
-import { AssetEventsPanel } from '../AssetEventsPanel/AssetEventsPanel';
-import { DocumentTable } from '../DocumentTable/DocumentTable';
+import { Tabs } from 'antd';
+import React from 'react';
 import {
   AssetEventsPanelProps,
   AssetPanelType,
   DocumentTableProps,
 } from '../../interfaces';
+import { AssetEventsPanel } from '../AssetEventsPanel/AssetEventsPanel';
+import { DescriptionList } from '../DescriptionList/DescriptionList';
+import { DocumentTable } from '../DocumentTable/DocumentTable';
 
 const { TabPane } = Tabs;
 

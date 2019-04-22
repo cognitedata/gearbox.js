@@ -1,5 +1,5 @@
-import React from 'react';
 import { CollapseProps } from 'antd/lib/collapse';
+import React from 'react';
 import { PureObject } from './index';
 
 export type OnDocumentClick = (

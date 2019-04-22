@@ -1,8 +1,8 @@
-import { Button, Form, Input, Spin, Collapse } from 'antd';
+import { Button, Collapse, Form, Input, Spin } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { sanitizeTenant, isEmptyString } from '../../utils';
 import { PureObject } from '../../interfaces';
+import { isEmptyString, sanitizeTenant } from '../../utils';
 
 const Panel = Collapse.Panel;
 

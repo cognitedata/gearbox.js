@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { SetVideoRefCallback } from '../../interfaces';
+import { SetVideoRefCallback } from '../../../interfaces';
 
 const StyledVideo = styled.video`
   background: rgba(0, 0, 0, 0.5);

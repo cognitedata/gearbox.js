@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { EmptyCallback, SetVideoRefCallback } from '../../../interfaces';
+import { LoadingOverlay } from '../../common/LoadingOverlay/LoadingOverlay';
 import { Webcam } from '../Webcam/Webcam';
 import { WebcamScreenshot } from '../WebcamScreenshot/WebcamScreenshot';
-import { LoadingOverlay } from '../LoadingOverlay/LoadingOverlay';
-import { SetVideoRefCallback, EmptyCallback } from '../../interfaces';
 
 const CameraButton = styled.button`
   position: absolute;

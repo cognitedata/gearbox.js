@@ -2,9 +2,9 @@
 import { Button } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { ComplexString } from '../common/ComplexString/ComplexString';
+import { ApiEvent, OnClick, PureObject } from '../../interfaces';
 import { formatDatetime } from '../../utils';
-import { ApiEvent, PureObject, OnClick } from '../../interfaces';
+import { ComplexString } from '../common/ComplexString/ComplexString';
 
 const EventTitle = styled.div`
   font-size: 1.4rem;
