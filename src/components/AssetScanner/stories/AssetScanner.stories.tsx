@@ -8,7 +8,7 @@ import { ASNotifyTypes, AssetScanner } from '../AssetScanner';
 import * as full from './full.md';
 import * as customNotificationsDoc from './notifications.md';
 
-const onUnauthorized: (error: ErrorResponse) => {
+const onUnauthorized = (error: ErrorResponse) => {
   action('onUnauthorized')(error);
 };
 
