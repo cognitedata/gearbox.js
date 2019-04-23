@@ -2,29 +2,14 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import {
-  datapointsList,
-  datapoints,
-  testData,
-} from 'mocks/timeseriesDataPointsList';
-import { timeseriesList } from 'mocks/timeseriesList';
+// import {
+//   datapointsList,
+//   datapoints,
+//   testData,
+// } from 'mocks/timeseriesDataPointsList';
+import { timeseriesList } from '../../mocks/timeseriesList';
 import * as sdk from '@cognite/sdk';
-import TimeseriesChart from 'components/TimeseriesChart/TimeseriesChart';
-sdk.TimeSeries.list = async (
-  input: sdk.TimeseriesSearchParams
-): Promise<sdk.TimeseriesWithCursor> => {
-  action('sdk.TimeSeries.list')(input);
-  if (!input.query) {
-    return {
-      items: timeseriesList,
-    };
-  }
-  return {
-    items: timeseriesList.filter(
-      ts => ts.name.toUpperCase().indexOf(input.query.toUpperCase()) >= 0
-    ),
-  };
-};
+import TimeseriesChart from './TimeseriesChart';
 
 const randomData = (start: number, end: number, n = 250): sdk.Datapoint[] => {
   const data = [];
@@ -35,7 +20,7 @@ const randomData = (start: number, end: number, n = 250): sdk.Datapoint[] => {
         () =>
           Math.sin(i / 20) * 50 +
           Math.cos(Math.PI - i / 40) * 50 +
-          Math.random() * 10
+          Math.random() * 100
       )
       .sort((a: number, b: number) => a - b);
     data.push({
@@ -49,18 +34,36 @@ const randomData = (start: number, end: number, n = 250): sdk.Datapoint[] => {
   return data;
 };
 
-sdk.Datapoints.retrieveByName = async (
-  name: string,
-  params?: sdk.DatapointsRetrieveParams | undefined
-): Promise<sdk.DataDatapoints> => {
-  action('sdk.Datapoints.retrieveByName')(name, params);
-  return {
-    name: 'VAL_45-FT-92139B:X.Value',
-    // datapoints,
-    datapoints: randomData(
-      params ? params.start || 0 : 0,
-      params ? params.end || 100 : 100
-    ),
+const setupMocks = () => {
+  sdk.TimeSeries.retrieve = async (id: number, _): Promise<sdk.Timeseries> => {
+    action('sdk.TimeSeries.retrieve')(id);
+    const timeserie = timeseriesList.find(ts => ts.id === id);
+    if (!timeserie) {
+      throw new Error('Cannot find mocked timeseries');
+    }
+    return timeserie;
+  };
+
+  sdk.Datapoints.retrieve = async (
+    id: number,
+    params?: sdk.DatapointsRetrieveParams | undefined
+  ): Promise<sdk.DataDatapoints> => {
+    action('sdk.Datapoints.retrieve')(id, params);
+    const n =
+      params.granularity === 's'
+        ? 2
+        : params.granularity.includes('s')
+        ? 10
+        : 250;
+    return {
+      name: 'name',
+      // datapoints,
+      datapoints: randomData(
+        params ? params.start || 0 : 0,
+        params ? params.end || 100 : 100,
+        n
+      ),
+    };
   };
 };
 
@@ -73,43 +76,58 @@ sdk.Datapoints.retrieveByName = async (
 
 storiesOf('TimeseriesChart', module)
   .addDecorator(story => <div style={{ width: '100%' }}>{story()}</div>)
-  .add('Single', () => (
-    <TimeseriesChart
-      timeseriesNames={['abc']}
-      start={+Date.now() - 30 * 24 * 60 * 60 * 1000}
-      end={+Date.now()}
-    />
-  ))
-  .add('Multiple', () => (
-    <TimeseriesChart
-      timeseriesNames={['abc', '123']}
-      start={+Date.now() - 30 * 24 * 60 * 60 * 1000}
-      end={+Date.now()}
-    />
-  ))
-  .add('Context chart', () => (
-    <TimeseriesChart
-      timeseriesNames={['abc']}
-      start={+Date.now() - 30 * 24 * 60 * 60 * 1000}
-      end={+Date.now()}
-      contextChart={true}
-    />
-  ))
-  .add('Live update', () => (
-    <TimeseriesChart
-      timeseriesNames={['abc']}
-      start={+Date.now() - 30 * 24 * 60 * 60 * 1000}
-      end={+Date.now()}
-      liveUpdate={true}
-      updateIntervalMillis={2000}
-    />
-  ))
-  .add('Zoomable', () => (
-    <TimeseriesChart
-      timeseriesNames={['abc']}
-      start={+Date.now() - 30 * 24 * 60 * 60 * 1000}
-      end={+Date.now()}
-      zoomable={true}
-      contextChart={true}
-    />
-  ));
+  .add('Single', () => {
+    setupMocks();
+    return (
+      <TimeseriesChart
+        timeseriesIds={[timeseriesList[0].id]}
+        start={+Date.now() - 30 * 24 * 60 * 60 * 1000}
+        end={+Date.now()}
+      />
+    );
+  })
+  .add('Multiple', () => {
+    setupMocks();
+    return (
+      <TimeseriesChart
+        timeseriesIds={[timeseriesList[0].id, timeseriesList[1].id]}
+        start={+Date.now() - 30 * 24 * 60 * 60 * 1000}
+        end={+Date.now()}
+      />
+    );
+  })
+  .add('Context chart', () => {
+    setupMocks();
+    return (
+      <TimeseriesChart
+        timeseriesIds={[timeseriesList[0].id]}
+        start={+Date.now() - 30 * 24 * 60 * 60 * 1000}
+        end={+Date.now()}
+        contextChart={true}
+      />
+    );
+  })
+  .add('Live update', () => {
+    setupMocks();
+    return (
+      <TimeseriesChart
+        timeseriesIds={[timeseriesList[0].id]}
+        start={+Date.now() - 30 * 24 * 60 * 60 * 1000}
+        end={+Date.now()}
+        liveUpdate={true}
+        updateIntervalMillis={2000}
+      />
+    );
+  })
+  .add('Zoomable', () => {
+    setupMocks();
+    return (
+      <TimeseriesChart
+        timeseriesIds={[timeseriesList[0].id]}
+        start={+Date.now() - 30 * 24 * 60 * 60 * 1000}
+        end={+Date.now()}
+        zoomable={true}
+        contextChart={true}
+      />
+    );
+  });

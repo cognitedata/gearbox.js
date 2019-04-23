@@ -30,7 +30,7 @@ declare module '@cognite/griff-react' {
   }
 
   export interface DataProviderLoaderParams {
-    id: string;
+    id: number;
     timeDomain: number[];
     timeSubDomain: number[];
     pointsPerSeries: number;
@@ -40,9 +40,7 @@ declare module '@cognite/griff-react' {
 
   export interface DataProviderProps {
     onFetchData: () => void;
-    defaultLoader: (
-      params: DataProviderLoaderParams
-    ) => Promise<Series>;
+    defaultLoader: (params: DataProviderLoaderParams) => Promise<Series>;
     onFetchDataError: (e: Error) => void;
     pointsPerSeries: number;
     series: any;

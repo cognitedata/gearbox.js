@@ -4,7 +4,7 @@ import {
   yAccessor,
   y0Accessor,
   y1Accessor,
-} from 'utils/dataLoader';
+} from '../../utils/dataLoader';
 
 import {
   AxisDisplayModeType,
@@ -12,19 +12,16 @@ import {
   DataProvider,
   LineChart,
 } from '@cognite/griff-react';
-import { getColor } from 'utils/colors';
-import { decimalTickFormatter } from 'utils/axisSigFix';
+import { getColor } from '../../utils/colors';
+import { decimalTickFormatter } from '../../utils/axisSigFix';
 import { Spin } from 'antd';
 
 export interface TimeseriesChartProps {
   panelHeight: number;
-  timeseriesNames: string[];
+  timeseriesIds: number[];
   pointsPerSeries: number;
   start: number;
   end: number;
-  timeseriesColors: {
-    [name: string]: string;
-  };
   contextChart: boolean;
   zoomable: boolean;
   liveUpdate: boolean;
@@ -49,7 +46,7 @@ class TimeseriesChart extends React.Component<
     start: +Date.now() - 60 * 60 * 1000,
     end: +Date.now(),
     subDomain: null,
-    timeseriesNames: [],
+    timeseriesIds: [],
     pointsPerSeries: 600,
     updateIntervalMillis: 5000,
     annotations: [],
@@ -80,13 +77,12 @@ class TimeseriesChart extends React.Component<
       start,
       end,
       pointsPerSeries,
-      timeseriesNames,
+      timeseriesIds,
       updateIntervalMillis,
       zoomable,
       contextChart,
       yDomain,
       yAxisDisplayMode,
-      timeseriesColors,
       onFetchDataError,
       panelHeight,
       liveUpdate,
@@ -94,10 +90,9 @@ class TimeseriesChart extends React.Component<
 
     const { loaded } = this.state;
 
-    const griffSeries = timeseriesNames.map((name: string) => ({
-      id: name,
-      name,
-      color: timeseriesColors[name] || getColor(name),
+    const griffSeries = timeseriesIds.map((id: number) => ({
+      id,
+      color: getColor(id.toString()),
       yAxisDisplayMode,
       yAccessor,
       y0Accessor,

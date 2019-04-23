@@ -1,10 +1,5 @@
 import * as sdk from '@cognite/sdk';
-import {
-  DataDatapoints,
-  Datapoint,
-  Timeseries,
-  TimeseriesWithCursor,
-} from '@cognite/sdk';
+import { DataDatapoints, Datapoint, Timeseries } from '@cognite/sdk';
 import { DataProviderLoaderParams, Series } from '@cognite/griff-react';
 
 interface GriffSeries {
@@ -13,19 +8,19 @@ interface GriffSeries {
   granularity: string;
 }
 
-const SERIES_GETTERS: Map<string, GriffSeries> = new Map<string, GriffSeries>();
+const SERIES_GETTERS: Map<number, GriffSeries> = new Map<number, GriffSeries>();
 
 export declare type AccessorFunc = (point: Datapoint) => number;
 
 const timeseries = {
-  results: new Map<string, Promise<Timeseries>>(),
-  requests: new Map<string, Promise<Timeseries>>(),
+  results: new Map<number, Promise<Timeseries>>(),
+  requests: new Map<number, Promise<Timeseries>>(),
 };
 
-export const getSubdomain = (id: string) =>
+export const getSubdomain = (id: number) =>
   id ? (SERIES_GETTERS.get(id) || { subDomain: [0, 1] }).subDomain : [0, 1];
 
-export const getGranularity = (id: string) =>
+export const getGranularity = (id: number) =>
   id ? (SERIES_GETTERS.get(id) || { granularity: '1d' }).granularity : '1d';
 
 export const yAccessor = (d: Datapoint) => {
@@ -80,53 +75,43 @@ const calculateGranularity = (domain: number[], pps: number) => {
   return 'day';
 };
 
-const getTimeSeries = (name: string): Promise<Timeseries> => {
-  if (timeseries.requests.has(name)) {
+const getTimeSeries = (id: number): Promise<Timeseries> => {
+  if (timeseries.requests.has(id)) {
     // @ts-ignore - We're checking for undefined with the "has" check.
-    return timeseries.requests.get(name);
+    return timeseries.requests.get(id);
   }
-  if (timeseries.results.has(name)) {
+  if (timeseries.results.has(id)) {
     // @ts-ignore - We're checking for undefined with the "has" check.
-    return timeseries.results.get(name);
+    return timeseries.results.get(id);
   }
-  const promise = sdk.TimeSeries.list({ q: name }).then(
-    (list: TimeseriesWithCursor) => {
-      if (list.items.length === 0) {
-        throw new Error(`Could not find a timeseries with name ${name}`);
-      }
-      const timeserie = list.items[0];
-      timeseries.results = timeseries.results.set(
-        name,
-        Promise.resolve(timeserie)
-      );
-      timeseries.requests.delete(name);
-      return timeserie;
-    }
-  );
-  timeseries.requests = timeseries.requests.set(name, promise);
+  const promise = sdk.TimeSeries.retrieve(id).then((timeserie: Timeseries) => {
+    timeseries.results = timeseries.results.set(id, Promise.resolve(timeserie));
+    timeseries.requests.delete(id);
+    return timeserie;
+  });
+  timeseries.requests = timeseries.requests.set(id, promise);
   return promise;
 };
 
 const getRawDataPoints = ({
-  name,
+  id,
   step,
   start,
   end,
   limit,
 }: {
-  name: string;
+  id: number;
   step?: boolean;
   start: number;
   end: number;
   limit?: number;
 }): Promise<Datapoint[]> =>
-  sdk.Datapoints.retrieveByName(name, { start, end, limit }).then(
-    (data: DataDatapoints) => {
-      return data.datapoints.map((d: Datapoint) => ({
+  sdk.Datapoints.retrieve(id, { start, end, limit }).then(
+    (data: DataDatapoints) =>
+      data.datapoints.map((d: Datapoint) => ({
         [`${step ? 'stepInterpolation' : 'average'}`]: d.value,
         timestamp: d.timestamp,
-      }));
-    }
+      }))
   );
 
 export const mergeInsert = (
@@ -180,12 +165,12 @@ export const cogniteloader = async ({
     const { step } = oldSeries;
     const requestPromise: Promise<Datapoint[]> = oldSeries.drawPoints
       ? getRawDataPoints({
-          name: id,
+          id,
           start: startTime,
           end: Date.now(),
           step,
         })
-      : sdk.Datapoints.retrieveByName(id, {
+      : sdk.Datapoints.retrieve(id, {
           start: startTime,
           end: Date.now(),
           granularity,
@@ -213,7 +198,7 @@ export const cogniteloader = async ({
   return getTimeSeries(id).then((timeseriesResponse: Timeseries) => {
     const { isStep: step } = timeseriesResponse;
     return (
-      sdk.Datapoints.retrieveByName(id, {
+      sdk.Datapoints.retrieve(id, {
         granularity,
         aggregates: `${step ? 'step' : 'avg'},count,min,max`,
         start: fetchDomain[0],
@@ -228,7 +213,7 @@ export const cogniteloader = async ({
           ) {
             // If there are less than x points, show raw values
             const result = await getRawDataPoints({
-              name: id,
+              id,
               step,
               start: fetchDomain[0],
               end: fetchDomain[1],
