@@ -7,9 +7,9 @@ import Adapter from 'enzyme-adapter-react-16';
 import sizeMe from 'react-sizeme';
 import sinon from 'sinon';
 import { SensorOverlay as OriginalSensorOverlay } from './SensorOverlay';
-import { DraggableBox, Tag } from './DraggableBox';
-import { DraggablePoint } from './DraggablePoint';
-import SvgLine from './SvgLine';
+import { DraggableBox, Tag } from './components/DraggableBox';
+import { DraggablePoint } from './components/DraggablePoint';
+import SvgLine from './components/SvgLine';
 import { timeseriesList } from '../../mocks';
 
 sizeMe.noPlaceholders = true;

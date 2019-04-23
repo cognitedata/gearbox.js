@@ -3,7 +3,7 @@ import { mount, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import * as sdk from '@cognite/sdk';
 import { DraggableBox, Tag, Link } from './DraggableBox';
-import { timeseriesList } from '../../mocks';
+import { timeseriesList } from '../../../mocks';
 
 configure({ adapter: new Adapter() });
 

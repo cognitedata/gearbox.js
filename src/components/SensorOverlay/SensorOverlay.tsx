@@ -12,9 +12,9 @@ import { withSize } from 'react-sizeme';
 import { Datapoint } from '@cognite/sdk';
 import { omit, sortedIndex } from 'lodash';
 import { DragTargets } from './constants';
-import DraggableBox from './DraggableBox';
-import DraggablePoint from './DraggablePoint';
-import SvgLine from './SvgLine';
+import DraggableBox from './components/DraggableBox';
+import DraggablePoint from './components/DraggablePoint';
+import SvgLine from './components/SvgLine';
 import { clampNumber, getColor } from '../../utils';
 
 const boxTarget: DropTargetSpec<SensorOverlayProps> = {
@@ -80,7 +80,7 @@ interface DraggableBoxPosition extends SensorPosition {
 }
 
 export interface SensorOverlayProps {
-  children: any;
+  children: React.ReactNode;
   timeserieIds: number[];
   colorMap: {
     [id: string]: string;
@@ -106,6 +106,7 @@ export interface SensorOverlayProps {
     height: number;
   };
   fixedWidth?: number;
+  refreshInterval?: number;
 }
 
 interface SensorOverlayState {
@@ -331,7 +332,13 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
   };
 
   render() {
-    const { size, fixedWidth, colorMap, stickyMap } = this.props;
+    const {
+      size,
+      fixedWidth,
+      colorMap,
+      stickyMap,
+      refreshInterval,
+    } = this.props;
     return this.props.connectDropTarget(
       <div
         style={{
@@ -360,6 +367,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
                 onDragHandleDoubleClick={this.onDragHandleDoubleClick}
                 onClick={this.props.onClick}
                 onSettingsClick={this.props.onSettingsClick}
+                refreshInterval={refreshInterval}
               />
               <SvgLine
                 box={{
