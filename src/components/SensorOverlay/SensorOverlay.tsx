@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
-import HTML5Backend from 'react-dnd-html5-backend';
-import {
-  DropTarget,
-  DragDropContext,
-  DropTargetConnector,
-  DropTargetMonitor,
-  ConnectDropTarget,
-  DropTargetSpec,
-} from 'react-dnd';
-import { withSize } from 'react-sizeme';
 import { Datapoint } from '@cognite/sdk';
 import { omit, sortedIndex } from 'lodash';
-import { DragTargets } from './constants';
+import React, { Component } from 'react';
+import {
+  ConnectDropTarget,
+  DragDropContext,
+  DropTarget,
+  DropTargetConnector,
+  DropTargetMonitor,
+  DropTargetSpec,
+} from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import { withSize } from 'react-sizeme';
+import { clampNumber, getColor } from '../../utils';
 import DraggableBox from './components/DraggableBox';
 import DraggablePoint from './components/DraggablePoint';
 import SvgLine from './components/SvgLine';
-import { clampNumber, getColor } from '../../utils';
+import { DragTargets } from './constants';
 
 const boxTarget: DropTargetSpec<SensorOverlayProps> = {
   hover(

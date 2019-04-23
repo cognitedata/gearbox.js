@@ -1,16 +1,16 @@
-import React from 'react';
-import { mount, configure } from 'enzyme';
 import * as sdk from '@cognite/sdk';
+import { configure, mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+import React from 'react';
 import { DragDropContext } from 'react-dnd';
 import DNDTestBackend from 'react-dnd-test-backend';
-import Adapter from 'enzyme-adapter-react-16';
 import sizeMe from 'react-sizeme';
 import sinon from 'sinon';
-import { SensorOverlay as OriginalSensorOverlay } from './SensorOverlay';
+import { timeseriesList } from '../../mocks';
 import { DraggableBox, Tag } from './components/DraggableBox';
 import { DraggablePoint } from './components/DraggablePoint';
 import SvgLine from './components/SvgLine';
-import { timeseriesList } from '../../mocks';
+import { SensorOverlay as OriginalSensorOverlay } from './SensorOverlay';
 
 sizeMe.noPlaceholders = true;
 

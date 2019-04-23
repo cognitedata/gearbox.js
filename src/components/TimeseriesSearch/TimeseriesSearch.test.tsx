@@ -1,12 +1,12 @@
-import React from 'react';
-import { mount, configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import { Input } from 'antd';
-import lodash from 'lodash';
 import * as sdk from '@cognite/sdk';
-import { TimeseriesSearch } from './TimeseriesSearch';
-import { DetailCheckbox } from '../DetailCheckbox/DetailCheckbox';
+import { Input } from 'antd';
+import { configure, mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+import lodash from 'lodash';
+import React from 'react';
 import { assetsList, timeseriesList } from '../../mocks';
+import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
+import { TimeseriesSearch } from './TimeseriesSearch';
 
 configure({ adapter: new Adapter() });
 

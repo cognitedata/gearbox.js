@@ -1,4 +1,3 @@
-import docTypes from './resources/docTypes.json';
 import {
   Document,
   DocumentsByCategory,
@@ -7,6 +6,7 @@ import {
   Priority,
   PureObject,
 } from '../interfaces';
+import docTypes from './resources/docTypes.json';
 
 const maxDocumentTitleLength = 56;
 const documentTypesOptions = ['DOC_TYPE', 'doc_type'];

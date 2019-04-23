@@ -1,9 +1,9 @@
 import { configure, mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import renderer from 'react-test-renderer';
-import Adapter from 'enzyme-adapter-react-16';
-import { AssetTree } from './AssetTree';
 import { ASSET_LIST_CHILD } from '../../mocks';
+import { AssetTree } from './AssetTree';
 
 const zeroChild = ASSET_LIST_CHILD.findIndex(asset => asset.depth === 0);
 

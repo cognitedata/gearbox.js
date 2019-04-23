@@ -1,8 +1,8 @@
-import { mount, configure } from 'enzyme';
-import React from 'react';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { SearchForm, defaultStrings } from './SearchForm';
-import { SearchValue } from '../../../mocks';
+import React from 'react';
+import { SearchValue } from '../../../../mocks';
+import { defaultStrings, SearchForm } from './SearchForm';
 
 configure({ adapter: new Adapter() });
 

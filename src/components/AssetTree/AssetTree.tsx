@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import { Asset } from '@cognite/sdk';
 import { Tree } from 'antd';
 import { AntTreeNode } from 'antd/lib/tree';
-import { Asset } from '@cognite/sdk';
+import React, { Component } from 'react';
 import {
   AssetTreeType,
-  TreeNodeType,
   OnSelectReturnType,
   TreeNodeData,
+  TreeNodeType,
 } from '../../interfaces';
 
 const { TreeNode } = Tree;

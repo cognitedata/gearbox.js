@@ -1,13 +1,13 @@
+import { Button, Form, Icon, Input } from 'antd';
+import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { SyntheticEvent } from 'react';
+import { v4 as uuid } from 'uuid';
 import {
   AdvancedSearch,
-  PureObject,
-  OnAdvancedSearchChange,
   EmptyCallback,
-} from '../../../interfaces';
-import { Form, Input, Icon, Button } from 'antd';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { v4 as uuid } from 'uuid';
+  OnAdvancedSearchChange,
+  PureObject,
+} from '../../../../interfaces';
 
 const formItemLayout = {
   labelCol: {

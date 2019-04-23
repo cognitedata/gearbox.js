@@ -1,19 +1,19 @@
+import { Asset } from '@cognite/sdk';
 import { Button, Icon, Input, Modal } from 'antd';
 import { debounce } from 'lodash';
 import React, { SyntheticEvent } from 'react';
 import styled from 'styled-components';
-import { Asset } from '@cognite/sdk';
-import { SearchForm } from '../SearchForm/SearchForm';
-import { RootAssetSelect } from '../RootAssetSelect/RootAssetSelect';
 import {
-  PureObject,
   AdvancedSearch,
-  ApiQuery,
   AnyTypeCallback,
-  IdCallback,
+  ApiQuery,
   EmptyCallback,
+  IdCallback,
   OnClick,
+  PureObject,
 } from '../../../interfaces';
+import { RootAssetSelect } from '../RootAssetSelect/RootAssetSelect';
+import { SearchForm } from './SearchForm/SearchForm';
 
 const InputGroup = styled(Input.Group)`
   display: flex !important;

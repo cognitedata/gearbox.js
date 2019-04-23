@@ -1,19 +1,19 @@
+import * as sdk from '@cognite/sdk';
+import { Datapoint, Timeseries } from '@cognite/sdk';
+import { Icon } from 'antd';
+import numeral from 'numeral';
 import React, { Component } from 'react';
 import {
+  ConnectDragPreview,
+  ConnectDragSource,
   DragSource,
   DragSourceConnector,
   DragSourceMonitor,
-  ConnectDragSource,
-  ConnectDragPreview,
 } from 'react-dnd';
-import { Icon } from 'antd';
 import Odometer from 'react-odometerjs';
 import styled from 'styled-components';
-import numeral from 'numeral';
-import * as sdk from '@cognite/sdk';
-import { Timeseries, Datapoint } from '@cognite/sdk';
-import StyledOdometer from './StyledOdometer';
 import { DragTargets } from '../constants';
+import StyledOdometer from './StyledOdometer';
 
 const HELLIP = String.fromCharCode(0x02026);
 

@@ -1,25 +1,26 @@
+import { Asset } from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
-import { Asset } from '@cognite/sdk';
 
-import { WebcamScanner } from '../WebcamScanner/WebcamScanner';
-import { getCanvas } from '../../utils';
-import {
-  EmptyCallback,
-  StringsCallback,
-  OnAssetListCallback,
-  SetVideoRefCallback,
-} from '../../interfaces';
 import { getAssetList, ocrRecognize } from '../../api';
 import {
+  AnyTypeCallback,
+  EmptyCallback,
+  OnAssetListCallback,
+  SetVideoRefCallback,
+  StringsCallback,
+} from '../../interfaces';
+import { getCanvas } from '../../utils';
+import {
   notification,
-  ocrSuccess,
   ocrAssetFind,
   ocrAssetNotFind,
-  ocrNoTextFound,
   ocrError,
   ocrErrorVideo,
+  ocrNoTextFound,
+  ocrSuccess,
 } from '../../utils';
+import { WebcamScanner } from './WebcamScanner/WebcamScanner';
 
 const Wrapper = styled.div`
   padding: 0;
@@ -36,7 +37,7 @@ export enum ASNotifyTypes {
   errorOccurred = 'errorOccurred',
 }
 
-type ASNotification = (type: ASNotifyTypes) => void;
+type ASNotification = (type: ASNotifyTypes) => any;
 
 export interface AssetScannerProps {
   ocrUrl?: string;
@@ -47,7 +48,7 @@ export interface AssetScannerProps {
   onEndLoading?: EmptyCallback;
   onAssetEmpty?: EmptyCallback;
   onAssetFind?: OnAssetListCallback;
-  onUnauthorized?: any;
+  onUnauthorized?: AnyTypeCallback;
 }
 
 export interface AssetScannerState {
@@ -60,6 +61,7 @@ export class AssetScanner extends React.Component<
   AssetScannerState
 > {
   static defaultProps = {
+    ocrUrl: 'https://vision.googleapis.com/v1/images:annotate',
     customNotifications: false,
     isLoading: false,
     currentScanResults: [],

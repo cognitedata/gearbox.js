@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { mapMetaData } from '../../utils';
 import { ValueListType } from '../../interfaces';
+import { mapMetaData } from '../../utils';
 
 const DL = styled('dl')`
   display: flex;

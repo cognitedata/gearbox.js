@@ -1,8 +1,8 @@
-import React, { SyntheticEvent } from 'react';
 import { configure, mount } from 'enzyme';
-import { EventPreview, defaultStrings } from './EventPreview';
-import { EVENTS, eventWithout, eventPreviewStrings } from '../../mocks';
 import Adapter from 'enzyme-adapter-react-16';
+import React, { SyntheticEvent } from 'react';
+import { eventPreviewStrings, EVENTS, eventWithout } from '../../mocks';
+import { defaultStrings, EventPreview } from './EventPreview';
 
 configure({ adapter: new Adapter() });
 

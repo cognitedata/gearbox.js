@@ -1,9 +1,9 @@
-import React from 'react';
-import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
 import * as sdk from '@cognite/sdk';
-import { TimeseriesSearch } from './TimeseriesSearch';
+import { action } from '@storybook/addon-actions';
+import { storiesOf } from '@storybook/react';
+import React from 'react';
 import { assetsList, timeseriesList } from '../../mocks';
+import { TimeseriesSearch } from './TimeseriesSearch';
 
 const timeseriesNames = timeseriesList.map(ts => ts.name);
 const timeseriesIds = timeseriesList.map(ts => ts.id);

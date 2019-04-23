@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
+  ConnectDragPreview,
+  ConnectDragSource,
   DragSource,
   DragSourceConnector,
   DragSourceMonitor,
-  ConnectDragSource,
-  ConnectDragPreview,
 } from 'react-dnd';
 import { DragTargets } from '../constants';
 

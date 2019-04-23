@@ -1,14 +1,14 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { DocumentTable } from './DocumentTable';
 import {
-  DOCUMENT_WITHOUT_TYPE,
-  DOCUMENT_WITHOUT_METADATA,
-  DOCUMENT_WITH_CUSTOM_TYPE_FIELD,
   DOCUMENT_WITH_CUSTOM_TITLE_FIELD,
+  DOCUMENT_WITH_CUSTOM_TYPE_FIELD,
+  DOCUMENT_WITHOUT_METADATA,
+  DOCUMENT_WITHOUT_TYPE,
   generateDocumentWithDocType,
 } from '../../mocks';
+import { DocumentTable } from './DocumentTable';
 
 configure({ adapter: new Adapter() });
 

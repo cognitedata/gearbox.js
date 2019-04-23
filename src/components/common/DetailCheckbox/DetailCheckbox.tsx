@@ -1,6 +1,6 @@
+import { Checkbox } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { Checkbox } from 'antd';
 
 const Container = styled.div`
   background: white;

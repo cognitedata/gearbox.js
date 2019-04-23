@@ -1,7 +1,7 @@
-import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { DescriptionList } from './DescriptionList';
+import React from 'react';
 import { ASSET_DATA } from '../../mocks';
+import { DescriptionList } from './DescriptionList';
 
 storiesOf('DescriptionList', module)
   .add('Basic example', () => (

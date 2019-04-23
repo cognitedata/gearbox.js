@@ -1,20 +1,20 @@
-import React from 'react';
-import * as sdk from '@cognite/sdk';
 import { Datapoint, Timeseries } from '@cognite/sdk';
-import { storiesOf } from '@storybook/react';
+import * as sdk from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
-import { SensorOverlay } from '../SensorOverlay';
+import { storiesOf } from '@storybook/react';
+import React from 'react';
 import { timeseriesList } from '../../../mocks';
-import fullDescription from './full.md';
+import { SensorOverlay } from '../SensorOverlay';
+import addDynamically from './addDynamically.md';
 import basic from './basic.md';
-import withMany from './withMany.md';
 import defaultPosition from './defaultPosition.md';
 import disabledDragging from './disabledDragging.md';
-import withLink from './withLink.md';
-import withStickyTooltips from './withStickyTooltips.md';
-import withImage from './withImage.md';
+import fullDescription from './full.md';
 import withFixedWidth from './withFixedWidth.md';
-import addDynamically from './addDynamically.md';
+import withImage from './withImage.md';
+import withLink from './withLink.md';
+import withMany from './withMany.md';
+import withStickyTooltips from './withStickyTooltips.md';
 
 sdk.TimeSeries.retrieve = (id: number, _): Promise<Timeseries> => {
   return new Promise(resolve => {

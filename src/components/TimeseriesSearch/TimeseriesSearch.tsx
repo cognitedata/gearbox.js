@@ -1,11 +1,11 @@
+import * as sdk from '@cognite/sdk';
 import { Spin } from 'antd';
 import { debounce } from 'lodash';
-import * as sdk from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
-import { Search } from '../common/Search/Search';
-import { DetailCheckbox } from '../DetailCheckbox/DetailCheckbox';
 import { ApiQuery } from '../../interfaces';
+import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
+import { Search } from '../common/Search/Search';
 
 const Wrapper = styled.div`
   display: flex;
