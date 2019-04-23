@@ -6,7 +6,7 @@ import {
   DragSourceConnector,
   DragSourceMonitor,
 } from 'react-dnd';
-import { DragTargets } from './constants';
+import { DragTargets } from '../constants';
 
 const boxSource = {
   beginDrag(props: DraggablePointProps) {

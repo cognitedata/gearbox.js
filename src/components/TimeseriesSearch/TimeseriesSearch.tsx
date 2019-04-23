@@ -4,8 +4,8 @@ import { debounce } from 'lodash';
 import React from 'react';
 import styled from 'styled-components';
 import { ApiQuery } from '../../interfaces';
-import { Search } from '../common/Search/Search';
 import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
+import { Search } from '../common/Search/Search';
 
 const Wrapper = styled.div`
   display: flex;
