@@ -3,6 +3,12 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { ASSET_DATA, DOCUMENTS, EVENTS } from '../../mocks';
 import { AssetMeta } from './AssetMeta';
+import { Assets, Asset } from '@cognite/sdk';
+
+Assets.retrieve = async (): Promise<Asset> => {
+  action('Assets.retrieve')();
+  return ASSET_DATA;
+};
 
 const onPaneChange = (key: string) => action('onPaneChange')(key);
 

@@ -20,3 +20,7 @@ export async function getAssetList({
 
   return response.items;
 }
+
+export async function retrieveAsset(assetId: number) {
+  return await Assets.retrieve(assetId);
+}
