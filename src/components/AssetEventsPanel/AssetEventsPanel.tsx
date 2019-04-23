@@ -1,10 +1,11 @@
 import { Icon, Modal, Table } from 'antd';
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { ApiEvent, AssetEventsPanelProps } from '../../interfaces';
+import { AssetEventsPanelProps } from '../../interfaces';
 import { momentFromTimestamp } from '../../utils';
+import { Event } from '@cognite/sdk';
 
-interface EventAddonsProp extends ApiEvent {
+interface EventAddonsProp extends Event {
   typeAndSubtype: React.ReactNode;
   description: string;
   start: string;
@@ -92,7 +93,7 @@ export class AssetEventsPanel extends Component<
     </EventMetadataList>
   );
 
-  mapEvent = (event: ApiEvent): EventAddonsProp => ({
+  mapEvent = (event: Event): EventAddonsProp => ({
     ...event,
     typeAndSubtype: (
       <span>

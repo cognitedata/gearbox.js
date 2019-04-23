@@ -3,7 +3,14 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { ASSET_DATA, DOCUMENTS, EVENTS } from '../../mocks';
 import { AssetMeta } from './AssetMeta';
-import { Assets, Asset, Events, EventDataWithCursor, Files, FileMetadataWithCursor } from '@cognite/sdk';
+import {
+  Assets,
+  Asset,
+  Events,
+  EventDataWithCursor,
+  Files,
+  FileMetadataWithCursor,
+} from '@cognite/sdk';
 
 Assets.retrieve = async (): Promise<Asset> => {
   action('Assets.retrieve')();
@@ -23,51 +30,14 @@ Files.list = async (): Promise<FileMetadataWithCursor> => {
 const onPaneChange = (key: string) => action('onPaneChange')(key);
 
 storiesOf('AssetMeta', module)
-  .add('Minimal', () => <AssetMeta asset={{ id: 123, name: '' }} />)
-  .add(
-    'Basic send data',
-    () => (
-      <AssetMeta
-        asset={ASSET_DATA}
-        docsProps={{
-          docs: DOCUMENTS,
-        }}
-        eventProps={{ events: EVENTS }}
-        onPaneChange={onPaneChange}
-      />
-    ),
-    {
-      info: {
-        text:
-          'You can add info to docsProps, eventProps and detailProps ' +
-          'to alter the subcomponent. See storybooks with more examples: AssetDetailsPanel, ' +
-          'AssetEventsPanel and DocumentTable',
-      },
-    }
-  )
-  .add('Alternate default tab', () => (
-    <AssetMeta
-      asset={ASSET_DATA}
-      tab="events"
-      docsProps={{
-        docs: DOCUMENTS,
-      }}
-      eventProps={{ events: EVENTS }}
-    />
+  .add('Minimal', () => <AssetMeta assetId={123} />)
+  .add('Return selected pane', () => (
+    <AssetMeta assetId={123} onPaneChange={onPaneChange} />
   ))
+  .add('Alternate default tab', () => <AssetMeta assetId={123} tab="events" />)
   .add(
     'Hide a tab',
-    () => (
-      <AssetMeta
-        asset={ASSET_DATA}
-        tab="events"
-        docsProps={{
-          docs: DOCUMENTS,
-        }}
-        eventProps={{ events: EVENTS }}
-        hidePanels={['details']}
-      />
-    ),
+    () => <AssetMeta assetId={123} tab="events" hidePanels={['details']} />,
     {
       info: {
         text: 'You can define panels if you do not wat to display them.',

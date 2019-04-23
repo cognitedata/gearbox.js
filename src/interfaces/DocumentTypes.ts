@@ -49,8 +49,7 @@ export type DocumentRenderer = (
   documents: Document[]
 ) => React.ReactNode;
 
-export interface DocumentTableProps {
-  docs: Document[];
+export interface MetaDocProps {
   handleDocumentClick?: OnDocumentClick;
   collapseProps?: CollapseProps;
   categoryPriorityList?: string[];
@@ -60,4 +59,8 @@ export interface DocumentTableProps {
   docTypes?: JsonDocTypes;
   noDocumentsSign?: string;
   documentRenderer?: DocumentRenderer;
+}
+
+export interface DocumentTableProps extends MetaDocProps {
+  docs: Document[];
 }

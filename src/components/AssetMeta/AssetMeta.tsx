@@ -10,15 +10,16 @@ import { AssetEventsPanel } from '../AssetEventsPanel/AssetEventsPanel';
 import { DescriptionList } from '../DescriptionList/DescriptionList';
 import { DocumentTable } from '../DocumentTable/DocumentTable';
 import { retrieveAsset, getAssetEvent, getAssetFiles } from '../../api';
+import { MetaDocProps } from '../../interfaces/DocumentTypes';
+import { MetaEventsProps } from '../../interfaces/AssetTypes';
 
 const { TabPane } = Tabs;
 
 interface AssetMetaTypes {
   assetId?: number;
-  asset: Asset;
   tab?: string;
-  docsProps?: DocumentTableProps;
-  eventProps?: AssetEventsPanelProps;
+  docsProps?: MetaDocProps;
+  eventProps?: MetaEventsProps;
   hidePanels?: AssetPanelType[];
   onPaneChange?: (key: string) => void;
 }

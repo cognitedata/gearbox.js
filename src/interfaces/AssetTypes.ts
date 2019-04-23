@@ -38,8 +38,11 @@ export interface TableDesignType {
   style?: object;
 }
 
-export interface AssetEventsPanelProps extends TableDesignType {
+export interface MetaEventsProps extends TableDesignType {
   columns?: TableColumnType[];
+}
+
+export interface AssetEventsPanelProps extends MetaEventsProps {
   events?: Event[];
 }
 
