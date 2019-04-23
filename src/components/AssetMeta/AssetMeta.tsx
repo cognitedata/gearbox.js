@@ -9,7 +9,7 @@ import {
 import { AssetEventsPanel } from '../AssetEventsPanel/AssetEventsPanel';
 import { DescriptionList } from '../DescriptionList/DescriptionList';
 import { DocumentTable } from '../DocumentTable/DocumentTable';
-import { retrieveAsset } from '../../api';
+import { retrieveAsset, getAssetEvent, getAssetFiles } from '../../api';
 
 const { TabPane } = Tabs;
 
@@ -25,13 +25,36 @@ interface AssetMetaTypes {
 
 export class AssetMeta extends React.Component<
   AssetMetaTypes,
-  { asset: Asset }
+  {
+    asset: Asset | null;
+    assetEvents: AssetEventsPanelProps | null;
+    docs: DocumentTableProps | null;
+  }
 > {
+  constructor(props: AssetMetaTypes) {
+    super(props);
+    this.state = {
+      asset: null,
+      assetEvents: null,
+      docs: null,
+    };
+  }
+
   componentDidMount() {
+    const { eventProps, docsProps } = this.props;
     const id = this.props && this.props.assetId ? this.props.assetId : 0;
+    const query = { assetId: id, limit: 1000 };
 
     retrieveAsset(id).then(asset => {
       this.setState({ asset });
+    });
+    getAssetEvent(query).then(events => {
+      const eventState = eventProps ? { ...eventProps, events } : { events };
+      this.setState({ assetEvents: eventState });
+    });
+    getAssetFiles(query).then(docs => {
+      const fileState = docsProps ? { ...docsProps, docs } : { docs };
+      this.setState({ docs: fileState });
     });
   }
 
@@ -46,9 +69,9 @@ export class AssetMeta extends React.Component<
     this.props.hidePanels ? this.props.hidePanels.indexOf(pane) < 0 : true;
 
   render() {
-    const { tab: propsTab, docsProps, eventProps, onPaneChange } = this.props;
+    const { tab: propsTab, onPaneChange } = this.props;
 
-    const { asset } = this.state | { asset: null };
+    const { asset, assetEvents, docs } = this.state;
 
     const tab =
       propsTab === 'docs' || propsTab === 'events' ? propsTab : 'details';
@@ -67,30 +90,29 @@ export class AssetMeta extends React.Component<
               <DescriptionList valueSet={asset.metadata} />
             </TabPane>
           )}
-          {docsProps && this.includesPanel('documents') && (
+          {docs && this.includesPanel('documents') && (
             <TabPane
-              tab={this.tabStyle('Documents', docsProps.docs.length)}
+              tab={this.tabStyle('Documents', docs.docs.length)}
               key="documents"
             >
-              <DocumentTable {...docsProps} />
+              <DocumentTable {...docs} />
             </TabPane>
           )}
-          {eventProps && this.includesPanel('events') && (
+          {assetEvents && this.includesPanel('events') && (
             <TabPane
               tab={this.tabStyle(
                 'Events',
-                eventProps.events ? eventProps.events.length : 0
+                assetEvents.events ? assetEvents.events.length : 0
               )}
-              tab="Events"
               key="events"
             >
-              <AssetEventsPanel {...eventProps} />
+              <AssetEventsPanel {...assetEvents} />
             </TabPane>
           )}
         </Tabs>
       </>
     ) : (
-      <p>No asset</p>
+      <p>no Asset</p>
     );
   }
 }

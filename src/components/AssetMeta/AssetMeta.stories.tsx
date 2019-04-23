@@ -3,11 +3,21 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { ASSET_DATA, DOCUMENTS, EVENTS } from '../../mocks';
 import { AssetMeta } from './AssetMeta';
-import { Assets, Asset } from '@cognite/sdk';
+import { Assets, Asset, Events, EventDataWithCursor, Files, FileMetadataWithCursor } from '@cognite/sdk';
 
 Assets.retrieve = async (): Promise<Asset> => {
   action('Assets.retrieve')();
   return ASSET_DATA;
+};
+
+Events.list = async (): Promise<EventDataWithCursor> => {
+  action('Events.list')();
+  return { items: EVENTS };
+};
+
+Files.list = async (): Promise<FileMetadataWithCursor> => {
+  action('Files.list')();
+  return { items: DOCUMENTS };
 };
 
 const onPaneChange = (key: string) => action('onPaneChange')(key);
