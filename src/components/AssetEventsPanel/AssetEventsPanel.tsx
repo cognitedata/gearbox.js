@@ -1,14 +1,16 @@
+import { Event } from '@cognite/sdk';
 import { Icon, Modal, Table } from 'antd';
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { ApiEvent, AssetEventsPanelProps } from '../../interfaces';
+import { AssetEventsPanelProps } from '../../interfaces';
 import { momentFromTimestamp } from '../../utils';
 
-interface EventAddonsProp extends ApiEvent {
+interface EventAddonsProp extends Event {
   typeAndSubtype: React.ReactNode;
   description: string;
   start: string;
   end: string;
+  metadata?: { [key: string]: any };
 }
 
 interface AssetEventsPanelState {
@@ -92,7 +94,7 @@ export class AssetEventsPanel extends Component<
     </EventMetadataList>
   );
 
-  mapEvent = (event: ApiEvent): EventAddonsProp => ({
+  mapEvent = (event: Event): EventAddonsProp => ({
     ...event,
     typeAndSubtype: (
       <span>
@@ -101,7 +103,9 @@ export class AssetEventsPanel extends Component<
       </span>
     ),
     description: event.description || 'No description',
-    start: momentFromTimestamp(event.startTime).format('LLL'),
+    start: event.startTime
+      ? momentFromTimestamp(event.startTime).format('LLL')
+      : '-',
     end: event.endTime
       ? momentFromTimestamp(event.endTime).format('LLL')
       : 'Ongoing',

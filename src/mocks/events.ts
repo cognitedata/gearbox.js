@@ -1,3 +1,4 @@
+/* tslint:disable:no-duplicate-string */
 import moment from 'moment-timezone';
 
 const EVENT_DESCRIPTION = 'PRODUCTION WELL A-23, SLOT-09 (101109)';
@@ -49,34 +50,74 @@ export const eventWithout = (field: string) => ({
 
 export const EVENTS = [
   {
-    id: 33965918626,
-    startTime: 1524812400000,
-    endTime: 1524373706000,
-    description: EVENT_DESCRIPTION,
-    type: 'Workitem',
-    subtype: 'VAL',
-    metadata: EVENT_METADATA,
-    assetIds: [1546393076379171],
+    id: 1995162693488,
+    type: '***',
+    subtype: 'Valhall',
+    metadata: {
+      source: 'akerbp-cdp1',
+      sourceId: '8357488757942266',
+    },
+    assetIds: [4650652196144007],
+    source: 'akerbp-cdpr',
+    sourceId: '8357488757942266',
+    createdTime: 1538252247102,
+    lastUpdatedTime: 1538252247102,
   },
   {
-    id: 49888151327,
-    startTime: 1522306800000,
-    endTime: 1523877589000,
-    description: 'Utv Insp, Nom WT\u003d2,769 mm',
-    type: 'Workitem',
-    subtype: 'VAL',
-    metadata: EVENT_METADATA,
-    assetIds: [],
+    id: 8825861064387,
+    type: '***',
+    subtype: 'Val',
+    metadata: {
+      source: 'akerbp-cdp9',
+      sourceId: '5712479887811020',
+    },
+    assetIds: [4650652196144007],
+    source: 'akerbp-cdp',
+    sourceId: '5712479887811020',
+    createdTime: 1544644816746,
+    lastUpdatedTime: 1544644816746,
   },
   {
-    id: 62961748915,
-    startTime: 1518073200000,
-    endTime: 1518781807000,
-    description: 'Utv Insp, Nom WT\u003d3,05 mm',
-    type: 'Workitem',
-    subtype: 'VAL',
-    metadata: EVENT_METADATA,
-    assetIds: [],
+    id: 25496029326330,
+    type: '***',
+    subtype: 'Val',
+    metadata: {
+      source: 'akerbp-cdp5',
+      sourceId: '2045316963854017',
+    },
+    assetIds: [4650652196144007],
+    source: 'akerbp-cdp',
+    sourceId: '2045316963854017',
+    createdTime: 1548932470085,
+    lastUpdatedTime: 1548932470085,
+  },
+  {
+    id: 33766051546406,
+    type: '***',
+    subtype: 'Val',
+    metadata: {
+      source: 'akerbp-cdp2',
+      sourceId: '6122324097482222',
+    },
+    assetIds: [4650652196144007],
+    source: 'akerbp-cdp',
+    sourceId: '6122324097482222',
+    createdTime: 1548273625540,
+    lastUpdatedTime: 1548273625540,
+  },
+  {
+    id: 35593709738144,
+    type: '***',
+    subtype: 'Val',
+    metadata: {
+      source: 'akerbp-cdp4',
+      sourceId: '3080723126388384',
+    },
+    assetIds: [4650652196144007],
+    source: 'akerbp-cdp3',
+    sourceId: '3080723126388384',
+    createdTime: 1548932461186,
+    lastUpdatedTime: 1548932461186,
   },
 ];
 
