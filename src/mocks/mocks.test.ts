@@ -1,8 +1,8 @@
 import {
+  eventTimelineDataObject,
+  eventTimelineDataSrc,
   eventWithout,
   generateEventTimelineData,
-  eventTimelineDataSrc,
-  eventTimelineDataObject,
 } from './index';
 
 describe('EventPreview mock data tests', () => {

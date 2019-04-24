@@ -12,7 +12,7 @@ import {
 } from 'react-dnd';
 import Odometer from 'react-odometerjs';
 import styled from 'styled-components';
-import { DragTargets } from './constants';
+import { DragTargets } from '../constants';
 import StyledOdometer from './StyledOdometer';
 
 const HELLIP = String.fromCharCode(0x02026);
@@ -145,7 +145,7 @@ interface DraggableBoxProps extends DragSourceProps {
   top: number;
   color: string;
   sticky?: boolean;
-  updateInterval: number; // milliseconds
+  refreshInterval: number; // milliseconds
 }
 
 interface DraggableBoxState {
@@ -166,7 +166,7 @@ export class DraggableBox extends Component<
     max: null,
     sticky: false,
     isDraggable: true,
-    updateInterval: 5000, // update datapoint every five seconds
+    refreshInterval: 5000, // update datapoint every five seconds
   };
 
   private interval: number | null = null;
@@ -227,7 +227,7 @@ export class DraggableBox extends Component<
       this.interval = null;
     }
     this.updateValue();
-    this.interval = setInterval(this.updateValue, this.props.updateInterval);
+    this.interval = setInterval(this.updateValue, this.props.refreshInterval);
   };
 
   updateValue = async () => {

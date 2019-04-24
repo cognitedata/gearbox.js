@@ -7,10 +7,10 @@ import DNDTestBackend from 'react-dnd-test-backend';
 import sizeMe from 'react-sizeme';
 import sinon from 'sinon';
 import { timeseriesList } from '../../mocks';
-import { DraggableBox, Tag } from './DraggableBox';
-import { DraggablePoint } from './DraggablePoint';
+import { DraggableBox, Tag } from './components/DraggableBox';
+import { DraggablePoint } from './components/DraggablePoint';
+import SvgLine from './components/SvgLine';
 import { SensorOverlay as OriginalSensorOverlay } from './SensorOverlay';
-import SvgLine from './SvgLine';
 
 sizeMe.noPlaceholders = true;
 

@@ -1,14 +1,14 @@
-import React from 'react';
 import * as sdk from '@cognite/sdk';
-import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { AssetSearch } from '../AssetSearch';
+import { storiesOf } from '@storybook/react';
+import React from 'react';
 import { assetsList } from '../../../mocks';
+import { AssetSearch } from '../AssetSearch';
 
-import * as full from './full.md';
 import * as basic from './basic.md';
 import * as empty from './empty.md';
 import * as error from './error.md';
+import * as full from './full.md';
 
 // Mock the SDK calls
 sdk.Assets.search = async (

@@ -6,7 +6,7 @@
     "tslint-react"
   ],
   "rules": {
-    "ordered-imports": [false],
+    "ordered-imports": [true],
     "interface-name": [
       true,
       "never-prefix"
