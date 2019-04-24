@@ -1,20 +1,20 @@
 import React from 'react';
 import {
   cogniteloader as griffloader,
-  yAccessor,
   y0Accessor,
   y1Accessor,
+  yAccessor,
 } from '../../utils/dataLoader';
 
 import {
   AxisDisplayMode,
+  AxisPlacement,
   DataProvider,
   LineChart,
-  AxisPlacement,
 } from '@cognite/griff-react';
-import { getColor } from '../../utils/colors';
-import { decimalTickFormatter } from '../../utils/axisSigFix';
 import { Spin } from 'antd';
+import { decimalTickFormatter } from '../../utils/axisSigFix';
+import { getColor } from '../../utils/colors';
 
 export interface TimeseriesChartProps {
   panelHeight: number;

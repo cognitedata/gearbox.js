@@ -1,9 +1,9 @@
-import React from 'react';
-import { configure, mount } from 'enzyme';
 import * as sdk from '@cognite/sdk';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import React from 'react';
+import { datapointsList, timeseriesList } from '../../mocks';
 import TimeseriesChart from './TimeseriesChart';
-import { timeseriesList, datapointsList } from '../../mocks';
 
 configure({ adapter: new Adapter() });
 

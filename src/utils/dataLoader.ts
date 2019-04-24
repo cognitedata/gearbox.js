@@ -1,6 +1,6 @@
+import { DataProviderLoaderParams, Series } from '@cognite/griff-react';
 import * as sdk from '@cognite/sdk';
 import { DataDatapoints, Datapoint, Timeseries } from '@cognite/sdk';
-import { DataProviderLoaderParams, Series } from '@cognite/griff-react';
 
 interface GriffSeries {
   firstSeries: Datapoint[];
