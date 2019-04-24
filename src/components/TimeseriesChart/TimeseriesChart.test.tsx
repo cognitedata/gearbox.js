@@ -30,12 +30,13 @@ describe('TimeseriesChart', () => {
       timeseriesIds: [timeseriesList[0].id],
     };
     const wrapper = mount(<TimeseriesChart {...props} />);
-    setImmediate(() => {
+
+    setTimeout(() => {
       wrapper.update();
       expect(wrapper.find('.linechart-container').exists()).toBeTruthy();
       jest.clearAllMocks();
       done();
-    });
+    }, 0);
   });
 
   it('calls the sdk', done => {
@@ -44,7 +45,7 @@ describe('TimeseriesChart', () => {
       timeseriesIds: [id],
     };
     const wrapper = mount(<TimeseriesChart {...props} />);
-    setImmediate(() => {
+    setTimeout(() => {
       wrapper.update();
       expect(sdk.TimeSeries.retrieve).toHaveBeenCalledTimes(1);
       expect(sdk.TimeSeries.retrieve).toHaveBeenCalledWith(id);
@@ -55,7 +56,7 @@ describe('TimeseriesChart', () => {
       );
       jest.clearAllMocks();
       done();
-    });
+    }, 0);
   });
 
   it('renders context chart', done => {
@@ -65,11 +66,11 @@ describe('TimeseriesChart', () => {
     };
     const wrapper = mount(<TimeseriesChart {...props} />);
     // tslint:disable-next-line: no-identical-functions
-    setImmediate(() => {
+    setTimeout(() => {
       wrapper.update();
       expect(wrapper.find('.context-container').exists()).toBeTruthy();
       jest.clearAllMocks();
       done();
-    });
+    }, 0);
   });
 });

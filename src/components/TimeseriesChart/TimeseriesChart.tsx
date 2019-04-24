@@ -13,8 +13,7 @@ import {
   LineChart,
 } from '@cognite/griff-react';
 import { Spin } from 'antd';
-import { decimalTickFormatter } from '../../utils/axisSigFix';
-import { getColor } from '../../utils/colors';
+import { decimalTickFormatter, getColor } from '../../utils';
 
 export interface TimeseriesChartProps {
   panelHeight: number;
@@ -55,10 +54,6 @@ export class TimeseriesChart extends React.Component<
     timeseriesColors: {},
     liveUpdate: false,
     yAxisPlacement: 'RIGHT',
-    // Just rethrow the error if there is no custom error handler
-    onFetchDataError: (e: Error) => {
-      throw e;
-    },
     panelHeight: 500,
   };
   state = {
