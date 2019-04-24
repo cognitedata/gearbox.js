@@ -1,14 +1,20 @@
 import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import lodash from 'lodash';
 import React from 'react';
 import { datapointsList, timeseriesList } from '../../mocks';
-import TimeseriesChart from './TimeseriesChart';
+import { TimeseriesChart } from './TimeseriesChart';
 
 configure({ adapter: new Adapter() });
 
 sdk.TimeSeries.retrieve = jest.fn();
 sdk.Datapoints.retrieve = jest.fn();
+
+// ignore debounce
+jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
+  return f;
+});
 
 beforeEach(() => {
   // @ts-ignore
