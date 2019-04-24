@@ -1224,10 +1224,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@cognite/sdk@^1.5.6":
-  version "1.5.6"
-  resolved "https://registry.yarnpkg.com/@cognite/sdk/-/sdk-1.5.6.tgz#41eb0314b735b28a941a4152452f5223886044fd"
-  integrity sha512-73MCMWN9Uv1rWRs64jnSnaTXCEdh6tnrXXx3Q9v5WZNa+EcUEla9SqBgf3jIDoxQ9vVGuTf9fm4+lEtS/wgv9g==
+"@cognite/sdk@^1.6.2":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@cognite/sdk/-/sdk-1.6.2.tgz#a0c51b763c844ddabdadf63772d1134bba384801"
+  integrity sha512-T4K8FC8M1ajSB62cWaLogGvCrF7zMDtSWfAh2esvQ/wZDgHHvE/vfCHq90kwX6guCwTSxJ8H3IW6M9Xx/36HlQ==
   dependencies:
     axios "^0.18.0"
     jwt-decode "^2.2.0"

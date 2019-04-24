@@ -103,12 +103,14 @@ export class AssetEventsPanel extends Component<
       </span>
     ),
     description: event.description || 'No description',
-    start: event.startTime
-      ? momentFromTimestamp(event.startTime).format('LLL')
-      : '-',
-    end: event.endTime
-      ? momentFromTimestamp(event.endTime).format('LLL')
-      : 'Ongoing',
+    start:
+      typeof event.startTime === 'number'
+        ? momentFromTimestamp(event.startTime).format('LLL')
+        : '-',
+    end:
+      typeof event.endTime === 'number'
+        ? momentFromTimestamp(event.endTime).format('LLL')
+        : 'Ongoing',
   });
 
   onEventClick = (record: EventAddonsProp) => {
