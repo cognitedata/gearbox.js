@@ -6,6 +6,8 @@ import React from 'react';
 import { datapointsList, timeseriesList } from '../../mocks';
 import { TimeseriesChart } from './TimeseriesChart';
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 configure({ adapter: new Adapter() });
 
 sdk.TimeSeries.retrieve = jest.fn();
@@ -23,54 +25,45 @@ beforeEach(() => {
   sdk.Datapoints.retrieve.mockResolvedValue(datapointsList);
 });
 
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
 // tslint:disable:no-big-function
 describe('TimeseriesChart', () => {
-  it('renders correctly', done => {
+  it('renders correctly', async () => {
     const props = {
       timeseriesIds: [timeseriesList[0].id],
     };
     const wrapper = mount(<TimeseriesChart {...props} />);
-
-    setTimeout(() => {
-      wrapper.update();
-      expect(wrapper.find('.linechart-container').exists()).toBeTruthy();
-      jest.clearAllMocks();
-      done();
-    }, 0);
+    await sleep(300);
+    wrapper.update();
+    expect(wrapper.find('.linechart-container').exists()).toBeTruthy();
   });
 
-  it('calls the sdk', done => {
+  it('calls the sdk', async () => {
     const id = 123;
     const props = {
       timeseriesIds: [id],
     };
     const wrapper = mount(<TimeseriesChart {...props} />);
-    setTimeout(() => {
-      wrapper.update();
-      expect(sdk.TimeSeries.retrieve).toHaveBeenCalledTimes(1);
-      expect(sdk.TimeSeries.retrieve).toHaveBeenCalledWith(id);
-      expect(sdk.Datapoints.retrieve).toHaveBeenCalledTimes(1);
-      expect(sdk.Datapoints.retrieve).toHaveBeenCalledWith(
-        id,
-        expect.anything()
-      );
-      jest.clearAllMocks();
-      done();
-    }, 0);
+    await sleep(300);
+    wrapper.update();
+    expect(sdk.TimeSeries.retrieve).toHaveBeenCalledTimes(1);
+    expect(sdk.TimeSeries.retrieve).toHaveBeenCalledWith(id);
+    expect(sdk.Datapoints.retrieve).toHaveBeenCalledTimes(1);
+    expect(sdk.Datapoints.retrieve).toHaveBeenCalledWith(id, expect.anything());
   });
 
-  it('renders context chart', done => {
+  it('renders context chart', async () => {
     const props = {
       timeseriesIds: [timeseriesList[0].id],
       contextChart: true,
     };
     const wrapper = mount(<TimeseriesChart {...props} />);
     // tslint:disable-next-line: no-identical-functions
-    setTimeout(() => {
-      wrapper.update();
-      expect(wrapper.find('.context-container').exists()).toBeTruthy();
-      jest.clearAllMocks();
-      done();
-    }, 0);
+    await sleep(300);
+    wrapper.update();
+    expect(wrapper.find('.context-container').exists()).toBeTruthy();
   });
 });
