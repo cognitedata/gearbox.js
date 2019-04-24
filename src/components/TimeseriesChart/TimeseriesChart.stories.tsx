@@ -3,7 +3,7 @@ import * as sdk from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import TimeseriesChart from './TimeseriesChart';
+import { TimeseriesChart } from './TimeseriesChart';
 
 const randomData = (start: number, end: number, n: number): sdk.Datapoint[] => {
   const data = [];

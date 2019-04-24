@@ -4,7 +4,7 @@ import {
   y0Accessor,
   y1Accessor,
   yAccessor,
-} from '../../utils/dataLoader';
+} from './dataLoader';
 
 import {
   AxisDisplayMode,
@@ -37,7 +37,7 @@ interface TimeseriesChartState {
 // Don't allow updating faster than every 1000ms.
 const MINIMUM_UPDATE_FREQUENCY_MILLIS = 1000;
 
-class TimeseriesChart extends React.Component<
+export class TimeseriesChart extends React.Component<
   TimeseriesChartProps,
   TimeseriesChartState
 > {
@@ -137,5 +137,3 @@ class TimeseriesChart extends React.Component<
     );
   }
 }
-
-export default TimeseriesChart;
