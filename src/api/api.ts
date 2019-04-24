@@ -56,10 +56,5 @@ export async function getAssetFiles(query: {
   limit: number;
 }): Promise<File[]> {
   const response = await Files.list(query);
-
-  if (response.items && response.items.length > 0) {
-    return response.items;
-  }
-
-  return [];
+  return response.items;
 }

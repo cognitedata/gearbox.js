@@ -10,7 +10,7 @@ interface EventAddonsProp extends Event {
   description: string;
   start: string;
   end: string;
-  metadata?: { [key: string]: any };
+  metadata?: { [key: string]: string };
 }
 
 interface AssetEventsPanelState {
