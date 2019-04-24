@@ -7,10 +7,10 @@ import {
 } from '../../utils/dataLoader';
 
 import {
-  AxisDisplayModeType,
   AxisDisplayMode,
   DataProvider,
   LineChart,
+  AxisPlacement,
 } from '@cognite/griff-react';
 import { getColor } from '../../utils/colors';
 import { decimalTickFormatter } from '../../utils/axisSigFix';
@@ -26,9 +26,8 @@ export interface TimeseriesChartProps {
   zoomable: boolean;
   liveUpdate: boolean;
   updateIntervalMillis: number;
-  yDomain: number[];
-  yAxisDisplayMode: AxisDisplayModeType;
-  onFetchDataError: (error: Error) => void;
+  yAxisDisplayMode: 'ALL' | 'COLLAPSED' | 'NONE';
+  yAxisPlacement: 'RIGHT' | 'LEFT' | 'BOTH';
 }
 
 interface TimeseriesChartState {
@@ -49,13 +48,13 @@ class TimeseriesChart extends React.Component<
     timeseriesIds: [],
     pointsPerSeries: 600,
     updateIntervalMillis: 5000,
-    annotations: [],
+
     zoomable: false,
     contextChart: false,
-    yDomain: null,
-    yAxisDisplayMode: AxisDisplayMode.ALL,
+    yAxisDisplayMode: 'ALL',
     timeseriesColors: {},
     liveUpdate: false,
+    yAxisPlacement: 'RIGHT',
     // Just rethrow the error if there is no custom error handler
     onFetchDataError: (e: Error) => {
       throw e;
@@ -81,11 +80,10 @@ class TimeseriesChart extends React.Component<
       updateIntervalMillis,
       zoomable,
       contextChart,
-      yDomain,
       yAxisDisplayMode,
-      onFetchDataError,
       panelHeight,
       liveUpdate,
+      yAxisPlacement,
     } = this.props;
 
     const { loaded } = this.state;
@@ -93,12 +91,10 @@ class TimeseriesChart extends React.Component<
     const griffSeries = timeseriesIds.map((id: number) => ({
       id,
       color: getColor(id.toString()),
-      yAxisDisplayMode,
+      yAxisDisplayMode: AxisDisplayMode[yAxisDisplayMode],
       yAccessor,
       y0Accessor,
       y1Accessor,
-      yDomain,
-      ySubDomain: yDomain,
     }));
 
     return (
@@ -108,10 +104,12 @@ class TimeseriesChart extends React.Component<
             <DataProvider
               defaultLoader={griffloader}
               onFetchData={this.onFetchData}
-              onFetchDataError={onFetchDataError}
               pointsPerSeries={pointsPerSeries}
               series={griffSeries}
               timeDomain={[start, end]}
+              onFetchDataError={(e: Error) => {
+                throw e;
+              }}
               updateInterval={
                 liveUpdate
                   ? Math.max(
@@ -130,6 +128,7 @@ class TimeseriesChart extends React.Component<
                   isDefault: true,
                 }}
                 yAxisFormatter={decimalTickFormatter}
+                yAxisPlacement={AxisPlacement[yAxisPlacement]}
               />
             </DataProvider>
           </div>

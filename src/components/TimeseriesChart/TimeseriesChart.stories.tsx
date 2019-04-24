@@ -95,6 +95,28 @@ storiesOf('TimeseriesChart', module)
     setupMocks();
     return <TimeseriesChart timeseriesIds={[123, 456]} />;
   })
+  .add('Left y-axis', () => {
+    setupMocks();
+    return (
+      <TimeseriesChart timeseriesIds={[123, 456]} yAxisPlacement={'LEFT'} />
+    );
+  })
+  .add('No y-axis', () => {
+    setupMocks();
+    return (
+      <TimeseriesChart timeseriesIds={[123, 456]} yAxisDisplayMode={'NONE'} />
+    );
+  })
+  // tslint:disable-next-line: no-identical-functions
+  .add('Collapsed y-axis', () => {
+    setupMocks();
+    return (
+      <TimeseriesChart
+        timeseriesIds={[123, 456]}
+        yAxisDisplayMode={'COLLAPSED'}
+      />
+    );
+  })
   .add('Context chart', () => {
     setupMocks();
     return <TimeseriesChart timeseriesIds={[123]} contextChart={true} />;

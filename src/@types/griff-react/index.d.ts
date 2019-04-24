@@ -63,6 +63,21 @@ declare module '@cognite/griff-react' {
     startTime: number;
   }
 
+  export interface AxisPlacementType {
+    id: number;
+    name: string;
+    toString: () => string;
+  }
+
+  export const AxisPlacement: {
+    UNSPECIFIED: AxisPlacement;
+    RIGHT: AxisPlacement;
+    LEFT: AxisPlacement;
+    BOTH: AxisPlacement;
+    BOTTOM: AxisPlacement;
+    TOP: AxisPlacement;
+  };
+
   export interface LineChartProps {
     zoomable?: boolean;
     crosshair?: boolean;
@@ -72,6 +87,7 @@ declare module '@cognite/griff-react' {
       isDefault: boolean;
     };
     yAxisFormatter?: (tick: number, ticks: number[]) => string;
+    yAxisPlacement: AxisPlacement;
   }
 
   export class LineChart extends React.Component<LineChartProps> {}
