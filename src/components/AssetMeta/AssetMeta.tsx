@@ -1,19 +1,19 @@
-import { Asset, Event, Events, Files, File } from '@cognite/sdk';
+import { Asset, Event, Events, File, Files } from '@cognite/sdk';
 import { Tabs } from 'antd';
+import { Spin } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
+import { getAssetEvent, getAssetFiles, retrieveAsset } from '../../api';
 import {
   AssetEventsPanelProps,
   AssetPanelType,
   DocumentTableProps,
 } from '../../interfaces';
+import { MetaEventsProps } from '../../interfaces/AssetTypes';
+import { MetaDocProps } from '../../interfaces/DocumentTypes';
 import { AssetEventsPanel } from '../AssetEventsPanel/AssetEventsPanel';
 import { DescriptionList } from '../DescriptionList/DescriptionList';
 import { DocumentTable } from '../DocumentTable/DocumentTable';
-import { retrieveAsset, getAssetEvent, getAssetFiles } from '../../api';
-import { MetaDocProps } from '../../interfaces/DocumentTypes';
-import { MetaEventsProps } from '../../interfaces/AssetTypes';
-import { Spin } from 'antd';
 
 const SpinContainer = styled.div`
   display: flex;

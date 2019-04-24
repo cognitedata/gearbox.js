@@ -1,16 +1,16 @@
+import {
+  Asset,
+  Assets,
+  EventDataWithCursor,
+  Events,
+  FileMetadataWithCursor,
+  Files,
+} from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { ASSET_DATA, DOCUMENTS, EVENTS } from '../../mocks';
 import { AssetMeta } from './AssetMeta';
-import {
-  Assets,
-  Asset,
-  Events,
-  EventDataWithCursor,
-  Files,
-  FileMetadataWithCursor,
-} from '@cognite/sdk';
 
 Assets.retrieve = (): Promise<Asset> => {
   return new Promise(resolve => {

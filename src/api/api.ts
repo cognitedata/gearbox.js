@@ -1,4 +1,4 @@
-import { Assets, Asset, Event, Events, Files, File } from '@cognite/sdk';
+import { Asset, Assets, Event, Events, File, Files } from '@cognite/sdk';
 import { ApiAssetList } from '../interfaces';
 
 export async function getAssetList({
