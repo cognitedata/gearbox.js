@@ -4,11 +4,10 @@
 
 ### Description:
 
-Renders set of latest timeseries (sensors) data. Each sensor is represented as a draggable box (tag) connected by a line with round pointer. All sensor items are drawn on top of wrapped content.
+Renders set of latest timeseries (sensors) data. Each sensor is represented as a draggable box (tag) connected by line with round pointer. All sensor items are drawn on top of wrapped content.
 This component can be used as a container of an infographic image for displaying real-time sensors data.
-The height of SensorOverlay component is defined by content provided in `children`,
-the width takes `100%` unless `fixedWidth` is provided. This component requires a list of timeserie IDs, once they are passed via
-`timeserieIds` prop it fetches meta information (name, description, etc) for all timeseries in the list and then constantly fetches latest data (Datapoint) for each timeserie with interval provided in `refreshInterval` (5 seconds by default).
+The height of SensorOverlay component is defined by content in `children` and the width takes `100%` unless `fixedWidth` is provided. This component requires a list of timeserie IDs and once they are passed via
+`timeserieIds` prop SensorOverlay fetches meta information (name, description, etc) for all timeseries in the list and then constantly fetches latest data (Datapoint) for each timeserie with interval provided in `refreshInterval` (5 seconds by default).
 
 #### Usage:
 
@@ -56,6 +55,11 @@ function ExampleComponent(props) {
 
 ### Types
 #### SensorPosition
+This type can be imported from @cognite/gearbox:
+```typescript
+import { SensorPosition } from '@cognite/gearbox';
+```
+Definition:
 ```typescript
 interface SensorPosition {
   left: number;
@@ -66,8 +70,11 @@ interface SensorPosition {
   };
 }
 ```
-This interface defines position of tag and pointer of a sensor relatively to size of wrapped content provided as `children`. `left` and `top` are coordinates of a sensor's tag whereas `pointer` object includes coordinates of a pointer.
+The interface defines position for tag and pointer of a sensor relatively to the size of wrapped content provided as `children`. `left` and `top` are coordinates of the tag whereas `pointer` object contains coordinates of the pointer.
 These coordinates are float numbers from 0 to 1.
 #### Datapoint
-This interface is provided by [@cognite/sdk](https://github.com/cognitedata/cognitesdk-js).
+This interface is provided by [@cognite/sdk](https://github.com/cognitedata/cognitesdk-js):
+```typescript
+import { Datapoint } from '@cognite/sdk';
+```
 
