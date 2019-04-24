@@ -38,7 +38,6 @@ export async function getAssetListDescendants(
   return response.items;
 }
 
-
 export async function getAssetEvent(query: {
   assetId: number;
   limit: number;

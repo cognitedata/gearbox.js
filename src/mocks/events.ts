@@ -1,3 +1,4 @@
+/* tslint:disable:no-duplicate-string */
 import moment from 'moment-timezone';
 
 const EVENT_DESCRIPTION = 'PRODUCTION WELL A-23, SLOT-09 (101109)';

@@ -12,9 +12,13 @@ import {
   FileMetadataWithCursor,
 } from '@cognite/sdk';
 
-Assets.retrieve = async (): Promise<Asset> => {
-  action('Assets.retrieve')();
-  return ASSET_DATA;
+Assets.retrieve = (): Promise<Asset> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      action('Assets.retrieve')();
+      resolve(ASSET_DATA);
+    }, 1000); // simulate load delay
+  });
 };
 
 Events.list = async (): Promise<EventDataWithCursor> => {
