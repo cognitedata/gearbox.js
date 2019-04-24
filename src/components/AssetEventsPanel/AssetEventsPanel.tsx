@@ -10,6 +10,7 @@ interface EventAddonsProp extends Event {
   description: string;
   start: string;
   end: string;
+  metadata?: { [key: string]: any };
 }
 
 interface AssetEventsPanelState {
@@ -102,7 +103,9 @@ export class AssetEventsPanel extends Component<
       </span>
     ),
     description: event.description || 'No description',
-    start: momentFromTimestamp(event.startTime).format('LLL'),
+    start: event.startTime
+      ? momentFromTimestamp(event.startTime).format('LLL')
+      : '-',
     end: event.endTime
       ? momentFromTimestamp(event.endTime).format('LLL')
       : 'Ongoing',

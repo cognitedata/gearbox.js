@@ -1,6 +1,5 @@
-import { Asset, Event, Events, File, Files } from '@cognite/sdk';
-import { Tabs } from 'antd';
-import { Spin } from 'antd';
+import { Asset, Event, File } from '@cognite/sdk';
+import { Spin, Tabs } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import { getAssetEvent, getAssetFiles, retrieveAsset } from '../../api';
