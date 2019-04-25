@@ -19,7 +19,7 @@ const setupMocks = () => {
       items: assetsList.map(
         (a: sdk.Asset): sdk.Asset => {
           return {
-            id: Number.parseInt(a.id.toString(), 10),
+            id: a.id,
             name: a.name,
             description: a.description,
           };
