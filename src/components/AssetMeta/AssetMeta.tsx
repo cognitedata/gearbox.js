@@ -10,9 +10,9 @@ import {
 } from '../../interfaces';
 import { MetaEventsProps } from '../../interfaces/AssetTypes';
 import { MetaDocProps } from '../../interfaces/DocumentTypes';
-import { AssetEventsPanel } from '../AssetEventsPanel/AssetEventsPanel';
 import { DescriptionList } from '../DescriptionList/DescriptionList';
-import { DocumentTable } from '../DocumentTable/DocumentTable';
+import { AssetEventsPanel } from './components/AssetEventsPanel';
+import { DocumentTable } from './components/DocumentTable';
 
 const SpinContainer = styled.div`
   display: flex;
@@ -126,7 +126,7 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
     }
 
     const tab =
-      propsTab === 'docs' || propsTab === 'events' ? propsTab : 'details';
+      propsTab === 'documents' || propsTab === 'events' ? propsTab : 'details';
 
     return asset ? (
       <>
