@@ -2,32 +2,36 @@ import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
+import { getAssetEvent, getAssetFiles, retrieveAsset } from '../../api';
 import { ASSET_DATA, DOCUMENTS, EVENTS } from '../../mocks';
 import { AssetMeta } from './AssetMeta';
 
-sdk.Assets.retrieve = jest.fn();
-sdk.Events.list = jest.fn();
-sdk.Files.list = jest.fn();
+// @ts-ignore
+retrieveAsset = jest.fn();
+// @ts-ignore
+getAssetEvent = jest.fn();
+// @ts-ignore
+getAssetFiles = jest.fn();
 
 configure({ adapter: new Adapter() });
 
 beforeEach(() => {
   // @ts-ignore
-  sdk.Assets.retrieve.mockImplementation(
+  retrieveAsset.mockImplementation(
     async (): Promise<sdk.Asset> => {
       return ASSET_DATA;
     }
   );
   // @ts-ignore
-  sdk.Events.list.mockImplementation(
-    async (): Promise<sdk.EventDataWithCursor> => {
-      return { items: EVENTS };
+  getAssetEvent.mockImplementation(
+    async (): Promise<sdk.Event[]> => {
+      return EVENTS;
     }
   );
   // @ts-ignore
-  sdk.Files.list.mockImplementation(
-    async (): Promise<sdk.FileMetadataWithCursor> => {
-      return { items: DOCUMENTS };
+  getAssetFiles.mockImplementation(
+    async (): Promise<sdk.File[]> => {
+      return DOCUMENTS;
     }
   );
 });
@@ -73,7 +77,7 @@ describe('AssetMeta', () => {
 
   it('should render spinner while loading asset, events and documents', () => {
     // @ts-ignore
-    sdk.Assets.retrieve.mockImplementation(
+    retrieveAsset.mockImplementation(
       (): Promise<sdk.Asset> => {
         return new Promise(resolve => {
           setTimeout(() => {
