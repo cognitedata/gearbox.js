@@ -63,7 +63,7 @@ export class TimeseriesSearch extends React.Component<
 > {
   static defaultProps = {
     selectedTimeseries: [],
-    filterRule: () => true,
+    filterRule: undefined,
     hideSelected: false,
   };
 
@@ -210,7 +210,7 @@ export class TimeseriesSearch extends React.Component<
     const closedTimeseries = selectedTimeseries.find(
       timeseries => timeseries.id === item.id
     );
-    console.log(closedTimeseries);
+
     if (closedTimeseries === undefined) {
       throw Error('Closing nonexisting timeseries should not be possible');
     }

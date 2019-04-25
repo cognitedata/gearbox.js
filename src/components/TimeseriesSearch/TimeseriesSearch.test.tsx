@@ -231,24 +231,29 @@ describe('TimeseriesSearch', () => {
         .find(DetailCheckbox)
         .first()
         .simulate('click');
-      expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(1);
+      wrapper
+        .find(DetailCheckbox)
+        .at(1)
+        .simulate('click');
+      expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(2);
       expect(onTimeserieSelectionChange).toHaveBeenNthCalledWith(
-        1,
-        [timeseriesList[0].id],
-        timeseriesList[0]
+        2,
+        [timeseriesList[0].id, timeseriesList[1].id],
+        timeseriesList[1]
       );
 
       wrapper
         .find(Tag)
         .find('.anticon-close')
+        .first()
         .simulate('click');
-      expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(2);
+      expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(3);
       expect(onTimeserieSelectionChange).toHaveBeenNthCalledWith(
-        2,
-        [],
+        3,
+        [timeseriesList[1].id],
         timeseriesList[0]
       );
-      expect(wrapper.find(Tag)).toHaveLength(0);
+      expect(wrapper.find(Tag)).toHaveLength(1);
       expect(
         wrapper
           .find(DetailCheckbox)
