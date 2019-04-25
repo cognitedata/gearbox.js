@@ -10,37 +10,45 @@ const timeseriesIds = timeseriesList.map(ts => ts.id);
 const infoText = `Names you can search for : ${timeseriesNames.join(', ')}.`;
 
 // Mock the SDK calls
-sdk.Assets.list = async (
-  input: sdk.AssetListParams
-): Promise<sdk.AssetDataWithCursor> => {
-  action('sdk.Assets.list')(input);
-  return {
-    items: assetsList.map(
-      (a: sdk.Asset): sdk.Asset => {
-        return {
-          id: Number.parseInt(a.id.toString(), 10),
-          name: a.name,
-          description: a.description,
-        };
-      }
-    ),
-  };
-};
-
-sdk.TimeSeries.search = async (
-  input: sdk.TimeseriesSearchParams
-): Promise<sdk.TimeseriesWithCursor> => {
-  action('sdk.TimeSeries.search')(input);
-  if (!input.query) {
+const setupMocks = () => {
+  sdk.Assets.list = async (
+    input: sdk.AssetListParams
+  ): Promise<sdk.AssetDataWithCursor> => {
+    action('sdk.Assets.list')(input);
     return {
-      items: timeseriesList,
+      items: assetsList.map(
+        (a: sdk.Asset): sdk.Asset => {
+          return {
+            id: a.id,
+            name: a.name,
+            description: a.description,
+          };
+        }
+      ),
     };
-  }
-  return {
-    items: timeseriesList.filter(
-      // @ts-ignore
-      ts => ts.name.toUpperCase().indexOf(input.query.toUpperCase()) >= 0
-    ),
+  };
+
+  sdk.TimeSeries.retrieveMultiple = async (
+    ids: number[]
+  ): Promise<sdk.Timeseries[]> => {
+    return timeseriesList.filter(timeseries => ids.includes(timeseries.id));
+  };
+
+  sdk.TimeSeries.search = async (
+    input: sdk.TimeseriesSearchParams
+  ): Promise<sdk.TimeseriesWithCursor> => {
+    action('sdk.TimeSeries.search')(input);
+    if (!input.query) {
+      return {
+        items: timeseriesList,
+      };
+    }
+    return {
+      items: timeseriesList.filter(
+        // @ts-ignore
+        ts => ts.name.toUpperCase().indexOf(input.query.toUpperCase()) >= 0
+      ),
+    };
   };
 };
 
@@ -57,11 +65,31 @@ const onTimeserieSelectionChange = (
 storiesOf('TimeseriesSearch', module)
   .add(
     'Basic',
-    () => (
-      <TimeseriesSearch
-        onTimeserieSelectionChange={onTimeserieSelectionChange}
-      />
-    ),
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesSearch
+          onTimeserieSelectionChange={onTimeserieSelectionChange}
+        />
+      );
+    },
+    {
+      info: {
+        text: infoText,
+      },
+    }
+  )
+  .add(
+    'Hide selected row',
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesSearch
+          onTimeserieSelectionChange={onTimeserieSelectionChange}
+          hideSelected={true}
+        />
+      );
+    },
     {
       info: {
         text: infoText,
@@ -70,12 +98,15 @@ storiesOf('TimeseriesSearch', module)
   )
   .add(
     'Single selection',
-    () => (
-      <TimeseriesSearch
-        onTimeserieSelectionChange={onTimeserieSelectionChange}
-        single={true}
-      />
-    ),
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesSearch
+          onTimeserieSelectionChange={onTimeserieSelectionChange}
+          single={true}
+        />
+      );
+    },
     {
       info: {
         text: infoText,
@@ -84,12 +115,15 @@ storiesOf('TimeseriesSearch', module)
   )
   .add(
     'Allow strings',
-    () => (
-      <TimeseriesSearch
-        onTimeserieSelectionChange={onTimeserieSelectionChange}
-        allowStrings={true}
-      />
-    ),
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesSearch
+          onTimeserieSelectionChange={onTimeserieSelectionChange}
+          allowStrings={true}
+        />
+      );
+    },
     {
       info: {
         text: infoText,
@@ -98,12 +132,15 @@ storiesOf('TimeseriesSearch', module)
   )
   .add(
     'Preselected',
-    () => (
-      <TimeseriesSearch
-        onTimeserieSelectionChange={onTimeserieSelectionChange}
-        selectedTimeseries={[timeseriesIds[1], timeseriesIds[3]]}
-      />
-    ),
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesSearch
+          onTimeserieSelectionChange={onTimeserieSelectionChange}
+          selectedTimeseries={[timeseriesIds[1], timeseriesIds[3]]}
+        />
+      );
+    },
     {
       info: {
         text: infoText,
@@ -112,12 +149,15 @@ storiesOf('TimeseriesSearch', module)
   )
   .add(
     'Custom filter rule',
-    () => (
-      <TimeseriesSearch
-        onTimeserieSelectionChange={onTimeserieSelectionChange}
-        filterRule={filterRule}
-      />
-    ),
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesSearch
+          onTimeserieSelectionChange={onTimeserieSelectionChange}
+          filterRule={filterRule}
+        />
+      );
+    },
     {
       info: {
         text: `const filterRule = (timeseries: sdk.Timeseries) : boolean =>
