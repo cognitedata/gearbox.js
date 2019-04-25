@@ -1224,6 +1224,18 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@cognite/griff-react@^0.5.0-rc.33":
+  version "0.5.0-rc.40"
+  resolved "https://registry.yarnpkg.com/@cognite/griff-react/-/griff-react-0.5.0-rc.40.tgz#4d498a1f8402cacb093c419aee00fa48d4e1793c"
+  integrity sha512-rGZG/pzV/CJaOwXDhhlqvK/KIHo+QzWgGLSuIjnWuNYY1LDk2VPBNml7cTDcKQnfFCUKC3cWqACjGWgNKo/PWg==
+  dependencies:
+    bluebird "^3.5.1"
+    d3 "4.10.0"
+    immutable "^3.8.2"
+    lodash.isequal "^4.5.0"
+    prop-types "^15.7.2"
+    react-sizeme "^2.5.2"
+
 "@cognite/sdk@^1.6.2":
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/@cognite/sdk/-/sdk-1.6.2.tgz#a0c51b763c844ddabdadf63772d1134bba384801"

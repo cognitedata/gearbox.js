@@ -30,6 +30,7 @@
   "homepage": "https://github.com/cognitedata/gearbox.js#readme",
   "license": "Apache-2.0",
   "dependencies": {
+    "@cognite/griff-react": "^0.5.0-rc.33",
     "d3": "^5.9.2",
     "lodash": "^4.17.11",
     "moment-timezone": "^0.5.23",
