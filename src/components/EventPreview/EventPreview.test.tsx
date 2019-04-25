@@ -1,12 +1,14 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React, { SyntheticEvent } from 'react';
+import { ApiEvent } from '../../interfaces';
 import { eventPreviewStrings, EVENTS, eventWithout } from '../../mocks';
 import { defaultStrings, EventPreview } from './EventPreview';
 
 configure({ adapter: new Adapter() });
 
-const event = EVENTS[0];
+// @ts-ignore - ignore mock type casting
+const event = EVENTS[0] as ApiEvent;
 const onShowDetails = (e: SyntheticEvent) => e;
 
 describe('EventPreview', () => {
