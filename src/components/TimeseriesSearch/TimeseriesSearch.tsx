@@ -22,7 +22,7 @@ const TagList = styled.div`
   overflow: auto;
 `;
 
-export const CenteredSpin = styled(Spin)`
+const CenteredSpin = styled(Spin)`
   &.ant-spin-spinning {
     min-height: 25px;
     height: 100%;
@@ -48,7 +48,7 @@ export interface TimeseriesSearchProps {
   onError?: (error: Error) => void;
 }
 
-export interface TimeseriesSearchState {
+interface TimeseriesSearchState {
   assetId?: number;
   assets: sdk.Asset[];
   fetching: boolean;
