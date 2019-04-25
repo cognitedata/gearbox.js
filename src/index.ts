@@ -13,5 +13,6 @@ export { TenantSelector } from './components/TenantSelector/TenantSelector';
 export {
   TimeseriesSearch,
 } from './components/TimeseriesSearch/TimeseriesSearch';
+export * from './components/TimeseriesChart/TimeseriesChart';
 
 export * from './interfaces';
