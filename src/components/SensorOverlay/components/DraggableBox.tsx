@@ -12,6 +12,10 @@ import {
 } from 'react-dnd';
 import Odometer from 'react-odometerjs';
 import styled from 'styled-components';
+import {
+  bindPromiseToUnmountState,
+  ComponentWithUnmountState,
+} from '../../../utils';
 import { DragTargets } from '../constants';
 import StyledOdometer from './StyledOdometer';
 
@@ -154,10 +158,9 @@ interface DraggableBoxState {
   hovering: boolean;
 }
 
-export class DraggableBox extends Component<
-  DraggableBoxProps,
-  DraggableBoxState
-> {
+export class DraggableBox
+  extends Component<DraggableBoxProps, DraggableBoxState>
+  implements ComponentWithUnmountState {
   static defaultProps = {
     hovering: false,
     color: '',
@@ -168,6 +171,8 @@ export class DraggableBox extends Component<
     isDraggable: true,
     refreshInterval: 5000, // update datapoint every five seconds
   };
+
+  isComponentUnmounted = false;
 
   private interval: number | null = null;
 
@@ -185,6 +190,7 @@ export class DraggableBox extends Component<
   }
 
   componentWillUnmount() {
+    this.isComponentUnmounted = true;
     if (this.interval) {
       clearInterval(this.interval);
     }
@@ -218,7 +224,10 @@ export class DraggableBox extends Component<
   };
 
   fetchTimeSeries = async (id: number) => {
-    const timeserie = await sdk.TimeSeries.retrieve(id, true);
+    const timeserie = await bindPromiseToUnmountState(
+      this,
+      sdk.TimeSeries.retrieve(id, true)
+    );
     this.setState({
       tag: timeserie,
     });
@@ -231,7 +240,10 @@ export class DraggableBox extends Component<
   };
 
   updateValue = async () => {
-    const data = await sdk.Datapoints.retrieveLatest(this.state.tag!.name);
+    const data = await bindPromiseToUnmountState(
+      this,
+      sdk.Datapoints.retrieveLatest(this.state.tag!.name)
+    );
     if (!data) {
       this.setState({
         dataPoint: null,
