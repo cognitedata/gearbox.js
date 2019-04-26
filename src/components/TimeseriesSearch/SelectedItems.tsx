@@ -15,7 +15,7 @@ export interface Item {
 
 export interface SelectedTimeseriesProps {
   selectedItems: Item[];
-  onItemClose: (items: Item[]) => void;
+  onItemClose: (closedItem: Item) => void;
 }
 
 export class SelectedItems extends React.Component<SelectedTimeseriesProps> {
@@ -24,15 +24,8 @@ export class SelectedItems extends React.Component<SelectedTimeseriesProps> {
     onItemClose: null,
   };
 
-  onClose = (item: Item) => {
-    const newItems = this.props.selectedItems.filter(
-      existingItem => existingItem.id !== item.id
-    );
-    this.props.onItemClose(newItems);
-  };
-
   render() {
-    const { selectedItems } = this.props;
+    const { selectedItems, onItemClose } = this.props;
     return (
       <Wrapper>
         <span style={{ marginRight: '8px' }}>
@@ -42,7 +35,7 @@ export class SelectedItems extends React.Component<SelectedTimeseriesProps> {
           selectedItems.map(item => (
             <Tag
               key={item.id}
-              onClose={() => this.onClose(item)}
+              onClose={() => onItemClose(item)}
               closable={true}
               color={getColor(item.id.toString())}
             >

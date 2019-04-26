@@ -53,7 +53,7 @@ interface TimeseriesSearchState {
   assets: sdk.Asset[];
   fetching: boolean;
   searchResults: sdk.Timeseries[];
-  selectedTimeseries: Item[];
+  selectedTimeseries: sdk.Timeseries[];
   lastFetchId: number;
 }
 
@@ -63,7 +63,7 @@ export class TimeseriesSearch extends React.Component<
 > {
   static defaultProps = {
     selectedTimeseries: [],
-    filterRule: () => true,
+    filterRule: undefined,
     hideSelected: false,
   };
 
@@ -113,13 +113,9 @@ export class TimeseriesSearch extends React.Component<
     this.setState({ assets });
     const { selectedTimeseries } = this.props;
     if (selectedTimeseries && selectedTimeseries.length > 0) {
-      const apiTimeseries = await sdk.TimeSeries.retrieveMultiple(
+      const timeseries = await sdk.TimeSeries.retrieveMultiple(
         selectedTimeseries
       );
-      const timeseries = apiTimeseries.map(item => ({
-        id: item.id,
-        name: item.name,
-      }));
       this.setState({ selectedTimeseries: timeseries });
     }
   }
@@ -129,15 +125,14 @@ export class TimeseriesSearch extends React.Component<
   };
 
   onTimeSerieClicked = (timeseries: sdk.Timeseries): void => {
-    let newTimeseries: Item[] = [];
-    const item = { id: timeseries.id, name: timeseries.name };
+    let newTimeseries: sdk.Timeseries[] = [];
     if (this.props.single) {
-      newTimeseries = [item];
+      newTimeseries = [timeseries];
     } else if (!this.isChecked(timeseries.id)) {
-      newTimeseries = [...this.state.selectedTimeseries, item];
+      newTimeseries = [...this.state.selectedTimeseries, timeseries];
     } else {
       newTimeseries = [...this.state.selectedTimeseries].filter(
-        existing => existing.id !== item.id
+        existing => existing.id !== timeseries.id
       );
     }
     this.setState({ selectedTimeseries: newTimeseries });
@@ -210,19 +205,46 @@ export class TimeseriesSearch extends React.Component<
       timeseries => timeseries.id === id
     ) !== -1;
 
-  onItemClose = (items: Item[]) => {
-    this.setState({ selectedTimeseries: items });
+  onItemClose = (item: Item) => {
+    const { selectedTimeseries } = this.state;
+    const closedTimeseries = selectedTimeseries.find(
+      timeseries => timeseries.id === item.id
+    );
+
+    if (closedTimeseries === undefined) {
+      throw Error('Closing nonexisting timeseries should not be possible');
+    }
+    const newTimeseries = selectedTimeseries.filter(
+      existing => existing.id !== item.id
+    );
+    this.setState({ selectedTimeseries: newTimeseries });
+
+    if (this.props.onTimeserieSelectionChange) {
+      this.props.onTimeserieSelectionChange(
+        newTimeseries.map(x => x.id),
+        closedTimeseries
+      );
+    }
   };
 
   render() {
     const { allowStrings, single, hideSelected } = this.props;
-    const { assetId, fetching, searchResults, assets } = this.state;
+    const {
+      assetId,
+      fetching,
+      searchResults,
+      assets,
+      selectedTimeseries,
+    } = this.state;
 
     return (
       <Wrapper>
         {!hideSelected && (
           <SelectedItems
-            selectedItems={this.state.selectedTimeseries}
+            selectedItems={selectedTimeseries.map(t => ({
+              id: t.id,
+              name: t.name,
+            }))}
             onItemClose={this.onItemClose}
           />
         )}
