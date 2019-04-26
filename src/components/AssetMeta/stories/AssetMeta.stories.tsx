@@ -77,7 +77,7 @@ storiesOf('AssetMeta/Examples', module)
     },
   })
   .add(
-    'Return selected pane',
+    'Returns selected pane',
     () => <AssetMeta assetId={4650652196144007} onPaneChange={onPaneChange} />,
     {
       readme: {

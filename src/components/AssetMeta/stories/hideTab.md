@@ -1,4 +1,4 @@
-## Alternate Pane 
+## Hide a Tab
 
 <!-- STORY -->
 

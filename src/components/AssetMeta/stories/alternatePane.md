@@ -1,4 +1,4 @@
-## Alternate Pane 
+## Alternate Default Tab 
 
 <!-- STORY -->
 
