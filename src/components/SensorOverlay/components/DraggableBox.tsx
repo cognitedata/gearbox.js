@@ -169,6 +169,8 @@ export class DraggableBox extends Component<
     refreshInterval: 5000, // update datapoint every five seconds
   };
 
+  private isComponentUnmounted = false;
+
   private interval: number | null = null;
 
   constructor(props: DraggableBoxProps) {
@@ -185,6 +187,7 @@ export class DraggableBox extends Component<
   }
 
   componentWillUnmount() {
+    this.isComponentUnmounted = true;
     if (this.interval) {
       clearInterval(this.interval);
     }
@@ -219,6 +222,9 @@ export class DraggableBox extends Component<
 
   fetchTimeSeries = async (id: number) => {
     const timeserie = await sdk.TimeSeries.retrieve(id, true);
+    if (this.isComponentUnmounted) {
+      return;
+    }
     this.setState({
       tag: timeserie,
     });
@@ -232,6 +238,9 @@ export class DraggableBox extends Component<
 
   updateValue = async () => {
     const data = await sdk.Datapoints.retrieveLatest(this.state.tag!.name);
+    if (this.isComponentUnmounted) {
+      return;
+    }
     if (!data) {
       this.setState({
         dataPoint: null,
