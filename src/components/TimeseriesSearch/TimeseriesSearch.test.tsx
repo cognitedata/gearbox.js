@@ -1,5 +1,5 @@
 import * as sdk from '@cognite/sdk';
-import { Input } from 'antd';
+import { Input, Tag } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
@@ -12,6 +12,7 @@ configure({ adapter: new Adapter() });
 
 sdk.TimeSeries.search = jest.fn();
 sdk.Assets.list = jest.fn();
+sdk.TimeSeries.retrieveMultiple = jest.fn();
 
 const propsCallbacks = {
   filterRule: jest.fn(),
@@ -119,6 +120,7 @@ describe('TimeseriesSearch', () => {
     setImmediate(() => {
       wrapper.update();
       expect(wrapper.find(DetailCheckbox)).toHaveLength(timeseriesList.length);
+      expect(wrapper.find(Tag)).toHaveLength(0);
       done();
     });
   });
@@ -180,6 +182,82 @@ describe('TimeseriesSearch', () => {
         wrapper
           .find(DetailCheckbox)
           .at(1)
+          .find({ type: 'checkbox' })
+          .first()
+          .props().checked
+      ).toBe(false);
+      done();
+    });
+  });
+
+  it('should render selected item', done => {
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = { onTimeserieSelectionChange };
+    const wrapper = mount(<TimeseriesSearch {...props} />);
+
+    wrapper
+      .find(Input)
+      .find('input')
+      .simulate('change', { target: { value: 'a' } });
+
+    // need this to wait for promise to complete
+    setImmediate(() => {
+      wrapper.update();
+      wrapper
+        .find(DetailCheckbox)
+        .first()
+        .simulate('click');
+
+      expect(wrapper.find(Tag)).toHaveLength(1);
+      expect(wrapper.find(Tag).text()).toBe(timeseriesList[0].name);
+      done();
+    });
+  });
+
+  it('should remove timeseries when tag is closed', done => {
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = { onTimeserieSelectionChange };
+    const wrapper = mount(<TimeseriesSearch {...props} />);
+
+    wrapper
+      .find(Input)
+      .find('input')
+      .simulate('change', { target: { value: 'a' } });
+
+    // need this to wait for promise to complete
+    setImmediate(() => {
+      wrapper.update();
+      wrapper
+        .find(DetailCheckbox)
+        .first()
+        .simulate('click');
+      wrapper
+        .find(DetailCheckbox)
+        .at(1)
+        .simulate('click');
+      expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(2);
+      expect(onTimeserieSelectionChange).toHaveBeenNthCalledWith(
+        2,
+        [timeseriesList[0].id, timeseriesList[1].id],
+        timeseriesList[1]
+      );
+
+      wrapper
+        .find(Tag)
+        .find('.anticon-close')
+        .first()
+        .simulate('click');
+      expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(3);
+      expect(onTimeserieSelectionChange).toHaveBeenNthCalledWith(
+        3,
+        [timeseriesList[1].id],
+        timeseriesList[0]
+      );
+      expect(wrapper.find(Tag)).toHaveLength(1);
+      expect(
+        wrapper
+          .find(DetailCheckbox)
+          .first()
           .find({ type: 'checkbox' })
           .first()
           .props().checked
@@ -277,6 +355,8 @@ describe('TimeseriesSearch', () => {
   });
 
   it('should preselect', done => {
+    // @ts-ignore
+    sdk.TimeSeries.retrieveMultiple.mockResolvedValue([timeseriesList[1]]);
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = {
       assets: assetsList,
@@ -301,6 +381,9 @@ describe('TimeseriesSearch', () => {
           .first()
           .props().checked
       ).toBe(true);
+      expect(wrapper.find(Tag).text()).toBe(timeseriesList[1].name);
+      // @ts-ignore
+      sdk.TimeSeries.retrieveMultiple.mockClear();
       done();
     });
   });

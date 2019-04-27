@@ -1,0 +1,58 @@
+# Blender MTL File: 'tank.blend'
+# Material Count: 6
+
+newmtl Material
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.345403 0.640000 0.621707
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd D:\Banco 3D\Arquitetura\Tanque\tanque.png
+
+newmtl Material.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.326375 0.326375 0.326375
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd D:\Banco 3D\Arquitetura\escada.png
+
+newmtl Material.001_pedalEscada
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.326375 0.326375 0.326375
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd D:\Banco 3D\Arquitetura\pedalEscada.png
+
+newmtl None
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd D:\Banco 3D\Arquitetura\cano.png
+
+newmtl None_bocal
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+
+newmtl None_estrutura
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd D:\Banco 3D\Arquitetura\estrutura.png

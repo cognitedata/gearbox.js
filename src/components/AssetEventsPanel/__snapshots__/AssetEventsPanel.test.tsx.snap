@@ -74,30 +74,74 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                   <th
                     className=""
                   >
-                    <div>
-                      Type / Subtype
-                    </div>
+                    <span
+                      className="ant-table-header-column"
+                    >
+                      <div>
+                        <span
+                          className="ant-table-column-title"
+                        >
+                          Type / Subtype
+                        </span>
+                        <span
+                          className="ant-table-column-sorter"
+                        />
+                      </div>
+                    </span>
                   </th>
                   <th
                     className=""
                   >
-                    <div>
-                      Description
-                    </div>
+                    <span
+                      className="ant-table-header-column"
+                    >
+                      <div>
+                        <span
+                          className="ant-table-column-title"
+                        >
+                          Description
+                        </span>
+                        <span
+                          className="ant-table-column-sorter"
+                        />
+                      </div>
+                    </span>
                   </th>
                   <th
                     className=""
                   >
-                    <div>
-                      Start
-                    </div>
+                    <span
+                      className="ant-table-header-column"
+                    >
+                      <div>
+                        <span
+                          className="ant-table-column-title"
+                        >
+                          Start
+                        </span>
+                        <span
+                          className="ant-table-column-sorter"
+                        />
+                      </div>
+                    </span>
                   </th>
                   <th
                     className=""
                   >
-                    <div>
-                      End
-                    </div>
+                    <span
+                      className="ant-table-header-column"
+                    >
+                      <div>
+                        <span
+                          className="ant-table-column-title"
+                        >
+                          End
+                        </span>
+                        <span
+                          className="ant-table-column-sorter"
+                        />
+                      </div>
+                    </span>
                   </th>
                 </tr>
               </thead>
@@ -106,7 +150,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
               >
                 <tr
                   className="ant-table-row ant-table-row-level-0"
-                  data-row-key={33965918626}
+                  data-row-key={1995162693488}
                   onClick={[Function]}
                   onContextMenu={[Function]}
                   onDoubleClick={[Function]}
@@ -138,7 +182,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        Workitem
+                        failure
                       </strong>
                       <span
                         style={
@@ -148,7 +192,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        VAL
+                        Valhall
                       </span>
                     </span>
                   </td>
@@ -156,24 +200,24 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                     className=""
                     onClick={[Function]}
                   >
-                    PRODUCTION WELL A-23, SLOT-09 (101109)
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   </td>
                   <td
                     className=""
                     onClick={[Function]}
                   >
-                    April 27, 2018 7:00 AM
+                    April 24, 2019 3:35 PM
                   </td>
                   <td
                     className=""
                     onClick={[Function]}
                   >
-                    April 22, 2018 5:08 AM
+                    Ongoing
                   </td>
                 </tr>
                 <tr
                   className="ant-table-row ant-table-row-level-0"
-                  data-row-key={49888151327}
+                  data-row-key={8825861064387}
                   onClick={[Function]}
                   onContextMenu={[Function]}
                   onDoubleClick={[Function]}
@@ -205,7 +249,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        Workitem
+                        alert
                       </strong>
                       <span
                         style={
@@ -215,7 +259,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        VAL
+                        Val
                       </span>
                     </span>
                   </td>
@@ -223,24 +267,24 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                     className=""
                     onClick={[Function]}
                   >
-                    Utv Insp, Nom WT=2,769 mm
+                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                   </td>
                   <td
                     className=""
                     onClick={[Function]}
                   >
-                    March 29, 2018 7:00 AM
+                    April 27, 2019 3:35 PM
                   </td>
                   <td
                     className=""
                     onClick={[Function]}
                   >
-                    April 16, 2018 11:19 AM
+                    April 30, 2019 3:35 PM
                   </td>
                 </tr>
                 <tr
                   className="ant-table-row ant-table-row-level-0"
-                  data-row-key={62961748915}
+                  data-row-key={25496029326330}
                   onClick={[Function]}
                   onContextMenu={[Function]}
                   onDoubleClick={[Function]}
@@ -272,7 +316,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        Workitem
+                        workorder
                       </strong>
                       <span
                         style={
@@ -282,7 +326,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        VAL
+                        Val
                       </span>
                     </span>
                   </td>
@@ -290,19 +334,153 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                     className=""
                     onClick={[Function]}
                   >
-                    Utv Insp, Nom WT=3,05 mm
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                   </td>
                   <td
                     className=""
                     onClick={[Function]}
                   >
-                    February 8, 2018 7:00 AM
+                    May 7, 2019 3:35 PM
                   </td>
                   <td
                     className=""
                     onClick={[Function]}
                   >
-                    February 16, 2018 11:50 AM
+                    May 14, 2019 3:35 PM
+                  </td>
+                </tr>
+                <tr
+                  className="ant-table-row ant-table-row-level-0"
+                  data-row-key={33766051546406}
+                  onClick={[Function]}
+                  onContextMenu={[Function]}
+                  onDoubleClick={[Function]}
+                  onMouseEnter={[Function]}
+                  onMouseLeave={[Function]}
+                  style={
+                    Object {
+                      "height": null,
+                    }
+                  }
+                >
+                  <td
+                    className=""
+                    onClick={[Function]}
+                  >
+                    <span
+                      className="ant-table-row-indent indent-level-0"
+                      style={
+                        Object {
+                          "paddingLeft": "0px",
+                        }
+                      }
+                    />
+                    <span>
+                      <strong
+                        style={
+                          Object {
+                            "display": "block",
+                          }
+                        }
+                      >
+                        failure
+                      </strong>
+                      <span
+                        style={
+                          Object {
+                            "fontSize": 12,
+                            "opacity": 0.8,
+                          }
+                        }
+                      >
+                        Val
+                      </span>
+                    </span>
+                  </td>
+                  <td
+                    className=""
+                    onClick={[Function]}
+                  >
+                    Excepteur sint occaecat cupidatat non proident
+                  </td>
+                  <td
+                    className=""
+                    onClick={[Function]}
+                  >
+                    April 4, 2019 3:35 PM
+                  </td>
+                  <td
+                    className=""
+                    onClick={[Function]}
+                  >
+                    April 14, 2019 3:35 PM
+                  </td>
+                </tr>
+                <tr
+                  className="ant-table-row ant-table-row-level-0"
+                  data-row-key={35593709738144}
+                  onClick={[Function]}
+                  onContextMenu={[Function]}
+                  onDoubleClick={[Function]}
+                  onMouseEnter={[Function]}
+                  onMouseLeave={[Function]}
+                  style={
+                    Object {
+                      "height": null,
+                    }
+                  }
+                >
+                  <td
+                    className=""
+                    onClick={[Function]}
+                  >
+                    <span
+                      className="ant-table-row-indent indent-level-0"
+                      style={
+                        Object {
+                          "paddingLeft": "0px",
+                        }
+                      }
+                    />
+                    <span>
+                      <strong
+                        style={
+                          Object {
+                            "display": "block",
+                          }
+                        }
+                      >
+                        alert
+                      </strong>
+                      <span
+                        style={
+                          Object {
+                            "fontSize": 12,
+                            "opacity": 0.8,
+                          }
+                        }
+                      >
+                        Val
+                      </span>
+                    </span>
+                  </td>
+                  <td
+                    className=""
+                    onClick={[Function]}
+                  >
+                    Sunt in culpa qui officia deserunt mollit anim id est laborum.
+                  </td>
+                  <td
+                    className=""
+                    onClick={[Function]}
+                  >
+                    June 6, 2019 3:35 PM
+                  </td>
+                  <td
+                    className=""
+                    onClick={[Function]}
+                  >
+                    June 13, 2019 3:35 PM
                   </td>
                 </tr>
               </tbody>
@@ -335,6 +513,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                 className=""
                 data-icon="left"
                 fill="currentColor"
+                focusable="false"
                 height="1em"
                 viewBox="64 64 896 896"
                 width="1em"
@@ -377,6 +556,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                 className=""
                 data-icon="right"
                 fill="currentColor"
+                focusable="false"
                 height="1em"
                 viewBox="64 64 896 896"
                 width="1em"

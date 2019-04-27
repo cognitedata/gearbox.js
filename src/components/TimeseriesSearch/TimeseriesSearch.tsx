@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { ApiQuery } from '../../interfaces';
 import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
 import { Search } from '../common/Search/Search';
+import { Item, SelectedItems } from './SelectedItems';
 
 const Wrapper = styled.div`
   display: flex;
@@ -21,7 +22,7 @@ const TagList = styled.div`
   overflow: auto;
 `;
 
-export const CenteredSpin = styled(Spin)`
+const CenteredSpin = styled(Spin)`
   &.ant-spin-spinning {
     min-height: 25px;
     height: 100%;
@@ -35,6 +36,8 @@ export const CenteredSpin = styled(Spin)`
 export interface TimeseriesSearchProps {
   selectedTimeseries: number[];
   single?: boolean;
+
+  hideSelected: boolean;
   allowStrings?: boolean;
   onTimeserieSelectionChange?: (
     newTimeseries: number[],
@@ -45,12 +48,12 @@ export interface TimeseriesSearchProps {
   onError?: (error: Error) => void;
 }
 
-export interface TimeseriesSearchState {
+interface TimeseriesSearchState {
   assetId?: number;
   assets: sdk.Asset[];
   fetching: boolean;
   searchResults: sdk.Timeseries[];
-  selectedTimeseries: number[];
+  selectedTimeseries: sdk.Timeseries[];
   lastFetchId: number;
 }
 
@@ -60,7 +63,8 @@ export class TimeseriesSearch extends React.Component<
 > {
   static defaultProps = {
     selectedTimeseries: [],
-    filterRule: () => true,
+    filterRule: undefined,
+    hideSelected: false,
   };
 
   static getDerivedStateFromProps(
@@ -79,7 +83,7 @@ export class TimeseriesSearch extends React.Component<
       assetId: props.rootAsset || undefined,
       fetching: false,
       searchResults: [],
-      selectedTimeseries: props.selectedTimeseries || [],
+      selectedTimeseries: [],
       lastFetchId: 0,
       assets: [],
     };
@@ -107,6 +111,13 @@ export class TimeseriesSearch extends React.Component<
       }
     );
     this.setState({ assets });
+    const { selectedTimeseries } = this.props;
+    if (selectedTimeseries && selectedTimeseries.length > 0) {
+      const timeseries = await sdk.TimeSeries.retrieveMultiple(
+        selectedTimeseries
+      );
+      this.setState({ selectedTimeseries: timeseries });
+    }
   }
 
   onSelectAsset = (assetId: number): void => {
@@ -114,21 +125,23 @@ export class TimeseriesSearch extends React.Component<
   };
 
   onTimeSerieClicked = (timeseries: sdk.Timeseries): void => {
-    let newTimeseries: number[] = [];
-
+    let newTimeseries: sdk.Timeseries[] = [];
     if (this.props.single) {
-      newTimeseries = [timeseries.id];
+      newTimeseries = [timeseries];
     } else if (!this.isChecked(timeseries.id)) {
-      newTimeseries = [...this.state.selectedTimeseries, timeseries.id];
+      newTimeseries = [...this.state.selectedTimeseries, timeseries];
     } else {
       newTimeseries = [...this.state.selectedTimeseries].filter(
-        existing => existing !== timeseries.id
+        existing => existing.id !== timeseries.id
       );
     }
     this.setState({ selectedTimeseries: newTimeseries });
 
     if (this.props.onTimeserieSelectionChange) {
-      this.props.onTimeserieSelectionChange(newTimeseries, timeseries);
+      this.props.onTimeserieSelectionChange(
+        newTimeseries.map(x => x.id),
+        timeseries
+      );
     }
   };
 
@@ -188,15 +201,53 @@ export class TimeseriesSearch extends React.Component<
   };
 
   isChecked = (id: number): boolean =>
-    this.state.selectedTimeseries.findIndex(timeseries => timeseries === id) !==
-    -1;
+    this.state.selectedTimeseries.findIndex(
+      timeseries => timeseries.id === id
+    ) !== -1;
+
+  onItemClose = (item: Item) => {
+    const { selectedTimeseries } = this.state;
+    const closedTimeseries = selectedTimeseries.find(
+      timeseries => timeseries.id === item.id
+    );
+
+    if (closedTimeseries === undefined) {
+      throw Error('Closing nonexisting timeseries should not be possible');
+    }
+    const newTimeseries = selectedTimeseries.filter(
+      existing => existing.id !== item.id
+    );
+    this.setState({ selectedTimeseries: newTimeseries });
+
+    if (this.props.onTimeserieSelectionChange) {
+      this.props.onTimeserieSelectionChange(
+        newTimeseries.map(x => x.id),
+        closedTimeseries
+      );
+    }
+  };
 
   render() {
-    const { allowStrings, single } = this.props;
-    const { assetId, fetching, searchResults, assets } = this.state;
+    const { allowStrings, single, hideSelected } = this.props;
+    const {
+      assetId,
+      fetching,
+      searchResults,
+      assets,
+      selectedTimeseries,
+    } = this.state;
 
     return (
       <Wrapper>
+        {!hideSelected && (
+          <SelectedItems
+            selectedItems={selectedTimeseries.map(t => ({
+              id: t.id,
+              name: t.name,
+            }))}
+            onItemClose={this.onItemClose}
+          />
+        )}
         <Search
           rootAssetSelect={true}
           onAssetSelected={this.onSelectAsset}

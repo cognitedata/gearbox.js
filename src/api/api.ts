@@ -1,4 +1,13 @@
-import { Asset, Assets } from '@cognite/sdk';
+import {
+  Asset,
+  Assets,
+  Event,
+  Events,
+  File,
+  Files,
+  Revision,
+  ThreeD,
+} from '@cognite/sdk';
 import { ApiAssetList } from '../interfaces';
 
 export async function getAssetList({
@@ -18,5 +27,50 @@ export async function getAssetList({
     });
   }
 
+  return response.items;
+}
+
+export function fetch3DModelRevision(
+  modelId: number,
+  revisionId: number
+): Promise<Revision> {
+  return ThreeD.retrieveRevision(modelId, revisionId);
+}
+
+export async function retrieveAsset(assetId: number) {
+  return await Assets.retrieve(assetId);
+}
+
+export async function getAssetListDescendants(
+  assetId: number,
+  query: { [name: string]: any }
+) {
+  const response = await Assets.listDescendants(assetId, query);
+
+  if (!response.items || response.items.length < 1) {
+    return [];
+  }
+
+  return response.items;
+}
+
+export async function getAssetEvent(query: {
+  assetId: number;
+  limit: number;
+}): Promise<Event[]> {
+  const response = await Events.list(query);
+
+  if (response.items && response.items.length > 0) {
+    return response.items;
+  }
+
+  return [];
+}
+
+export async function getAssetFiles(query: {
+  assetId: number;
+  limit: number;
+}): Promise<File[]> {
+  const response = await Files.list(query);
   return response.items;
 }

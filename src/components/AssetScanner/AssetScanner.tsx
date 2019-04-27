@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { getAssetList, ocrRecognize } from '../../api';
 import {
-  AnyTypeCallback,
+  Callback,
   EmptyCallback,
   OnAssetListCallback,
   SetVideoRefCallback,
@@ -48,7 +48,7 @@ export interface AssetScannerProps {
   onEndLoading?: EmptyCallback;
   onAssetEmpty?: EmptyCallback;
   onAssetFind?: OnAssetListCallback;
-  onUnauthorized?: AnyTypeCallback;
+  onUnauthorized?: Callback;
 }
 
 export interface AssetScannerState {

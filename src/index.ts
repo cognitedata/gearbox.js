@@ -10,8 +10,7 @@ export { EventPreview } from './components/EventPreview/EventPreview';
 export { EventTimeline } from './components/EventTimeline/EventTimeline';
 export { SensorOverlay } from './components/SensorOverlay/SensorOverlay';
 export { TenantSelector } from './components/TenantSelector/TenantSelector';
-export {
-  TimeseriesSearch,
-} from './components/TimeseriesSearch/TimeseriesSearch';
+export * from './components/TimeseriesChart/TimeseriesChart';
+export * from './components/TimeseriesSearch/TimeseriesSearch';
 
 export * from './interfaces';

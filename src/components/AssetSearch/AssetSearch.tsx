@@ -1,7 +1,7 @@
 import * as sdk from '@cognite/sdk';
 import React from 'react';
 import { PureObject } from '../../interfaces';
-import { AnyTypeCallback } from '../../interfaces';
+import { Callback } from '../../interfaces';
 import { Search } from '../common/Search/Search';
 
 type onSearchCallback = (query: sdk.AssetSearchParams) => void;
@@ -15,7 +15,7 @@ export const defaultStrings: PureObject = {
 
 export interface AssetSearchProps {
   onLiveSearchSelect: LiveSearchSelect;
-  onError?: AnyTypeCallback;
+  onError?: Callback;
   strings?: PureObject;
 }
 

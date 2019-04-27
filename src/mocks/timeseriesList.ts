@@ -56,7 +56,7 @@ export const IAA_21PT1019: Timeseries[] = [
       compdevpercent: '0',
     },
     assetId: 4965555138606429,
-    isStep: true,
+    isStep: false,
     description: '21PT1019.AlarmByte',
   },
   {
@@ -112,7 +112,7 @@ export const IAA_21PT1019: Timeseries[] = [
       compdevpercent: '0',
     },
     assetId: 4965555138606429,
-    isStep: true,
+    isStep: false,
     description: '21PT1019.CommandWord',
   },
   {
@@ -168,7 +168,7 @@ export const IAA_21PT1019: Timeseries[] = [
       compdevpercent: '0',
     },
     assetId: 4965555138606429,
-    isStep: true,
+    isStep: false,
     description: '21PT1019.PTAB',
   },
   {
@@ -280,7 +280,7 @@ export const IAA_21PT1019: Timeseries[] = [
       compdevpercent: '0',
     },
     assetId: 4965555138606429,
-    isStep: true,
+    isStep: false,
     description: '21PT1019.StatusWord',
   },
   {
@@ -336,7 +336,7 @@ export const IAA_21PT1019: Timeseries[] = [
       compdevpercent: '0',
     },
     assetId: 4965555138606429,
-    isStep: true,
+    isStep: false,
     description: '21PT1019.UnAcknowledgByte',
   },
 ];

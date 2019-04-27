@@ -1,5 +1,5 @@
-import { Asset } from '@cognite/sdk';
-import { ApiEvent, MetadataId } from './index';
+import { Asset, Event } from '@cognite/sdk';
+import { MetadataId } from './index';
 
 export type AssetPanelType = 'details' | 'events' | 'documents';
 
@@ -38,9 +38,12 @@ export interface TableDesignType {
   style?: object;
 }
 
-export interface AssetEventsPanelProps extends TableDesignType {
+export interface MetaEventsProps extends TableDesignType {
   columns?: TableColumnType[];
-  events?: ApiEvent[];
+}
+
+export interface AssetEventsPanelProps extends MetaEventsProps {
+  events?: Event[];
 }
 
 export interface TreeNodeType {

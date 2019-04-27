@@ -46,7 +46,7 @@ export const AssetView = (props: AssetViewProps) => {
       style={{ display: 'inline-block' }}
       onClick={onClick}
       closable={!!onClose}
-      afterClose={onClose}
+      onClose={onClose}
       color={tagColor}
     >
       {asset.name || ''}

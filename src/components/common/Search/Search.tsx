@@ -5,8 +5,8 @@ import React, { SyntheticEvent } from 'react';
 import styled from 'styled-components';
 import {
   AdvancedSearch,
-  AnyTypeCallback,
   ApiQuery,
+  Callback,
   EmptyCallback,
   IdCallback,
   OnClick,
@@ -74,10 +74,10 @@ export interface SearchProps {
   assets: Asset[];
   liveSearchResults: any[];
   assetId?: number;
-  onSearch?: AnyTypeCallback;
+  onSearch?: Callback;
   onAssetSelected?: IdCallback;
   onFilterIconClick?: EmptyCallback;
-  onLiveSearchSelect?: AnyTypeCallback;
+  onLiveSearchSelect?: Callback;
 }
 
 interface SearchState {
