@@ -91,4 +91,22 @@ describe('AssetMeta', () => {
     expect(wrapper.find('Spin')).toHaveLength(1);
     expect(wrapper.find('div.ant-spin.ant-spin-spinning')).toHaveLength(1);
   });
+
+  it('should trigger callback on pane change', done => {
+    const onPaneChange = jest.fn();
+    const wrapper = mount(
+      <AssetMeta assetId={123} onPaneChange={onPaneChange} />
+    );
+    setImmediate(() => {
+      wrapper.update();
+      const tabs = wrapper.find('div.ant-tabs-tab');
+      tabs.at(1).simulate('click');
+      expect(onPaneChange).toBeCalledWith('documents');
+      tabs.at(2).simulate('click');
+      expect(onPaneChange).toBeCalledWith('events');
+      tabs.at(0).simulate('click');
+      expect(onPaneChange).toBeCalledWith('details');
+      done();
+    });
+  });
 });

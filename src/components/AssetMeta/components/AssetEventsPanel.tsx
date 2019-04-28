@@ -2,8 +2,8 @@ import { Event } from '@cognite/sdk';
 import { Icon, Modal, Table } from 'antd';
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { AssetEventsPanelProps } from '../../interfaces';
-import { momentFromTimestamp } from '../../utils';
+import { AssetEventsPanelProps } from '../../../interfaces';
+import { momentFromTimestamp } from '../../../utils';
 
 interface EventAddonsProp extends Event {
   typeAndSubtype: React.ReactNode;

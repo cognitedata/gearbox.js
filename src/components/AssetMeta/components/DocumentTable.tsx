@@ -1,13 +1,13 @@
 import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { Document, DocumentTableProps } from '../../interfaces';
+import { Document, DocumentTableProps } from '../../../interfaces';
 import {
   getCategoryByPriority,
   getDocumentsByCategory,
   getDocumentTitle,
   getShortDescription,
-} from '../../utils';
+} from '../../../utils';
 
 const { Panel } = Collapse;
 
