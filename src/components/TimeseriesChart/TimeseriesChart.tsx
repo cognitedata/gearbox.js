@@ -43,7 +43,6 @@ export class TimeseriesChart extends React.Component<
   static defaultProps = {
     start: +Date.now() - 60 * 60 * 1000,
     end: +Date.now(),
-    subDomain: null,
     timeseriesIds: [],
     pointsPerSeries: 600,
     updateIntervalMillis: 5000,
@@ -51,7 +50,6 @@ export class TimeseriesChart extends React.Component<
     zoomable: false,
     contextChart: false,
     yAxisDisplayMode: 'ALL',
-    timeseriesColors: {},
     liveUpdate: false,
     yAxisPlacement: 'RIGHT',
     panelHeight: 500,
