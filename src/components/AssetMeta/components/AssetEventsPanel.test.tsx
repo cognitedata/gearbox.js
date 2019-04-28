@@ -2,7 +2,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { EVENTS } from '../../mocks';
+import { EVENTS } from '../../../mocks';
 import { AssetEventsPanel } from './AssetEventsPanel';
 
 configure({ adapter: new Adapter() });

@@ -1,3 +1,4 @@
+import { File } from '@cognite/sdk';
 import { CollapseProps } from 'antd/lib/collapse';
 import React from 'react';
 import { PureObject } from './index';
@@ -8,19 +9,8 @@ export type OnDocumentClick = (
   description: string
 ) => void;
 
-export interface Document {
-  id: number;
-  fileName: string;
-  directory?: string;
-  source?: string;
-  sourceId?: string;
-  fileType?: string;
+export interface Document extends File {
   metadata?: PureObject;
-  assetIds?: number[];
-  uploaded?: boolean;
-  uploadedAt?: number;
-  createdTime?: number;
-  lastUpdatedTime?: number;
 }
 
 export interface DocumentType {

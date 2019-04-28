@@ -7,7 +7,7 @@ import {
   DOCUMENT_WITHOUT_METADATA,
   DOCUMENT_WITHOUT_TYPE,
   generateDocumentWithDocType,
-} from '../../mocks';
+} from '../../../mocks';
 import { DocumentTable } from './DocumentTable';
 
 configure({ adapter: new Adapter() });
