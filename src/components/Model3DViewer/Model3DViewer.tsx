@@ -1,5 +1,3 @@
-import 'regenerator-runtime';
-
 import { Cognite3DModel, Cognite3DViewer, THREE } from '@cognite/3d-viewer';
 import * as sdk from '@cognite/sdk';
 import React from 'react';
@@ -18,7 +16,7 @@ type ClickHandler = (position: MouseScreenPosition) => void;
 export interface Model3DViewerProps {
   boundingBox: THREE.Box3;
   cache: CacheObject;
-  defaultCameraPosition?: boolean;
+  useDefaultCameraPosition?: boolean;
   modelId: number;
   onError?: Callback;
   onProgress?: Callback;
@@ -40,7 +38,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       min: [Infinity, Infinity, Infinity],
       max: [-Infinity, -Infinity, -Infinity],
     }),
-    defaultCameraPosition: true,
+    useDefaultCameraPosition: true,
     cache: {},
   };
 
@@ -64,7 +62,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       revisionId,
       cache,
       boundingBox,
-      defaultCameraPosition,
+      useDefaultCameraPosition,
       onProgress,
       onComplete,
       onReady,
@@ -123,7 +121,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     this.model = model;
     this.revision = revision;
 
-    if (defaultCameraPosition) {
+    if (useDefaultCameraPosition) {
       this.resetCameraPosition();
     }
 

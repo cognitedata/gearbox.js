@@ -1,5 +1,3 @@
-import 'regenerator-runtime';
-
 import {
   Cognite3DModel,
   Cognite3DViewer,

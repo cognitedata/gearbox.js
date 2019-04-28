@@ -1,5 +1,3 @@
-import 'regenerator-runtime';
-
 import { Cognite3DViewer, OnProgressData, THREE } from '@cognite/3d-viewer';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { CacheObject, Callback, EventHandlers } from '../interfaces';

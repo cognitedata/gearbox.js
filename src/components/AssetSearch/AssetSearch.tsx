@@ -6,7 +6,7 @@ import { Search } from '../common/Search/Search';
 
 type onSearchCallback = (query: sdk.AssetSearchParams) => void;
 
-export type LiveSearchSelect = (asset: sdk.Asset) => void;
+type LiveSearchSelect = (asset: sdk.Asset) => void;
 
 export const defaultStrings: PureObject = {
   searchPlaceholder: 'Search for an asset',

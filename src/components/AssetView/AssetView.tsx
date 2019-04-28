@@ -3,7 +3,7 @@ import React from 'react';
 import { OnClick } from '../../interfaces';
 import { getColor } from '../../utils';
 
-interface AssetViewProps {
+export interface AssetViewProps {
   asset: {
     id: number;
     name?: string;

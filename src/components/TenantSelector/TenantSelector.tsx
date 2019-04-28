@@ -17,14 +17,14 @@ enum TenantValidity {
  * resolves, then the tenant is valid. If it throws an error or returns
  * {@code false} then the tenant is invalid.
  */
-export type OnTenantValidationFunction = (
+type OnTenantValidationFunction = (
   tenant: string,
   advancedOptions: PureObject | null
 ) => Promise<boolean>;
 
-export type OnInvalidTenantFunction = (tenant: string) => void;
+type OnInvalidTenantFunction = (tenant: string) => void;
 
-export type OnTenantSelectionFunction = (
+type OnTenantSelectionFunction = (
   tenant: string,
   advancedOptions: PureObject | null
 ) => void;

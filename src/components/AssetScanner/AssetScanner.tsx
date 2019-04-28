@@ -51,7 +51,7 @@ export interface AssetScannerProps {
   onUnauthorized?: Callback;
 }
 
-export interface AssetScannerState {
+interface AssetScannerState {
   isLoading: boolean;
   scannedImageSrc: string;
 }

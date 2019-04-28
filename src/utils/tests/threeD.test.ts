@@ -1,5 +1,3 @@
-import 'regenerator-runtime';
-
 import { THREE } from '@cognite/3d-viewer';
 import { Callback } from '../../interfaces';
 
