@@ -2,12 +2,19 @@ import * as sdk from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { assetsList, timeseriesList } from '../../mocks';
-import { TimeseriesSearch } from './TimeseriesSearch';
+import { assetsList, timeseriesList } from '../../../mocks';
+import { TimeseriesSearch } from '../TimeseriesSearch';
+
+import * as allowStrings from './allowStrings.md';
+import * as basic from './basic.md';
+import * as customFilter from './customFilter.md';
+import * as fullDescription from './full.md';
+import * as hideSelectedRow from './hideSelectedRow.md';
+import * as preselected from './preselected.md';
+import * as singleSelection from './singleSelection.md';
 
 const timeseriesNames = timeseriesList.map(ts => ts.name);
 const timeseriesIds = timeseriesList.map(ts => ts.id);
-const infoText = `Names you can search for : ${timeseriesNames.join(', ')}.`;
 
 // Mock the SDK calls
 const setupMocks = () => {
@@ -52,6 +59,10 @@ const setupMocks = () => {
   };
 };
 
+const injectTimeseriesNames = (content: string) => {
+  return content.replace('${names}', timeseriesNames.join(', '));
+};
+
 const filterRule = (timeseries: sdk.Timeseries): boolean =>
   !timeseries.isString;
 
@@ -62,7 +73,35 @@ const onTimeserieSelectionChange = (
   action('onTimeserieSelectionChange')(newTimeseries, timeseries);
 };
 
-storiesOf('TimeseriesSearch', module)
+storiesOf('TimeseriesSearch', module).add(
+  'Full Description',
+  () => (
+    <TimeseriesSearch onTimeserieSelectionChange={onTimeserieSelectionChange} />
+  ),
+  {
+    readme: {
+      content: fullDescription,
+    },
+    info: {
+      header: false,
+      source: false,
+      styles: {
+        infoBody: { display: 'none' },
+      },
+    },
+  }
+);
+
+storiesOf('TimeseriesSearch/Examples', module)
+  .addParameters({
+    info: {
+      header: false,
+      source: false,
+      styles: {
+        infoBody: { display: 'none' },
+      },
+    },
+  })
   .add(
     'Basic',
     () => {
@@ -74,8 +113,8 @@ storiesOf('TimeseriesSearch', module)
       );
     },
     {
-      info: {
-        text: infoText,
+      readme: {
+        content: injectTimeseriesNames(basic.toString()),
       },
     }
   )
@@ -91,8 +130,8 @@ storiesOf('TimeseriesSearch', module)
       );
     },
     {
-      info: {
-        text: infoText,
+      readme: {
+        content: injectTimeseriesNames(hideSelectedRow.toString()),
       },
     }
   )
@@ -108,8 +147,8 @@ storiesOf('TimeseriesSearch', module)
       );
     },
     {
-      info: {
-        text: infoText,
+      readme: {
+        content: injectTimeseriesNames(singleSelection.toString()),
       },
     }
   )
@@ -125,8 +164,8 @@ storiesOf('TimeseriesSearch', module)
       );
     },
     {
-      info: {
-        text: infoText,
+      readme: {
+        content: injectTimeseriesNames(allowStrings.toString()),
       },
     }
   )
@@ -142,8 +181,8 @@ storiesOf('TimeseriesSearch', module)
       );
     },
     {
-      info: {
-        text: infoText,
+      readme: {
+        content: injectTimeseriesNames(preselected.toString()),
       },
     }
   )
@@ -159,9 +198,8 @@ storiesOf('TimeseriesSearch', module)
       );
     },
     {
-      info: {
-        text: `const filterRule = (timeseries: sdk.Timeseries) : boolean =>
-      !timeseries.isString;`,
+      readme: {
+        content: injectTimeseriesNames(customFilter.toString()),
       },
     }
   );

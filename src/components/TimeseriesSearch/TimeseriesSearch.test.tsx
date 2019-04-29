@@ -43,13 +43,19 @@ afterEach(() => {
 // tslint:disable:no-big-function
 describe('TimeseriesSearch', () => {
   it('Renders without exploding', () => {
-    const props = {};
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = {
+      onTimeserieSelectionChange,
+    };
     const wrapper = mount(<TimeseriesSearch {...props} />);
     expect(wrapper.exists()).toBe(true);
   });
 
   it('Checks default values', () => {
-    const props = {};
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = {
+      onTimeserieSelectionChange,
+    };
     const wrapper = mount(<TimeseriesSearch {...props} />);
 
     expect(wrapper.prop('selectedTimeseries')).toEqual([]);
@@ -61,7 +67,10 @@ describe('TimeseriesSearch', () => {
   });
 
   it('should search with when input changes', () => {
-    const props = {};
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = {
+      onTimeserieSelectionChange,
+    };
     const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
@@ -78,7 +87,10 @@ describe('TimeseriesSearch', () => {
   });
 
   it('should update assetId with user-selected root asset id', done => {
-    const props = {};
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = {
+      onTimeserieSelectionChange,
+    };
     const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
@@ -107,7 +119,8 @@ describe('TimeseriesSearch', () => {
   });
 
   it('should render search results', done => {
-    const props = { assets: assetsList };
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = { assets: assetsList, onTimeserieSelectionChange };
     const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
@@ -126,7 +139,8 @@ describe('TimeseriesSearch', () => {
   });
 
   it('should clear search results when input is cleared', done => {
-    const props = { assets: assetsList };
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = { assets: assetsList, onTimeserieSelectionChange };
     const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
@@ -389,9 +403,13 @@ describe('TimeseriesSearch', () => {
   });
 
   it('should use filterRule if defined', done => {
-    const { filterRule } = propsCallbacks;
+    const { onTimeserieSelectionChange, filterRule } = propsCallbacks;
     filterRule.mockReturnValueOnce(true);
-    const props = { assets: assetsList, filterRule };
+    const props = {
+      assets: assetsList,
+      onTimeserieSelectionChange,
+      filterRule,
+    };
     const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
@@ -409,10 +427,10 @@ describe('TimeseriesSearch', () => {
   });
 
   it('should call onError when api call fails', done => {
-    const { onError } = propsCallbacks;
+    const { onTimeserieSelectionChange, onError } = propsCallbacks;
     // @ts-ignore
     sdk.TimeSeries.search.mockRejectedValue(new Error('Error'));
-    const props = { assets: assetsList, onError };
+    const props = { assets: assetsList, onTimeserieSelectionChange, onError };
     const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
@@ -430,7 +448,12 @@ describe('TimeseriesSearch', () => {
   });
 
   it('should not render checkboxes when single is true', done => {
-    const props = { assets: assetsList, single: true };
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = {
+      assets: assetsList,
+      onTimeserieSelectionChange,
+      single: true,
+    };
     const wrapper = mount(<TimeseriesSearch {...props} />);
 
     wrapper
