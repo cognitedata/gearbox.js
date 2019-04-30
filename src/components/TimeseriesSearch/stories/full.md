@@ -28,21 +28,21 @@ function ExampleComponent(props) {
 
 ##### Required:
 
-| Property                     | Description | Type     |
-| ---------------------------- | ----------- | -------- |
-| `onTimeserieSelectionChange` | Callback function called when the selection changes. Called with two parameters: the current list of selected ids and the last added/removed timeseries   | `(newTimeseriesIds: number[], selectedTimeseries: Timeseries) => void` |
+| Property                     | Description | Type     | Default     |
+| ---------------------------- | ----------- | -------- | ----------- |
+| `onTimeserieSelectionChange` | Callback function called when the selection changes. Called with two parameters: the current list of selected ids and the last added/removed timeseries   | `(newTimeseriesIds: number[], selectedTimeseries: Timeseries) => void` |          |
 
 ##### Optional:
 
 | Property             | Description                                                                  | Type                                      | Default     |
 | -------------------- | ---------------------------------------------------------------------------- | ------------------------------------------| ----------- |
 | `selectedTimeseries` | List of preselected timeseries                                               | `number[]`                                | `[]`        |
-| `rootAsset`          | The selected root asset id. `undefined` will select all                      | `number`                                  | `undefined` |
+| `rootAsset`          | The selected root asset id. `undefined` will select all                      | `number`                                  |             |
 | `single`             | Removes the checkboxes from search result and will only callback with one id | `boolean`                                 | `false`     |
 | `hideSelected`       | Hides the row with selected timeseries above the search bar                  | `boolean`                                 | `false`     |
 | `allowStrings`       | Allows the user to select search results that are strings                    | `boolean`                                 | `false`     |
-| `filterRule`         | Custom rule to filter search results                                         | `(timeseries: Timeseries) => boolean`     | `undefined` |
-| `onError`            | Function called on fetch timeseries error                                    | `(error: Error) => void`                  | `undefined` |
+| `filterRule`         | Custom rule to filter search results                                         | `(timeseries: Timeseries) => boolean`     |             |
+| `onError`            | Function called on fetch timeseries error                                    | `(error: Error) => void`                  |             |
 
 ### Types
 
