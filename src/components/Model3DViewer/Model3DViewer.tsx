@@ -4,7 +4,6 @@ import React from 'react';
 import { CacheObject, Callback, MouseScreenPosition } from '../../interfaces';
 import {
   createViewer as originalCreateViewer,
-  parseBoundingBox,
   setCameraPosition,
   ViewerEventTypes,
 } from '../../utils';
@@ -17,7 +16,7 @@ export interface Model3DViewerProps {
   modelId: number;
   revisionId: number;
   cache: CacheObject;
-  boundingBox: THREE.Box3;
+  boundingBox?: THREE.Box3;
   assetId?: number;
   onError?: Callback;
   onProgress?: Callback;
@@ -34,10 +33,6 @@ export function mockCreateViewer(mockFunction: any) {
 
 export class Model3DViewer extends React.Component<Model3DViewerProps> {
   static defaultProps = {
-    boundingBox: parseBoundingBox({
-      min: [Infinity, Infinity, Infinity],
-      max: [-Infinity, -Infinity, -Infinity],
-    }),
     useDefaultCameraPosition: true,
     cache: {},
   };
@@ -71,7 +66,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       onError,
     } = this.props;
     const { progress, complete } = ViewerEventTypes;
-    const threeJsBoundingBox = parseBoundingBox(boundingBox);
     const {
       viewer,
       addEvent,
@@ -81,7 +75,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     } = createViewer({
       modelId,
       revisionId,
-      boundingBox: threeJsBoundingBox,
+      boundingBox,
       cache,
     });
 
@@ -181,13 +175,12 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       revision,
       props: { boundingBox },
     } = this;
-    const parsedBoundingBox = parseBoundingBox(boundingBox);
 
     if (!viewer || !model || !revision) {
       return;
     }
 
-    setCameraPosition(viewer, model, parsedBoundingBox, revision);
+    setCameraPosition(viewer, model, revision, boundingBox);
   };
 
   onClickHandler({ offsetX, offsetY }: MouseScreenPosition) {

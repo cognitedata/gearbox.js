@@ -11,8 +11,8 @@ import { CacheObject, Callback, EventHandlers } from '../interfaces';
 interface ViewerConfig {
   modelId: number;
   revisionId: number;
-  boundingBox: THREE.Box3;
   cache: CacheObject;
+  boundingBox?: THREE.Box3;
 }
 
 export interface ViewerConfigResponse {
@@ -46,8 +46,8 @@ export function parseBoundingBox(
 export function setCameraPosition(
   viewer: Cognite3DViewer,
   model: Cognite3DModel,
-  boundingBox: THREE.Box3,
-  revision: sdk.Revision
+  revision: sdk.Revision,
+  boundingBox?: THREE.Box3
 ) {
   const { Vector3 } = THREE;
   const { camera } = revision;
@@ -56,7 +56,7 @@ export function setCameraPosition(
     return;
   }
 
-  if (!boundingBox.isEmpty()) {
+  if (boundingBox && !boundingBox.isEmpty()) {
     // todo: matrix property doesn't present in Cognite3DModel
     // @ts-ignore
     boundingBox.applyMatrix4(model.matrix);
@@ -114,7 +114,7 @@ export function createViewer({
     projectName: '',
     modelId,
     revisionId,
-    boundingBox: boundingBox.isEmpty() ? undefined : boundingBox,
+    boundingBox,
     onProgress,
     onComplete,
   });
@@ -166,11 +166,17 @@ export function removeEvent(
 export function hashGenerator(
   modelId: number,
   revisionId: number,
-  boundingBox: THREE.Box3
+  boundingBox?: THREE.Box3
 ): string {
-  const boundingBoxMinString = boundingBox.min.toArray().join(',');
-  const boundingBoxMaxString = boundingBox.max.toArray().join(',');
-  const boundingBoxString = `[${boundingBoxMinString}, ${boundingBoxMaxString}]`;
+  let boundingBoxString;
 
-  return `${modelId}/${revisionId}?boundingBox=${boundingBoxString}`;
+  if (boundingBox) {
+    const boundingBoxMinString = boundingBox.min.toArray().join(',');
+    const boundingBoxMaxString = boundingBox.max.toArray().join(',');
+    boundingBoxString = `[${boundingBoxMinString}, ${boundingBoxMaxString}]`;
+  }
+
+  return `${modelId}/${revisionId}${
+    boundingBoxString ? '?boundingBox=' + boundingBoxString : ''
+  }`;
 }
