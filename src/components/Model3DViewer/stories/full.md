@@ -4,24 +4,21 @@
 
 #### Requirements:
 
-To use this component you have to install `@cognite/3d-viewer` package:
+To use this component you have to install `@cognite/3d-viewer` package (version 4.1.1):
 
 ```bash
-yarn add @cognite/3d-viewer
+yarn add @cognite/3d-viewer@4.1.1
 ```
 
 #### Description:
 
-Component uses for retrieving 3D-models, which is available for provided project.
-Via providing modelId and revisionId values, user have ability to get a 3D model
-of some asset. Via providing `boundingBox` value user can manage displayed number
-of asset's nodes, that hits `boundingBox` dimension.
+This component can be used to visualize 3D models from Cognite Data Fusion.
+The component will visualize the full 3D model by default, but by providing an optional `boundingBox` parameter, you can download only a specific area. This could for instance be around a specific asset.
 
-For retrieving 3D model you need to provide:
+To retrieve a 3D model you need to provide:
 
-- `projectName` – your project name
-- `modelId` – you can find it using `sdk.ThreeD.listModels()` call
-- `revisionId` – you can find it via `sdk.ThreeD.listRevisions(modelID)` call
+- `modelId` – which can be found with `sdk.ThreeD.listModels()`
+- `revisionId` – which can be found with `sdk.ThreeD.listRevisions(modelId)`
 
 #### Usage:
 
@@ -36,9 +33,8 @@ import * as sdk from '@cognite/sdk';
 import { Model3DViewer } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
-  const projectName = 'publicdata';
-  const modelID = 0;
-  const revisionID = 0;
+  const modelId = 0;
+  const revisionId = 0;
   const onClick = (modelId: number) => {};
   const onProgress = (progress: OnProgressData) => {};
   const onComplete = () => {};
@@ -50,9 +46,8 @@ function ExampleComponent(props) {
 
   return (
     <Model3DViewer
-      modelId={modelID}
-      revisionId={revisionID}
-      projectName={projectName}
+      modelId={modelId}
+      revisionId={revisionId}
       onClick={onClick}
       onProgress={onProgress}
       onComplete={onComplete}
@@ -69,9 +64,8 @@ function ExampleComponent(props) {
 
 | Property      | Description              | Type     | Default |
 | ------------- | ------------------------ | -------- | ------- |
-| `projectName` | Name of your project     | `string` |         |
-| `modelId`     | model ID number          | `number` |         |
-| `revisionId`  | model revision ID number | `number` |         |
+| `modelId`     | model ID                 | `number` |         |
+| `revisionId`  | revision ID              | `number` |         |
 
 ##### Optionals:
 
@@ -80,7 +74,7 @@ function ExampleComponent(props) {
 | `assetId`                  | id of asset to highlight                                            | `number`                                                                            |         |
 | `boundingBox`              | bounding box object, that describes dimension of viewed asset nodes | `THREE.Box3`                                                                        | {}      |
 | `cache`                    | object for caching 3D viewers instances                             | `{ [name:string]: any }`                                                            |         |
-| `useDefaultCameraPosition` | setting camera to default position on created 3D scene              | `boolean`                                                                           | true    |
+| `useDefaultCameraPosition` | use default camera position                                         | `boolean`                                                                            | true    |
 | `onReady`                  | on scene prepared to display model callback                         | `(viewer: Cognite3DViewer, model: Cognite3DModel, revision: sdk.Revision) => void;` |         |
 | `onProgress`               | on model loading progress callback                                  | `(progress: OnProgressData) => void;`                                               |         |
 | `onComplete`               | on model complete loading callback                                  | `() => void;`                                                                       |         |
