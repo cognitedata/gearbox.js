@@ -117,6 +117,16 @@ storiesOf('TimeseriesChart', module)
       />
     );
   })
+  .add('Start and end', () => {
+    setupMocks();
+    return (
+      <TimeseriesChart
+        timeseriesIds={[123, 456]}
+        start={new Date(2019, 3, 1)}
+        end={new Date(2019, 4, 1)}
+      />
+    );
+  })
   .add('Context chart', () => {
     setupMocks();
     return <TimeseriesChart timeseriesIds={[123]} contextChart={true} />;
@@ -127,7 +137,7 @@ storiesOf('TimeseriesChart', module)
       <TimeseriesChart
         timeseriesIds={[123]}
         start={+Date.now() - 30 * 24 * 60 * 60 * 1000}
-        end={+Date.now()}
+        end={Date.now()}
         zoomable={true}
         contextChart={true}
       />
@@ -139,7 +149,7 @@ storiesOf('TimeseriesChart', module)
       <TimeseriesChart
         timeseriesIds={[123]}
         start={+Date.now() - 60 * 1000}
-        end={+Date.now()}
+        end={Date.now()}
         liveUpdate={true}
         updateIntervalMillis={2000}
       />
