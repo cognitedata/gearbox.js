@@ -19,8 +19,8 @@ export interface TimeseriesChartProps {
   panelHeight: number;
   timeseriesIds: number[];
   pointsPerSeries: number;
-  start: number;
-  end: number;
+  start: number | Date;
+  end: number | Date;
   contextChart: boolean;
   zoomable: boolean;
   liveUpdate: boolean;
@@ -101,7 +101,7 @@ export class TimeseriesChart extends React.Component<
               onFetchData={this.onFetchData}
               pointsPerSeries={pointsPerSeries}
               series={griffSeries}
-              timeDomain={[start, end]}
+              timeDomain={[+start, +end]}
               onFetchDataError={(e: Error) => {
                 throw e;
               }}

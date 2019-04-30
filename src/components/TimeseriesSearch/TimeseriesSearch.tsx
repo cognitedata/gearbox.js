@@ -35,13 +35,13 @@ const CenteredSpin = styled(Spin)`
 
 export interface TimeseriesSearchProps {
   selectedTimeseries: number[];
-  single?: boolean;
+  single: boolean;
 
   hideSelected: boolean;
-  allowStrings?: boolean;
-  onTimeserieSelectionChange?: (
-    newTimeseries: number[],
-    selectedTimeserie: sdk.Timeseries
+  allowStrings: boolean;
+  onTimeserieSelectionChange: (
+    newTimeseriesIds: number[],
+    selectedTimeseries: sdk.Timeseries
   ) => void;
   rootAsset?: number;
   filterRule?: (timeseries: sdk.Timeseries) => boolean;
@@ -65,6 +65,10 @@ export class TimeseriesSearch extends React.Component<
     selectedTimeseries: [],
     filterRule: undefined,
     hideSelected: false,
+    allowStrings: false,
+    single: false,
+    onError: undefined,
+    rootAsset: undefined,
   };
 
   static getDerivedStateFromProps(
@@ -137,12 +141,10 @@ export class TimeseriesSearch extends React.Component<
     }
     this.setState({ selectedTimeseries: newTimeseries });
 
-    if (this.props.onTimeserieSelectionChange) {
-      this.props.onTimeserieSelectionChange(
-        newTimeseries.map(x => x.id),
-        timeseries
-      );
-    }
+    this.props.onTimeserieSelectionChange(
+      newTimeseries.map(x => x.id),
+      timeseries
+    );
   };
 
   fetchTimeseries = (apiQuery: ApiQuery): void => {
