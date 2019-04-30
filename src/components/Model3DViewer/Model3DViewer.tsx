@@ -14,19 +14,19 @@ let createViewer = originalCreateViewer;
 type ClickHandler = (position: MouseScreenPosition) => void;
 
 export interface Model3DViewerProps {
-  boundingBox: THREE.Box3;
-  cache: CacheObject;
-  useDefaultCameraPosition?: boolean;
+  projectName: string;
   modelId: number;
+  revisionId: number;
+  cache: CacheObject;
+  boundingBox: THREE.Box3;
+  assetId?: number;
   onError?: Callback;
   onProgress?: Callback;
   onComplete?: Callback;
   onReady?: Callback;
   onClick?: Callback;
   onCameraChange?: Callback;
-  projectName: string;
-  revisionId: number;
-  assetId?: number;
+  useDefaultCameraPosition?: boolean;
 }
 
 export function mockCreateViewer(mockFunction: any) {
