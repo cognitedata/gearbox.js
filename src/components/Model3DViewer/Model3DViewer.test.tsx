@@ -34,7 +34,6 @@ mockCreateViewer(callbacksCreateViewer);
 describe('Model3DViewer', () => {
   it('renders without exploding', done => {
     const props = {
-      projectName: 'publicdata',
       modelId: 0,
       revisionId: 0,
     };
@@ -45,7 +44,6 @@ describe('Model3DViewer', () => {
   });
   it('should trigger provided callbacks', done => {
     const props = {
-      projectName: 'publicdata',
       modelId: 0,
       revisionId: 0,
       onProgress,

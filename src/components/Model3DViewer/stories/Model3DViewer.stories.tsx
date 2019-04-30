@@ -13,7 +13,6 @@ import { mockCreateViewer, Model3DViewer } from '../Model3DViewer';
 
 import * as full from './full.md';
 
-const projectName = 'itera-dev';
 const modelID = 0;
 const revisionID = 0;
 
@@ -41,7 +40,6 @@ storiesOf('Model3DViewer', module).add(
         <Model3DViewer
           modelId={modelID}
           revisionId={revisionID}
-          projectName={projectName}
           onClick={onClick}
           onProgress={onProgress}
           onComplete={onComplete}

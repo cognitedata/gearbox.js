@@ -19,7 +19,6 @@ of asset's nodes, that hits `boundingBox` dimension.
 
 For retrieving 3D model you need to provide:
 
-- `projectName` – your project name
 - `modelId` – you can find it using `sdk.ThreeD.listModels()` call
 - `revisionId` – you can find it via `sdk.ThreeD.listRevisions(modelID)` call
 
@@ -36,7 +35,6 @@ import * as sdk from '@cognite/sdk';
 import { Model3DViewer } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
-  const projectName = 'publicdata';
   const modelID = 0;
   const revisionID = 0;
   const onClick = (modelId: number) => {};
@@ -52,7 +50,6 @@ function ExampleComponent(props) {
     <Model3DViewer
       modelId={modelID}
       revisionId={revisionID}
-      projectName={projectName}
       onClick={onClick}
       onProgress={onProgress}
       onComplete={onComplete}
@@ -69,7 +66,6 @@ function ExampleComponent(props) {
 
 | Property      | Description              | Type     | Default |
 | ------------- | ------------------------ | -------- | ------- |
-| `projectName` | Name of your project     | `string` |         |
 | `modelId`     | model ID number          | `number` |         |
 | `revisionId`  | model revision ID number | `number` |         |
 

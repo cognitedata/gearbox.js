@@ -28,7 +28,7 @@ function ExampleComponent(props) {
 
 | Property              | Description                                                        | Type                  | Default |
 | --------------------- | ------------------------------------------------------------------ | --------------------- | ------- |
-| `onLiveSearchSelect`  | Trigger after selecting on of items from live search results list  | `(asset: sdk.Asset) => void;`            |         |
+| `onLiveSearchSelect`  | Trigger after selecting one of items from live search results list  | `(asset: sdk.Asset) => void;`            |         |
 
 ##### Optionals:
 

@@ -9,7 +9,6 @@ import { fetch3DModelRevision } from '../api';
 import { CacheObject, Callback, EventHandlers } from '../interfaces';
 
 interface ViewerConfig {
-  projectName: string;
   modelId: number;
   revisionId: number;
   boundingBox: THREE.Box3;
@@ -78,13 +77,12 @@ export function setCameraPosition(
   }
 }
 export function createViewer({
-  projectName,
   modelId,
   revisionId,
   boundingBox,
   cache,
 }: ViewerConfig): ViewerConfigResponse {
-  const hash = hashGenerator(projectName, modelId, revisionId, boundingBox);
+  const hash = hashGenerator(modelId, revisionId, boundingBox);
   const { progress, complete, error } = ViewerEventTypes;
 
   if (cache[hash]) {
@@ -113,7 +111,7 @@ export function createViewer({
   };
 
   const modelPromise = viewer.addModel({
-    projectName,
+    projectName: '',
     modelId,
     revisionId,
     boundingBox: boundingBox.isEmpty() ? undefined : boundingBox,
@@ -166,7 +164,6 @@ export function removeEvent(
 }
 
 export function hashGenerator(
-  projectName: string,
   modelId: number,
   revisionId: number,
   boundingBox: THREE.Box3
@@ -175,5 +172,5 @@ export function hashGenerator(
   const boundingBoxMaxString = boundingBox.max.toArray().join(',');
   const boundingBoxString = `[${boundingBoxMinString}, ${boundingBoxMaxString}]`;
 
-  return `${projectName}/${modelId}/${revisionId}?boundingBox=${boundingBoxString}`;
+  return `${modelId}/${revisionId}?boundingBox=${boundingBoxString}`;
 }

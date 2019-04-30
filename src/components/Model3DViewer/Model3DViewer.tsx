@@ -14,7 +14,6 @@ let createViewer = originalCreateViewer;
 type ClickHandler = (position: MouseScreenPosition) => void;
 
 export interface Model3DViewerProps {
-  projectName: string;
   modelId: number;
   revisionId: number;
   cache: CacheObject;
@@ -61,7 +60,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
   async componentDidMount() {
     const {
-      projectName,
       modelId,
       revisionId,
       cache,
@@ -81,7 +79,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       revisionPromise,
       modelPromise,
     } = createViewer({
-      projectName,
       modelId,
       revisionId,
       boundingBox: threeJsBoundingBox,
