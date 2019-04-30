@@ -28,13 +28,13 @@ function ExampleComponent(props) {
 
 | Property              | Description                                                        | Type                  | Default |
 | --------------------- | ------------------------------------------------------------------ | --------------------- | ------- |
-| `onLiveSearchSelect`  | Trigger after selecting on of items from live search results list  | `function`            |         |
+| `onLiveSearchSelect`  | Trigger after selecting on of items from live search results list  | `(asset: sdk.Asset) => void;`            |         |
 
 ##### Optionals:
 
 | Property              | Description                                 | Type                        | Default |
 | --------------------- | ------------------------------------------- | --------------------------- | ------- |
-| `onError`             | Triggers when search error occurs           | `function`                  |         |
+| `onError`             | Triggers when search error occurs           | `(error: any) => void`                  |         |
 | `strings`             | Object of strings to be placed in component | `{ [name: string]: string }`|         |
 
 **strings** default fields is:

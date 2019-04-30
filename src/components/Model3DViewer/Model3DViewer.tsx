@@ -26,6 +26,7 @@ export interface Model3DViewerProps {
   onCameraChange?: Callback;
   projectName: string;
   revisionId: number;
+  assetId?: number;
 }
 
 export function mockCreateViewer(mockFunction: any) {
@@ -46,13 +47,16 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   divWrapper: HTMLElement | null = null;
   model: Cognite3DModel | null = null;
   onClickHandlerBounded: ClickHandler;
+  onCompleteBounded: Callback;
   revision: sdk.Revision | null = null;
   viewer: Cognite3DViewer | null = null;
+  nodes: sdk.AssetMapping[] = [];
 
   constructor(props: Model3DViewerProps) {
     super(props);
 
     this.onClickHandlerBounded = this.onClickHandler.bind(this);
+    this.onCompleteBounded = this.onComplete.bind(this);
   }
 
   async componentDidMount() {
@@ -64,7 +68,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       boundingBox,
       useDefaultCameraPosition,
       onProgress,
-      onComplete,
       onReady,
       onCameraChange,
       onError,
@@ -91,9 +94,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       addEvent([[progress, onProgress]]);
     }
 
-    if (onComplete) {
-      addEvent([[complete, onComplete]]);
-    }
+    addEvent([[complete, this.onCompleteBounded]]);
 
     this.addDisposeCall(() => {
       removeEvent();
@@ -105,9 +106,14 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
     let model: Cognite3DModel;
     let revision: sdk.Revision;
+    let nodes: sdk.AssetMapping[];
 
     try {
-      [model, revision] = await Promise.all([modelPromise, revisionPromise]);
+      [model, revision, nodes] = await Promise.all([
+        modelPromise,
+        revisionPromise,
+        this.findMappedNodes(),
+      ]);
     } catch (e) {
       if (onError) {
         onError(e);
@@ -120,6 +126,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
     this.model = model;
     this.revision = revision;
+    this.nodes = nodes;
 
     if (useDefaultCameraPosition) {
       this.resetCameraPosition();
@@ -142,6 +149,18 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
         viewer.off('cameraChange', onCameraChange);
       }
     });
+  }
+
+  async componentDidUpdate() {
+    const { onError } = this.props;
+    try {
+      this.nodes = await this.findMappedNodes();
+      this.highlightNodes();
+    } catch (error) {
+      if (onError) {
+        onError(error);
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -196,5 +215,56 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
         ref={ref => (this.divWrapper = ref)}
       />
     );
+  }
+  private async findMappedNodes(): Promise<sdk.AssetMapping[]> {
+    const { assetId, modelId, revisionId } = this.props;
+
+    if (!assetId) {
+      return Promise.resolve([]);
+    }
+
+    const { items } = await sdk.ThreeD.listAssetMappings(modelId, revisionId, {
+      assetId,
+    });
+
+    return items;
+  }
+
+  private highlightNodes() {
+    const { length } = this.nodes;
+
+    if (!this.model || !this.viewer) {
+      return;
+    }
+
+    this.model.deselectAllNodes();
+
+    if (!length) {
+      this.viewer.fitCameraToModel(this.model);
+    } else if (length === 1) {
+      const { nodeId } = this.nodes[0];
+      const bb = this.model.getBoundingBox(nodeId);
+
+      this.model.selectNode(nodeId);
+
+      if (!bb.isEmpty()) {
+        this.viewer.fitCameraToBoundingBox(bb);
+      }
+    } else {
+      this.nodes.forEach((node: sdk.AssetMapping) =>
+        // @ts-ignore
+        this.model.selectNode(node.nodeId)
+      );
+    }
+  }
+
+  private onComplete() {
+    const { onComplete } = this.props;
+
+    this.highlightNodes();
+
+    if (onComplete) {
+      onComplete();
+    }
   }
 }

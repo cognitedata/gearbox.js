@@ -2,6 +2,14 @@
 
 <!-- STORY -->
 
+#### Requirements:
+
+To use this component you have to install `@cognite/3d-viewer` package:
+
+```bash
+yarn add @cognite/3d-viewer
+```
+
 #### Description:
 
 Component uses for retrieving 3D-models, which is available for provided project.
@@ -19,7 +27,11 @@ For retrieving 3D model you need to provide:
 
 ```typescript jsx
 import React from 'react';
-import { Cognite3DViewer, Cognite3DModel, OnProgressData } from '@cognite/3d-viewer';
+import {
+  Cognite3DViewer,
+  Cognite3DModel,
+  OnProgressData,
+} from '@cognite/3d-viewer';
 import * as sdk from '@cognite/sdk';
 import { Model3DViewer } from '@cognite/gearbox';
 
@@ -44,7 +56,6 @@ function ExampleComponent(props) {
       onClick={onClick}
       onProgress={onProgress}
       onComplete={onComplete}
-      
     />
     
   );
@@ -64,16 +75,17 @@ function ExampleComponent(props) {
 
 ##### Optionals:
 
-| Property                | Description                                                         | Type                                                                                | Default |
-| ----------------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------- |
-| `boundingBox`           | bounding box object, that describes dimension of viewed asset nodes | `THREE.Box3`                                                                        | {}      |
-| `cache`                 | object for caching 3D viewers instances                             | `{ [name:string]: any }`                                                            |         |
+| Property                   | Description                                                         | Type                                                                                | Default |
+| -------------------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------- |
+| `assetId`                  | id of asset to highlight                                            | `number`                                                                            |         |
+| `boundingBox`              | bounding box object, that describes dimension of viewed asset nodes | `THREE.Box3`                                                                        | {}      |
+| `cache`                    | object for caching 3D viewers instances                             | `{ [name:string]: any }`                                                            |         |
 | `useDefaultCameraPosition` | setting camera to default position on created 3D scene              | `boolean`                                                                           | true    |
-| `onReady`               | on scene prepared to display model callback                         | `(viewer: Cognite3DViewer, model: Cognite3DModel, revision: sdk.Revision) => void;` |         |
-| `onProgress`            | on model loading progress callback                                  | `(progress: OnProgressData) => void;`                                               |         |
-| `onComplete`            | on model complete loading callback                                  | `() => void;`                                                                       |         |
-| `onClick`               | on model click handler                                              | `(nodeId: number) => void;`                                                         |         |
-| `onCameraChange`        | on scene camera change position callback                            | `(position: THREE.Vector3) => void;`                                                |         |
+| `onReady`                  | on scene prepared to display model callback                         | `(viewer: Cognite3DViewer, model: Cognite3DModel, revision: sdk.Revision) => void;` |         |
+| `onProgress`               | on model loading progress callback                                  | `(progress: OnProgressData) => void;`                                               |         |
+| `onComplete`               | on model complete loading callback                                  | `() => void;`                                                                       |         |
+| `onClick`                  | on model click handler                                              | `(nodeId: number) => void;`                                                         |         |
+| `onCameraChange`           | on scene camera change position callback                            | `(position: THREE.Vector3) => void;`                                                |         |
 
 ##### Default boundingBox value:
 
@@ -85,6 +97,11 @@ const boundingBox = new THREE.Box3({
 ```
 
 ##### Interfaces:
+
 ```typescript jsx
-import { Cognite3DViewer, Cognite3DModel, OnProgressData } from '@cognite/3d-viewer';
+import {
+  Cognite3DViewer,
+  Cognite3DModel,
+  OnProgressData,
+} from '@cognite/3d-viewer';
 ```

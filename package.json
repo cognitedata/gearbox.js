@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "yarn clean && rollup -c && yarn esCheck",
-    "build-storybook": "build-storybook",
+    "build-storybook": "build-storybook -s ./public",
     "clean": "rm -rf dist",
     "esCheck": "es-check es5 './dist/index.js'",
     "lint": "tslint -c tslint.json -p tsconfig.json",
@@ -30,7 +30,6 @@
   "homepage": "https://github.com/cognitedata/gearbox.js#readme",
   "license": "Apache-2.0",
   "dependencies": {
-    "@cognite/3d-viewer": "^4.1.1",
     "@cognite/griff-react": "^0.5.0-rc.33",
     "d3": "^5.9.2",
     "lodash": "^4.17.11",
@@ -46,7 +45,7 @@
     "@babel/core": "^7.3.3",
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
-    "@cognite/sdk": "^1.6.2",
+    "@cognite/sdk": "^1.7.0",
     "@storybook/addon-actions": "^5.0.8",
     "@storybook/addon-info": "^5.0.8",
     "@storybook/addon-links": "^5.0.8",
@@ -97,7 +96,8 @@
     "typescript": "^3.3.3333"
   },
   "peerDependencies": {
-    "@cognite/sdk": "^1.5.6",
+    "@cognite/3d-viewer": "^4.1.1",
+    "@cognite/sdk": "^1.7.0",
     "antd": "^3.14.1",
     "react": "16",
     "styled-components": "^4.1.3"

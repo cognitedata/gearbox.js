@@ -23,6 +23,8 @@ import {
 import { WebcamScanner } from './WebcamScanner/WebcamScanner';
 
 const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
   padding: 0;
   display: flex;
   flex-direction: row;
