@@ -5,7 +5,7 @@ import { AntTreeNode } from 'antd/lib/tree';
 import React, { Component } from 'react';
 import {
   AssetTreeProps,
-  OnSelectReturnType,
+  OnSelectAssetTreeParams,
   TreeNodeData,
   TreeNodeType,
 } from '../../interfaces';
@@ -13,7 +13,7 @@ import {
 const { TreeNode } = Tree;
 
 interface ExpandedKeysMap {
-  [key: string]: true;
+  [key: number]: true;
 }
 
 interface AssetTreeState {
@@ -81,7 +81,7 @@ export class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
     };
   }
 
-  static toKeys(path: string[], initial = {}): ExpandedKeysMap {
+  static toKeys(path: number[], initial = {}): ExpandedKeysMap {
     return path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
   }
 
@@ -145,7 +145,7 @@ export class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
     }
   };
 
-  onSelectNode = (returnAsset: OnSelectReturnType) => {
+  onSelectNode = (returnAsset: OnSelectAssetTreeParams) => {
     const { onSelect } = this.props;
     if (onSelect) {
       onSelect(returnAsset);
@@ -154,7 +154,9 @@ export class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
 
   onExpand = (expandedKeys: string[]) => {
     this.setState({
-      expandedKeys: AssetTree.toKeys(expandedKeys),
+      expandedKeys: AssetTree.toKeys(
+        expandedKeys.map(key => Number.parseInt(key, 10))
+      ),
     });
   };
 

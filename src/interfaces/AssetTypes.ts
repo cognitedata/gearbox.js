@@ -53,7 +53,7 @@ export interface TreeNodeType {
   [name: string]: any;
 }
 
-export interface OnSelectReturnType {
+export interface OnSelectAssetTreeParams {
   key: number | string;
   title: string;
   isLeaf?: boolean;
@@ -61,8 +61,8 @@ export interface OnSelectReturnType {
 }
 
 export interface AssetTreeProps {
-  onSelect?: (onSelect: OnSelectReturnType) => void;
-  defaultExpandedKeys?: string[];
+  onSelect?: (onSelect: OnSelectAssetTreeParams) => void;
+  defaultExpandedKeys?: number[];
 }
 
 export interface AdvancedSearch {

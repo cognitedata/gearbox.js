@@ -27,9 +27,7 @@ afterEach(() => {
 describe('AssetTree', () => {
   it('renders correctly', done => {
     const tree = renderer.create(
-      <AssetTree
-        defaultExpandedKeys={[String(ASSET_ZERO_DEPTH_ARRAY[zeroChild].id)]}
-      />
+      <AssetTree defaultExpandedKeys={[ASSET_ZERO_DEPTH_ARRAY[zeroChild].id]} />
     );
     setImmediate(() => {
       expect(tree).toMatchSnapshot();
