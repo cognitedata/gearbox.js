@@ -19,7 +19,7 @@ const metadata = {
 function ExampleComponent(props) {
   return (
     <DescriptionList 
-      valueSet=metadata 
+      valueSet={metadata} 
     />
   );
   
