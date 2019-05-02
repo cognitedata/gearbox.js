@@ -27,18 +27,25 @@ const setupMocks = () => {
 };
 const zeroChild = ASSET_ZERO_DEPTH_ARRAY.findIndex(asset => asset.depth === 0);
 
-storiesOf('AssetTree', module).add('Full description', () => <AssetTree />, {
-  readme: {
-    content: fullDescription,
+storiesOf('AssetTree', module).add(
+  'Full description',
+  () => {
+    setupMocks();
+    return <AssetTree />;
   },
-  info: {
-    header: false,
-    source: false,
-    styles: {
-      infoBody: { display: 'none' },
+  {
+    readme: {
+      content: fullDescription,
     },
-  },
-});
+    info: {
+      header: false,
+      source: false,
+      styles: {
+        infoBody: { display: 'none' },
+      },
+    },
+  }
+);
 
 storiesOf('AssetTree/Examples', module)
   .addParameters({
@@ -51,7 +58,7 @@ storiesOf('AssetTree/Examples', module)
     },
   })
   .add(
-    'basic',
+    'Basic',
     () => {
       setupMocks();
       return <AssetTree />;
