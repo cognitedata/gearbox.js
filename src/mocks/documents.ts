@@ -52,6 +52,13 @@ export const DOCUMENTS = [
       DOC_TYPE: 'XG',
     },
   },
+  {
+    ...generateDocumentBase(4),
+    metadata: {
+      DOC_TITLE: 'document title 4',
+      DOC_TYPE: 'AB',
+    },
+  },
 ];
 
 export const DOCUMENT_WITHOUT_TYPE = {

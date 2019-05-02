@@ -4,6 +4,10 @@ export function clampNumber(v: number, minValue: number, maxValue: number) {
   return Math.max(Math.min(v, maxValue), minValue);
 }
 
+export function sortStringsAlphabetically(a: string, b: string): number {
+  return a < b ? -1 : a > b ? 1 : 0;
+}
+
 export function getCanvas(
   img: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement,
   width: number,

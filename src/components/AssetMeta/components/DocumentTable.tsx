@@ -21,6 +21,7 @@ export class DocumentTable extends React.PureComponent<
 > {
   static defaultProps = {
     handleDocumentClick: () => null,
+    categoryPriorityList: ['XB', 'XL'], // categories "P&ID" and "Logic Diagrams" are prioritized by default
   };
 
   renderDocument = (category: string, description: string) => (
@@ -72,12 +73,12 @@ export class DocumentTable extends React.PureComponent<
       docTypes,
       documentTypeField
     );
-    const categoryByPriority = getCategoryByPriority(
+    const { categories, prioritizedCount } = getCategoryByPriority(
       documentsByCategory,
       categoryPriorityList
     );
 
-    if (!categoryByPriority.length) {
+    if (!categories.length) {
       return (
         <NoDocuments data-test-id="no-documents">{`${
           noDocumentsSign
@@ -91,13 +92,20 @@ export class DocumentTable extends React.PureComponent<
       <>
         <TableWrapper>
           <CollapseContainer {...collapseProps}>
-            {categoryByPriority.map(category => {
+            {categories.map((category, i) => {
               const { description, documents } = documentsByCategory[category];
               const header = `${getShortDescription(description)} (${
                 documents.length
               })`;
               return (
-                <PanelWrapper header={header} key={category}>
+                <PanelWrapper
+                  header={header}
+                  key={category}
+                  delimiter={
+                    prioritizedCount === i + 1 &&
+                    prioritizedCount !== categories.length
+                  }
+                >
                   {documents.map(this.renderDocument(category, description))}
                 </PanelWrapper>
               );
@@ -132,8 +140,10 @@ const TextContainerTop = styled.div`
   text-transform: uppercase;
 `;
 
-const PanelWrapper = styled(Panel)`
+const PanelWrapper = styled(Panel)<{ delimiter: boolean }>`
   text-align: left;
+  ${({ delimiter }) =>
+    delimiter ? 'border-bottom: 2px solid #CCCCCC !important;' : ''}
 `;
 
 const LinkStyle = styled.a`

@@ -7,6 +7,7 @@ import {
   PureObject,
 } from '../interfaces';
 import docTypes from './resources/docTypes.json';
+import { sortStringsAlphabetically } from './utils';
 
 const maxDocumentTitleLength = 56;
 const documentTypesOptions = ['DOC_TYPE', 'doc_type'];
@@ -15,9 +16,16 @@ const documentTitleOptions = ['DOC_TITLE', 'title'];
 const getPriorityObjectFromArray = (list: string[]): Priority =>
   list.reduce((acc, p, i) => ({ ...acc, [p]: i + 1 }), {});
 
-const sortDocsByPriority = (a: string, b: string, priority: Priority) =>
-  (priority[a] || Number.MAX_SAFE_INTEGER) -
-  (priority[b] || Number.MAX_SAFE_INTEGER);
+const sortDocsByPriority = (
+  a: string,
+  b: string,
+  priority: Priority
+): number => {
+  return (
+    (priority[a] || Number.MAX_SAFE_INTEGER) -
+    (priority[b] || Number.MAX_SAFE_INTEGER)
+  );
+};
 
 const getValueFromObject = (metadata?: PureObject, arr?: string[]): string => {
   if (!metadata || !arr) {
@@ -66,11 +74,23 @@ export const getCategoryName = (
 export const getCategoryByPriority = (
   docsByCat: DocumentsByCategory,
   priorityList: string[] = []
-) => {
+): { categories: string[]; prioritizedCount: number } => {
   const priorityObject = getPriorityObjectFromArray(priorityList);
-  return Object.keys(docsByCat).sort((a, b) =>
-    sortDocsByPriority(a, b, priorityObject)
-  );
+  const prioritizedCategories: string[] = [];
+  const regularCategories: string[] = [];
+  for (const category of Object.keys(docsByCat)) {
+    if (priorityObject[category] !== undefined) {
+      prioritizedCategories.push(category);
+    } else {
+      regularCategories.push(category);
+    }
+  }
+  return {
+    categories: prioritizedCategories
+      .sort((a, b) => sortDocsByPriority(a, b, priorityObject))
+      .concat(regularCategories.sort(sortStringsAlphabetically)),
+    prioritizedCount: prioritizedCategories.length,
+  };
 };
 
 export const getDocumentsByCategory = (
