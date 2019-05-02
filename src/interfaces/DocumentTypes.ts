@@ -1,17 +1,14 @@
 import { File } from '@cognite/sdk';
 import { CollapseProps } from 'antd/lib/collapse';
 import React from 'react';
-import { PureObject } from './index';
+
+export type Document = File;
 
 export type OnDocumentClick = (
   document: Document,
   category: string,
   description: string
 ) => void;
-
-export interface Document extends File {
-  metadata?: PureObject;
-}
 
 export interface DocumentType {
   key: string;
