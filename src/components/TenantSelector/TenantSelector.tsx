@@ -12,33 +12,22 @@ enum TenantValidity {
   UNKNOWN = 2,
 }
 
-/**
- * Check the validity of a given tenant name. If this returns {@code true} or
- * resolves, then the tenant is valid. If it throws an error or returns
- * {@code false} then the tenant is invalid.
- */
-type OnTenantValidationFunction = (
-  tenant: string,
-  advancedOptions: PureObject | null
-) => Promise<boolean>;
-
-type OnInvalidTenantFunction = (tenant: string) => void;
-
-type OnTenantSelectionFunction = (
-  tenant: string,
-  advancedOptions: PureObject | null
-) => void;
-
 export interface TenantSelectorProps {
   header?: string | React.ReactNode;
   initialTenant?: string;
   loginText?: string;
-  onInvalidTenant?: OnInvalidTenantFunction | any;
-  onTenantSelected: OnTenantSelectionFunction | any;
+  onInvalidTenant?: (tenant: string) => void;
+  onTenantSelected: (
+    tenant: string,
+    advancedOptions: PureObject | null
+  ) => void;
   placeholder?: string;
   title: string | React.ReactNode;
   unknownMessage?: string;
-  validateTenant?: OnTenantValidationFunction | any;
+  validateTenant?: (
+    tenant: string,
+    advancedOptions: PureObject | null
+  ) => Promise<boolean>;
   advancedOptions?: PureObject;
 }
 
