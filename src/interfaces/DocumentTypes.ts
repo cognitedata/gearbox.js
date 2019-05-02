@@ -1,17 +1,14 @@
 import { File } from '@cognite/sdk';
 import { CollapseProps } from 'antd/lib/collapse';
 import React from 'react';
-import { PureObject } from './index';
+
+export type Document = File;
 
 export type OnDocumentClick = (
   document: Document,
   category: string,
   description: string
 ) => void;
-
-export interface Document extends File {
-  metadata?: PureObject;
-}
 
 export interface DocumentType {
   key: string;
@@ -45,6 +42,14 @@ export interface MetaDocProps {
   categoryPriorityList?: string[];
   unknownCategoryName?: string;
   documentTitleField?: string;
+
+  /**
+   * The {@code metadata} field used to group documents into types. If this is
+   * not specified, then {@code doc_type} field will be attempted. If no
+   * {@code doc_type} field is present in the metadata, then the filename will
+   * be attempted to be parsed using the NORSOK standard. If this fails, then
+   * the document will be in the "unknown" group.
+   */
   documentTypeField?: string;
   docTypes?: JsonDocTypes;
   noDocumentsSign?: string;

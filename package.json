@@ -1,6 +1,6 @@
 {
   "name": "@cognite/gearbox",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "GearBox will be a place for application developers to contribute useful, reusable components across applications",
   "contributors": [],
   "main": "dist/index.js",
@@ -45,7 +45,7 @@
     "@babel/core": "^7.3.3",
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
-    "@cognite/sdk": "^1.7.0",
+    "@cognite/sdk": "^1.7.1",
     "@storybook/addon-actions": "^5.0.8",
     "@storybook/addon-info": "^5.0.8",
     "@storybook/addon-links": "^5.0.8",
@@ -96,7 +96,7 @@
     "typescript": "^3.3.3333"
   },
   "peerDependencies": {
-    "@cognite/sdk": "^1.7.0",
+    "@cognite/sdk": "^1.7.1",
     "antd": "^3.14.1",
     "react": "16",
     "styled-components": "^4.1.3"
