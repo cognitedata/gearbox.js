@@ -1,52 +1,54 @@
+import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { ASSET_LIST_CHILD } from '../../mocks';
+import { ASSET_LIST_CHILD, ASSET_ZERO_DEPTH_ARRAY } from '../../mocks';
 import { AssetTree } from './AssetTree';
 
-const zeroChild = ASSET_LIST_CHILD.findIndex(asset => asset.depth === 0);
+const zeroChild = ASSET_ZERO_DEPTH_ARRAY.findIndex(asset => asset.depth === 0);
 
 configure({ adapter: new Adapter() });
 
+sdk.Assets.list = jest.fn();
+sdk.Assets.listDescendants = jest.fn();
+
+beforeEach(() => {
+  // @ts-ignore
+  sdk.Assets.list.mockResolvedValue({ items: ASSET_ZERO_DEPTH_ARRAY });
+  // @ts-ignore
+  sdk.Assets.listDescendants.mockResolvedValue({ items: ASSET_LIST_CHILD });
+});
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
 describe('AssetTree', () => {
-  it('renders correctly', () => {
-    const tree = renderer
-      .create(
-        <AssetTree
-          assets={ASSET_LIST_CHILD}
-          defaultExpandedKeys={[String(ASSET_LIST_CHILD[zeroChild].id)]}
-        />
-      )
-      .toJSON();
-    expect(tree).toMatchSnapshot();
+  it('renders correctly', done => {
+    const tree = renderer.create(
+      <AssetTree
+        defaultExpandedKeys={[String(ASSET_ZERO_DEPTH_ARRAY[zeroChild].id)]}
+      />
+    );
+    setImmediate(() => {
+      expect(tree).toMatchSnapshot();
+      done();
+    });
   });
-  it('Checks if onSelect returns node', () => {
+
+  it('Checks if onSelect returns node', done => {
     const jestTest = jest.fn();
-    const AssetTreeModal = mount(
-      <AssetTree assets={ASSET_LIST_CHILD} onSelect={jestTest} />
-    );
-    AssetTreeModal.find('.ant-tree-node-content-wrapper')
-      .first()
-      .simulate('click');
+    const AssetTreeModal = mount(<AssetTree onSelect={jestTest} />);
+    setImmediate(() => {
+      AssetTreeModal.update();
+      AssetTreeModal.find('.ant-tree-node-content-wrapper')
+        .first()
+        .simulate('click');
 
-    expect(jestTest).toBeCalled();
-    expect(typeof jestTest.mock.results).toBe('object');
-  });
-
-  it('Should update tree on assets props change', done => {
-    const rootNodes = ASSET_LIST_CHILD.filter(o => o.depth === 0);
-    const AssetTreeModal = mount(<AssetTree assets={rootNodes} />);
-    expect(AssetTreeModal.find('TreeNode')).toHaveLength(2);
-
-    AssetTreeModal.setProps(
-      {
-        assets: [rootNodes[0]],
-      },
-      () => {
-        expect(AssetTreeModal.find('TreeNode')).toHaveLength(1);
-        done();
-      }
-    );
+      expect(jestTest).toBeCalled();
+      expect(typeof jestTest.mock.results).toBe('object');
+      done();
+    });
   });
 });

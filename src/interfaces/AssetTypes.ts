@@ -53,12 +53,6 @@ export interface TreeNodeType {
   [name: string]: any;
 }
 
-export interface AssetQuery {
-  limit: number;
-  depth: number;
-  [name: string]: any;
-}
-
 export interface OnSelectReturnType {
   key: number | string;
   title: string;
@@ -66,9 +60,7 @@ export interface OnSelectReturnType {
   node?: Asset;
 }
 
-export interface AssetTreeType {
-  assets?: Asset[];
-  loadData?: (assetId: number, query: AssetQuery) => Asset[];
+export interface AssetTreeProps {
   onSelect?: (onSelect: OnSelectReturnType) => void;
   defaultExpandedKeys?: string[];
 }
