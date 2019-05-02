@@ -3,7 +3,7 @@ import React from 'react';
 import { OnClick } from '../../interfaces';
 import { getColor } from '../../utils';
 
-interface AssetViewProps {
+export interface AssetViewProps {
   asset: {
     id: number;
     name?: string;
@@ -46,7 +46,7 @@ export const AssetView = (props: AssetViewProps) => {
       style={{ display: 'inline-block' }}
       onClick={onClick}
       closable={!!onClose}
-      afterClose={onClose}
+      onClose={onClose}
       color={tagColor}
     >
       {asset.name || ''}

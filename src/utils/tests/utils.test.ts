@@ -1,4 +1,4 @@
-import { clampNumber } from '../';
+import { clampNumber } from '../utils';
 
 describe('clampNumber helper', () => {
   it('should return max if the value is greater than max', () => {

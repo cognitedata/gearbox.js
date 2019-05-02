@@ -1,4 +1,13 @@
-import { Asset, Assets, Event, Events, File, Files } from '@cognite/sdk';
+import {
+  Asset,
+  Assets,
+  Event,
+  Events,
+  File,
+  Files,
+  Revision,
+  ThreeD,
+} from '@cognite/sdk';
 import { ApiAssetList } from '../interfaces';
 
 export async function getAssetList({
@@ -19,6 +28,13 @@ export async function getAssetList({
   }
 
   return response.items;
+}
+
+export function fetch3DModelRevision(
+  modelId: number,
+  revisionId: number
+): Promise<Revision> {
+  return ThreeD.retrieveRevision(modelId, revisionId);
 }
 
 export async function retrieveAsset(assetId: number) {

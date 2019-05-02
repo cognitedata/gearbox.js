@@ -4,4 +4,5 @@ export * from './documents';
 export * from './formatters';
 export * from './notifications';
 export * from './sanitize';
+export * from './threeD';
 export * from './utils';

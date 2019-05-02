@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { getAssetList, ocrRecognize } from '../../api';
 import {
-  AnyTypeCallback,
+  Callback,
   EmptyCallback,
   OnAssetListCallback,
   SetVideoRefCallback,
@@ -23,6 +23,8 @@ import {
 import { WebcamScanner } from './WebcamScanner/WebcamScanner';
 
 const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
   padding: 0;
   display: flex;
   flex-direction: row;
@@ -48,10 +50,10 @@ export interface AssetScannerProps {
   onEndLoading?: EmptyCallback;
   onAssetEmpty?: EmptyCallback;
   onAssetFind?: OnAssetListCallback;
-  onUnauthorized?: AnyTypeCallback;
+  onUnauthorized?: Callback;
 }
 
-export interface AssetScannerState {
+interface AssetScannerState {
   isLoading: boolean;
   scannedImageSrc: string;
 }

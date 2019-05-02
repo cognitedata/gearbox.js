@@ -3,10 +3,8 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
 import React from 'react';
-import { datapointsList, timeseriesList } from '../../mocks';
+import { datapointsList, sleep, timeseriesList } from '../../mocks';
 import { TimeseriesChart } from './TimeseriesChart';
-
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 configure({ adapter: new Adapter() });
 

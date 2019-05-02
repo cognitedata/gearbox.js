@@ -52,7 +52,7 @@ const NoData = styled('p')`
   text-align: center;
 `;
 
-interface DescriptionListType {
+export interface DescriptionListProps {
   description?: {
     descriptionId: string;
     descriptionText: string;
@@ -60,7 +60,7 @@ interface DescriptionListType {
   valueSet: { [name: string]: any };
 }
 
-export const DescriptionList = (props: DescriptionListType) => {
+export const DescriptionList = (props: DescriptionListProps) => {
   const { description, valueSet } = props;
 
   const arrayValues = mapMetaData(valueSet);
