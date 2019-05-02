@@ -45,6 +45,14 @@ export interface MetaDocProps {
   categoryPriorityList?: string[];
   unknownCategoryName?: string;
   documentTitleField?: string;
+
+  /**
+   * The {@code metadata} field used to group documents into types. If this is
+   * not specified, then {@code doc_type} field will be attempted. If no
+   * {@code doc_type} field is present in the metadata, then the filename will
+   * be attempted to be parsed using the NORSOK standard. If this fails, then
+   * the document will be in the "unknown" group.
+   */
   documentTypeField?: string;
   docTypes?: JsonDocTypes;
   noDocumentsSign?: string;
