@@ -7,10 +7,8 @@ import { momentFromTimestamp } from '../../../utils';
 
 interface EventAddonsProp extends Event {
   typeAndSubtype: React.ReactNode;
-  description: string;
   start: string;
   end: string;
-  metadata?: { [key: string]: string };
 }
 
 interface AssetEventsPanelState {
