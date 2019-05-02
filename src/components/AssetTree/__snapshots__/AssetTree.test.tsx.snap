@@ -87,12 +87,12 @@ exports[`AssetTree renders correctly 1`] = `
           onDoubleClick={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
-          title="VAL: Valhall plattform"
+          title="VAL : Valhall plattform"
         >
           <span
             className="ant-tree-title"
           >
-            VAL: Valhall plattform
+            VAL : Valhall plattform
           </span>
         </span>
       </li>

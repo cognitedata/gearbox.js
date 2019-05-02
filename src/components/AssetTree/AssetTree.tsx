@@ -1,10 +1,11 @@
-import { Asset } from '@cognite/sdk';
+import { Asset, AssetListDescendantsParams } from '@cognite/sdk';
+import * as sdk from '@cognite/sdk';
 import { Tree } from 'antd';
 import { AntTreeNode } from 'antd/lib/tree';
 import React, { Component } from 'react';
 import {
-  AssetTreeType,
-  OnSelectReturnType,
+  AssetTreeProps,
+  OnSelectAssetTreeParams,
   TreeNodeData,
   TreeNodeType,
 } from '../../interfaces';
@@ -12,34 +13,32 @@ import {
 const { TreeNode } = Tree;
 
 interface ExpandedKeysMap {
-  [key: string]: true;
+  [key: number]: true;
 }
 
 interface AssetTreeState {
-  assets?: Asset[]; // reference to assets in props
+  assets: Asset[];
   treeData: TreeNodeData[];
   expandedKeys: ExpandedKeysMap;
 }
 
-export class AssetTree extends Component<AssetTreeType, AssetTreeState> {
-  static getDerivedStateFromProps(props: AssetTreeType, state: AssetTreeState) {
-    if (props.assets !== state.assets) {
-      return AssetTree.getStateFromProps(props);
-    } else {
-      return null;
-    }
+const cursorApiRequest = async (
+  assetId: number,
+  params: AssetListDescendantsParams,
+  data: Asset[] = []
+): Promise<Asset[]> => {
+  const result = await sdk.Assets.listDescendants(assetId, params);
+  const { nextCursor: cursor } = result;
+  if (result.nextCursor) {
+    return cursorApiRequest(assetId, { ...params, cursor }, [
+      ...data,
+      ...result.items,
+    ]);
   }
+  return [...data, ...result.items];
+};
 
-  static getStateFromProps(props: AssetTreeType): AssetTreeState {
-    const { assets, defaultExpandedKeys } = props;
-    return {
-      assets,
-      treeData:
-        assets && assets.length > 0 ? AssetTree.mapDataAssets(assets) : [],
-      expandedKeys: defaultExpandedKeys ? this.toKeys(defaultExpandedKeys) : {},
-    };
-  }
-
+export class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
   static mapDataAssets(assets: Asset[]): TreeNodeData[] {
     const nodes: { [name: string]: TreeNodeData } = {};
 
@@ -82,31 +81,47 @@ export class AssetTree extends Component<AssetTreeType, AssetTreeState> {
     };
   }
 
-  static toKeys(path: string[], initial = {}): ExpandedKeysMap {
+  static toKeys(path: number[], initial = {}): ExpandedKeysMap {
     return path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
   }
 
-  constructor(props: AssetTreeType) {
+  constructor(props: AssetTreeProps) {
     super(props);
-    this.state = AssetTree.getStateFromProps(props);
+    const { defaultExpandedKeys } = props;
+    this.state = {
+      assets: [],
+      treeData: [],
+      expandedKeys: defaultExpandedKeys
+        ? AssetTree.toKeys(defaultExpandedKeys)
+        : {},
+    };
+  }
+
+  async componentDidMount() {
+    const assets = await sdk.Assets.list({ depth: 1 });
+    this.setState({
+      assets: assets.items,
+      treeData:
+        assets && assets.items.length > 0
+          ? AssetTree.mapDataAssets(assets.items)
+          : [],
+    });
   }
 
   onLoadData = async (treeNode: AntTreeNode) => {
-    const { loadData } = this.props;
-
     if (treeNode.props.children) {
       return;
     }
     const eventKey = treeNode.props.eventKey;
     const assetId = eventKey ? Number.parseInt(eventKey, 10) : undefined;
 
-    if (loadData && assetId && !Number.isNaN(assetId)) {
+    if (assetId && !Number.isNaN(assetId)) {
       const query = {
         depth: 2,
         limit: 1000,
       };
 
-      const loadedData = loadData(assetId, query);
+      const loadedData = await cursorApiRequest(assetId, query);
       if (loadedData.length > 1) {
         treeNode.props.dataRef.children = loadedData
           .slice(1)
@@ -130,9 +145,8 @@ export class AssetTree extends Component<AssetTreeType, AssetTreeState> {
     }
   };
 
-  onSelectNode = (returnAsset: OnSelectReturnType) => {
+  onSelectNode = (returnAsset: OnSelectAssetTreeParams) => {
     const { onSelect } = this.props;
-
     if (onSelect) {
       onSelect(returnAsset);
     }
@@ -140,7 +154,9 @@ export class AssetTree extends Component<AssetTreeType, AssetTreeState> {
 
   onExpand = (expandedKeys: string[]) => {
     this.setState({
-      expandedKeys: AssetTree.toKeys(expandedKeys),
+      expandedKeys: AssetTree.toKeys(
+        expandedKeys.map(key => Number.parseInt(key, 10))
+      ),
     });
   };
 
@@ -158,7 +174,6 @@ export class AssetTree extends Component<AssetTreeType, AssetTreeState> {
 
   render() {
     const { treeData, expandedKeys } = this.state;
-
     return (
       <Tree
         loadData={this.onLoadData}
