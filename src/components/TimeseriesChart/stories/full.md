@@ -7,7 +7,7 @@
 This component loads the datapoints given a timeseries id and renders a line chart of those points.
 The component requires only `timeseriesIds`
 
-####
+#### Usage:
 
 ```typescript jsx
 import React from 'react';
@@ -19,7 +19,7 @@ function ExampleComponent(props) {
   );
   
 }
-````
+```
 
 #### Available props:
 
