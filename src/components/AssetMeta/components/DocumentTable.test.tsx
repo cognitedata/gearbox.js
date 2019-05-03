@@ -6,6 +6,7 @@ import {
   DOCUMENT_WITH_CUSTOM_TYPE_FIELD,
   DOCUMENT_WITHOUT_METADATA,
   DOCUMENT_WITHOUT_TYPE,
+  DOCUMENTS,
   generateDocumentWithDocType,
 } from '../../../mocks';
 import { DocumentTable } from './DocumentTable';
@@ -14,6 +15,7 @@ configure({ adapter: new Adapter() });
 
 const ANT_COLLAPSE_HEADER = '.ant-collapse-header';
 
+// tslint:disable:no-big-function
 describe('DocumentTable', () => {
   it('Renders without exploding', () => {
     const wrapper = mount(<DocumentTable docs={[]} />);
@@ -205,5 +207,20 @@ describe('DocumentTable', () => {
       .hostNodes()
       .simulate('click');
     expect(handleCategoryClick.mock.calls[0][0]).toEqual(['XB']);
+  });
+
+  it('Should sort categories with custom sort', () => {
+    const customCategorySort = (a: string, b: string) =>
+      a > b ? 1 : a < b ? -1 : 0;
+    const wrapper = mount(
+      <DocumentTable docs={DOCUMENTS} customCategorySort={customCategorySort} />
+    );
+    const categories = wrapper
+      .find(ANT_COLLAPSE_HEADER)
+      .hostNodes()
+      .map(node => node.text());
+    for (let i = 0; i < categories.length - 1; i++) {
+      expect(customCategorySort(categories[i], categories[i + 1])).not.toBe(1);
+    }
   });
 });
