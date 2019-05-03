@@ -88,7 +88,14 @@ export const getCategoryByPriority = (
   return {
     categories: prioritizedCategories
       .sort((a, b) => sortDocsByPriority(a, b, priorityObject))
-      .concat(regularCategories.sort(sortStringsAlphabetically)),
+      .concat(
+        regularCategories.sort((a, b) =>
+          sortStringsAlphabetically(
+            docsByCat[a].description,
+            docsByCat[b].description
+          )
+        )
+      ),
     prioritizedCount: prioritizedCategories.length,
   };
 };

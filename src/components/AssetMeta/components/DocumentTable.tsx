@@ -143,7 +143,7 @@ const TextContainerTop = styled.div`
 const PanelWrapper = styled(Panel)<{ delimiter: boolean }>`
   text-align: left;
   ${({ delimiter }) =>
-    delimiter ? 'border-bottom: 2px solid #CCCCCC !important;' : ''}
+    delimiter ? 'border-bottom: 2px solid #CFCFCF !important;' : ''}
 `;
 
 const LinkStyle = styled.a`
