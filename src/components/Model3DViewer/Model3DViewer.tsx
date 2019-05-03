@@ -233,7 +233,15 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       this.viewer.fitCameraToModel(this.model);
     } else if (length === 1) {
       const { nodeId } = this.nodes[0];
-      const bb = this.model.getBoundingBox(nodeId);
+
+      // @ts-ignore
+      this.model.updateMatrixWorld();
+
+      const reusableBox = new THREE.Box3();
+
+      // @ts-ignore
+      const { matrixWorld } = this.model;
+      const bb = this.model.getBoundingBox(nodeId, reusableBox, matrixWorld);
 
       this.model.selectNode(nodeId);
 
