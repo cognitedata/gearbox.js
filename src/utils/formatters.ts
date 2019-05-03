@@ -1,8 +1,10 @@
 import moment from 'moment-timezone';
 import { PureObject } from '../interfaces';
 
+type TimeType = number | string | Date;
+
 export function formatDatetime(
-  time: number | string | Date,
+  time: TimeType | undefined,
   defaultValue: string = '',
   timezone: string = '',
   format: string = 'MMM D, YYYY HH:mm:ss'

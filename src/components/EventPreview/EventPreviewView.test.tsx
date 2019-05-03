@@ -1,9 +1,9 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React, { SyntheticEvent } from 'react';
-import { ApiEvent } from '../../interfaces';
+import { Event as ApiEvent } from '@cognite/sdk';
 import { eventPreviewStrings, EVENTS, eventWithout } from '../../mocks';
-import { defaultStrings, EventPreview } from './EventPreview';
+import { defaultStrings, EventPreview } from './components/EventPreviewView';
 
 configure({ adapter: new Adapter() });
 
