@@ -14,6 +14,9 @@ import { ASSET_DATA, DOCUMENTS, EVENTS } from '../../../mocks';
 import { AssetMeta } from '../AssetMeta';
 import alternatePane from './alternatePane.md';
 import basic from './basic.md';
+import customCategorySort from './customCategorySort.md';
+import customPriorityAndSort from './customPriorityAndSort.md';
+import customPriorityCategory from './customPriorityCategory.md';
 import fullDescription from './full.md';
 import hideTab from './hideTab.md';
 import selectedDocument from './selectedDocument.md';
@@ -115,6 +118,62 @@ storiesOf('AssetMeta/Examples', module)
     {
       readme: {
         content: selectedDocument,
+      },
+    }
+  )
+  .add(
+    'Custom priority categories',
+    () => {
+      return (
+        <AssetMeta
+          assetId={123}
+          docsProps={{ categoryPriorityList: ['AB', 'ZE'] }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: customPriorityCategory,
+      },
+    }
+  )
+  .add(
+    'Custom categories sort',
+    () => {
+      const customSort = (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0);
+      return (
+        <AssetMeta
+          assetId={123}
+          docsProps={{
+            customCategorySort: customSort,
+            categoryPriorityList: [],
+          }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: customCategorySort,
+      },
+    }
+  )
+  .add(
+    'Custom category priority and sort',
+    () => {
+      const customSort = (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0);
+      return (
+        <AssetMeta
+          assetId={123}
+          docsProps={{
+            customCategorySort: customSort,
+            categoryPriorityList: ['ZE'],
+          }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: customPriorityAndSort,
       },
     }
   );

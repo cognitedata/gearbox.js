@@ -54,6 +54,7 @@ export interface MetaDocProps {
   docTypes?: JsonDocTypes;
   noDocumentsSign?: string;
   documentRenderer?: DocumentRenderer;
+  customCategorySort?: (a: string, b: string) => number;
 }
 
 export interface DocumentTableProps extends MetaDocProps {

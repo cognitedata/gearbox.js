@@ -43,9 +43,14 @@ function ExampleComponent(props) {
 ### Types
 
 #### MetaDocProps
-This prop is supposed to customize the look of "Documents" pane.
+This prop customizes the appearance of "Documents" pane.
 It also contains a handler triggered when a user clicks on a certain document.
-The type can be imported from @cognite/gearbox:
+Please notice that document categories "P&ID" and "Logic diagrams" are prioritized by default 
+so that these categories always appear on top of the list unless `categoryPriorityList` 
+is provided with a list of prioritized category codes. The rest of categories are sorted alphabetically, 
+but if `customCategorySort` is provided this function will be used for sorting none prioritized categories.
+Priority categories are delimited from regular categories by gray line.
+`MetaDocProps` type can be imported from @cognite/gearbox:
 
 ```typescript
 import { MetaDocProps } from '@cognite/gearbox';
@@ -67,6 +72,7 @@ interface MetaDocProps {
   docTypes?: JsonDocTypes;
   noDocumentsSign?: string;
   documentRenderer?: DocumentRenderer;
+  customCategorySort?: (a: string, b: string) => number;
 }
   
 type OnDocumentClick = (

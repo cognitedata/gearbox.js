@@ -49,7 +49,21 @@ export const DOCUMENTS = [
     ...generateDocumentBase(3),
     metadata: {
       DOC_TITLE: 'document title 3',
-      DOC_TYPE: 'XG',
+      DOC_TYPE: 'ZE',
+    },
+  },
+  {
+    ...generateDocumentBase(4),
+    metadata: {
+      DOC_TITLE: 'document title 4',
+      DOC_TYPE: 'AB',
+    },
+  },
+  {
+    ...generateDocumentBase(5),
+    metadata: {
+      DOC_TITLE: 'document title 5',
+      DOC_TYPE: 'XL',
     },
   },
 ];
