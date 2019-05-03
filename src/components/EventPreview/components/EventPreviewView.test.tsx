@@ -1,7 +1,7 @@
 import { Event as ApiEvent } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import { eventPreviewStrings, EVENTS, eventWithout } from '../../../mocks';
 import { defaultStrings, EventPreviewView } from './EventPreviewView';
 
@@ -9,7 +9,7 @@ configure({ adapter: new Adapter() });
 
 // @ts-ignore - ignore mock type casting
 const event = EVENTS[0] as ApiEvent;
-const onShowDetails = (e: SyntheticEvent) => e;
+const onShowDetails = (e: ApiEvent) => e;
 
 describe('EventPreview', () => {
   it('Renders without exploding', () => {

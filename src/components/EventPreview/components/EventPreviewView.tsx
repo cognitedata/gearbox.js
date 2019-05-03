@@ -3,7 +3,7 @@ import { Event as ApiEvent } from '@cognite/sdk';
 import { Button } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { OnClick, PureObject } from '../../../interfaces';
+import { PureObject } from '../../../interfaces';
 import { formatDatetime } from '../../../utils';
 import { ComplexString } from '../../common/ComplexString/ComplexString';
 
@@ -44,7 +44,7 @@ export const defaultStrings: PureObject = {
 
 export interface EventPreviewProps {
   event: ApiEvent;
-  onShowDetails: OnClick;
+  onShowDetails?: (event: ApiEvent) => void;
   strings?: PureObject;
 }
 
@@ -78,7 +78,11 @@ export const EventPreviewView = ({
           count={metadataCount}
         />
       </EventDescription>
-      <Button htmlType="button" type="primary" onClick={onShowDetails}>
+      <Button
+        htmlType="button"
+        type="primary"
+        onClick={() => onShowDetails && onShowDetails(event)}
+      >
         {details}
       </Button>
     </Container>

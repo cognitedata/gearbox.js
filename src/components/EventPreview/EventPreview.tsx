@@ -1,11 +1,11 @@
 import { Event as ApiEvent, Events } from '@cognite/sdk';
 import React from 'react';
-import { OnClick, PureObject } from '../../interfaces';
+import { PureObject } from '../../interfaces';
 import { LoadingSpinner } from '../common/LoadingSpinner/LoadingSpinner';
 import { EventPreviewView } from './components/EventPreviewView';
 export interface EventPreviewProps {
   eventId: number;
-  onShowDetails: OnClick;
+  onShowDetails?: (e: ApiEvent) => void;
   strings?: PureObject;
 }
 
@@ -45,7 +45,6 @@ export class EventPreview extends React.Component<
         />
       );
     } else {
-      console.log('--------?????');
       return null;
     }
   }
