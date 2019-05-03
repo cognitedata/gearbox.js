@@ -31,7 +31,7 @@ function ExampleComponent(props) {
 | Property           | Description                                  | Type                                                           | Default |
 | ------------------ | -------------------------------------------- | -------------------------------------------------------------- | ------- |
 | `title`            | A title text                                 | `string`                                                       |         |
-| `onTenantSelected` | A function called when the button is clicked | `(tenant: string, advancedOptions: PureObject | null) => void` |         |
+| `onTenantSelected` | A function called when the button is clicked | `(tenant: string, advancedOptions: PureObject \| null) => void` |         |
 
 #### Optional:
 
