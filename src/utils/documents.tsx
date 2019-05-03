@@ -100,6 +100,21 @@ export const getCategoryByPriority = (
   };
 };
 
+export const getCategoryByCustomSort = (
+  documentsByCategory: DocumentsByCategory,
+  customSort: (a: string, b: string) => number
+): { categories: string[]; prioritizedCount: number } => {
+  return {
+    categories: Object.keys(documentsByCategory).sort((a, b) =>
+      customSort(
+        documentsByCategory[a].description,
+        documentsByCategory[b].description
+      )
+    ),
+    prioritizedCount: 0,
+  };
+};
+
 export const getDocumentsByCategory = (
   docs: Document[],
   unknownCategoryName?: string,
