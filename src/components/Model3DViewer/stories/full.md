@@ -72,23 +72,15 @@ function ExampleComponent(props) {
 | Property                   | Description                                                         | Type                                                                                | Default |
 | -------------------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------- |
 | `assetId`                  | id of asset to highlight                                            | `number`                                                                            |         |
-| `boundingBox`              | bounding box object, that describes dimension of viewed asset nodes | `THREE.Box3`                                                                        | {}      |
-| `cache`                    | object for caching 3D viewers instances                             | `{ [name:string]: any }`                                                            |         |
-| `useDefaultCameraPosition` | use default camera position                                         | `boolean`                                                                            | true    |
+| `boundingBox`              | bounding box object, that describes dimension of viewed asset nodes | `THREE.Box3`                                                                        |         |
+| `cache`                    | object for caching 3D viewers instances                             | `{ [name:string]: any }`                                                            |   {}    |
+| `useDefaultCameraPosition` | use default camera position                                         | `boolean`                                                                           | true    |
 | `onReady`                  | on scene prepared to display model callback                         | `(viewer: Cognite3DViewer, model: Cognite3DModel, revision: sdk.Revision) => void;` |         |
 | `onProgress`               | on model loading progress callback                                  | `(progress: OnProgressData) => void;`                                               |         |
 | `onComplete`               | on model complete loading callback                                  | `() => void;`                                                                       |         |
 | `onClick`                  | on model click handler                                              | `(nodeId: number) => void;`                                                         |         |
 | `onCameraChange`           | on scene camera change position callback                            | `(position: THREE.Vector3) => void;`                                                |         |
 
-##### Default boundingBox value:
-
-```typescript jsx
-const boundingBox = new THREE.Box3({
-  min: { x: Infinity, y: Infinity, z: Infinity },
-  max: { x: -Infinity, y: Infinity, z: -Infinity },
-});
-```
 
 ##### Interfaces:
 

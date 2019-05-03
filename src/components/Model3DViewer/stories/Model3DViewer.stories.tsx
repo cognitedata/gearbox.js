@@ -24,11 +24,12 @@ const onClick = (modelId: number) =>
   action('onClick')(modelId || generateNumber());
 const onProgress = (progress: OnProgressData) => action('onProgress')(progress);
 const onComplete = () => action('onComplete')();
-const onReady = (
-  _: Cognite3DViewer,
-  model: Cognite3DModel,
-  revision: sdk.Revision
-) => action('onReady')({ name: 'viewer' }, model, revision);
+const onReady = (_: Cognite3DViewer, __: Cognite3DModel, ___: sdk.Revision) =>
+  action('onReady')(
+    { name: 'viewer' },
+    { name: 'model' },
+    { name: 'revision' }
+  );
 
 storiesOf('Model3DViewer', module).add(
   'Full description',

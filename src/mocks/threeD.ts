@@ -8,20 +8,6 @@ import {
   ViewerEventTypes,
 } from '../utils';
 
-export const revisionObj = {
-  published: false,
-  id: 102301,
-  fileId: 12,
-  status: 'Done',
-  assetMappingCount: 4,
-  createdTime: Date.now(),
-};
-
-export const modelObj = {
-  modelId: 0,
-  revisionId: 0,
-};
-
 export function createFakeViewer({
   project,
   cache = {},
@@ -48,13 +34,12 @@ export function createFakeViewer({
     listeners[complete].forEach(callback => callback());
   };
 
-  const onLoad = (object: THREE.Object3D) => {
+  const onLoad = async (object: THREE.Object3D) => {
     const bb = new THREE.Box3().setFromObject(object);
 
     // @ts-ignore
     viewer.addObject3D(object);
     viewer.fitCameraToBoundingBox(bb);
-
     onComplete();
   };
 
@@ -69,8 +54,8 @@ export function createFakeViewer({
 
   cache[project] = {
     viewer,
-    modelPromise: Promise.resolve(modelObj),
-    revisionPromise: Promise.resolve(revisionObj),
+    modelPromise: Promise.resolve(null),
+    revisionPromise: Promise.resolve(null),
     addEvent: addEvent.bind(null, listeners),
     removeEvent: removeEvent.bind(null, listeners),
   };
