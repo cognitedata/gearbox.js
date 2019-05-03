@@ -211,9 +211,13 @@ describe('DocumentTable', () => {
 
   it('Should sort categories with custom sort', () => {
     const customCategorySort = (a: string, b: string) =>
-      a > b ? 1 : a < b ? -1 : 0;
+      a > b ? -1 : a < b ? 1 : 0;
     const wrapper = mount(
-      <DocumentTable docs={DOCUMENTS} customCategorySort={customCategorySort} />
+      <DocumentTable
+        docs={DOCUMENTS}
+        categoryPriorityList={[]}
+        customCategorySort={customCategorySort}
+      />
     );
     const categories = wrapper
       .find(ANT_COLLAPSE_HEADER)

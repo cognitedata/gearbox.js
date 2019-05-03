@@ -3,7 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Document, DocumentTableProps } from '../../../interfaces';
 import {
-  getCategoryByCustomSort,
   getCategoryByPriority,
   getDocumentsByCategory,
   getDocumentTitle,
@@ -75,12 +74,11 @@ export class DocumentTable extends React.PureComponent<
       docTypes,
       documentTypeField
     );
-    const {
-      categories,
-      prioritizedCount,
-    }: { categories: string[]; prioritizedCount: number } = customCategorySort
-      ? getCategoryByCustomSort(documentsByCategory, customCategorySort)
-      : getCategoryByPriority(documentsByCategory, categoryPriorityList);
+    const { categories, prioritizedCount } = getCategoryByPriority(
+      documentsByCategory,
+      categoryPriorityList,
+      customCategorySort
+    );
 
     if (!categories.length) {
       return (

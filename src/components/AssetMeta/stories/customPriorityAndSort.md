@@ -1,4 +1,4 @@
-## Custom Categories Sort
+## Custom Category Priority and Sort
 
 <!-- STORY -->
 
@@ -16,9 +16,9 @@ function ExampleComponent(props) {
     <AssetMeta 
       assetId={4650652196144007}
       docsProps={{
-        customCategorySort,
-        categoryPriorityList: [],
-        }}
+            customCategorySort,
+            categoryPriorityList: ['ZE'],
+          }}
     />
   );
   

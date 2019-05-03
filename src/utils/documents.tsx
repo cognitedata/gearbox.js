@@ -73,7 +73,8 @@ export const getCategoryName = (
 
 export const getCategoryByPriority = (
   docsByCat: DocumentsByCategory,
-  priorityList: string[] = []
+  priorityList: string[] = [],
+  customSort?: (a: string, b: string) => number
 ): { categories: string[]; prioritizedCount: number } => {
   const priorityObject = getPriorityObjectFromArray(priorityList);
   const prioritizedCategories: string[] = [];
@@ -85,33 +86,16 @@ export const getCategoryByPriority = (
       regularCategories.push(category);
     }
   }
+  const sortFunction = customSort || sortStringsAlphabetically;
   return {
     categories: prioritizedCategories
       .sort((a, b) => sortDocsByPriority(a, b, priorityObject))
       .concat(
         regularCategories.sort((a, b) =>
-          sortStringsAlphabetically(
-            docsByCat[a].description,
-            docsByCat[b].description
-          )
+          sortFunction(docsByCat[a].description, docsByCat[b].description)
         )
       ),
     prioritizedCount: prioritizedCategories.length,
-  };
-};
-
-export const getCategoryByCustomSort = (
-  documentsByCategory: DocumentsByCategory,
-  customSort: (a: string, b: string) => number
-): { categories: string[]; prioritizedCount: number } => {
-  return {
-    categories: Object.keys(documentsByCategory).sort((a, b) =>
-      customSort(
-        documentsByCategory[a].description,
-        documentsByCategory[b].description
-      )
-    ),
-    prioritizedCount: 0,
   };
 };
 
