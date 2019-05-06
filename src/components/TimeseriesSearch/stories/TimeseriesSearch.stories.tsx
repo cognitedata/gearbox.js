@@ -75,9 +75,14 @@ const onTimeserieSelectionChange = (
 
 storiesOf('TimeseriesSearch', module).add(
   'Full Description',
-  () => (
-    <TimeseriesSearch onTimeserieSelectionChange={onTimeserieSelectionChange} />
-  ),
+  () => {
+    setupMocks();
+    return (
+      <TimeseriesSearch
+        onTimeserieSelectionChange={onTimeserieSelectionChange}
+      />
+    );
+  },
   {
     readme: {
       content: fullDescription,
@@ -104,6 +109,7 @@ storiesOf('TimeseriesSearch/Examples', module)
   })
   .add(
     'Basic',
+    // tslint:disable-next-line: no-identical-functions
     () => {
       setupMocks();
       return (
