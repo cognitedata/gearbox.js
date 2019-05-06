@@ -12,7 +12,7 @@ const SpinContainer = styled.div`
   justify-content: center;
 `;
 
-export const LoadingSpinner: React.SFC = () => (
+const LoadingSpinner: React.SFC = () => (
   <SpinContainer>
     <Spin />
   </SpinContainer>
