@@ -74,7 +74,8 @@ function ExampleComponent(props) {
 | `assetId`                  | id of asset to highlight                                            | `number`                                                                            |         |
 | `boundingBox`              | bounding box object, that describes dimension of viewed asset nodes | `THREE.Box3`                                                                        |         |
 | `cache`                    | object for caching 3D viewers instances                             | `{ [name:string]: any }`                                                            |   {}    |
-| `useDefaultCameraPosition` | use default camera position                                         | `boolean`                                                                           | true    |
+| `disableKeyboardNavigation`| disable/enable keyboard navigation in viewer (disabled by default)  | `boolean`                                                                           |  true   |
+| `useDefaultCameraPosition` | use default camera position                                         | `boolean`                                                                           |  true   |
 | `onReady`                  | on scene prepared to display model callback                         | `(viewer: Cognite3DViewer, model: Cognite3DModel, revision: sdk.Revision) => void;` |         |
 | `onProgress`               | on model loading progress callback                                  | `(progress: OnProgressData) => void;`                                               |         |
 | `onComplete`               | on model complete loading callback                                  | `() => void;`                                                                       |         |
