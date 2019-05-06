@@ -5,6 +5,7 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { EVENTS } from '../../../mocks';
 import { EventPreview } from '../EventPreview';
+import fullDescription from './full.md';
 
 Events.retrieve = (eventId: number): Promise<Event> => {
   return new Promise(resolve => {
@@ -19,7 +20,24 @@ const onShowDetails = (e: ApiEvent) => {
   action('onShowDetails')(e);
 };
 
-const stories = storiesOf('EventPreview', module)
+storiesOf('EventPreview', module).add(
+  'Full Description',
+  () => <EventPreview eventId={25496029326330} onShowDetails={onShowDetails} />,
+  {
+    readme: {
+      content: fullDescription,
+    },
+    info: {
+      header: false,
+      source: false,
+      styles: {
+        infoBody: { display: 'none' },
+      },
+    },
+  }
+);
+
+storiesOf('EventPreview/Examples', module)
   .add(
     'Basic',
     () => (
@@ -111,8 +129,6 @@ const stories = storiesOf('EventPreview', module)
     () => (
       <EventPreview
         eventId={25496029326330}
-        onShowDetails={onShowDetails}
-        hideDetailsButton={true}
       />
     ),
     {
