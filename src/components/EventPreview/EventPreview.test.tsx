@@ -40,7 +40,7 @@ describe('EventPreview', () => {
     const wrapper = mount(
       <EventPreview eventId={8825861064387} hideLoadingSpinner={true} />
     );
-    expect(wrapper.children()).toHaveLength(0);
+    expect(wrapper.isEmptyRender()).toBeTruthy();
   });
 
   it('Should request an event via SDK if eventId has been changed', done => {
