@@ -15,8 +15,8 @@ type ClickHandler = (position: MouseScreenPosition) => void;
 export interface Model3DViewerProps {
   modelId: number;
   revisionId: number;
-  cache: CacheObject;
   boundingBox?: THREE.Box3;
+  cache?: CacheObject;
   assetId?: number;
   enableKeyboardNavigation?: boolean;
   onError?: Callback;
@@ -36,7 +36,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   static defaultProps = {
     enableKeyboardNavigation: false,
     useDefaultCameraPosition: true,
-    cache: {},
   };
 
   disposeCalls: any[] = [];
@@ -75,6 +74,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       removeEvent,
       revisionPromise,
       modelPromise,
+      fromCache,
     } = createViewer({
       modelId,
       revisionId,
@@ -126,7 +126,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     this.revision = revision;
     this.nodes = nodes;
 
-    if (useDefaultCameraPosition) {
+    if (useDefaultCameraPosition && !fromCache) {
       this.resetCameraPosition();
     }
 
@@ -147,10 +147,15 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
         viewer.off('cameraChange', onCameraChange);
       }
     });
+
+    if (fromCache) {
+      this.highlightNodes();
+    }
   }
 
   async componentDidUpdate() {
     const { onError } = this.props;
+
     try {
       this.nodes = await this.findMappedNodes();
       this.highlightNodes();

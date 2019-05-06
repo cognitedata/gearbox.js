@@ -15,6 +15,7 @@ import * as full from './full.md';
 
 const modelID = 0;
 const revisionID = 0;
+const cache = {};
 
 const Wrapper = styled.div`
   padding: 20px;
@@ -45,6 +46,7 @@ storiesOf('Model3DViewer', module).add(
           onProgress={onProgress}
           onComplete={onComplete}
           onReady={onReady}
+          cache={cache}
         />
       </Wrapper>
     );
