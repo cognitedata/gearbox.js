@@ -1,4 +1,3 @@
-// @ts-ignore
 import { Event as ApiEvent } from '@cognite/sdk';
 import { Button } from 'antd';
 import React from 'react';
@@ -16,7 +15,7 @@ const EventType = styled.div`
   color: #40a9ff;
   padding-bottom: 8px;
 `;
-const EventDescription = styled.div`
+const EventDetailsBlock = styled.div`
   font-size: 1.1rem;
   padding-bottom: 16px;
   p {
@@ -46,12 +45,16 @@ export interface EventPreviewProps {
   event: ApiEvent;
   onShowDetails?: (event: ApiEvent) => void;
   strings?: PureObject;
+  hideProperties?: (keyof ApiEvent)[];
+  hideDetailsButton?: boolean;
 }
 
 export const EventPreviewView = ({
   onShowDetails,
   event,
   strings = {},
+  hideProperties = [],
+  hideDetailsButton,
 }: EventPreviewProps) => {
   const lang = { ...defaultStrings, ...strings };
   const { startTime, endTime, type, subtype, description, metadata } = event;
@@ -62,29 +65,46 @@ export const EventPreviewView = ({
 
   return (
     <Container key="container">
-      <EventType>{[type, subtype].filter(Boolean).join(' / ')}</EventType>
-      <EventTitle>{description || noDescription}</EventTitle>
-      <EventDescription>
-        <p>
-          {start}: {startDate}
-        </p>
-        <p>
-          {end}: {endDate}
-        </p>
-      </EventDescription>
-      <EventDescription>
-        <ComplexString
-          input={metadataSummary as string}
-          count={metadataCount}
-        />
-      </EventDescription>
-      <Button
-        htmlType="button"
-        type="primary"
-        onClick={() => onShowDetails && onShowDetails(event)}
-      >
-        {details}
-      </Button>
+      <EventType>
+        {[
+          hideProperties.includes('type') ? '' : type,
+          hideProperties.includes('subtype') ? '' : subtype,
+        ]
+          .filter(Boolean)
+          .join(' / ')}
+      </EventType>
+      {!hideProperties.includes('description') && (
+        <EventTitle>{description || noDescription}</EventTitle>
+      )}
+      <EventDetailsBlock>
+        {!hideProperties.includes('startTime') && (
+          <p>
+            {start}: {startDate}
+          </p>
+        )}
+        {!hideProperties.includes('endTime') && (
+          <p>
+            {end}: {endDate}
+          </p>
+        )}
+      </EventDetailsBlock>
+      {!hideProperties.includes('metadata') && (
+        <EventDetailsBlock>
+          <ComplexString
+            input={metadataSummary as string}
+            count={metadataCount}
+          />
+        </EventDetailsBlock>
+      )}
+      {!hideDetailsButton && (
+        <Button
+          htmlType="button"
+          type="primary"
+          onClick={() => onShowDetails && onShowDetails(event)}
+        >
+          {details}
+        </Button>
+      )}
     </Container>
   );
 };

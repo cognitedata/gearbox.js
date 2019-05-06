@@ -1,4 +1,5 @@
 /* tslint:disable:no-duplicate-string */
+import { Event as ApiEvent } from '@cognite/sdk';
 import moment from 'moment-timezone';
 
 const EVENT_DESCRIPTION = 'PRODUCTION WELL A-23, SLOT-09 (101109)';
@@ -50,7 +51,7 @@ export const eventWithout = (field: string) => ({
 
 const baseTimestamp = 1556120152466;
 
-export const EVENTS = [
+export const EVENTS: ApiEvent[] = [
   {
     id: 1995162693488,
     type: 'failure',
