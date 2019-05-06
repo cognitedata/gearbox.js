@@ -15,6 +15,7 @@ const viewer = {
   getCanvas: () => document.createElement('div'),
   on: jest.fn(),
   off: jest.fn(),
+  disableKeyboardNavigation: jest.fn(),
 };
 
 const callbacksCreateViewer = jest.fn(() => ({
