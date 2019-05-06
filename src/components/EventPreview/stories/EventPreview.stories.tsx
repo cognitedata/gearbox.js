@@ -12,7 +12,6 @@ import hideDateTime from './hideDateTime.md';
 import hideDescription from './hideDescription.md';
 import hideLoadingSpinner from './hideLoadingSpinner.md';
 import hideMetadata from './hideMetadata.md';
-import hideSubtype from './hideSubtype.md';
 import hideType from './hideType.md';
 import withCustomText from './withCustomText.md';
 
@@ -83,21 +82,6 @@ storiesOf('EventPreview/Examples', module)
     }
   )
   .add(
-    'Hidden subtype',
-    () => (
-      <EventPreview
-        eventId={25496029326330}
-        onShowDetails={onShowDetails}
-        hideProperties={['subtype']}
-      />
-    ),
-    {
-      readme: {
-        content: hideSubtype,
-      },
-    }
-  )
-  .add(
     'Hidden description',
     () => (
       <EventPreview
@@ -145,6 +129,17 @@ storiesOf('EventPreview/Examples', module)
   .add(
     'Hidden details button',
     () => <EventPreview eventId={25496029326330} />,
+    {
+      readme: {
+        content: hideButton,
+      },
+    }
+  )
+  .add(
+    'With missing properties',
+    () => (
+      <EventPreview eventId={35593709738145} onShowDetails={onShowDetails} />
+    ),
     {
       readme: {
         content: hideButton,

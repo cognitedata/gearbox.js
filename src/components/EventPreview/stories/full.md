@@ -52,6 +52,8 @@ function ExampleComponent(props) {
   noDescription: 'No description',
   start: 'Start',
   end: 'End',
+  noStartTime: 'Unknown',
+  noEndTime: 'Ongoing',
   details: 'Explore event details',
   metadataSummary: 'Contains {{count}} additional pieces of data',
 }

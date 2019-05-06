@@ -141,6 +141,14 @@ export const EVENTS: ApiEvent[] = [
     createdTime: 1548932461186,
     lastUpdatedTime: 1548932461186,
   },
+  {
+    id: 35593709738145,
+    assetIds: [4650652196144007],
+    source: 'akerbp-cdp3',
+    sourceId: '3080723126388384',
+    createdTime: 1548932461186,
+    lastUpdatedTime: 1548932461186,
+  },
 ];
 
 export const eventTimelineDataSrc = [
