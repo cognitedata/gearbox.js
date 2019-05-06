@@ -37,6 +37,8 @@ export const defaultStrings: PureObject = {
   noDescription: 'No description',
   start: 'Start',
   end: 'End',
+  noStartTime: 'Unknown',
+  noEndTime: 'Ongoing',
   details: 'Explore event details',
   metadataSummary: 'Contains {{count}} additional pieces of data',
 };
@@ -46,7 +48,6 @@ export interface EventPreviewProps {
   onShowDetails?: (event: ApiEvent) => void;
   strings?: PureObject;
   hideProperties?: (keyof ApiEvent)[];
-  hideDetailsButton?: boolean;
 }
 
 export const EventPreviewView = ({
@@ -54,13 +55,20 @@ export const EventPreviewView = ({
   event,
   strings = {},
   hideProperties = [],
-  hideDetailsButton,
 }: EventPreviewProps) => {
   const lang = { ...defaultStrings, ...strings };
   const { startTime, endTime, type, subtype, description, metadata } = event;
-  const { noDescription, start, end, details, metadataSummary } = lang;
-  const startDate = formatDatetime(startTime, 'Unknown');
-  const endDate = formatDatetime(endTime, 'Ongoing');
+  const {
+    noDescription,
+    start,
+    end,
+    details,
+    metadataSummary,
+    noStartTime,
+    noEndTime,
+  } = lang;
+  const startDate = formatDatetime(startTime, noStartTime as string);
+  const endDate = formatDatetime(endTime, noEndTime as string);
   const metadataCount = metadata ? Object.keys(metadata).length : 0;
 
   return (
@@ -96,11 +104,11 @@ export const EventPreviewView = ({
           />
         </EventDetailsBlock>
       )}
-      {!hideDetailsButton && (
+      {onShowDetails && (
         <Button
           htmlType="button"
           type="primary"
-          onClick={() => onShowDetails && onShowDetails(event)}
+          onClick={() => onShowDetails(event)}
         >
           {details}
         </Button>

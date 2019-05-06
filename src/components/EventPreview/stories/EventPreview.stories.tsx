@@ -5,6 +5,15 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { EVENTS } from '../../../mocks';
 import { EventPreview } from '../EventPreview';
+import basic from './basic.md';
+import fullDescription from './full.md';
+import hideButton from './hideButton.md';
+import hideDateTime from './hideDateTime.md';
+import hideDescription from './hideDescription.md';
+import hideLoadingSpinner from './hideLoadingSpinner.md';
+import hideMetadata from './hideMetadata.md';
+import hideType from './hideType.md';
+import withCustomText from './withCustomText.md';
 
 Events.retrieve = (eventId: number): Promise<Event> => {
   return new Promise(resolve => {
@@ -19,15 +28,41 @@ const onShowDetails = (e: ApiEvent) => {
   action('onShowDetails')(e);
 };
 
-const stories = storiesOf('EventPreview', module)
+storiesOf('EventPreview', module).add(
+  'Full Description',
+  () => <EventPreview eventId={25496029326330} onShowDetails={onShowDetails} />,
+  {
+    readme: {
+      content: fullDescription,
+    },
+    info: {
+      header: false,
+      source: false,
+      styles: {
+        infoBody: { display: 'none' },
+      },
+    },
+  }
+);
+
+storiesOf('EventPreview/Examples', module)
+  .addParameters({
+    info: {
+      header: false,
+      source: false,
+      styles: {
+        infoBody: { display: 'none' },
+      },
+    },
+  })
   .add(
     'Basic',
     () => (
       <EventPreview eventId={25496029326330} onShowDetails={onShowDetails} />
     ),
     {
-      info: {
-        maxPropObjectKeys: 10,
+      readme: {
+        content: basic,
       },
     }
   )
@@ -41,23 +76,8 @@ const stories = storiesOf('EventPreview', module)
       />
     ),
     {
-      info: {
-        maxPropObjectKeys: 10,
-      },
-    }
-  )
-  .add(
-    'Hidden subtype',
-    () => (
-      <EventPreview
-        eventId={25496029326330}
-        onShowDetails={onShowDetails}
-        hideProperties={['subtype']}
-      />
-    ),
-    {
-      info: {
-        maxPropObjectKeys: 10,
+      readme: {
+        content: hideType,
       },
     }
   )
@@ -71,8 +91,8 @@ const stories = storiesOf('EventPreview', module)
       />
     ),
     {
-      info: {
-        maxPropObjectKeys: 10,
+      readme: {
+        content: hideDescription,
       },
     }
   )
@@ -86,8 +106,8 @@ const stories = storiesOf('EventPreview', module)
       />
     ),
     {
-      info: {
-        maxPropObjectKeys: 10,
+      readme: {
+        content: hideDateTime,
       },
     }
   )
@@ -101,23 +121,28 @@ const stories = storiesOf('EventPreview', module)
       />
     ),
     {
-      info: {
-        maxPropObjectKeys: 10,
+      readme: {
+        content: hideMetadata,
       },
     }
   )
   .add(
     'Hidden details button',
+    () => <EventPreview eventId={25496029326330} />,
+    {
+      readme: {
+        content: hideButton,
+      },
+    }
+  )
+  .add(
+    'With missing properties',
     () => (
-      <EventPreview
-        eventId={25496029326330}
-        onShowDetails={onShowDetails}
-        hideDetailsButton={true}
-      />
+      <EventPreview eventId={35593709738145} onShowDetails={onShowDetails} />
     ),
     {
-      info: {
-        maxPropObjectKeys: 10,
+      readme: {
+        content: hideButton,
       },
     }
   )
@@ -131,8 +156,28 @@ const stories = storiesOf('EventPreview', module)
       />
     ),
     {
-      info: {
-        maxPropObjectKeys: 10,
+      readme: {
+        content: hideLoadingSpinner,
+      },
+    }
+  )
+  .add(
+    'With custom text',
+    () => (
+      <EventPreview
+        eventId={25496029326330}
+        onShowDetails={onShowDetails}
+        strings={{
+          start: 'From',
+          end: 'To',
+          details: 'More Details',
+          metadataSummary: 'Contains {{count}} more',
+        }}
+      />
+    ),
+    {
+      readme: {
+        content: withCustomText,
       },
     }
   );

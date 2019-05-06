@@ -439,6 +439,69 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                     June 13, 2019 3:35 PM
                   </td>
                 </tr>
+                <tr
+                  className="ant-table-row ant-table-row-level-0"
+                  data-row-key={35593709738145}
+                  onClick={[Function]}
+                  onContextMenu={[Function]}
+                  onDoubleClick={[Function]}
+                  onMouseEnter={[Function]}
+                  onMouseLeave={[Function]}
+                  style={
+                    Object {
+                      "height": null,
+                    }
+                  }
+                >
+                  <td
+                    className=""
+                    onClick={[Function]}
+                  >
+                    <span
+                      className="ant-table-row-indent indent-level-0"
+                      style={
+                        Object {
+                          "paddingLeft": "0px",
+                        }
+                      }
+                    />
+                    <span>
+                      <strong
+                        style={
+                          Object {
+                            "display": "block",
+                          }
+                        }
+                      />
+                      <span
+                        style={
+                          Object {
+                            "fontSize": 12,
+                            "opacity": 0.8,
+                          }
+                        }
+                      />
+                    </span>
+                  </td>
+                  <td
+                    className=""
+                    onClick={[Function]}
+                  >
+                    No description
+                  </td>
+                  <td
+                    className=""
+                    onClick={[Function]}
+                  >
+                    -
+                  </td>
+                  <td
+                    className=""
+                    onClick={[Function]}
+                  >
+                    Ongoing
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>

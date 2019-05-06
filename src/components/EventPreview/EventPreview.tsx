@@ -23,7 +23,6 @@ export interface EventPreviewProps {
   onShowDetails?: (e: ApiEvent) => void;
   strings?: PureObject;
   hideProperties?: (keyof ApiEvent)[];
-  hideDetailsButton?: boolean;
   hideLoadingSpinner?: boolean;
 }
 
@@ -68,7 +67,6 @@ export class EventPreview extends React.Component<
         event={this.state.event}
         onShowDetails={this.props.onShowDetails}
         hideProperties={this.props.hideProperties}
-        hideDetailsButton={this.props.hideDetailsButton}
         strings={this.props.strings}
       />
     );
