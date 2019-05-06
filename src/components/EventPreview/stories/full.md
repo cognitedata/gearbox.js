@@ -41,7 +41,7 @@ function ExampleComponent(props) {
 
 | Property            | Description                                                            | Type                                          | Default     |
 | ------------------- | ---------------------------------------------------------------------- | --------------------------------------------- | ----------- |
-| `hideProperties`    | List of event properties to be hidden. Possible values: `type`, `subtype`, `description`, `startTime`, `endTime`, `Metadata`| `Array<keyof Event>`                          | []          |
+| `hideProperties`    | List of event properties to be hidden. Possible values: `type`, `subtype`, `description`, `startTime`, `endTime`, `metadata`| `Array<keyof Event>`                          | []          |
 | `hideLoadingSpinner`| Defines whether to hide the loading spinner                            | `boolean`                       |             | false       |
 | `onShowDetails`     | Function triggered when user clicks on the 'Explore event details' button. If the function is not provided the button will not be rendered. | `(event: Event) => void`     |             |             |
 | `strings`           | Object map with strings to customize/localize text in the component    | `{[key: string]: string}`       |             |             |
@@ -61,9 +61,9 @@ function ExampleComponent(props) {
 ### Types
 
 #### Event
-`Event` type can be imported from @cognite/gearbox:
+`Event` type can be imported from @cognite/sdk:
 
 ```typescript
-import { Event } from '@cognite/gearbox';
+import { Event } from '@cognite/sdk';
 ```
 
