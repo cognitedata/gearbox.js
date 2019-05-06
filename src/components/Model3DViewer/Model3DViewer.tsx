@@ -18,7 +18,7 @@ export interface Model3DViewerProps {
   cache: CacheObject;
   boundingBox?: THREE.Box3;
   assetId?: number;
-  disableKeyboardNavigation?: boolean;
+  enableKeyboardNavigation?: boolean;
   onError?: Callback;
   onProgress?: Callback;
   onComplete?: Callback;
@@ -34,7 +34,7 @@ export function mockCreateViewer(mockFunction: any) {
 
 export class Model3DViewer extends React.Component<Model3DViewerProps> {
   static defaultProps = {
-    disableKeyboardNavigation: true,
+    enableKeyboardNavigation: false,
     useDefaultCameraPosition: true,
     cache: {},
   };
@@ -62,7 +62,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       cache,
       boundingBox,
       useDefaultCameraPosition,
-      disableKeyboardNavigation,
+      enableKeyboardNavigation,
       onProgress,
       onReady,
       onCameraChange,
@@ -84,7 +84,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
     this.viewer = viewer;
 
-    if (disableKeyboardNavigation) {
+    if (!enableKeyboardNavigation) {
       viewer.disableKeyboardNavigation();
     }
 
