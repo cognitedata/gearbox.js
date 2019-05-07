@@ -11,7 +11,7 @@ import { CacheObject, Callback, EventHandlers } from '../interfaces';
 interface ViewerConfig {
   modelId: number;
   revisionId: number;
-  cache: CacheObject;
+  cache?: CacheObject;
   boundingBox?: THREE.Box3;
 }
 
@@ -21,6 +21,7 @@ export interface ViewerConfigResponse {
   revisionPromise: Promise<sdk.Revision>;
   addEvent: (events: [ViewerEventTypes, Callback][]) => void;
   removeEvent: (events?: [ViewerEventTypes, Callback][]) => void;
+  fromCache?: boolean;
 }
 
 export enum ViewerEventTypes {
@@ -85,7 +86,9 @@ export function createViewer({
   const hash = hashGenerator(modelId, revisionId, boundingBox);
   const { progress, complete, error } = ViewerEventTypes;
 
-  if (cache[hash]) {
+  if (cache && cache[hash]) {
+    cache[hash].fromCache = true;
+
     return cache[hash];
   }
 
@@ -119,7 +122,7 @@ export function createViewer({
     onComplete,
   });
 
-  cache[hash] = {
+  const response = {
     viewer,
     modelPromise,
     revisionPromise,
@@ -127,7 +130,11 @@ export function createViewer({
     removeEvent: removeEvent.bind(null, listeners),
   };
 
-  return cache[hash];
+  if (cache) {
+    cache[hash] = response;
+  }
+
+  return response;
 }
 
 export function addEvent(
