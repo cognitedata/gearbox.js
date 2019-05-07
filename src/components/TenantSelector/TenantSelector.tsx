@@ -1,6 +1,6 @@
 import { Button, Collapse, Form, Input as AntInput, Spin } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
-import { InputProps } from 'antd/lib/input/input';
+import { InputProps } from 'antd/lib/input';
 import React from 'react';
 import styled from 'styled-components';
 import { PureObject } from '../../interfaces';
