@@ -57,26 +57,10 @@ storiesOf('AssetSearch', module).add(
     readme: {
       content: full,
     },
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
   }
 );
 
 storiesOf('AssetSearch/Examples', module)
-  .addParameters({
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
-  })
   .add(
     'Basic',
     () => (

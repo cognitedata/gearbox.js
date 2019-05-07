@@ -12,16 +12,13 @@ import * as defaultExpanded from './defaultExpanded.md';
 import * as fullDescription from './full.md';
 
 const setupMocks = () => {
-  sdk.Assets.list = async (query: sdk.AssetListParams) => {
+  sdk.Assets.list = async (_: sdk.AssetListParams) => {
     return { items: ASSET_ZERO_DEPTH_ARRAY };
   };
 
-  sdk.Assets.listDescendants = async (
-    assetId: number,
-    query: sdk.AssetListDescendantsParams
-  ) => {
+  sdk.Assets.listDescendants = async (assetId: number) => {
     return {
-      items: ASSET_LIST_CHILD.sort((a, b) => (a.id === assetId ? -1 : 1)),
+      items: ASSET_LIST_CHILD.sort(a => (a.id === assetId ? -1 : 1)),
     };
   };
 };
@@ -37,26 +34,10 @@ storiesOf('AssetTree', module).add(
     readme: {
       content: fullDescription,
     },
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
   }
 );
 
 storiesOf('AssetTree/Examples', module)
-  .addParameters({
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
-  })
   .add(
     'Basic',
     () => {

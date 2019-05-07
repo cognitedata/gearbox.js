@@ -87,26 +87,10 @@ storiesOf('TimeseriesSearch', module).add(
     readme: {
       content: fullDescription,
     },
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
   }
 );
 
 storiesOf('TimeseriesSearch/Examples', module)
-  .addParameters({
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
-  })
   .add(
     'Basic',
     // tslint:disable-next-line: no-identical-functions
