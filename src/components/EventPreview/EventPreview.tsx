@@ -34,6 +34,8 @@ export class EventPreview extends React.Component<
   EventPreviewProps,
   EventPreviewState
 > {
+  isComponentUnmount: boolean = false;
+
   constructor(props: EventPreviewProps) {
     super(props);
     this.state = {
@@ -52,9 +54,15 @@ export class EventPreview extends React.Component<
     }
   }
 
+  componentWillUnmount() {
+    this.isComponentUnmount = true;
+  }
+
   async loadEvent() {
     const event = await Events.retrieve(this.props.eventId);
-    this.setState({ event });
+    if (!this.isComponentUnmount) {
+      this.setState({ event });
+    }
   }
 
   render() {
