@@ -13,6 +13,7 @@ import hideDescription from './hideDescription.md';
 import hideLoadingSpinner from './hideLoadingSpinner.md';
 import hideMetadata from './hideMetadata.md';
 import hideType from './hideType.md';
+import missingProperties from './missingProperties.md';
 import withCustomText from './withCustomText.md';
 
 Events.retrieve = (eventId: number): Promise<Event> => {
@@ -142,7 +143,7 @@ storiesOf('EventPreview/Examples', module)
     ),
     {
       readme: {
-        content: hideButton,
+        content: missingProperties,
       },
     }
   )
