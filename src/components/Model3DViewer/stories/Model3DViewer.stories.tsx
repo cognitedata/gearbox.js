@@ -1,9 +1,4 @@
-import {
-  Cognite3DModel,
-  Cognite3DViewer,
-  OnProgressData,
-} from '@cognite/3d-viewer';
-import * as sdk from '@cognite/sdk';
+import { OnProgressData } from '@cognite/3d-viewer';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
@@ -25,7 +20,7 @@ const onClick = (modelId: number) =>
   action('onClick')(modelId || generateNumber());
 const onProgress = (progress: OnProgressData) => action('onProgress')(progress);
 const onComplete = () => action('onComplete')();
-const onReady = (_: Cognite3DViewer, __: Cognite3DModel, ___: sdk.Revision) =>
+const onReady = () =>
   action('onReady')(
     { name: 'viewer' },
     { name: 'model' },
@@ -54,13 +49,6 @@ storiesOf('Model3DViewer', module).add(
   {
     readme: {
       content: full,
-    },
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
     },
   }
 );

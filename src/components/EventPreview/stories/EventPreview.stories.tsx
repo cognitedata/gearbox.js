@@ -36,26 +36,10 @@ storiesOf('EventPreview', module).add(
     readme: {
       content: fullDescription,
     },
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
   }
 );
 
 storiesOf('EventPreview/Examples', module)
-  .addParameters({
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
-  })
   .add(
     'Basic',
     () => (

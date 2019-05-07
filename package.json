@@ -47,8 +47,6 @@
     "@cognite/griff-react": "^0.4.2",
     "@cognite/sdk": "^1.7.1",
     "@storybook/addon-actions": "^5.0.11",
-    "@storybook/addon-info": "^5.0.11",
-    "@storybook/addon-links": "^5.0.11",
     "@storybook/addons": "^5.0.11",
     "@storybook/react": "^5.0.11",
     "@types/d3": "^5.7.1",

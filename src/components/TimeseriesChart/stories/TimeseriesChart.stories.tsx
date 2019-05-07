@@ -103,27 +103,11 @@ storiesOf('TimeseriesChart', module).add(
     readme: {
       content: full,
     },
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
   }
 );
 
 storiesOf('TimeseriesChart/Examples', module)
   .addDecorator(story => <div style={{ width: '100%' }}>{story()}</div>)
-  .addParameters({
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
-  })
   .add(
     'Empty',
     () => {

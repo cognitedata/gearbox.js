@@ -15,26 +15,10 @@ storiesOf('DescriptionList', module).add(
     readme: {
       content: fullDescription,
     },
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
   }
 );
 
 storiesOf('DescriptionList/Examples', module)
-  .addParameters({
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
-  })
   .add('Basic', () => <DescriptionList valueSet={ASSET_DATA.metadata} />, {
     readme: {
       content: basic,

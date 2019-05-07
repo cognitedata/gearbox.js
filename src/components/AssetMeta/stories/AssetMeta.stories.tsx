@@ -54,26 +54,10 @@ storiesOf('AssetMeta', module).add(
     readme: {
       content: fullDescription,
     },
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
   }
 );
 
 storiesOf('AssetMeta/Examples', module)
-  .addParameters({
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
-  })
   .add('Basic', () => <AssetMeta assetId={4650652196144007} />, {
     readme: {
       content: basic,

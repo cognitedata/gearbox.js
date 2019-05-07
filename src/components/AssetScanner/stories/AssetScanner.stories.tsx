@@ -57,38 +57,21 @@ storiesOf('AssetScanner', module).add(
     readme: {
       content: full,
     },
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
-    },
   }
 );
 
-storiesOf('AssetScanner/Examples', module)
-  .addParameters({
-    info: {
-      header: false,
-      source: false,
-      styles: {
-        infoBody: { display: 'none' },
-      },
+storiesOf('AssetScanner/Examples', module).add(
+  'Custom notifications',
+  () => (
+    <AssetScanner
+      onUnauthorized={onUnauthorized}
+      ocrKey={'YOUR_GOOGLE_VISION_KEY'}
+      customNotification={customNotification}
+    />
+  ),
+  {
+    readme: {
+      content: customNotificationsDoc,
     },
-  })
-  .add(
-    'Custom notifications',
-    () => (
-      <AssetScanner
-        onUnauthorized={onUnauthorized}
-        ocrKey={'YOUR_GOOGLE_VISION_KEY'}
-        customNotification={customNotification}
-      />
-    ),
-    {
-      readme: {
-        content: customNotificationsDoc,
-      },
-    }
-  );
+  }
+);
