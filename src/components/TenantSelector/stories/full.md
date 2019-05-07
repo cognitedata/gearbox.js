@@ -46,6 +46,7 @@ function ExampleComponent(props) {
 | `unknownMessage`  | Message to show if validation fails        | `string`                                                        | `'This is an unknown configuration.'` |
 | `advancedOptions` | Object to show as advanced options         | `PureObject`                                                    |                                       |
 | `onInvalidTenant` | function called when tenant is invalid     | `(tenant: string) => void`                                      |                                       |
+| `styles`          | Object that defines inline CSS styles for inner elements of the component.  | `TenantSelectorStyles`         |                                       |
 
 
 ### Types
@@ -68,4 +69,27 @@ interface PureObject {
   [name: string]: ID;
 };
 
+```
+
+#### TenantSelectorStyles
+This interface defines inline CSS styles for inner elements of `TenantSelector` component.
+For more details see `Custom Styles` example.
+
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { TenantSelectorStyles } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+interface TenantSelectorStyles {
+  button?: React.CSSProperties;
+  collapseWrapper?: React.CSSProperties;
+  input?: React.CSSProperties;
+  subTitle?: React.CSSProperties;
+  title?: React.CSSProperties;
+  wrapper?: React.CSSProperties;
+}
 ```

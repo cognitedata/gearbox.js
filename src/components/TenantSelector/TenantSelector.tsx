@@ -14,6 +14,15 @@ enum TenantValidity {
   UNKNOWN = 2,
 }
 
+export interface TenantSelectorStyles {
+  button?: React.CSSProperties;
+  collapseWrapper?: React.CSSProperties;
+  input?: React.CSSProperties;
+  subTitle?: React.CSSProperties;
+  title?: React.CSSProperties;
+  wrapper?: React.CSSProperties;
+}
+
 export interface TenantSelectorProps {
   header?: string | React.ReactNode;
   initialTenant?: string;
@@ -31,14 +40,7 @@ export interface TenantSelectorProps {
     advancedOptions: PureObject | null
   ) => Promise<boolean>;
   advancedOptions?: PureObject;
-  styles?: {
-    button?: React.CSSProperties;
-    collapseWrapper?: React.CSSProperties;
-    input?: React.CSSProperties;
-    subTitle?: React.CSSProperties;
-    title?: React.CSSProperties;
-    wrapper?: React.CSSProperties;
-  };
+  styles?: TenantSelectorStyles;
 }
 
 interface TenantSelectorState {
@@ -249,7 +251,7 @@ const LoginWrapper = styled.div`
   flex-direction: column;
   -webkit-box-pack: start;
   justify-content: flex-start;
-  width: 100%;
+  max-width: 400px;
   box-shadow: rgba(0, 0, 0, 0.05) 1px 6px 20px 8px,
     rgba(0, 0, 0, 0.11) 0px 6px 6px;
   background-color: rgb(255, 255, 255);
