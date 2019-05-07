@@ -14,11 +14,11 @@ In case if some of the panes are not necessary it can be disabled by `hidePanels
 
 ```typescript jsx
 import React from 'react';
-import { AssetMetadata } from '@cognite/gearbox';
+import { AssetMeta } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
   return <AssetMeta assetId={4650652196144007} />;
-
+  
 }
 ```
 
