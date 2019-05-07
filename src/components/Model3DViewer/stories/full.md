@@ -33,6 +33,7 @@ import * as sdk from '@cognite/sdk';
 import { Model3DViewer } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
+  const cache = {};
   const modelId = 0;
   const revisionId = 0;
   const onClick = (modelId: number) => {};
@@ -51,6 +52,7 @@ function ExampleComponent(props) {
       onClick={onClick}
       onProgress={onProgress}
       onComplete={onComplete}
+      cache={cache}
     />
     
   );
@@ -73,7 +75,7 @@ function ExampleComponent(props) {
 | -------------------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------- |
 | `assetId`                  | id of asset to highlight                                            | `number`                                                                            |         |
 | `boundingBox`              | bounding box object, that describes dimension of viewed asset nodes | `THREE.Box3`                                                                        |         |
-| `cache`                    | object for caching 3D viewers instances                             | `{ [name:string]: any }`                                                            |   {}    |
+| `cache`                    | object for caching 3D viewers instances                             | `{ [name:string]: any }`                                                            |         |
 | `enableKeyboardNavigation` | enable keyboard navigation in viewer                                | `boolean`                                                                           |  false  |
 | `useDefaultCameraPosition` | use default camera position                                         | `boolean`                                                                           |  true   |
 | `onReady`                  | on scene prepared to display model callback                         | `(viewer: Cognite3DViewer, model: Cognite3DModel, revision: sdk.Revision) => void;` |         |
