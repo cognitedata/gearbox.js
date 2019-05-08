@@ -7,27 +7,36 @@ import {
 } from './dataLoader';
 
 import {
+  Annotation,
   AxisDisplayMode,
   AxisPlacement,
   DataProvider,
   LineChart,
+  Ruler,
 } from '@cognite/griff-react';
 import { Spin } from 'antd';
 import { decimalTickFormatter, getColor } from '../../utils';
 
-export interface TimeseriesChartProps {
+export type TimeseriesChartProps = {
   panelHeight: number;
-  timeseriesIds: number[];
   pointsPerSeries: number;
-  start: number | Date;
-  end: number | Date;
+  startTime: number | Date;
+  endTime: number | Date;
   contextChart: boolean;
   zoomable: boolean;
   liveUpdate: boolean;
   updateIntervalMillis: number;
+  timeseriesColors: { [id: number]: string };
+  hiddenSeries: { [id: number]: boolean };
+  annotations: Annotation[];
+  ruler: Ruler;
   yAxisDisplayMode: 'ALL' | 'COLLAPSED' | 'NONE';
   yAxisPlacement: 'RIGHT' | 'LEFT' | 'BOTH';
-}
+  onMouseMove?: (e: any) => void;
+  onBlur?: (e: any) => void;
+  onMouseOut?: (e: any) => void;
+  onFetchDataError: (e: Error) => void;
+} & ({ timeseriesIds: number[] } | { series: any });
 
 interface TimeseriesChartState {
   loaded: boolean;
@@ -41,18 +50,23 @@ export class TimeseriesChart extends React.Component<
   TimeseriesChartState
 > {
   static defaultProps = {
-    start: +Date.now() - 60 * 60 * 1000,
-    end: +Date.now(),
-    timeseriesIds: [],
+    startTime: +Date.now() - 60 * 60 * 1000,
+    endTime: +Date.now(),
     pointsPerSeries: 600,
     updateIntervalMillis: 5000,
-
     zoomable: false,
     contextChart: false,
     yAxisDisplayMode: 'ALL',
     liveUpdate: false,
     yAxisPlacement: 'RIGHT',
     panelHeight: 500,
+    timeseriesColors: {},
+    hiddenSeries: {},
+    annotations: [],
+    ruler: {},
+    onFetchDataError: (e: Error) => {
+      throw e;
+    },
   };
   state = {
     loaded: false,
@@ -66,29 +80,43 @@ export class TimeseriesChart extends React.Component<
 
   render() {
     const {
-      start,
-      end,
+      startTime,
+      endTime,
       pointsPerSeries,
+      // @ts-ignore
       timeseriesIds,
+      // @ts-ignore
+      series,
       updateIntervalMillis,
       zoomable,
       contextChart,
+      timeseriesColors,
       yAxisDisplayMode,
       panelHeight,
       liveUpdate,
       yAxisPlacement,
+      hiddenSeries,
+      annotations,
+      ruler,
+      onMouseMove,
+      onMouseOut,
+      onBlur,
+      onFetchDataError,
     } = this.props;
 
     const { loaded } = this.state;
 
-    const griffSeries = timeseriesIds.map((id: number) => ({
-      id,
-      color: getColor(id.toString()),
-      yAxisDisplayMode: AxisDisplayMode[yAxisDisplayMode],
-      yAccessor,
-      y0Accessor,
-      y1Accessor,
-    }));
+    const griffSeries = series
+      ? series
+      : timeseriesIds.map((id: number) => ({
+          id,
+          color: timeseriesColors[id] || getColor(id.toString()),
+          yAxisDisplayMode: AxisDisplayMode[yAxisDisplayMode],
+          hidden: hiddenSeries[id],
+          yAccessor,
+          y0Accessor,
+          y1Accessor,
+        }));
 
     return (
       griffSeries.length !== 0 && (
@@ -99,10 +127,8 @@ export class TimeseriesChart extends React.Component<
               onFetchData={this.onFetchData}
               pointsPerSeries={pointsPerSeries}
               series={griffSeries}
-              timeDomain={[+start, +end]}
-              onFetchDataError={(e: Error) => {
-                throw e;
-              }}
+              timeDomain={[+startTime, +endTime]}
+              onFetchDataError={onFetchDataError}
               updateInterval={
                 liveUpdate
                   ? Math.max(
@@ -115,13 +141,18 @@ export class TimeseriesChart extends React.Component<
               <LineChart
                 zoomable={zoomable}
                 crosshair={false}
+                annotations={annotations}
                 contextChart={{
                   visible: contextChart,
                   height: 100,
                   isDefault: true,
                 }}
+                ruler={ruler}
                 yAxisFormatter={decimalTickFormatter}
                 yAxisPlacement={AxisPlacement[yAxisPlacement]}
+                onMouseMove={onMouseMove}
+                onMouseOut={onMouseOut}
+                onBlur={onBlur}
               />
             </DataProvider>
           </div>

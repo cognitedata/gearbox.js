@@ -1,18 +1,26 @@
 /* eslint-disable react/no-multi-comp */
+import { AxisDisplayMode } from '@cognite/griff-react';
 import * as sdk from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
+import { y0Accessor, y1Accessor, yAccessor } from '../dataLoader';
 import { TimeseriesChart } from '../TimeseriesChart';
 
+import * as annotations from './annotations.md';
 import * as collapsedYAxis from './collapsedYAxis.md';
 import * as contextChart from './contextChart.md';
+import * as customColors from './customColors.md';
+import * as customSeries from './customSeries.md';
 import * as empty from './empty.md';
 import * as full from './full.md';
+import * as hidden from './hidden.md';
 import * as leftYAxis from './leftYAxis.md';
 import * as liveUpdate from './liveUpdate.md';
+import * as mouseEvents from './mouseEvents.md';
 import * as multiple from './multiple.md';
 import * as noYAxis from './noYAxis.md';
+import * as ruler from './ruler.md';
 import * as single from './single.md';
 import * as startEnd from './startEnd.md';
 import * as zoomable from './zoomable.md';
@@ -145,6 +153,23 @@ storiesOf('TimeseriesChart/Examples', module)
     }
   )
   .add(
+    'Hidden',
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesChart
+          timeseriesIds={[123, 456]}
+          hiddenSeries={{ 123: true }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: hidden,
+      },
+    }
+  )
+  .add(
     'Left y-axis',
     () => {
       setupMocks();
@@ -186,14 +211,14 @@ storiesOf('TimeseriesChart/Examples', module)
     }
   )
   .add(
-    'Start and end',
+    'Start and end time',
     () => {
       setupMocks();
       return (
         <TimeseriesChart
           timeseriesIds={[123]}
-          start={new Date(2019, 3, 1)}
-          end={new Date(2019, 4, 1)}
+          startTime={new Date(2019, 3, 1)}
+          endTime={new Date(2019, 4, 1)}
         />
       );
     },
@@ -222,8 +247,8 @@ storiesOf('TimeseriesChart/Examples', module)
       return (
         <TimeseriesChart
           timeseriesIds={[123]}
-          start={+Date.now() - 30 * 24 * 60 * 60 * 1000}
-          end={Date.now()}
+          startTime={+Date.now() - 30 * 24 * 60 * 60 * 1000}
+          endTime={Date.now()}
           zoomable={true}
           contextChart={true}
         />
@@ -242,8 +267,8 @@ storiesOf('TimeseriesChart/Examples', module)
       return (
         <TimeseriesChart
           timeseriesIds={[123]}
-          start={+Date.now() - 60 * 1000}
-          end={Date.now()}
+          startTime={+Date.now() - 60 * 1000}
+          endTime={Date.now()}
           liveUpdate={true}
           updateIntervalMillis={2000}
         />
@@ -252,6 +277,116 @@ storiesOf('TimeseriesChart/Examples', module)
     {
       readme: {
         content: liveUpdate,
+      },
+    }
+  )
+  .add(
+    'Custom colors',
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesChart
+          timeseriesIds={[123, 456]}
+          timeseriesColors={{ 123: 'red', 456: '#00ff00' }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: customColors,
+      },
+    }
+  )
+  .add(
+    'Annotations',
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesChart
+          timeseriesIds={[123]}
+          startTime={+Date.now() - 60 * 1000}
+          endTime={Date.now()}
+          annotations={[
+            {
+              data: [Date.now() - 30 * 1000, Date.now() - 20 * 1000],
+              height: 30,
+              id: 888,
+            },
+          ]}
+        />
+      );
+    },
+    {
+      readme: {
+        content: annotations,
+      },
+    }
+  )
+  .add(
+    'Ruler',
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesChart
+          timeseriesIds={[123]}
+          startTime={Date.now() - 60 * 1000}
+          endTime={Date.now()}
+          ruler={{
+            visible: true,
+            yLabel: (point: any) =>
+              `${Number.parseFloat(point.value).toFixed(3)}`,
+            timeLabel: (point: any) => point.timestamp,
+          }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: ruler,
+      },
+    }
+  )
+  .add(
+    'Mouse events',
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesChart
+          timeseriesIds={[123]}
+          startTime={+Date.now() - 60 * 1000}
+          endTime={Date.now()}
+          onMouseMove={(e: any) => action('onMouseMove')(e)}
+          onMouseOut={(e: any) => action('onMouseOut')(e)}
+          onBlur={(e: any) => action('onBlur')(e)}
+        />
+      );
+    },
+    {
+      readme: {
+        content: mouseEvents,
+      },
+    }
+  )
+  .add(
+    'Custom series',
+    () => {
+      setupMocks();
+      const series = [
+        {
+          id: 123,
+          color: 'green',
+          yAxisDisplayMode: AxisDisplayMode.ALL,
+          hidden: false,
+          y0Accessor,
+          y1Accessor,
+          yAccessor,
+        },
+      ];
+      return <TimeseriesChart series={series} />;
+    },
+    {
+      readme: {
+        content: customSeries,
       },
     }
   );
