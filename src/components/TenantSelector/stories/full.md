@@ -75,7 +75,7 @@ interface PureObject {
 This interface defines inline CSS styles for inner elements of `TenantSelector` component.
 You can override styles of following blocks:
 
-<img src="/tenant_selector/styling_schema.jpg" alt="Tenant Styling" width="600px">
+<img src="tenant_selector/styling_schema.jpg" alt="Tenant Styling" width="600px">
 <br><br>
 The type can be imported from `@cognite/gearbox`:
 
