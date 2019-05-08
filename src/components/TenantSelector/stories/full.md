@@ -73,8 +73,10 @@ interface PureObject {
 
 #### TenantSelectorStyles
 This interface defines inline CSS styles for inner elements of `TenantSelector` component.
-For more details see `Custom Styles` example.
+You can override styles of following blocks:
 
+<img src="/tenant_selector/styling_schema.jpg" alt="Tenant Styling" width="600px">
+<br><br>
 The type can be imported from `@cognite/gearbox`:
 
 ```typescript
@@ -93,3 +95,5 @@ interface TenantSelectorStyles {
   wrapper?: React.CSSProperties;
 }
 ```
+
+See more details in `Custom Styles` example.
