@@ -46,6 +46,7 @@ function ExampleComponent(props) {
 | `unknownMessage`  | Message to show if validation fails        | `string`                                                        | `'This is an unknown configuration.'` |
 | `advancedOptions` | Object to show as advanced options         | `PureObject`                                                    |                                       |
 | `onInvalidTenant` | function called when tenant is invalid     | `(tenant: string) => void`                                      |                                       |
+| `styles`          | Object that defines inline CSS styles for inner elements of the component.  | `TenantSelectorStyles`         |                                       |
 
 
 ### Types
@@ -69,3 +70,30 @@ interface PureObject {
 };
 
 ```
+
+#### TenantSelectorStyles
+This interface defines inline CSS styles for inner elements of `TenantSelector` component.
+You can override styles of following blocks:
+
+<img src="/tenant_selector/styling_schema.jpg" alt="Tenant Styling" width="600px">
+<br><br>
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { TenantSelectorStyles } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+interface TenantSelectorStyles {
+  button?: React.CSSProperties;
+  collapseWrapper?: React.CSSProperties;
+  input?: React.CSSProperties;
+  subTitle?: React.CSSProperties;
+  title?: React.CSSProperties;
+  wrapper?: React.CSSProperties;
+}
+```
+
+See more details in `Custom Styles` example.

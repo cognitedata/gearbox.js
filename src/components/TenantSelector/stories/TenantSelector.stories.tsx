@@ -8,6 +8,7 @@ import { TenantSelector } from '../TenantSelector';
 import * as advancedOptions from './advancedOptions.md';
 import * as basic from './basic.md';
 import * as customErrorMessageOnValidationError from './customErrorMessageOnValidationError.md';
+import * as customStyles from './customStyles.md';
 import * as customValidationError from './customValidationError.md';
 import * as customValidationSuccess from './customValidationSuccess.md';
 import * as fullDescription from './full.md';
@@ -180,6 +181,53 @@ storiesOf('TenantSelector/Examples', module)
     {
       readme: {
         content: advancedOptions,
+      },
+    }
+  )
+  .add(
+    'Custom Styles',
+    () => (
+      <TenantSelector
+        title="Styled App"
+        onTenantSelected={action('onTenantSelected')}
+        advancedOptions={{ apiUrl: '', comment: 'Comment' }}
+        styles={{
+          title: {
+            color: 'red',
+            alignSelf: 'center',
+            fontFamily: 'Comic Sans MS',
+          },
+          subTitle: {
+            color: 'purple',
+            alignSelf: 'center',
+          },
+          wrapper: {
+            width: 400,
+            backgroundColor: '#ffffa7',
+            borderRadius: 30,
+            boxShadow: 'none',
+          },
+          button: {
+            width: 200,
+            textTransform: 'none',
+            alignSelf: 'center',
+            borderRadius: 10,
+            backgroundColor: 'magenta',
+            color: 'white',
+          },
+          input: {
+            borderRadius: 10,
+            border: '2px solid #33DD33',
+          },
+          collapseWrapper: {
+            backgroundColor: '#ffffa7',
+          },
+        }}
+      />
+    ),
+    {
+      readme: {
+        content: customStyles,
       },
     }
   );

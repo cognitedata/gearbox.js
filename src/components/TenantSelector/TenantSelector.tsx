@@ -1,4 +1,6 @@
-import { Button, Collapse, Form, Input, Spin } from 'antd';
+import { Button, Collapse, Form, Input as AntInput, Spin } from 'antd';
+import { NativeButtonProps } from 'antd/lib/button/button';
+import { InputProps } from 'antd/lib/input';
 import React from 'react';
 import styled from 'styled-components';
 import { PureObject } from '../../interfaces';
@@ -10,6 +12,15 @@ enum TenantValidity {
   CHECKING = 0,
   INVALID = 1,
   UNKNOWN = 2,
+}
+
+export interface TenantSelectorStyles {
+  button?: React.CSSProperties;
+  collapseWrapper?: React.CSSProperties;
+  input?: React.CSSProperties;
+  subTitle?: React.CSSProperties;
+  title?: React.CSSProperties;
+  wrapper?: React.CSSProperties;
 }
 
 export interface TenantSelectorProps {
@@ -29,6 +40,7 @@ export interface TenantSelectorProps {
     advancedOptions: PureObject | null
   ) => Promise<boolean>;
   advancedOptions?: PureObject;
+  styles?: TenantSelectorStyles;
 }
 
 interface TenantSelectorState {
@@ -59,6 +71,7 @@ export class TenantSelector extends React.Component<
 
   renderAdvancedOptions() {
     const { advanced } = this.state;
+    const { styles } = this.props;
     const keys = Object.keys(advanced);
 
     if (!keys.length) {
@@ -69,6 +82,7 @@ export class TenantSelector extends React.Component<
       return (
         <Form.Item key={option}>
           <Input
+            style={styles && styles.input}
             name={option}
             onChange={e => this.onAdvancedOptionChange(e, option)}
             value={advanced[option]}
@@ -79,7 +93,11 @@ export class TenantSelector extends React.Component<
     });
 
     return (
-      <CollapseWrapper bordered={false} data-id="collapse-container">
+      <CollapseWrapper
+        bordered={false}
+        data-id="collapse-container"
+        style={styles && styles.collapseWrapper}
+      >
         <Panel key={'0'} header={'Advanced options'}>
           {inputs}
         </Panel>
@@ -94,6 +112,7 @@ export class TenantSelector extends React.Component<
       placeholder,
       title,
       unknownMessage,
+      styles,
     } = this.props;
 
     const { tenant, validity } = this.state;
@@ -113,12 +132,17 @@ export class TenantSelector extends React.Component<
     }
 
     return (
-      <LoginWrapper>
-        <Title>{title}</Title>
-        {header || <h3>Enter your company name</h3>}
+      <LoginWrapper style={styles && styles.wrapper}>
+        <Title style={styles && styles.title}>{title}</Title>
+        {header || (
+          <SubTitle style={styles && styles.subTitle}>
+            Enter your company name
+          </SubTitle>
+        )}
         <Form>
           <Form.Item hasFeedback={true} {...formItemProps}>
             <Input
+              style={styles && styles.input}
               data-id="tenant-input"
               autoFocus={true}
               onChange={this.onTenantChange}
@@ -130,14 +154,14 @@ export class TenantSelector extends React.Component<
           </Form.Item>
           {this.renderAdvancedOptions()}
         </Form>
-        <Button
+        <LoginButton
+          style={styles && styles.button}
           htmlType="button"
           disabled={checkingValidity || invalidTenant || tenant === ''}
           onClick={this.checkTenantValidity}
-          className="uppercase tenant-selector-login-button"
         >
           {checkingValidity ? <Spin size="small" /> : loginText || 'Login'}
-        </Button>
+        </LoginButton>
       </LoginWrapper>
     );
   }
@@ -227,31 +251,23 @@ const LoginWrapper = styled.div`
   flex-direction: column;
   -webkit-box-pack: start;
   justify-content: flex-start;
-  width: 100%;
+  max-width: 400px;
   box-shadow: rgba(0, 0, 0, 0.05) 1px 6px 20px 8px,
     rgba(0, 0, 0, 0.11) 0px 6px 6px;
   background-color: rgb(255, 255, 255);
   margin: auto;
   padding: 45px;
   overflow: auto;
+`;
 
-  .tenant-selector-login-button {
-    font-weight: bold;
-    a {
-      color: #000000;
-    }
-    border-radius: 0;
-    min-height: 45px;
-    margin: 15px 0;
+const Title = styled.h1`
+  font-weight: bold;
+`;
 
-    &:not([disabled]) {
-      cursor: pointer;
-      background-color: #179aff;
-      color: #fff;
-    }
-  }
+const SubTitle = styled.h3``;
 
-  input {
+const Input = styled((props: InputProps) => <AntInput {...props} />)`
+  && {
     border: none;
     background-color: #f5f5f5;
     font-weight: bold;
@@ -268,8 +284,19 @@ const LoginWrapper = styled.div`
   }
 `;
 
-const Title = styled.h1`
+const LoginButton = styled((props: NativeButtonProps) => <Button {...props} />)`
   font-weight: bold;
+  text-transform: uppercase;
+  background-color: red;
+  border-radius: 0;
+  min-height: 45px;
+  margin: 15px 0;
+
+  &:not([disabled]) {
+    cursor: pointer;
+    background-color: #179aff;
+    color: #fff;
+  }
 `;
 
 const CollapseWrapper = styled(Collapse)`
