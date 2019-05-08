@@ -3,6 +3,7 @@ import { Spin } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import { PureObject } from '../../interfaces';
+import { PromiseKeeper } from '../../utils';
 import { EventPreviewView } from './components/EventPreviewView';
 
 const SpinContainer = styled.div`
@@ -34,7 +35,7 @@ export class EventPreview extends React.Component<
   EventPreviewProps,
   EventPreviewState
 > {
-  isComponentUnmount: boolean = false;
+  loadEventCancel: (() => void) | null = null;
 
   constructor(props: EventPreviewProps) {
     super(props);
@@ -55,13 +56,30 @@ export class EventPreview extends React.Component<
   }
 
   componentWillUnmount() {
-    this.isComponentUnmount = true;
+    if (this.loadEventCancel) {
+      this.loadEventCancel();
+    }
   }
 
   async loadEvent() {
-    const event = await Events.retrieve(this.props.eventId);
-    if (!this.isComponentUnmount) {
+    if (this.loadEventCancel) {
+      this.loadEventCancel();
+    }
+    const { promise, cancel } = PromiseKeeper.cancelable(
+      Events.retrieve(this.props.eventId)
+    );
+
+    this.loadEventCancel = cancel;
+
+    try {
+      const event = await promise;
+      this.loadEventCancel = null;
+
       this.setState({ event });
+    } catch (e) {
+      if (e.isCanceled) {
+        this.loadEventCancel = null;
+      }
     }
   }
 

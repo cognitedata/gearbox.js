@@ -59,7 +59,7 @@ export class TimeseriesChart extends React.Component<
   };
 
   onFetchData = () => {
-    if (!this.state.loaded) {
+    if (this.state && !this.state.loaded) {
       this.setState({ loaded: true });
     }
   };

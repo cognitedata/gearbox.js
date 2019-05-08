@@ -9,6 +9,7 @@ import {
   TreeNodeData,
   TreeNodeType,
 } from '../../interfaces';
+import { PromiseKeeper } from '../../utils';
 
 const { TreeNode } = Tree;
 
@@ -85,6 +86,8 @@ export class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
     return path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
   }
 
+  private pk: PromiseKeeper = new PromiseKeeper();
+
   constructor(props: AssetTreeProps) {
     super(props);
     const { defaultExpandedKeys } = props;
@@ -98,14 +101,25 @@ export class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
   }
 
   async componentDidMount() {
-    const assets = await sdk.Assets.list({ depth: 1 });
-    this.setState({
-      assets: assets.items,
-      treeData:
-        assets && assets.items.length > 0
-          ? AssetTree.mapDataAssets(assets.items)
-          : [],
-    });
+    try {
+      const assets = await this.pk.keep(sdk.Assets.list({ depth: 1 }));
+
+      this.setState({
+        assets: assets.items,
+        treeData:
+          assets && assets.items.length > 0
+            ? AssetTree.mapDataAssets(assets.items)
+            : [],
+      });
+    } catch (error) {
+      if (error.isCanceled) {
+        return false;
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    this.pk.cancel();
   }
 
   onLoadData = async (treeNode: AntTreeNode) => {
