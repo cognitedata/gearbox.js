@@ -13,6 +13,7 @@ describe('promise helper helper', () => {
     const component = new MockComponentClass(true);
     try {
       await connectPromiseToUnmountState(component, Promise.resolve());
+      expect(false).toBeTruthy(); // this should be a dead code
     } catch (error) {
       expect(error instanceof CanceledPromiseException).toBeTruthy();
     }
