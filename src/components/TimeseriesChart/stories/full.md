@@ -43,4 +43,5 @@ function ExampleComponent(props) {
 | `pointsPerSeries`      | The number of aggregated datapoints to show                                 | `number`                         | `600`                          |
 | `yAxisPlacement`       | Placement of the y-axis                                                     | `'RIGHT' \| 'LEFT' \| 'BOTH'`    | `RIGHT`                        |
 | `yAxisDisplayMode`     | Display mode of the y-axis                                                  | `'ALL' \| 'COLLAPSED' \| 'NONE'` | `ALL`                          |
+| `xAxisHeight`          | Height of x-axis container in pixels. `0` will hide it completely           | `number`                         | `50`                           |
 | `timeseriesColors`     | Map of timeseries ids and color                                             | `{ [id:number]: string }`        | `ALL`                          |

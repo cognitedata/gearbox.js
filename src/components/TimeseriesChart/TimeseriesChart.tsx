@@ -30,6 +30,7 @@ export type TimeseriesChartProps = {
   hiddenSeries: { [id: number]: boolean };
   annotations: Annotation[];
   ruler: Ruler;
+  xAxisHeight: number;
   yAxisDisplayMode: 'ALL' | 'COLLAPSED' | 'NONE';
   yAxisPlacement: 'RIGHT' | 'LEFT' | 'BOTH';
   onMouseMove?: (e: any) => void;
@@ -63,6 +64,7 @@ export class TimeseriesChart extends React.Component<
     timeseriesColors: {},
     hiddenSeries: {},
     annotations: [],
+    xAxisHeight: 50,
     ruler: {},
     onFetchDataError: (e: Error) => {
       throw e;
@@ -90,6 +92,7 @@ export class TimeseriesChart extends React.Component<
       updateIntervalMillis,
       zoomable,
       contextChart,
+      xAxisHeight,
       timeseriesColors,
       yAxisDisplayMode,
       panelHeight,
@@ -150,6 +153,7 @@ export class TimeseriesChart extends React.Component<
                 ruler={ruler}
                 yAxisFormatter={decimalTickFormatter}
                 yAxisPlacement={AxisPlacement[yAxisPlacement]}
+                xAxisHeight={xAxisHeight}
                 onMouseMove={onMouseMove}
                 onMouseOut={onMouseOut}
                 onBlur={onBlur}

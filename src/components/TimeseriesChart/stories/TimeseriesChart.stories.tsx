@@ -19,10 +19,12 @@ import * as leftYAxis from './leftYAxis.md';
 import * as liveUpdate from './liveUpdate.md';
 import * as mouseEvents from './mouseEvents.md';
 import * as multiple from './multiple.md';
+import * as noXAxis from './noXAxis.md';
 import * as noYAxis from './noYAxis.md';
 import * as ruler from './ruler.md';
 import * as single from './single.md';
 import * as startEnd from './startEnd.md';
+import * as xAxisHeight from './xAxisHeight.md';
 import * as zoomable from './zoomable.md';
 
 const randomData = (start: number, end: number, n: number): sdk.Datapoint[] => {
@@ -207,6 +209,30 @@ storiesOf('TimeseriesChart/Examples', module)
     {
       readme: {
         content: collapsedYAxis,
+      },
+    }
+  )
+  .add(
+    'X-axis height',
+    () => {
+      setupMocks();
+      return <TimeseriesChart timeseriesIds={[123]} xAxisHeight={100} />;
+    },
+    {
+      readme: {
+        content: xAxisHeight,
+      },
+    }
+  )
+  .add(
+    'No x-axis',
+    () => {
+      setupMocks();
+      return <TimeseriesChart timeseriesIds={[123]} xAxisHeight={0} />;
+    },
+    {
+      readme: {
+        content: noXAxis,
       },
     }
   )
