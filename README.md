@@ -12,8 +12,8 @@ Gearbox.js
 Run `yarn add @cognite/gearbox` or `npm install @cognite/gearbox --save`.
 
 Install additional dependencies:
-1.  Using Yarn `yarn add @cognite/sdk antd styled-components`
-2.  Using NPM `npm i @cognite/sdk antd styled-components --save`
+1.  Using Yarn `yarn add @cognite/sdk @cognite/griff-react antd styled-components`
+2.  Using NPM `npm i @cognite/sdk @cognite/griff-react antd styled-components --save`
 
 ## Examples
 ```
