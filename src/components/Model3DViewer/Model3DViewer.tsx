@@ -1,6 +1,6 @@
 import { Cognite3DModel, Cognite3DViewer, THREE } from '@cognite/3d-viewer';
 import * as sdk from '@cognite/sdk';
-import React from 'react';
+import React, { RefObject } from 'react';
 import { CacheObject, Callback, MouseScreenPosition } from '../../interfaces';
 import {
   createViewer as originalCreateViewer,
@@ -39,7 +39,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   };
 
   disposeCalls: any[] = [];
-  divWrapper: HTMLElement | null = null;
+  divWrapper: RefObject<HTMLDivElement> = React.createRef();
   model: Cognite3DModel | null = null;
   onClickHandlerBounded: ClickHandler;
   onCompleteBounded: Callback;
@@ -98,8 +98,8 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       removeEvent();
     });
 
-    if (this.divWrapper) {
-      this.divWrapper.appendChild(viewer.getCanvas());
+    if (this.divWrapper.current) {
+      this.divWrapper.current.appendChild(viewer.getCanvas());
     }
 
     let model: Cognite3DModel;
@@ -153,8 +153,13 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     }
   }
 
-  async componentDidUpdate() {
-    const { onError } = this.props;
+  async componentDidUpdate(prevProps: Model3DViewerProps) {
+    const { onError, assetId } = this.props;
+    const { assetId: pAssetId } = prevProps;
+
+    if (assetId === pAssetId) {
+      return;
+    }
 
     try {
       this.nodes = await this.findMappedNodes();
@@ -212,10 +217,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
   render() {
     return (
-      <div
-        style={{ width: '100%', height: '100%' }}
-        ref={ref => (this.divWrapper = ref)}
-      />
+      <div style={{ width: '100%', height: '100%' }} ref={this.divWrapper} />
     );
   }
   private async findMappedNodes(): Promise<sdk.AssetMapping[]> {
