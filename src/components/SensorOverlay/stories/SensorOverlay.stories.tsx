@@ -176,6 +176,28 @@ storiesOf('SensorOverlay/Examples', module)
     }
   )
   .add(
+    'With min-max limit',
+    () => (
+      <SensorOverlay
+        timeserieIds={[timeseriesList[0].id]}
+        stickyMap={{ [8681821313339919]: true }}
+        minMaxMap={{
+          [8681821313339919]: {
+            min: 5,
+            max: 10,
+          },
+        }}
+      >
+        <div style={{ width: '100%', height: '250px', background: '#EEE' }} />
+      </SensorOverlay>
+    ),
+    {
+      readme: {
+        content: withStickyTooltips,
+      },
+    }
+  )
+  .add(
     'With Image',
     () => (
       <SensorOverlay

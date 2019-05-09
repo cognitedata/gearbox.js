@@ -73,6 +73,11 @@ export interface SensorPosition {
   };
 }
 
+export interface SensorMinMaxRange {
+  min?: number;
+  max?: number;
+}
+
 interface DraggableBoxPosition extends SensorPosition {
   id: number;
   defaultSlot: number | null;
@@ -94,6 +99,9 @@ export interface SensorOverlayProps {
   stickyMap: {
     [id: string]: boolean;
   };
+  minMaxMap: {
+    [id: string]: SensorMinMaxRange;
+  };
   isTagDraggable: boolean;
   isPointerDraggable: boolean;
   onSensorPositionChange?: (id: number, position: SensorPosition) => void;
@@ -107,6 +115,7 @@ export interface SensorOverlayProps {
   };
   fixedWidth?: number;
   refreshInterval?: number;
+  strings?: { [key: string]: string };
 }
 
 interface SensorOverlayState {
@@ -337,7 +346,9 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
       fixedWidth,
       colorMap,
       stickyMap,
+      minMaxMap,
       refreshInterval,
+      strings,
     } = this.props;
     return this.props.connectDropTarget(
       <div
@@ -368,6 +379,8 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
                 onClick={this.props.onClick}
                 onSettingsClick={this.props.onSettingsClick}
                 refreshInterval={refreshInterval}
+                minMaxRange={minMaxMap && minMaxMap[box.id]}
+                strings={strings}
               />
               <SvgLine
                 box={{
