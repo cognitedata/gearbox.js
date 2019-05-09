@@ -273,7 +273,7 @@ storiesOf('TimeseriesChart/Examples', module)
       return (
         <TimeseriesChart
           timeseriesIds={[123]}
-          startTime={+Date.now() - 30 * 24 * 60 * 60 * 1000}
+          startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
           endTime={Date.now()}
           zoomable={true}
           contextChart={true}
@@ -293,7 +293,7 @@ storiesOf('TimeseriesChart/Examples', module)
       return (
         <TimeseriesChart
           timeseriesIds={[123]}
-          startTime={+Date.now() - 60 * 1000}
+          startTime={Date.now() - 60 * 1000}
           endTime={Date.now()}
           liveUpdate={true}
           updateIntervalMillis={2000}
@@ -330,7 +330,7 @@ storiesOf('TimeseriesChart/Examples', module)
       return (
         <TimeseriesChart
           timeseriesIds={[123]}
-          startTime={+Date.now() - 60 * 1000}
+          startTime={Date.now() - 60 * 1000}
           endTime={Date.now()}
           annotations={[
             {
@@ -379,7 +379,7 @@ storiesOf('TimeseriesChart/Examples', module)
       return (
         <TimeseriesChart
           timeseriesIds={[123]}
-          startTime={+Date.now() - 60 * 1000}
+          startTime={Date.now() - 60 * 1000}
           endTime={Date.now()}
           onMouseMove={(e: any) => action('onMouseMove')(e)}
           onMouseOut={(e: any) => action('onMouseOut')(e)}

@@ -51,8 +51,8 @@ export class TimeseriesChart extends React.Component<
   TimeseriesChartState
 > {
   static defaultProps = {
-    startTime: +Date.now() - 60 * 60 * 1000,
-    endTime: +Date.now(),
+    startTime: Date.now() - 60 * 60 * 1000,
+    endTime: Date.now(),
     pointsPerSeries: 600,
     updateIntervalMillis: 5000,
     zoomable: false,
