@@ -32,10 +32,10 @@ function ExampleComponent(props) {
 ##### Optionals:
 
 | Property               | Description                                                                 | Type                             | Default                        |
-| ---------------------- | --------------------------------------------------------------------------- | -------------------------------- | ------------------------------ |
+| ---------------------- | ----------------------------------------------------------------------------| -------------------------------- | ------------------------------ |
 | `panelHeight`          | The height of the chart                                                     | `number`                         | `500`                          |
-| `start`                | The time the timeseries should start from. Should be UNIX timestamp or Date | `number \| Date`                 | `Date.now() - 60 * 60 * 1000`  |
-| `end`                  | The time the timeseries should end. Should be UNIX timestamp or Date        | `number \| Date`                 | `Date.now()`                   |
+| `startTime`            | The time the timeseries should start from. Should be UNIX timestamp or Date | `number \| Date`                 | `Date.now() - 60 * 60 * 1000`  |
+| `endTime`              | The time the timeseries should end. Should be UNIX timestamp or Date        | `number \| Date`                 | `Date.now()`                   |
 | `contextChart`         | Whether the context chart should be showed                                  | `boolean`                        | `false`                        |
 | `zoomable`             | Whether zooming on the chart is enabled                                     | `boolean`                        | `false`                        |
 | `liveUpdate`           | Whether live update of chart is enabled                                     | `boolean`                        | `false`                        |
@@ -43,3 +43,5 @@ function ExampleComponent(props) {
 | `pointsPerSeries`      | The number of aggregated datapoints to show                                 | `number`                         | `600`                          |
 | `yAxisPlacement`       | Placement of the y-axis                                                     | `'RIGHT' \| 'LEFT' \| 'BOTH'`    | `RIGHT`                        |
 | `yAxisDisplayMode`     | Display mode of the y-axis                                                  | `'ALL' \| 'COLLAPSED' \| 'NONE'` | `ALL`                          |
+| `xAxisHeight`          | Height of x-axis container in pixels. `0` will hide it completely           | `number`                         | `50`                           |
+| `timeseriesColors`     | Map of timeseries ids and color                                             | `{ [id:number]: string }`        | `ALL`                          |
