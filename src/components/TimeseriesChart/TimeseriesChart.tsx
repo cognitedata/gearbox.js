@@ -67,7 +67,7 @@ export class TimeseriesChart extends React.Component<
     annotations: [],
     xAxisHeight: 50,
     collections: {},
-    ruler: {},
+    ruler: undefined,
     onFetchDataError: (e: Error) => {
       throw e;
     },
