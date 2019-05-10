@@ -9,6 +9,7 @@ import { TimeseriesChart } from '../TimeseriesChart';
 
 import * as annotations from './annotations.md';
 import * as collapsedYAxis from './collapsedYAxis.md';
+import * as containerStyle from './containerStyle.md';
 import * as contextChart from './contextChart.md';
 import * as crosshair from './crosshair.md';
 import * as customColors from './customColors.md';
@@ -177,11 +178,28 @@ storiesOf('TimeseriesChart/Examples', module)
     'Height and width',
     () => {
       setupMocks();
-      return <TimeseriesChart timeseriesIds={[123]} height={300} width={200} />;
+      return <TimeseriesChart timeseriesIds={[123]} height={300} width={800} />;
     },
     {
       readme: {
         content: heightAndWidth,
+      },
+    }
+  )
+  .add(
+    'Container style',
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesChart
+          timeseriesIds={[123]}
+          containerStyle={{ height: '300px', backgroundColor: 'lightblue' }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: containerStyle,
       },
     }
   )

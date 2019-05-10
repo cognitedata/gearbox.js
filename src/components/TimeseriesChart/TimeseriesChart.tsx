@@ -18,7 +18,7 @@ import { Spin } from 'antd';
 import { decimalTickFormatter, getColor } from '../../utils';
 
 export type TimeseriesChartProps = {
-  panelHeight: number;
+  containerStyle: React.CSSProperties;
   pointsPerSeries: number;
   startTime: number | Date;
   endTime: number | Date;
@@ -65,7 +65,6 @@ export class TimeseriesChart extends React.Component<
     yAxisDisplayMode: 'ALL',
     liveUpdate: false,
     yAxisPlacement: 'RIGHT',
-    panelHeight: 500,
     height: undefined,
     width: undefined,
     timeseriesColors: {},
@@ -74,6 +73,7 @@ export class TimeseriesChart extends React.Component<
     xAxisHeight: 50,
     collections: {},
     ruler: undefined,
+    containerStyle: { height: 500, width: '100%' },
     onFetchDataError: (e: Error) => {
       throw e;
     },
@@ -105,7 +105,7 @@ export class TimeseriesChart extends React.Component<
       xAxisHeight,
       timeseriesColors,
       yAxisDisplayMode,
-      panelHeight,
+      containerStyle,
       liveUpdate,
       yAxisPlacement,
       hiddenSeries,
@@ -136,7 +136,7 @@ export class TimeseriesChart extends React.Component<
     return (
       griffSeries.length !== 0 && (
         <Spin spinning={!loaded}>
-          <div style={{ height: panelHeight }}>
+          <div style={containerStyle}>
             <DataProvider
               defaultLoader={griffloader}
               onFetchData={this.onFetchData}
