@@ -15,6 +15,7 @@ import * as customColors from './customColors.md';
 import * as customSeries from './customSeries.md';
 import * as empty from './empty.md';
 import * as full from './full.md';
+import * as heightAndWidth from './heightAndWidth.md';
 import * as hidden from './hidden.md';
 import * as leftYAxis from './leftYAxis.md';
 import * as liveUpdate from './liveUpdate.md';
@@ -169,6 +170,18 @@ storiesOf('TimeseriesChart/Examples', module)
     {
       readme: {
         content: hidden,
+      },
+    }
+  )
+  .add(
+    'Height and width',
+    () => {
+      setupMocks();
+      return <TimeseriesChart timeseriesIds={[123]} height={300} width={200} />;
+    },
+    {
+      readme: {
+        content: heightAndWidth,
       },
     }
   )

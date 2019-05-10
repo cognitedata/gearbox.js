@@ -109,6 +109,8 @@ declare module '@cognite/griff-react' {
     yAxisPlacement: AxisPlacementType;
     xAxisHeight?: number;
     ruler: Ruler;
+    height?: number;
+    width?: number;
     onMouseMove?: (e: any) => void;
     onBlur?: (e: any) => void;
     onMouseOut?: (e: any) => void;

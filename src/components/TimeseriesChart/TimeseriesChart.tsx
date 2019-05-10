@@ -35,6 +35,8 @@ export type TimeseriesChartProps = {
   xAxisHeight: number;
   yAxisDisplayMode: 'ALL' | 'COLLAPSED' | 'NONE';
   yAxisPlacement: 'RIGHT' | 'LEFT' | 'BOTH';
+  height?: number;
+  width?: number;
   onMouseMove?: (e: any) => void;
   onBlur?: (e: any) => void;
   onMouseOut?: (e: any) => void;
@@ -64,6 +66,8 @@ export class TimeseriesChart extends React.Component<
     liveUpdate: false,
     yAxisPlacement: 'RIGHT',
     panelHeight: 500,
+    height: undefined,
+    width: undefined,
     timeseriesColors: {},
     hiddenSeries: {},
     annotations: [],
@@ -107,6 +111,8 @@ export class TimeseriesChart extends React.Component<
       hiddenSeries,
       annotations,
       ruler,
+      height,
+      width,
       onMouseMove,
       onMouseOut,
       onBlur,
@@ -163,6 +169,8 @@ export class TimeseriesChart extends React.Component<
                   height: 100,
                   isDefault: true,
                 }}
+                height={height}
+                width={width}
                 ruler={ruler}
                 yAxisFormatter={decimalTickFormatter}
                 yAxisPlacement={AxisPlacement[yAxisPlacement]}
