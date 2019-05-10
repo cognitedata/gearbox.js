@@ -25,6 +25,7 @@ export type TimeseriesChartProps = {
   contextChart: boolean;
   zoomable: boolean;
   liveUpdate: boolean;
+  crosshair: boolean;
   updateIntervalMillis: number;
   timeseriesColors: { [id: number]: string };
   hiddenSeries: { [id: number]: boolean };
@@ -58,6 +59,7 @@ export class TimeseriesChart extends React.Component<
     updateIntervalMillis: 5000,
     zoomable: false,
     contextChart: false,
+    crosshair: false,
     yAxisDisplayMode: 'ALL',
     liveUpdate: false,
     yAxisPlacement: 'RIGHT',
@@ -94,6 +96,7 @@ export class TimeseriesChart extends React.Component<
       collections,
       updateIntervalMillis,
       zoomable,
+      crosshair,
       contextChart,
       xAxisHeight,
       timeseriesColors,
@@ -153,7 +156,7 @@ export class TimeseriesChart extends React.Component<
             >
               <LineChart
                 zoomable={zoomable}
-                crosshair={false}
+                crosshair={crosshair}
                 annotations={annotations}
                 contextChart={{
                   visible: contextChart,

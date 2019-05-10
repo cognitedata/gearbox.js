@@ -10,6 +10,7 @@ import { TimeseriesChart } from '../TimeseriesChart';
 import * as annotations from './annotations.md';
 import * as collapsedYAxis from './collapsedYAxis.md';
 import * as contextChart from './contextChart.md';
+import * as crosshair from './crosshair.md';
 import * as customColors from './customColors.md';
 import * as customSeries from './customSeries.md';
 import * as empty from './empty.md';
@@ -251,6 +252,18 @@ storiesOf('TimeseriesChart/Examples', module)
     {
       readme: {
         content: startEnd,
+      },
+    }
+  )
+  .add(
+    'Crosshair',
+    () => {
+      setupMocks();
+      return <TimeseriesChart timeseriesIds={[123]} crosshair={true} />;
+    },
+    {
+      readme: {
+        content: crosshair,
       },
     }
   )
