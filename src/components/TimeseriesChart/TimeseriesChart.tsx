@@ -30,6 +30,7 @@ export type TimeseriesChartProps = {
   hiddenSeries: { [id: number]: boolean };
   annotations: Annotation[];
   ruler: Ruler;
+  collections: any;
   xAxisHeight: number;
   yAxisDisplayMode: 'ALL' | 'COLLAPSED' | 'NONE';
   yAxisPlacement: 'RIGHT' | 'LEFT' | 'BOTH';
@@ -65,6 +66,7 @@ export class TimeseriesChart extends React.Component<
     hiddenSeries: {},
     annotations: [],
     xAxisHeight: 50,
+    collections: {},
     ruler: {},
     onFetchDataError: (e: Error) => {
       throw e;
@@ -89,6 +91,7 @@ export class TimeseriesChart extends React.Component<
       timeseriesIds,
       // @ts-ignore
       series,
+      collections,
       updateIntervalMillis,
       zoomable,
       contextChart,
@@ -130,6 +133,13 @@ export class TimeseriesChart extends React.Component<
               onFetchData={this.onFetchData}
               pointsPerSeries={pointsPerSeries}
               series={griffSeries}
+              collections={[...new Set(Object.values(collections))].map(
+                (unit: any) => ({
+                  id: unit,
+                  color: getColor(unit),
+                  yAxisDisplayMode: AxisPlacement[yAxisPlacement],
+                })
+              )}
               timeDomain={[+startTime, +endTime]}
               onFetchDataError={onFetchDataError}
               updateInterval={

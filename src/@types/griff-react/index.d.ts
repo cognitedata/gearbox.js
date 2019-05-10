@@ -46,6 +46,7 @@ declare module '@cognite/griff-react' {
     series: any;
     timeDomain: number[] | Domain;
     updateInterval: number;
+    collections: any;
   }
 
   export class DataProvider extends React.Component<DataProviderProps> {}
