@@ -43,6 +43,7 @@ function ExampleComponent(props) {
 | `colorMap`            | Object map that defines custom colors for timeseries             | { [timeserieId: number]: string }  |         |
 | `defaultPositionMap`  | Object map that defines position of newly added sensors in `timeserieIds`. The map doesn't affect position of previously added or dragged sensors.         | { [timeserieId: number]: SensorPosition }  |          |
 | `skickyMap`           | Object map that defines which timeseries will show tooltips with name and description without mouse hovering  | { [timeserieId: number]: boolean } |       |
+| `minMaxMap`           | Object map that defines a normal range for sensor values and ones the value is out of this range an alert bar will be shown | { [timeserieId: number]: SensorMinMaxRange } |       |
 | `linksMap`            | Object map that defines if it's needed to wrap timeserie values in the anchor tag `<a>`, works in conjunction with `onLinkClick` | { [timeserieId: number]: boolean } |       |
 | `fixedWidth`          | By default SensorOverlay takes 100% width in current block context but if `fixedWidth` is given the width will be fixed by the number in pixels  | number |      |
 | `isTagDraggable`      | Defines whether it's possible to drag sensor boxes (tags)        | boolean  | true      |
@@ -51,11 +52,19 @@ function ExampleComponent(props) {
 | `onLinkClick`         | Function triggered when user clicks on a sensor value link. The link should be enabled with  `linksMap` | `(timeserieId: number, datapoint?: Datapoint) => void`    |         |
 | `onSettingsClick`     | Function triggered when user clicks on the settings icon. The icon is shown if this prop is defined. | `(timeserieId: number) => void`    |         |
 | `onSensorPositionChange`| Function triggered when either a tag or a pointer has been dragged. | `(timeserieId: number, position: SensorPosition) => void`    |         |
+| `strings`              | Object map with strings to customize/localize text in the component    | `{[key: string]: string}`       |             | 
 
+`strings` default value is:
+```js
+{
+  underPercentage: '{{ percent }}% under the set limit of {{ min }}',
+  overPercentage: '{{ percent }}% over the set limit of {{ max }}',
+}
+```
 
 ### Types
 #### SensorPosition
-This type can be imported from @cognite/gearbox:
+ This type can be imported from @cognite/gearbox:
 ```typescript
 import { SensorPosition } from '@cognite/gearbox';
 ```
@@ -72,6 +81,20 @@ interface SensorPosition {
 ```
 The interface defines position for tag and pointer of a sensor relatively to the size of wrapped content provided as `children`. `left` and `top` are coordinates of the tag whereas `pointer` object contains coordinates of the pointer.
 These coordinates are float numbers from 0 to 1.
+#### SensorMinMaxRange
+This interface defines minimum and maximum values for a datapoint of a timeserie.
+The type can be imported from @cognite/gearbox:
+```typescript
+import { SensorMinMaxRange } from '@cognite/gearbox';
+```
+Definition: 
+```typescript
+interface SensorMinMaxRange {
+  min?: number;
+  max?: number;
+}
+```
+
 #### Datapoint
 This interface is provided by [@cognite/sdk](https://github.com/cognitedata/cognitesdk-js):
 ```typescript
