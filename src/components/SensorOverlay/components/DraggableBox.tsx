@@ -19,8 +19,6 @@ import StyledOdometer from './StyledOdometer';
 
 const HELLIP = String.fromCharCode(0x02026);
 
-type DataValueType = number | string | null | undefined;
-
 export const Link = styled.a`
   color: 'white';
   display: 'inherit';
@@ -108,7 +106,7 @@ const TagDescription = styled.div`
   }
 `;
 
-const TagError = styled.div`
+const TagError = styled.div<{ alertColor: string }>`
   color: white;
   position: absolute;
   top: 100%;
@@ -119,7 +117,7 @@ const TagError = styled.div`
   margin-top: 6px;
   white-space: nowrap;
   border-radius: 30px;
-  background: #e74c3c;
+  background-color: ${({ alertColor }) => alertColor};
   transition: 0.3s margin-right, 0.3s opacity, 0.3s margin-bottom;
   opacity: 0;
   right: auto;
@@ -145,7 +143,6 @@ const handleStyles = {
   height: 25,
   borderRadius: '100%',
   margin: 'auto 8px',
-  backgroundColor: 'white',
   cursor: 'move',
   transform: 'translate(0, 0)',
   transition: '.5s background',
@@ -184,6 +181,7 @@ interface DraggableBoxProps extends DragSourceProps {
   refreshInterval: number; // milliseconds
   minMaxRange?: SensorMinMaxRange;
   strings: { [key: string]: string };
+  alertColor: string;
 }
 
 interface DraggableBoxState {
@@ -209,6 +207,7 @@ export class DraggableBox extends Component<
       underPercentage: '{{ percent }}% under the set limit of {{ min }}',
       overPercentage: '{{ percent }}% over the set limit of {{ max }}',
     },
+    alertColor: '#e74c3c',
   };
 
   private isComponentUnmounted = false;
@@ -320,14 +319,15 @@ export class DraggableBox extends Component<
     }
   };
 
-  isValid = (value: DataValueType) => {
+  isValid = () => {
     const { minMaxRange } = this.props;
-    if (!minMaxRange || typeof value !== 'number') {
+    const { dataPoint } = this.state;
+    if (!dataPoint || typeof dataPoint.value !== 'number' || !minMaxRange) {
       return true;
     } else {
       return !(
-        (minMaxRange.min && value < minMaxRange.min) ||
-        (minMaxRange.max && value > minMaxRange.max)
+        (minMaxRange.min && dataPoint.value < minMaxRange.min) ||
+        (minMaxRange.max && dataPoint.value > minMaxRange.max)
       );
     }
   };
@@ -396,6 +396,9 @@ export class DraggableBox extends Component<
             <div
               style={{
                 ...handleStyles,
+                backgroundColor: this.isValid()
+                  ? 'white'
+                  : this.props.alertColor,
               }}
               onDoubleClick={this.onDragHandleDoubleClick}
             />
@@ -432,10 +435,11 @@ export class DraggableBox extends Component<
   }
 
   renderError() {
-    const { hovering, dataPoint } = this.state;
-    const { color, sticky, flipped } = this.props;
-    return !this.isValid(dataPoint && dataPoint.value) ? (
+    const { hovering } = this.state;
+    const { alertColor, color, sticky, flipped } = this.props;
+    return !this.isValid() ? (
       <TagError
+        alertColor={alertColor}
         color={color}
         className={`${hovering || sticky ? 'hovering' : ''} ${
           flipped ? 'flipped' : ''
