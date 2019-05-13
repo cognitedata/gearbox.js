@@ -187,7 +187,7 @@ storiesOf('TimeseriesChart/Examples', module)
     }
   )
   .add(
-    'Custom container style',
+    'Custom container styles',
     () => {
       setupMocks();
       return (

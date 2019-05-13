@@ -77,8 +77,7 @@ export class TimeseriesChart extends React.Component<
     xAxisHeight: 50,
     collections: {},
     ruler: undefined,
-    styles: undefined,
-    containerStyle: { height: 500, width: '100%' },
+    styles: { container: { height: 500, width: '100%' } },
     onFetchDataError: (e: Error) => {
       throw e;
     },
