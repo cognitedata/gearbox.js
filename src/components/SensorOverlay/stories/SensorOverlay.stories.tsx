@@ -14,7 +14,7 @@ import withFixedWidth from './withFixedWidth.md';
 import withImage from './withImage.md';
 import withLink from './withLink.md';
 import withMany from './withMany.md';
-import withMinMaX from './withMinMax.md';
+import withMinMax from './withMinMax.md';
 import withStickyTooltips from './withStickyTooltips.md';
 
 sdk.TimeSeries.retrieve = (id: number, _): Promise<Timeseries> => {
@@ -194,7 +194,7 @@ storiesOf('SensorOverlay/Examples', module)
     ),
     {
       readme: {
-        content: withMinMaX,
+        content: withMinMax,
       },
     }
   )
