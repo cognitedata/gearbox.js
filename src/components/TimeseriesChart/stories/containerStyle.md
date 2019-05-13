@@ -12,7 +12,9 @@ function ExampleComponent(props) {
   return (
     <TimeseriesChart
       timeseriesIds={[123]}
-      containerStyle={{ height: '300px', backgroundColor: 'lightblue' }}
+      styles={{
+        container: { height: '300px', backgroundColor: 'lightblue' },
+      }}
     />
   );
   
