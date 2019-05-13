@@ -453,8 +453,15 @@ storiesOf('TimeseriesChart/Examples', module)
           y1Accessor,
           yAccessor,
         },
+        {
+          id: 456,
+          color: 'red',
+          y0Accessor,
+          y1Accessor,
+          yAccessor,
+        },
       ];
-      return <TimeseriesChart series={series} />;
+      return <TimeseriesChart series={series} yAxisDisplayMode={'NONE'} />;
     },
     {
       readme: {
