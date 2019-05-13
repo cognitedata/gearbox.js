@@ -87,6 +87,7 @@ interface DraggableBoxPosition extends SensorPosition {
 export interface SensorOverlayProps {
   children: React.ReactNode;
   timeserieIds: number[];
+  alertColor?: string;
   colorMap: {
     [id: string]: string;
   };
@@ -349,6 +350,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
       minMaxMap,
       refreshInterval,
       strings,
+      alertColor,
     } = this.props;
     return this.props.connectDropTarget(
       <div
@@ -366,6 +368,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
             <React.Fragment key={box.id}>
               <DraggableBox
                 id={box.id}
+                alertColor={alertColor}
                 left={box.left * size.width}
                 top={box.top * size.height}
                 color={color}

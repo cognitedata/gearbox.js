@@ -182,6 +182,7 @@ storiesOf('SensorOverlay/Examples', module)
       <SensorOverlay
         timeserieIds={[timeseriesList[0].id]}
         stickyMap={{ [8681821313339919]: true }}
+        alertColor={'magenta'}
         minMaxMap={{
           [8681821313339919]: {
             min: 5,

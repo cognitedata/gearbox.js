@@ -45,6 +45,7 @@ function ExampleComponent(props) {
 | `skickyMap`           | Object map that defines which timeseries will show tooltips with name and description without mouse hovering  | { [timeserieId: number]: boolean } |       |
 | `minMaxMap`           | Object map that defines a normal range for sensor values and once the value is out of this range an alert bar will be shown | { [timeserieId: number]: SensorMinMaxRange } |       |
 | `linksMap`            | Object map that defines if it's needed to wrap timeserie values in the anchor tag `<a>`, works in conjunction with `onLinkClick` | { [timeserieId: number]: boolean } |       |
+| `alertColor`          | Works in conjuction with `minMaxMap`. Defines background color of the alert tooltip that is shown if sensor value is out of min/max range. The dragdable circle in the tag should also have the alert color if the sensor value is out of range. | string  | `#e74c3c`    |
 | `fixedWidth`          | By default SensorOverlay takes 100% width in current block context but if `fixedWidth` is given the width will be fixed by the number in pixels  | number |      |
 | `isTagDraggable`      | Defines whether it's possible to drag sensor boxes (tags)        | boolean  | true      |
 | `isPointerDraggable`  | Defines whether it's possible to drag sensor pointers            | boolean  | true      |
