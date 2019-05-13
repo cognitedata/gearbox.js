@@ -17,22 +17,30 @@ import {
 import { Spin } from 'antd';
 import { decimalTickFormatter, getColor } from '../../utils';
 
+export interface TimeseriesChartStyles {
+  container?: React.CSSProperties;
+}
+
 export type TimeseriesChartProps = {
-  panelHeight: number;
+  styles?: TimeseriesChartStyles;
   pointsPerSeries: number;
   startTime: number | Date;
   endTime: number | Date;
   contextChart: boolean;
   zoomable: boolean;
   liveUpdate: boolean;
+  crosshair: boolean;
   updateIntervalMillis: number;
   timeseriesColors: { [id: number]: string };
   hiddenSeries: { [id: number]: boolean };
   annotations: Annotation[];
   ruler: Ruler;
+  collections: any;
   xAxisHeight: number;
   yAxisDisplayMode: 'ALL' | 'COLLAPSED' | 'NONE';
   yAxisPlacement: 'RIGHT' | 'LEFT' | 'BOTH';
+  height?: number;
+  width?: number;
   onMouseMove?: (e: any) => void;
   onBlur?: (e: any) => void;
   onMouseOut?: (e: any) => void;
@@ -57,15 +65,20 @@ export class TimeseriesChart extends React.Component<
     updateIntervalMillis: 5000,
     zoomable: false,
     contextChart: false,
+    crosshair: false,
     yAxisDisplayMode: 'ALL',
     liveUpdate: false,
     yAxisPlacement: 'RIGHT',
-    panelHeight: 500,
+    height: undefined,
+    width: undefined,
     timeseriesColors: {},
     hiddenSeries: {},
     annotations: [],
     xAxisHeight: 50,
-    ruler: {},
+    collections: {},
+    ruler: undefined,
+    styles: undefined,
+    containerStyle: { height: 500, width: '100%' },
     onFetchDataError: (e: Error) => {
       throw e;
     },
@@ -89,18 +102,22 @@ export class TimeseriesChart extends React.Component<
       timeseriesIds,
       // @ts-ignore
       series,
+      collections,
       updateIntervalMillis,
       zoomable,
+      crosshair,
       contextChart,
       xAxisHeight,
       timeseriesColors,
       yAxisDisplayMode,
-      panelHeight,
+      styles,
       liveUpdate,
       yAxisPlacement,
       hiddenSeries,
       annotations,
       ruler,
+      height,
+      width,
       onMouseMove,
       onMouseOut,
       onBlur,
@@ -124,12 +141,19 @@ export class TimeseriesChart extends React.Component<
     return (
       griffSeries.length !== 0 && (
         <Spin spinning={!loaded}>
-          <div style={{ height: panelHeight }}>
+          <div style={styles && styles.container}>
             <DataProvider
               defaultLoader={griffloader}
               onFetchData={this.onFetchData}
               pointsPerSeries={pointsPerSeries}
               series={griffSeries}
+              collections={[...new Set(Object.values(collections))].map(
+                (unit: any) => ({
+                  id: unit,
+                  color: getColor(unit),
+                  yAxisDisplayMode: AxisPlacement[yAxisPlacement],
+                })
+              )}
               timeDomain={[+startTime, +endTime]}
               onFetchDataError={onFetchDataError}
               updateInterval={
@@ -143,13 +167,15 @@ export class TimeseriesChart extends React.Component<
             >
               <LineChart
                 zoomable={zoomable}
-                crosshair={false}
+                crosshair={crosshair}
                 annotations={annotations}
                 contextChart={{
                   visible: contextChart,
                   height: 100,
                   isDefault: true,
                 }}
+                height={height}
+                width={width}
                 ruler={ruler}
                 yAxisFormatter={decimalTickFormatter}
                 yAxisPlacement={AxisPlacement[yAxisPlacement]}

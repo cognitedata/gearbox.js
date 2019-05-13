@@ -9,11 +9,14 @@ import { TimeseriesChart } from '../TimeseriesChart';
 
 import * as annotations from './annotations.md';
 import * as collapsedYAxis from './collapsedYAxis.md';
+import * as containerStyle from './containerStyle.md';
 import * as contextChart from './contextChart.md';
+import * as crosshair from './crosshair.md';
 import * as customColors from './customColors.md';
 import * as customSeries from './customSeries.md';
 import * as empty from './empty.md';
 import * as full from './full.md';
+import * as heightAndWidth from './heightAndWidth.md';
 import * as hidden from './hidden.md';
 import * as leftYAxis from './leftYAxis.md';
 import * as liveUpdate from './liveUpdate.md';
@@ -172,6 +175,37 @@ storiesOf('TimeseriesChart/Examples', module)
     }
   )
   .add(
+    'Height and width',
+    () => {
+      setupMocks();
+      return <TimeseriesChart timeseriesIds={[123]} height={300} width={800} />;
+    },
+    {
+      readme: {
+        content: heightAndWidth,
+      },
+    }
+  )
+  .add(
+    'Custom container style',
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesChart
+          timeseriesIds={[123]}
+          styles={{
+            container: { height: '300px', backgroundColor: 'lightblue' },
+          }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: containerStyle,
+      },
+    }
+  )
+  .add(
     'Left y-axis',
     () => {
       setupMocks();
@@ -251,6 +285,18 @@ storiesOf('TimeseriesChart/Examples', module)
     {
       readme: {
         content: startEnd,
+      },
+    }
+  )
+  .add(
+    'Crosshair',
+    () => {
+      setupMocks();
+      return <TimeseriesChart timeseriesIds={[123]} crosshair={true} />;
+    },
+    {
+      readme: {
+        content: crosshair,
       },
     }
   )

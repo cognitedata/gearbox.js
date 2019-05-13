@@ -46,6 +46,7 @@ declare module '@cognite/griff-react' {
     series: any;
     timeDomain: number[] | Domain;
     updateInterval: number;
+    collections: any;
   }
 
   export class DataProvider extends React.Component<DataProviderProps> {}
@@ -108,6 +109,8 @@ declare module '@cognite/griff-react' {
     yAxisPlacement: AxisPlacementType;
     xAxisHeight?: number;
     ruler: Ruler;
+    height?: number;
+    width?: number;
     onMouseMove?: (e: any) => void;
     onBlur?: (e: any) => void;
     onMouseOut?: (e: any) => void;

@@ -31,17 +31,21 @@ function ExampleComponent(props) {
 
 ##### Optionals:
 
-| Property               | Description                                                                 | Type                             | Default                        |
-| ---------------------- | ----------------------------------------------------------------------------| -------------------------------- | ------------------------------ |
-| `panelHeight`          | The height of the chart                                                     | `number`                         | `500`                          |
-| `startTime`            | The time the timeseries should start from. Should be UNIX timestamp or Date | `number \| Date`                 | `Date.now() - 60 * 60 * 1000`  |
-| `endTime`              | The time the timeseries should end. Should be UNIX timestamp or Date        | `number \| Date`                 | `Date.now()`                   |
-| `contextChart`         | Whether the context chart should be showed                                  | `boolean`                        | `false`                        |
-| `zoomable`             | Whether zooming on the chart is enabled                                     | `boolean`                        | `false`                        |
-| `liveUpdate`           | Whether live update of chart is enabled                                     | `boolean`                        | `false`                        |
-| `updateIntervalMillis` | The update interval when live update is enabled                             | `number`                         | `5000`                         |
-| `pointsPerSeries`      | The number of aggregated datapoints to show                                 | `number`                         | `600`                          |
-| `yAxisPlacement`       | Placement of the y-axis                                                     | `'RIGHT' \| 'LEFT' \| 'BOTH'`    | `RIGHT`                        |
-| `yAxisDisplayMode`     | Display mode of the y-axis                                                  | `'ALL' \| 'COLLAPSED' \| 'NONE'` | `ALL`                          |
-| `xAxisHeight`          | Height of x-axis container in pixels. `0` will hide it completely           | `number`                         | `50`                           |
-| `timeseriesColors`     | Map of timeseries ids and color                                             | `{ [id:number]: string }`        | `ALL`                          |
+| Property               | Description                                                                 | Type                             | Default                           |
+| ---------------------- | ----------------------------------------------------------------------------| -------------------------------- | --------------------------------- |
+| `startTime`            | The time the timeseries should start from. Should be UNIX timestamp or Date | `number \| Date`                 | `Date.now() - 60 * 60 * 1000`     |
+| `endTime`              | The time the timeseries should end. Should be UNIX timestamp or Date        | `number \| Date`                 | `Date.now()`                      |
+| `contextChart`         | Whether the context chart should be showed                                  | `boolean`                        | `false`                           |
+| `zoomable`             | Whether zooming on the chart is enabled                                     | `boolean`                        | `false`                           |
+| `crosshair`            | Whether crosshair should be shown                                           | `boolean`                        | `false`                           |
+| `liveUpdate`           | Whether live update of chart is enabled                                     | `boolean`                        | `false`                           |
+| `updateIntervalMillis` | The update interval when live update is enabled                             | `number`                         | `5000`                            |
+| `pointsPerSeries`      | The number of aggregated datapoints to show                                 | `number`                         | `600`                             |
+| `yAxisPlacement`       | Placement of the y-axis                                                     | `'RIGHT' \| 'LEFT' \| 'BOTH'`    | `RIGHT`                           |
+| `yAxisDisplayMode`     | Display mode of the y-axis                                                  | `'ALL' \| 'COLLAPSED' \| 'NONE'` | `ALL`                             |
+| `xAxisHeight`          | Height of x-axis container in pixels. `0` will hide it completely           | `number`                         | `50`                              |
+| `timeseriesColors`     | Map of timeseries ids and color                                             | `{ [id:number]: string }`        | `ALL`                             |
+| `containerStyle`       | Styling of the chart container                                              | `React.CSSProperties`            | `{ height: '500', width:'100%' }` |
+| `height`               | Height of the chart                                                         | `number`                         |                                   |
+| `width`                | Width of the chart                                                          | `number`                         |                                   |
+| `hiddenSeries`         | Object desribing if timeseries id should be hidden                          | `{[id: string]: boolean}`        | `{}`                              |
