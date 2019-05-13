@@ -19,8 +19,6 @@ import StyledOdometer from './StyledOdometer';
 
 const HELLIP = String.fromCharCode(0x02026);
 
-type DataValueType = number | string | null | undefined;
-
 export const Link = styled.a`
   color: 'white';
   display: 'inherit';
@@ -145,7 +143,6 @@ const handleStyles = {
   height: 25,
   borderRadius: '100%',
   margin: 'auto 8px',
-  backgroundColor: 'white',
   cursor: 'move',
   transform: 'translate(0, 0)',
   transition: '.5s background',
@@ -320,14 +317,15 @@ export class DraggableBox extends Component<
     }
   };
 
-  isValid = (value: DataValueType) => {
+  isValid = () => {
     const { minMaxRange } = this.props;
-    if (!minMaxRange || typeof value !== 'number') {
+    const { dataPoint } = this.state;
+    if (!dataPoint || typeof dataPoint.value !== 'number' || !minMaxRange) {
       return true;
     } else {
       return !(
-        (minMaxRange.min && value < minMaxRange.min) ||
-        (minMaxRange.max && value > minMaxRange.max)
+        (minMaxRange.min && dataPoint.value < minMaxRange.min) ||
+        (minMaxRange.max && dataPoint.value > minMaxRange.max)
       );
     }
   };
@@ -396,6 +394,7 @@ export class DraggableBox extends Component<
             <div
               style={{
                 ...handleStyles,
+                backgroundColor: this.isValid() ? 'white' : '#e74c3c',
               }}
               onDoubleClick={this.onDragHandleDoubleClick}
             />
@@ -432,9 +431,9 @@ export class DraggableBox extends Component<
   }
 
   renderError() {
-    const { hovering, dataPoint } = this.state;
+    const { hovering } = this.state;
     const { color, sticky, flipped } = this.props;
-    return !this.isValid(dataPoint && dataPoint.value) ? (
+    return !this.isValid() ? (
       <TagError
         color={color}
         className={`${hovering || sticky ? 'hovering' : ''} ${
