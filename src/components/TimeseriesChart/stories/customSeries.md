@@ -21,11 +21,18 @@ const series = [
     y1Accessor,
     yAccessor,
   },
+  {
+    id: 456,
+    color: 'red',
+    y0Accessor,
+    y1Accessor,
+    yAccessor,
+  },
 ];
 
 function ExampleComponent(props) {
   return (
-    <TimeseriesChart series={series} />
+    <TimeseriesChart series={series} yAxisDisplayMode={'NONE'} />
   );
   
 }

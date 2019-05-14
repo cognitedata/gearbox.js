@@ -77,8 +77,7 @@ export class TimeseriesChart extends React.Component<
     xAxisHeight: 50,
     collections: {},
     ruler: undefined,
-    styles: undefined,
-    containerStyle: { height: 500, width: '100%' },
+    styles: { container: { height: 500, width: '100%' } },
     onFetchDataError: (e: Error) => {
       throw e;
     },
@@ -127,7 +126,17 @@ export class TimeseriesChart extends React.Component<
     const { loaded } = this.state;
 
     const griffSeries = series
-      ? series
+      ? series.map((s: any) => ({
+          ...s,
+          id: s.id,
+          color: s.color || timeseriesColors[s.id] || getColor(s.id.toString()),
+          yAxisDisplayMode:
+            s.yAxisDisplayMode || AxisDisplayMode[yAxisDisplayMode],
+          hidden: s.hidden || hiddenSeries[s.id],
+          yAccessor: s.yAccessor || yAccessor,
+          y0Accessor: s.y0Accessor || y0Accessor,
+          y1Accessor: s.y1Accessor || y1Accessor,
+        }))
       : timeseriesIds.map((id: number) => ({
           id,
           color: timeseriesColors[id] || getColor(id.toString()),
