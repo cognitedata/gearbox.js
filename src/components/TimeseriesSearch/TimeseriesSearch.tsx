@@ -265,8 +265,8 @@ export class TimeseriesSearch extends React.Component<
         />
         <TagList
           style={{
-            ...(styles && styles.list ? styles.list : {}),
             marginTop: '8px',
+            ...(styles && styles.list ? styles.list : {}),
           }}
         >
           {fetching ? <CenteredSpin /> : null}
