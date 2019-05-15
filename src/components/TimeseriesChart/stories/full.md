@@ -10,6 +10,8 @@ The component requires only `timeseriesIds`
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import { TimeseriesChart } from '@cognite/gearbox';
 

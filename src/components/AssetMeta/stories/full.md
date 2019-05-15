@@ -13,6 +13,8 @@ In case if some of the panes are not necessary it can be disabled by `hidePanels
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import { AssetMeta } from '@cognite/gearbox';
 
