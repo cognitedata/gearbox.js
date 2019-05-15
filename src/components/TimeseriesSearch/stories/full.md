@@ -43,6 +43,7 @@ function ExampleComponent(props) {
 | `allowStrings`       | Allows the user to select search results that are strings                    | `boolean`                                 | `false`     |
 | `filterRule`         | Custom rule to filter search results                                         | `(timeseries: Timeseries) => boolean`     |             |
 | `onError`            | Function called on fetch timeseries error                                    | `(error: Error) => void`                  |             |
+| `styles`             | Custom styles for the component                                              | `TimeseriesSearchStyles`                  |             |
 
 ### Types
 
@@ -51,3 +52,23 @@ function ExampleComponent(props) {
 This type describes what the cognite API returns when fetching timeseries.
 It can be imported from `@cognite/sdk`.
 Documentation can be found at https://js-sdk-docs.cogniteapp.com/interfaces/timeseries.html.
+
+### TimeseriesSearchStyles
+
+This interface defines inline CSS styles for inner elements of `TimeseriesSearch` component.
+
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { TimeseriesSearchStyles } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+export interface TimeseriesSearchStyles {
+  list?: React.CSSProperties;
+}
+```
+
+See more details in `Custom styles` example.

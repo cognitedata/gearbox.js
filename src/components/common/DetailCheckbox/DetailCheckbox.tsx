@@ -5,6 +5,7 @@ import styled from 'styled-components';
 const Container = styled.div`
   background: white;
   border: 'none';
+  border-radius: 3px;
   display: inline-flex;
   justify-content: space-between;
   padding: 8px;
@@ -12,6 +13,11 @@ const Container = styled.div`
   cursor: pointer;
   margin-bottom: 4px;
   width: 100%;
+  transition: 0.3s all;
+
+  label {
+    margin: auto 16px auto 32px;
+  }
 `;
 
 export interface DetailCheckboxProps {
@@ -43,21 +49,22 @@ export const DetailCheckbox: React.SFC<DetailCheckboxProps> = ({
 }) => (
   <Container className={className} onClick={disabled ? null : onContainerClick}>
     <div style={{ wordBreak: 'break-all' }}>
-      <p
+      <span
         style={{
           fontSize: '14px',
         }}
       >
         {title}
-      </p>
-      <p
+      </span>
+      <br />
+      <span
         style={{
           fontSize: '12px',
           opacity: 0.6,
         }}
       >
         {description}
-      </p>
+      </span>
     </div>
     {checkable && (
       <Checkbox

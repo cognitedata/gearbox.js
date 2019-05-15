@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 const TagList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  margin-top: 16px;
+  margin-top: 8px;
   width: 100%;
   height: auto;
   overflow: auto;
@@ -33,6 +33,10 @@ const CenteredSpin = styled(Spin)`
   }
 `;
 
+export interface TimeseriesSearchStyles {
+  list?: React.CSSProperties;
+}
+
 export interface TimeseriesSearchProps {
   selectedTimeseries: number[];
   single: boolean;
@@ -46,6 +50,7 @@ export interface TimeseriesSearchProps {
   rootAsset?: number;
   filterRule?: (timeseries: sdk.Timeseries) => boolean;
   onError?: (error: Error) => void;
+  styles?: TimeseriesSearchStyles;
 }
 
 interface TimeseriesSearchState {
@@ -230,7 +235,7 @@ export class TimeseriesSearch extends React.Component<
   };
 
   render() {
-    const { allowStrings, single, hideSelected } = this.props;
+    const { allowStrings, single, hideSelected, styles } = this.props;
     const {
       assetId,
       fetching,
@@ -258,7 +263,7 @@ export class TimeseriesSearch extends React.Component<
           onSearch={this.fetchTimeseries}
           strings={{ searchPlaceholder: 'Search for timeseries' }}
         />
-        <TagList style={{ marginTop: '8px' }}>
+        <TagList style={styles && styles.list}>
           {fetching ? <CenteredSpin /> : null}
           {searchResults.map((timeseries: sdk.Timeseries) => (
             <DetailCheckbox
