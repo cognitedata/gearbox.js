@@ -8,6 +8,7 @@ import { TimeseriesSearch } from '../TimeseriesSearch';
 import * as allowStrings from './allowStrings.md';
 import * as basic from './basic.md';
 import * as customFilter from './customFilter.md';
+import * as customStyles from './customStyles.md';
 import * as fullDescription from './full.md';
 import * as hideSelectedRow from './hideSelectedRow.md';
 import * as preselected from './preselected.md';
@@ -190,6 +191,23 @@ storiesOf('TimeseriesSearch/Examples', module)
     {
       readme: {
         content: injectTimeseriesNames(customFilter.toString()),
+      },
+    }
+  )
+  .add(
+    'Custom styles',
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesSearch
+          onTimeserieSelectionChange={onTimeserieSelectionChange}
+          styles={{ list: { height: '200px' } }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: injectTimeseriesNames(customStyles.toString()),
       },
     }
   );
