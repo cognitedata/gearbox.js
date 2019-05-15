@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 const TagList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  margin-top: 16px;
+  margin-top: 8px;
   width: 100%;
   height: auto;
   overflow: auto;
@@ -263,12 +263,7 @@ export class TimeseriesSearch extends React.Component<
           onSearch={this.fetchTimeseries}
           strings={{ searchPlaceholder: 'Search for timeseries' }}
         />
-        <TagList
-          style={{
-            marginTop: '8px',
-            ...(styles && styles.list ? styles.list : {}),
-          }}
-        >
+        <TagList style={styles && styles.list}>
           {fetching ? <CenteredSpin /> : null}
           {searchResults.map((timeseries: sdk.Timeseries) => (
             <DetailCheckbox
