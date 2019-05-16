@@ -4,10 +4,10 @@
 
 #### Requirements:
 
-To use this component you have to install `@cognite/3d-viewer` package (version 5.0.7):
+To use this component you have to install `@cognite/3d-viewer` package (version 5.x.x):
 
 ```bash
-yarn add @cognite/3d-viewer@5.0.7
+yarn add @cognite/3d-viewer@5
 ```
 
 #### Description:
