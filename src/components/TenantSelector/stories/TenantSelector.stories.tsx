@@ -54,6 +54,7 @@ storiesOf('TenantSelector/Examples', module)
       <TenantSelector
         title="Example app"
         onTenantSelected={action('onTenantSelected')}
+        header="Your company"
         loginText="LET'S ROLL!"
       />
     ),
