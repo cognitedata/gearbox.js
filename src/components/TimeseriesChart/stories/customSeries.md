@@ -5,6 +5,8 @@
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import { AxisDisplayMode } from '@cognite/griff-react';
 const yAccessor = (data: Datapoint) => data.value;

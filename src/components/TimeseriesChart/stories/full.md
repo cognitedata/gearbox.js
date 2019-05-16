@@ -10,6 +10,8 @@ The component requires only `timeseriesIds`
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import { TimeseriesChart } from '@cognite/gearbox';
 
@@ -45,7 +47,7 @@ function ExampleComponent(props) {
 | `yAxisDisplayMode`     | Display mode of the y-axis                                                  | `'ALL' \| 'COLLAPSED' \| 'NONE'` | `ALL`                                           |
 | `xAxisHeight`          | Height of x-axis container in pixels. `0` will hide it completely           | `number`                         | `50`                                            |
 | `timeseriesColors`     | Map of timeseries ids and color                                             | `{ [id:number]: string }`        | `ALL`                                           |
-| `styles`               | Custom styles for the component                                             | `TimeseriesChartStyles`          | `{ container: { height: 500, width: '100%' } }` |
+| `styles`               | Custom styles for the component                                             | `TimeseriesChartStyles`          |                                                 |
 | `height`               | Height of the chart                                                         | `number`                         |                                                 |
 | `width`                | Width of the chart                                                          | `number`                         |                                                 |
 | `hiddenSeries`         | Object desribing if timeseries id should be hidden                          | `{[id: string]: boolean}`        | `{}`                                            |

@@ -12,6 +12,8 @@ shows loading spinner.
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import { Event } from '@cognite/sdk';
 import { EventPreview } from '@cognite/gearbox';
@@ -39,12 +41,13 @@ function ExampleComponent(props) {
 
 ##### Optionals:
 
-| Property            | Description                                                            | Type                                          | Default     |
-| ------------------- | ---------------------------------------------------------------------- | --------------------------------------------- | ----------- |
+| Property            | Description                                                                | Type                                          | Default     |
+| ------------------- | -------------------------------------------------------------------------- | --------------------------------------------- | ----------- |
 | `hideProperties`    | List of event properties to be hidden. Possible values: `type`, `subtype`, `description`, `startTime`, `endTime`, `metadata`| `Array<keyof Event>`                          | []          |
-| `hideLoadingSpinner`| Defines whether to hide the loading spinner                            | `boolean`                       |             | false       |
+| `hideLoadingSpinner`| Defines whether to hide the loading spinner                                | `boolean`                       |             | false       |
 | `onShowDetails`     | Function triggered when user clicks on the 'Explore event details' button. If the function is not provided the button will not be rendered. | `(event: Event) => void`     |             |             |
-| `strings`           | Object map with strings to customize/localize text in the component    | `{[key: string]: string}`       |             |             |
+| `strings`           | Object map with strings to customize/localize text in the component        | `{[key: string]: string}`       |             |             |
+| `styles`            | Object that defines inline CSS styles for inner elements of the component. | `EventPreviewStyles`            |             |             |
 
 `strings` default value is:
 ```js
@@ -69,3 +72,29 @@ function ExampleComponent(props) {
 import { Event } from '@cognite/sdk';
 ```
 
+#### EventPreviewStyles
+This interface defines inline CSS styles for inner elements of `EventPreview` component.
+You can override styles of following blocks:
+
+<img src="event_preview/styling_schema.png" alt="EventPreview Styling" width="600px">
+<br><br>
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { EventPreviewStyles } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+interface EventPreviewStyles {
+  wrapper?: React.CSSProperties;
+  eventType?: React.CSSProperties;
+  title?: React.CSSProperties;
+  button?: React.CSSProperties;
+  times?: React.CSSProperties;
+  metadata?: React.CSSProperties;
+}
+```
+
+See more details in `Custom Styles` example.

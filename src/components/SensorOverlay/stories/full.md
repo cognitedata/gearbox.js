@@ -12,6 +12,8 @@ The height of SensorOverlay component is defined by content in `children` and th
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import { SensorOverlay } from '@cognite/gearbox';
 

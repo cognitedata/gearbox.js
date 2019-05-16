@@ -25,6 +25,8 @@ Google Vision API key could be pass to component via **ocrKey** prop or you can 
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import { AssetScanner } from '@cognite/gearbox';
 

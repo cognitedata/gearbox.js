@@ -23,6 +23,8 @@ To retrieve a 3D model you need to provide:
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import {
   Cognite3DViewer,
