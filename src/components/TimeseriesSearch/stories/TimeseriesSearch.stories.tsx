@@ -86,7 +86,7 @@ storiesOf('TimeseriesSearch', module).add(
   },
   {
     readme: {
-      content: fullDescription,
+      content: injectTimeseriesNames(fullDescription.toString()),
     },
   }
 );

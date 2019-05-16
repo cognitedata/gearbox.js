@@ -26,6 +26,9 @@ function ExampleComponent(props) {
 }
 ```
 
+#### Info:
+You can search for `${names}`
+
 #### Available props:
 
 ##### Required:

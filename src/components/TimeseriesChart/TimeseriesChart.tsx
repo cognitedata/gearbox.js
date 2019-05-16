@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import {
   cogniteloader as griffloader,
   y0Accessor,
@@ -16,6 +17,11 @@ import {
 } from '@cognite/griff-react';
 import { Spin } from 'antd';
 import { decimalTickFormatter, getColor } from '../../utils';
+
+const Wrapper = styled.div`
+  height: 500px;
+  width: 100%;
+`;
 
 export interface TimeseriesChartStyles {
   container?: React.CSSProperties;
@@ -77,7 +83,6 @@ export class TimeseriesChart extends React.Component<
     xAxisHeight: 50,
     collections: {},
     ruler: undefined,
-    styles: { container: { height: 500, width: '100%' } },
     onFetchDataError: (e: Error) => {
       throw e;
     },
@@ -150,7 +155,7 @@ export class TimeseriesChart extends React.Component<
     return (
       griffSeries.length !== 0 && (
         <Spin spinning={!loaded}>
-          <div style={styles && styles.container}>
+          <Wrapper style={styles && styles.container}>
             <DataProvider
               defaultLoader={griffloader}
               onFetchData={this.onFetchData}
@@ -194,7 +199,7 @@ export class TimeseriesChart extends React.Component<
                 onBlur={onBlur}
               />
             </DataProvider>
-          </div>
+          </Wrapper>
         </Spin>
       )
     );
