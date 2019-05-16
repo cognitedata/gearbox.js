@@ -43,11 +43,21 @@ export const defaultStrings: PureObject = {
   metadataSummary: 'Contains {{count}} additional pieces of data',
 };
 
+export interface EventPreviewStyles {
+  wrapper?: React.CSSProperties;
+  eventType?: React.CSSProperties;
+  description?: React.CSSProperties;
+  button?: React.CSSProperties;
+  times?: React.CSSProperties;
+  metadata?: React.CSSProperties;
+}
+
 export interface EventPreviewProps {
   event: ApiEvent;
   onShowDetails?: (event: ApiEvent) => void;
   strings?: PureObject;
   hideProperties?: (keyof ApiEvent)[];
+  styles?: EventPreviewStyles;
 }
 
 export const EventPreviewView = ({
@@ -55,6 +65,7 @@ export const EventPreviewView = ({
   event,
   strings = {},
   hideProperties = [],
+  styles = {},
 }: EventPreviewProps) => {
   const lang = { ...defaultStrings, ...strings };
   const { startTime, endTime, type, subtype, description, metadata } = event;
@@ -72,8 +83,8 @@ export const EventPreviewView = ({
   const metadataCount = metadata ? Object.keys(metadata).length : 0;
 
   return (
-    <Container key="container">
-      <EventType>
+    <Container key="container" style={styles.wrapper}>
+      <EventType style={styles.eventType}>
         {[
           hideProperties.includes('type') ? '' : type,
           hideProperties.includes('subtype') ? '' : subtype,
@@ -82,9 +93,11 @@ export const EventPreviewView = ({
           .join(' / ')}
       </EventType>
       {!hideProperties.includes('description') && (
-        <EventTitle>{description || noDescription}</EventTitle>
+        <EventTitle style={styles.description}>
+          {description || noDescription}
+        </EventTitle>
       )}
-      <EventDetailsBlock>
+      <EventDetailsBlock style={styles.times}>
         {!hideProperties.includes('startTime') && (
           <p>
             {start}: {startDate}
@@ -97,7 +110,7 @@ export const EventPreviewView = ({
         )}
       </EventDetailsBlock>
       {!hideProperties.includes('metadata') && (
-        <EventDetailsBlock>
+        <EventDetailsBlock style={styles.metadata}>
           <ComplexString
             input={metadataSummary as string}
             count={metadataCount}
@@ -109,6 +122,7 @@ export const EventPreviewView = ({
           htmlType="button"
           type="primary"
           onClick={() => onShowDetails(event)}
+          style={styles.button}
         >
           {details}
         </Button>
