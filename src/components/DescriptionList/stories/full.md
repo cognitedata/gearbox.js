@@ -9,6 +9,8 @@ This component displays an object in a table layout.
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import { DescriptionList } from '@cognite/gearbox';
 

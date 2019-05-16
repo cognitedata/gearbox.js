@@ -10,6 +10,8 @@ The component requires two props, `title` and `onTenantSelected`.
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import { TenantSelector, PureObject } from '@cognite/gearbox';
 
