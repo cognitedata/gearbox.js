@@ -11,9 +11,11 @@ import {
 export function createFakeViewer({
   project,
   cache = {},
+  domElement,
 }: {
   project: string;
   cache: CacheObject;
+  domElement: HTMLElement;
 }): ViewerConfigResponse {
   if (cache[project]) {
     return cache[project];
@@ -43,11 +45,7 @@ export function createFakeViewer({
     onComplete();
   };
 
-  const viewer = new Cognite3DViewer();
-  const canvas = viewer.getCanvas();
-
-  canvas.style.width = '100%';
-  canvas.style.height = '100%';
+  const viewer = new Cognite3DViewer({ domElement });
 
   const loader = new OBJLoader();
   loader.load('./tank/tank.obj', onLoad, onProgress);
