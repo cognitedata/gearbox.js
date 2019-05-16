@@ -134,9 +134,11 @@ export class TenantSelector extends React.Component<
     return (
       <LoginWrapper style={styles && styles.wrapper}>
         <Title style={styles && styles.title}>{title}</Title>
-        {header || (
+        {header && typeof header !== 'string' ? (
+          header
+        ) : (
           <SubTitle style={styles && styles.subTitle}>
-            Enter your company name
+            {header || 'Enter your company name'}
           </SubTitle>
         )}
         <Form>

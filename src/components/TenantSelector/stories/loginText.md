@@ -14,6 +14,7 @@ function ExampleComponent(props) {
     <TenantSelector
       title="Example app"
       onTenantSelected={onTenantSelected}
+      header="Your company"
       loginText="LET'S ROLL!"
     />
   );
