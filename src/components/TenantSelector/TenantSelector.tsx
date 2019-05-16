@@ -217,9 +217,6 @@ export class TenantSelector extends React.Component<
         throw new Error('Tenant is invalid');
       }
 
-      this.setState({
-        validity: TenantValidity.UNKNOWN,
-      });
     } catch (e) {
       this.setState({
         validity: TenantValidity.INVALID,
