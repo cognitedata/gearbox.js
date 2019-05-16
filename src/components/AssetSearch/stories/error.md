@@ -7,6 +7,8 @@
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import { AssetSearch } from '@cognite/gearbox';
 import { Asset } from '@cognite/sdk';

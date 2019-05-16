@@ -5,6 +5,8 @@
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import { SensorOverlay } from '@cognite/gearbox';
 import { timeseriesList } from './timeseriesList'; // sample list of timeseries 

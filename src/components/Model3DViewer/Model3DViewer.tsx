@@ -55,6 +55,10 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   }
 
   async componentDidMount() {
+    if (!this.divWrapper.current) {
+      return;
+    }
+
     const {
       modelId,
       revisionId,
@@ -80,6 +84,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       revisionId,
       boundingBox,
       cache,
+      domElement: this.divWrapper.current,
     });
 
     this.viewer = viewer;
@@ -97,10 +102,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     this.addDisposeCall(() => {
       removeEvent();
     });
-
-    if (this.divWrapper.current) {
-      this.divWrapper.current.appendChild(viewer.getCanvas());
-    }
 
     let model: Cognite3DModel;
     let revision: sdk.Revision;
@@ -217,7 +218,10 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
   render() {
     return (
-      <div style={{ width: '100%', height: '100%' }} ref={this.divWrapper} />
+      <div
+        style={{ width: '100%', height: '100%', fontSize: 0 }}
+        ref={this.divWrapper}
+      />
     );
   }
   private async findMappedNodes(): Promise<sdk.AssetMapping[]> {
@@ -253,9 +257,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
       const reusableBox = new THREE.Box3();
 
-      // @ts-ignore
-      const { matrixWorld } = this.model;
-      const bb = this.model.getBoundingBox(nodeId, reusableBox, matrixWorld);
+      const bb = this.model.getBoundingBox(nodeId, reusableBox);
 
       this.model.selectNode(nodeId);
 

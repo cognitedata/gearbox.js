@@ -3,7 +3,12 @@ import { Spin } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import { PureObject } from '../../interfaces';
-import { EventPreviewView } from './components/EventPreviewView';
+import {
+  EventPreviewStyles,
+  EventPreviewView,
+} from './components/EventPreviewView';
+
+export type EventPreviewStyles = EventPreviewStyles;
 
 const SpinContainer = styled.div`
   display: flex;
@@ -24,6 +29,7 @@ export interface EventPreviewProps {
   strings?: PureObject;
   hideProperties?: (keyof ApiEvent)[];
   hideLoadingSpinner?: boolean;
+  styles?: EventPreviewStyles;
 }
 
 interface EventPreviewState {
@@ -66,16 +72,25 @@ export class EventPreview extends React.Component<
   }
 
   render() {
-    if (!this.state.event) {
-      return this.props.hideLoadingSpinner ? null : <LoadingSpinner />;
+    const {
+      hideLoadingSpinner,
+      onShowDetails,
+      hideProperties,
+      strings,
+      styles,
+    } = this.props;
+    const { event } = this.state;
+    if (!event) {
+      return hideLoadingSpinner ? null : <LoadingSpinner />;
     }
 
     return (
       <EventPreviewView
-        event={this.state.event}
-        onShowDetails={this.props.onShowDetails}
-        hideProperties={this.props.hideProperties}
-        strings={this.props.strings}
+        styles={styles}
+        event={event}
+        onShowDetails={onShowDetails}
+        hideProperties={hideProperties}
+        strings={strings}
       />
     );
   }
