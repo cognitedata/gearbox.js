@@ -1,7 +1,6 @@
 import typescript from 'rollup-plugin-typescript2';
 import json from 'rollup-plugin-json';
 import pkg from './package.json';
-import regenerator from 'rollup-plugin-regenerator';
 
 export default {
   external: [
@@ -24,6 +23,5 @@ export default {
       typescript: require('typescript'),
     }),
     json(),
-    regenerator(),
   ],
 };
