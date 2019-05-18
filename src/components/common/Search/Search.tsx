@@ -225,18 +225,23 @@ export class Search extends React.Component<SearchProps, SearchState> {
     }
 
     // Arrow up
-    if (e.keyCode === 38 && cursor && cursor > 0) {
-      this.setState({ cursor: cursor - 1 });
+    if (e.keyCode === 38) {
+      if (cursor === undefined || cursor === 0) {
+        this.setState({ cursor: liveSearchResults.length - 1 });
+      } else {
+        this.setState({ cursor: cursor - 1 });
+      }
       return;
     }
 
     // Arrow down
     if (e.keyCode === 40) {
-      if (cursor === undefined) {
+      if (cursor === undefined || cursor === liveSearchResults.length - 1) {
         this.setState({ cursor: 0 });
-      } else if (cursor < liveSearchResults.length - 1) {
+      } else {
         this.setState({ cursor: cursor + 1 });
       }
+      return;
     }
 
     // Enter
