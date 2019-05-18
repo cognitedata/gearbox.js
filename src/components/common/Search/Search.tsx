@@ -213,7 +213,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
     const { liveSearch, onKeyDown } = this.props;
     const { cursor, liveSearchResults, liveSearchShow } = this.state;
 
-    if(onKeyDown){
+    if (onKeyDown) {
       onKeyDown(e);
     }
     if (e.keyCode === 38 || e.keyCode === 40) {

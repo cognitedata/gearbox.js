@@ -21,6 +21,7 @@ afterEach(() => {
   );
 });
 
+// tslint:disable:no-big-function
 describe('Search', () => {
   it('should renders without exploding', () => {
     const props = { assets: assetsList };

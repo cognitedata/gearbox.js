@@ -1,7 +1,7 @@
 import * as sdk from '@cognite/sdk';
 import { Spin } from 'antd';
 import { debounce } from 'lodash';
-import React from 'react';
+import React, { KeyboardEvent } from 'react';
 import styled from 'styled-components';
 import { ApiQuery } from '../../interfaces';
 import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
@@ -60,6 +60,7 @@ interface TimeseriesSearchState {
   searchResults: sdk.Timeseries[];
   selectedTimeseries: sdk.Timeseries[];
   lastFetchId: number;
+  cursor?: number;
 }
 
 export class TimeseriesSearch extends React.Component<
@@ -134,6 +135,11 @@ export class TimeseriesSearch extends React.Component<
   };
 
   onTimeSerieClicked = (timeseries: sdk.Timeseries): void => {
+    const { allowStrings } = this.props;
+    if (!allowStrings && timeseries.isString) {
+      return;
+    }
+
     let newTimeseries: sdk.Timeseries[] = [];
     if (this.props.single) {
       newTimeseries = [timeseries];
@@ -234,6 +240,38 @@ export class TimeseriesSearch extends React.Component<
     }
   };
 
+  onKeyDown = (e: KeyboardEvent) => {
+    const { cursor, searchResults } = this.state;
+    if (e.keyCode === 38 || e.keyCode === 40) {
+      e.preventDefault();
+    }
+
+    if (!searchResults || searchResults.length === 0) {
+      return;
+    }
+
+    // Arrow up
+    if (e.keyCode === 38 && cursor && cursor > 0) {
+      this.setState({ cursor: cursor - 1 });
+      return;
+    }
+
+    // Arrow down
+    if (e.keyCode === 40) {
+      if (cursor === undefined) {
+        this.setState({ cursor: 0 });
+      } else if (cursor < searchResults.length - 1) {
+        this.setState({ cursor: cursor + 1 });
+      }
+    }
+
+    // Enter
+    if (e.keyCode === 13 && cursor !== undefined) {
+      const item = searchResults[cursor];
+      this.onTimeSerieClicked(item);
+    }
+  };
+
   render() {
     const { allowStrings, single, hideSelected, styles } = this.props;
     const {
@@ -242,6 +280,7 @@ export class TimeseriesSearch extends React.Component<
       searchResults,
       assets,
       selectedTimeseries,
+      cursor,
     } = this.state;
 
     return (
@@ -262,12 +301,15 @@ export class TimeseriesSearch extends React.Component<
           assetId={assetId || 0}
           onSearch={this.fetchTimeseries}
           strings={{ searchPlaceholder: 'Search for timeseries' }}
+          onKeyDown={this.onKeyDown}
         />
         <TagList style={styles && styles.list}>
           {fetching ? <CenteredSpin /> : null}
-          {searchResults.map((timeseries: sdk.Timeseries) => (
+          {searchResults.map((timeseries: sdk.Timeseries, index: number) => (
             <DetailCheckbox
-              className={`tag-search-result result-${timeseries.id}`}
+              className={`tag-search-result result-${timeseries.id} ${
+                index === cursor ? 'active' : ''
+              }`}
               key={`detail-checkbox--${timeseries.id}`}
               title={timeseries.name || timeseries.id.toString()}
               description={
