@@ -76,7 +76,7 @@ import { Event } from '@cognite/sdk';
 This interface defines inline CSS styles for inner elements of `EventPreview` component.
 You can override styles of following blocks:
 
-<img src="event_preview/styling_schema.png" alt="EventPreview Styling" width="600px">
+<img src="event_preview/styling_schema.jpg" alt="EventPreview Styling" width="600px">
 <br><br>
 The type can be imported from `@cognite/gearbox`:
 
