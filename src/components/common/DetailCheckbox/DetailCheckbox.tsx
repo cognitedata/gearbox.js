@@ -15,6 +15,14 @@ const Container = styled.div`
   width: 100%;
   transition: 0.3s all;
 
+  &.active {
+    background-color: #eeeeee;
+  }
+
+  &:hover {
+    background-color: #eeeeee;
+  }
+
   label {
     margin: auto 16px auto 32px;
   }
