@@ -29,14 +29,29 @@ afterEach(() => {
 
 // tslint:disable:no-big-function
 describe('TimeseriesChart', () => {
-  it('renders correctly', async () => {
+  it('renders correctly when ids are specified', async () => {
     const props = {
       timeseriesIds: [timeseriesList[0].id],
     };
     const wrapper = mount(<TimeseriesChart {...props} />);
     await sleep(300);
     wrapper.update();
-    expect(wrapper.find('.linechart-container').exists()).toBeTruthy();
+    expect(wrapper.find('.line').exists()).toBeTruthy();
+  });
+
+  fit('renders correctly when series are specified', async () => {
+    const props = {
+      series: [
+        {
+          id: 123,
+          color: 'green',
+        },
+      ],
+    };
+    const wrapper = mount(<TimeseriesChart {...props} />);
+    await sleep(300);
+    wrapper.update();
+    expect(wrapper.find('.line').exists()).toBeTruthy();
   });
 
   it('calls the sdk', async () => {

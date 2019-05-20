@@ -123,6 +123,7 @@ export const mergeInsert = (
   if (toInsert.length === 0) {
     return base;
   }
+
   // Remove the points from base within the subdoconstn
   const strippedBase: Datapoint[] = base.filter(
     point => xAccessor(point) < subDomain[0] || xAccessor(point) > subDomain[1]
@@ -208,7 +209,7 @@ export const cogniteloader = async ({
         .then(async (items: DataDatapoints) => {
           const { datapoints: points } = items;
           if (
-            points.reduce((p, c: Datapoint) => p + (c.count || 0), 0) <
+            points.reduce((p: number, c: Datapoint) => p + (c.count || 0), 0) <
             pointsPerSeries / 2
           ) {
             // If there are less than x points, show raw values
