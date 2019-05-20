@@ -54,6 +54,7 @@ function ExampleComponent(props) {
       onClick={onClick}
       onProgress={onProgress}
       onComplete={onComplete}
+      onReady={onReady}
       cache={cache}
     />
     
