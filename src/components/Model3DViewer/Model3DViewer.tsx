@@ -34,7 +34,7 @@ export function mockCreateViewer(mockFunction: any) {
 
 export class Model3DViewer extends React.Component<Model3DViewerProps> {
   static defaultProps = {
-    enableKeyboardNavigation: false,
+    enableKeyboardNavigation: true,
     useDefaultCameraPosition: true,
   };
 
