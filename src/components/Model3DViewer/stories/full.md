@@ -49,8 +49,8 @@ function ExampleComponent(props) {
 
   return (
     <Model3DViewer
-      modelId={modelID}
-      revisionId={revisionID}
+      modelId={modelId}
+      revisionId={revisionId}
       onClick={onClick}
       onProgress={onProgress}
       onComplete={onComplete}
