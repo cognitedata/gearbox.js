@@ -247,9 +247,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
     this.model.deselectAllNodes();
 
-    if (!length) {
-      this.viewer.fitCameraToModel(this.model);
-    } else if (length === 1) {
+    if (length === 1) {
       const { nodeId } = this.nodes[0];
 
       // @ts-ignore
