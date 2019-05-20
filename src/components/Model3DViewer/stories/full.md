@@ -38,7 +38,7 @@ function ExampleComponent(props) {
   const cache = {};
   const modelId = 0;
   const revisionId = 0;
-  const onClick = (modelId: number) => {};
+  const onClick = (nodeId: number) => {};
   const onProgress = (progress: OnProgressData) => {};
   const onComplete = () => {};
   const onReady = (
