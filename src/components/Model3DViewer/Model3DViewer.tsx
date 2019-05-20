@@ -275,8 +275,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   private onComplete() {
     const { onComplete } = this.props;
 
-    this.highlightNodes();
-
     if (onComplete) {
       onComplete();
     }
