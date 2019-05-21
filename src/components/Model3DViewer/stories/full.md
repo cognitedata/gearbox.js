@@ -38,7 +38,7 @@ function ExampleComponent(props) {
   const cache = {};
   const modelId = 0;
   const revisionId = 0;
-  const onClick = (modelId: number) => {};
+  const onClick = (nodeId: number) => {};
   const onProgress = (progress: OnProgressData) => {};
   const onComplete = () => {};
   const onReady = (
@@ -49,11 +49,12 @@ function ExampleComponent(props) {
 
   return (
     <Model3DViewer
-      modelId={modelID}
-      revisionId={revisionID}
+      modelId={modelId}
+      revisionId={revisionId}
       onClick={onClick}
       onProgress={onProgress}
       onComplete={onComplete}
+      onReady={onReady}
       cache={cache}
     />
     
