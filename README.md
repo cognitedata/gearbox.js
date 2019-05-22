@@ -30,6 +30,10 @@ import 'antd/dist/antd.css';
 
 See the up-to-date storybook [here](https://cognitedata.github.io/gearbox.js).
 
+## Development
+
+To build the library locally it's required to have version of `node` installed not lower than `10.10`
+
 ## Tests
 
 Utilising Jest and Enzyme you can test your component
