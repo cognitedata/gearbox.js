@@ -4,8 +4,13 @@ import json from 'rollup-plugin-json';
 import pkg from './package.json';
 
 const exportedComponents = fs
-  .readdirSync('src/components')
-  .filter(dir => dir !== 'common' && dir !== '_internal');
+  .readdirSync('src/components', {
+    withFileTypes: true,
+  })
+  .filter(
+    fd => fd.isDirectory() && fd.name !== 'common' && fd.name !== '_internal'
+  )
+  .map(({ name }) => name);
 
 export default [
   {
