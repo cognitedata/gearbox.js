@@ -243,17 +243,12 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
     if (this.pinchZoom.current) {
       this.pinchZoom.current.innerHTML = '';
       this.pinchZoom.current.appendChild(this.svg);
-      // If we already have a pinchToZoom instance just reset zoom
-      if (this.pinchZoomInstance) {
-        this.pinchZoomInstance.zoomOutAnimation();
-      } else {
-        this.pinchZoomInstance = new PinchZoom(this.pinchZoom.current, {
-          animationDuration: 0,
-          tapZoomFactor: 8,
-          maxZoom: 30,
-          minZoom: 1,
-        });
-      }
+      this.pinchZoomInstance = new PinchZoom(this.pinchZoom.current, {
+        animationDuration: 0,
+        tapZoomFactor: 8,
+        maxZoom: 30,
+        minZoom: 1,
+      });
     }
   };
 

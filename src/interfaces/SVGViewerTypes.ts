@@ -25,5 +25,4 @@ export interface PinchZoomInterface {
   scaleTo: (zoomFactor: number, center: ZoomCenter) => void;
   stopAnimation: () => void;
   sanitizeOffset: (offset: ZoomCenter) => ZoomCenter;
-  zoomOutAnimation: () => void;
 }
