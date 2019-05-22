@@ -40,6 +40,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
   disposeCalls: any[] = [];
   divWrapper: RefObject<HTMLDivElement> = React.createRef();
+  inputWrapper: RefObject<HTMLInputElement> = React.createRef();
   model: Cognite3DModel | null = null;
   onClickHandlerBounded: ClickHandler;
   onCompleteBounded: Callback;
@@ -55,7 +56,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   }
 
   async componentDidMount() {
-    if (!this.divWrapper.current) {
+    if (!this.divWrapper.current || !this.inputWrapper.current) {
       return;
     }
 
@@ -65,7 +66,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       cache,
       boundingBox,
       useDefaultCameraPosition,
-      enableKeyboardNavigation,
       onProgress,
       onReady,
       onCameraChange,
@@ -88,10 +88,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     });
 
     this.viewer = viewer;
-
-    if (!enableKeyboardNavigation) {
-      viewer.disableKeyboardNavigation();
-    }
 
     if (onProgress) {
       addEvent([[progress, onProgress]]);
@@ -216,12 +212,40 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     }
   }
 
+  onContainerClick = () => {
+    if (this.inputWrapper.current) {
+      this.inputWrapper.current.focus();
+    }
+  };
+
+  onBlur = () => {
+    if (this.viewer) {
+      this.viewer.disableKeyboardNavigation();
+    }
+  };
+
+  onFocus = () => {
+    if (this.viewer && this.props.enableKeyboardNavigation) {
+      this.viewer.enableKeyboardNavigation();
+    }
+  };
+
   render() {
     return (
-      <div
-        style={{ width: '100%', height: '100%', fontSize: 0 }}
-        ref={this.divWrapper}
-      />
+      <React.Fragment>
+        <input
+          type="text"
+          onBlur={this.onBlur}
+          onFocus={this.onFocus}
+          ref={this.inputWrapper}
+          style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
+        />
+        <div
+          style={{ width: '100%', height: '100%', fontSize: 0 }}
+          ref={this.divWrapper}
+          onClick={this.onContainerClick}
+        />
+      </React.Fragment>
     );
   }
   private async findMappedNodes(): Promise<sdk.AssetMapping[]> {
