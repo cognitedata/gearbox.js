@@ -6,7 +6,7 @@ import {
   createViewer as originalCreateViewer,
   setCameraPosition,
   ViewerEventTypes,
-} from '../../utils';
+} from '../../utils/threeD';
 
 let createViewer = originalCreateViewer;
 

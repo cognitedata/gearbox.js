@@ -6,7 +6,7 @@ import {
   removeEvent,
   ViewerConfigResponse,
   ViewerEventTypes,
-} from '../utils';
+} from '../utils/threeD';
 
 export function createFakeViewer({
   project,

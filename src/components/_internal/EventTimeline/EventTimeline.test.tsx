@@ -1,7 +1,10 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { eventTimelineDataSrc, generateEventTimelineData } from '../../mocks';
+import {
+  eventTimelineDataSrc,
+  generateEventTimelineData,
+} from '../../../mocks';
 import { EventTimeline } from './EventTimeline';
 
 const data = eventTimelineDataSrc.map(event =>
