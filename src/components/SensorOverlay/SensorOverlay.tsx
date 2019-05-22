@@ -86,7 +86,7 @@ interface DraggableBoxPosition extends SensorPosition {
 
 export interface SensorOverlayProps {
   children: React.ReactNode;
-  timeserieIds: number[];
+  timeseriesIds: number[];
   alertColor?: string;
   colorMap: {
     [id: string]: string;
@@ -120,7 +120,7 @@ export interface SensorOverlayProps {
 }
 
 interface SensorOverlayState {
-  timeserieIds: number[]; // reference to timeserieIds in props
+  timeseriesIds: number[]; // reference to timeseriesIds in props
   boxes: DraggableBoxPosition[];
   prevSize: {
     width: number;
@@ -139,7 +139,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
     state: SensorOverlayState
   ) {
     if (
-      props.timeserieIds !== state.timeserieIds ||
+      props.timeseriesIds !== state.timeseriesIds ||
       props.size.width !== state.prevSize.width ||
       props.size.height !== state.prevSize.height
     ) {
@@ -156,7 +156,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
     return props.size.width === 0 || props.size.height === 0
       ? {
           // container is empty
-          timeserieIds: props.timeserieIds,
+          timeseriesIds: props.timeseriesIds,
           boxes: [],
           prevSize: {
             width: props.size.width,
@@ -164,7 +164,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
           },
         }
       : {
-          timeserieIds: props.timeserieIds,
+          timeseriesIds: props.timeseriesIds,
           boxes: SensorOverlay.makeBoxesList(state.boxes, props),
           prevSize: {
             width: props.size.width,
@@ -182,7 +182,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
       .filter((v): v is number => typeof v === 'number')
       .sort((a: number, b: number) => a - b);
 
-    return props.timeserieIds.map(id => {
+    return props.timeseriesIds.map(id => {
       const oldBox = oldBoxes.find(box => box.id === id);
       if (oldBox) {
         return oldBox;
@@ -247,7 +247,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
   constructor(props: SensorOverlayProps) {
     super(props);
     this.state = SensorOverlay.getNewStateFromProps(props, {
-      timeserieIds: [],
+      timeseriesIds: [],
       boxes: [],
       prevSize: {
         width: 0,

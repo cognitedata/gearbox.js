@@ -29,31 +29,6 @@ afterEach(() => {
 
 // tslint:disable:no-big-function
 describe('TimeseriesChart', () => {
-  it('renders correctly when ids are specified', async () => {
-    const props = {
-      timeseriesIds: [timeseriesList[0].id],
-    };
-    const wrapper = mount(<TimeseriesChart {...props} />);
-    await sleep(300);
-    wrapper.update();
-    expect(wrapper.find('.line').exists()).toBeTruthy();
-  });
-
-  fit('renders correctly when series are specified', async () => {
-    const props = {
-      series: [
-        {
-          id: 123,
-          color: 'green',
-        },
-      ],
-    };
-    const wrapper = mount(<TimeseriesChart {...props} />);
-    await sleep(300);
-    wrapper.update();
-    expect(wrapper.find('.line').exists()).toBeTruthy();
-  });
-
   it('calls the sdk', async () => {
     const id = 123;
     const props = {
@@ -68,13 +43,37 @@ describe('TimeseriesChart', () => {
     expect(sdk.Datapoints.retrieve).toHaveBeenCalledWith(id, expect.anything());
   });
 
+  it('renders correctly when ids are specified', async () => {
+    const props = {
+      timeseriesIds: [timeseriesList[0].id],
+    };
+    const wrapper = mount(<TimeseriesChart {...props} />);
+    await sleep(300);
+    wrapper.update();
+    expect(wrapper.find('.line').exists()).toBeTruthy();
+  });
+
+  it('renders correctly when series are specified', async () => {
+    const props = {
+      series: [
+        {
+          id: 123,
+          color: 'green',
+        },
+      ],
+    };
+    const wrapper = mount(<TimeseriesChart {...props} />);
+    await sleep(300);
+    wrapper.update();
+    expect(wrapper.find('.line').exists()).toBeTruthy();
+  });
+
   it('renders context chart', async () => {
     const props = {
       timeseriesIds: [timeseriesList[0].id],
       contextChart: true,
     };
     const wrapper = mount(<TimeseriesChart {...props} />);
-    // tslint:disable-next-line: no-identical-functions
     await sleep(300);
     wrapper.update();
     expect(wrapper.find('.context-container').exists()).toBeTruthy();

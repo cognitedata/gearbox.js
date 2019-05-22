@@ -1,4 +1,4 @@
-## With Many Sensors 
+## With Many Sensors
 
 <!-- STORY -->
 
@@ -11,7 +11,7 @@ import React from 'react';
 import { SensorOverlay } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
-  const timeserieIds = [ 
+  const timeseriesIds = [
     8681821313339919,
     4965555138606429,
     1762612637163055,
@@ -19,10 +19,10 @@ function ExampleComponent(props) {
   ];
 
   return (
-    <SensorOverlay timeserieIds={ timeserieIds }>
+    <SensorOverlay timeseriesIds={timeseriesIds}>
       <div style={{ width: '100%', height: '220px', background: '#EEE' }} />
     </SensorOverlay>
   );
-
+  
 }
 ```
