@@ -3,7 +3,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import {
   clampNumber,
   extractValidStrings,
-  getCanvas,
   sortStringsAlphabetically,
 } from '../utils';
 
