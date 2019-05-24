@@ -22,7 +22,9 @@ export const generateNumber = (length: number = 10): number => {
     return 0;
   }
 
-  const aggregator = new Array(length).fill(0);
+  const aggregator = new Array(length).fill(null);
 
-  return Number(aggregator.map(() => Math.floor(Math.random() * 10)).join(''));
+  return Number(
+    aggregator.map(() => Math.floor(Math.random() * 10) || 1).join('')
+  );
 };
