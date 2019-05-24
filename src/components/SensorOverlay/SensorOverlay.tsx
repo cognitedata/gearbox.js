@@ -203,7 +203,8 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
         return {
           id,
           defaultSlot,
-          color: (props.colorMap && props.colorMap[id]) || getColor(id),
+          color:
+            (props.colorMap && props.colorMap[id]) || getColor(id.toString()),
           ...(isDefaultPositionProvided
             ? props.defaultPositionMap[id]
             : SensorOverlay.getDefaultPosition(
