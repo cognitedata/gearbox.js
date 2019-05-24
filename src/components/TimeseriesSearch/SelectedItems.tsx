@@ -1,7 +1,7 @@
 import { Tag } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { getColor } from './../../utils/colors';
+import { getColorByString } from './../../utils/colors';
 
 const Wrapper = styled.div`
   flex-directoin: row;
@@ -37,7 +37,7 @@ export class SelectedItems extends React.Component<SelectedTimeseriesProps> {
               key={item.id}
               onClose={() => onItemClose(item)}
               closable={true}
-              color={getColor(item.id.toString())}
+              color={getColorByString(item.id.toString())}
             >
               {item.name || ''}
             </Tag>
