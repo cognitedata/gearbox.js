@@ -383,10 +383,8 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
     }
   };
 
-  isNullStrokeWidth = (textNode: Element) => {
-    const strokeWidth = textNode.getAttribute('stroke-width');
-    return textNode.getAttribute('stroke-width') === '0';
-  };
+  isNullStrokeWidth = (textNode: Element) =>
+    textNode.getAttribute('stroke-width') === '0';
 
   handleItemClick = async (e: MouseEvent) => {
     const target = e.target as HTMLElement;
