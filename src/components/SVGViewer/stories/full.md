@@ -38,7 +38,7 @@ function ExampleComponent(props) {
 
 | Property              | Description                                 | Type                        | Default |
 | --------------------- | ------------------------------------------- | --------------------------- | ------- |
-| `documentId`            | CDF fileId to fetch svg-document            | `number` |         |
+| `documentId`            | `fileId` provided by `@cognite/sdk` to fetch svg-document            | `number` |         |
 
 #### Optional:
 
