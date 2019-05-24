@@ -33,16 +33,6 @@ describe('utils', () => {
     });
   });
 
-  describe('getCanvas', () => {
-    it('returns HTMLCanvasElement', () => {
-      const img = document.createElement('img');
-
-      expect(
-        getCanvas(img, 200, 200) instanceof HTMLCanvasElement
-      ).toBeTruthy();
-    });
-  });
-
   describe('extractValidStrings', () => {
     const arr = [
       {
