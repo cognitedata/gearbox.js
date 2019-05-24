@@ -1,12 +1,17 @@
 import { Files } from '@cognite/sdk';
-import axios from 'axios';
 
 export const getDocumentDownloadLink = async (id: number) => {
   const url = await Files.download(id);
-  const { data } = await axios({
-    url,
-    method: 'GET',
-    responseType: 'text',
-  });
-  return data;
+
+  const response = await fetch(url);
+
+  if (response.status !== 200) {
+    const { status } = response;
+    const errorResponse = await response.json();
+    const message = errorResponse.error ? errorResponse.error.message : '';
+
+    throw { error: response, status, message };
+  }
+
+  return await response.text();
 };

@@ -1,8 +1,7 @@
 import { Files } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
+import fetchMock from 'fetch-mock';
 import React from 'react';
 import styled from 'styled-components';
 import { ZoomCenter } from '../../../interfaces';
@@ -15,13 +14,11 @@ import * as fullDescription from './full.md';
 import * as locateDescription from './locate.md';
 import * as zoomDescription from './zoom.md';
 
-const mock = new MockAdapter(axios);
-
 const API_REQUEST = 'https://example.com';
 
 const setupMocks = () => {
   Files.download = async (): Promise<string> => API_REQUEST;
-  mock.onGet(API_REQUEST).reply(200, SVG);
+  fetchMock.restore().getOnce(API_REQUEST, SVG);
 };
 
 const getTextFromMetadataNode = (node: Element) =>
