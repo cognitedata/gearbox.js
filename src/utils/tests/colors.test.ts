@@ -1,20 +1,18 @@
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { getColor, getColorFromPercentage } from '../colors';
+import { getColorByString, getColorFromPercentage } from '../colors';
 
 configure({ adapter: new Adapter() });
 
 describe('colors', () => {
-  describe('getColor', () => {
+  describe('getColorByString', () => {
     it.each`
       param       | expected
-      ${0}        | ${'#0097e6'}
-      ${14}       | ${'#DD4477'}
       ${'string'} | ${'#8B0707'}
     `(
       'Should return element from ColorList array upon $param input',
       ({ param, expected }) => {
-        expect(getColor(param)).toBe(expected);
+        expect(getColorByString(param)).toBe(expected);
       }
     );
   });

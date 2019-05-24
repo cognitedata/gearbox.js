@@ -11,7 +11,7 @@ import {
 } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { withSize } from 'react-sizeme';
-import { clampNumber, getColor } from '../../utils';
+import { clampNumber, getColorByString } from '../../utils';
 import DraggableBox from './components/DraggableBox';
 import DraggablePoint from './components/DraggablePoint';
 import SvgLine from './components/SvgLine';
@@ -203,7 +203,9 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
         return {
           id,
           defaultSlot,
-          color: (props.colorMap && props.colorMap[id]) || getColor(id),
+          color:
+            (props.colorMap && props.colorMap[id]) ||
+            getColorByString(id.toString()),
           ...(isDefaultPositionProvided
             ? props.defaultPositionMap[id]
             : SensorOverlay.getDefaultPosition(
