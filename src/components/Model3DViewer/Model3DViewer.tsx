@@ -91,6 +91,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     this.viewer = viewer;
     // Looks like replaceChild looses onClick event handler, so adding it this way instead
     domElement.onclick = this.onContainerClick;
+
     if (onProgress) {
       addEvent([[progress, onProgress]]);
     }
