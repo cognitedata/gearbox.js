@@ -17,7 +17,7 @@ const viewer = {
   disableKeyboardNavigation: jest.fn(),
 };
 
-const domElement = {};
+const domElement = document.createElement('div');
 
 const callbacksCreateViewer = jest.fn(() => ({
   addEvent,
