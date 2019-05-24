@@ -23,7 +23,7 @@ import { SVGViewer } from '@cognite/gearbox';
 function ExampleComponent(props) {
 
   return (
-    <div style={{ height: '100vh', position: 'relative' }}>
+    <div style={{ height: '100vh' }}>
       <SVGViewer
         documentId={5185355395511590}
       />
@@ -47,7 +47,8 @@ function ExampleComponent(props) {
 | `metadataClassesConditions`            | List of classes and conditions on when they should be applied for equipment            | `Conditions[]` |         |
 | `title` | Document title  | `string`                  |   |
 | `description` | Document description  | `string`                  |   |
-| `showOverlappedText` | Display text with stroke-width: 0  | `string`                  | true |
+| `showOverlappedText` | Display text with stroke-width: 0  | `boolean`                  | true |
+| `customClassNames` | Override default colors with custom classNames  | `CustomClassNames`                  | true |
 | `isCurrentAsset` | Condition to locate and highlight current asset during first render  | `(metadataNode: Element) => boolean`                  |   |
 | `handleCancel` | Viewer close callback  | `() => void;`                  |   |
 | `handleAnimateZoom` | Zoom callback  | `({ zoomProgress, source, zoomCenter }: { zoomProgress: number; source: string; zoomCenter?: ZoomCenter; }) => void`                  |   |
@@ -91,6 +92,26 @@ Definition:
 interface ZoomCenter {
   x: number;
   y: number;
+}
+
+```
+
+#### CustomClassNames
+
+This type describes the parameters the `handleAnimateZoom` function is called with.
+The type can be imported from @cognite/gearbox:
+
+```typescript
+import { CustomClassNames } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+interface CustomClassNames {
+  searchResults: string;
+  currentSearchResult: string;
+  currentAsset: string;
 }
 
 ```

@@ -16,12 +16,20 @@ import { SVGViewer } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
 
+  const metadataClassesConditions = [
+    {
+      condition: (metadata: Element) =>
+        (metadata.textContent || '').replace(/\s/g, '').length % 2 === 0,
+      className: 'checklist-asset',
+    },
+  ];
+
   return (
-    <div style={{ height: '100vh', position: 'relative' }}>
+    <div style={{ height: '100vh' }}>
       <SVGViewer
-          documentId={5185355395511590}
-          metadataClassesConditions={metadataClassesConditions}
-        />
+        documentId={5185355395511590}
+        metadataClassesConditions={metadataClassesConditions}
+      />
     </div>
   );
 

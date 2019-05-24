@@ -1,15 +1,20 @@
-import 'antd/dist/antd.css';
 import Icon from 'antd/lib/icon';
 import PinchZoom from 'pinch-zoom-js';
 import React from 'react';
 import styled from 'styled-components';
-import { Conditions, PinchZoomInterface, ZoomCenter } from '../../interfaces';
+import {
+  Conditions,
+  CustomClassNames,
+  PinchZoomInterface,
+  ZoomCenter,
+} from '../../interfaces';
 import * as CustomIcon from './Icons';
 import SVGViewerSearch from './SVGViewerSearch';
 import { getDocumentDownloadLink } from './utils';
 
 const zoomLevel = 0.7;
 const wheelZoomLevel = 0.15;
+const currentAssetClassName = 'current-asset';
 
 export interface ComponentProps {
   // CDF fileId to fetch svg-document
@@ -22,6 +27,8 @@ export interface ComponentProps {
   description?: string;
   // Display text with stroke-width: 0
   showOverlappedText?: boolean;
+  // Override default colors with custom classNames
+  customClassNames?: CustomClassNames;
   // Condition to locate and highlight current asset during first render
   isCurrentAsset?: (metadataNode: Element) => boolean;
   // Viewer close callback
@@ -93,7 +100,7 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
   }
 
   render() {
-    const { title, description } = this.props;
+    const { title, description, customClassNames = {} } = this.props;
     const isDesktop = this.state.width > 992;
 
     return (
@@ -107,6 +114,7 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
           // https://developers.google.com/web/updates/2015/10/tap-to-search
           tabIndex={-1}
           onWheel={this.handleTrackpadZoom}
+          customClassNames={customClassNames}
           data-test-id="svg-viewer"
         >
           <StyledHeaderContainer>
@@ -159,6 +167,8 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
             onFocus={this.handleSearchFocus}
             onBlur={this.handleSearchBlur}
             isDesktop={isDesktop}
+            searchClassName={customClassNames.searchResults}
+            currentSearchClassName={customClassNames.currentSearchResult}
           />
           <div ref={this.pinchZoomContainer}>
             <div
@@ -186,7 +196,7 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
   };
 
   presetSVG = async () => {
-    const { documentId } = this.props;
+    const { documentId, customClassNames } = this.props;
     let svgString;
     try {
       svgString = await getDocumentDownloadLink(documentId);
@@ -208,7 +218,11 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
         this.initAttributesForMetadataContainer();
         this.setCustomClasses();
         this.svg.addEventListener('click', this.handleItemClick);
-        this.zoomOnCurrentAsset(document.querySelector('.current-asset'));
+        this.zoomOnCurrentAsset(
+          document.querySelector(
+            `.${currentAssetClassName || (customClassNames || {}).currentAsset}`
+          )
+        );
       }
     }
   };
@@ -217,7 +231,9 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
     if (this.props.isCurrentAsset) {
       this.addCssClassesToMetadataContainer({
         condition: this.props.isCurrentAsset,
-        className: 'current-asset',
+        className:
+          currentAssetClassName ||
+          (this.props.customClassNames || {}).currentAsset,
       });
     }
     if (this.props.metadataClassesConditions) {
@@ -504,7 +520,12 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
 const SVGViewerContainer = styled.div`
   height: 100%;
   width: 100%;
+  position: relative;
 `;
+
+interface InternalThemedStyledProps {
+  customClassNames: CustomClassNames;
+}
 
 const SvgNode = styled.div`
   cursor: move;
@@ -515,6 +536,10 @@ const SvgNode = styled.div`
   > svg {
     display: block;
   }
+  ${(props: InternalThemedStyledProps) =>
+    !props.customClassNames.searchResults &&
+    // tslint:disable-next-line: no-nested-template-literals
+    `
   .search-result {
     &.metadata-container {
       text {
@@ -528,7 +553,11 @@ const SvgNode = styled.div`
       fill: #c945db !important;
       font-weight: bold;
     }
-  }
+  }`}
+  ${(props: InternalThemedStyledProps) =>
+    !props.customClassNames.currentSearchResult &&
+    // tslint:disable-next-line: no-nested-template-literals
+    `
   .current-search-result {
     &.metadata-container {
       text {
@@ -540,7 +569,7 @@ const SvgNode = styled.div`
       stroke: #3838ff !important;
       fill: #3838ff !important;
     }
-  }
+  }`}
   .metadata-container {
     cursor: pointer;
     > {
@@ -574,6 +603,10 @@ const SvgNode = styled.div`
         stroke: #36a2c2;
       }
     }
+    ${(props: InternalThemedStyledProps) =>
+      !props.customClassNames.currentAsset &&
+      // tslint:disable-next-line: no-nested-template-literals
+      `
     &.current-asset {
       outline: auto 2px #36a2c2;
       cursor: default;
@@ -589,7 +622,7 @@ const SvgNode = styled.div`
           transition: all 0.2s ease;
         }
       }
-    }
+    }`}
   }
 `;
 

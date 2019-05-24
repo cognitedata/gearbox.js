@@ -8,6 +8,12 @@ export interface ZoomCenter {
   y: number;
 }
 
+export interface CustomClassNames {
+  searchResults?: string;
+  currentSearchResult?: string;
+  currentAsset?: string;
+}
+
 export interface PinchZoomInterface {
   zoomFactor: number;
   offset: ZoomCenter;

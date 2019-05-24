@@ -10,6 +10,7 @@ import { SVGViewer } from '../SVGViewer';
 
 import * as classesDescription from './classes.md';
 import * as clickDescription from './click.md';
+import * as customDescription from './custom.md';
 import * as fullDescription from './full.md';
 import * as locateDescription from './locate.md';
 import * as zoomDescription from './zoom.md';
@@ -31,7 +32,7 @@ storiesOf('SVGViewer', module).add(
   () => {
     setupMocks();
     return (
-      <div style={{ height: '100vh', position: 'relative' }}>
+      <div style={{ height: '100vh' }}>
         <SVGViewer
           documentId={5185355395511590}
           title="Title"
@@ -53,7 +54,7 @@ storiesOf('SVGViewer/Examples', module)
     () => {
       setupMocks();
       return (
-        <div style={{ height: '100vh', position: 'relative' }}>
+        <div style={{ height: '100vh' }}>
           <SVGViewer
             documentId={5185355395511590}
             isCurrentAsset={(metadata: Element) =>
@@ -81,7 +82,7 @@ storiesOf('SVGViewer/Examples', module)
         }
       };
       return (
-        <div style={{ height: '100vh', position: 'relative' }}>
+        <div style={{ height: '100vh' }}>
           <SVGViewer
             documentId={5185355395511590}
             handleItemClick={handleItemClick}
@@ -129,7 +130,7 @@ storiesOf('SVGViewer/Examples', module)
         },
       ];
       return (
-        <Container style={{ height: '100vh', position: 'relative' }}>
+        <Container style={{ height: '100vh' }}>
           <SVGViewer
             documentId={5185355395511590}
             metadataClassesConditions={metadataClassesConditions}
@@ -140,6 +141,43 @@ storiesOf('SVGViewer/Examples', module)
     {
       readme: {
         content: classesDescription,
+      },
+    }
+  )
+  .add(
+    'Custom search result color',
+    () => {
+      setupMocks();
+      const Container = styled.div`
+        .search-result {
+          &.metadata-container {
+            text {
+              stroke: red !important;
+              fill: red !important;
+              font-weight: bold;
+            }
+          }
+          &:not(.metadata-container) {
+            stroke: red !important;
+            fill: red !important;
+            font-weight: bold;
+          }
+        }
+      `;
+      return (
+        <Container style={{ height: '100vh' }}>
+          <SVGViewer
+            documentId={5185355395511590}
+            customClassNames={{
+              searchResults: 'search-result',
+            }}
+          />
+        </Container>
+      );
+    },
+    {
+      readme: {
+        content: customDescription,
       },
     }
   )
@@ -165,7 +203,7 @@ storiesOf('SVGViewer/Examples', module)
         action('handleAnimateZoom')(params);
       };
       return (
-        <div style={{ height: '100vh', position: 'relative' }}>
+        <div style={{ height: '100vh' }}>
           <SVGViewer
             documentId={5185355395511590}
             handleAnimateZoom={zoomCallback}

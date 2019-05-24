@@ -3,9 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 import * as CustomIcon from './Icons';
 
-const searchClassName = 'search-result';
-const currentSearchClassName = 'current-search-result';
-
 const initialState = {
   searchPhrase: '',
   amountOfResults: 0,
@@ -16,6 +13,8 @@ export interface ComponentProps {
   visible: boolean;
   svg: SVGSVGElement;
   isDesktop: boolean;
+  searchClassName: string;
+  currentSearchClassName: string;
   openSearch: () => void;
   zoomOnCurrentAsset: (currentAsset: Element | null) => void;
   handleCancelSearch: () => void;
@@ -44,6 +43,11 @@ interface ComponentState {
 }
 
 class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
+  static defaultProps = {
+    searchClassName: 'search-result',
+    currentSearchClassName: 'current-search-result',
+  };
+
   searchInput: React.RefObject<HTMLInputElement>;
 
   constructor(props: ComponentProps) {
@@ -156,7 +160,7 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
   };
 
   resetSearchResults = () => {
-    const { svg } = this.props;
+    const { svg, searchClassName, currentSearchClassName } = this.props;
     if (!svg) {
       return;
     }
@@ -184,7 +188,12 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
 
   handleNavigateSearchResult = (move: number) => {
     const { currentResult, amountOfResults } = this.state;
-    const { svg, zoomOnCurrentAsset } = this.props;
+    const {
+      svg,
+      zoomOnCurrentAsset,
+      searchClassName,
+      currentSearchClassName,
+    } = this.props;
     const searchResults = svg.querySelectorAll(`.${searchClassName}`);
     const currentSearchResult = svg.querySelector(`.${currentSearchClassName}`);
     if (!currentSearchResult) {
@@ -215,6 +224,8 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
       addCssClassesToMetadataContainer,
       addCssClassesToSvgText,
       zoomOnCurrentAsset,
+      searchClassName,
+      currentSearchClassName,
     } = this.props;
     this.resetSearchResults();
     if (!value) {

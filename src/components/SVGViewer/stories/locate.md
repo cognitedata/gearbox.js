@@ -17,11 +17,11 @@ import { SVGViewer } from '@cognite/gearbox';
 function ExampleComponent(props) {
 
   return (
-    <div style={{ height: '100vh', position: 'relative' }}>
+    <div style={{ height: '100vh' }}>
       <SVGViewer
         documentId={5185355395511590}
         isCurrentAsset={(metadata: Element) =>
-          getTextFromMetadataNode(metadata) === '21PT1019'
+          (metadata.textContent || '').replace(/\s/g, '') === '21PT1019'
         }
       />
     </div>
