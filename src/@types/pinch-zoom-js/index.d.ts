@@ -1,2 +1,1 @@
-declare module 'pinch-zoom-js'
-
+declare module 'pinch-zoom-js';
