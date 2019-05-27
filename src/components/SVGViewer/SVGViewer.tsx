@@ -1,6 +1,6 @@
 import Icon from 'antd/lib/icon';
 import PinchZoom from 'pinch-zoom-js';
-import React from 'react';
+import React, { KeyboardEvent, RefObject } from 'react';
 import styled from 'styled-components';
 import {
   Conditions,
@@ -53,6 +53,7 @@ interface ComponentState {
   isSearchVisible: boolean;
   isSearchFocused: boolean;
   width: number;
+  handleKeyDown: boolean;
 }
 
 export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
@@ -61,6 +62,7 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
   dragging: boolean = false;
   startMouse!: ZoomCenter;
   pinchZoomInstance!: PinchZoomInterface;
+  inputWrapper: RefObject<HTMLInputElement>;
   svg!: SVGSVGElement;
   pinchZoom: React.RefObject<HTMLDivElement>;
   pinchZoomContainer: React.RefObject<HTMLDivElement>;
@@ -70,12 +72,14 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
     this.state = {
       isSearchVisible: false,
       isSearchFocused: false,
+      handleKeyDown: false,
       width: window.innerWidth,
     };
 
     this.pinchZoom = React.createRef();
     this.pinchZoomContainer = React.createRef();
     this.svgParentNode = React.createRef();
+    this.inputWrapper = React.createRef();
   }
 
   componentDidMount() {
@@ -104,7 +108,17 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
     const isDesktop = this.state.width > 992;
 
     return (
-      <SVGViewerContainer>
+      <SVGViewerContainer
+        onClick={this.onContainerClick}
+        onKeyDown={this.handleKeyDown}
+      >
+        <input
+          type="text"
+          onBlur={this.onContainerBlur}
+          onFocus={this.onContainerFocus}
+          ref={this.inputWrapper}
+          style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
+        />
         <SvgNode
           ref={this.svgParentNode}
           onMouseDown={this.onMouseDown}
@@ -323,6 +337,9 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
   };
 
   onMouseUp = () => {
+    if (this.inputWrapper.current) {
+      this.inputWrapper.current.focus();
+    }
     this.dragging = false;
     this.prevMoveDistanceX = 0;
     this.prevMoveDistanceY = 0;
@@ -386,7 +403,7 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
   isNullStrokeWidth = (textNode: Element) =>
     textNode.getAttribute('stroke-width') === '0';
 
-  handleItemClick = async (e: MouseEvent) => {
+  handleItemClick = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
     const parentNode = target.parentNode as HTMLElement;
     if (parentNode && parentNode.classList.contains('metadata-container')) {
@@ -512,6 +529,33 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
 
   handleSearchBlur = () => {
     this.setState({ isSearchFocused: false });
+  };
+
+  onContainerClick = () => {
+    if (this.inputWrapper.current) {
+      this.inputWrapper.current.focus();
+    }
+  };
+
+  onContainerBlur = () => {
+    this.setState({ handleKeyDown: false });
+  };
+
+  onContainerFocus = () => {
+    this.setState({ handleKeyDown: true });
+  };
+
+  handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (!this.state.handleKeyDown) {
+      return;
+    }
+
+    // Overriding ctrl+F
+    const FKeyCode = 70;
+    if ((e.ctrlKey || e.metaKey) && e.keyCode === FKeyCode) {
+      e.preventDefault();
+      this.openSearch();
+    }
   };
 }
 

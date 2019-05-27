@@ -1,5 +1,5 @@
 import Icon from 'antd/lib/icon';
-import React from 'react';
+import React, { KeyboardEvent, MouseEvent } from 'react';
 import styled from 'styled-components';
 import * as CustomIcon from './Icons';
 
@@ -56,10 +56,6 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
     this.searchInput = React.createRef();
   }
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
-
   componentDidUpdate(prevProps: ComponentProps) {
     if (!prevProps.visible && this.props.visible) {
       this.setFocus();
@@ -67,10 +63,6 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
     if (prevProps.visible && !this.props.visible) {
       this.resetSearch();
     }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
   }
 
   render() {
@@ -81,7 +73,13 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
     }
 
     return (
-      <StyledSearch data-test-id="svg-viewer-search">
+      <StyledSearch
+        data-test-id="svg-viewer-search"
+        onKeyDown={this.handleKeyDown}
+        onMouseDown={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}
+        onMouseUp={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}
+        onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}
+      >
         {isDesktop ? (
           <React.Fragment>
             <SearchNavigationNext
@@ -173,16 +171,18 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
     }
   };
 
-  handleKeyDown = (e: KeyboardEvent) => {
+  handleMouseDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
+
+  handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.keyCode === 13 && this.state.amountOfResults) {
+      this.handleNavigateSearchResult(1);
+    }
     // Overriding ctrl+F
     const FKeyCode = 70;
     if ((e.ctrlKey || e.metaKey) && e.keyCode === FKeyCode) {
       e.preventDefault();
-      this.props.openSearch();
-    }
-
-    if (e.keyCode === 13 && this.state.amountOfResults) {
-      this.handleNavigateSearchResult(1);
     }
   };
 
