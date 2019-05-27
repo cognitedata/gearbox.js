@@ -18,7 +18,15 @@ export function createFakeViewer({
   domElement: HTMLElement;
 }): ViewerConfigResponse {
   if (cache[project]) {
-    return cache[project];
+    // @ts-ignore
+    domElement.parentNode.replaceChild(
+      cache[project].viewer.domElement,
+      domElement
+    );
+    return {
+      ...cache[project],
+      domElement: cache[project].viewer.domElement,
+    };
   }
 
   const { progress, complete, error } = ViewerEventTypes;
@@ -56,6 +64,7 @@ export function createFakeViewer({
     revisionPromise: Promise.resolve(null),
     addEvent: addEvent.bind(null, listeners),
     removeEvent: removeEvent.bind(null, listeners),
+    domElement,
   };
 
   return cache[project];
