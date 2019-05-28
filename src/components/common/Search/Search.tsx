@@ -53,7 +53,10 @@ const LiveSearchWrapper = styled.div`
       }
 
       &.active {
-        background-color: #eeeeee;
+        background-color: #f2f2f2;
+        &:hover {
+          background-color: #e0e0e0;
+        }
       }
     }
   }

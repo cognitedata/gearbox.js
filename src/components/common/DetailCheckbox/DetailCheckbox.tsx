@@ -15,12 +15,15 @@ const Container = styled.div`
   width: 100%;
   transition: 0.3s all;
 
-  &.active {
+  &:hover {
     background-color: #eeeeee;
   }
 
-  &:hover {
-    background-color: #eeeeee;
+  &.active {
+    background-color: #f2f2f2;
+    &:hover {
+      background-color: #e0e0e0;
+    }
   }
 
   label {
