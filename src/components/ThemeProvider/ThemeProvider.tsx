@@ -4,7 +4,7 @@ import { defaultTheme } from '../../theme/defaultTheme';
 
 type GearboxThemeKey = keyof typeof defaultTheme;
 
-export type GearboxTheme = { [key in GearboxThemeKey]?: 'string' };
+export type GearboxTheme = Partial<{ [key in GearboxThemeKey]: string }>;
 
 export interface ThemeProviderProps {
   theme: GearboxTheme;
