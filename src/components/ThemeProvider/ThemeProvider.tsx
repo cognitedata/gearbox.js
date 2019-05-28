@@ -4,11 +4,11 @@ import { defaultTheme } from '../../theme/defaultTheme';
 
 type GearboxThemeKey = keyof typeof defaultTheme;
 
-export type GearboxTheme = Partial<{ [key in GearboxThemeKey]: string }>;
+export type GearboxTheme = { [key in GearboxThemeKey]?: string };
 
 export interface ThemeProviderProps {
   theme: GearboxTheme;
-  children: any;
+  children: React.ReactChild;
 }
 
 export const ThemeProvider = (props: ThemeProviderProps) => {

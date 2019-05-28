@@ -300,8 +300,11 @@ const Input = styled((props: InputProps) => <AntInput {...props} />)`
       box-shadow: none;
       border-bottom: 2px solid ${({ theme }) => theme.gearbox.primaryColor};
     }
+    &:hover {
+      border-bottom: 2px solid ${({ theme }) => theme.gearbox.primaryColor};
+    }
     &::placeholder {
-      color: ${props => props.theme.gearbox.textColorDisabled};
+      color: ${props => props.theme.gearbox.textColorDisabled} !important;
     }
   }
 `;
@@ -323,15 +326,20 @@ const LoginButton = styled((props: NativeButtonProps) => <Button {...props} />)`
   &:not([disabled]) {
     cursor: pointer;
     background-color: ${props => props.theme.gearbox.primaryColor};
+    border-color: ${props => props.theme.gearbox.buttonBorderColor};
     color: ${props => props.theme.gearbox.white};
     &:hover {
+      color: ${props => props.theme.gearbox.white};
       border-color: ${props => props.theme.gearbox.primaryColor};
+      background-color: ${({ theme }) => theme.gearbox.primaryColor};
     }
   }
 
   &:disabled,
   &:disabled:hover {
-    background-color: ${props => props.theme.gearbox.buttonDisabledColor};
+    border-color: ${props => props.theme.gearbox.buttonBorderColor} !important;
+    background-color: ${props =>
+      props.theme.gearbox.buttonDisabledColor} !important;
     color: ${props => props.theme.gearbox.textColorDisabled};
   }
 `;
