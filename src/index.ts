@@ -9,5 +9,6 @@ export * from './components/SensorOverlay/SensorOverlay';
 export * from './components/TenantSelector/TenantSelector';
 export * from './components/TimeseriesChart/TimeseriesChart';
 export * from './components/TimeseriesSearch/TimeseriesSearch';
+export * from './components/ThemeProvider/ThemeProvider';
 
 export * from './interfaces';
