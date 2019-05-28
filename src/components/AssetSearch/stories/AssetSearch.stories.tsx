@@ -5,15 +5,35 @@ import React from 'react';
 import { assetsList } from '../../../mocks';
 import { AssetSearch } from '../AssetSearch';
 
+import * as advancedSearch from './advancedSearch.md';
 import * as basic from './basic.md';
 import * as empty from './empty.md';
 import * as error from './error.md';
 import * as full from './full.md';
+import * as rootAssetSelect from './rootAssetSelect.md';
 
 // Mock the SDK calls
+sdk.Assets.list = async (
+  input: sdk.AssetListParams
+): Promise<sdk.AssetDataWithCursor> => {
+  action('sdk.Assets.list')(input);
+  return {
+    items: assetsList.map(
+      (a: sdk.Asset): sdk.Asset => {
+        return {
+          id: a.id,
+          name: a.name,
+          description: a.description,
+        };
+      }
+    ),
+  };
+};
+
 sdk.Assets.search = async (
   query: sdk.AssetSearchParams
 ): Promise<sdk.AssetDataWithCursor> => {
+  action('sdk.Assets.search')(query);
   if (query.query === 'empty') {
     return { items: [] };
   }
@@ -24,6 +44,7 @@ sdk.Assets.search = async (
 
   return {
     items: assetsList.map(
+      // tslint:disable-next-line: no-identical-functions
       (a: sdk.Asset): sdk.Asset => {
         return {
           id: a.id,
@@ -101,6 +122,34 @@ storiesOf('AssetSearch/Examples', module)
     {
       readme: {
         content: error,
+      },
+    }
+  )
+  .add(
+    'Root asset select',
+    () => (
+      <AssetSearch
+        onLiveSearchSelect={onLiveSearchSelect}
+        rootAssetSelect={true}
+      />
+    ),
+    {
+      readme: {
+        content: rootAssetSelect,
+      },
+    }
+  )
+  .add(
+    'Advanced search',
+    () => (
+      <AssetSearch
+        onLiveSearchSelect={onLiveSearchSelect}
+        advancedSearch={true}
+      />
+    ),
+    {
+      readme: {
+        content: advancedSearch,
       },
     }
   );

@@ -113,7 +113,11 @@ export class Search extends React.Component<SearchProps, SearchState> {
 
   static getDerivedStateFromProps(props: SearchProps, state: SearchState) {
     const { liveSearch, liveSearchResults: propsSearchResults } = props;
-    const { liveSearchResults: stateSearchResults, query } = state;
+    const {
+      liveSearchResults: stateSearchResults,
+      query,
+      advancedSearchQuery,
+    } = state;
 
     if (!liveSearch) {
       return null;
@@ -122,7 +126,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
     if (propsSearchResults !== stateSearchResults) {
       return {
         liveSearchResults: propsSearchResults,
-        liveSearchShow: !!query,
+        liveSearchShow: !!query || !!advancedSearchQuery,
       };
     }
 
@@ -314,9 +318,9 @@ export class Search extends React.Component<SearchProps, SearchState> {
                   suffix={this.toggleInputIcon('search', query)}
                 />
               )}
-              {this.renderLiveSearch()}
             </React.Fragment>
           )}
+          {this.renderLiveSearch()}
         </InputGroup>
         <Modal
           visible={isModalOpen}
