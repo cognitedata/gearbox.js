@@ -10,6 +10,7 @@ import * as basic from './basic.md';
 import * as customFilter from './customFilter.md';
 import * as customStyles from './customStyles.md';
 import * as fullDescription from './full.md';
+import * as hideRootAssetSelect from './hideRootAssetSelect.md';
 import * as hideSelectedRow from './hideSelectedRow.md';
 import * as preselected from './preselected.md';
 import * as singleSelection from './singleSelection.md';
@@ -106,6 +107,23 @@ storiesOf('TimeseriesSearch/Examples', module)
     {
       readme: {
         content: injectTimeseriesNames(basic.toString()),
+      },
+    }
+  )
+  .add(
+    'Hide root asset select',
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesSearch
+          onTimeserieSelectionChange={onTimeserieSelectionChange}
+          hideRootAssetSelect={true}
+        />
+      );
+    },
+    {
+      readme: {
+        content: injectTimeseriesNames(hideRootAssetSelect.toString()),
       },
     }
   )

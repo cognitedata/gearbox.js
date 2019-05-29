@@ -51,6 +51,7 @@ export interface TimeseriesSearchProps {
   filterRule?: (timeseries: sdk.Timeseries) => boolean;
   onError?: (error: Error) => void;
   styles?: TimeseriesSearchStyles;
+  hideRootAssetSelect: boolean;
 }
 
 interface TimeseriesSearchState {
@@ -72,6 +73,7 @@ export class TimeseriesSearch extends React.Component<
     filterRule: undefined,
     hideSelected: false,
     allowStrings: false,
+    hideRootAssetSelect: false,
     single: false,
     onError: undefined,
     rootAsset: undefined,
@@ -278,7 +280,13 @@ export class TimeseriesSearch extends React.Component<
   };
 
   render() {
-    const { allowStrings, single, hideSelected, styles } = this.props;
+    const {
+      allowStrings,
+      single,
+      hideSelected,
+      hideRootAssetSelect,
+      styles,
+    } = this.props;
     const {
       assetId,
       fetching,
@@ -300,7 +308,7 @@ export class TimeseriesSearch extends React.Component<
           />
         )}
         <Search
-          rootAssetSelect={true}
+          rootAssetSelect={!hideRootAssetSelect}
           onAssetSelected={this.onSelectAsset}
           assets={assets}
           assetId={assetId || 0}
