@@ -5,7 +5,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { PureObject } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
-import { isEmptyString, sanitizeTenant } from '../../utils';
+import { isEmptyString, sanitizeTenant } from '../../utils/sanitize';
 
 const Panel = Collapse.Panel;
 

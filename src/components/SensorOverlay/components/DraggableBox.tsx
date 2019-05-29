@@ -16,7 +16,7 @@ import {
   CanceledPromiseException,
   ComponentWithUnmountState,
   connectPromiseToUnmountState,
-} from '../../../utils';
+} from '../../../utils/promise';
 import { ComplexString } from '../../common/ComplexString/ComplexString';
 import { DragTargets } from '../constants';
 import { SensorMinMaxRange } from '../SensorOverlay';

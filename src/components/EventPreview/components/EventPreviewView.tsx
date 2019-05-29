@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import { PureObject } from '../../../interfaces';
-import { formatDatetime } from '../../../utils';
+import { formatDatetime } from '../../../utils/formatters';
 import { ComplexString } from '../../common/ComplexString/ComplexString';
 
 const EventTitle = styled.div`

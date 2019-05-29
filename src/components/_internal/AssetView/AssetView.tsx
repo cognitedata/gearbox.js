@@ -1,7 +1,7 @@
 import { Tag } from 'antd';
 import React from 'react';
 import { OnClick } from '../../../interfaces';
-import { getColorByString } from '../../../utils';
+import { getColorByString } from '../../../utils/colors';
 
 export interface AssetViewProps {
   asset: {
