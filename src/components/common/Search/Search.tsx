@@ -1,5 +1,6 @@
 import { Asset } from '@cognite/sdk';
 import { Button, Icon, Input, Modal } from 'antd';
+import { NativeButtonProps } from 'antd/lib/button/button';
 import { debounce } from 'lodash';
 import React, { KeyboardEvent, SyntheticEvent } from 'react';
 import styled from 'styled-components';
@@ -24,6 +25,16 @@ const InputGroup = styled(Input.Group)`
   > span {
     z-index: 1;
   }
+`;
+
+const ChangeSearchButton = styled((props: NativeButtonProps) => (
+  <Button {...props} />
+))`
+  width: 100%;
+`;
+
+const RootAssetSelectStyled = styled(RootAssetSelect)`
+  width: 35%;
 `;
 
 const LiveSearchWrapper = styled.div`
@@ -290,27 +301,24 @@ export class Search extends React.Component<SearchProps, SearchState> {
       <React.Fragment>
         <InputGroup compact={true}>
           {rootAssetSelect && (
-            <RootAssetSelect
+            <RootAssetSelectStyled
               onAssetSelected={this.onAssetSelected}
               assets={assets}
               assetId={assetId}
               styles={{
-                select: { width: '35%', ...(styles && styles.rootAssetSelect) },
+                select: styles && styles.rootAssetSelect,
               }}
             />
           )}
           {advancedSearchQuery ? (
             <React.Fragment>
-              <Button
-                style={{
-                  width: '100%',
-                  ...(styles && styles.advancedSearchButton),
-                }}
+              <ChangeSearchButton
+                style={styles && styles.advancedSearchButton}
                 type="primary"
                 onClick={this.onFilterIconClick}
               >
                 {changeSearch}
-              </Button>
+              </ChangeSearchButton>
               <Button htmlType="button" onClick={this.onModalCancel}>
                 {clear}
               </Button>
