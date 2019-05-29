@@ -12,6 +12,11 @@ import {
 } from 'react-dnd';
 import Odometer from 'react-odometerjs';
 import styled from 'styled-components';
+import {
+  CanceledPromiseException,
+  ComponentWithUnmountState,
+  connectPromiseToUnmountState,
+} from '../../../utils';
 import { ComplexString } from '../../common/ComplexString/ComplexString';
 import { DragTargets } from '../constants';
 import { SensorMinMaxRange } from '../SensorOverlay';
@@ -190,10 +195,9 @@ interface DraggableBoxState {
   hovering: boolean;
 }
 
-export class DraggableBox extends Component<
-  DraggableBoxProps,
-  DraggableBoxState
-> {
+export class DraggableBox
+  extends Component<DraggableBoxProps, DraggableBoxState>
+  implements ComponentWithUnmountState {
   static defaultProps = {
     hovering: false,
     color: '',
@@ -210,7 +214,7 @@ export class DraggableBox extends Component<
     alertColor: '#e74c3c',
   };
 
-  private isComponentUnmounted = false;
+  isComponentUnmounted = false;
 
   private interval: number | null = null;
 
@@ -262,41 +266,53 @@ export class DraggableBox extends Component<
   };
 
   fetchTimeSeries = async (id: number) => {
-    const timeserie = await sdk.TimeSeries.retrieve(id, true);
-    if (this.isComponentUnmounted) {
-      return;
+    try {
+      const timeserie = await connectPromiseToUnmountState(
+        this,
+        sdk.TimeSeries.retrieve(id, true)
+      );
+      this.setState({
+        tag: timeserie,
+      });
+      if (this.interval) {
+        clearInterval(this.interval);
+        this.interval = null;
+      }
+      this.updateValue();
+      this.interval = setInterval(this.updateValue, this.props.refreshInterval);
+    } catch (error) {
+      if (error instanceof CanceledPromiseException !== true) {
+        throw error;
+      }
     }
-    this.setState({
-      tag: timeserie,
-    });
-    if (this.interval) {
-      clearInterval(this.interval);
-      this.interval = null;
-    }
-    this.updateValue();
-    this.interval = setInterval(this.updateValue, this.props.refreshInterval);
   };
 
   updateValue = async () => {
-    const data = await sdk.Datapoints.retrieveLatest(this.state.tag!.name);
-    if (this.isComponentUnmounted) {
-      return;
-    }
-    if (!data) {
+    try {
+      const data = await connectPromiseToUnmountState(
+        this,
+        sdk.Datapoints.retrieveLatest(this.state.tag!.name)
+      );
+      if (!data) {
+        this.setState({
+          dataPoint: null,
+        });
+        return;
+      }
+      if (
+        this.state.dataPoint &&
+        data.timestamp < this.state.dataPoint.timestamp
+      ) {
+        return; // got old data point - skip it
+      }
       this.setState({
-        dataPoint: null,
+        dataPoint: data,
       });
-      return;
+    } catch (error) {
+      if (error instanceof CanceledPromiseException !== true) {
+        throw error;
+      }
     }
-    if (
-      this.state.dataPoint &&
-      data.timestamp < this.state.dataPoint.timestamp
-    ) {
-      return; // got old data point - skip it
-    }
-    this.setState({
-      dataPoint: data,
-    });
   };
 
   handleClick = () => {
