@@ -53,7 +53,7 @@ const randomData = (start: number, end: number, n: number): sdk.Datapoint[] => {
   return data;
 };
 
-const setupMocks = (n = 100) => {
+export const setupMocks = (n = 100) => {
   sdk.TimeSeries.retrieve = async (id: number, _): Promise<sdk.Timeseries> => {
     action('sdk.TimeSeries.retrieve')(id);
     return { id, name: 'name' };
