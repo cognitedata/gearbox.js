@@ -8,6 +8,7 @@ import { TimeseriesSearch } from '../TimeseriesSearch';
 import * as allowStrings from './allowStrings.md';
 import * as basic from './basic.md';
 import * as customFilter from './customFilter.md';
+import * as customStrings from './customStrings.md';
 import * as customStyles from './customStyles.md';
 import * as fullDescription from './full.md';
 import * as hideRootAssetSelect from './hideRootAssetSelect.md';
@@ -226,6 +227,26 @@ storiesOf('TimeseriesSearch/Examples', module)
     {
       readme: {
         content: injectTimeseriesNames(customStyles.toString()),
+      },
+    }
+  )
+  .add(
+    'Custom strings',
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesSearch
+          onTimeserieSelectionChange={onTimeserieSelectionChange}
+          strings={{
+            rootAssetSelectAll: 'No filter',
+            searchPlaceholder: 'search for stuff!',
+          }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: injectTimeseriesNames(customStrings.toString()),
       },
     }
   );

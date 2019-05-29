@@ -296,7 +296,14 @@ export class Search extends React.Component<SearchProps, SearchState> {
 
     this.lang = { ...defaultStrings, ...strings };
 
-    const { changeSearch, clear, searchPlaceholder, search } = this.lang;
+    const {
+      changeSearch,
+      clear,
+      searchPlaceholder,
+      search,
+      rootAssetSelectLoading,
+      rootAssetSelectAll,
+    } = this.lang;
     return (
       <React.Fragment>
         <InputGroup compact={true}>
@@ -305,6 +312,10 @@ export class Search extends React.Component<SearchProps, SearchState> {
               onAssetSelected={this.onAssetSelected}
               assets={assets}
               assetId={assetId}
+              strings={{
+                loading: rootAssetSelectLoading,
+                all: rootAssetSelectAll,
+              }}
               styles={{
                 select: styles && styles.rootAssetSelect,
               }}

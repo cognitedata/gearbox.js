@@ -3,7 +3,7 @@ import { Spin } from 'antd';
 import { debounce } from 'lodash';
 import React, { KeyboardEvent } from 'react';
 import styled from 'styled-components';
-import { ApiQuery } from '../../interfaces';
+import { ApiQuery, PureObject } from '../../interfaces';
 import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
 import { Search } from '../common/Search/Search';
 import { Item, SelectedItems } from './SelectedItems';
@@ -52,7 +52,11 @@ export interface TimeseriesSearchProps {
   onError?: (error: Error) => void;
   styles?: TimeseriesSearchStyles;
   hideRootAssetSelect: boolean;
+  strings: PureObject;
 }
+export const defaultStrings: PureObject = {
+  searchPlaceholder: 'Search for timeseries',
+};
 
 interface TimeseriesSearchState {
   assetId?: number;
@@ -70,6 +74,7 @@ export class TimeseriesSearch extends React.Component<
 > {
   static defaultProps = {
     selectedTimeseries: [],
+    strings: {},
     filterRule: undefined,
     hideSelected: false,
     allowStrings: false,
@@ -286,6 +291,7 @@ export class TimeseriesSearch extends React.Component<
       hideSelected,
       hideRootAssetSelect,
       styles,
+      strings,
     } = this.props;
     const {
       assetId,
@@ -295,7 +301,7 @@ export class TimeseriesSearch extends React.Component<
       selectedTimeseries,
       cursor,
     } = this.state;
-
+    const lang = { ...defaultStrings, ...strings };
     return (
       <Wrapper>
         {!hideSelected && (
@@ -313,7 +319,11 @@ export class TimeseriesSearch extends React.Component<
           assets={assets}
           assetId={assetId || 0}
           onSearch={this.fetchTimeseries}
-          strings={{ searchPlaceholder: 'Search for timeseries' }}
+          strings={{
+            searchPlaceholder: lang.searchPlaceholder,
+            rootAssetSelectAll: lang.rootAssetSelectAll,
+            rootAssetSelectLoading: lang.rootAssetSelectLoading,
+          }}
           onKeyDown={this.onKeyDown}
         />
         <TagList style={styles && styles.list}>
