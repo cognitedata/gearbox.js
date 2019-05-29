@@ -129,7 +129,7 @@ export class AssetScanner extends React.Component<
 
     this.startLoading();
 
-    const imageString = this.getImageFromCanvas();
+    const imageString = await this.getImageFromCanvas();
 
     if (!imageString) {
       this.endLoading();
@@ -185,6 +185,10 @@ export class AssetScanner extends React.Component<
   private startLoading() {
     const { onStartLoading } = this.props;
 
+    if (this.video) {
+      this.video.pause();
+    }
+
     this.setState({ isLoading: true });
 
     if (onStartLoading) {
@@ -194,6 +198,10 @@ export class AssetScanner extends React.Component<
 
   private endLoading() {
     const { onEndLoading } = this.props;
+
+    if (this.video) {
+      this.video.play();
+    }
 
     this.setState({ isLoading: false });
 
@@ -233,13 +241,14 @@ export class AssetScanner extends React.Component<
       .reduce((res, current) => res.concat(current));
   }
 
-  private getImageFromCanvas(): string {
+  // Made async to provide better UX for component
+  private getImageFromCanvas(): Promise<string> {
     const { errorVideoAccess } = ASNotifyTypes;
 
     if (!this.video) {
       this.notification(errorVideoAccess);
 
-      return '';
+      return Promise.resolve('');
     }
 
     const aspectRatio = this.video.videoWidth / this.video.videoHeight;
@@ -249,7 +258,9 @@ export class AssetScanner extends React.Component<
       this.video.clientWidth / aspectRatio
     );
 
-    return canvas.toDataURL();
+    return new Promise(resolve =>
+      setTimeout(() => resolve(canvas.toDataURL()), 0)
+    );
   }
 
   private async recognizeImage(image: string): Promise<string[] | null> {

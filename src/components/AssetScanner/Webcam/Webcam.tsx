@@ -42,7 +42,7 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
   static mountedInstances: Webcam[] = [];
   static userMediaRequested = false;
   static defaultProps = {
-    audio: true,
+    audio: false,
     className: '',
     height: 480,
     width: 640,
@@ -190,7 +190,7 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
   }
 
   private async sourceSelected(audioSource: string, videoSource: string) {
-    const { onError } = this.props;
+    const { onError, audio } = this.props;
 
     if (!this.video) {
       return;
@@ -214,9 +214,11 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
         height,
         deviceId: videoSource,
       },
-      audio: {
-        deviceId: audioSource,
-      },
+      audio: audio
+        ? {
+            deviceId: audioSource,
+          }
+        : false,
     };
 
     try {
