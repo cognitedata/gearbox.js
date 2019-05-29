@@ -11,7 +11,8 @@ import {
 } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { withSize } from 'react-sizeme';
-import { clampNumber, getColorByString } from '../../utils';
+import { getColorByString } from '../../utils/colors';
+import { clampNumber } from '../../utils/utils';
 import DraggableBox from './components/DraggableBox';
 import DraggablePoint from './components/DraggablePoint';
 import SvgLine from './components/SvgLine';

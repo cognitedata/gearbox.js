@@ -1,5 +1,5 @@
 import { OcrRequest } from '../interfaces';
-import { extractValidStrings } from '../utils';
+import { extractValidStrings } from '../utils/utils';
 
 const ocrVisionURL = 'https://vision.googleapis.com/v1/images:annotate';
 

@@ -3,7 +3,7 @@ import { Icon, Modal, Table } from 'antd';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { AssetEventsPanelProps } from '../../../interfaces';
-import { momentFromTimestamp } from '../../../utils';
+import { momentFromTimestamp } from '../../../utils/formatters';
 
 interface EventAddonsProp extends Event {
   typeAndSubtype: React.ReactNode;

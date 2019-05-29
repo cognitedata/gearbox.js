@@ -11,7 +11,6 @@ import {
   PureObject,
   SetVideoRefCallback,
 } from '../../interfaces';
-import { getCanvas } from '../../utils';
 import {
   notification,
   ocrAssetFind,
@@ -20,7 +19,8 @@ import {
   ocrErrorVideo,
   ocrNoTextFound,
   ocrSuccess,
-} from '../../utils';
+} from '../../utils/notifications';
+import { getCanvas } from '../../utils/utils';
 import { WebcamScanner } from './WebcamScanner/WebcamScanner';
 
 const Wrapper = styled.div`
