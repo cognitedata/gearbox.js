@@ -66,6 +66,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       cache,
       boundingBox,
       useDefaultCameraPosition,
+      enableKeyboardNavigation,
       onProgress,
       onReady,
       onCameraChange,
@@ -79,6 +80,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       revisionPromise,
       modelPromise,
       fromCache,
+      domElement,
     } = createViewer({
       modelId,
       revisionId,
@@ -88,6 +90,8 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     });
 
     this.viewer = viewer;
+    // Looks like replaceChild looses onClick event handler, so adding it this way instead
+    domElement.addEventListener('click', this.onContainerClick);
 
     if (onProgress) {
       addEvent([[progress, onProgress]]);
@@ -96,6 +100,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     addEvent([[complete, this.onCompleteBounded]]);
 
     this.addDisposeCall(() => {
+      domElement.removeEventListener('click', this.onContainerClick);
       removeEvent();
     });
 
@@ -243,7 +248,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
         <div
           style={{ width: '100%', height: '100%', fontSize: 0 }}
           ref={this.divWrapper}
-          onClick={this.onContainerClick}
         />
       </React.Fragment>
     );
@@ -274,7 +278,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     if (length === 1) {
       const { nodeId } = this.nodes[0];
 
-      // @ts-ignore
       this.model.updateMatrixWorld();
 
       const reusableBox = new THREE.Box3();

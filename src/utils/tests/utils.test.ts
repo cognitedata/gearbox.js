@@ -3,7 +3,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import {
   clampNumber,
   extractValidStrings,
-  getCanvas,
   sortStringsAlphabetically,
 } from '../utils';
 
@@ -30,16 +29,6 @@ describe('utils', () => {
       arr.sort(sortStringsAlphabetically);
 
       expect(arr).toEqual(['aaa', 'bbb', 'ccc', 'zzz']);
-    });
-  });
-
-  describe('getCanvas', () => {
-    it('returns HTMLCanvasElement', () => {
-      const img = document.createElement('img');
-
-      expect(
-        getCanvas(img, 200, 200) instanceof HTMLCanvasElement
-      ).toBeTruthy();
     });
   });
 

@@ -23,6 +23,7 @@ export interface ViewerConfigResponse {
   addEvent: (events: [ViewerEventTypes, Callback][]) => void;
   removeEvent: (events?: [ViewerEventTypes, Callback][]) => void;
   fromCache?: boolean;
+  domElement: HTMLElement;
 }
 
 export enum ViewerEventTypes {
@@ -90,8 +91,15 @@ export function createViewer({
 
   if (cache && cache[hash]) {
     cache[hash].fromCache = true;
-
-    return cache[hash];
+    // @ts-ignore
+    domElement.parentNode.replaceChild(
+      cache[hash].viewer.domElement,
+      domElement
+    );
+    return {
+      ...cache[hash],
+      domElement: cache[hash].viewer.domElement,
+    };
   }
 
   const revisionPromise = fetch3DModelRevision(modelId, revisionId);
@@ -120,6 +128,7 @@ export function createViewer({
   });
 
   const response = {
+    domElement,
     viewer,
     modelPromise,
     revisionPromise,

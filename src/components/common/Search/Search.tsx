@@ -53,7 +53,10 @@ const LiveSearchWrapper = styled.div`
       }
 
       &.active {
-        background-color: #eeeeee;
+        background-color: #f2f2f2;
+        &:hover {
+          background-color: #e0e0e0;
+        }
       }
     }
   }
@@ -350,6 +353,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
     const { liveSearch, liveSearchResults } = this.props;
     const { liveSearchShow, cursor } = this.state;
     const { emptyLiveSearch } = this.lang;
+
     if (!liveSearch || !liveSearchShow) {
       return null;
     }

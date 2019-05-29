@@ -16,7 +16,7 @@ import {
   Ruler,
 } from '@cognite/griff-react';
 import { Spin } from 'antd';
-import { decimalTickFormatter, getColor } from '../../utils';
+import { decimalTickFormatter, getColorByString } from '../../utils';
 
 const Wrapper = styled.div`
   height: 500px;
@@ -134,7 +134,10 @@ export class TimeseriesChart extends React.Component<
       ? series.map((s: any) => ({
           ...s,
           id: s.id,
-          color: s.color || timeseriesColors[s.id] || getColor(s.id.toString()),
+          color:
+            s.color ||
+            timeseriesColors[s.id] ||
+            getColorByString(s.id.toString()),
           yAxisDisplayMode:
             s.yAxisDisplayMode || AxisDisplayMode[yAxisDisplayMode],
           hidden: s.hidden || hiddenSeries[s.id],
@@ -144,7 +147,7 @@ export class TimeseriesChart extends React.Component<
         }))
       : timeseriesIds.map((id: number) => ({
           id,
-          color: timeseriesColors[id] || getColor(id.toString()),
+          color: timeseriesColors[id] || getColorByString(id.toString()),
           yAxisDisplayMode: AxisDisplayMode[yAxisDisplayMode],
           hidden: hiddenSeries[id],
           yAccessor,
@@ -164,7 +167,7 @@ export class TimeseriesChart extends React.Component<
               collections={[...new Set(Object.values(collections))].map(
                 (unit: any) => ({
                   id: unit,
-                  color: getColor(unit),
+                  color: getColorByString(unit.toString()),
                   yAxisDisplayMode: AxisPlacement[yAxisPlacement],
                 })
               )}
