@@ -3,10 +3,11 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { assetsList } from '../../../mocks';
-import { AssetSearch } from '../AssetSearch';
+import { AssetSearch, AssetSearchStyles } from '../AssetSearch';
 
 import * as advancedSearch from './advancedSearch.md';
 import * as basic from './basic.md';
+import * as customStyles from './customStyles.md';
 import * as empty from './empty.md';
 import * as error from './error.md';
 import * as full from './full.md';
@@ -150,6 +151,44 @@ storiesOf('AssetSearch/Examples', module)
     {
       readme: {
         content: advancedSearch,
+      },
+    }
+  )
+  .add(
+    'Custom styles',
+    () => {
+      const styles: AssetSearchStyles = {
+        advancedSearchButton: { backgroundColor: 'red' },
+        rootAssetSelect: { width: '40%' },
+        searchResultList: {
+          container: {
+            backgroundColor: 'purple',
+            marginTop: '20px',
+          },
+          listItem: { marginTop: '10px' },
+        },
+        advancedSearch: {
+          modalBody: { backgroundColor: 'green' },
+          searchButton: { backgroundColor: 'teal' },
+          clearButton: { backgroundColor: 'magenta' },
+          searchForm: {
+            container: { backgroundColor: 'gray' },
+            addMoreMetadataButton: { backgroundColor: 'lightblue' },
+          },
+        },
+      };
+      return (
+        <AssetSearch
+          onLiveSearchSelect={onLiveSearchSelect}
+          styles={styles}
+          advancedSearch={true}
+          rootAssetSelect={true}
+        />
+      );
+    },
+    {
+      readme: {
+        content: customStyles,
       },
     }
   );

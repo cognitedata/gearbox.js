@@ -40,6 +40,7 @@ function ExampleComponent(props) {
 | `strings`             | Object of strings to be placed in component | `{ [name: string]: string }`|         |
 | `rootAssetSelect`     | Enable root asset selection                 | `boolean`                   | `false` |
 | `advancedSearch`      | Enable root advanced search                 | `boolean`                   | `false` |
+| `styles`              | Custom styles                               | `AssetSearchStyles`         |         |
 
 **strings** default fields is:
 
@@ -49,3 +50,38 @@ function ExampleComponent(props) {
    emptyLiveSearch: 'Nothing found',
  }
 ```
+
+### Types:
+
+#### AssetSearchStyles
+This interface defines inline CSS styles for inner elements of `AssetSearch` component.
+
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { AssetSearchStyles } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+interface AssetSearchStyles {
+  rootAssetSelect?: React.CSSProperties;
+  advancedSearchButton?: React.CSSProperties;
+  searchResultList?: {
+    container?: React.CSSProperties;
+    listItem?: React.CSSProperties;
+  };
+  advancedSearch?: {
+    modalBody?: React.CSSProperties;
+    searchButton?: React.CSSProperties;
+    clearButton?: React.CSSProperties;
+    searchForm?: {
+      container?: React.CSSProperties;
+      addMoreMetadataButton?: React.CSSProperties;
+    }
+  };
+}
+```
+
+See more details in `Custom Styles` example.

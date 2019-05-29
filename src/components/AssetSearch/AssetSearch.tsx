@@ -1,7 +1,11 @@
 import * as sdk from '@cognite/sdk';
 import React from 'react';
 import { ApiQuery, Callback, PureObject } from '../../interfaces';
-import { Search } from '../common/Search/Search';
+import {
+  Search,
+  SearchStyles as AssetSearchStyles,
+} from '../common/Search/Search';
+export type AssetSearchStyles = AssetSearchStyles;
 
 type LiveSearchSelect = (asset: sdk.Asset) => void;
 
@@ -16,6 +20,7 @@ export interface AssetSearchProps {
   strings?: PureObject;
   rootAssetSelect: boolean;
   advancedSearch: boolean;
+  styles?: AssetSearchStyles;
 }
 
 interface AssetSearchState {
@@ -95,6 +100,7 @@ export class AssetSearch extends React.Component<
       rootAssetSelect,
       advancedSearch,
       strings,
+      styles,
     } = this.props;
     const resultStrings = { ...defaultStrings, ...strings };
     const { items, loading, rootAssets } = this.state;
@@ -110,6 +116,7 @@ export class AssetSearch extends React.Component<
         assets={rootAssets}
         rootAssetSelect={rootAssetSelect}
         advancedSearch={advancedSearch}
+        styles={styles}
       />
     );
   }

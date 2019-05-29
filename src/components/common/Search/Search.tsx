@@ -26,10 +26,6 @@ const InputGroup = styled(Input.Group)`
   }
 `;
 
-const RootAssetSelectStyled = styled(RootAssetSelect)`
-  width: 35%;
-`;
-
 const LiveSearchWrapper = styled.div`
   position: absolute;
   top: 100%;
@@ -70,6 +66,24 @@ export const defaultStrings: PureObject = {
   emptyLiveSearch: 'Nothing found',
 };
 
+export interface SearchStyles {
+  rootAssetSelect?: React.CSSProperties;
+  advancedSearchButton?: React.CSSProperties;
+  searchResultList?: {
+    container?: React.CSSProperties;
+    listItem?: React.CSSProperties;
+  };
+  advancedSearch?: {
+    modalBody?: React.CSSProperties;
+    searchButton?: React.CSSProperties;
+    clearButton?: React.CSSProperties;
+    searchForm?: {
+      container?: React.CSSProperties;
+      addMoreMetadataButton?: React.CSSProperties;
+    };
+  };
+}
+
 export interface SearchProps {
   fetchingLimit: number;
   debounceTime: number;
@@ -86,6 +100,7 @@ export interface SearchProps {
   onFilterIconClick?: EmptyCallback;
   onLiveSearchSelect?: Callback;
   onKeyDown?: (e: KeyboardEvent) => void;
+  styles?: SearchStyles;
 }
 
 interface SearchState {
@@ -260,26 +275,37 @@ export class Search extends React.Component<SearchProps, SearchState> {
 
   render() {
     const { assetId, query, isModalOpen, advancedSearchQuery } = this.state;
-    const { assets, advancedSearch, rootAssetSelect, strings } = this.props;
+    const {
+      assets,
+      advancedSearch,
+      rootAssetSelect,
+      strings,
+      styles,
+    } = this.props;
 
     this.lang = { ...defaultStrings, ...strings };
 
     const { changeSearch, clear, searchPlaceholder, search } = this.lang;
-
     return (
       <React.Fragment>
         <InputGroup compact={true}>
           {rootAssetSelect && (
-            <RootAssetSelectStyled
+            <RootAssetSelect
               onAssetSelected={this.onAssetSelected}
               assets={assets}
               assetId={assetId}
+              styles={{
+                select: { width: '35%', ...(styles && styles.rootAssetSelect) },
+              }}
             />
           )}
           {advancedSearchQuery ? (
             <React.Fragment>
               <Button
-                style={{ width: '100%' }}
+                style={{
+                  width: '100%',
+                  ...(styles && styles.advancedSearchButton),
+                }}
                 type="primary"
                 onClick={this.onFilterIconClick}
               >
@@ -325,8 +351,20 @@ export class Search extends React.Component<SearchProps, SearchState> {
         <Modal
           visible={isModalOpen}
           onCancel={this.onModalCancel}
+          bodyStyle={
+            styles && styles.advancedSearch && styles.advancedSearch.modalBody
+          }
           footer={[
-            <Button htmlType="button" key="cancel" onClick={this.onModalCancel}>
+            <Button
+              htmlType="button"
+              key="cancel"
+              onClick={this.onModalCancel}
+              style={
+                styles &&
+                styles.advancedSearch &&
+                styles.advancedSearch.clearButton
+              }
+            >
               {clear}
             </Button>,
             <Button
@@ -334,6 +372,11 @@ export class Search extends React.Component<SearchProps, SearchState> {
               key="search"
               type="primary"
               onClick={this.onModalOk}
+              style={
+                styles &&
+                styles.advancedSearch &&
+                styles.advancedSearch.searchButton
+              }
             >
               {search}
             </Button>,
@@ -343,6 +386,11 @@ export class Search extends React.Component<SearchProps, SearchState> {
             value={advancedSearchQuery}
             onPressEnter={this.onModalOk}
             onChange={this.onSearchChange}
+            styles={
+              styles &&
+              styles.advancedSearch &&
+              styles.advancedSearch.searchForm
+            }
           />
         </Modal>
       </React.Fragment>
@@ -354,7 +402,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
   }
 
   private renderLiveSearch() {
-    const { liveSearch, liveSearchResults } = this.props;
+    const { liveSearch, liveSearchResults, styles } = this.props;
     const { liveSearchShow, cursor } = this.state;
     const { emptyLiveSearch } = this.lang;
     if (!liveSearch || !liveSearchShow) {
@@ -367,6 +415,11 @@ export class Search extends React.Component<SearchProps, SearchState> {
           onMouseDown={() => this.onLiveSearchClick(item)}
           key={index}
           className={cursor === index ? 'active' : undefined}
+          style={
+            styles &&
+            styles.searchResultList &&
+            styles.searchResultList.listItem
+          }
         >
           {item.name || 'NaN'}
         </li>
@@ -378,7 +431,11 @@ export class Search extends React.Component<SearchProps, SearchState> {
     );
 
     return (
-      <LiveSearchWrapper>
+      <LiveSearchWrapper
+        style={
+          styles && styles.searchResultList && styles.searchResultList.container
+        }
+      >
         <ul data-id={'live-search-list'}>{list}</ul>
       </LiveSearchWrapper>
     );

@@ -8,6 +8,10 @@ export const defaultStrings: PureObject = {
   all: '-- all --',
 };
 
+export interface RootAssetSelectStyles {
+  select?: React.CSSProperties;
+}
+
 export interface RootAssetSelectProps {
   assetId: number;
   assets: Asset[];
@@ -15,9 +19,10 @@ export interface RootAssetSelectProps {
   allowAll: boolean;
   strings: PureObject;
   onAssetSelected?: IdCallback;
+  styles?: RootAssetSelectStyles;
 }
 
-export interface RootAssetSelectState {
+interface RootAssetSelectState {
   current: number;
 }
 
@@ -52,7 +57,7 @@ export class RootAssetSelect extends React.Component<
   };
 
   render() {
-    const { allowAll, assets, className, strings } = this.props;
+    const { allowAll, assets, className, strings, styles } = this.props;
 
     const lang = { ...defaultStrings, ...strings };
     const { all, loading } = lang;
@@ -79,6 +84,7 @@ export class RootAssetSelect extends React.Component<
         className={className}
         onChange={this.onSelectAsset}
         dropdownMatchSelectWidth={false}
+        style={styles && styles.select}
       >
         {allowAll && (
           <Select.Option key="all" value={0}>
