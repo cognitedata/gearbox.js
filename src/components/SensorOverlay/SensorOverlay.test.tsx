@@ -55,7 +55,7 @@ describe('SensorOverlay', () => {
   it('Renders without exploding', () => {
     const wrapper = mount(
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         size={{ width: 1000, height: 500 }}
       />
     );
@@ -66,7 +66,7 @@ describe('SensorOverlay', () => {
   it('Includes all required components', () => {
     const wrapper = mount(
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         size={{ width: 1000, height: 500 }}
       >
         <div style={{ width: 1000, height: 500 }} />
@@ -86,7 +86,7 @@ describe('SensorOverlay', () => {
   it('Calls callbacks on mouse events', () => {
     const wrapper = mount(
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         linksMap={{ [timeseriesList[0].id]: true }}
         onClick={propsCallbacks.onClick}
         onLinkClick={propsCallbacks.onLinkClick}
@@ -133,7 +133,7 @@ describe('SensorOverlay', () => {
   it('Tag and pointer should be draggable', () => {
     const wrapper = mount(
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         linksMap={{ [timeseriesList[0].id]: true }}
         onClick={propsCallbacks.onClick}
         onSensorPositionChange={propsCallbacks.onSensorPositionChange}
@@ -188,7 +188,7 @@ describe('SensorOverlay', () => {
   it('Should render nothing if there is no space in container', () => {
     const wrapper = mount(
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         size={{ width: 1000, height: 0 }}
       />
     );
@@ -206,14 +206,14 @@ describe('SensorOverlay', () => {
   it('Should render new sensors if they were added in props', done => {
     const wrapper = mount(
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         size={{ width: 1000, height: 500 }}
       />
     );
 
     wrapper.setProps(
       {
-        timeserieIds: [timeseriesList[0].id, timeseriesList[1].id],
+        timeseriesIds: [timeseriesList[0].id, timeseriesList[1].id],
       },
       () => {
         const draggableBox = wrapper.find(DraggableBox);
@@ -233,14 +233,14 @@ describe('SensorOverlay', () => {
   it('Newly added sensor should have be shifted position and different color', done => {
     const wrapper = mount(
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         size={{ width: 1000, height: 500 }}
       />
     );
 
     wrapper.setProps(
       {
-        timeserieIds: [timeseriesList[0].id, timeseriesList[1].id],
+        timeseriesIds: [timeseriesList[0].id, timeseriesList[1].id],
       },
       () => {
         const draggableBoxes = wrapper.find(DraggableBox);
@@ -268,7 +268,7 @@ describe('SensorOverlay', () => {
   it('if first sensor has been dragged the next added one should appear in first default slot', done => {
     const wrapper = mount(
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         size={{ width: 1000, height: 500 }}
         onSensorPositionChange={propsCallbacks.onSensorPositionChange}
       >
@@ -304,7 +304,7 @@ describe('SensorOverlay', () => {
 
     wrapper.setProps(
       {
-        timeserieIds: [timeseriesList[0].id, timeseriesList[1].id],
+        timeseriesIds: [timeseriesList[0].id, timeseriesList[1].id],
       },
       () => {
         const newSensor = wrapper
@@ -323,7 +323,7 @@ describe('SensorOverlay', () => {
   it('Sensor should change default color if a new color has been given in colorMap', done => {
     const wrapper = mount(
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         size={{ width: 1000, height: 500 }}
       />
     );
@@ -333,7 +333,7 @@ describe('SensorOverlay', () => {
 
     wrapper.setProps(
       {
-        timeserieIds: [timeseriesList[0].id],
+        timeseriesIds: [timeseriesList[0].id],
         colorMap: {
           [timeseriesList[0].id]: 'magenta',
         },

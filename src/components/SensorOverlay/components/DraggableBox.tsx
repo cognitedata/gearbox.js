@@ -17,7 +17,9 @@ import {
   ComponentWithUnmountState,
   connectPromiseToUnmountState,
 } from '../../../utils';
+import { ComplexString } from '../../common/ComplexString/ComplexString';
 import { DragTargets } from '../constants';
+import { SensorMinMaxRange } from '../SensorOverlay';
 import StyledOdometer from './StyledOdometer';
 
 const HELLIP = String.fromCharCode(0x02026);
@@ -109,12 +111,43 @@ const TagDescription = styled.div`
   }
 `;
 
+const TagError = styled.div<{ alertColor: string }>`
+  color: white;
+  position: absolute;
+  top: 100%;
+  opacity: 1;
+  align-items: center;
+  font-size: 0.7rem;
+  padding: 6px 12px;
+  margin-top: 6px;
+  white-space: nowrap;
+  border-radius: 30px;
+  background-color: ${({ alertColor }) => alertColor};
+  transition: 0.3s margin-right, 0.3s opacity, 0.3s margin-bottom;
+  opacity: 0;
+  right: auto;
+  margin-right: 0;
+  margin-top: 6px;
+
+  & > p {
+    margin: 2px;
+  }
+
+  &.hovering {
+    opacity: 1;
+    margin-top: 10;
+  }
+  &.flipped {
+    transform: rotate(180deg);
+    margin-right: -42px;
+  }
+`;
+
 const handleStyles = {
   width: 25,
   height: 25,
   borderRadius: '100%',
   margin: 'auto 8px',
-  backgroundColor: 'white',
   cursor: 'move',
   transform: 'translate(0, 0)',
   transition: '.5s background',
@@ -151,6 +184,9 @@ interface DraggableBoxProps extends DragSourceProps {
   color: string;
   sticky?: boolean;
   refreshInterval: number; // milliseconds
+  minMaxRange?: SensorMinMaxRange;
+  strings: { [key: string]: string };
+  alertColor: string;
 }
 
 interface DraggableBoxState {
@@ -171,6 +207,11 @@ export class DraggableBox
     sticky: false,
     isDraggable: true,
     refreshInterval: 5000, // update datapoint every five seconds
+    strings: {
+      underPercentage: '{{ percent }}% under the set limit of {{ min }}',
+      overPercentage: '{{ percent }}% over the set limit of {{ max }}',
+    },
+    alertColor: '#e74c3c',
   };
 
   isComponentUnmounted = false;
@@ -294,6 +335,49 @@ export class DraggableBox
     }
   };
 
+  isValid = () => {
+    const { minMaxRange } = this.props;
+    const { dataPoint } = this.state;
+    if (!dataPoint || typeof dataPoint.value !== 'number' || !minMaxRange) {
+      return true;
+    } else {
+      return !(
+        (minMaxRange.min && dataPoint.value < minMaxRange.min) ||
+        (minMaxRange.max && dataPoint.value > minMaxRange.max)
+      );
+    }
+  };
+
+  getPercentDiff = (): React.ReactNode => {
+    const { strings } = this.props;
+    const { min, max } = this.props.minMaxRange!;
+    const { value } = this.state.dataPoint!;
+    if (typeof value !== 'number') {
+      return '';
+    }
+    if (min !== undefined && value < min) {
+      const percent = (((min - value) / min) * 100).toFixed(2);
+      return (
+        <ComplexString
+          input={strings.underPercentage}
+          percent={percent}
+          min={min}
+        />
+      );
+    }
+    if (max !== undefined && value > max) {
+      const percent = (((value - max) / max) * 100).toFixed(2);
+      return (
+        <ComplexString
+          input={strings.overPercentage}
+          percent={percent}
+          max={max}
+        />
+      );
+    }
+    return '';
+  };
+
   renderValue() {
     const { value } = this.state.dataPoint || { value: undefined };
     if (value === undefined) {
@@ -328,6 +412,9 @@ export class DraggableBox
             <div
               style={{
                 ...handleStyles,
+                backgroundColor: this.isValid()
+                  ? 'white'
+                  : this.props.alertColor,
               }}
               onDoubleClick={this.onDragHandleDoubleClick}
             />
@@ -361,6 +448,22 @@ export class DraggableBox
         )}
       </Tag>
     );
+  }
+
+  renderError() {
+    const { hovering } = this.state;
+    const { alertColor, color, sticky, flipped } = this.props;
+    return !this.isValid() ? (
+      <TagError
+        alertColor={alertColor}
+        color={color}
+        className={`${hovering || sticky ? 'hovering' : ''} ${
+          flipped ? 'flipped' : ''
+        }`}
+      >
+        {this.getPercentDiff()}
+      </TagError>
+    ) : null;
   }
 
   render() {
@@ -410,6 +513,7 @@ export class DraggableBox
             {description}
           </TagDescription>
         )}
+        {this.renderError()}
         {this.renderTag()}
       </div>
     );

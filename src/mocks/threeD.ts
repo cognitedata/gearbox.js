@@ -6,17 +6,27 @@ import {
   removeEvent,
   ViewerConfigResponse,
   ViewerEventTypes,
-} from '../utils';
+} from '../utils/threeD';
 
 export function createFakeViewer({
   project,
   cache = {},
+  domElement,
 }: {
   project: string;
   cache: CacheObject;
+  domElement: HTMLElement;
 }): ViewerConfigResponse {
   if (cache[project]) {
-    return cache[project];
+    // @ts-ignore
+    domElement.parentNode.replaceChild(
+      cache[project].viewer.domElement,
+      domElement
+    );
+    return {
+      ...cache[project],
+      domElement: cache[project].viewer.domElement,
+    };
   }
 
   const { progress, complete, error } = ViewerEventTypes;
@@ -43,11 +53,7 @@ export function createFakeViewer({
     onComplete();
   };
 
-  const viewer = new Cognite3DViewer();
-  const canvas = viewer.getCanvas();
-
-  canvas.style.width = '100%';
-  canvas.style.height = '100%';
+  const viewer = new Cognite3DViewer({ domElement });
 
   const loader = new OBJLoader();
   loader.load('./tank/tank.obj', onLoad, onProgress);
@@ -58,6 +64,7 @@ export function createFakeViewer({
     revisionPromise: Promise.resolve(null),
     addEvent: addEvent.bind(null, listeners),
     removeEvent: removeEvent.bind(null, listeners),
+    domElement,
   };
 
   return cache[project];

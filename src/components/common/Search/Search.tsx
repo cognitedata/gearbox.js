@@ -1,7 +1,7 @@
 import { Asset } from '@cognite/sdk';
 import { Button, Icon, Input, Modal } from 'antd';
 import { debounce } from 'lodash';
-import React, { SyntheticEvent } from 'react';
+import React, { KeyboardEvent, SyntheticEvent } from 'react';
 import styled from 'styled-components';
 import {
   AdvancedSearch,
@@ -51,6 +51,13 @@ const LiveSearchWrapper = styled.div`
       &:hover {
         background-color: #eeeeee;
       }
+
+      &.active {
+        background-color: #f2f2f2;
+        &:hover {
+          background-color: #e0e0e0;
+        }
+      }
     }
   }
 `;
@@ -78,6 +85,7 @@ export interface SearchProps {
   onAssetSelected?: IdCallback;
   onFilterIconClick?: EmptyCallback;
   onLiveSearchSelect?: Callback;
+  onKeyDown?: (e: KeyboardEvent) => void;
 }
 
 interface SearchState {
@@ -87,6 +95,7 @@ interface SearchState {
   advancedSearchQuery: AdvancedSearch | null;
   liveSearchResults: any[];
   liveSearchShow: boolean;
+  cursor?: number;
 }
 
 export class Search extends React.Component<SearchProps, SearchState> {
@@ -138,6 +147,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
     };
 
     this.onSearchBlurBounded = this.onSearchBlur.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
   }
 
   debouncedSearch() {
@@ -202,6 +212,48 @@ export class Search extends React.Component<SearchProps, SearchState> {
     );
   };
 
+  onKeyDown = (e: KeyboardEvent) => {
+    const { liveSearch, onKeyDown } = this.props;
+    const { cursor, liveSearchResults, liveSearchShow } = this.state;
+
+    if (onKeyDown) {
+      onKeyDown(e);
+    }
+    if (e.keyCode === 38 || e.keyCode === 40) {
+      e.preventDefault();
+    }
+
+    if (!liveSearch || !liveSearchShow) {
+      return;
+    }
+
+    // Arrow up
+    if (e.keyCode === 38) {
+      if (cursor === undefined || cursor === 0) {
+        this.setState({ cursor: liveSearchResults.length - 1 });
+      } else {
+        this.setState({ cursor: cursor - 1 });
+      }
+      return;
+    }
+
+    // Arrow down
+    if (e.keyCode === 40) {
+      if (cursor === undefined || cursor === liveSearchResults.length - 1) {
+        this.setState({ cursor: 0 });
+      } else {
+        this.setState({ cursor: cursor + 1 });
+      }
+      return;
+    }
+
+    // Enter
+    if (e.keyCode === 13 && cursor !== undefined) {
+      const item = liveSearchResults[cursor];
+      this.onLiveSearchClick(item);
+    }
+  };
+
   render() {
     const { assetId, query, isModalOpen, advancedSearchQuery } = this.state;
     const { assets, advancedSearch, rootAssetSelect, strings } = this.props;
@@ -243,6 +295,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
                   onChange={this.onSearchQueryInput}
                   allowClear={true}
                   onBlur={this.onSearchBlurBounded}
+                  onKeyDown={this.onKeyDown}
                   suffix={this.toggleInputIcon(
                     'filter',
                     query,
@@ -257,6 +310,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
                   onChange={this.onSearchQueryInput}
                   allowClear={true}
                   onBlur={this.onSearchBlurBounded}
+                  onKeyDown={this.onKeyDown}
                   suffix={this.toggleInputIcon('search', query)}
                 />
               )}
@@ -297,16 +351,19 @@ export class Search extends React.Component<SearchProps, SearchState> {
 
   private renderLiveSearch() {
     const { liveSearch, liveSearchResults } = this.props;
-    const { liveSearchShow } = this.state;
+    const { liveSearchShow, cursor } = this.state;
     const { emptyLiveSearch } = this.lang;
-
     if (!liveSearch || !liveSearchShow) {
       return null;
     }
 
     const list = liveSearchResults.length ? (
       liveSearchResults.map((item, index) => (
-        <li onMouseDown={() => this.onLiveSearchClick(item)} key={index}>
+        <li
+          onMouseDown={() => this.onLiveSearchClick(item)}
+          key={index}
+          className={cursor === index ? 'active' : undefined}
+        >
           {item.name || 'NaN'}
         </li>
       ))
@@ -350,6 +407,10 @@ export class Search extends React.Component<SearchProps, SearchState> {
       onLiveSearchSelect(item);
     }
 
-    this.setState({ query: item.name, liveSearchShow: false });
+    this.setState({
+      query: item.name,
+      liveSearchShow: false,
+      cursor: undefined,
+    });
   }
 }

@@ -5,15 +5,17 @@
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import { SensorOverlay } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
-  const timeserieIds = [ 8681821313339919 ];
+  const timeseriesIds = [8681821313339919];
 
   return (
     <SensorOverlay
-      timeserieIds={timeserieIds}
+      timeseriesIds={timeseriesIds}
       stickyMap={{ [8681821313339919]: true }}
       defaultPositionMap={{
         [8681821313339919]: {
@@ -29,6 +31,6 @@ function ExampleComponent(props) {
       <div style={{ width: '100%', height: '250px', background: '#EEE' }} />
     </SensorOverlay>
   );
-
+  
 }
 ```

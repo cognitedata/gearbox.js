@@ -6,6 +6,8 @@
 ##### Date:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import { TimeseriesChart } from '@cognite/gearbox';
 
@@ -13,8 +15,8 @@ function ExampleComponent(props) {
   return (
     <TimeseriesChart 
       timeseriesIds={[123]} 
-      start={new Date(2019, 3, 1)}
-      end={new Date(2019, 4, 1)} 
+      startTime={new Date(2019, 3, 1)}
+      endTime={new Date(2019, 4, 1)}
     />
   );
   
@@ -31,8 +33,8 @@ function ExampleComponent(props) {
   return (
     <TimeseriesChart 
       timeseriesIds={[123]} 
-      start={1554069600000}
-      end={1556661600000)} 
+      startTime={1554069600000}
+      endTime={1556661600000)}
     />
   );
   

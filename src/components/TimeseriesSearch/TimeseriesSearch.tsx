@@ -1,7 +1,7 @@
 import * as sdk from '@cognite/sdk';
 import { Spin } from 'antd';
 import { debounce } from 'lodash';
-import React from 'react';
+import React, { KeyboardEvent } from 'react';
 import styled from 'styled-components';
 import { ApiQuery } from '../../interfaces';
 import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 const TagList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  margin-top: 16px;
+  margin-top: 8px;
   width: 100%;
   height: auto;
   overflow: auto;
@@ -33,6 +33,10 @@ const CenteredSpin = styled(Spin)`
   }
 `;
 
+export interface TimeseriesSearchStyles {
+  list?: React.CSSProperties;
+}
+
 export interface TimeseriesSearchProps {
   selectedTimeseries: number[];
   single: boolean;
@@ -46,6 +50,7 @@ export interface TimeseriesSearchProps {
   rootAsset?: number;
   filterRule?: (timeseries: sdk.Timeseries) => boolean;
   onError?: (error: Error) => void;
+  styles?: TimeseriesSearchStyles;
 }
 
 interface TimeseriesSearchState {
@@ -55,6 +60,7 @@ interface TimeseriesSearchState {
   searchResults: sdk.Timeseries[];
   selectedTimeseries: sdk.Timeseries[];
   lastFetchId: number;
+  cursor?: number;
 }
 
 export class TimeseriesSearch extends React.Component<
@@ -129,6 +135,11 @@ export class TimeseriesSearch extends React.Component<
   };
 
   onTimeSerieClicked = (timeseries: sdk.Timeseries): void => {
+    const { allowStrings } = this.props;
+    if (!allowStrings && timeseries.isString) {
+      return;
+    }
+
     let newTimeseries: sdk.Timeseries[] = [];
     if (this.props.single) {
       newTimeseries = [timeseries];
@@ -229,14 +240,52 @@ export class TimeseriesSearch extends React.Component<
     }
   };
 
+  onKeyDown = (e: KeyboardEvent) => {
+    const { cursor, searchResults } = this.state;
+    if (e.keyCode === 38 || e.keyCode === 40) {
+      e.preventDefault();
+    }
+
+    if (!searchResults || searchResults.length === 0) {
+      return;
+    }
+
+    // Arrow up
+    if (e.keyCode === 38) {
+      if (cursor === undefined || cursor === 0) {
+        this.setState({ cursor: searchResults.length - 1 });
+      } else {
+        this.setState({ cursor: cursor - 1 });
+      }
+      return;
+    }
+
+    // Arrow down
+    if (e.keyCode === 40) {
+      if (cursor === undefined || cursor === searchResults.length - 1) {
+        this.setState({ cursor: 0 });
+      } else {
+        this.setState({ cursor: cursor + 1 });
+      }
+      return;
+    }
+
+    // Enter
+    if (e.keyCode === 13 && cursor !== undefined) {
+      const item = searchResults[cursor];
+      this.onTimeSerieClicked(item);
+    }
+  };
+
   render() {
-    const { allowStrings, single, hideSelected } = this.props;
+    const { allowStrings, single, hideSelected, styles } = this.props;
     const {
       assetId,
       fetching,
       searchResults,
       assets,
       selectedTimeseries,
+      cursor,
     } = this.state;
 
     return (
@@ -257,12 +306,15 @@ export class TimeseriesSearch extends React.Component<
           assetId={assetId || 0}
           onSearch={this.fetchTimeseries}
           strings={{ searchPlaceholder: 'Search for timeseries' }}
+          onKeyDown={this.onKeyDown}
         />
-        <TagList style={{ marginTop: '8px' }}>
+        <TagList style={styles && styles.list}>
           {fetching ? <CenteredSpin /> : null}
-          {searchResults.map((timeseries: sdk.Timeseries) => (
+          {searchResults.map((timeseries: sdk.Timeseries, index: number) => (
             <DetailCheckbox
-              className={`tag-search-result result-${timeseries.id}`}
+              className={`tag-search-result result-${timeseries.id} ${
+                index === cursor ? 'active' : ''
+              }`}
               key={`detail-checkbox--${timeseries.id}`}
               title={timeseries.name || timeseries.id.toString()}
               description={

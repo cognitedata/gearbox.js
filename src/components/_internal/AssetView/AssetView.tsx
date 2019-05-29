@@ -1,7 +1,7 @@
 import { Tag } from 'antd';
 import React from 'react';
-import { OnClick } from '../../interfaces';
-import { getColor } from '../../utils';
+import { OnClick } from '../../../interfaces';
+import { getColorByString } from '../../../utils';
 
 export interface AssetViewProps {
   asset: {
@@ -38,7 +38,7 @@ export const AssetView = (props: AssetViewProps) => {
   if (typeof color === 'string') {
     tagColor = color;
   } else if (color) {
-    tagColor = getColor(+asset.id);
+    tagColor = getColorByString(asset.id.toString());
   }
 
   return (

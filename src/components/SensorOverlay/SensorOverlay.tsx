@@ -11,7 +11,7 @@ import {
 } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { withSize } from 'react-sizeme';
-import { clampNumber, getColor } from '../../utils';
+import { clampNumber, getColorByString } from '../../utils';
 import DraggableBox from './components/DraggableBox';
 import DraggablePoint from './components/DraggablePoint';
 import SvgLine from './components/SvgLine';
@@ -73,6 +73,11 @@ export interface SensorPosition {
   };
 }
 
+export interface SensorMinMaxRange {
+  min?: number;
+  max?: number;
+}
+
 interface DraggableBoxPosition extends SensorPosition {
   id: number;
   defaultSlot: number | null;
@@ -81,7 +86,8 @@ interface DraggableBoxPosition extends SensorPosition {
 
 export interface SensorOverlayProps {
   children: React.ReactNode;
-  timeserieIds: number[];
+  timeseriesIds: number[];
+  alertColor?: string;
   colorMap: {
     [id: string]: string;
   };
@@ -93,6 +99,9 @@ export interface SensorOverlayProps {
   };
   stickyMap: {
     [id: string]: boolean;
+  };
+  minMaxMap: {
+    [id: string]: SensorMinMaxRange;
   };
   isTagDraggable: boolean;
   isPointerDraggable: boolean;
@@ -107,10 +116,11 @@ export interface SensorOverlayProps {
   };
   fixedWidth?: number;
   refreshInterval?: number;
+  strings?: { [key: string]: string };
 }
 
 interface SensorOverlayState {
-  timeserieIds: number[]; // reference to timeserieIds in props
+  timeseriesIds: number[]; // reference to timeseriesIds in props
   boxes: DraggableBoxPosition[];
   prevSize: {
     width: number;
@@ -129,7 +139,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
     state: SensorOverlayState
   ) {
     if (
-      props.timeserieIds !== state.timeserieIds ||
+      props.timeseriesIds !== state.timeseriesIds ||
       props.size.width !== state.prevSize.width ||
       props.size.height !== state.prevSize.height
     ) {
@@ -146,7 +156,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
     return props.size.width === 0 || props.size.height === 0
       ? {
           // container is empty
-          timeserieIds: props.timeserieIds,
+          timeseriesIds: props.timeseriesIds,
           boxes: [],
           prevSize: {
             width: props.size.width,
@@ -154,7 +164,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
           },
         }
       : {
-          timeserieIds: props.timeserieIds,
+          timeseriesIds: props.timeseriesIds,
           boxes: SensorOverlay.makeBoxesList(state.boxes, props),
           prevSize: {
             width: props.size.width,
@@ -172,7 +182,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
       .filter((v): v is number => typeof v === 'number')
       .sort((a: number, b: number) => a - b);
 
-    return props.timeserieIds.map(id => {
+    return props.timeseriesIds.map(id => {
       const oldBox = oldBoxes.find(box => box.id === id);
       if (oldBox) {
         return oldBox;
@@ -193,7 +203,9 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
         return {
           id,
           defaultSlot,
-          color: (props.colorMap && props.colorMap[id]) || getColor(id),
+          color:
+            (props.colorMap && props.colorMap[id]) ||
+            getColorByString(id.toString()),
           ...(isDefaultPositionProvided
             ? props.defaultPositionMap[id]
             : SensorOverlay.getDefaultPosition(
@@ -237,7 +249,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
   constructor(props: SensorOverlayProps) {
     super(props);
     this.state = SensorOverlay.getNewStateFromProps(props, {
-      timeserieIds: [],
+      timeseriesIds: [],
       boxes: [],
       prevSize: {
         width: 0,
@@ -337,7 +349,10 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
       fixedWidth,
       colorMap,
       stickyMap,
+      minMaxMap,
       refreshInterval,
+      strings,
+      alertColor,
     } = this.props;
     return this.props.connectDropTarget(
       <div
@@ -355,6 +370,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
             <React.Fragment key={box.id}>
               <DraggableBox
                 id={box.id}
+                alertColor={alertColor}
                 left={box.left * size.width}
                 top={box.top * size.height}
                 color={color}
@@ -368,6 +384,8 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
                 onClick={this.props.onClick}
                 onSettingsClick={this.props.onSettingsClick}
                 refreshInterval={refreshInterval}
+                minMaxRange={minMaxMap && minMaxMap[box.id]}
+                strings={strings}
               />
               <SvgLine
                 box={{

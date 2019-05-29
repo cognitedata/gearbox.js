@@ -12,23 +12,33 @@ Gearbox.js
 Run `yarn add @cognite/gearbox` or `npm install @cognite/gearbox --save`.
 
 Install additional dependencies:
-1.  Using Yarn `yarn add @cognite/sdk antd styled-components`
-2.  Using NPM `npm i @cognite/sdk antd styled-components --save`
+1.  Using Yarn `yarn add @cognite/sdk @cognite/griff-react antd styled-components`
+2.  Using NPM `npm i @cognite/sdk @cognite/griff-react antd styled-components --save`
 
 ## Examples
-```
+```js
 import { %Component_name% } from "@cognite/gearbox";
 import 'antd/dist/antd.css';
 ```
 or
-```
+```js
 import * as gearbox from "@cognite/gearbox";
 import 'antd/dist/antd.css';
 ```
+You can also import separate components. This approach reduces bundle size of your app:
+```js
+import {
+  TenantSelector
+} from "@cognite/gearbox/dist/components/TenantSelector";
+``` 
 
 ## Storybook
 
 See the up-to-date storybook [here](https://cognitedata.github.io/gearbox.js).
+
+## Development
+
+To build the library locally it's required to have version of `node` installed not lower than `10.10`
 
 ## Tests
 

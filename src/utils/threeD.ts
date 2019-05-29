@@ -11,6 +11,7 @@ import { CacheObject, Callback, EventHandlers } from '../interfaces';
 interface ViewerConfig {
   modelId: number;
   revisionId: number;
+  domElement: HTMLElement;
   cache?: CacheObject;
   boundingBox?: THREE.Box3;
 }
@@ -22,6 +23,7 @@ export interface ViewerConfigResponse {
   addEvent: (events: [ViewerEventTypes, Callback][]) => void;
   removeEvent: (events?: [ViewerEventTypes, Callback][]) => void;
   fromCache?: boolean;
+  domElement: HTMLElement;
 }
 
 export enum ViewerEventTypes {
@@ -82,22 +84,26 @@ export function createViewer({
   revisionId,
   boundingBox,
   cache,
+  domElement,
 }: ViewerConfig): ViewerConfigResponse {
   const hash = hashGenerator(modelId, revisionId, boundingBox);
   const { progress, complete, error } = ViewerEventTypes;
 
   if (cache && cache[hash]) {
     cache[hash].fromCache = true;
-
-    return cache[hash];
+    // @ts-ignore
+    domElement.parentNode.replaceChild(
+      cache[hash].viewer.domElement,
+      domElement
+    );
+    return {
+      ...cache[hash],
+      domElement: cache[hash].viewer.domElement,
+    };
   }
 
   const revisionPromise = fetch3DModelRevision(modelId, revisionId);
-  const viewer = new Cognite3DViewer();
-  const canvas = viewer.getCanvas();
-
-  canvas.style.width = '100%';
-  canvas.style.height = '100%';
+  const viewer = new Cognite3DViewer({ domElement });
 
   const listeners: EventHandlers = {
     [progress]: [],
@@ -114,15 +120,15 @@ export function createViewer({
   };
 
   const modelPromise = viewer.addModel({
-    projectName: '',
     modelId,
     revisionId,
-    boundingBox,
+    geometryFilter: { boundingBox },
     onProgress,
     onComplete,
   });
 
   const response = {
+    domElement,
     viewer,
     modelPromise,
     revisionPromise,

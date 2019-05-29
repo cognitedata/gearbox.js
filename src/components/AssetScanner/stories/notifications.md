@@ -5,6 +5,8 @@
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import { message } from 'antd';
 import React from 'react';
 import { ASNotifyTypes, AssetScanner } from '@cognite/gearbox';

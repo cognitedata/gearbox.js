@@ -4,8 +4,9 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { EVENTS } from '../../../mocks';
-import { EventPreview } from '../EventPreview';
+import { EventPreview, EventPreviewStyles } from '../EventPreview';
 import basic from './basic.md';
+import customStyles from './customStyles.md';
 import fullDescription from './full.md';
 import hideButton from './hideButton.md';
 import hideDateTime from './hideDateTime.md';
@@ -163,6 +164,31 @@ storiesOf('EventPreview/Examples', module)
     {
       readme: {
         content: withCustomText,
+      },
+    }
+  )
+  .add(
+    'With custom styles',
+    () => {
+      const styles: EventPreviewStyles = {
+        wrapper: { backgroundColor: 'pink' },
+        eventType: { color: 'green' },
+        description: { color: 'yellow' },
+        button: { color: 'black', backgroundColor: 'magenta' },
+        times: { backgroundColor: 'purple' },
+        metadata: { backgroundColor: 'lightblue' },
+      };
+      return (
+        <EventPreview
+          eventId={25496029326330}
+          onShowDetails={onShowDetails}
+          styles={styles}
+        />
+      );
+    },
+    {
+      readme: {
+        content: customStyles,
       },
     }
   );

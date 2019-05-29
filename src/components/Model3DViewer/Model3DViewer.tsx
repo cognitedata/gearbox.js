@@ -1,12 +1,12 @@
 import { Cognite3DModel, Cognite3DViewer, THREE } from '@cognite/3d-viewer';
 import * as sdk from '@cognite/sdk';
-import React from 'react';
+import React, { RefObject } from 'react';
 import { CacheObject, Callback, MouseScreenPosition } from '../../interfaces';
 import {
   createViewer as originalCreateViewer,
   setCameraPosition,
   ViewerEventTypes,
-} from '../../utils';
+} from '../../utils/threeD';
 
 let createViewer = originalCreateViewer;
 
@@ -34,12 +34,13 @@ export function mockCreateViewer(mockFunction: any) {
 
 export class Model3DViewer extends React.Component<Model3DViewerProps> {
   static defaultProps = {
-    enableKeyboardNavigation: false,
+    enableKeyboardNavigation: true,
     useDefaultCameraPosition: true,
   };
 
   disposeCalls: any[] = [];
-  divWrapper: HTMLElement | null = null;
+  divWrapper: RefObject<HTMLDivElement> = React.createRef();
+  inputWrapper: RefObject<HTMLInputElement> = React.createRef();
   model: Cognite3DModel | null = null;
   onClickHandlerBounded: ClickHandler;
   onCompleteBounded: Callback;
@@ -55,13 +56,16 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   }
 
   async componentDidMount() {
+    if (!this.divWrapper.current || !this.inputWrapper.current) {
+      return;
+    }
+
     const {
       modelId,
       revisionId,
       cache,
       boundingBox,
       useDefaultCameraPosition,
-      enableKeyboardNavigation,
       onProgress,
       onReady,
       onCameraChange,
@@ -75,18 +79,18 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       revisionPromise,
       modelPromise,
       fromCache,
+      domElement,
     } = createViewer({
       modelId,
       revisionId,
       boundingBox,
       cache,
+      domElement: this.divWrapper.current,
     });
 
     this.viewer = viewer;
-
-    if (!enableKeyboardNavigation) {
-      viewer.disableKeyboardNavigation();
-    }
+    // Looks like replaceChild looses onClick event handler, so adding it this way instead
+    domElement.addEventListener('click', this.onContainerClick);
 
     if (onProgress) {
       addEvent([[progress, onProgress]]);
@@ -95,12 +99,9 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     addEvent([[complete, this.onCompleteBounded]]);
 
     this.addDisposeCall(() => {
+      domElement.removeEventListener('click', this.onContainerClick);
       removeEvent();
     });
-
-    if (this.divWrapper) {
-      this.divWrapper.appendChild(viewer.getCanvas());
-    }
 
     let model: Cognite3DModel;
     let revision: sdk.Revision;
@@ -121,7 +122,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
       return;
     }
-
     this.model = model;
     this.revision = revision;
     this.nodes = nodes;
@@ -153,8 +153,13 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     }
   }
 
-  async componentDidUpdate() {
-    const { onError } = this.props;
+  async componentDidUpdate(prevProps: Model3DViewerProps) {
+    const { onError, assetId } = this.props;
+    const { assetId: pAssetId } = prevProps;
+
+    if (assetId === pAssetId) {
+      return;
+    }
 
     try {
       this.nodes = await this.findMappedNodes();
@@ -210,12 +215,39 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     }
   }
 
+  onContainerClick = () => {
+    if (this.inputWrapper.current) {
+      this.inputWrapper.current.focus();
+    }
+  };
+
+  onBlur = () => {
+    if (this.viewer) {
+      this.viewer.disableKeyboardNavigation();
+    }
+  };
+
+  onFocus = () => {
+    if (this.viewer && this.props.enableKeyboardNavigation) {
+      this.viewer.enableKeyboardNavigation();
+    }
+  };
+
   render() {
     return (
-      <div
-        style={{ width: '100%', height: '100%' }}
-        ref={ref => (this.divWrapper = ref)}
-      />
+      <React.Fragment>
+        <input
+          type="text"
+          onBlur={this.onBlur}
+          onFocus={this.onFocus}
+          ref={this.inputWrapper}
+          style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
+        />
+        <div
+          style={{ width: '100%', height: '100%', fontSize: 0 }}
+          ref={this.divWrapper}
+        />
+      </React.Fragment>
     );
   }
   private async findMappedNodes(): Promise<sdk.AssetMapping[]> {
@@ -241,19 +273,14 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
     this.model.deselectAllNodes();
 
-    if (!length) {
-      this.viewer.fitCameraToModel(this.model);
-    } else if (length === 1) {
+    if (length === 1) {
       const { nodeId } = this.nodes[0];
 
-      // @ts-ignore
       this.model.updateMatrixWorld();
 
       const reusableBox = new THREE.Box3();
 
-      // @ts-ignore
-      const { matrixWorld } = this.model;
-      const bb = this.model.getBoundingBox(nodeId, reusableBox, matrixWorld);
+      const bb = this.model.getBoundingBox(nodeId, reusableBox);
 
       this.model.selectNode(nodeId);
 
@@ -270,8 +297,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
   private onComplete() {
     const { onComplete } = this.props;
-
-    this.highlightNodes();
 
     if (onComplete) {
       onComplete();

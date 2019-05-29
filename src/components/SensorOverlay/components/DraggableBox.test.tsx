@@ -188,4 +188,38 @@ describe('SensorOverlay - DraggableBox', () => {
     const innerDiv = draggableBox.find('div');
     expect(innerDiv).toHaveLength(0);
   });
+
+  it('Should render min-max alert', done => {
+    const wrapper = mount(
+      <div
+        style={{
+          position: 'relative',
+          ...containerSize,
+        }}
+      >
+        <DraggableBox
+          id={testTimeserie.id}
+          left={0.2 * containerSize.width}
+          top={0.2 * containerSize.height}
+          color={'green'}
+          sticky={true}
+          isDraggable={true}
+          flipped={false}
+          onDragHandleDoubleClick={propsCallbacks.onDragHandleDoubleClick}
+          isDragging={false}
+          connectDragSource={(v: any) => v}
+          connectDragPreview={(v: any) => v}
+          minMaxRange={{ min: 0, max: 10 }}
+        />
+      </div>
+    );
+
+    setImmediate(() => {
+      wrapper.update();
+      const alertParagraph = wrapper.find('p');
+      expect(alertParagraph).toHaveLength(1);
+      expect(alertParagraph.text()).toEqual('400.00% over the set limit of 10');
+      done();
+    });
+  });
 });

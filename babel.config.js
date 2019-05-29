@@ -6,7 +6,7 @@ module.exports = function (api) {
     "@babel/preset-react",
   ];
   const plugins = [
-    ["import", {"libraryName": "antd"}],
+    ["import", {"libraryName": "antd", "style": "css"}],
   ];
 
   return {

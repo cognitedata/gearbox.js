@@ -4,10 +4,10 @@
 
 #### Requirements:
 
-To use this component you have to install `@cognite/3d-viewer` package (version 4.1.1):
+To use this component you have to install `@cognite/3d-viewer` package (version 5.x.x):
 
 ```bash
-yarn add @cognite/3d-viewer@4.1.1
+yarn add @cognite/3d-viewer@5
 ```
 
 #### Description:
@@ -23,6 +23,8 @@ To retrieve a 3D model you need to provide:
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import {
   Cognite3DViewer,
@@ -36,7 +38,7 @@ function ExampleComponent(props) {
   const cache = {};
   const modelId = 0;
   const revisionId = 0;
-  const onClick = (modelId: number) => {};
+  const onClick = (nodeId: number) => {};
   const onProgress = (progress: OnProgressData) => {};
   const onComplete = () => {};
   const onReady = (
@@ -47,11 +49,12 @@ function ExampleComponent(props) {
 
   return (
     <Model3DViewer
-      modelId={modelID}
-      revisionId={revisionID}
+      modelId={modelId}
+      revisionId={revisionId}
       onClick={onClick}
       onProgress={onProgress}
       onComplete={onComplete}
+      onReady={onReady}
       cache={cache}
     />
     
@@ -76,7 +79,7 @@ function ExampleComponent(props) {
 | `assetId`                  | id of asset to highlight                                            | `number`                                                                            |         |
 | `boundingBox`              | bounding box object, that describes dimension of viewed asset nodes | `THREE.Box3`                                                                        |         |
 | `cache`                    | object for caching 3D viewers instances                             | `{ [name:string]: any }`                                                            |         |
-| `enableKeyboardNavigation` | enable keyboard navigation in viewer                                | `boolean`                                                                           |  false  |
+| `enableKeyboardNavigation` | enable keyboard navigation in viewer. Viewer must be in focus       | `boolean`                                                                           |  true   |
 | `useDefaultCameraPosition` | use default camera position                                         | `boolean`                                                                           |  true   |
 | `onReady`                  | on scene prepared to display model callback                         | `(viewer: Cognite3DViewer, model: Cognite3DModel, revision: sdk.Revision) => void;` |         |
 | `onProgress`               | on model loading progress callback                                  | `(progress: OnProgressData) => void;`                                               |         |

@@ -12,11 +12,12 @@ const addEvent = jest.fn();
 const removeEvent = jest.fn();
 
 const viewer = {
-  getCanvas: () => document.createElement('div'),
   on: jest.fn(),
   off: jest.fn(),
   disableKeyboardNavigation: jest.fn(),
 };
+
+const domElement = document.createElement('div');
 
 const callbacksCreateViewer = jest.fn(() => ({
   addEvent,
@@ -24,6 +25,7 @@ const callbacksCreateViewer = jest.fn(() => ({
   modelPromise: Promise.resolve(),
   revisionPromise: Promise.resolve(),
   viewer,
+  domElement,
 }));
 
 afterEach(() => {
@@ -43,6 +45,7 @@ describe('Model3DViewer', () => {
     expect(wrapper.exists()).toBe(true);
     done();
   });
+
   it('should trigger provided callbacks', done => {
     const props = {
       modelId: 0,
@@ -53,7 +56,6 @@ describe('Model3DViewer', () => {
     };
 
     const wrapper = mount(<Model3DViewer {...props} />);
-
     setImmediate(() => {
       expect(addEvent).toHaveBeenCalledTimes(2);
       expect(onReady).toHaveBeenCalledTimes(1);

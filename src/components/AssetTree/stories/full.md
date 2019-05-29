@@ -9,6 +9,8 @@ Visualize parent-child relationship of assets in a tree structure. It will initi
 #### Usage:
 
 ```typescript jsx
+import 'antd/dist/antd.css';
+
 import React from 'react';
 import { AssetTree } from '@cognite/gearbox';
 

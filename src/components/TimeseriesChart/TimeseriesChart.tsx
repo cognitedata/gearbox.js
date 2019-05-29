@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import {
   cogniteloader as griffloader,
   y0Accessor,
@@ -7,27 +8,50 @@ import {
 } from './dataLoader';
 
 import {
+  Annotation,
   AxisDisplayMode,
   AxisPlacement,
   DataProvider,
   LineChart,
+  Ruler,
 } from '@cognite/griff-react';
 import { Spin } from 'antd';
-import { decimalTickFormatter, getColor } from '../../utils';
+import { decimalTickFormatter, getColorByString } from '../../utils';
 
-export interface TimeseriesChartProps {
-  panelHeight: number;
-  timeseriesIds: number[];
+const Wrapper = styled.div`
+  height: 500px;
+  width: 100%;
+`;
+
+export interface TimeseriesChartStyles {
+  container?: React.CSSProperties;
+}
+
+export type TimeseriesChartProps = {
+  styles?: TimeseriesChartStyles;
   pointsPerSeries: number;
-  start: number | Date;
-  end: number | Date;
+  startTime: number | Date;
+  endTime: number | Date;
   contextChart: boolean;
   zoomable: boolean;
   liveUpdate: boolean;
+  crosshair: boolean;
   updateIntervalMillis: number;
+  timeseriesColors: { [id: number]: string };
+  hiddenSeries: { [id: number]: boolean };
+  annotations: Annotation[];
+  ruler: Ruler;
+  collections: any;
+  xAxisHeight: number;
   yAxisDisplayMode: 'ALL' | 'COLLAPSED' | 'NONE';
   yAxisPlacement: 'RIGHT' | 'LEFT' | 'BOTH';
-}
+  height?: number;
+  width?: number;
+  onMouseMove?: (e: any) => void;
+  onBlur?: (e: any) => void;
+  onMouseOut?: (e: any) => void;
+  onFetchDataError: (e: Error) => void;
+} & ({ timeseriesIds: number[] } | { series: any });
 
 interface TimeseriesChartState {
   loaded: boolean;
@@ -41,18 +65,27 @@ export class TimeseriesChart extends React.Component<
   TimeseriesChartState
 > {
   static defaultProps = {
-    start: +Date.now() - 60 * 60 * 1000,
-    end: +Date.now(),
-    timeseriesIds: [],
+    startTime: Date.now() - 60 * 60 * 1000,
+    endTime: Date.now(),
     pointsPerSeries: 600,
     updateIntervalMillis: 5000,
-
     zoomable: false,
     contextChart: false,
+    crosshair: false,
     yAxisDisplayMode: 'ALL',
     liveUpdate: false,
     yAxisPlacement: 'RIGHT',
-    panelHeight: 500,
+    height: undefined,
+    width: undefined,
+    timeseriesColors: {},
+    hiddenSeries: {},
+    annotations: [],
+    xAxisHeight: 50,
+    collections: {},
+    ruler: undefined,
+    onFetchDataError: (e: Error) => {
+      throw e;
+    },
   };
   state = {
     loaded: false,
@@ -66,43 +99,80 @@ export class TimeseriesChart extends React.Component<
 
   render() {
     const {
-      start,
-      end,
+      startTime,
+      endTime,
       pointsPerSeries,
+      // @ts-ignore
       timeseriesIds,
+      // @ts-ignore
+      series,
+      collections,
       updateIntervalMillis,
       zoomable,
+      crosshair,
       contextChart,
+      xAxisHeight,
+      timeseriesColors,
       yAxisDisplayMode,
-      panelHeight,
+      styles,
       liveUpdate,
       yAxisPlacement,
+      hiddenSeries,
+      annotations,
+      ruler,
+      height,
+      width,
+      onMouseMove,
+      onMouseOut,
+      onBlur,
+      onFetchDataError,
     } = this.props;
 
     const { loaded } = this.state;
 
-    const griffSeries = timeseriesIds.map((id: number) => ({
-      id,
-      color: getColor(id.toString()),
-      yAxisDisplayMode: AxisDisplayMode[yAxisDisplayMode],
-      yAccessor,
-      y0Accessor,
-      y1Accessor,
-    }));
+    const griffSeries = series
+      ? series.map((s: any) => ({
+          ...s,
+          id: s.id,
+          color:
+            s.color ||
+            timeseriesColors[s.id] ||
+            getColorByString(s.id.toString()),
+          yAxisDisplayMode:
+            s.yAxisDisplayMode || AxisDisplayMode[yAxisDisplayMode],
+          hidden: s.hidden || hiddenSeries[s.id],
+          yAccessor: s.yAccessor || yAccessor,
+          y0Accessor: s.y0Accessor || y0Accessor,
+          y1Accessor: s.y1Accessor || y1Accessor,
+        }))
+      : timeseriesIds.map((id: number) => ({
+          id,
+          color: timeseriesColors[id] || getColorByString(id.toString()),
+          yAxisDisplayMode: AxisDisplayMode[yAxisDisplayMode],
+          hidden: hiddenSeries[id],
+          yAccessor,
+          y0Accessor,
+          y1Accessor,
+        }));
 
     return (
       griffSeries.length !== 0 && (
         <Spin spinning={!loaded}>
-          <div style={{ height: panelHeight }}>
+          <Wrapper style={styles && styles.container}>
             <DataProvider
               defaultLoader={griffloader}
               onFetchData={this.onFetchData}
               pointsPerSeries={pointsPerSeries}
               series={griffSeries}
-              timeDomain={[+start, +end]}
-              onFetchDataError={(e: Error) => {
-                throw e;
-              }}
+              collections={[...new Set(Object.values(collections))].map(
+                (unit: any) => ({
+                  id: unit,
+                  color: getColorByString(unit.toString()),
+                  yAxisDisplayMode: AxisPlacement[yAxisPlacement],
+                })
+              )}
+              timeDomain={[+startTime, +endTime]}
+              onFetchDataError={onFetchDataError}
               updateInterval={
                 liveUpdate
                   ? Math.max(
@@ -114,17 +184,25 @@ export class TimeseriesChart extends React.Component<
             >
               <LineChart
                 zoomable={zoomable}
-                crosshair={false}
+                crosshair={crosshair}
+                annotations={annotations}
                 contextChart={{
                   visible: contextChart,
                   height: 100,
                   isDefault: true,
                 }}
+                height={height}
+                width={width}
+                ruler={ruler}
                 yAxisFormatter={decimalTickFormatter}
                 yAxisPlacement={AxisPlacement[yAxisPlacement]}
+                xAxisHeight={xAxisHeight}
+                onMouseMove={onMouseMove}
+                onMouseOut={onMouseOut}
+                onBlur={onBlur}
               />
             </DataProvider>
-          </div>
+          </Wrapper>
         </Spin>
       )
     );
