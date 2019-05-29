@@ -66,7 +66,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       cache,
       boundingBox,
       useDefaultCameraPosition,
-      enableKeyboardNavigation,
       onProgress,
       onReady,
       onCameraChange,
