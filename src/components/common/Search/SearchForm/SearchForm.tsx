@@ -37,6 +37,11 @@ export const defaultStrings: PureObject = {
   search: 'Search',
 };
 
+export interface SearchFormStyles {
+  container?: React.CSSProperties;
+  addMoreMetadataButton?: React.CSSProperties;
+}
+
 export interface SearchProps {
   form: WrappedFormUtils;
   value: AdvancedSearch | null;
@@ -44,6 +49,7 @@ export interface SearchProps {
   onPressEnter?: EmptyCallback;
   onSubmit?: OnAdvancedSearchChange;
   strings?: PureObject;
+  styles?: SearchFormStyles;
 }
 
 export interface MetadataField {
@@ -56,6 +62,7 @@ const SearchForm = ({
   onSubmit,
   form,
   onPressEnter,
+  styles,
   strings = {},
 }: SearchProps) => {
   const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
@@ -176,7 +183,11 @@ const SearchForm = ({
   ));
 
   return (
-    <Form layout="horizontal" onSubmit={submit}>
+    <Form
+      layout="horizontal"
+      onSubmit={submit}
+      style={styles && styles.container}
+    >
       <Form.Item label={nameField} {...formItemLayout}>
         {getFieldDecorator('name')(
           <Input
@@ -206,7 +217,7 @@ const SearchForm = ({
           type="dashed"
           className="add-more-metadata"
           onClick={onAddMetadata}
-          style={{ width: '100%' }}
+          style={{ width: '100%', ...(styles && styles.addMoreMetadataButton) }}
         >
           <Icon type="plus" style={{ marginRight: 8 }} />
           {addMetadata}
