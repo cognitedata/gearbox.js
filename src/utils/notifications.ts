@@ -30,8 +30,8 @@ export const notification = ({
 
 export const ocrError = {
   type: NotificationTypes.ERROR,
-  message: 'Some error appears',
-  description: 'Check developer console for more info',
+  message: 'Network error',
+  description: `Check developer's console for more info`,
 };
 
 export const ocrNoTextFound = {

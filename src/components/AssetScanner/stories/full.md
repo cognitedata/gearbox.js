@@ -4,23 +4,23 @@
 
 #### Description:
 
-Uses for recognising assets name strings from captured image.
+The component can be used for recognizing the name of an asset in a captured image (from a webcam)
 
 #### Usage requirements:
 
-By default, component uses Google Vision API (to recognize text on picture). User has to provide valid API key for Google Vision via **ocrKey** prop to use embedded OCR functional.
-Please, follow this guide to generate an api-key:
+By default, component uses Google Vision API (to recognize text on the picture). User has to provide a valid API key for Google Vision via **ocrKey** prop to use embedded OCR functional.
+Please, follow this guide to generate an API key:
 
 **Google Vision API**
 
 > Before you can use the Cloud Vision API, you must enable it for your project and generate your API key, see here how – [Enable the Vision API](https://cloud.google.com/vision/docs/before-you-begin).
 
-> Don't forget for setting up API key restrictions – [Using API Keys](https://cloud.google.com/docs/authentication/api-keys).
+> Don't forget to set API key restrictions – [Using API Keys](https://cloud.google.com/docs/authentication/api-keys).
 
-You might provide your custom `extractOcrStrings` function to retrieve string array from OCR recognition response structure.
+You might provide your custom `extractOcrStrings` function to retrieve an array of strings from OCR recognition response structure.
 
 You also can use your own implementation of OCR call if you use your own OCR service.
-Just provide `ocrRequest` function to get recognised from image strings with your own realisation of OCR request.
+Just provide `ocrRequest` function to retrieve strings recognized from an image with your own implementation of OCR request.
 
 #### Usage:
 
@@ -50,17 +50,17 @@ _No required props_
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- | ------------------ |
 | `button`                 | Render prop function, that should returns button node. Capture function and image base64 string are passed as arguments                          | `ButtonRenderProp`                             |                    |
 | `customNotification`     | Callback function to react on provided type of notification                                                                                      | `(type: ASNotifyTypes) => any`                 |                    |
-| `extractOcrStrings`      | Function, that get result of recognise function and format it as array of recognised strings (Can be used if you use embedded Google Vision API) | `(ocrResult: any) => string`                   |                    |
-| `ocrKey`                 | Api key property which is needed if you use embedded Google Vision API                                                                           | `string`                                       |                    |
-| `ocrRequest`             | Function that provide custom OCR call to detect strings on image                                                                                 | `(ocrParams: OcrRequest) => Promise<string[]>` |                    |
-| `onStartLoading`         | Callback which triggers right after tacking shot from camera                                                                                     | `() => void`                                   |                    |
-| `onImageRecognizeStart`  | Callback which triggers when image recognition process start                                                                                     | `(image: string) => void`                      |                    |
-| `onImageRecognizeFinish` | Callback which triggers when image recognition process finish and right before fetching assets by recognised strings                             | `(strings: string[] \| null) => void`          |                    |
-| `onAssetFetchResult`     | Callback which triggers when sdk asset search finished                                                                                           | `(assets: Asset[]) => void`                    |                    |
-| `onEndLoading`           | Callback which triggers after finish of all recognition process                                                                                  | `() => void`                                   |                    |
-| `onImageReset`           | Callback which triggers after resetting captured image                                                                                           | `() => void`                                   |                    |
-| `onOcrError`             | Callback which triggers when issues appears related to OCR service/request                                                                       | `(error: any) => void`                         |                    |
-| `onError`                | Callback which triggers when some error occurs                                                                                                   | `(error: any) => void`                         |                    |
+| `extractOcrStrings`      | Function that gets a result from the recognize function and formats it as an array of recognized strings (Can be used if you use embedded Google Vision API) | `(ocrResult: any) => string`                   |                    |
+| `ocrKey`                 | API key property which is needed if you use embedded Google Vision API                                                                           | `string`                                       |                    |
+| `ocrRequest`             | Function that provides custom OCR call to detect strings on image                                                                                 | `(ocrParams: OcrRequest) => Promise<string[]>` |                    |
+| `onStartLoading`         | Callback triggered right after taking a shot from camera                                                                                     | `() => void`                                   |                    |
+| `onImageRecognizeStart`  | Callback triggered when image recognition process starts                                                                                     | `(image: string) => void`                      |                    |
+| `onImageRecognizeFinish` | Callback triggered when image recognition process is finished and right before fetching assets by recognized strings                             | `(strings: string[] \| null) => void`          |                    |
+| `onAssetFetchResult`     | Callback triggered when SDK asset search has been finished                                                                                           | `(assets: Asset[]) => void`                    |                    |
+| `onEndLoading`           | Callback triggered after finishing recognition process                                                                                  | `() => void`                                   |                    |
+| `onImageReset`           | Callback triggered after resetting captured image                                                                                           | `() => void`                                   |                    |
+| `onOcrError`             | Callback triggered when occurs an error related to OCR service/request                                                                       | `(error: any) => void`                         |                    |
+| `onError`                | Callback triggered when an error occurs                                                                                                    | `(error: any) => void`                         |                    |
 | `styles`                 | Object that defines inline CSS styles for inner elements of the component (Use if you **not** provide `button` render prop)                      | `AssetScannerStyles`                           |                    |
 | `strings`                | Object that defines strings to be passed to component                                                                                            | `PureObject`                                   | `{reset: 'Reset'}` |
 
