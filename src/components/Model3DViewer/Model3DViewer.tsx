@@ -122,6 +122,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
       return;
     }
+
     this.model = model;
     this.revision = revision;
     this.nodes = nodes;

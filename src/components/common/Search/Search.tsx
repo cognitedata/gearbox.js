@@ -353,6 +353,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
     const { liveSearch, liveSearchResults } = this.props;
     const { liveSearchShow, cursor } = this.state;
     const { emptyLiveSearch } = this.lang;
+
     if (!liveSearch || !liveSearchShow) {
       return null;
     }
