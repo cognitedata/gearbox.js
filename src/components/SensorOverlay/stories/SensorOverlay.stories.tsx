@@ -39,7 +39,7 @@ sdk.Datapoints.retrieveLatest = async (name: string): Promise<Datapoint> => {
 storiesOf('SensorOverlay', module).add(
   'Full description',
   () => (
-    <SensorOverlay timeserieIds={[timeseriesList[0].id]}>
+    <SensorOverlay timeseriesIds={[timeseriesList[0].id]}>
       <div style={{ width: '100%', height: '160px', background: '#EEE' }} />
     </SensorOverlay>
   ),
@@ -54,7 +54,7 @@ storiesOf('SensorOverlay/Examples', module)
   .add(
     'Basic',
     () => (
-      <SensorOverlay timeserieIds={[timeseriesList[0].id]}>
+      <SensorOverlay timeseriesIds={[timeseriesList[0].id]}>
         <div style={{ width: '100%', height: '200px', background: '#EEE' }} />
       </SensorOverlay>
     ),
@@ -68,7 +68,7 @@ storiesOf('SensorOverlay/Examples', module)
     'With many sensors',
     () => (
       <SensorOverlay
-        timeserieIds={[
+        timeseriesIds={[
           timeseriesList[0].id,
           timeseriesList[1].id,
           timeseriesList[2].id,
@@ -88,7 +88,7 @@ storiesOf('SensorOverlay/Examples', module)
     'Default position and color',
     () => (
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         colorMap={{ [timeseriesList[0].id]: '#33AA33' }}
         defaultPositionMap={{
           [timeseriesList[0].id]: {
@@ -117,7 +117,7 @@ storiesOf('SensorOverlay/Examples', module)
     'Disabled Dragging',
     () => (
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         isTagDraggable={false}
         isPointerDraggable={false}
       >
@@ -134,7 +134,7 @@ storiesOf('SensorOverlay/Examples', module)
     'With link',
     () => (
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         linksMap={{ [timeseriesList[0].id]: true }}
         onClick={action('onClick')}
         onLinkClick={action('onLinkClick')}
@@ -154,7 +154,7 @@ storiesOf('SensorOverlay/Examples', module)
     'With sticky tooltips',
     () => (
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         stickyMap={{ [8681821313339919]: true }}
         defaultPositionMap={{
           [8681821313339919]: {
@@ -180,7 +180,7 @@ storiesOf('SensorOverlay/Examples', module)
     'With min-max limit',
     () => (
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         stickyMap={{ [8681821313339919]: true }}
         alertColor={'magenta'}
         minMaxMap={{
@@ -203,7 +203,7 @@ storiesOf('SensorOverlay/Examples', module)
     'With Image',
     () => (
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         colorMap={{ [timeseriesList[0].id]: 'orange' }}
         defaultPositionMap={{
           [timeseriesList[0].id]: {
@@ -235,7 +235,7 @@ storiesOf('SensorOverlay/Examples', module)
     'With Fixed Width',
     () => (
       <SensorOverlay
-        timeserieIds={[timeseriesList[0].id]}
+        timeseriesIds={[timeseriesList[0].id]}
         colorMap={{ [timeseriesList[0].id]: 'orange' }}
         defaultPositionMap={{
           [timeseriesList[0].id]: {
@@ -270,7 +270,7 @@ storiesOf('SensorOverlay/Examples', module)
       class WrapperComponent extends React.Component {
         state = {
           counter: 0,
-          timeserieIds: [],
+          timeseriesIds: [],
         };
         render() {
           return (
@@ -279,8 +279,8 @@ storiesOf('SensorOverlay/Examples', module)
                 style={{ marginBottom: 20 }}
                 onClick={() =>
                   this.setState({
-                    timeserieIds: [
-                      ...this.state.timeserieIds,
+                    timeseriesIds: [
+                      ...this.state.timeseriesIds,
                       timeseriesList[this.state.counter].id,
                     ],
                     counter: this.state.counter + 1,
@@ -289,7 +289,7 @@ storiesOf('SensorOverlay/Examples', module)
               >
                 Add Sensor
               </button>
-              <SensorOverlay timeserieIds={this.state.timeserieIds}>
+              <SensorOverlay timeseriesIds={this.state.timeseriesIds}>
                 <div
                   style={{
                     width: '100%',

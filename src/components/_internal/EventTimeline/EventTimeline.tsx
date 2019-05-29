@@ -11,7 +11,7 @@ import {
 } from 'd3';
 import moment from 'moment-timezone';
 import React, { createRef, RefObject } from 'react';
-import { EventTimelineType, IdCallback } from '../../interfaces';
+import { EventTimelineType, IdCallback } from '../../../interfaces';
 
 interface EventTimelineProps {
   barHeight: number;

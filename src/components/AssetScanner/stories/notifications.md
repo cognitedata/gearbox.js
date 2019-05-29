@@ -12,7 +12,7 @@ import React from 'react';
 import { ASNotifyTypes, AssetScanner } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
-  const onUnauthorized = (error: any): void => {};
+  const onOcrError = (error: any): void => {};
   const customNotification = (
      type: ASNotifyTypes
   ) => {
@@ -29,7 +29,7 @@ function ExampleComponent(props) {
 
   return (
     <AssetScanner
-      onUnauthorized={onUnauthorized}
+      onOcrError={onOcrError}
       ocrKey={'YOUR_GOOGLE_VISION_KEY'}
       customNotification={customNotification}
     />

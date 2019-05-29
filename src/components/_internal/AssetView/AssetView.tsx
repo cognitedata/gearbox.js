@@ -1,7 +1,7 @@
 import { Tag } from 'antd';
 import React from 'react';
-import { OnClick } from '../../interfaces';
-import { getColor } from '../../utils';
+import { OnClick } from '../../../interfaces';
+import { getColor } from '../../../utils';
 
 export interface AssetViewProps {
   asset: {

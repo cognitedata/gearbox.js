@@ -509,4 +509,41 @@ describe('TimeseriesSearch', () => {
       done();
     });
   });
+
+  it('should select search result on arrow keys', done => {
+    const { onTimeserieSelectionChange } = propsCallbacks;
+    const props = {
+      assets: assetsList,
+      onTimeserieSelectionChange,
+    };
+    const wrapper = mount(<TimeseriesSearch {...props} />);
+    const input = wrapper.find(Input).find('input');
+    input.simulate('change', { target: { value: 'a' } });
+
+    // need this to wait for promise to complete
+    setImmediate(() => {
+      wrapper.update();
+      input
+        .simulate('keydown', { keyCode: 40 })
+        .simulate('keydown', { keyCode: 40 });
+      wrapper.update();
+
+      expect(
+        wrapper
+          .find(DetailCheckbox)
+          .at(1)
+          .hasClass('active')
+      ).toBeTruthy();
+
+      input.simulate('keydown', { keyCode: 13 });
+      wrapper.update();
+
+      expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(1);
+      expect(onTimeserieSelectionChange).toHaveBeenCalledWith(
+        [timeseriesList[1].id],
+        timeseriesList[1]
+      );
+      done();
+    });
+  });
 });

@@ -1,6 +1,6 @@
 {
   "name": "@cognite/gearbox",
-  "version": "0.0.32",
+  "version": "0.0.34",
   "description": "GearBox will be a place for application developers to contribute useful, reusable components across applications",
   "contributors": [],
   "main": "dist/index.js",
@@ -80,7 +80,7 @@
     "regenerator-runtime": "^0.13.2",
     "rollup": "^1.2.0",
     "rollup-plugin-json": "^3.1.0",
-    "rollup-plugin-typescript2": "^0.19.2",
+    "rollup-plugin-typescript2": "^0.21.0",
     "sinon": "^7.2.7",
     "storybook-readme": "^5.0.2",
     "styled-components": "^4.1.3",

@@ -9,12 +9,12 @@ import 'antd/dist/antd.css';
 
 import React from 'react';
 import { SensorOverlay } from '@cognite/gearbox';
-import { timeseriesList } from './timeseriesList'; // sample list of timeseries 
+import { timeseriesList } from './timeseriesList'; // sample list of timeseries
 
 class ExampleComponent extends React.Component {
   state = {
     counter: 0,
-    timeserieIds: [],
+    timeseriesIds: [],
   };
   render() {
     return (
@@ -23,8 +23,8 @@ class ExampleComponent extends React.Component {
           style={{ marginBottom: 20 }}
           onClick={() =>
             this.setState({
-              timeserieIds: [
-                ...this.state.timeserieIds,
+              timeseriesIds: [
+                ...this.state.timeseriesIds,
                 timeseriesList[this.state.counter].id,
               ],
               counter: this.state.counter + 1,
@@ -33,7 +33,7 @@ class ExampleComponent extends React.Component {
         >
           Add Sensor
         </button>
-        <SensorOverlay timeserieIds={this.state.timeserieIds}>
+        <SensorOverlay timeseriesIds={this.state.timeseriesIds}>
           <div
             style={{
               width: '100%',
@@ -45,6 +45,6 @@ class ExampleComponent extends React.Component {
       </div>
     );
   }
-
+  
 }
 ```

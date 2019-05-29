@@ -5,15 +5,14 @@ const ocrVisionURL = 'https://vision.googleapis.com/v1/images:annotate';
 
 export async function ocrRecognize({
   image,
-  url,
   key,
+  extractOcrStrings,
 }: OcrRequest): Promise<string[]> {
   const headers = new Headers();
 
   headers.append('Content-Type', 'application/json');
 
-  let ocrUrl = url ? url : ocrVisionURL;
-  ocrUrl += key ? `?key=${key}` : '';
+  const ocrUrl = `${ocrVisionURL}${key ? '?key=' + key : ''}`;
 
   const body = {
     requests: [
@@ -48,5 +47,7 @@ export async function ocrRecognize({
 
   const result = await response.json();
 
-  return extractValidStrings(result.responses[0].textAnnotations);
+  return extractOcrStrings
+    ? extractOcrStrings(result)
+    : extractValidStrings(result.responses[0].textAnnotations);
 }

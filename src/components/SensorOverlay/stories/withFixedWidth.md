@@ -11,14 +11,17 @@ import React from 'react';
 import { SensorOverlay, SensorPosition } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
-  const timeserieIds = [  8681821313339919 ];
+  const timeseriesIds = [8681821313339919];
   const handleClick = (timeserieId: number) => {};
   const handleSettingsClick = (timeserieId: number) => {};
-  const handlePositionChange = (timeserieId: number, position: SensorPosition) => {};
+  const handlePositionChange = (
+    timeserieId: number,
+    position: SensorPosition
+  ) => {};
 
   return (
     <SensorOverlay
-      timeserieIds={ timeserieIds }
+      timeseriesIds={timeseriesIds}
       colorMap={{ [8681821313339919]: 'orange' }}
       defaultPositionMap={{
         [8681821313339919]: {
@@ -41,6 +44,6 @@ function ExampleComponent(props) {
       />
     </SensorOverlay>
   );
-
+  
 }
 ```

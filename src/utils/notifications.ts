@@ -30,8 +30,8 @@ export const notification = ({
 
 export const ocrError = {
   type: NotificationTypes.ERROR,
-  message: 'Failed to scan image',
-  description: 'Check your API key configuration for Google Vision',
+  message: 'Some error appears',
+  description: 'Check developer console for more info',
 };
 
 export const ocrNoTextFound = {

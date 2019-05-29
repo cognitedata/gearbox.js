@@ -1,3 +1,4 @@
+import { Input } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -20,6 +21,7 @@ afterEach(() => {
   );
 });
 
+// tslint:disable:no-big-function
 describe('Search', () => {
   it('should renders without exploding', () => {
     const props = { assets: assetsList };
@@ -188,5 +190,42 @@ describe('Search', () => {
 
     expect(onLiveSearchSelect).toHaveBeenCalledTimes(1);
     expect(wrapper.state('query')).toEqual(assetsList[0].name);
+  });
+
+  it('should select search result on arrow keys', () => {
+    const { onLiveSearchSelect } = propsCallbacks;
+    const props = {
+      liveSearch: true,
+      liveSearchResults: [],
+      onLiveSearchSelect,
+    };
+    const wrapper = mount(<Search {...props} />);
+
+    wrapper.setState({ query: 'test' });
+    wrapper.setProps({ liveSearchResults: assetsList });
+
+    wrapper.update();
+
+    const input = wrapper.find(Input).find('input');
+
+    input
+      .simulate('keydown', { keyCode: 40 })
+      .simulate('keydown', { keyCode: 40 });
+    wrapper.update();
+
+    const list = wrapper.find('ul[data-id="live-search-list"]');
+
+    expect(
+      list
+        .find('li')
+        .at(1)
+        .hasClass('active')
+    ).toBeTruthy();
+
+    input.simulate('keydown', { keyCode: 13 });
+    wrapper.update();
+
+    expect(onLiveSearchSelect).toHaveBeenCalledTimes(1);
+    expect(onLiveSearchSelect).toHaveBeenCalledWith(assetsList[1]);
   });
 });
