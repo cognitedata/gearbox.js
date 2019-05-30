@@ -7,7 +7,7 @@ import {
   getDocumentsByCategory,
   getDocumentTitle,
   getShortDescription,
-} from '../../../utils';
+} from '../../../utils/documents';
 
 const { Panel } = Collapse;
 

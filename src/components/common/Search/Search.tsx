@@ -1,3 +1,4 @@
+import { Asset } from '@cognite/sdk';
 import { Button, Icon, Input, Modal } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
 import { debounce } from 'lodash';
@@ -107,6 +108,7 @@ export interface SearchProps {
   advancedSearch: boolean;
   liveSearch: boolean;
   strings: PureObject;
+  assets: Asset[];
   liveSearchResults: any[];
   assetId?: number;
   onSearch?: Callback;
