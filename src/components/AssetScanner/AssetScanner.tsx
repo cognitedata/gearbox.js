@@ -60,9 +60,10 @@ export interface AssetScannerProps {
   customNotification?: ASNotification;
   onImageRecognizeStart?: (image: string) => void;
   onImageRecognizeFinish?: (strings: string[] | null) => void;
+  onImageRecognizeEmpty?: Callback;
+  onAssetFetchResult?: OnAssetListCallback;
   onStartLoading?: EmptyCallback;
   onEndLoading?: EmptyCallback;
-  onAssetFetchResult?: OnAssetListCallback;
   onOcrError?: Callback;
   onError?: Callback;
   onImageReset?: Callback;
@@ -126,7 +127,12 @@ export class AssetScanner extends React.Component<
   }
 
   async capture() {
-    const { onImageRecognizeFinish, onImageRecognizeStart } = this.props;
+    const {
+      onImageRecognizeFinish,
+      onImageRecognizeStart,
+      onImageRecognizeEmpty,
+      onAssetFetchResult,
+    } = this.props;
     const { recognizeSuccess, recognizeFails } = ASNotifyTypes;
 
     this.startLoading();
@@ -153,14 +159,24 @@ export class AssetScanner extends React.Component<
     }
 
     if (strings !== null && strings.length >= 1) {
-      await this.getAssetsHandler(strings);
+      const assets = await this.getAssetsHandler(strings);
+
+      this.endLoading();
 
       this.notification(recognizeSuccess);
-    } else if (strings !== null) {
-      this.notification(recognizeFails);
-    }
 
-    this.endLoading();
+      if (onAssetFetchResult) {
+        onAssetFetchResult(assets);
+      }
+    } else if (strings !== null) {
+      this.endLoading();
+
+      this.notification(recognizeFails);
+
+      if (onImageRecognizeEmpty) {
+        onImageRecognizeEmpty();
+      }
+    }
   }
 
   render() {
@@ -290,22 +306,20 @@ export class AssetScanner extends React.Component<
     }
   }
 
-  private async getAssetsHandler(strings: string[]) {
-    const { onError, onAssetFetchResult } = this.props;
+  private async getAssetsHandler(strings: string[]): Promise<Asset[]> {
+    const { onError } = this.props;
     const { errorOccurred } = ASNotifyTypes;
 
     try {
-      const assets = await this.getAssets(strings);
-
-      if (onAssetFetchResult) {
-        onAssetFetchResult(assets);
-      }
+      return await this.getAssets(strings);
     } catch (error) {
       this.notification(errorOccurred);
 
       if (onError) {
         onError(error);
       }
+
+      return [];
     }
   }
 }
