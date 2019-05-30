@@ -139,8 +139,6 @@ export class AssetEventsPanel extends Component<
 
     const { selectedEvent } = this.state;
 
-    console.log(this.getTableComponents().body.cell);
-
     return (
       <>
         <StyledTable
