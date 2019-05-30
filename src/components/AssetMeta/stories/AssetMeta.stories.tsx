@@ -40,7 +40,7 @@ Files.list = async ({
   assetId,
 }: FileListParams): Promise<FileMetadataWithCursor> => {
   if (assetId === 12345) {
-    return { items: [] }; // simulate asset without documnets
+    return { items: [] }; // simulate asset without documents
   }
   return { items: DOCUMENTS };
 };
