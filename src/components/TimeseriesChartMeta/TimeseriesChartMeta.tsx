@@ -34,20 +34,26 @@ const timeScales: { [key: string]: { unit: string; number: number } } = {
   },
 };
 
+export type TimeseriesChartMetaPeriod = keyof typeof timeScales;
+
 export interface TimeseriesChartMetaProps {
-  // timeseriesId: number;
   timeseries: Timeseries;
   liveUpdate: boolean;
   updateIntervalMillis: number;
-  showDescription: boolean;
-  showPeriods: boolean;
-  showChart: boolean;
-  showDatapoint: boolean;
-  showMetadata: boolean;
+  defaultTimePeriod?: TimeseriesChartMetaPeriod;
+  defaultBasePeriod?: {
+    startTime: number;
+    endTime: number;
+  };
+  showDescription?: boolean;
+  showPeriods?: boolean;
+  showChart?: boolean;
+  showDatapoint?: boolean;
+  showMetadata?: boolean;
 }
 
 interface TimeseriesChartMetaState {
-  timePeriod: string;
+  timePeriod: TimeseriesChartMetaPeriod;
   basePeriod: {
     startTime: number;
     endTime: number;
@@ -60,7 +66,8 @@ export class TimeseriesChartMeta extends React.PureComponent<
 > {
   static defaultProps = {
     liveUpdate: true,
-    updateIntervalMillis: '5000',
+    updateIntervalMillis: 5000,
+    defaultTimePeriod: 'lastHour',
     showDescription: true,
     showPeriods: true,
     showChart: true,
@@ -70,14 +77,16 @@ export class TimeseriesChartMeta extends React.PureComponent<
 
   constructor(props: TimeseriesChartMetaProps) {
     super(props);
-    const timePeriod = 'lastHour';
     this.state = {
-      timePeriod,
-      basePeriod: this.getBasePeriod(timePeriod),
+      timePeriod: props.defaultBasePeriod ? '-' : props.defaultTimePeriod!,
+      basePeriod:
+        props.defaultBasePeriod || this.getBasePeriod(props.defaultTimePeriod!),
     };
   }
 
-  getBasePeriod(period: string): { startTime: number; endTime: number } {
+  getBasePeriod(
+    period: TimeseriesChartMetaPeriod
+  ): { startTime: number; endTime: number } {
     const { number: substructNumber, unit } = timeScales[period];
     return {
       // @ts-ignore
@@ -96,13 +105,14 @@ export class TimeseriesChartMeta extends React.PureComponent<
 
   render() {
     const {
-      timeseries,
-      updateIntervalMillis,
+      liveUpdate,
       showDescription,
       showPeriods,
       showChart,
       showDatapoint,
       showMetadata,
+      timeseries,
+      updateIntervalMillis,
     } = this.props;
     const { basePeriod, timePeriod } = this.state;
 
@@ -127,7 +137,7 @@ export class TimeseriesChartMeta extends React.PureComponent<
         {showChart && (
           <TimeseriesChart
             timeseriesIds={[timeseries.id]}
-            liveUpdate={true}
+            liveUpdate={liveUpdate}
             updateIntervalMillis={updateIntervalMillis}
             startTime={basePeriod.startTime}
             endTime={basePeriod.endTime}
@@ -138,6 +148,7 @@ export class TimeseriesChartMeta extends React.PureComponent<
             <TimeseriesValue
               timeseriesName={timeseries.name}
               timeseriesDescription={timeseries.description}
+              liveUpdate={liveUpdate}
               updatePeriodMillis={updateIntervalMillis}
               unit={timeseries.unit}
             />

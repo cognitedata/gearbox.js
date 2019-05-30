@@ -11,6 +11,7 @@ import {
 interface TimeseriesValueProps {
   timeseriesDescription?: string;
   timeseriesName: string;
+  liveUpdate: boolean;
   updatePeriodMillis: number;
   unit?: string;
 }
@@ -33,11 +34,13 @@ export class TimeseriesValue
   private interval: number | null = null;
 
   componentDidMount() {
-    this.getLatestsDatapoint();
-    this.interval = setInterval(
-      this.getLatestsDatapoint,
-      this.props.updatePeriodMillis
-    );
+    this.getLatestDatapoint();
+    if (this.props.liveUpdate) {
+      this.interval = setInterval(
+        this.getLatestDatapoint,
+        this.props.updatePeriodMillis
+      );
+    }
   }
 
   componentWillUnmount() {
@@ -52,15 +55,15 @@ export class TimeseriesValue
       if (this.interval) {
         clearInterval(this.interval);
       }
-      this.getLatestsDatapoint();
+      this.getLatestDatapoint();
       this.interval = setInterval(
-        this.getLatestsDatapoint,
+        this.getLatestDatapoint,
         this.props.updatePeriodMillis
       );
     }
   }
 
-  getLatestsDatapoint = async () => {
+  getLatestDatapoint = async () => {
     try {
       const datapoint = await connectPromiseToUnmountState(
         this,
@@ -97,7 +100,10 @@ export class TimeseriesValue
   render() {
     return (
       <Container>
-        <Value>{this.state.value}</Value>
+        <Value>
+          {this.state.value}
+          {this.props.unit && <sup>{this.props.unit}</sup>}
+        </Value>
         <Description>{this.props.timeseriesDescription}</Description>
       </Container>
     );
