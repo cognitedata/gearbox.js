@@ -56,6 +56,7 @@ export interface AssetScannerProps {
   ocrKey?: string;
   button?: ButtonRenderProp;
   extractOcrStrings?: (ocrResult: any) => string[];
+  enableNotification?: boolean;
   customNotification?: ASNotification;
   onImageRecognizeStart?: (image: string) => void;
   onImageRecognizeFinish?: (strings: string[] | null) => void;
@@ -80,6 +81,7 @@ export class AssetScanner extends React.Component<
 > {
   static defaultProps = {
     ocrRequest: ocrRecognize,
+    enableNotification: false,
   };
 
   notification: ASNotification = this.prepareNotifications();
@@ -215,7 +217,11 @@ export class AssetScanner extends React.Component<
   }
 
   private prepareNotifications(): ASNotification {
-    const { customNotification } = this.props;
+    const { customNotification, enableNotification } = this.props;
+
+    if (!enableNotification) {
+      return () => false;
+    }
 
     return customNotification || this.embeddedNotification;
   }
