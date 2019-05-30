@@ -11,8 +11,8 @@ import {
 interface TimeseriesValueProps {
   timeseriesDescription?: string;
   timeseriesName: string;
-  liveUpdate: boolean;
-  updatePeriodMillis: number;
+  liveUpdate?: boolean;
+  updatePeriodMillis?: number;
   unit?: string;
 }
 
@@ -24,6 +24,12 @@ interface TimeseriesValueState {
 export class TimeseriesValue
   extends React.PureComponent<TimeseriesValueProps, TimeseriesValueState>
   implements ComponentWithUnmountState {
+  static defaultProps = {
+    liveUpdate: true,
+    timeseriesDescription: '',
+    updatePeriodMillis: 5000,
+  };
+
   isComponentUnmounted = false;
 
   state = {
