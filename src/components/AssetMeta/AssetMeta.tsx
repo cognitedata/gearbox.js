@@ -118,15 +118,9 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
     contentLen > 0 ? (
       <span>{tab}</span>
     ) : (
-      <span
-        style={
-          (this.props.styles && this.props.styles.emptyTab) || {
-            color: '#9b9b9b',
-          }
-        }
-      >
+      <EmptyPane style={this.props.styles && this.props.styles.emptyTab}>
         ({tab})
-      </span>
+      </EmptyPane>
     );
 
   includesPanel = (pane: AssetPanelType): boolean =>
@@ -222,3 +216,7 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
 }
 
 const Header = styled.div``;
+
+const EmptyPane = styled.span`
+  color: #9b9b9b;
+`;
