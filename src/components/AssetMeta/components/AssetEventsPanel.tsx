@@ -33,7 +33,10 @@ export class AssetEventsPanel extends Component<
       body: {
         row: (props: any) => {
           return (
-            <StyledRow style={styles && styles.tableRow}>
+            <StyledRow
+              style={styles && styles.tableRow}
+              onClick={() => this.onEventClick(props['data-row-key'])}
+            >
               {props.children}
             </StyledRow>
           );
@@ -97,9 +100,17 @@ export class AssetEventsPanel extends Component<
         : 'Ongoing',
   });
 
-  onEventClick = (record: EventAddonsProp) => {
+  onEventClick = (id: number) => {
+    const { events } = this.props;
+    if (!events) {
+      return;
+    }
+    const selectedEvent = events.find(e => e.id === id);
+    if (!selectedEvent) {
+      return;
+    }
     this.setState({
-      selectedEvent: record,
+      selectedEvent: this.mapEvent(selectedEvent),
     });
   };
 
@@ -152,9 +163,6 @@ export class AssetEventsPanel extends Component<
           bordered={bordered}
           components={this.getTableComponents()}
           style={styles && styles.table}
-          onRow={record => ({
-            onClick: () => this.onEventClick(record as EventAddonsProp),
-          })}
         />
         {!!selectedEvent && (
           <Modal
