@@ -6,8 +6,8 @@ const Wrapper = styled.img`
   max-width: 100%;
   position: absolute;
   min-width: 150px;
-  top: 0;
-  border-radius: 5%;
+  top: 50%;
+  transform: translate(0, -50%);
 `;
 
 interface WebcamScreenshotProps {

@@ -19,8 +19,8 @@ export interface EventHandlers {
 
 export interface OcrRequest {
   image: string;
-  url?: string;
   key?: string;
+  extractOcrStrings?: (data: any) => string[];
 }
 
 export interface MetadataId {

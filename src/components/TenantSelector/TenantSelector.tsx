@@ -4,7 +4,8 @@ import { InputProps } from 'antd/lib/input';
 import React from 'react';
 import styled from 'styled-components';
 import { PureObject } from '../../interfaces';
-import { isEmptyString, sanitizeTenant } from '../../utils';
+import { defaultTheme } from '../../theme/defaultTheme';
+import { isEmptyString, sanitizeTenant } from '../../utils/sanitize';
 
 const Panel = Collapse.Panel;
 
@@ -250,67 +251,131 @@ const LoginWrapper = styled.div`
   -webkit-box-pack: start;
   justify-content: flex-start;
   max-width: 400px;
-  box-shadow: rgba(0, 0, 0, 0.05) 1px 6px 20px 8px,
-    rgba(0, 0, 0, 0.11) 0px 6px 6px;
-  background-color: rgb(255, 255, 255);
+  box-shadow: ${({ theme }) => theme.gearbox.lightShadow};
+  background-color: ${({ theme }) => theme.gearbox.containerColor};
   margin: auto;
   padding: 45px;
   overflow: auto;
 `;
 
+LoginWrapper.defaultProps = {
+  theme: {
+    gearbox: defaultTheme,
+  },
+};
+
 const Title = styled.h1`
   font-weight: bold;
+  color: ${({ theme }) => theme.gearbox.textColor};
 `;
 
-const SubTitle = styled.h3``;
+Title.defaultProps = {
+  theme: {
+    gearbox: defaultTheme,
+  },
+};
+
+const SubTitle = styled.h3`
+  color: ${({ theme }) => theme.gearbox.textColor};
+`;
+
+SubTitle.defaultProps = {
+  theme: {
+    gearbox: defaultTheme,
+  },
+};
 
 const Input = styled((props: InputProps) => <AntInput {...props} />)`
   && {
     border: none;
-    background-color: #f5f5f5;
+    background-color: ${({ theme }) => theme.gearbox.lightGrey};
     font-weight: bold;
     border-radius: 0;
     height: 48px;
-    border-bottom: 2px solid #f5f5f5;
+    border-bottom: 2px solid ${({ theme }) => theme.gearbox.lightGrey};
     margin-bottom: 8px;
-
+    color: ${({ theme }) => theme.gearbox.textColor};
     &:focus,
     &:active {
       box-shadow: none;
-      border-bottom: 2px solid #179aff;
+      border-bottom: 2px solid ${({ theme }) => theme.gearbox.primaryColor};
+    }
+    &:hover {
+      border-bottom: 2px solid ${({ theme }) => theme.gearbox.primaryColor};
+    }
+    &::placeholder {
+      color: ${({ theme }) => theme.gearbox.textColorDisabled} !important;
     }
   }
 `;
 
+Input.defaultProps = {
+  theme: {
+    gearbox: defaultTheme,
+  },
+};
+
 const LoginButton = styled((props: NativeButtonProps) => <Button {...props} />)`
   font-weight: bold;
   text-transform: uppercase;
-  background-color: red;
   border-radius: 0;
   min-height: 45px;
   margin: 15px 0;
+  border-color: ${({ theme }) => theme.gearbox.buttonBorderColor};
 
   &:not([disabled]) {
     cursor: pointer;
-    background-color: #179aff;
-    color: #fff;
+    background-color: ${({ theme }) => theme.gearbox.primaryColor};
+    border-color: ${({ theme }) => theme.gearbox.buttonBorderColor};
+    color: ${({ theme }) => theme.gearbox.white};
+    &:hover {
+      color: ${({ theme }) => theme.gearbox.white};
+      border-color: ${({ theme }) => theme.gearbox.primaryColor};
+      background-color: ${({ theme }) => theme.gearbox.primaryColor};
+    }
+  }
+
+  &:disabled,
+  &:disabled:hover {
+    border-color: ${({ theme }) => theme.gearbox.buttonBorderColor} !important;
+    background-color: ${({ theme }) =>
+      theme.gearbox.buttonDisabledColor} !important;
+    color: ${({ theme }) => theme.gearbox.textColorDisabled};
   }
 `;
+
+LoginButton.defaultProps = {
+  theme: {
+    gearbox: defaultTheme,
+  },
+};
 
 const CollapseWrapper = styled(Collapse)`
   .ant-collapse-item {
     border-bottom: none !important;
   }
+  .ant-collapse-content {
+    background-color: ${({ theme }) => theme.gearbox.containerColor} !important;
+  }
   .ant-collapse-header {
     font-size: 1.17em;
     font-weight: 500;
+    color: ${({ theme }) => theme.gearbox.textColor} !important;
     padding-left: 20px !important;
+    background-color: ${({ theme }) => theme.gearbox.containerColor};
 
     .ant-collapse-arrow {
       left: 0 !important;
+      color: ${({ theme }) => theme.gearbox.textColor} !important;
     }
   }
   .ant-collapse-content-box {
     padding: 5px 0 0 0 !important;
   }
 `;
+
+CollapseWrapper.defaultProps = {
+  theme: {
+    gearbox: defaultTheme,
+  },
+};

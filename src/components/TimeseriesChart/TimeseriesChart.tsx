@@ -16,7 +16,8 @@ import {
   Ruler,
 } from '@cognite/griff-react';
 import { Spin } from 'antd';
-import { decimalTickFormatter, getColorByString } from '../../utils';
+import { decimalTickFormatter } from '../../utils/axisSigFix';
+import { getColorByString } from '../../utils/colors';
 
 const Wrapper = styled.div`
   height: 500px;
