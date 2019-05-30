@@ -198,10 +198,10 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
 
     return asset ? (
       <>
-        <Header style={styles && styles.header}>
+        <div style={styles && styles.header}>
           <h3>{asset.name ? asset.name : asset.id}</h3>
           {asset.description && <p>{asset.description}</p>}
-        </Header>
+        </div>
 
         <Tabs defaultActiveKey={tab} onChange={onPaneChange}>
           {this.renderDetailsPane()}
@@ -214,8 +214,6 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
     );
   }
 }
-
-const Header = styled.div``;
 
 const EmptyPane = styled.span`
   color: #9b9b9b;

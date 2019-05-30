@@ -106,6 +106,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
               >
                 <tr
                   className="sc-bwzfXH kByjcP"
+                  onClick={[Function]}
                 >
                   <td
                     className="sc-htpNat irDPrN"
@@ -158,6 +159,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                 </tr>
                 <tr
                   className="sc-bwzfXH kByjcP"
+                  onClick={[Function]}
                 >
                   <td
                     className="sc-htpNat irDPrN"
@@ -210,6 +212,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                 </tr>
                 <tr
                   className="sc-bwzfXH kByjcP"
+                  onClick={[Function]}
                 >
                   <td
                     className="sc-htpNat irDPrN"
@@ -262,6 +265,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                 </tr>
                 <tr
                   className="sc-bwzfXH kByjcP"
+                  onClick={[Function]}
                 >
                   <td
                     className="sc-htpNat irDPrN"
@@ -314,6 +318,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                 </tr>
                 <tr
                   className="sc-bwzfXH kByjcP"
+                  onClick={[Function]}
                 >
                   <td
                     className="sc-htpNat irDPrN"
@@ -366,6 +371,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                 </tr>
                 <tr
                   className="sc-bwzfXH kByjcP"
+                  onClick={[Function]}
                 >
                   <td
                     className="sc-htpNat irDPrN"
