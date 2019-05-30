@@ -2,13 +2,7 @@ import { Timeseries } from '@cognite/sdk';
 import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { TimeseriesChart } from '../../TimeseriesChart';
-
-const { Panel } = Collapse;
-
-interface TimeseriesPanelState {
-  // stateParam?: string;
-}
+import { TimeseriesChartMeta } from '../../TimeseriesChartMeta';
 
 export interface MetaTimeseriesProps {
   noTimeseriesSign?: string;
@@ -18,10 +12,7 @@ export interface TimeseriesPanelProps extends MetaTimeseriesProps {
   timeseries?: Timeseries[];
 }
 
-export class TimeseriesPanel extends React.PureComponent<
-  TimeseriesPanelProps,
-  TimeseriesPanelState
-> {
+export class TimeseriesPanel extends React.PureComponent<TimeseriesPanelProps> {
   static defaultProps = {};
 
   render() {
@@ -42,19 +33,21 @@ export class TimeseriesPanel extends React.PureComponent<
         <TableWrapper>
           <CollapseContainer>
             {timeseries &&
-              timeseries.map(ts => {
-                return (
-                  <PanelWrapper header={ts.name} key={ts.id.toString()}>
-                    <TimeseriesChart timeseriesIds={[ts.id]} />
-                  </PanelWrapper>
-                );
-              })}
+              timeseries.map(ts => (
+                <PanelWrapper header={ts.name} key={ts.id.toString()}>
+                  <TimeseriesChartMeta key={ts.id} timeseries={ts} />
+                </PanelWrapper>
+              ))}
           </CollapseContainer>
         </TableWrapper>
       </>
     );
   }
 }
+
+const PanelWrapper = styled(Collapse.Panel)`
+  text-align: left;
+`;
 
 const TableWrapper = styled.div`
   width: 100%;
@@ -64,10 +57,6 @@ const TableWrapper = styled.div`
 
 const CollapseContainer = styled(Collapse)`
   width: 100%;
-`;
-
-const PanelWrapper = styled(Panel)`
-  text-align: left;
 `;
 
 const NoTimeseries = styled.div`

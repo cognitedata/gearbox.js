@@ -1,6 +1,8 @@
 import {
   Asset,
   Assets,
+  Datapoint,
+  Datapoints,
   EventDataWithCursor,
   Events,
   FileMetadataWithCursor,
@@ -43,6 +45,13 @@ Files.list = async (): Promise<FileMetadataWithCursor> => {
 
 TimeSeries.list = async (): Promise<TimeseriesWithCursor> => {
   return { items: timeseriesList };
+};
+
+Datapoints.retrieveLatest = async (name: string): Promise<Datapoint> => {
+  return {
+    timestamp: Date.now(),
+    value: name.length + Math.random() * 5.0, // just random number
+  };
 };
 
 const onPaneChange = (key: string) => action('onPaneChange')(key);
