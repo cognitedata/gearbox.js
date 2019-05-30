@@ -77,7 +77,11 @@ const customNotification: (type: ASNotifyTypes) => any = (
 storiesOf('AssetScanner', module).add(
   'Full description',
   () => (
-    <AssetScanner onOcrError={onOcrError} ocrKey={'YOUR_GOOGLE_VISION_KEY'} />
+    <AssetScanner
+      onOcrError={onOcrError}
+      enableNotification={true}
+      ocrKey={'YOUR_GOOGLE_VISION_KEY'}
+    />
   ),
   {
     readme: {
@@ -118,11 +122,12 @@ storiesOf('AssetScanner/Examples', module)
     }
   )
   .add(
-    'Custom notifications',
+    'Notification',
     () => (
       <AssetScanner
         onOcrError={onOcrError}
         ocrKey={'YOUR_GOOGLE_VISION_KEY'}
+        enableNotification={true}
         customNotification={customNotification}
       />
     ),
