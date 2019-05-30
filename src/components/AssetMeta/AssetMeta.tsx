@@ -132,9 +132,64 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
   includesPanel = (pane: AssetPanelType): boolean =>
     this.props.hidePanels ? this.props.hidePanels.indexOf(pane) < 0 : true;
 
+  renderDetailsPane() {
+    const { styles } = this.props;
+    const { asset } = this.state;
+    return (
+      asset &&
+      asset.metadata &&
+      this.includesPanel('details') && (
+        <TabPane
+          tab={this.tabStyle('Details', Object.keys(asset.metadata).length)}
+          key="details"
+        >
+          <DescriptionList
+            valueSet={asset.metadata}
+            styles={styles && styles.details}
+          />
+        </TabPane>
+      )
+    );
+  }
+
+  renderDocumentsPane() {
+    const { styles } = this.props;
+    const { docs } = this.state;
+    return (
+      docs &&
+      this.includesPanel('documents') && (
+        <TabPane
+          tab={this.tabStyle('Documents', docs.docs.length)}
+          key="documents"
+        >
+          <DocumentTable {...docs} styles={styles && styles.documents} />
+        </TabPane>
+      )
+    );
+  }
+
+  renderEventsPane() {
+    const { styles } = this.props;
+    const { assetEvents } = this.state;
+    return (
+      assetEvents &&
+      this.includesPanel('events') && (
+        <TabPane
+          tab={this.tabStyle(
+            'Events',
+            assetEvents.events ? assetEvents.events.length : 0
+          )}
+          key="events"
+        >
+          <AssetEventsPanel {...assetEvents} styles={styles && styles.events} />
+        </TabPane>
+      )
+    );
+  }
+
   render() {
     const { styles, tab: propsTab, onPaneChange } = this.props;
-    const { asset, assetEvents, docs, isLoading } = this.state;
+    const { asset, isLoading } = this.state;
 
     if (isLoading) {
       return (
@@ -155,39 +210,9 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
         </Header>
 
         <Tabs defaultActiveKey={tab} onChange={onPaneChange}>
-          {asset.metadata && this.includesPanel('details') && (
-            <TabPane
-              tab={this.tabStyle('Details', Object.keys(asset.metadata).length)}
-              key="details"
-            >
-              <DescriptionList
-                valueSet={asset.metadata}
-                styles={styles && styles.details}
-              />
-            </TabPane>
-          )}
-          {docs && this.includesPanel('documents') && (
-            <TabPane
-              tab={this.tabStyle('Documents', docs.docs.length)}
-              key="documents"
-            >
-              <DocumentTable {...docs} styles={styles && styles.documents} />
-            </TabPane>
-          )}
-          {assetEvents && this.includesPanel('events') && (
-            <TabPane
-              tab={this.tabStyle(
-                'Events',
-                assetEvents.events ? assetEvents.events.length : 0
-              )}
-              key="events"
-            >
-              <AssetEventsPanel
-                {...assetEvents}
-                styles={styles && styles.events}
-              />
-            </TabPane>
-          )}
+          {this.renderDetailsPane()}
+          {this.renderDocumentsPane()}
+          {this.renderEventsPane()}
         </Tabs>
       </>
     ) : (
