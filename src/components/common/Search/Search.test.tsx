@@ -1,3 +1,4 @@
+import * as sdk from '@cognite/sdk';
 import { Input } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -14,6 +15,13 @@ const propsCallbacks: { [name: string]: Mock } = {
   onFilterIconClick: jest.fn(),
   onLiveSearchSelect: jest.fn(),
 };
+
+sdk.Assets.list = jest.fn();
+
+beforeEach(() => {
+  // @ts-ignore
+  sdk.Assets.list.mockResolvedValue({ items: assetsList });
+});
 
 afterEach(() => {
   Object.keys(propsCallbacks).forEach((key: string) =>
@@ -58,7 +66,7 @@ describe('Search', () => {
     expect(wrapper.state('isModalOpen')).toEqual(true);
   });
 
-  it('should change selected asset ID on user action', () => {
+  it('should change selected asset ID on user action', done => {
     const { onAssetSelected } = propsCallbacks;
     const props = {
       assets: assetsList,
@@ -67,12 +75,16 @@ describe('Search', () => {
     };
     const wrapper = mount(<Search {...props} />);
 
-    wrapper.find('.ant-select').simulate('click');
-    wrapper
-      .find('.ant-select-dropdown-menu-item')
-      .last()
-      .simulate('click');
-    expect(onAssetSelected).toHaveBeenCalledTimes(1);
+    setImmediate(() => {
+      wrapper.find('.ant-select').simulate('click');
+      wrapper
+        .find('.ant-select-dropdown-menu-item')
+        .last()
+        .simulate('click');
+      expect(onAssetSelected).toHaveBeenCalledTimes(1);
+
+      done();
+    });
   });
 
   it('should trigger state change while changing input', () => {

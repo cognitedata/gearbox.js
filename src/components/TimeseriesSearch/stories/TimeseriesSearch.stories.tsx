@@ -112,13 +112,13 @@ storiesOf('TimeseriesSearch/Examples', module)
     }
   )
   .add(
-    'Hide root asset select',
+    'Show root asset select',
     () => {
       setupMocks();
       return (
         <TimeseriesSearch
           onTimeserieSelectionChange={onTimeserieSelectionChange}
-          hideRootAssetSelect={true}
+          rootAssetSelect={true}
         />
       );
     },

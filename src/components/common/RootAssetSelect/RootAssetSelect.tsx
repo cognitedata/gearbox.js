@@ -1,11 +1,33 @@
-import { Asset } from '@cognite/sdk';
+import * as sdk from '@cognite/sdk';
 import { Select } from 'antd';
 import React from 'react';
 import { IdCallback, PureObject } from '../../../interfaces';
 
+async function getRootAssetList(): Promise<sdk.Asset[]> {
+  const apiAssets = await sdk.Assets.list({ depth: 0 });
+
+  return apiAssets.items
+    ? apiAssets.items.map(
+        (apiAsset: sdk.Asset): sdk.Asset => {
+          return {
+            id: apiAsset.id,
+            name: apiAsset.name || '',
+            description: apiAsset.description,
+            path: apiAsset.path,
+            depth: apiAsset.depth,
+            metadata: apiAsset.metadata,
+            parentId: apiAsset.parentId,
+            createdTime: apiAsset.createdTime,
+            lastUpdatedTime: apiAsset.lastUpdatedTime,
+          };
+        }
+      )
+    : [];
+}
+
 export const defaultStrings: PureObject = {
   loading: 'Loading',
-  all: '-- all --',
+  all: '-- All --',
 };
 
 export interface RootAssetSelectStyles {
@@ -13,10 +35,9 @@ export interface RootAssetSelectStyles {
 }
 
 export interface RootAssetSelectProps {
-  assetId: number;
-  assets: Asset[];
-  className: string;
   allowAll: boolean;
+  assetId: number;
+  className: string;
   strings: PureObject;
   onAssetSelected?: IdCallback;
   styles?: RootAssetSelectStyles;
@@ -24,6 +45,7 @@ export interface RootAssetSelectProps {
 
 interface RootAssetSelectState {
   current: number;
+  assets: sdk.Asset[] | null;
 }
 
 export class RootAssetSelect extends React.Component<
@@ -31,8 +53,8 @@ export class RootAssetSelect extends React.Component<
   RootAssetSelectState
 > {
   static defaultProps = {
-    assetId: 0,
     allowAll: true,
+    assetId: 0,
     className: '',
     strings: {},
   };
@@ -44,8 +66,16 @@ export class RootAssetSelect extends React.Component<
 
     this.state = {
       current: assetId,
+      assets: null,
     };
   }
+
+  async componentDidMount() {
+    const assets = await getRootAssetList();
+
+    this.setState({ assets });
+  }
+
   onSelectAsset = (selectedAssetId: number) => {
     const { onAssetSelected } = this.props;
 
@@ -57,28 +87,24 @@ export class RootAssetSelect extends React.Component<
   };
 
   render() {
-    const { allowAll, assets, className, strings, styles } = this.props;
+    const { allowAll, className, strings, styles } = this.props;
+    const { current, assets } = this.state;
 
     const lang = { ...defaultStrings, ...strings };
     const { all, loading } = lang;
-    const { current } = this.state;
 
-    if (assets === null || !assets.length) {
-      return (
-        <Select
-          value={0}
-          className={className}
-          dropdownMatchSelectWidth={false}
-          loading={true}
-        >
-          <Select.Option key="global:loading" value={0}>
-            {loading}
-          </Select.Option>
-        </Select>
-      );
-    }
-
-    return (
+    return assets === null || !assets.length ? (
+      <Select
+        value={0}
+        className={className}
+        dropdownMatchSelectWidth={false}
+        loading={true}
+      >
+        <Select.Option key="global:loading" value={0}>
+          {loading}
+        </Select.Option>
+      </Select>
+    ) : (
       <Select
         value={current}
         className={className}

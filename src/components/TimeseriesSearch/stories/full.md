@@ -43,6 +43,7 @@ You can search for `${names}`
 | -------------------- | ---------------------------------------------------------------------------- | ------------------------------------------| ----------- |
 | `selectedTimeseries` | List of preselected timeseries                                               | `number[]`                                | `[]`        |
 | `rootAsset`          | The selected root asset id. `undefined` will select all                      | `number`                                  |             |
+| `rootAssetSelect`    | Enable/disable RootAssetSelect component                                     | `boolean`                                 | `false`     |
 | `single`             | Removes the checkboxes from search result and will only callback with one id | `boolean`                                 | `false`     |
 | `hideSelected`       | Hides the row with selected timeseries above the search bar                  | `boolean`                                 | `false`     |
 | `allowStrings`       | Allows the user to select search results that are strings                    | `boolean`                                 | `false`     |

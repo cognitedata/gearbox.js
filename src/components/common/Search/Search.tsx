@@ -1,4 +1,3 @@
-import { Asset } from '@cognite/sdk';
 import { Button, Icon, Input, Modal } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
 import { debounce } from 'lodash';
@@ -13,7 +12,10 @@ import {
   OnClick,
   PureObject,
 } from '../../../interfaces';
-import { RootAssetSelect } from '../RootAssetSelect/RootAssetSelect';
+import {
+  defaultStrings as rootAssetSelectStrings,
+  RootAssetSelect,
+} from '../RootAssetSelect/RootAssetSelect';
 import { SearchForm } from './SearchForm/SearchForm';
 
 const InputGroup = styled(Input.Group)`
@@ -75,6 +77,8 @@ export const defaultStrings: PureObject = {
   searchPlaceholder: 'Search for an asset',
   search: 'Search',
   emptyLiveSearch: 'Nothing found',
+  rootAssetSelectLoading: rootAssetSelectStrings.loading,
+  rootAssetSelectAll: rootAssetSelectStrings.all,
 };
 
 export interface SearchStyles {
@@ -103,7 +107,6 @@ export interface SearchProps {
   advancedSearch: boolean;
   liveSearch: boolean;
   strings: PureObject;
-  assets: Asset[];
   liveSearchResults: any[];
   assetId?: number;
   onSearch?: Callback;
@@ -126,7 +129,6 @@ interface SearchState {
 
 export class Search extends React.Component<SearchProps, SearchState> {
   static defaultProps = {
-    assets: [],
     liveSearchResults: [],
     fetchingLimit: 25,
     debounceTime: 200,
@@ -162,8 +164,6 @@ export class Search extends React.Component<SearchProps, SearchState> {
   onSearchBlurBounded: OnClick;
 
   onSearch = debounce(this.debouncedSearch.bind(this), this.props.debounceTime);
-
-  private lang: PureObject = {};
 
   constructor(props: SearchProps) {
     super(props);
@@ -286,15 +286,9 @@ export class Search extends React.Component<SearchProps, SearchState> {
 
   render() {
     const { assetId, query, isModalOpen, advancedSearchQuery } = this.state;
-    const {
-      assets,
-      advancedSearch,
-      rootAssetSelect,
-      strings,
-      styles,
-    } = this.props;
+    const { advancedSearch, rootAssetSelect, strings, styles } = this.props;
 
-    this.lang = { ...defaultStrings, ...strings };
+    const lang = { ...defaultStrings, ...strings };
 
     const {
       changeSearch,
@@ -303,14 +297,13 @@ export class Search extends React.Component<SearchProps, SearchState> {
       search,
       rootAssetSelectLoading,
       rootAssetSelectAll,
-    } = this.lang;
+    } = lang;
     return (
       <React.Fragment>
         <InputGroup compact={true}>
           {rootAssetSelect && (
             <RootAssetSelectStyled
               onAssetSelected={this.onAssetSelected}
-              assets={assets}
               assetId={assetId}
               strings={{
                 loading: rootAssetSelectLoading,
@@ -365,7 +358,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
               )}
             </React.Fragment>
           )}
-          {this.renderLiveSearch()}
+          {this.renderLiveSearch(lang)}
         </InputGroup>
         <Modal
           visible={isModalOpen}
@@ -420,10 +413,11 @@ export class Search extends React.Component<SearchProps, SearchState> {
     this.setState({ liveSearchShow: false });
   }
 
-  private renderLiveSearch() {
+  private renderLiveSearch(strings: PureObject) {
     const { liveSearch, liveSearchResults, styles } = this.props;
     const { liveSearchShow, cursor } = this.state;
-    const { emptyLiveSearch } = this.lang;
+    const { emptyLiveSearch } = strings;
+
     if (!liveSearch || !liveSearchShow) {
       return null;
     }
