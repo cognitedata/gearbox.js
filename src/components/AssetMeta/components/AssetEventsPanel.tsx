@@ -15,43 +15,6 @@ interface AssetEventsPanelState {
   selectedEvent: EventAddonsProp | null;
 }
 
-const StyledTable = styled(Table)`
-  tr {
-    background: white;
-    cursor: pointer;
-    &:nth-child(2n) {
-      background: #fafafa;
-    }
-  }
-  td {
-    max-width: 500px;
-  }
-`;
-
-const EventDetails = styled.div`
-  .description {
-    font-size: 18px;
-    padding-top: 16px;
-  }
-  .times {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 16px;
-  }
-`;
-
-const EventMetadataList = styled.div`
-  margin-top: 32px;
-  max-height: calc(100vh - 400px);
-  overflow: auto;
-  .event-metadata {
-    padding: 16px;
-    &:nth-child(2n) {
-      background: #fbfbfb;
-    }
-  }
-`;
-
 export class AssetEventsPanel extends Component<
   AssetEventsPanelProps,
   AssetEventsPanelState
@@ -60,6 +23,29 @@ export class AssetEventsPanel extends Component<
     super(props);
     this.state = {
       selectedEvent: null,
+    };
+  }
+
+  getTableComponents() {
+    const { styles } = this.props;
+
+    return {
+      body: {
+        row: (props: any) => {
+          return (
+            <StyledRow style={styles && styles.tableRow}>
+              {props.children}
+            </StyledRow>
+          );
+        },
+        cell: (props: any) => {
+          return (
+            <StyledCell style={styles && styles.tableCell}>
+              {props.children}
+            </StyledCell>
+          );
+        },
+      },
     };
   }
 
@@ -148,10 +134,12 @@ export class AssetEventsPanel extends Component<
       scroll,
       bordered = false,
       showHeader = true,
-      style,
+      styles,
     } = this.props;
 
     const { selectedEvent } = this.state;
+
+    console.log(this.getTableComponents().body.cell);
 
     return (
       <>
@@ -164,7 +152,8 @@ export class AssetEventsPanel extends Component<
           pagination={pagination}
           scroll={scroll}
           bordered={bordered}
-          style={style}
+          components={this.getTableComponents()}
+          style={styles && styles.table}
           onRow={record => ({
             onClick: () => this.onEventClick(record as EventAddonsProp),
           })}
@@ -186,3 +175,41 @@ export class AssetEventsPanel extends Component<
     );
   }
 }
+
+const StyledTable = styled(Table)``;
+
+const StyledRow = styled.tr`
+  background: white;
+  cursor: pointer;
+  &:nth-child(2n) {
+    background: #fafafa;
+  }
+`;
+
+const StyledCell = styled.td`
+  max-width: 500px;
+`;
+
+const EventDetails = styled.div`
+  .description {
+    font-size: 18px;
+    padding-top: 16px;
+  }
+  .times {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 16px;
+  }
+`;
+
+const EventMetadataList = styled.div`
+  margin-top: 32px;
+  max-height: calc(100vh - 400px);
+  overflow: auto;
+  .event-metadata {
+    padding: 16px;
+    &:nth-child(2n) {
+      background: #fbfbfb;
+    }
+  }
+`;

@@ -2,7 +2,7 @@
 
 exports[`AssetEventsPanel renders correctly 1`] = `
 <div
-  className="ant-table-wrapper sc-bdVaJa eXrEpW"
+  className="ant-table-wrapper sc-bdVaJa bDWFJH"
 >
   <div
     className="ant-spin-nested-loading"
@@ -105,22 +105,10 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                 className="ant-table-tbody"
               >
                 <tr
-                  className="ant-table-row ant-table-row-level-0"
-                  data-row-key={1995162693488}
-                  onClick={[Function]}
-                  onContextMenu={[Function]}
-                  onDoubleClick={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  style={
-                    Object {
-                      "height": null,
-                    }
-                  }
+                  className="sc-bwzfXH kByjcP"
                 >
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     <span
                       className="ant-table-row-indent indent-level-0"
@@ -153,41 +141,26 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                     </span>
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     April 24, 2019 3:35 PM
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     Ongoing
                   </td>
                 </tr>
                 <tr
-                  className="ant-table-row ant-table-row-level-0"
-                  data-row-key={8825861064387}
-                  onClick={[Function]}
-                  onContextMenu={[Function]}
-                  onDoubleClick={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  style={
-                    Object {
-                      "height": null,
-                    }
-                  }
+                  className="sc-bwzfXH kByjcP"
                 >
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     <span
                       className="ant-table-row-indent indent-level-0"
@@ -220,41 +193,26 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                     </span>
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     April 27, 2019 3:35 PM
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     April 30, 2019 3:35 PM
                   </td>
                 </tr>
                 <tr
-                  className="ant-table-row ant-table-row-level-0"
-                  data-row-key={25496029326330}
-                  onClick={[Function]}
-                  onContextMenu={[Function]}
-                  onDoubleClick={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  style={
-                    Object {
-                      "height": null,
-                    }
-                  }
+                  className="sc-bwzfXH kByjcP"
                 >
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     <span
                       className="ant-table-row-indent indent-level-0"
@@ -287,41 +245,26 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                     </span>
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     May 7, 2019 3:35 PM
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     May 14, 2019 3:35 PM
                   </td>
                 </tr>
                 <tr
-                  className="ant-table-row ant-table-row-level-0"
-                  data-row-key={33766051546406}
-                  onClick={[Function]}
-                  onContextMenu={[Function]}
-                  onDoubleClick={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  style={
-                    Object {
-                      "height": null,
-                    }
-                  }
+                  className="sc-bwzfXH kByjcP"
                 >
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     <span
                       className="ant-table-row-indent indent-level-0"
@@ -354,41 +297,26 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                     </span>
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     Excepteur sint occaecat cupidatat non proident
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     April 4, 2019 3:35 PM
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     April 14, 2019 3:35 PM
                   </td>
                 </tr>
                 <tr
-                  className="ant-table-row ant-table-row-level-0"
-                  data-row-key={35593709738144}
-                  onClick={[Function]}
-                  onContextMenu={[Function]}
-                  onDoubleClick={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  style={
-                    Object {
-                      "height": null,
-                    }
-                  }
+                  className="sc-bwzfXH kByjcP"
                 >
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     <span
                       className="ant-table-row-indent indent-level-0"
@@ -421,41 +349,26 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                     </span>
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     Sunt in culpa qui officia deserunt mollit anim id est laborum.
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     June 6, 2019 3:35 PM
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     June 13, 2019 3:35 PM
                   </td>
                 </tr>
                 <tr
-                  className="ant-table-row ant-table-row-level-0"
-                  data-row-key={35593709738145}
-                  onClick={[Function]}
-                  onContextMenu={[Function]}
-                  onDoubleClick={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  style={
-                    Object {
-                      "height": null,
-                    }
-                  }
+                  className="sc-bwzfXH kByjcP"
                 >
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     <span
                       className="ant-table-row-indent indent-level-0"
@@ -484,20 +397,17 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                     </span>
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     No description
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     -
                   </td>
                   <td
-                    className=""
-                    onClick={[Function]}
+                    className="sc-htpNat irDPrN"
                   >
                     Ongoing
                   </td>

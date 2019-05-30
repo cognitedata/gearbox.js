@@ -42,8 +42,15 @@ export interface MetaEventsProps extends TableDesignType {
   columns?: TableColumnType[];
 }
 
+export interface AssetEventsPanelStyles {
+  table?: React.CSSProperties;
+  tableRow?: React.CSSProperties;
+  tableCell?: React.CSSProperties;
+}
+
 export interface AssetEventsPanelProps extends MetaEventsProps {
   events?: Event[];
+  styles?: AssetEventsPanelStyles;
 }
 
 export interface TreeNodeType {

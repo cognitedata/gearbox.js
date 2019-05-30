@@ -3,6 +3,7 @@ import {
   Assets,
   EventDataWithCursor,
   Events,
+  FileListParams,
   FileMetadataWithCursor,
   Files,
 } from '@cognite/sdk';
@@ -17,6 +18,7 @@ import basic from './basic.md';
 import customCategorySort from './customCategorySort.md';
 import customPriorityAndSort from './customPriorityAndSort.md';
 import customPriorityCategory from './customPriorityCategory.md';
+import customStyles from './customStyles.md';
 import fullDescription from './full.md';
 import hideTab from './hideTab.md';
 import selectedDocument from './selectedDocument.md';
@@ -34,7 +36,12 @@ Events.list = async (): Promise<EventDataWithCursor> => {
   return { items: EVENTS };
 };
 
-Files.list = async (): Promise<FileMetadataWithCursor> => {
+Files.list = async ({
+  assetId,
+}: FileListParams): Promise<FileMetadataWithCursor> => {
+  if (assetId === 12345) {
+    return { items: [] };
+  }
   return { items: DOCUMENTS };
 };
 
@@ -158,6 +165,63 @@ storiesOf('AssetMeta/Examples', module)
     {
       readme: {
         content: customPriorityAndSort,
+      },
+    }
+  )
+  .add(
+    'Custom Styles',
+    () => {
+      return (
+        <AssetMeta
+          assetId={123456}
+          styles={{
+            header: {
+              textAlign: 'center',
+              fontFamily: 'Comic Sans MS',
+              fontSize: '1.2em',
+              background: '#ffa3d2',
+            },
+            emptyTab: {
+              color: 'yellow',
+            },
+            details: {
+              fontSize: '1.2em',
+              color: 'green',
+            },
+            documents: {
+              wrapper: {
+                backgroundColor: 'yellow',
+              },
+              fileTitle: {
+                textAlign: 'right',
+                color: 'blue',
+              },
+              fileLink: {
+                textAlign: 'right',
+                color: 'red',
+              },
+              fileContainer: {
+                width: '50%',
+              },
+            },
+            events: {
+              table: {
+                width: '80%',
+              },
+              tableRow: {
+                background: '#00FF00',
+              },
+              tableCell: {
+                fontStyle: 'italic',
+              },
+            },
+          }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: customStyles,
       },
     }
   );

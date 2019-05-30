@@ -20,7 +20,7 @@ import { AssetMeta } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
   return <AssetMeta assetId={4650652196144007} />;
-  
+
 }
 ```
 
@@ -41,15 +41,16 @@ function ExampleComponent(props) {
 | `onPaneChange` | Function triggered when a user changes panes                           | `(tab: string) => void`                       |             |
 | `docsProps`    | Object passed as props to inner component that presents documents pane | `MetaDocProps`                                |             |
 | `eventProps`   | Object passed as props to inner component that presents events pane    | `MetaEventsProps`                             |             |
+| `styles`       | Object that defines inline CSS styles for inner elements of the component.| `AssetMetaStyles`, `DocumentTableStyles`, `AssetEventsPanelStyles`|             |
 
 ### Types
 
 #### MetaDocProps
 This prop customizes the appearance of "Documents" pane.
 It also contains a handler triggered when a user clicks on a certain document.
-Please notice that document categories "P&ID" and "Logic diagrams" are prioritized by default 
-so that these categories always appear on top of the list unless `categoryPriorityList` 
-is provided with a list of prioritized category codes. The rest of categories are sorted alphabetically, 
+Please notice that document categories "P&ID" and "Logic diagrams" are prioritized by default
+so that these categories always appear on top of the list unless `categoryPriorityList`
+is provided with a list of prioritized category codes. The rest of categories are sorted alphabetically,
 but if `customCategorySort` is provided this function will be used for sorting none prioritized categories.
 Priority categories are delimited from regular categories by gray line.
 `MetaDocProps` type can be imported from @cognite/gearbox:
@@ -63,7 +64,7 @@ Definition:
 ```typescript
 import { CollapseProps } from 'antd/lib/collapse';
 import { File as Document } from '@cognite/sdk';
- 
+
 interface MetaDocProps {
   handleDocumentClick?: OnDocumentClick;
   collapseProps?: CollapseProps;
@@ -76,19 +77,19 @@ interface MetaDocProps {
   documentRenderer?: DocumentRenderer;
   customCategorySort?: (a: string, b: string) => number;
 }
-  
+
 type OnDocumentClick = (
   document: Document,
   category: string,
   description: string
 ) => void;
-  
+
 type DocumentRenderer = (
   document: Document,
   i: number,
   documents: Document[]
 ) => React.ReactNode;
-  
+
 interface JsonDocTypes {
   [s: string]: string;
 
@@ -110,7 +111,7 @@ Definition:
 interface MetaEventsProps extends TableDesignType {
   columns?: TableColumnType[];
 }
-  
+
 interface TableDesignType {
   pagination?: {
     pageSize?: number;
@@ -125,7 +126,7 @@ interface TableDesignType {
   showHeader?: boolean;
   style?: object;
 }
-  
+
 interface TableColumnType {
   title: string;
   dataIndex: string;
@@ -134,3 +135,47 @@ interface TableColumnType {
 }
 
 ```
+#### AssetMetaStyles
+This interface defines inline CSS styles for inner elements of `AssetMeta` component.
+You can override styles of following blocks:
+<p>Details tab:</p>
+<img src="asset_meta/styling_schema1.jpg" alt="Tenant Styling" width="700px"><br><br>
+<p>Documents tab:</p>
+<img src="asset_meta/styling_schema2.jpg" alt="Tenant Styling" width="700px"><br><br>
+<p>Events tab:</p>
+<img src="asset_meta/styling_schema3.jpg" alt="Tenant Styling" width="700px"><br><br>
+
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { AssetMetaStyles, DocumentTableStyles, AssetEventsPanelStyles } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+interface AssetMetaStyles {
+  header?: React.CSSProperties;
+  emptyTab?: React.CSSProperties;
+  details?: React.CSSProperties;
+  documents?: DocumentTableStyles;
+  events?: AssetEventsPanelStyles;
+}
+```
+```typescript
+interface DocumentTableStyles {
+  wrapper?: React.CSSProperties;
+  fileContainer?: React.CSSProperties;
+  fileLink?: React.CSSProperties;
+  fileTitle?: React.CSSProperties;
+}
+```
+```typescript
+interface AssetEventsPanelStyles {
+  table?: React.CSSProperties;
+  tableRow?: React.CSSProperties;
+  tableCell?: React.CSSProperties;
+}
+```
+
+See more details in `Custom Styles` example.

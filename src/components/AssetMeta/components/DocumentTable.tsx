@@ -34,10 +34,10 @@ export class DocumentTable extends React.PureComponent<
       return documentRenderer(document, i, all);
     }
 
-    const { documentTitleField, handleDocumentClick } = this.props;
+    const { documentTitleField, handleDocumentClick, styles } = this.props;
 
     return (
-      <LinkContainer key={document.id}>
+      <LinkContainer key={document.id} style={styles && styles.fileContainer}>
         <LinkStyle
           key={document.id}
           data-test-id="file-name"
@@ -47,10 +47,14 @@ export class DocumentTable extends React.PureComponent<
               : null
           }
           tabIndex={-1}
+          style={styles && styles.fileLink}
         >
           {document.fileName}
         </LinkStyle>
-        <TextContainerTop data-test-id="document-title">
+        <TextContainerTop
+          data-test-id="document-title"
+          style={styles && styles.fileTitle}
+        >
           {getDocumentTitle(document.metadata, documentTitleField)}
         </TextContainerTop>
       </LinkContainer>
@@ -67,7 +71,9 @@ export class DocumentTable extends React.PureComponent<
       noDocumentsSign,
       collapseProps,
       customCategorySort,
+      styles,
     } = this.props;
+
     const documentsByCategory = getDocumentsByCategory(
       docs || [],
       unknownCategoryName,
@@ -107,6 +113,7 @@ export class DocumentTable extends React.PureComponent<
                     prioritizedCount === i + 1 &&
                     prioritizedCount !== categories.length
                   }
+                  style={styles && styles.wrapper}
                 >
                   {documents.map(this.renderDocument(category, description))}
                 </PanelWrapper>
@@ -132,6 +139,7 @@ const LinkContainer = styled.div`
 `;
 
 const CollapseContainer = styled(Collapse)`
+  background-color: green;
   width: 100%;
 `;
 

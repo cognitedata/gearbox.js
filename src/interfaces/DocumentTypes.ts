@@ -57,6 +57,14 @@ export interface MetaDocProps {
   customCategorySort?: (a: string, b: string) => number;
 }
 
+export interface DocumentTableStyles {
+  wrapper?: React.CSSProperties;
+  fileContainer?: React.CSSProperties;
+  fileLink?: React.CSSProperties;
+  fileTitle?: React.CSSProperties;
+}
+
 export interface DocumentTableProps extends MetaDocProps {
   docs: Document[];
+  styles?: DocumentTableStyles;
 }
