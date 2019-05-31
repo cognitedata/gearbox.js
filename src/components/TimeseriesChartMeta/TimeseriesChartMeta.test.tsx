@@ -23,6 +23,8 @@ afterEach(() => {
 });
 
 describe('TimeseriesChartMeta', () => {
+  const activeLabelSelector = 'label.ant-radio-button-wrapper-checked';
+
   it('Should render without exploding', () => {
     const wrapper = shallow(<TimeseriesChartMeta timeseries={timeseries} />);
     expect(wrapper.find('RadioGroup')).toHaveLength(1);
@@ -50,7 +52,7 @@ describe('TimeseriesChartMeta', () => {
   it('Should have default period 1 hour', () => {
     const wrapper = mount(<TimeseriesChartMeta timeseries={timeseries} />);
     expect(wrapper).toHaveLength(1);
-    const checkedLabel = wrapper.find('label.ant-radio-button-wrapper-checked');
+    const checkedLabel = wrapper.find(activeLabelSelector);
     expect(checkedLabel).toHaveLength(1);
     expect(checkedLabel.text()).toEqual('1 hour');
   });
@@ -65,7 +67,7 @@ describe('TimeseriesChartMeta', () => {
         }}
       />
     );
-    const checkedLabel = wrapper.find('label.ant-radio-button-wrapper-checked');
+    const checkedLabel = wrapper.find(activeLabelSelector);
     expect(checkedLabel).toHaveLength(0);
   });
 
@@ -73,7 +75,7 @@ describe('TimeseriesChartMeta', () => {
     const wrapper = mount(<TimeseriesChartMeta timeseries={timeseries} />);
     const radioInputs = wrapper.find('input.ant-radio-button-input');
     radioInputs.first().simulate('change', { target: { checked: true } });
-    const checkedLabel = wrapper.find('label.ant-radio-button-wrapper-checked');
+    const checkedLabel = wrapper.find(activeLabelSelector);
     expect(checkedLabel).toHaveLength(1);
     expect(checkedLabel.text()).toEqual('1 year');
   });
