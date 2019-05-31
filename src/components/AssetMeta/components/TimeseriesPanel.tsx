@@ -2,9 +2,13 @@ import { Timeseries } from '@cognite/sdk';
 import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { TimeseriesChartMeta } from '../../TimeseriesChartMeta';
+import {
+  TimeseriesChartMeta,
+  TimeseriesChartMetaProps,
+} from '../../TimeseriesChartMeta';
 
-export interface MetaTimeseriesProps {
+export interface MetaTimeseriesProps
+  extends Omit<TimeseriesChartMetaProps, 'timeseries'> {
   noTimeseriesSign?: string;
 }
 
@@ -16,7 +20,7 @@ export class TimeseriesPanel extends React.PureComponent<TimeseriesPanelProps> {
   static defaultProps = {};
 
   render() {
-    const { noTimeseriesSign, timeseries } = this.props;
+    const { noTimeseriesSign, timeseries, ...rest } = this.props;
 
     if (!timeseries || !timeseries.length) {
       return (
@@ -35,7 +39,7 @@ export class TimeseriesPanel extends React.PureComponent<TimeseriesPanelProps> {
             {timeseries &&
               timeseries.map(ts => (
                 <PanelWrapper header={ts.name} key={ts.id.toString()}>
-                  <TimeseriesChartMeta key={ts.id} timeseries={ts} />
+                  <TimeseriesChartMeta key={ts.id} timeseries={ts} {...rest} />
                 </PanelWrapper>
               ))}
           </CollapseContainer>

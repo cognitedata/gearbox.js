@@ -38,8 +38,8 @@ export type TimeseriesChartMetaPeriod = keyof typeof timeScales;
 
 export interface TimeseriesChartMetaProps {
   timeseries: Timeseries;
-  liveUpdate: boolean;
-  updateIntervalMillis: number;
+  liveUpdate?: boolean;
+  updateIntervalMillis?: number;
   defaultTimePeriod?: TimeseriesChartMetaPeriod;
   defaultBasePeriod?: {
     startTime: number;
