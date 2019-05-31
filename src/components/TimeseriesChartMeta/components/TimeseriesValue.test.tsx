@@ -62,6 +62,33 @@ describe('TimeseriesValue', () => {
     expect(sdk.Datapoints.retrieveLatest).toBeCalledTimes(2);
   });
 
+  it('Should clear interval after unmounting ', () => {
+    jest.useFakeTimers();
+    const wrapper = mount(
+      <TimeseriesValue
+        timeseriesName={timeseries.name}
+        timeseriesDescription={timeseries.description}
+      />
+    );
+
+    expect(setInterval).toHaveBeenCalledTimes(1);
+    wrapper.unmount();
+    expect(clearInterval).toHaveBeenCalledTimes(1);
+  });
+
+  it('Should clear interval after changing timeseriesName ', () => {
+    jest.useFakeTimers();
+    const wrapper = mount(
+      <TimeseriesValue
+        timeseriesName={timeseries.name}
+        timeseriesDescription={timeseries.description}
+      />
+    );
+    expect(setInterval).toHaveBeenCalledTimes(1);
+    wrapper.setProps({ timeseriesName: 'some name' });
+    expect(clearInterval).toHaveBeenCalledTimes(1);
+  });
+
   it('Should not call setState on unmounted component', done => {
     TimeseriesValue.prototype.setState = jest.fn();
 

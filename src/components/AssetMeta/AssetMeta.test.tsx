@@ -2,7 +2,12 @@ import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { getAssetEvent, getAssetFiles, retrieveAsset, getAssetTimeseries } from '../../api';
+import {
+  getAssetEvent,
+  getAssetFiles,
+  getAssetTimeseries,
+  retrieveAsset,
+} from '../../api';
 import { ASSET_DATA, DOCUMENTS, EVENTS, timeseriesList } from '../../mocks';
 import { AssetMeta } from './AssetMeta';
 

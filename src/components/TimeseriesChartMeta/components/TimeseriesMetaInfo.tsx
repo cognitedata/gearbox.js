@@ -20,7 +20,7 @@ export const TimeseriesMetaInfo: React.SFC<TimeseriesMetaInfoProps> = ({
     <CollapseContainer>
       <PanelWrapper header={'Metadata'} key={'timeseries-metadata'}>
         <Table>
-          {metaList.map((entry) => (
+          {metaList.map(entry => (
             <TableRow key={entry.property}>
               <TableProperty>{entry.property}</TableProperty>
               <TableValue>{entry.value}</TableValue>

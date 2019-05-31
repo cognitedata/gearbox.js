@@ -14,18 +14,14 @@ const timeseries = timeseriesList[0];
 describe('TimeseriesMetaInfo', () => {
   it('Should render without exploding', () => {
     const wrapper = mount(
-      <TimeseriesMetaInfo
-        metaInfo={timeseries.metadata!}
-      />
+      <TimeseriesMetaInfo metaInfo={timeseries.metadata!} />
     );
     expect(wrapper.find(TimeseriesMetaInfo)).toHaveLength(1);
   });
 
   it('Should expand after click', () => {
     const wrapper = mount(
-      <TimeseriesMetaInfo
-        metaInfo={timeseries.metadata!}
-      />
+      <TimeseriesMetaInfo metaInfo={timeseries.metadata!} />
     );
 
     const header = wrapper.find('div.ant-collapse-header');
@@ -34,5 +30,4 @@ describe('TimeseriesMetaInfo', () => {
     wrapper.update();
     expect(wrapper.text()).toContain(Object.keys(timeseries.metadata!)[0]);
   });
-
 });
