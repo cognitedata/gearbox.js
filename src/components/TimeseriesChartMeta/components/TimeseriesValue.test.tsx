@@ -9,7 +9,7 @@ configure({ adapter: new Adapter() });
 
 sdk.Datapoints.retrieveLatest = jest.fn();
 
-const timeseries = timeseriesList[0] as sdk.Timeseries;
+const timeseries = timeseriesList[0];
 const datapopint = datapoints[0];
 
 beforeEach(() => {
@@ -34,5 +34,50 @@ describe('TimeseriesValue', () => {
 
     expect(wrapper.find(TimeseriesValue)).toHaveLength(1);
     expect(wrapper.text()).toContain(timeseries.description);
+  });
+
+  it('Should  request latest datapoint', () => {
+    mount(
+      <TimeseriesValue
+        timeseriesName={timeseries.name}
+        timeseriesDescription={timeseries.description}
+        liveUpdate={false}
+      />
+    );
+
+    expect(sdk.Datapoints.retrieveLatest).toBeCalled();
+  });
+
+  it('Should retrieve latest datapoint twice if timeseriesName has been changed ', () => {
+    const wrapper = mount(
+      <TimeseriesValue
+        timeseriesName={timeseries.name}
+        timeseriesDescription={timeseries.description}
+        liveUpdate={false}
+      />
+    );
+
+    wrapper.setProps({ timeseriesName: 'some other timeseries' });
+
+    expect(sdk.Datapoints.retrieveLatest).toBeCalledTimes(2);
+  });
+
+  it('Should not call setState on unmounted component', done => {
+    TimeseriesValue.prototype.setState = jest.fn();
+
+    const wrapper = mount(
+      <TimeseriesValue
+        timeseriesName={timeseries.name}
+        timeseriesDescription={timeseries.description}
+        liveUpdate={false}
+      />
+    );
+
+    wrapper.unmount();
+
+    setImmediate(() => {
+      expect(TimeseriesValue.prototype.setState).not.toHaveBeenCalled();
+      done();
+    });
   });
 });
