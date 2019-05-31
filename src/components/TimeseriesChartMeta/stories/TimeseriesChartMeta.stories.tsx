@@ -4,12 +4,12 @@ import React from 'react';
 import { setupMocks } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { TimeseriesChartMeta } from '../TimeseriesChartMeta';
 
-import full from './full.md';
-import predefinedPeriod from './predefinedPeriod.md';
-import hideElements from './hideElements.md';
-import disableUpdates from './disableUpdates.md';
-import customInterval from './customInterval.md';
 import customBasePeriod from './customBasePeriod.md';
+import customInterval from './customInterval.md';
+import disableUpdates from './disableUpdates.md';
+import full from './full.md';
+import hideElements from './hideElements.md';
+import predefinedPeriod from './predefinedPeriod.md';
 
 const ts = {
   id: 8681821313339919,
@@ -48,10 +48,7 @@ storiesOf('TimeseriesChartMeta/Examples', module)
     () => {
       setupMocks();
       return (
-        <TimeseriesChartMeta
-          timeseries={ts}
-          defaultTimePeriod="lastMonth"
-        />
+        <TimeseriesChartMeta timeseries={ts} defaultTimePeriod="lastMonth" />
       );
     },
     {
