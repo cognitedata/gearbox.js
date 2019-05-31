@@ -11,9 +11,9 @@ import * as customFilter from './customFilter.md';
 import * as customStrings from './customStrings.md';
 import * as customStyles from './customStyles.md';
 import * as fullDescription from './full.md';
-import * as hideRootAssetSelect from './hideRootAssetSelect.md';
 import * as hideSelectedRow from './hideSelectedRow.md';
 import * as preselected from './preselected.md';
+import * as rootAssetSelect from './rootAssetSelect.md';
 import * as singleSelection from './singleSelection.md';
 
 const timeseriesNames = timeseriesList.map(ts => ts.name);
@@ -124,7 +124,7 @@ storiesOf('TimeseriesSearch/Examples', module)
     },
     {
       readme: {
-        content: injectTimeseriesNames(hideRootAssetSelect.toString()),
+        content: injectTimeseriesNames(rootAssetSelect.toString()),
       },
     }
   )

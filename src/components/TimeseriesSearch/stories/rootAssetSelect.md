@@ -19,7 +19,7 @@ function ExampleComponent(props) {
   return (
     <TimeseriesSearch
       onTimeserieSelectionChange={onTimeserieSelectionChange}
-      hideRootAssetSelect={true}
+      rootAssetSelect={true}
     />
   );
   
