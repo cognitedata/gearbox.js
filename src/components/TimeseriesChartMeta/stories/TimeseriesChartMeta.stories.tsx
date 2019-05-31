@@ -1,34 +1,37 @@
 /* eslint-disable react/no-multi-comp */
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { timeseriesList } from '../../../mocks/timeseriesList';
 import { setupMocks } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { TimeseriesChartMeta } from '../TimeseriesChartMeta';
 
 import full from './full.md';
+import predefinedPeriod from './predefinedPeriod.md';
+import hideElements from './hideElements.md';
+import disableUpdates from './disableUpdates.md';
+import customInterval from './customInterval.md';
+import customBasePeriod from './customBasePeriod.md';
 
-const timeseries = timeseriesList[0];
+const ts = {
+  id: 8681821313339919,
+  name: 'IA_21PT1019.AlarmByte',
+  isString: false,
+  unit: 'bar',
+  metadata: {
+    tag: 'IA_21PT1019.AlarmByte',
+    scan: '1',
+    span: '100',
+    step: '1',
+    zero: '0',
+  },
+  assetId: 4965555138606429,
+  isStep: false,
+  description: '21PT1019.AlarmByte',
+};
 
 storiesOf('TimeseriesChartMeta', module).add(
   'Full description',
   () => {
     setupMocks();
-    const ts = {
-      id: 8681821313339919,
-      name: 'IA_21PT1019.AlarmByte',
-      isString: false,
-      unit: 'bar',
-      metadata: {
-        tag: 'IA_21PT1019.AlarmByte',
-        scan: '1',
-        span: '100',
-        step: '1',
-        zero: '0',
-      },
-      assetId: 4965555138606429,
-      isStep: false,
-      description: '21PT1019.AlarmByte',
-    };
     return <TimeseriesChartMeta timeseries={ts} />;
   },
   {
@@ -46,14 +49,14 @@ storiesOf('TimeseriesChartMeta/Examples', module)
       setupMocks();
       return (
         <TimeseriesChartMeta
-          timeseries={timeseries}
+          timeseries={ts}
           defaultTimePeriod="lastMonth"
         />
       );
     },
     {
       readme: {
-        content: '',
+        content: predefinedPeriod,
       },
     }
   )
@@ -63,7 +66,7 @@ storiesOf('TimeseriesChartMeta/Examples', module)
       setupMocks();
       return (
         <TimeseriesChartMeta
-          timeseries={timeseries}
+          timeseries={ts}
           showChart={true}
           showDescription={false}
           showDatapoint={false}
@@ -74,7 +77,7 @@ storiesOf('TimeseriesChartMeta/Examples', module)
     },
     {
       readme: {
-        content: '',
+        content: hideElements,
       },
     }
   )
@@ -82,11 +85,11 @@ storiesOf('TimeseriesChartMeta/Examples', module)
     'Disable live updates',
     () => {
       setupMocks();
-      return <TimeseriesChartMeta timeseries={timeseries} liveUpdate={false} />;
+      return <TimeseriesChartMeta timeseries={ts} liveUpdate={false} />;
     },
     {
       readme: {
-        content: '',
+        content: disableUpdates,
       },
     }
   )
@@ -96,7 +99,7 @@ storiesOf('TimeseriesChartMeta/Examples', module)
       setupMocks();
       return (
         <TimeseriesChartMeta
-          timeseries={timeseries}
+          timeseries={ts}
           liveUpdate={true}
           updateIntervalMillis={1000}
         />
@@ -104,7 +107,7 @@ storiesOf('TimeseriesChartMeta/Examples', module)
     },
     {
       readme: {
-        content: '',
+        content: customInterval,
       },
     }
   )
@@ -114,7 +117,7 @@ storiesOf('TimeseriesChartMeta/Examples', module)
       setupMocks();
       return (
         <TimeseriesChartMeta
-          timeseries={timeseries}
+          timeseries={ts}
           defaultBasePeriod={{
             startTime: Date.now() - 10 * 24 * 60 * 60 * 1000, // 10 days ago
             endTime: Date.now(),
@@ -124,7 +127,7 @@ storiesOf('TimeseriesChartMeta/Examples', module)
     },
     {
       readme: {
-        content: '',
+        content: customBasePeriod,
       },
     }
   );
