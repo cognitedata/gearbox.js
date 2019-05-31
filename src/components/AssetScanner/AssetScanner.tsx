@@ -56,12 +56,14 @@ export interface AssetScannerProps {
   ocrKey?: string;
   button?: ButtonRenderProp;
   extractOcrStrings?: (ocrResult: any) => string[];
+  enableNotification?: boolean;
   customNotification?: ASNotification;
   onImageRecognizeStart?: (image: string) => void;
   onImageRecognizeFinish?: (strings: string[] | null) => void;
+  onImageRecognizeEmpty?: Callback;
+  onAssetFetchResult?: OnAssetListCallback;
   onStartLoading?: EmptyCallback;
   onEndLoading?: EmptyCallback;
-  onAssetFetchResult?: OnAssetListCallback;
   onOcrError?: Callback;
   onError?: Callback;
   onImageReset?: Callback;
@@ -80,6 +82,7 @@ export class AssetScanner extends React.Component<
 > {
   static defaultProps = {
     ocrRequest: ocrRecognize,
+    enableNotification: false,
   };
 
   notification: ASNotification = this.prepareNotifications();
@@ -124,12 +127,17 @@ export class AssetScanner extends React.Component<
   }
 
   async capture() {
-    const { onImageRecognizeFinish, onImageRecognizeStart } = this.props;
+    const {
+      onImageRecognizeFinish,
+      onImageRecognizeStart,
+      onImageRecognizeEmpty,
+      onAssetFetchResult,
+    } = this.props;
     const { recognizeSuccess, recognizeFails } = ASNotifyTypes;
 
     this.startLoading();
 
-    const imageString = this.getImageFromCanvas();
+    const imageString = await this.getImageFromCanvas();
 
     if (!imageString) {
       this.endLoading();
@@ -151,14 +159,24 @@ export class AssetScanner extends React.Component<
     }
 
     if (strings !== null && strings.length >= 1) {
-      await this.getAssetsHandler(strings);
+      const assets = await this.getAssetsHandler(strings);
+
+      this.endLoading();
 
       this.notification(recognizeSuccess);
-    } else if (strings !== null) {
-      this.notification(recognizeFails);
-    }
 
-    this.endLoading();
+      if (onAssetFetchResult) {
+        onAssetFetchResult(assets);
+      }
+    } else if (strings !== null) {
+      this.endLoading();
+
+      this.notification(recognizeFails);
+
+      if (onImageRecognizeEmpty) {
+        onImageRecognizeEmpty();
+      }
+    }
   }
 
   render() {
@@ -185,6 +203,10 @@ export class AssetScanner extends React.Component<
   private startLoading() {
     const { onStartLoading } = this.props;
 
+    if (this.video) {
+      this.video.pause();
+    }
+
     this.setState({ isLoading: true });
 
     if (onStartLoading) {
@@ -194,6 +216,10 @@ export class AssetScanner extends React.Component<
 
   private endLoading() {
     const { onEndLoading } = this.props;
+
+    if (this.video) {
+      this.video.play();
+    }
 
     this.setState({ isLoading: false });
 
@@ -207,7 +233,11 @@ export class AssetScanner extends React.Component<
   }
 
   private prepareNotifications(): ASNotification {
-    const { customNotification } = this.props;
+    const { customNotification, enableNotification } = this.props;
+
+    if (!enableNotification) {
+      return () => false;
+    }
 
     return customNotification || this.embeddedNotification;
   }
@@ -233,13 +263,14 @@ export class AssetScanner extends React.Component<
       .reduce((res, current) => res.concat(current));
   }
 
-  private getImageFromCanvas(): string {
+  // Made async to provide better UX for component
+  private getImageFromCanvas(): Promise<string> {
     const { errorVideoAccess } = ASNotifyTypes;
 
     if (!this.video) {
       this.notification(errorVideoAccess);
 
-      return '';
+      return Promise.resolve('');
     }
 
     const aspectRatio = this.video.videoWidth / this.video.videoHeight;
@@ -249,7 +280,9 @@ export class AssetScanner extends React.Component<
       this.video.clientWidth / aspectRatio
     );
 
-    return canvas.toDataURL();
+    return new Promise(resolve =>
+      setTimeout(() => resolve(canvas.toDataURL()), 0)
+    );
   }
 
   private async recognizeImage(image: string): Promise<string[] | null> {
@@ -273,22 +306,20 @@ export class AssetScanner extends React.Component<
     }
   }
 
-  private async getAssetsHandler(strings: string[]) {
-    const { onError, onAssetFetchResult } = this.props;
+  private async getAssetsHandler(strings: string[]): Promise<Asset[]> {
+    const { onError } = this.props;
     const { errorOccurred } = ASNotifyTypes;
 
     try {
-      const assets = await this.getAssets(strings);
-
-      if (onAssetFetchResult) {
-        onAssetFetchResult(assets);
-      }
+      return await this.getAssets(strings);
     } catch (error) {
       this.notification(errorOccurred);
 
       if (onError) {
         onError(error);
       }
+
+      return [];
     }
   }
 }
