@@ -51,6 +51,49 @@ export const eventWithout = (field: string) => ({
 
 const baseTimestamp = 1556120152466;
 
+export const ASSET_META_STYLES = {
+  header: {
+    textAlign: 'center',
+    fontFamily: 'Comic Sans MS',
+    fontSize: '1.2em',
+    background: '#ffa3d2',
+  },
+  emptyTab: {
+    color: 'yellow',
+  },
+  details: {
+    fontSize: '1.2em',
+    color: 'green',
+  },
+  documents: {
+    wrapper: {
+      backgroundColor: 'yellow',
+    },
+    fileTitle: {
+      textAlign: 'right',
+      color: 'blue',
+    },
+    fileLink: {
+      textAlign: 'right',
+      color: 'red',
+    },
+    fileContainer: {
+      width: '50%',
+    },
+  },
+  events: {
+    table: {
+      width: '80%',
+    },
+    tableRow: {
+      background: '#00FF00',
+    },
+    tableCell: {
+      fontStyle: 'italic',
+    },
+  },
+};
+
 export const EVENTS: ApiEvent[] = [
   {
     id: 1995162693488,
