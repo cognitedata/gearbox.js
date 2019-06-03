@@ -1,5 +1,5 @@
 import * as sdk from '@cognite/sdk';
-import { Input, Tag } from 'antd';
+import { Button, Input, Tag } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
@@ -545,6 +545,133 @@ describe('TimeseriesSearch', () => {
         timeseriesList[1]
       );
       done();
+    });
+  });
+
+  describe('Select all button', () => {
+    it('should select all not string when allowStrings is false', done => {
+      const { onTimeserieSelectionChange } = propsCallbacks;
+      const props = {
+        assets: assetsList,
+        onTimeserieSelectionChange,
+        allowStrings: false,
+      };
+      const wrapper = mount(<TimeseriesSearch {...props} />);
+      const input = wrapper.find(Input).find('input');
+      input.simulate('change', { target: { value: 'a' } });
+      // need this to wait for promise to complete
+      setImmediate(() => {
+        wrapper.update();
+        wrapper
+          .find(Button)
+          .at(0)
+          .simulate('click');
+        expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(1);
+        expect(onTimeserieSelectionChange).toHaveBeenCalledWith(
+          timeseriesList.filter(x => !x.isString).map(x => x.id),
+          null
+        );
+        done();
+      });
+    });
+
+    it('should select all when allowStrings is true', done => {
+      const { onTimeserieSelectionChange } = propsCallbacks;
+      const props = {
+        assets: assetsList,
+        onTimeserieSelectionChange,
+        allowStrings: true,
+      };
+      const wrapper = mount(<TimeseriesSearch {...props} />);
+      const input = wrapper.find(Input).find('input');
+      input.simulate('change', { target: { value: 'a' } });
+      // need this to wait for promise to complete
+      setImmediate(() => {
+        wrapper.update();
+        wrapper
+          .find(Button)
+          .at(0)
+          .simulate('click');
+        expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(1);
+        expect(onTimeserieSelectionChange).toHaveBeenCalledWith(
+          timeseriesList.map(x => x.id),
+          null
+        );
+        done();
+      });
+    });
+
+    it('should be disabled if all already selected', done => {
+      const { onTimeserieSelectionChange } = propsCallbacks;
+      const props = {
+        assets: assetsList,
+        onTimeserieSelectionChange,
+        allowStrings: false,
+      };
+      const wrapper = mount(<TimeseriesSearch {...props} />);
+      const input = wrapper.find(Input).find('input');
+      input.simulate('change', { target: { value: 'a' } });
+      // need this to wait for promise to complete
+      setImmediate(() => {
+        wrapper.update();
+        const button = wrapper.find('button').at(0);
+        expect(button.getDOMNode().hasAttribute('disabled')).toBeFalsy();
+        button.simulate('click');
+        expect(button.getDOMNode().hasAttribute('disabled')).toBeTruthy();
+
+        done();
+      });
+    });
+  });
+
+  describe('Select none button', () => {
+    it('should clear all selected ', done => {
+      const { onTimeserieSelectionChange } = propsCallbacks;
+      const props = {
+        assets: assetsList,
+        onTimeserieSelectionChange,
+      };
+      const wrapper = mount(<TimeseriesSearch {...props} />);
+      const input = wrapper.find(Input).find('input');
+      input.simulate('change', { target: { value: 'a' } });
+      // need this to wait for promise to complete
+      setImmediate(() => {
+        wrapper.update();
+        wrapper
+          .find(DetailCheckbox)
+          .first()
+          .simulate('click');
+        wrapper
+          .find(DetailCheckbox)
+          .at(1)
+          .simulate('click');
+        wrapper
+          .find(Button)
+          .at(1)
+          .simulate('click');
+        expect(onTimeserieSelectionChange).toHaveBeenCalledTimes(3);
+        expect(onTimeserieSelectionChange).toHaveBeenNthCalledWith(3, [], null);
+        done();
+      });
+    });
+
+    it('should be disabled if none are selected', done => {
+      const { onTimeserieSelectionChange } = propsCallbacks;
+      const props = {
+        assets: assetsList,
+        onTimeserieSelectionChange,
+        allowStrings: false,
+      };
+      const wrapper = mount(<TimeseriesSearch {...props} />);
+      const input = wrapper.find(Input).find('input');
+      input.simulate('change', { target: { value: 'a' } });
+      // need this to wait for promise to complete
+      setImmediate(() => {
+        wrapper.update();
+        const button = wrapper.find('button').at(1);
+        expect(button.getDOMNode().hasAttribute('disabled')).toBeTruthy();
+        done();
+      });
     });
   });
 });

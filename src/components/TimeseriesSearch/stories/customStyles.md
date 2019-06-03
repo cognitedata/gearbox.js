@@ -19,7 +19,15 @@ function ExampleComponent(props) {
   return (
     <TimeseriesSearch
       onTimeserieSelectionChange={onTimeserieSelectionChange}
-      styles={{ list: { height: '200px' } }}
+      styles={{
+        list: { height: '200px' },
+        buttonRow: { marginTop: '30px' },
+        selectAllButton: { backgroundColor: 'lightblue' },
+        selectNoneButton: {
+          backgroundColor: 'magenta',
+          marginLeft: '50px',
+        },
+      }}
     />
   );
   
