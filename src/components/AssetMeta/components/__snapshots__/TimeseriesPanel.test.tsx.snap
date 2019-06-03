@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TimeseriesPanel Should match the snapshot 1`] = `
+<div
+  className="sc-jTzLTM jgohNR"
+>
+  <div
+    className="ant-collapse sc-fjdhpX fAFgBy"
+    role={null}
+  >
+    <div
+      className="ant-collapse-item sc-VigVT jQzTgw"
+    >
+      <div
+        aria-expanded="false"
+        className="ant-collapse-header"
+        onClick={[Function]}
+        onKeyPress={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        <i
+          aria-label="icon: right"
+          className="anticon anticon-right ant-collapse-arrow"
+        >
+          <svg
+            aria-hidden="true"
+            className=""
+            data-icon="right"
+            fill="currentColor"
+            height="1em"
+            viewBox="64 64 896 896"
+            width="1em"
+          >
+            <path
+              d="M765.7 486.8L314.9 134.7A7.97 7.97 0 0 0 302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 0 0 0-50.4z"
+            />
+          </svg>
+        </i>
+        IA_21PT1019.AlarmByte
+      </div>
+    </div>
+    <div
+      className="ant-collapse-item sc-VigVT jQzTgw"
+    >
+      <div
+        aria-expanded="false"
+        className="ant-collapse-header"
+        onClick={[Function]}
+        onKeyPress={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        <i
+          aria-label="icon: right"
+          className="anticon anticon-right ant-collapse-arrow"
+        >
+          <svg
+            aria-hidden="true"
+            className=""
+            data-icon="right"
+            fill="currentColor"
+            height="1em"
+            viewBox="64 64 896 896"
+            width="1em"
+          >
+            <path
+              d="M765.7 486.8L314.9 134.7A7.97 7.97 0 0 0 302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 0 0 0-50.4z"
+            />
+          </svg>
+        </i>
+        IA_21PT1019.CommandWord
+      </div>
+    </div>
+    <div
+      className="ant-collapse-item sc-VigVT jQzTgw"
+    >
+      <div
+        aria-expanded="false"
+        className="ant-collapse-header"
+        onClick={[Function]}
+        onKeyPress={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        <i
+          aria-label="icon: right"
+          className="anticon anticon-right ant-collapse-arrow"
+        >
+          <svg
+            aria-hidden="true"
+            className=""
+            data-icon="right"
+            fill="currentColor"
+            height="1em"
+            viewBox="64 64 896 896"
+            width="1em"
+          >
+            <path
+              d="M765.7 486.8L314.9 134.7A7.97 7.97 0 0 0 302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 0 0 0-50.4z"
+            />
+          </svg>
+        </i>
+        IA_21PT1019.PTAB
+      </div>
+    </div>
+  </div>
+</div>
+`;

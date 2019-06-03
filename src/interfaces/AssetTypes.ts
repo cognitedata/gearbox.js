@@ -1,7 +1,7 @@
 import { Asset, Event } from '@cognite/sdk';
 import { MetadataId } from './index';
 
-export type AssetPanelType = 'details' | 'events' | 'documents';
+export type AssetPanelType = 'details' | 'events' | 'documents' | 'timeseries';
 
 export interface TreeNodeData {
   title: string;

@@ -8,10 +8,12 @@ import { TimeseriesSearch } from '../TimeseriesSearch';
 import * as allowStrings from './allowStrings.md';
 import * as basic from './basic.md';
 import * as customFilter from './customFilter.md';
+import * as customStrings from './customStrings.md';
 import * as customStyles from './customStyles.md';
 import * as fullDescription from './full.md';
 import * as hideSelectedRow from './hideSelectedRow.md';
 import * as preselected from './preselected.md';
+import * as rootAssetSelect from './rootAssetSelect.md';
 import * as singleSelection from './singleSelection.md';
 
 const timeseriesNames = timeseriesList.map(ts => ts.name);
@@ -106,6 +108,23 @@ storiesOf('TimeseriesSearch/Examples', module)
     {
       readme: {
         content: injectTimeseriesNames(basic.toString()),
+      },
+    }
+  )
+  .add(
+    'Show root asset select',
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesSearch
+          onTimeserieSelectionChange={onTimeserieSelectionChange}
+          rootAssetSelect={true}
+        />
+      );
+    },
+    {
+      readme: {
+        content: injectTimeseriesNames(rootAssetSelect.toString()),
       },
     }
   )
@@ -208,6 +227,26 @@ storiesOf('TimeseriesSearch/Examples', module)
     {
       readme: {
         content: injectTimeseriesNames(customStyles.toString()),
+      },
+    }
+  )
+  .add(
+    'Custom strings',
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesSearch
+          onTimeserieSelectionChange={onTimeserieSelectionChange}
+          strings={{
+            rootAssetSelectAll: 'No filter',
+            searchPlaceholder: 'search for stuff!',
+          }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: injectTimeseriesNames(customStrings.toString()),
       },
     }
   );
