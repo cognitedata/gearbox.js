@@ -24,29 +24,13 @@ configure({ adapter: new Adapter() });
 
 beforeEach(() => {
   // @ts-ignore
-  retrieveAsset.mockImplementation(
-    async (): Promise<sdk.Asset> => {
-      return ASSET_DATA;
-    }
-  );
+  retrieveAsset.mockResolvedValue(ASSET_DATA);
   // @ts-ignore
-  getAssetEvent.mockImplementation(
-    async (): Promise<sdk.Event[]> => {
-      return EVENTS;
-    }
-  );
+  getAssetEvent.mockResolvedValue(EVENTS);
   // @ts-ignore
-  getAssetFiles.mockImplementation(
-    async (): Promise<sdk.File[]> => {
-      return DOCUMENTS;
-    }
-  );
+  getAssetFiles.mockResolvedValue(DOCUMENTS);
   // @ts-ignore
-  getAssetTimeseries.mockImplementation(
-    async (): Promise<sdk.Timeseries[]> => {
-      return timeseriesList;
-    }
-  );
+  getAssetTimeseries.mockResolvedValue(timeseriesList);
 });
 
 describe('AssetMeta', () => {
