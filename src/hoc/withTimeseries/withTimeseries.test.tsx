@@ -2,7 +2,6 @@ import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-// import {Timeseries} from '@cognite/sdk';
 import { timeseriesList } from '../../mocks';
 import { withTimeseries, WithTimeseriesDataProps } from './withTimeseries';
 
@@ -24,9 +23,7 @@ describe('withTimeresries', () => {
   });
 
   it('Should render spinner', () => {
-    const TestComponent = () => (
-      <div >Test Content</div>
-    );
+    const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withTimeseries(TestComponent);
     const wrapper = mount(<WrappedComponent timeseriesId={123} />);
 
@@ -34,10 +31,10 @@ describe('withTimeresries', () => {
   });
 
   it('Wrapped component should receive timeseries data after loading', done => {
-    const TestComponent: React.SFC<WithTimeseriesDataProps> = (props) => (
+    const TestComponent: React.SFC<WithTimeseriesDataProps> = props => (
       <div>
-        <p className='name'>{props.timeseries.name}</p>
-        <p className='description'>{props.timeseries.description}</p>
+        <p className="name">{props.timeseries.name}</p>
+        <p className="description">{props.timeseries.description}</p>
       </div>
     );
     const WrappedComponent = withTimeseries(TestComponent);
@@ -46,25 +43,23 @@ describe('withTimeresries', () => {
     setImmediate(() => {
       wrapper.update();
       expect(wrapper.find('p.name').text()).toEqual(timeseries.name);
-      expect(wrapper.find('p.description').text()).toEqual(timeseries.description);
+      expect(wrapper.find('p.description').text()).toEqual(
+        timeseries.description
+      );
       done();
     });
   });
 
   it('Should request for timeseries if timeseriesId has been changed', done => {
-    const TestComponent = () => (
-      <div/>
-    );
+    const TestComponent = () => <div />;
     const WrappedComponent = withTimeseries(TestComponent);
     const wrapper = mount(<WrappedComponent timeseriesId={123} />);
 
-    wrapper.setProps({timeseriesId: 1234});
+    wrapper.setProps({ timeseriesId: 1234 });
 
     setImmediate(() => {
       expect(sdk.TimeSeries.retrieve).toBeCalledTimes(2);
       done();
     });
   });
-
-
 });

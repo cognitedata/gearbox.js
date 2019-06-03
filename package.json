@@ -92,7 +92,8 @@
     "tslint-plugin-prettier": "^2.0.1",
     "tslint-react": "^3.6.0",
     "tslint-sonarts": "^1.9.0",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.3.3333",
+    "utility-types": "^3.7.0"
   },
   "peerDependencies": {
     "@cognite/griff-react": "^0.4.2",

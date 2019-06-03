@@ -1,11 +1,12 @@
 import { Timeseries } from '@cognite/sdk';
 import * as sdk from '@cognite/sdk';
 import React from 'react';
-import {LoadingOverlay} from '../../components/common/LoadingOverlay/LoadingOverlay';
+import styled from 'styled-components';
+import { Subtract } from 'utility-types';
+import { LoadingOverlay } from '../../components/common/LoadingOverlay/LoadingOverlay';
 
 export interface WithTimeseriesDataProps {
   timeseries: Timeseries;
-  timeseriesId: number;
 }
 
 export interface WithTimeseriesProps {
@@ -18,24 +19,17 @@ interface WithTimeseriesState {
   timeseriesId: number;
 }
 
-export function withTimeseries(
-  WrapperComponent: React.ComponentType<WithTimeseriesDataProps>
+export function withTimeseries<P extends WithTimeseriesDataProps>(
+  WrapperComponent: React.ComponentType<P>
 ) {
   return class WithTimeseriesData extends React.Component<
-    WithTimeseriesProps,
+    Subtract<P, WithTimeseriesDataProps> & WithTimeseriesProps,
     WithTimeseriesState
   > {
-    constructor(props: WithTimeseriesProps) {
-      super(props);
-
-      this.state = {
-        isLoading: true,
-        timeseries: null,
-        timeseriesId: props.timeseriesId,
-      };
-    }
-
-    static getDerivedStateFromProps(props: WithTimeseriesProps, state: WithTimeseriesState) {
+    static getDerivedStateFromProps(
+      props: P & WithTimeseriesProps,
+      state: WithTimeseriesState
+    ) {
       if (props.timeseriesId !== state.timeseriesId) {
         return {
           isLoading: true,
@@ -46,12 +40,21 @@ export function withTimeseries(
 
       return null;
     }
+    constructor(props: P & WithTimeseriesProps) {
+      super(props);
+
+      this.state = {
+        isLoading: true,
+        timeseries: null,
+        timeseriesId: props.timeseriesId,
+      };
+    }
 
     async componentDidMount() {
       this.loadTimeseries();
     }
 
-    async componentDidUpdate(prevProps: WithTimeseriesProps) {
+    async componentDidUpdate(prevProps: P & WithTimeseriesProps) {
       if (prevProps.timeseriesId !== this.props.timeseriesId) {
         this.loadTimeseries();
       }
@@ -73,14 +76,28 @@ export function withTimeseries(
       const { isLoading, timeseries } = this.state;
 
       if (isLoading) {
-        return  <LoadingOverlay isLoading={true} />;
+        return (
+          <SpinnerContainer>
+            <LoadingOverlay isLoading={true} backgroundColor={'none'} />
+          </SpinnerContainer>
+        );
       }
 
       if (timeseries) {
-        return <WrapperComponent {...this.props} timeseries={timeseries} />;
+        return (
+          <WrapperComponent
+            {...(this.props as any) as P}
+            timeseries={timeseries}
+          />
+        );
       }
 
-      return 'null';
+      return null;
     }
   };
 }
+
+const SpinnerContainer = styled.div`
+  position: relative;
+  height: 300px;
+`;
