@@ -62,4 +62,18 @@ describe('withTimeresries', () => {
       done();
     });
   });
+
+  it('Should not call setState on unmounted component', done => {
+    const TestComponent = () => <div />;
+    const WrappedComponent = withTimeseries(TestComponent);
+    WrappedComponent.prototype.setState = jest.fn();
+    const wrapper = mount(<WrappedComponent timeseriesId={123} />);
+
+    wrapper.unmount();
+
+    setImmediate(() => {
+      expect(WrappedComponent.prototype.setState).not.toHaveBeenCalled();
+      done();
+    });
+  });
 });

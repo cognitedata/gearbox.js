@@ -2,11 +2,11 @@ import { Spin } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 
-const SpinContainer = styled(Spin)<{ backgroundColor?: string }>`
+const SpinContainer = styled(Spin)<{ backgroundcolor?: string }>`
   width: 100%;
   height: 100%;
   position: absolute !important;
-  background-color: ${({ backgroundColor }) => backgroundColor};
+  background-color: ${({ backgroundcolor }) => backgroundcolor};
   z-index: 100;
 
   &:before {
@@ -18,7 +18,7 @@ const SpinContainer = styled(Spin)<{ backgroundColor?: string }>`
 `;
 
 SpinContainer.defaultProps = {
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  backgroundcolor: 'rgba(0, 0, 0, 0.5)',
 };
 
 interface LoadingOverlayProps {
@@ -39,7 +39,7 @@ export function LoadingOverlay({
       <SpinContainer
         delay={delay}
         size={size}
-        backgroundColor={backgroundColor}
+        backgroundcolor={backgroundColor}
       />
     );
   }

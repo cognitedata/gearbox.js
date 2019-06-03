@@ -4,6 +4,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { Subtract } from 'utility-types';
 import { LoadingOverlay } from '../../components/common/LoadingOverlay/LoadingOverlay';
+import {
+  CanceledPromiseException,
+  ComponentWithUnmountState,
+  connectPromiseToUnmountState,
+} from '../../utils/promise';
 
 export interface WithTimeseriesDataProps {
   timeseries: Timeseries;
@@ -13,19 +18,21 @@ export interface WithTimeseriesProps {
   timeseriesId: number;
 }
 
-interface WithTimeseriesState {
+export interface WithTimeseriesState {
   isLoading: boolean;
   timeseries: Timeseries | null;
   timeseriesId: number;
 }
 
-export function withTimeseries<P extends WithTimeseriesDataProps>(
+export const withTimeseries = <P extends WithTimeseriesDataProps>(
   WrapperComponent: React.ComponentType<P>
-) {
-  return class WithTimeseriesData extends React.Component<
-    Subtract<P, WithTimeseriesDataProps> & WithTimeseriesProps,
-    WithTimeseriesState
-  > {
+) =>
+  class
+    extends React.Component<
+      Subtract<P, WithTimeseriesDataProps> & WithTimeseriesProps,
+      WithTimeseriesState
+    >
+    implements ComponentWithUnmountState {
     static getDerivedStateFromProps(
       props: P & WithTimeseriesProps,
       state: WithTimeseriesState
@@ -40,6 +47,9 @@ export function withTimeseries<P extends WithTimeseriesDataProps>(
 
       return null;
     }
+
+    isComponentUnmounted = false;
+
     constructor(props: P & WithTimeseriesProps) {
       super(props);
 
@@ -50,26 +60,36 @@ export function withTimeseries<P extends WithTimeseriesDataProps>(
       };
     }
 
-    async componentDidMount() {
+    componentDidMount() {
       this.loadTimeseries();
     }
 
-    async componentDidUpdate(prevProps: P & WithTimeseriesProps) {
+    componentWillUnmount() {
+      this.isComponentUnmounted = true;
+    }
+
+    componentDidUpdate(prevProps: P & WithTimeseriesProps) {
       if (prevProps.timeseriesId !== this.props.timeseriesId) {
         this.loadTimeseries();
       }
     }
 
     async loadTimeseries() {
-      const timeseries = await sdk.TimeSeries.retrieve(
-        this.props.timeseriesId,
-        true
-      );
+      try {
+        const timeseries = await connectPromiseToUnmountState(
+          this,
+          sdk.TimeSeries.retrieve(this.props.timeseriesId, true)
+        );
 
-      this.setState({
-        isLoading: false,
-        timeseries,
-      });
+        this.setState({
+          isLoading: false,
+          timeseries,
+        });
+      } catch (error) {
+        if (error instanceof CanceledPromiseException !== true) {
+          throw error;
+        }
+      }
     }
 
     render() {
@@ -95,7 +115,6 @@ export function withTimeseries<P extends WithTimeseriesDataProps>(
       return null;
     }
   };
-}
 
 const SpinnerContainer = styled.div`
   position: relative;
