@@ -48,7 +48,7 @@ function ExampleComponent(props) {
 ### Types
 
 ### MetaTimeseriesProps
-The object that customizes appearance of "Timeseries" pane. Property `noTimeseriesSign` defines custom message to be shown if no timeseries were found for the asset.
+The object that customizes the appearance of "Timeseries" pane. Property `strings` defines text literals for the inner component that represents a list of timeseries and in particular `noTimeseriesSign` property defines a custom message to be shown if no timeseries were found for the asset.
 Other properties define appearance of `TimeseriesChartMeta` component which is shown if any entry in the list was expanded. See `TimeseriesChartMeta` component for more details.
 `MetaTimeseriesProps` type can be imported from @cognite/gearbox:
 
@@ -60,7 +60,9 @@ Definition:
 
 ```typescript
 interface MetaTimeseriesProps {
-  noTimeseriesSign?: string;
+  strings?: {
+    noTimeseriesSign?: string;
+  };
   liveUpdate?: boolean;
   updateIntervalMillis?: number;
   defaultTimePeriod?: TimeseriesChartMetaPeriod;

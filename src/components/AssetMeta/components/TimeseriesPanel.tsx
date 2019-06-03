@@ -9,7 +9,9 @@ import {
 
 export interface MetaTimeseriesProps
   extends Omit<TimeseriesChartMetaProps, 'timeseries'> {
-  noTimeseriesSign?: string;
+  strings?: {
+    noTimeseriesSign?: string;
+  };
 }
 
 export interface TimeseriesPanelProps extends MetaTimeseriesProps {
@@ -17,17 +19,19 @@ export interface TimeseriesPanelProps extends MetaTimeseriesProps {
 }
 
 export class TimeseriesPanel extends React.PureComponent<TimeseriesPanelProps> {
-  static defaultProps = {};
+  static defaultProps = {
+    strings: {
+      noTimeseriesSign: 'No timeseries linked to this asset',
+    },
+  };
 
   render() {
-    const { noTimeseriesSign, timeseries, ...rest } = this.props;
+    const { strings, timeseries, ...rest } = this.props;
 
     if (!timeseries || !timeseries.length) {
       return (
         <NoTimeseries data-test-id="no-timeseries">{`${
-          noTimeseriesSign
-            ? noTimeseriesSign
-            : 'No timeseries linked to this asset'
+          strings!.noTimeseriesSign
         }`}</NoTimeseries>
       );
     }
