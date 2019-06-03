@@ -26,7 +26,6 @@ export interface AssetSearchProps {
 interface AssetSearchState {
   items: sdk.Asset[];
   loading: boolean;
-  rootAssets?: sdk.Asset[];
 }
 
 export class AssetSearch extends React.Component<
@@ -45,20 +44,6 @@ export class AssetSearch extends React.Component<
     };
 
     this.onSearch = this.onSearch.bind(this);
-  }
-
-  async componentDidMount() {
-    if (this.props.rootAssetSelect) {
-      const apiAssets = await sdk.Assets.list({ depth: 0 });
-      this.setState({ rootAssets: apiAssets.items });
-    }
-  }
-
-  async componentDidUpdate(prevProps: AssetSearchProps) {
-    if (!prevProps.rootAssetSelect && this.props.rootAssetSelect) {
-      const apiAssets = await sdk.Assets.list({ depth: 0 });
-      this.setState({ rootAssets: apiAssets.items });
-    }
   }
 
   async onSearch(query: ApiQuery) {
@@ -103,7 +88,7 @@ export class AssetSearch extends React.Component<
       styles,
     } = this.props;
     const resultStrings = { ...defaultStrings, ...strings };
-    const { items, loading, rootAssets } = this.state;
+    const { items, loading } = this.state;
 
     return (
       <Search
@@ -113,7 +98,6 @@ export class AssetSearch extends React.Component<
         onLiveSearchSelect={onLiveSearchSelect}
         strings={resultStrings}
         loading={loading}
-        assets={rootAssets}
         rootAssetSelect={rootAssetSelect}
         advancedSearch={advancedSearch}
         styles={styles}

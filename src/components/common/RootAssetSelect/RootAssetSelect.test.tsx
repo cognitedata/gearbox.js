@@ -1,3 +1,4 @@
+import * as sdk from '@cognite/sdk';
 import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -8,43 +9,67 @@ configure({ adapter: new Adapter() });
 
 const onAssetSelected = jest.fn();
 
-describe('EventPreview', () => {
-  it('Renders without exploding', () => {
-    const wrapper = mount(<RootAssetSelect assets={assetsList} />);
+sdk.Assets.list = jest.fn();
+
+beforeEach(() => {
+  // @ts-ignore
+  sdk.Assets.list.mockResolvedValue({ items: assetsList });
+});
+
+afterAll(() => {
+  jest.clearAllMocks();
+});
+
+describe('RootAssetSelect', () => {
+  it('renders without exploding', () => {
+    const wrapper = mount(<RootAssetSelect />);
     expect(wrapper.exists()).toBeTruthy();
   });
 
-  it('Loading assets', () => {
-    const { loading } = defaultStrings;
-    const wrapper = mount(<RootAssetSelect assets={[]} />);
-
-    wrapper.simulate('click');
-
-    const dropList = wrapper.find('.ant-select-dropdown ul');
-
-    expect(dropList.children().length).toEqual(1);
-    expect(
-      dropList
-        .find('li')
-        .at(0)
-        .text()
-    ).toEqual(loading);
-  });
-
-  it('Check AssetSelected callback', () => {
+  it('onSelectAsset should be triggered', async done => {
     const wrapper = shallow(
-      <RootAssetSelect assets={assetsList} onAssetSelected={onAssetSelected} />
+      <RootAssetSelect onAssetSelected={onAssetSelected} />
     );
     const instance = wrapper.instance() as RootAssetSelect;
     const onSelectAsset = jest.spyOn(instance, 'onSelectAsset');
     const assetId = assetsList[0].id;
 
-    instance.forceUpdate();
+    setImmediate(() => {
+      instance.forceUpdate();
 
-    wrapper.find('Select').simulate('change', assetId);
+      wrapper.find('Select').simulate('change', assetId);
 
-    expect(onSelectAsset).toHaveBeenCalledWith(assetId);
-    expect(onAssetSelected).toHaveBeenCalledWith(assetId);
-    expect(wrapper.state('current')).toEqual(assetId);
+      expect(onSelectAsset).toHaveBeenCalledWith(assetId);
+      expect(onAssetSelected).toHaveBeenCalledWith(assetId);
+      expect(wrapper.state('current')).toEqual(assetId);
+
+      done();
+    });
+  });
+
+  // @ts-ignore
+  sdk.Assets.list.mockResolvedValue({ items: [] });
+
+  it('should renders loading state', done => {
+    // @ts-ignore
+    sdk.Assets.list.mockResolvedValue({ items: [] });
+
+    const { loading } = defaultStrings;
+    const wrapper = mount(<RootAssetSelect />);
+    setImmediate(() => {
+      wrapper.simulate('click');
+
+      const dropList = wrapper.find('.ant-select-dropdown ul');
+
+      expect(dropList.children().length).toEqual(1);
+      expect(
+        dropList
+          .find('li')
+          .at(0)
+          .text()
+      ).toEqual(loading);
+
+      done();
+    });
   });
 });

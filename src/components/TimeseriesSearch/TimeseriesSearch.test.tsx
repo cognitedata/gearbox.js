@@ -90,6 +90,7 @@ describe('TimeseriesSearch', () => {
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = {
       onTimeserieSelectionChange,
+      rootAssetSelect: true,
     };
     const wrapper = mount(<TimeseriesSearch {...props} />);
 

@@ -3,8 +3,9 @@ import { Spin } from 'antd';
 import { debounce } from 'lodash';
 import React, { KeyboardEvent } from 'react';
 import styled from 'styled-components';
-import { ApiQuery } from '../../interfaces';
+import { ApiQuery, PureObject } from '../../interfaces';
 import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
+import { defaultStrings as rootAssetSelectStrings } from '../common/RootAssetSelect/RootAssetSelect';
 import { Search } from '../common/Search/Search';
 import { Item, SelectedItems } from './SelectedItems';
 
@@ -51,11 +52,17 @@ export interface TimeseriesSearchProps {
   filterRule?: (timeseries: sdk.Timeseries) => boolean;
   onError?: (error: Error) => void;
   styles?: TimeseriesSearchStyles;
+  rootAssetSelect: boolean;
+  strings: PureObject;
 }
+export const defaultStrings: PureObject = {
+  searchPlaceholder: 'Search for timeseries',
+  rootAssetSelectAll: rootAssetSelectStrings.all,
+  rootAssetSelectLoading: rootAssetSelectStrings.loading,
+};
 
 interface TimeseriesSearchState {
   assetId?: number;
-  assets: sdk.Asset[];
   fetching: boolean;
   searchResults: sdk.Timeseries[];
   selectedTimeseries: sdk.Timeseries[];
@@ -69,9 +76,11 @@ export class TimeseriesSearch extends React.Component<
 > {
   static defaultProps = {
     selectedTimeseries: [],
+    strings: {},
     filterRule: undefined,
     hideSelected: false,
     allowStrings: false,
+    rootAssetSelect: false,
     single: false,
     onError: undefined,
     rootAsset: undefined,
@@ -95,7 +104,6 @@ export class TimeseriesSearch extends React.Component<
       searchResults: [],
       selectedTimeseries: [],
       lastFetchId: 0,
-      assets: [],
     };
     this.fetchTimeseries = debounce(this.fetchTimeseries, 200, {
       leading: false,
@@ -104,23 +112,6 @@ export class TimeseriesSearch extends React.Component<
   }
 
   async componentDidMount() {
-    const apiAssets = await sdk.Assets.list({ depth: 0 });
-    const assets = apiAssets.items.map(
-      (apiAsset: sdk.Asset): sdk.Asset => {
-        return {
-          id: apiAsset.id,
-          name: apiAsset.name || '',
-          description: apiAsset.description,
-          path: apiAsset.path,
-          depth: apiAsset.depth,
-          metadata: apiAsset.metadata,
-          parentId: apiAsset.parentId,
-          createdTime: apiAsset.createdTime,
-          lastUpdatedTime: apiAsset.lastUpdatedTime,
-        };
-      }
-    );
-    this.setState({ assets });
     const { selectedTimeseries } = this.props;
     if (selectedTimeseries && selectedTimeseries.length > 0) {
       const timeseries = await sdk.TimeSeries.retrieveMultiple(
@@ -278,16 +269,22 @@ export class TimeseriesSearch extends React.Component<
   };
 
   render() {
-    const { allowStrings, single, hideSelected, styles } = this.props;
+    const {
+      allowStrings,
+      single,
+      hideSelected,
+      rootAssetSelect,
+      styles,
+      strings,
+    } = this.props;
     const {
       assetId,
       fetching,
       searchResults,
-      assets,
       selectedTimeseries,
       cursor,
     } = this.state;
-
+    const lang = { ...defaultStrings, ...strings };
     return (
       <Wrapper>
         {!hideSelected && (
@@ -300,12 +297,15 @@ export class TimeseriesSearch extends React.Component<
           />
         )}
         <Search
-          rootAssetSelect={true}
+          rootAssetSelect={rootAssetSelect}
           onAssetSelected={this.onSelectAsset}
-          assets={assets}
           assetId={assetId || 0}
           onSearch={this.fetchTimeseries}
-          strings={{ searchPlaceholder: 'Search for timeseries' }}
+          strings={{
+            searchPlaceholder: lang.searchPlaceholder,
+            rootAssetSelectAll: lang.rootAssetSelectAll,
+            rootAssetSelectLoading: lang.rootAssetSelectLoading,
+          }}
           onKeyDown={this.onKeyDown}
         />
         <TagList style={styles && styles.list}>
