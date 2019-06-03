@@ -7,6 +7,8 @@ import {
   Files,
   Revision,
   ThreeD,
+  TimeSeries,
+  Timeseries,
 } from '@cognite/sdk';
 import { ApiAssetList } from '../interfaces';
 
@@ -72,5 +74,13 @@ export async function getAssetFiles(query: {
   limit: number;
 }): Promise<File[]> {
   const response = await Files.list(query);
+  return response.items;
+}
+
+export async function getAssetTimeseries(query: {
+  assetId: number;
+  limit: number;
+}): Promise<Timeseries[]> {
+  const response = await TimeSeries.list(query);
   return response.items;
 }

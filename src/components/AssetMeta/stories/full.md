@@ -4,10 +4,12 @@
 
 ### Description:
 
-This component loads meta information for an asset and presents in three tabbed panes: "Details", "Documents" and "Events".
+This component loads meta information for an asset and presents in four tabbed panes: "Details", "Timeseries", "Documents" and "Events".
 First pane "Details" shows metadata about the asset itself as a table with two columns containing key-value pairs.
-Second pane "Documents" presents uploaded files related to the asset. Third pane "Events" shows a list of events related to the asset.
-The component requires only `assetId` prop and once passed it makes three API requests for asset metadata, documents, and events.
+Second pane "Timeseries" shows list of timeseries associated with the asset and each item in the list can be expanded showing timeseries
+chart, current data point (sensor value), meta data of the timeseries, etc.
+Third pane "Documents" presents uploaded files related to the asset. Fourth pane "Events" shows a list of events related to the asset.
+The component requires only `assetId` prop and once passed it makes four API requests for asset metadata, timeseries, documents, and events.
 In case if some of the panes are not necessary it can be disabled by `hidePanels` prop.
 
 #### Usage:
@@ -39,10 +41,43 @@ function ExampleComponent(props) {
 | `hidePanels`   | List of panes to be hidden                                             | `Array<'details' \| 'documents' \| 'events'>` |             |
 | `tab`          | Defines pane that will be activated once the data has been loaded      | `'details' \| 'documents' \| 'events'`        | `'details'` |
 | `onPaneChange` | Function triggered when a user changes panes                           | `(tab: string) => void`                       |             |
+| `timeseriesProps`| Object passed as props to inner component that presents timeseries pane | `MetaTimeseriesProps`                      |             |
 | `docsProps`    | Object passed as props to inner component that presents documents pane | `MetaDocProps`                                |             |
 | `eventProps`   | Object passed as props to inner component that presents events pane    | `MetaEventsProps`                             |             |
 
 ### Types
+
+### MetaTimeseriesProps
+The object that customizes appearance of "Timeseries" pane. Property `noTimeseriesSign` defines custom message to be shown if no timeseries were found for the asset.
+Other properties define appearance of `TimeseriesChartMeta` component which is shown if any entry in the list was expanded. See `TimeseriesChartMeta` component for more details.
+`MetaTimeseriesProps` type can be imported from @cognite/gearbox:
+
+```typescript
+import { MetaTimeseriesProps } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+interface MetaTimeseriesProps {
+  noTimeseriesSign?: string;
+  liveUpdate?: boolean;
+  updateIntervalMillis?: number;
+  defaultTimePeriod?: TimeseriesChartMetaPeriod;
+  defaultBasePeriod?: {
+    startTime: number;
+    endTime: number;
+  };
+  showDescription?: boolean;
+  showPeriods?: boolean;
+  showChart?: boolean;
+  showDatapoint?: boolean;
+  showMetadata?: boolean;
+}
+
+type TimeseriesChartMetaPeriod =  'lastYear' | 'lastMonth' | 'lastWeek' | 'lastDay' | 'lastHour' | 'last15minutes';
+
+```
 
 #### MetaDocProps
 This prop customizes the appearance of "Documents" pane.

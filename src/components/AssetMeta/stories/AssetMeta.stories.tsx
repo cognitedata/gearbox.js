@@ -1,22 +1,28 @@
 import {
   Asset,
   Assets,
+  Datapoint,
+  Datapoints,
   EventDataWithCursor,
   Events,
   FileMetadataWithCursor,
   Files,
+  TimeSeries,
+  TimeseriesWithCursor,
 } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { Document } from '../../../interfaces';
-import { ASSET_DATA, DOCUMENTS, EVENTS } from '../../../mocks';
+import { ASSET_DATA, DOCUMENTS, EVENTS, timeseriesList } from '../../../mocks';
+import { setupMocks as setupTimeseriesChartMocks } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { AssetMeta } from '../AssetMeta';
 import alternatePane from './alternatePane.md';
 import basic from './basic.md';
 import customCategorySort from './customCategorySort.md';
 import customPriorityAndSort from './customPriorityAndSort.md';
 import customPriorityCategory from './customPriorityCategory.md';
+import customTimeseriesChartMeta from './customTimeseriesChartMeta.md';
 import fullDescription from './full.md';
 import hideTab from './hideTab.md';
 import selectedDocument from './selectedDocument.md';
@@ -38,6 +44,17 @@ Files.list = async (): Promise<FileMetadataWithCursor> => {
   return { items: DOCUMENTS };
 };
 
+TimeSeries.list = async (): Promise<TimeseriesWithCursor> => {
+  return { items: timeseriesList };
+};
+
+Datapoints.retrieveLatest = async (name: string): Promise<Datapoint> => {
+  return {
+    timestamp: Date.now(),
+    value: name.length + Math.random() * 5.0, // just random number
+  };
+};
+
 const onPaneChange = (key: string) => action('onPaneChange')(key);
 const handleDocumentClick = (
   document: Document,
@@ -49,7 +66,10 @@ const handleDocumentClick = (
 
 storiesOf('AssetMeta', module).add(
   'Full Description',
-  () => <AssetMeta assetId={4650652196144007} />,
+  () => {
+    setupTimeseriesChartMocks();
+    return <AssetMeta assetId={4650652196144007} />;
+  },
   {
     readme: {
       content: fullDescription,
@@ -58,14 +78,26 @@ storiesOf('AssetMeta', module).add(
 );
 
 storiesOf('AssetMeta/Examples', module)
-  .add('Basic', () => <AssetMeta assetId={4650652196144007} />, {
-    readme: {
-      content: basic,
+  .add(
+    'Basic',
+    () => {
+      setupTimeseriesChartMocks();
+      return <AssetMeta assetId={4650652196144007} />;
     },
-  })
+    {
+      readme: {
+        content: basic,
+      },
+    }
+  )
   .add(
     'Returns selected pane',
-    () => <AssetMeta assetId={4650652196144007} onPaneChange={onPaneChange} />,
+    () => {
+      setupTimeseriesChartMocks();
+      return (
+        <AssetMeta assetId={4650652196144007} onPaneChange={onPaneChange} />
+      );
+    },
     {
       readme: {
         content: selectedPane,
@@ -74,7 +106,10 @@ storiesOf('AssetMeta/Examples', module)
   )
   .add(
     'Alternate default tab',
-    () => <AssetMeta assetId={4650652196144007} tab="documents" />,
+    () => {
+      setupTimeseriesChartMocks();
+      return <AssetMeta assetId={4650652196144007} tab="documents" />;
+    },
     {
       readme: {
         content: alternatePane,
@@ -83,13 +118,16 @@ storiesOf('AssetMeta/Examples', module)
   )
   .add(
     'Hide a tab',
-    () => (
-      <AssetMeta
-        assetId={4650652196144007}
-        tab="events"
-        hidePanels={['details']}
-      />
-    ),
+    () => {
+      setupTimeseriesChartMocks();
+      return (
+        <AssetMeta
+          assetId={4650652196144007}
+          tab="events"
+          hidePanels={['details']}
+        />
+      );
+    },
     {
       readme: {
         content: hideTab,
@@ -98,7 +136,10 @@ storiesOf('AssetMeta/Examples', module)
   )
   .add(
     'Returns selected document',
-    () => <AssetMeta assetId={123} docsProps={{ handleDocumentClick }} />,
+    () => {
+      setupTimeseriesChartMocks();
+      return <AssetMeta assetId={123} docsProps={{ handleDocumentClick }} />;
+    },
     {
       readme: {
         content: selectedDocument,
@@ -108,6 +149,7 @@ storiesOf('AssetMeta/Examples', module)
   .add(
     'Custom priority categories',
     () => {
+      setupTimeseriesChartMocks();
       return (
         <AssetMeta
           assetId={123}
@@ -124,6 +166,7 @@ storiesOf('AssetMeta/Examples', module)
   .add(
     'Custom categories sort',
     () => {
+      setupTimeseriesChartMocks();
       const customSort = (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0);
       return (
         <AssetMeta
@@ -144,6 +187,7 @@ storiesOf('AssetMeta/Examples', module)
   .add(
     'Custom category priority and sort',
     () => {
+      setupTimeseriesChartMocks();
       const customSort = (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0);
       return (
         <AssetMeta
@@ -158,6 +202,29 @@ storiesOf('AssetMeta/Examples', module)
     {
       readme: {
         content: customPriorityAndSort,
+      },
+    }
+  )
+  .add(
+    'Custom TimeseriesChartMeta',
+    () => {
+      setupTimeseriesChartMocks();
+      return (
+        <AssetMeta
+          assetId={123}
+          timeseriesProps={{
+            defaultTimePeriod: 'lastYear',
+            showMetadata: false,
+            showDatapoint: false,
+            showDescription: false,
+            liveUpdate: false,
+          }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: customTimeseriesChartMeta,
       },
     }
   );
