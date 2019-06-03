@@ -57,7 +57,7 @@ describe('TimeseriesChartMeta', () => {
     expect(checkedLabel.text()).toEqual('1 hour');
   });
 
-  it('Should not have active period selected is defaultBasePeriod has been provided', () => {
+  it('Should not have active period selected if defaultBasePeriod has been provided', () => {
     const wrapper = mount(
       <TimeseriesChartMeta
         timeseries={timeseries}
