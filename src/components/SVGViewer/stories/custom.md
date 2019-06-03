@@ -10,13 +10,12 @@
 
 ```typescript jsx
 import 'antd/dist/antd.css';
-
+import styled from 'styled-components';
 import React from 'react';
 import { SVGViewer } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
-
-  const Container = styled.div`
+  const Container = styled.div\` 
     &.search-result {
       &.metadata-container {
         text {
@@ -32,7 +31,7 @@ function ExampleComponent(props) {
       }
     }
   `;
-
+  
   return (
     <div style={{ height: '100vh' }}>
       <Container style={{ height: '100vh' }}>

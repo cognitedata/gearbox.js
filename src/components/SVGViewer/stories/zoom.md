@@ -12,9 +12,18 @@ While zooming callback is params will be fired
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { SVGViewer } from '@cognite/gearbox';
+import { SVGViewer, ZoomCenter } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
+  const zoomCallback = ({ 
+    zoomProgress, 
+    source, 
+    zoomCenter 
+  } : { 
+    zoomProgress: number;
+    source: string; 
+    zoomCenter?: ZoomCenter; 
+  }): void => {};
 
   return (
     <div style={{ height: '100vh' }}>

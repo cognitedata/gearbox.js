@@ -265,7 +265,7 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
         .reduce((acc, node) => acc + node.clientHeight, 0);
       const svgNodeHeight =
         this.svgParentNode.current.clientHeight - nonSvgChildrenHeight;
-      this.pinchZoomContainer.current.style.height = `${svgNodeHeight}px`;
+      this.pinchZoomContainer.current.style.height = `${svgNodeHeight - 1}px`;
     }
   };
 

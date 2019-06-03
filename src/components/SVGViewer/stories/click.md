@@ -15,6 +15,7 @@ import React from 'react';
 import { SVGViewer } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
+  const handleItemClick = (metadataNode: HTMLElement): void => {};
 
   return (
     <div style={{ height: '100vh' }}>
