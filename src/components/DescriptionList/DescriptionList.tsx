@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ValueListType } from '../../interfaces';
-import { mapMetaData } from '../../utils';
+import { mapMetaData } from '../../utils/formatters';
 
 const DL = styled('dl')`
   display: flex;
@@ -58,6 +58,7 @@ export interface DescriptionListProps {
     descriptionText: string;
   };
   valueSet: { [name: string]: any };
+  styles?: React.CSSProperties;
 }
 
 export const DescriptionList = (props: DescriptionListProps) => {
@@ -71,7 +72,10 @@ export const DescriptionList = (props: DescriptionListProps) => {
         <p id={description.descriptionId}>{description.descriptionText}</p>
       )}
       {arrayValues.length >= 1 ? (
-        <DL aria-describedby={description ? description.descriptionId : ''}>
+        <DL
+          style={props.styles}
+          aria-describedby={description ? description.descriptionId : ''}
+        >
           {arrayValues.map((valSet: ValueListType) => (
             <React.Fragment key={valSet.key || valSet.name}>
               <dt>{valSet.name}</dt>

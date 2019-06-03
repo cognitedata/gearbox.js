@@ -1,10 +1,11 @@
 {
   "name": "@cognite/gearbox",
-  "version": "0.0.34",
+  "version": "0.0.37",
   "description": "GearBox will be a place for application developers to contribute useful, reusable components across applications",
   "contributors": [],
   "main": "dist/index.js",
   "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -16,7 +17,7 @@
   "scripts": {
     "build": "yarn clean && rollup -c && yarn esCheck",
     "build-storybook": "build-storybook -s ./public",
-    "clean": "rm -rf dist",
+    "clean": "rimraf dist",
     "esCheck": "es-check es5 './dist/index.js'",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c tslint.json -p tsconfig.json --fix",
@@ -81,6 +82,7 @@
     "react-dnd-test-backend": "^7.4.4",
     "react-test-renderer": "^16.8.5",
     "regenerator-runtime": "^0.13.2",
+    "rimraf": "^2.6.3",
     "rollup": "^1.2.0",
     "rollup-plugin-json": "^3.1.0",
     "rollup-plugin-typescript2": "^0.21.0",

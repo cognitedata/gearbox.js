@@ -122,6 +122,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
       return;
     }
+
     this.model = model;
     this.revision = revision;
     this.nodes = nodes;
@@ -235,7 +236,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <input
           type="text"
           onBlur={this.onBlur}
@@ -247,7 +248,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
           style={{ width: '100%', height: '100%', fontSize: 0 }}
           ref={this.divWrapper}
         />
-      </div>
+      </React.Fragment>
     );
   }
   private async findMappedNodes(): Promise<sdk.AssetMapping[]> {

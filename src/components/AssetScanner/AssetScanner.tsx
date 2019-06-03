@@ -6,11 +6,11 @@ import { getAssetList, ocrRecognize } from '../../api';
 import {
   Callback,
   EmptyCallback,
+  OcrRequest,
   OnAssetListCallback,
+  PureObject,
   SetVideoRefCallback,
-  StringsCallback,
 } from '../../interfaces';
-import { getCanvas } from '../../utils';
 import {
   notification,
   ocrAssetFind,
@@ -19,7 +19,8 @@ import {
   ocrErrorVideo,
   ocrNoTextFound,
   ocrSuccess,
-} from '../../utils';
+} from '../../utils/notifications';
+import { getCanvas } from '../../utils/utils';
 import { WebcamScanner } from './WebcamScanner/WebcamScanner';
 
 const Wrapper = styled.div`
@@ -41,16 +42,33 @@ export enum ASNotifyTypes {
 
 type ASNotification = (type: ASNotifyTypes) => any;
 
+export type ButtonRenderProp = (
+  onCapture: Callback,
+  image?: string
+) => React.ReactNode;
+
+export interface AssetScannerStyles {
+  button: React.CSSProperties;
+}
+
 export interface AssetScannerProps {
-  ocrUrl?: string;
+  ocrRequest: (ocrParams: OcrRequest) => Promise<string[]>;
   ocrKey?: string;
+  button?: ButtonRenderProp;
+  extractOcrStrings?: (ocrResult: any) => string[];
+  enableNotification?: boolean;
   customNotification?: ASNotification;
-  onStringRecognize?: StringsCallback;
+  onImageRecognizeStart?: (image: string) => void;
+  onImageRecognizeFinish?: (strings: string[] | null) => void;
+  onImageRecognizeEmpty?: Callback;
+  onAssetFetchResult?: OnAssetListCallback;
   onStartLoading?: EmptyCallback;
   onEndLoading?: EmptyCallback;
-  onAssetEmpty?: EmptyCallback;
-  onAssetFind?: OnAssetListCallback;
-  onUnauthorized?: Callback;
+  onOcrError?: Callback;
+  onError?: Callback;
+  onImageReset?: Callback;
+  styles?: AssetScannerStyles;
+  strings?: PureObject;
 }
 
 interface AssetScannerState {
@@ -63,11 +81,8 @@ export class AssetScanner extends React.Component<
   AssetScannerState
 > {
   static defaultProps = {
-    ocrUrl: 'https://vision.googleapis.com/v1/images:annotate',
-    customNotifications: false,
-    isLoading: false,
-    currentScanResults: [],
-    envPath: '',
+    ocrRequest: ocrRecognize,
+    enableNotification: false,
   };
 
   notification: ASNotification = this.prepareNotifications();
@@ -80,6 +95,7 @@ export class AssetScanner extends React.Component<
 
   setRefBound: SetVideoRefCallback = this.setRef.bind(this);
   captureBound: EmptyCallback = this.capture.bind(this);
+  resetSearchBound: EmptyCallback = this.resetSearch.bind(this);
 
   constructor(props: AssetScannerProps) {
     super(props);
@@ -93,63 +109,15 @@ export class AssetScanner extends React.Component<
     this.video = video;
   }
 
-  async capture() {
-    const { onStartLoading, onStringRecognize, onEndLoading } = this.props;
-    const { recognizeSuccess, recognizeFails } = ASNotifyTypes;
-    const imageString = this.getImageFromCanvas();
+  resetSearch() {
+    const { onImageReset } = this.props;
 
-    if (!imageString) {
-      return;
-    }
-
-    if (onStartLoading) {
-      onStartLoading();
-    }
-
-    const imageSrc = imageString.split(',')[1];
-
-    this.startLoading();
-    this.setScannedImageSrc(imageSrc);
-
-    const strings = await this.recognizeImage(imageSrc);
-
-    if (strings !== null && strings.length >= 1) {
-      if (onStringRecognize) {
-        onStringRecognize(strings);
-      }
-
-      await this.getAssetsHandler(strings);
-
-      this.notification(recognizeSuccess);
-    } else if (strings !== null) {
-      this.notification(recognizeFails);
-    }
-
-    if (onEndLoading) {
-      onEndLoading();
-    }
-
-    this.resetSearch();
-  }
-
-  render() {
-    const { isLoading, scannedImageSrc } = this.state;
-
-    return (
-      <Wrapper>
-        <WebcamScanner
-          isLoading={isLoading}
-          imageSrc={scannedImageSrc}
-          capture={this.captureBound}
-          setRef={this.setRefBound}
-        />
-      </Wrapper>
-    );
-  }
-
-  private resetSearch() {
     if (!this.video) {
       return;
+    }
+
+    if (onImageReset) {
+      onImageReset();
     }
 
     this.setState({
@@ -158,8 +126,106 @@ export class AssetScanner extends React.Component<
     });
   }
 
+  async capture() {
+    const {
+      onImageRecognizeFinish,
+      onImageRecognizeStart,
+      onImageRecognizeEmpty,
+      onAssetFetchResult,
+    } = this.props;
+    const { recognizeSuccess, recognizeFails } = ASNotifyTypes;
+
+    this.startLoading();
+
+    const imageString = await this.getImageFromCanvas();
+
+    if (!imageString) {
+      this.endLoading();
+      return;
+    }
+
+    if (onImageRecognizeStart) {
+      onImageRecognizeStart(imageString);
+    }
+
+    const imageSrc = imageString.split(',')[1];
+
+    this.setScannedImageSrc(imageSrc);
+
+    const strings = await this.recognizeImage(imageSrc);
+
+    if (onImageRecognizeFinish) {
+      onImageRecognizeFinish(strings);
+    }
+
+    if (strings !== null && strings.length >= 1) {
+      const assets = await this.getAssetsHandler(strings);
+
+      this.endLoading();
+
+      this.notification(recognizeSuccess);
+
+      if (onAssetFetchResult) {
+        onAssetFetchResult(assets);
+      }
+    } else if (strings !== null) {
+      this.endLoading();
+
+      this.notification(recognizeFails);
+
+      if (onImageRecognizeEmpty) {
+        onImageRecognizeEmpty();
+      }
+    }
+  }
+
+  render() {
+    const { isLoading, scannedImageSrc } = this.state;
+    const { styles, strings, onError, button } = this.props;
+
+    return (
+      <Wrapper>
+        <WebcamScanner
+          isLoading={isLoading}
+          imageSrc={scannedImageSrc}
+          capture={this.captureBound}
+          setRef={this.setRefBound}
+          onReset={this.resetSearchBound}
+          strings={strings}
+          styles={styles}
+          onError={onError}
+          button={button}
+        />
+      </Wrapper>
+    );
+  }
+
   private startLoading() {
+    const { onStartLoading } = this.props;
+
+    if (this.video) {
+      this.video.pause();
+    }
+
     this.setState({ isLoading: true });
+
+    if (onStartLoading) {
+      onStartLoading();
+    }
+  }
+
+  private endLoading() {
+    const { onEndLoading } = this.props;
+
+    if (this.video) {
+      this.video.play();
+    }
+
+    this.setState({ isLoading: false });
+
+    if (onEndLoading) {
+      onEndLoading();
+    }
   }
 
   private setScannedImageSrc(scannedImageSrc: string = '') {
@@ -167,7 +233,11 @@ export class AssetScanner extends React.Component<
   }
 
   private prepareNotifications(): ASNotification {
-    const { customNotification } = this.props;
+    const { customNotification, enableNotification } = this.props;
+
+    if (!enableNotification) {
+      return () => false;
+    }
 
     return customNotification || this.embeddedNotification;
   }
@@ -193,13 +263,14 @@ export class AssetScanner extends React.Component<
       .reduce((res, current) => res.concat(current));
   }
 
-  private getImageFromCanvas(): string {
+  // Made async to provide better UX for component
+  private getImageFromCanvas(): Promise<string> {
     const { errorVideoAccess } = ASNotifyTypes;
 
     if (!this.video) {
       this.notification(errorVideoAccess);
 
-      return '';
+      return Promise.resolve('');
     }
 
     const aspectRatio = this.video.videoWidth / this.video.videoHeight;
@@ -209,50 +280,46 @@ export class AssetScanner extends React.Component<
       this.video.clientWidth / aspectRatio
     );
 
-    return canvas.toDataURL();
+    return new Promise(resolve =>
+      setTimeout(() => resolve(canvas.toDataURL()), 0)
+    );
   }
 
   private async recognizeImage(image: string): Promise<string[] | null> {
-    const { ocrUrl, ocrKey, onUnauthorized } = this.props;
+    const { ocrKey, onOcrError, extractOcrStrings, ocrRequest } = this.props;
     const { errorOccurred } = ASNotifyTypes;
-    let strings: string[] = [];
 
     try {
-      strings = await ocrRecognize({
+      return await ocrRequest({
         image,
-        url: ocrUrl,
         key: ocrKey,
+        extractOcrStrings,
       });
     } catch (error) {
-      if (onUnauthorized) {
-        onUnauthorized(error);
+      if (onOcrError) {
+        onOcrError(error);
       }
 
       this.notification(errorOccurred);
 
       return null;
     }
-
-    return strings;
   }
 
-  private async getAssetsHandler(strings: string[]) {
-    const { onAssetEmpty, onAssetFind, onUnauthorized } = this.props;
+  private async getAssetsHandler(strings: string[]): Promise<Asset[]> {
+    const { onError } = this.props;
+    const { errorOccurred } = ASNotifyTypes;
 
     try {
-      const assets = await this.getAssets(strings);
-
-      if (assets.length === 0 && onAssetEmpty) {
-        onAssetEmpty();
-      } else if (assets.length && onAssetFind) {
-        onAssetFind(assets);
-      }
+      return await this.getAssets(strings);
     } catch (error) {
-      if (error.status && onUnauthorized) {
-        const { status, message } = error;
+      this.notification(errorOccurred);
 
-        onUnauthorized({ status, message, error });
+      if (onError) {
+        onError(error);
       }
+
+      return [];
     }
   }
 }

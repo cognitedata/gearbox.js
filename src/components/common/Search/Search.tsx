@@ -1,5 +1,5 @@
-import { Asset } from '@cognite/sdk';
 import { Button, Icon, Input, Modal } from 'antd';
+import { NativeButtonProps } from 'antd/lib/button/button';
 import { debounce } from 'lodash';
 import React, { KeyboardEvent, SyntheticEvent } from 'react';
 import styled from 'styled-components';
@@ -12,7 +12,10 @@ import {
   OnClick,
   PureObject,
 } from '../../../interfaces';
-import { RootAssetSelect } from '../RootAssetSelect/RootAssetSelect';
+import {
+  defaultStrings as rootAssetSelectStrings,
+  RootAssetSelect,
+} from '../RootAssetSelect/RootAssetSelect';
 import { SearchForm } from './SearchForm/SearchForm';
 
 const InputGroup = styled(Input.Group)`
@@ -24,6 +27,12 @@ const InputGroup = styled(Input.Group)`
   > span {
     z-index: 1;
   }
+`;
+
+const ChangeSearchButton = styled((props: NativeButtonProps) => (
+  <Button {...props} />
+))`
+  width: 100%;
 `;
 
 const RootAssetSelectStyled = styled(RootAssetSelect)`
@@ -53,7 +62,10 @@ const LiveSearchWrapper = styled.div`
       }
 
       &.active {
-        background-color: #eeeeee;
+        background-color: #f2f2f2;
+        &:hover {
+          background-color: #e0e0e0;
+        }
       }
     }
   }
@@ -65,7 +77,27 @@ export const defaultStrings: PureObject = {
   searchPlaceholder: 'Search for an asset',
   search: 'Search',
   emptyLiveSearch: 'Nothing found',
+  rootAssetSelectLoading: rootAssetSelectStrings.loading,
+  rootAssetSelectAll: rootAssetSelectStrings.all,
 };
+
+export interface SearchStyles {
+  rootAssetSelect?: React.CSSProperties;
+  advancedSearchButton?: React.CSSProperties;
+  searchResultList?: {
+    container?: React.CSSProperties;
+    listItem?: React.CSSProperties;
+  };
+  advancedSearch?: {
+    modalBody?: React.CSSProperties;
+    searchButton?: React.CSSProperties;
+    clearButton?: React.CSSProperties;
+    searchForm?: {
+      container?: React.CSSProperties;
+      addMoreMetadataButton?: React.CSSProperties;
+    };
+  };
+}
 
 export interface SearchProps {
   fetchingLimit: number;
@@ -75,7 +107,6 @@ export interface SearchProps {
   advancedSearch: boolean;
   liveSearch: boolean;
   strings: PureObject;
-  assets: Asset[];
   liveSearchResults: any[];
   assetId?: number;
   onSearch?: Callback;
@@ -83,6 +114,7 @@ export interface SearchProps {
   onFilterIconClick?: EmptyCallback;
   onLiveSearchSelect?: Callback;
   onKeyDown?: (e: KeyboardEvent) => void;
+  styles?: SearchStyles;
 }
 
 interface SearchState {
@@ -97,7 +129,6 @@ interface SearchState {
 
 export class Search extends React.Component<SearchProps, SearchState> {
   static defaultProps = {
-    assets: [],
     liveSearchResults: [],
     fetchingLimit: 25,
     debounceTime: 200,
@@ -110,7 +141,11 @@ export class Search extends React.Component<SearchProps, SearchState> {
 
   static getDerivedStateFromProps(props: SearchProps, state: SearchState) {
     const { liveSearch, liveSearchResults: propsSearchResults } = props;
-    const { liveSearchResults: stateSearchResults, query } = state;
+    const {
+      liveSearchResults: stateSearchResults,
+      query,
+      advancedSearchQuery,
+    } = state;
 
     if (!liveSearch) {
       return null;
@@ -119,7 +154,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
     if (propsSearchResults !== stateSearchResults) {
       return {
         liveSearchResults: propsSearchResults,
-        liveSearchShow: !!query,
+        liveSearchShow: !!query || !!advancedSearchQuery,
       };
     }
 
@@ -129,8 +164,6 @@ export class Search extends React.Component<SearchProps, SearchState> {
   onSearchBlurBounded: OnClick;
 
   onSearch = debounce(this.debouncedSearch.bind(this), this.props.debounceTime);
-
-  private lang: PureObject = {};
 
   constructor(props: SearchProps) {
     super(props);
@@ -253,31 +286,43 @@ export class Search extends React.Component<SearchProps, SearchState> {
 
   render() {
     const { assetId, query, isModalOpen, advancedSearchQuery } = this.state;
-    const { assets, advancedSearch, rootAssetSelect, strings } = this.props;
+    const { advancedSearch, rootAssetSelect, strings, styles } = this.props;
 
-    this.lang = { ...defaultStrings, ...strings };
+    const lang = { ...defaultStrings, ...strings };
 
-    const { changeSearch, clear, searchPlaceholder, search } = this.lang;
-
+    const {
+      changeSearch,
+      clear,
+      searchPlaceholder,
+      search,
+      rootAssetSelectLoading,
+      rootAssetSelectAll,
+    } = lang;
     return (
       <React.Fragment>
         <InputGroup compact={true}>
           {rootAssetSelect && (
             <RootAssetSelectStyled
               onAssetSelected={this.onAssetSelected}
-              assets={assets}
               assetId={assetId}
+              strings={{
+                loading: rootAssetSelectLoading,
+                all: rootAssetSelectAll,
+              }}
+              styles={{
+                select: styles && styles.rootAssetSelect,
+              }}
             />
           )}
           {advancedSearchQuery ? (
             <React.Fragment>
-              <Button
-                style={{ width: '100%' }}
+              <ChangeSearchButton
+                style={styles && styles.advancedSearchButton}
                 type="primary"
                 onClick={this.onFilterIconClick}
               >
                 {changeSearch}
-              </Button>
+              </ChangeSearchButton>
               <Button htmlType="button" onClick={this.onModalCancel}>
                 {clear}
               </Button>
@@ -311,15 +356,27 @@ export class Search extends React.Component<SearchProps, SearchState> {
                   suffix={this.toggleInputIcon('search', query)}
                 />
               )}
-              {this.renderLiveSearch()}
             </React.Fragment>
           )}
+          {this.renderLiveSearch(lang)}
         </InputGroup>
         <Modal
           visible={isModalOpen}
           onCancel={this.onModalCancel}
+          bodyStyle={
+            styles && styles.advancedSearch && styles.advancedSearch.modalBody
+          }
           footer={[
-            <Button htmlType="button" key="cancel" onClick={this.onModalCancel}>
+            <Button
+              htmlType="button"
+              key="cancel"
+              onClick={this.onModalCancel}
+              style={
+                styles &&
+                styles.advancedSearch &&
+                styles.advancedSearch.clearButton
+              }
+            >
               {clear}
             </Button>,
             <Button
@@ -327,6 +384,11 @@ export class Search extends React.Component<SearchProps, SearchState> {
               key="search"
               type="primary"
               onClick={this.onModalOk}
+              style={
+                styles &&
+                styles.advancedSearch &&
+                styles.advancedSearch.searchButton
+              }
             >
               {search}
             </Button>,
@@ -336,6 +398,11 @@ export class Search extends React.Component<SearchProps, SearchState> {
             value={advancedSearchQuery}
             onPressEnter={this.onModalOk}
             onChange={this.onSearchChange}
+            styles={
+              styles &&
+              styles.advancedSearch &&
+              styles.advancedSearch.searchForm
+            }
           />
         </Modal>
       </React.Fragment>
@@ -346,10 +413,11 @@ export class Search extends React.Component<SearchProps, SearchState> {
     this.setState({ liveSearchShow: false });
   }
 
-  private renderLiveSearch() {
-    const { liveSearch, liveSearchResults } = this.props;
+  private renderLiveSearch(strings: PureObject) {
+    const { liveSearch, liveSearchResults, styles } = this.props;
     const { liveSearchShow, cursor } = this.state;
-    const { emptyLiveSearch } = this.lang;
+    const { emptyLiveSearch } = strings;
+
     if (!liveSearch || !liveSearchShow) {
       return null;
     }
@@ -360,6 +428,11 @@ export class Search extends React.Component<SearchProps, SearchState> {
           onMouseDown={() => this.onLiveSearchClick(item)}
           key={index}
           className={cursor === index ? 'active' : undefined}
+          style={
+            styles &&
+            styles.searchResultList &&
+            styles.searchResultList.listItem
+          }
         >
           {item.name || 'NaN'}
         </li>
@@ -371,7 +444,11 @@ export class Search extends React.Component<SearchProps, SearchState> {
     );
 
     return (
-      <LiveSearchWrapper>
+      <LiveSearchWrapper
+        style={
+          styles && styles.searchResultList && styles.searchResultList.container
+        }
+      >
         <ul data-id={'live-search-list'}>{list}</ul>
       </LiveSearchWrapper>
     );

@@ -21,17 +21,17 @@ jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
 });
 
 sdk.Assets.search = jest.fn();
+sdk.Assets.list = jest.fn();
+
 beforeEach(() => {
+  // @ts-ignore
+  sdk.Assets.list.mockResolvedValue({ items: assetsList });
   // @ts-ignore
   sdk.Assets.search.mockResolvedValue({ items: assetsList });
 });
 
 afterEach(() => {
-  Object.keys(propsCallbacks).forEach((key: string) =>
-    propsCallbacks[key].mockClear()
-  );
-  // @ts-ignore
-  sdk.Assets.search.mockClear();
+  jest.clearAllMocks();
 });
 
 describe('AssetSearch', () => {
@@ -81,6 +81,47 @@ describe('AssetSearch', () => {
       wrapper.update();
       expect(onError).toHaveBeenCalled();
       done();
+    });
+  });
+
+  it('should fetch root assets when rootAssetSelect is true', done => {
+    const { onLiveSearchSelect } = propsCallbacks;
+    const props = { onLiveSearchSelect, rootAssetSelect: true };
+    const wrapper = mount(<AssetSearch {...props} />);
+
+    setImmediate(() => {
+      wrapper.update();
+      expect(sdk.Assets.list).toHaveBeenCalled();
+      done();
+    });
+  });
+
+  it('should not fetch root assets when rootAssetSelect is false', done => {
+    const { onLiveSearchSelect } = propsCallbacks;
+    const props = { onLiveSearchSelect, rootAssetSelect: false };
+    const wrapper = mount(<AssetSearch {...props} />);
+
+    setImmediate(() => {
+      wrapper.update();
+      expect(sdk.Assets.list).not.toHaveBeenCalled();
+      done();
+    });
+  });
+
+  it('should fetch root assets when rootAssetSelect changes from false to true', done => {
+    const { onLiveSearchSelect } = propsCallbacks;
+    const props = { onLiveSearchSelect, rootAssetSelect: false };
+    const wrapper = mount(<AssetSearch {...props} />);
+
+    setImmediate(() => {
+      wrapper.update();
+      wrapper.setProps({ rootAssetSelect: true });
+      // tslint:disable-next-line: no-identical-functions
+      setImmediate(() => {
+        wrapper.update();
+        expect(sdk.Assets.list).toHaveBeenCalled();
+        done();
+      });
     });
   });
 });

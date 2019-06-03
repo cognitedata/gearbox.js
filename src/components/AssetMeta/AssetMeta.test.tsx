@@ -2,8 +2,13 @@ import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { getAssetEvent, getAssetFiles, retrieveAsset } from '../../api';
-import { ASSET_DATA, DOCUMENTS, EVENTS } from '../../mocks';
+import {
+  getAssetEvent,
+  getAssetFiles,
+  getAssetTimeseries,
+  retrieveAsset,
+} from '../../api';
+import { ASSET_DATA, DOCUMENTS, EVENTS, timeseriesList } from '../../mocks';
 import { AssetMeta } from './AssetMeta';
 
 // @ts-ignore
@@ -12,28 +17,20 @@ retrieveAsset = jest.fn();
 getAssetEvent = jest.fn();
 // @ts-ignore
 getAssetFiles = jest.fn();
+// @ts-ignore
+getAssetTimeseries = jest.fn();
 
 configure({ adapter: new Adapter() });
 
 beforeEach(() => {
   // @ts-ignore
-  retrieveAsset.mockImplementation(
-    async (): Promise<sdk.Asset> => {
-      return ASSET_DATA;
-    }
-  );
+  retrieveAsset.mockResolvedValue(ASSET_DATA);
   // @ts-ignore
-  getAssetEvent.mockImplementation(
-    async (): Promise<sdk.Event[]> => {
-      return EVENTS;
-    }
-  );
+  getAssetEvent.mockResolvedValue(EVENTS);
   // @ts-ignore
-  getAssetFiles.mockImplementation(
-    async (): Promise<sdk.File[]> => {
-      return DOCUMENTS;
-    }
-  );
+  getAssetFiles.mockResolvedValue(DOCUMENTS);
+  // @ts-ignore
+  getAssetTimeseries.mockResolvedValue(timeseriesList);
 });
 
 describe('AssetMeta', () => {
@@ -46,8 +43,8 @@ describe('AssetMeta', () => {
       expect(wrapper.find('h3')).toHaveLength(1);
       expect(wrapper.find('h3 + p')).toHaveLength(1);
       expect(wrapper.find('TabBar')).toHaveLength(1);
-      expect(wrapper.find('div.ant-tabs-tab')).toHaveLength(3);
-      expect(wrapper.find('TabPane')).toHaveLength(3);
+      expect(wrapper.find('div.ant-tabs-tab')).toHaveLength(4);
+      expect(wrapper.find('TabPane')).toHaveLength(4);
       done();
     });
   });
@@ -101,8 +98,10 @@ describe('AssetMeta', () => {
       wrapper.update();
       const tabs = wrapper.find('div.ant-tabs-tab');
       tabs.at(1).simulate('click');
-      expect(onPaneChange).toBeCalledWith('documents');
+      expect(onPaneChange).toBeCalledWith('timeseries');
       tabs.at(2).simulate('click');
+      expect(onPaneChange).toBeCalledWith('documents');
+      tabs.at(3).simulate('click');
       expect(onPaneChange).toBeCalledWith('events');
       tabs.at(0).simulate('click');
       expect(onPaneChange).toBeCalledWith('details');

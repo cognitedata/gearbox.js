@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { SetVideoRefCallback } from '../../../interfaces';
+import { Callback, SetVideoRefCallback } from '../../../interfaces';
 
 const StyledVideo = styled.video`
   background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
 `;
 
 function hasGetUserMedia() {
@@ -28,6 +30,7 @@ interface WebcamProps {
   audioSource?: string | null;
   videoSource?: string | null;
   isDesktop?: boolean;
+  onError?: Callback;
 }
 
 interface WebcamState {
@@ -39,7 +42,7 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
   static mountedInstances: Webcam[] = [];
   static userMediaRequested = false;
   static defaultProps = {
-    audio: true,
+    audio: false,
     className: '',
     height: 480,
     width: 640,
@@ -101,38 +104,36 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
     }
   }
 
-  requestUserMedia() {
-    this.setGlobalUserMediaInterface();
-
+  async requestUserMedia() {
     if (this.props.audioSource && this.props.videoSource) {
-      this.sourceSelected(this.props.audioSource, this.props.videoSource);
+      await this.sourceSelected(this.props.audioSource, this.props.videoSource);
     } else if ('mediaDevices' in navigator) {
-      navigator.mediaDevices
-        .enumerateDevices()
-        .then(devices => {
-          let audioSource = '';
-          let videoSource = '';
-          devices.forEach(device => {
-            if (device.kind === 'audioinput') {
-              audioSource = device.deviceId;
-            } else if (device.kind === 'videoinput') {
-              videoSource = device.deviceId;
-            }
-          });
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
 
-          if (this.props.audioSource) {
-            audioSource = this.props.audioSource;
-          }
-          if (this.props.videoSource) {
-            videoSource = this.props.videoSource;
-          }
+        let audioSource = '';
+        let videoSource = '';
 
-          this.sourceSelected(audioSource, videoSource);
-        })
-        .catch(error => {
-          // todo: add error handling
-          console.error(error);
+        devices.forEach(device => {
+          if (device.kind === 'audioinput') {
+            audioSource = device.deviceId;
+          } else if (device.kind === 'videoinput') {
+            videoSource = device.deviceId;
+          }
         });
+
+        if (this.props.audioSource) {
+          audioSource = this.props.audioSource;
+        }
+        if (this.props.videoSource) {
+          videoSource = this.props.videoSource;
+        }
+
+        await this.sourceSelected(audioSource, videoSource);
+      } catch (error) {
+        // todo: add error handling
+        console.error(error);
+      }
     }
 
     Webcam.userMediaRequested = true;
@@ -173,9 +174,6 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
     return (
       <StyledVideo
         autoPlay={true}
-        width="100%"
-        height="100%"
-        src={this.state.src}
         muted={this.props.audio}
         className={this.props.className}
         style={{
@@ -191,47 +189,52 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
     );
   }
 
-  private setGlobalUserMediaInterface() {
-    navigator.getUserMedia =
-      navigator.getUserMedia ||
-      // @ts-ignore
-      navigator.webkitGetUserMedia ||
-      // @ts-ignore
-      navigator.mozGetUserMedia ||
-      // @ts-ignore
-      navigator.msGetUserMedia ||
-      navigator.mediaDevices.getUserMedia;
-  }
+  private async sourceSelected(audioSource: string, videoSource: string) {
+    const { onError, audio } = this.props;
 
-  private sourceSelected(audioSource: string, videoSource: string) {
+    if (!this.video) {
+      return;
+    }
+
+    let width = 0;
+    let height = 0;
+
+    if (this.video.clientWidth > this.video.clientHeight) {
+      width = this.video.clientWidth;
+      height = this.video.clientHeight;
+    } else {
+      width = this.video.clientHeight;
+      height = this.video.clientWidth;
+    }
+
     const constraints: MediaStreamConstraints = {
-      video: { facingMode: 'environment' },
+      video: {
+        facingMode: 'environment',
+        width,
+        height,
+        deviceId: videoSource,
+      },
+      audio: audio
+        ? {
+            deviceId: audioSource,
+          }
+        : false,
     };
 
-    if (videoSource) {
-      constraints.video = {
-        deviceId: videoSource,
-      };
-    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
-    if (this.props.audio) {
-      constraints.audio = {
-        deviceId: audioSource,
-      };
-    }
+      Webcam.mountedInstances.forEach(instance =>
+        instance.handleUserMedia(stream)
+      );
+    } catch (e) {
+      Webcam.mountedInstances.forEach(instance =>
+        instance.handleUserMedia(null, e)
+      );
 
-    navigator.getUserMedia(
-      constraints,
-      stream => {
-        Webcam.mountedInstances.forEach(instance =>
-          instance.handleUserMedia(stream)
-        );
-      },
-      e => {
-        Webcam.mountedInstances.forEach(instance =>
-          instance.handleUserMedia(null, e)
-        );
+      if (onError) {
+        onError(e);
       }
-    );
+    }
   }
 }

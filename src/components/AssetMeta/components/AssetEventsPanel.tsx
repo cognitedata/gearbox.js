@@ -3,7 +3,7 @@ import { Icon, Modal, Table } from 'antd';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { AssetEventsPanelProps } from '../../../interfaces';
-import { momentFromTimestamp } from '../../../utils';
+import { momentFromTimestamp } from '../../../utils/formatters';
 
 interface EventAddonsProp extends Event {
   typeAndSubtype: React.ReactNode;
@@ -15,43 +15,6 @@ interface AssetEventsPanelState {
   selectedEvent: EventAddonsProp | null;
 }
 
-const StyledTable = styled(Table)`
-  tr {
-    background: white;
-    cursor: pointer;
-    &:nth-child(2n) {
-      background: #fafafa;
-    }
-  }
-  td {
-    max-width: 500px;
-  }
-`;
-
-const EventDetails = styled.div`
-  .description {
-    font-size: 18px;
-    padding-top: 16px;
-  }
-  .times {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 16px;
-  }
-`;
-
-const EventMetadataList = styled.div`
-  margin-top: 32px;
-  max-height: calc(100vh - 400px);
-  overflow: auto;
-  .event-metadata {
-    padding: 16px;
-    &:nth-child(2n) {
-      background: #fbfbfb;
-    }
-  }
-`;
-
 export class AssetEventsPanel extends Component<
   AssetEventsPanelProps,
   AssetEventsPanelState
@@ -60,6 +23,32 @@ export class AssetEventsPanel extends Component<
     super(props);
     this.state = {
       selectedEvent: null,
+    };
+  }
+
+  getTableComponents() {
+    const { styles } = this.props;
+
+    return {
+      body: {
+        row: (props: any) => {
+          return (
+            <StyledRow
+              style={styles && styles.tableRow}
+              onClick={() => this.onEventClick(props['data-row-key'])}
+            >
+              {props.children}
+            </StyledRow>
+          );
+        },
+        cell: (props: any) => {
+          return (
+            <StyledCell style={styles && styles.tableCell}>
+              {props.children}
+            </StyledCell>
+          );
+        },
+      },
     };
   }
 
@@ -111,9 +100,17 @@ export class AssetEventsPanel extends Component<
         : 'Ongoing',
   });
 
-  onEventClick = (record: EventAddonsProp) => {
+  onEventClick = (id: number) => {
+    const { events } = this.props;
+    if (!events) {
+      return;
+    }
+    const selectedEvent = events.find(e => e.id === id);
+    if (!selectedEvent) {
+      return;
+    }
     this.setState({
-      selectedEvent: record,
+      selectedEvent: this.mapEvent(selectedEvent),
     });
   };
 
@@ -148,7 +145,7 @@ export class AssetEventsPanel extends Component<
       scroll,
       bordered = false,
       showHeader = true,
-      style,
+      styles,
     } = this.props;
 
     const { selectedEvent } = this.state;
@@ -164,10 +161,8 @@ export class AssetEventsPanel extends Component<
           pagination={pagination}
           scroll={scroll}
           bordered={bordered}
-          style={style}
-          onRow={record => ({
-            onClick: () => this.onEventClick(record as EventAddonsProp),
-          })}
+          components={this.getTableComponents()}
+          style={styles && styles.table}
         />
         {!!selectedEvent && (
           <Modal
@@ -186,3 +181,41 @@ export class AssetEventsPanel extends Component<
     );
   }
 }
+
+const StyledTable = styled(Table)``;
+
+const StyledRow = styled.tr`
+  background: white;
+  cursor: pointer;
+  &:nth-child(2n) {
+    background: #fafafa;
+  }
+`;
+
+const StyledCell = styled.td`
+  max-width: 500px;
+`;
+
+const EventDetails = styled.div`
+  .description {
+    font-size: 18px;
+    padding-top: 16px;
+  }
+  .times {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 16px;
+  }
+`;
+
+const EventMetadataList = styled.div`
+  margin-top: 32px;
+  max-height: calc(100vh - 400px);
+  overflow: auto;
+  .event-metadata {
+    padding: 16px;
+    &:nth-child(2n) {
+      background: #fbfbfb;
+    }
+  }
+`;
