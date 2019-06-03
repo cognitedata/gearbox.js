@@ -5,6 +5,7 @@ import {
   Datapoints,
   EventDataWithCursor,
   Events,
+  FileListParams,
   FileMetadataWithCursor,
   Files,
   TimeSeries,
@@ -14,7 +15,13 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { Document } from '../../../interfaces';
-import { ASSET_DATA, DOCUMENTS, EVENTS, timeseriesList } from '../../../mocks';
+import {
+  ASSET_DATA,
+  ASSET_META_STYLES,
+  DOCUMENTS,
+  EVENTS,
+  timeseriesList,
+} from '../../../mocks';
 import { setupMocks as setupTimeseriesChartMocks } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { AssetMeta } from '../AssetMeta';
 import alternatePane from './alternatePane.md';
@@ -22,6 +29,7 @@ import basic from './basic.md';
 import customCategorySort from './customCategorySort.md';
 import customPriorityAndSort from './customPriorityAndSort.md';
 import customPriorityCategory from './customPriorityCategory.md';
+import customStyles from './customStyles.md';
 import customTimeseriesChartMeta from './customTimeseriesChartMeta.md';
 import fullDescription from './full.md';
 import hideTab from './hideTab.md';
@@ -40,7 +48,12 @@ Events.list = async (): Promise<EventDataWithCursor> => {
   return { items: EVENTS };
 };
 
-Files.list = async (): Promise<FileMetadataWithCursor> => {
+Files.list = async ({
+  assetId,
+}: FileListParams): Promise<FileMetadataWithCursor> => {
+  if (assetId === 12345) {
+    return { items: [] }; // simulate asset without documents
+  }
   return { items: DOCUMENTS };
 };
 
@@ -225,6 +238,17 @@ storiesOf('AssetMeta/Examples', module)
     {
       readme: {
         content: customTimeseriesChartMeta,
+      },
+    }
+  )
+  .add(
+    'Custom Styles',
+    () => {
+      return <AssetMeta assetId={123456} styles={ASSET_META_STYLES} />;
+    },
+    {
+      readme: {
+        content: customStyles,
       },
     }
   );

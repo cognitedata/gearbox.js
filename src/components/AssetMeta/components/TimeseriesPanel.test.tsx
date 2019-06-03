@@ -29,7 +29,10 @@ describe('TimeseriesPanel', () => {
 
   it('Should render special message if provided and timeseries are empty', () => {
     const wrapper = shallow(
-      <TimeseriesPanel timeseries={[]} noTimeseriesSign="nothing found" />
+      <TimeseriesPanel
+        timeseries={[]}
+        strings={{ noTimeseriesSign: 'nothing found' }}
+      />
     );
     expect(wrapper.text()).toEqual('nothing found');
   });

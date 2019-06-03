@@ -10,8 +10,10 @@ import {
 } from '../../api';
 import {
   AssetEventsPanelProps,
+  AssetEventsPanelStyles,
   AssetPanelType,
   DocumentTableProps,
+  DocumentTableStyles,
 } from '../../interfaces';
 import { MetaEventsProps } from '../../interfaces/AssetTypes';
 import { MetaDocProps } from '../../interfaces/DocumentTypes';
@@ -38,6 +40,14 @@ const SpinContainer = styled.div`
 
 const { TabPane } = Tabs;
 
+export interface AssetMetaStyles {
+  header?: React.CSSProperties;
+  emptyTab?: React.CSSProperties;
+  details?: React.CSSProperties;
+  documents?: DocumentTableStyles;
+  events?: AssetEventsPanelStyles;
+}
+
 interface AssetMetaProps {
   assetId: number;
   tab?: string;
@@ -46,6 +56,7 @@ interface AssetMetaProps {
   timeseriesProps?: MetaTimeseriesProps;
   hidePanels?: AssetPanelType[];
   onPaneChange?: (key: string) => void;
+  styles?: AssetMetaStyles;
 }
 
 interface AssetMetaState {
@@ -145,13 +156,16 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
     contentLen > 0 ? (
       <span>{tab}</span>
     ) : (
-      <span style={{ color: '#9b9b9b' }}>({tab})</span>
+      <EmptyPane style={this.props.styles && this.props.styles.emptyTab}>
+        ({tab})
+      </EmptyPane>
     );
 
   includesPanel = (pane: AssetPanelType): boolean =>
     this.props.hidePanels ? this.props.hidePanels.indexOf(pane) < 0 : true;
 
   renderDetails() {
+    const { styles } = this.props;
     const { asset } = this.state;
     if (!asset || !asset.metadata || !this.includesPanel('details')) {
       return null;
@@ -161,7 +175,10 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
         tab={this.tabStyle('Details', Object.keys(asset.metadata).length)}
         key="details"
       >
-        <DescriptionList valueSet={asset.metadata} />
+        <DescriptionList
+          valueSet={asset.metadata}
+          styles={styles && styles.details}
+        />
       </TabPane>
     );
   }
@@ -185,6 +202,7 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
   }
 
   renderDocuments() {
+    const { styles } = this.props;
     const { docs } = this.state;
     if (!docs || !this.includesPanel('documents')) {
       return null;
@@ -194,12 +212,13 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
         tab={this.tabStyle('Documents', docs.docs.length)}
         key="documents"
       >
-        <DocumentTable {...docs} />
+        <DocumentTable {...docs} styles={styles && styles.documents} />
       </TabPane>
     );
   }
 
   renderEvents() {
+    const { styles } = this.props;
     const { assetEvents } = this.state;
     if (!assetEvents || !this.includesPanel('events')) {
       return null;
@@ -212,13 +231,13 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
         )}
         key="events"
       >
-        <AssetEventsPanel {...assetEvents} />
+        <AssetEventsPanel {...assetEvents} styles={styles && styles.events} />
       </TabPane>
     );
   }
 
   render() {
-    const { tab: propsTab, onPaneChange } = this.props;
+    const { styles, tab: propsTab, onPaneChange } = this.props;
     const { asset, isLoading } = this.state;
 
     if (isLoading) {
@@ -234,8 +253,10 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
 
     return asset ? (
       <>
-        <h3>{asset.name ? asset.name : asset.id}</h3>
-        {asset.description && <p>{asset.description}</p>}
+        <div style={styles && styles.header}>
+          <h3>{asset.name ? asset.name : asset.id}</h3>
+          {asset.description && <p>{asset.description}</p>}
+        </div>
 
         <Tabs defaultActiveKey={tab} onChange={onPaneChange}>
           {this.renderDetails()}
@@ -249,3 +270,7 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
     );
   }
 }
+
+const EmptyPane = styled.span`
+  color: #9b9b9b;
+`;
