@@ -126,11 +126,11 @@ export class TimeseriesChartMeta extends React.PureComponent<
         {showPeriods && (
           <CenterWrapper>
             <Radio.Group value={timePeriod} onChange={this.handlePeriodChange}>
-              <Radio.Button value="lastYear">1 year</Radio.Button>
-              <Radio.Button value="lastMonth">1 month</Radio.Button>
-              <Radio.Button value="lastWeek">1 week</Radio.Button>
-              <Radio.Button value="lastHour">1 hour</Radio.Button>
-              <Radio.Button value="last15minutes">15 minutes</Radio.Button>
+              {Object.keys(timeScales).map(key => (
+                <Radio.Button key={key} value={key}>{`${
+                  timeScales[key].number
+                } ${timeScales[key].unit}`}</Radio.Button>
+              ))}
             </Radio.Group>
           </CenterWrapper>
         )}
