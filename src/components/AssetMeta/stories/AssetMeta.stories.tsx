@@ -11,7 +11,12 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { Document } from '../../../interfaces';
-import { ASSET_DATA, DOCUMENTS, EVENTS } from '../../../mocks';
+import {
+  ASSET_DATA,
+  ASSET_META_STYLES,
+  DOCUMENTS,
+  EVENTS,
+} from '../../../mocks';
 import { AssetMeta } from '../AssetMeta';
 import alternatePane from './alternatePane.md';
 import basic from './basic.md';
@@ -171,53 +176,7 @@ storiesOf('AssetMeta/Examples', module)
   .add(
     'Custom Styles',
     () => {
-      return (
-        <AssetMeta
-          assetId={123456}
-          styles={{
-            header: {
-              textAlign: 'center',
-              fontFamily: 'Comic Sans MS',
-              fontSize: '1.2em',
-              background: '#ffa3d2',
-            },
-            emptyTab: {
-              color: 'yellow',
-            },
-            details: {
-              fontSize: '1.2em',
-              color: 'green',
-            },
-            documents: {
-              wrapper: {
-                backgroundColor: 'yellow',
-              },
-              fileTitle: {
-                textAlign: 'right',
-                color: 'blue',
-              },
-              fileLink: {
-                textAlign: 'right',
-                color: 'red',
-              },
-              fileContainer: {
-                width: '50%',
-              },
-            },
-            events: {
-              table: {
-                width: '80%',
-              },
-              tableRow: {
-                background: '#00FF00',
-              },
-              tableCell: {
-                fontStyle: 'italic',
-              },
-            },
-          }}
-        />
-      );
+      return <AssetMeta assetId={123456} styles={ASSET_META_STYLES} />;
     },
     {
       readme: {

@@ -2,7 +2,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { ASSET_META_STYLES, EVENTS } from '../../../mocks';
+import { ASSET_META_EVENTS_STYLES, EVENTS } from '../../../mocks';
 import { AssetEventsPanel } from './AssetEventsPanel';
 
 configure({ adapter: new Adapter() });
@@ -13,34 +13,36 @@ describe('AssetEventsPanel', () => {
     expect(tree).toMatchSnapshot();
   });
   it('checks if the modal is opened', done => {
-    const EventPanelModal = mount(<AssetEventsPanel events={EVENTS} />);
+    const eventPanelModal = mount(<AssetEventsPanel events={EVENTS} />);
 
-    expect(EventPanelModal.state('selectedEvent')).toEqual(null);
+    expect(eventPanelModal.state('selectedEvent')).toEqual(null);
 
-    const clickableRow = EventPanelModal.find('td').first();
+    const clickableRow = eventPanelModal.find('td').first();
     clickableRow.simulate('click');
     setImmediate(() => {
-      EventPanelModal.update();
-      const modalWindow = EventPanelModal.find('Modal');
+      eventPanelModal.update();
+      const modalWindow = eventPanelModal.find('Modal');
       expect(modalWindow).toHaveLength(1);
       done();
     });
   });
   it.each`
-    inlineStyle                              | expected
-    ${'style="width: 80%;"'}                 | ${true}
-    ${'style="background: rgb(0, 255, 0);"'} | ${true}
-    ${'style="font-style: italic;"'}         | ${true}
+    inlineStyle                           | element
+    ${ASSET_META_EVENTS_STYLES.table}     | ${'.ant-table-wrapper'}
+    ${ASSET_META_EVENTS_STYLES.tableRow}  | ${'tr'}
+    ${ASSET_META_EVENTS_STYLES.tableCell} | ${'td'}
   `(
     'should render component with passed inline styles',
-    ({ inlineStyle, expected }) => {
-      const EventPanel = mount(
-        <AssetEventsPanel events={EVENTS} styles={ASSET_META_STYLES.events} />
+    ({ inlineStyle, element }) => {
+      const eventPanel = mount(
+        <AssetEventsPanel events={EVENTS} styles={ASSET_META_EVENTS_STYLES} />
       );
-      const containerTable = EventPanel.find('.ant-table-wrapper')
+      const containerStyle = eventPanel
+        .find(element)
         .last()
-        .html();
-      expect(containerTable.includes(inlineStyle)).toBe(expected);
+        .prop('style');
+
+      expect(inlineStyle === containerStyle).toBeTruthy();
     }
   );
 });

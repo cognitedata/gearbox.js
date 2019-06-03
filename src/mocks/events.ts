@@ -1,6 +1,8 @@
 /* tslint:disable:no-duplicate-string */
 import { Event as ApiEvent } from '@cognite/sdk';
 import moment from 'moment-timezone';
+import { AssetMetaStyles } from '../components/AssetMeta';
+import { AssetEventsPanelStyles, DocumentTableStyles } from '../interfaces';
 
 const EVENT_DESCRIPTION = 'PRODUCTION WELL A-23, SLOT-09 (101109)';
 
@@ -51,7 +53,36 @@ export const eventWithout = (field: string) => ({
 
 const baseTimestamp = 1556120152466;
 
-export const ASSET_META_STYLES = {
+export const ASSET_META_DOCS_STYLES: DocumentTableStyles = {
+  wrapper: {
+    backgroundColor: 'yellow',
+  },
+  fileTitle: {
+    textAlign: 'right',
+    color: 'blue',
+  },
+  fileLink: {
+    textAlign: 'right',
+    color: 'red',
+  },
+  fileContainer: {
+    width: '50%',
+  },
+};
+
+export const ASSET_META_EVENTS_STYLES: AssetEventsPanelStyles = {
+  table: {
+    width: '80%',
+  },
+  tableRow: {
+    background: '#00FF00',
+  },
+  tableCell: {
+    fontStyle: 'italic',
+  },
+};
+
+export const ASSET_META_STYLES: AssetMetaStyles = {
   header: {
     textAlign: 'center',
     fontFamily: 'Comic Sans MS',
@@ -65,33 +96,8 @@ export const ASSET_META_STYLES = {
     fontSize: '1.2em',
     color: 'green',
   },
-  documents: {
-    wrapper: {
-      backgroundColor: 'yellow',
-    },
-    fileTitle: {
-      textAlign: 'right',
-      color: 'blue',
-    },
-    fileLink: {
-      textAlign: 'right',
-      color: 'red',
-    },
-    fileContainer: {
-      width: '50%',
-    },
-  },
-  events: {
-    table: {
-      width: '80%',
-    },
-    tableRow: {
-      background: '#00FF00',
-    },
-    tableCell: {
-      fontStyle: 'italic',
-    },
-  },
+  documents: ASSET_META_DOCS_STYLES,
+  events: ASSET_META_EVENTS_STYLES,
 };
 
 export const EVENTS: ApiEvent[] = [
