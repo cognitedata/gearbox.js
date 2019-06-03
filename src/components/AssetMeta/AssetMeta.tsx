@@ -29,6 +29,7 @@ import {
   MetaTimeseriesProps,
   TimeseriesPanel,
   TimeseriesPanelProps,
+  TimeseriesPanelStyles,
 } from './components/TimeseriesPanel';
 
 const SpinContainer = styled.div`
@@ -44,6 +45,7 @@ export interface AssetMetaStyles {
   header?: React.CSSProperties;
   emptyTab?: React.CSSProperties;
   details?: React.CSSProperties;
+  timeseries?: TimeseriesPanelStyles;
   documents?: DocumentTableStyles;
   events?: AssetEventsPanelStyles;
 }
@@ -184,6 +186,7 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
   }
 
   renderTimeseries() {
+    const { styles } = this.props;
     const { timeseries } = this.state;
     if (!timeseries || !this.includesPanel('timeseries')) {
       return null;
@@ -196,7 +199,7 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
         )}
         key="timeseries"
       >
-        <TimeseriesPanel {...timeseries} />
+        <TimeseriesPanel {...timeseries} styles={styles && styles.timeseries} />
       </TabPane>
     );
   }

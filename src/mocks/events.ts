@@ -53,9 +53,19 @@ export const eventWithout = (field: string) => ({
 
 const baseTimestamp = 1556120152466;
 
+export const ASSET_META_SERIES_STYLES = {
+  wrapper: {
+    border: '2px red solid',
+    width: '70%',
+  },
+  timeseriesContainer: {
+    backgroundColor: '#efefef',
+  },
+};
+
 export const ASSET_META_DOCS_STYLES: DocumentTableStyles = {
   wrapper: {
-    backgroundColor: 'yellow',
+    backgroundColor: '#ffea0c',
   },
   fileTitle: {
     textAlign: 'right',
@@ -75,7 +85,7 @@ export const ASSET_META_EVENTS_STYLES: AssetEventsPanelStyles = {
     width: '80%',
   },
   tableRow: {
-    background: '#00FF00',
+    backgroundColor: '#00FF00',
   },
   tableCell: {
     fontStyle: 'italic',
@@ -87,7 +97,7 @@ export const ASSET_META_STYLES: AssetMetaStyles = {
     textAlign: 'center',
     fontFamily: 'Comic Sans MS',
     fontSize: '1.2em',
-    background: '#ffa3d2',
+    backgroundColor: '#ffa3d2',
   },
   emptyTab: {
     color: 'yellow',
@@ -96,6 +106,7 @@ export const ASSET_META_STYLES: AssetMetaStyles = {
     fontSize: '1.2em',
     color: 'green',
   },
+  timeseries: ASSET_META_SERIES_STYLES,
   documents: ASSET_META_DOCS_STYLES,
   events: ASSET_META_EVENTS_STYLES,
 };

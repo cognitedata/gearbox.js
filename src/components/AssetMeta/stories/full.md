@@ -44,7 +44,7 @@ function ExampleComponent(props) {
 | `timeseriesProps`| Object passed as props to inner component that presents timeseries pane | `MetaTimeseriesProps`                      |             |
 | `docsProps`    | Object passed as props to inner component that presents documents pane | `MetaDocProps`                                |             |
 | `eventProps`   | Object passed as props to inner component that presents events pane    | `MetaEventsProps`                             |             |
-| `styles`       | Object that defines inline CSS styles for inner elements of the component.| `AssetMetaStyles`, `DocumentTableStyles`, `AssetEventsPanelStyles`|             |
+| `styles`       | Object that defines inline CSS styles for inner elements of the component.| `AssetMetaStyles`, `TimeseriesPanelStyles`, `DocumentTableStyles`, `AssetEventsPanelStyles`|  |
 
 ### Types
 
@@ -177,6 +177,8 @@ This interface defines inline CSS styles for inner elements of `AssetMeta` compo
 You can override styles of following blocks:
 <p>Details tab:</p>
 <img src="asset_meta/styling_schema1.jpg" alt="Tenant Styling" width="700px"><br><br>
+<p>Timeseries tab:</p>
+<img src="asset_meta/styling_schema4.jpg" alt="Tenant Styling" width="700px"><br><br>
 <p>Documents tab:</p>
 <img src="asset_meta/styling_schema2.jpg" alt="Tenant Styling" width="700px"><br><br>
 <p>Events tab:</p>
@@ -185,7 +187,7 @@ You can override styles of following blocks:
 The type can be imported from `@cognite/gearbox`:
 
 ```typescript
-import { AssetMetaStyles, DocumentTableStyles, AssetEventsPanelStyles } from '@cognite/gearbox';
+import { AssetMetaStyles, TimeseriesPanelStyles, DocumentTableStyles, AssetEventsPanelStyles } from '@cognite/gearbox';
 ```
 
 Definition:
@@ -197,6 +199,12 @@ interface AssetMetaStyles {
   details?: React.CSSProperties;
   documents?: DocumentTableStyles;
   events?: AssetEventsPanelStyles;
+}
+```
+```typescript
+interface TimeseriesPanelStyles {
+  wrapper?: React.CSSProperties;
+  timeseriesContainer?: React.CSSProperties;
 }
 ```
 ```typescript
