@@ -73,7 +73,10 @@ Definition:
 
 ```typescript
 export interface TimeseriesSearchStyles {
+  buttonRow?: React.CSSProperties;
   list?: React.CSSProperties;
+  selectAllButton?: React.CSSProperties;
+  selectNoneButton?: React.CSSProperties;
 }
 ```
 
