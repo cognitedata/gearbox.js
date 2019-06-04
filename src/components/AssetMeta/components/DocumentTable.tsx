@@ -99,7 +99,10 @@ export class DocumentTable extends React.PureComponent<
     return (
       <>
         <TableWrapper>
-          <CollapseContainer {...collapseProps}>
+          <CollapseContainer
+            {...collapseProps}
+            style={styles && styles.wrapper}
+          >
             {categories.map((category, i) => {
               const { description, documents } = documentsByCategory[category];
               const header = `${getShortDescription(description)} (${
@@ -113,7 +116,6 @@ export class DocumentTable extends React.PureComponent<
                     prioritizedCount === i + 1 &&
                     prioritizedCount !== categories.length
                   }
-                  style={styles && styles.wrapper}
                 >
                   {documents.map(this.renderDocument(category, description))}
                 </PanelWrapper>
