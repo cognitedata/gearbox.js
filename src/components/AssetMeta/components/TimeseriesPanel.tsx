@@ -3,9 +3,9 @@ import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import {
-  TimeseriesChartMeta,
   TimeseriesChartMetaProps,
-} from '../../TimeseriesChartMeta';
+  TimeseriesChartMetaPure,
+} from '../../TimeseriesChartMeta/TimeseriesChartMetaPure';
 
 export interface MetaTimeseriesProps
   extends Omit<TimeseriesChartMetaProps, 'timeseries'> {
@@ -43,7 +43,11 @@ export class TimeseriesPanel extends React.PureComponent<TimeseriesPanelProps> {
             {timeseries &&
               timeseries.map(ts => (
                 <PanelWrapper header={ts.name} key={ts.id.toString()}>
-                  <TimeseriesChartMeta key={ts.id} timeseries={ts} {...rest} />
+                  <TimeseriesChartMetaPure
+                    key={ts.id}
+                    timeseries={ts}
+                    {...rest}
+                  />
                 </PanelWrapper>
               ))}
           </CollapseContainer>

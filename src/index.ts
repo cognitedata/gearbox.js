@@ -8,6 +8,7 @@ export { Model3DViewer } from './components/Model3DViewer/Model3DViewer';
 export * from './components/SensorOverlay/SensorOverlay';
 export * from './components/TenantSelector/TenantSelector';
 export * from './components/TimeseriesChart/TimeseriesChart';
+export * from './components/TimeseriesChartMeta/TimeseriesChartMeta';
 export * from './components/TimeseriesSearch/TimeseriesSearch';
 export * from './components/ThemeProvider/ThemeProvider';
 
