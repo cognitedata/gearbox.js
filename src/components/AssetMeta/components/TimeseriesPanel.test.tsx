@@ -14,7 +14,7 @@ describe('TimeseriesPanel', () => {
     const wrapper = shallow(<TimeseriesPanel timeseries={timeseries} />);
     expect(wrapper.find('Styled(Collapse)')).toHaveLength(1);
     expect(wrapper.find('Styled(CollapsePanel)')).toHaveLength(3);
-    expect(wrapper.find('TimeseriesChartMeta')).toHaveLength(3);
+    expect(wrapper.find('TimeseriesChartMetaPure')).toHaveLength(3);
   });
 
   it('Should match the snapshot', () => {
