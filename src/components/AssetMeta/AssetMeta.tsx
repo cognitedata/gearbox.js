@@ -2,18 +2,15 @@ import { Asset /*Event, File, Timeseries*/ } from '@cognite/sdk';
 import { Tabs } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-// import { getAssetEvent, getAssetFiles, getAssetTimeseries } from '../../api';
 import {
-  AssetEventsPanelProps,
   AssetEventsPanelStyles,
   AssetPanelType,
   DocumentTableProps,
   DocumentTableStyles,
 } from '../../interfaces';
-import { MetaEventsProps } from '../../interfaces/AssetTypes';
 import { MetaDocProps } from '../../interfaces/DocumentTypes';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
-import { AssetEventsPanel } from './components/AssetEventsPanel';
+import { AssetEventsPanel } from '../AssetEventsPanel';
 import { DocumentTable } from './components/DocumentTable';
 import {
   MetaTimeseriesProps,
@@ -35,7 +32,7 @@ interface AssetMetaProps {
   assetId: number;
   tab?: string;
   docsProps?: MetaDocProps;
-  eventProps?: MetaEventsProps;
+  // eventProps?: MetaEventsProps;
   timeseriesProps?: MetaTimeseriesProps;
   hidePanels?: AssetPanelType[];
   onPaneChange?: (key: string) => void;
@@ -45,7 +42,7 @@ interface AssetMetaProps {
 interface AssetMetaState {
   assetId: number;
   asset: Asset | null;
-  assetEvents: AssetEventsPanelProps | null;
+  // assetEvents: AssetEventsPanelProps | null;
   docs: DocumentTableProps | null;
   timeseries: TimeseriesPanelProps | null;
   isLoading: boolean;
@@ -84,7 +81,6 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
     this.state = {
       assetId: props.assetId,
       asset: null,
-      assetEvents: null,
       docs: null,
       timeseries: null,
       isLoading: true,
@@ -193,14 +189,13 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
   }
 
   renderEvents() {
-    const { styles } = this.props;
-    const { assetEvents } = this.state;
+    const { assetId, styles } = this.props;
     if (!this.includesPanel('events')) {
       return null;
     }
     return (
       <TabPane tab="Events" key="events">
-        <AssetEventsPanel {...assetEvents} styles={styles && styles.events} />
+        <AssetEventsPanel assetId={assetId} styles={styles && styles.events} />
       </TabPane>
     );
   }

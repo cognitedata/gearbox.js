@@ -45,7 +45,11 @@ Assets.retrieve = (): Promise<Asset> => {
 };
 
 Events.list = async (): Promise<EventDataWithCursor> => {
-  return { items: EVENTS };
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({ items: EVENTS });
+    }, 1000);
+  });
 };
 
 Files.list = async ({

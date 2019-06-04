@@ -2,7 +2,7 @@ import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { getAssetEvent, getAssetFiles, getAssetTimeseries } from '../../api';
+import { getAssetFiles, getAssetTimeseries } from '../../api';
 
 import { ASSET_DATA, DOCUMENTS, EVENTS, timeseriesList } from '../../mocks';
 import { AssetMeta } from './AssetMeta';
@@ -10,7 +10,7 @@ import { AssetMeta } from './AssetMeta';
 // @ts-ignore
 sdk.Assets.retrieve = jest.fn();
 // @ts-ignore
-getAssetEvent = jest.fn();
+sdk.Events.list = jest.fn();
 // @ts-ignore
 getAssetFiles = jest.fn();
 // @ts-ignore
@@ -22,7 +22,7 @@ beforeEach(() => {
   // @ts-ignore
   sdk.Assets.retrieve.mockResolvedValue(ASSET_DATA);
   // @ts-ignore
-  getAssetEvent.mockResolvedValue(EVENTS);
+  sdk.Events.list.mockResolvedValue({ items: EVENTS });
   // @ts-ignore
   getAssetFiles.mockResolvedValue(DOCUMENTS);
   // @ts-ignore
