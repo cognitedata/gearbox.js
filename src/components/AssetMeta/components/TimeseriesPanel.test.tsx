@@ -10,24 +10,24 @@ configure({ adapter: new Adapter() });
 const timeseries = timeseriesList.slice(0, 3);
 
 describe('TimeseriesPanel', () => {
-  xit('Renders without exploding', () => {
+  it('Renders without exploding', () => {
     const wrapper = shallow(<TimeseriesPanel timeseries={timeseries} />);
     expect(wrapper.find('Styled(Collapse)')).toHaveLength(1);
     expect(wrapper.find('Styled(CollapsePanel)')).toHaveLength(3);
     expect(wrapper.find('TimeseriesChartMeta')).toHaveLength(3);
   });
 
-  xit('Should match the snapshot', () => {
+  it('Should match the snapshot', () => {
     const tree = renderer.create(<TimeseriesPanel timeseries={timeseries} />);
     expect(tree).toMatchSnapshot();
   });
 
-  xit('Should render a message if timeseries are empty', () => {
+  it('Should render a message if timeseries are empty', () => {
     const wrapper = shallow(<TimeseriesPanel timeseries={[]} />);
     expect(wrapper.text()).toEqual('No timeseries linked to this asset');
   });
 
-  xit('Should render special message if provided and timeseries are empty', () => {
+  it('Should render special message if provided and timeseries are empty', () => {
     const wrapper = shallow(
       <TimeseriesPanel
         timeseries={[]}
