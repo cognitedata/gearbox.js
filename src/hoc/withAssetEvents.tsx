@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk';
+import { Event } from '@cognite/sdk';
 import * as sdk from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
@@ -10,38 +10,38 @@ import {
   connectPromiseToUnmountState,
 } from '../utils/promise';
 
-export interface WithAssetDataProps {
-  asset: Asset;
+export interface WithAssetEventsDataProps {
+  assetEvents: Event[];
 }
 
 export interface WithAssetProps {
   assetId: number;
-  onAssetLoaded?: (asset: Asset) => void;
+  onAssetEventsLoaded?: (assetEvents: Event[]) => void;
 }
 
-export interface WithAssetState {
+export interface WithAssetEventsState {
   isLoading: boolean;
-  asset: Asset | null;
+  assetEvents: Event[] | null;
   assetId: number;
 }
 
-export const withAsset = <P extends WithAssetDataProps>(
+export const withAssetEvents = <P extends WithAssetEventsDataProps>(
   WrapperComponent: React.ComponentType<P>
 ) =>
   class
     extends React.Component<
-      Subtract<P, WithAssetDataProps> & WithAssetProps,
-      WithAssetState
+      Subtract<P, WithAssetEventsDataProps> & WithAssetProps,
+      WithAssetEventsState
     >
     implements ComponentWithUnmountState {
     static getDerivedStateFromProps(
       props: P & WithAssetProps,
-      state: WithAssetState
+      state: WithAssetEventsState
     ) {
       if (props.assetId !== state.assetId) {
         return {
           isLoading: true,
-          asset: null,
+          assetEvents: null,
           assetId: props.assetId,
         };
       }
@@ -56,13 +56,13 @@ export const withAsset = <P extends WithAssetDataProps>(
 
       this.state = {
         isLoading: true,
-        asset: null,
+        assetEvents: null,
         assetId: props.assetId,
       };
     }
 
     componentDidMount() {
-      this.loadAsset();
+      this.loadAssetEvents();
     }
 
     componentWillUnmount() {
@@ -71,24 +71,24 @@ export const withAsset = <P extends WithAssetDataProps>(
 
     componentDidUpdate(prevProps: P & WithAssetProps) {
       if (prevProps.assetId !== this.props.assetId) {
-        this.loadAsset();
+        this.loadAssetEvents();
       }
     }
 
-    async loadAsset() {
+    async loadAssetEvents() {
       try {
-        const asset = await connectPromiseToUnmountState(
+        const res = await connectPromiseToUnmountState(
           this,
-          sdk.Assets.retrieve(this.props.assetId)
+          sdk.Events.list({ assetId: this.props.assetId, limit: 1000 })
         );
 
         this.setState({
           isLoading: false,
-          asset,
+          assetEvents: res.items,
         });
 
-        if (this.props.onAssetLoaded) {
-          this.props.onAssetLoaded(asset);
+        if (this.props.onAssetEventsLoaded) {
+          this.props.onAssetEventsLoaded(res.items);
         }
       } catch (error) {
         if (error instanceof CanceledPromiseException !== true) {
@@ -98,7 +98,7 @@ export const withAsset = <P extends WithAssetDataProps>(
     }
 
     render() {
-      const { isLoading, asset } = this.state;
+      const { isLoading, assetEvents } = this.state;
 
       if (isLoading) {
         return (
@@ -108,8 +108,13 @@ export const withAsset = <P extends WithAssetDataProps>(
         );
       }
 
-      if (asset) {
-        return <WrapperComponent {...(this.props as any) as P} asset={asset} />;
+      if (assetEvents) {
+        return (
+          <WrapperComponent
+            {...(this.props as any) as P}
+            assetEvents={assetEvents}
+          />
+        );
       }
 
       return null;
