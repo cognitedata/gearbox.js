@@ -2,17 +2,13 @@ import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import {
-  getAssetEvent,
-  getAssetFiles,
-  getAssetTimeseries,
-  retrieveAsset,
-} from '../../api';
+import { getAssetEvent, getAssetFiles, getAssetTimeseries } from '../../api';
+
 import { ASSET_DATA, DOCUMENTS, EVENTS, timeseriesList } from '../../mocks';
 import { AssetMeta } from './AssetMeta';
 
 // @ts-ignore
-retrieveAsset = jest.fn();
+sdk.Assets.retrieve = jest.fn();
 // @ts-ignore
 getAssetEvent = jest.fn();
 // @ts-ignore
@@ -24,7 +20,7 @@ configure({ adapter: new Adapter() });
 
 beforeEach(() => {
   // @ts-ignore
-  retrieveAsset.mockResolvedValue(ASSET_DATA);
+  sdk.Assets.retrieve.mockResolvedValue(ASSET_DATA);
   // @ts-ignore
   getAssetEvent.mockResolvedValue(EVENTS);
   // @ts-ignore
@@ -74,7 +70,7 @@ describe('AssetMeta', () => {
 
   it('should render spinner while loading asset, events and documents', () => {
     // @ts-ignore
-    retrieveAsset.mockImplementation(
+    sdk.Assets.retrieve.mockImplementation(
       (): Promise<sdk.Asset> => {
         return new Promise(resolve => {
           setTimeout(() => {

@@ -3,7 +3,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { timeseriesList } from '../../mocks';
-import { withTimeseries, WithTimeseriesDataProps } from './withTimeseries';
+import { withTimeseries, WithTimeseriesDataProps } from '../withTimeseries';
 
 configure({ adapter: new Adapter() });
 

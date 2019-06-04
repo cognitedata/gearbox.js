@@ -3,12 +3,12 @@ import * as sdk from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
 import { Subtract } from 'utility-types';
-import { LoadingOverlay } from '../../components/common/LoadingOverlay/LoadingOverlay';
+import { LoadingOverlay } from '../components/common/LoadingOverlay/LoadingOverlay';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
   connectPromiseToUnmountState,
-} from '../../utils/promise';
+} from '../utils/promise';
 
 export interface WithTimeseriesDataProps {
   timeseries: Timeseries;
