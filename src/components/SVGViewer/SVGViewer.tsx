@@ -16,7 +16,7 @@ const zoomLevel = 0.7;
 const wheelZoomLevel = 0.15;
 const currentAssetClassName = 'current-asset';
 
-export interface ComponentProps {
+export interface SvgViewerProps {
   // CDF fileId to fetch svg-document
   documentId: number;
   // List of classes and conditions on when they should be applied for equipment
@@ -49,14 +49,14 @@ export interface ComponentProps {
   handleDocumentLoadError?: (error: Error) => void;
 }
 
-interface ComponentState {
+interface SvgViewerState {
   isSearchVisible: boolean;
   isSearchFocused: boolean;
   width: number;
   handleKeyDown: boolean;
 }
 
-export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
+export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
   prevMoveDistanceX: number = 0;
   prevMoveDistanceY: number = 0;
   dragging: boolean = false;
@@ -67,7 +67,7 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
   pinchZoom: React.RefObject<HTMLDivElement>;
   pinchZoomContainer: React.RefObject<HTMLDivElement>;
   svgParentNode: React.RefObject<HTMLDivElement>;
-  constructor(props: ComponentProps) {
+  constructor(props: SvgViewerProps) {
     super(props);
     this.state = {
       isSearchVisible: false,
@@ -88,7 +88,7 @@ export class SVGViewer extends React.Component<ComponentProps, ComponentState> {
     window.addEventListener('resize', this.updateWindowDimensions);
   }
 
-  componentDidUpdate(prevProps: ComponentProps) {
+  componentDidUpdate(prevProps: SvgViewerProps) {
     if (this.svg) {
       this.setCustomClasses();
     }
