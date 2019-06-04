@@ -1,5 +1,6 @@
 import * as sdk from '@cognite/sdk';
-import { Spin } from 'antd';
+import { Button, Spin } from 'antd';
+import { NativeButtonProps } from 'antd/lib/button/button';
 import { debounce } from 'lodash';
 import React, { KeyboardEvent } from 'react';
 import styled from 'styled-components';
@@ -34,8 +35,21 @@ const CenteredSpin = styled(Spin)`
   }
 `;
 
+const ButtonRow = styled.div`
+  margin-top: 5px;
+`;
+
+const SelectNoneButton = styled((props: NativeButtonProps) => (
+  <Button {...props} />
+))`
+  margin-left: 10px;
+`;
+
 export interface TimeseriesSearchStyles {
+  buttonRow?: React.CSSProperties;
   list?: React.CSSProperties;
+  selectAllButton?: React.CSSProperties;
+  selectNoneButton?: React.CSSProperties;
 }
 
 export interface TimeseriesSearchProps {
@@ -46,7 +60,7 @@ export interface TimeseriesSearchProps {
   allowStrings: boolean;
   onTimeserieSelectionChange: (
     newTimeseriesIds: number[],
-    selectedTimeseries: sdk.Timeseries
+    selectedTimeseries: sdk.Timeseries | null
   ) => void;
   rootAsset?: number;
   filterRule?: (timeseries: sdk.Timeseries) => boolean;
@@ -57,6 +71,8 @@ export interface TimeseriesSearchProps {
 }
 export const defaultStrings: PureObject = {
   searchPlaceholder: 'Search for timeseries',
+  selectAll: 'Select all',
+  selectNone: 'Select none',
   rootAssetSelectAll: rootAssetSelectStrings.all,
   rootAssetSelectLoading: rootAssetSelectStrings.loading,
 };
@@ -126,13 +142,13 @@ export class TimeseriesSearch extends React.Component<
   };
 
   onTimeSerieClicked = (timeseries: sdk.Timeseries): void => {
-    const { allowStrings } = this.props;
+    const { allowStrings, single, onTimeserieSelectionChange } = this.props;
     if (!allowStrings && timeseries.isString) {
       return;
     }
 
     let newTimeseries: sdk.Timeseries[] = [];
-    if (this.props.single) {
+    if (single) {
       newTimeseries = [timeseries];
     } else if (!this.isChecked(timeseries.id)) {
       newTimeseries = [...this.state.selectedTimeseries, timeseries];
@@ -143,10 +159,7 @@ export class TimeseriesSearch extends React.Component<
     }
     this.setState({ selectedTimeseries: newTimeseries });
 
-    this.props.onTimeserieSelectionChange(
-      newTimeseries.map(x => x.id),
-      timeseries
-    );
+    onTimeserieSelectionChange(newTimeseries.map(x => x.id), timeseries);
   };
 
   fetchTimeseries = (apiQuery: ApiQuery): void => {
@@ -268,6 +281,37 @@ export class TimeseriesSearch extends React.Component<
     }
   };
 
+  onSelectAll = () => {
+    const { allowStrings, onTimeserieSelectionChange } = this.props;
+    const { searchResults, selectedTimeseries } = this.state;
+    const newTimeseries = searchResults.filter(
+      (result: sdk.Timeseries) =>
+        !result.isString || (allowStrings && result.isString)
+    );
+    this.setState({
+      selectedTimeseries: [
+        ...new Set([...selectedTimeseries, ...newTimeseries]),
+      ],
+    });
+    onTimeserieSelectionChange(newTimeseries.map(x => x.id), null);
+  };
+
+  onSelectNone = () => {
+    const { onTimeserieSelectionChange } = this.props;
+    this.setState({ selectedTimeseries: [] });
+    onTimeserieSelectionChange([], null);
+  };
+
+  isAllSelected = () => {
+    const { searchResults } = this.state;
+    const { allowStrings } = this.props;
+
+    return searchResults.every(series => {
+      const isAllowed = allowStrings || !series.isString;
+      return !isAllowed || this.isChecked(series.id);
+    });
+  };
+
   render() {
     const {
       allowStrings,
@@ -285,6 +329,7 @@ export class TimeseriesSearch extends React.Component<
       cursor,
     } = this.state;
     const lang = { ...defaultStrings, ...strings };
+
     return (
       <Wrapper>
         {!hideSelected && (
@@ -308,6 +353,26 @@ export class TimeseriesSearch extends React.Component<
           }}
           onKeyDown={this.onKeyDown}
         />
+        {searchResults.length > 0 && !single ? (
+          <ButtonRow style={styles && styles.buttonRow}>
+            <Button
+              htmlType="button"
+              onClick={this.onSelectAll}
+              disabled={this.isAllSelected()}
+              style={styles && styles.selectAllButton}
+            >
+              {lang.selectAll}
+            </Button>
+            <SelectNoneButton
+              htmlType="button"
+              onClick={this.onSelectNone}
+              disabled={selectedTimeseries.length === 0}
+              style={styles && styles.selectNoneButton}
+            >
+              {lang.selectNone}
+            </SelectNoneButton>
+          </ButtonRow>
+        ) : null}
         <TagList style={styles && styles.list}>
           {fetching ? <CenteredSpin /> : null}
           {searchResults.map((timeseries: sdk.Timeseries, index: number) => (

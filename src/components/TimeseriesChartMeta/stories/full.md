@@ -4,7 +4,7 @@
 
 ### Description:
 
-This component shows an instance of `TimeseriesChart` component along with additional information about timeseries such as current data point (sensor value),
+This component loads timeseries data by `timeseriesId` and shows an instance of `TimeseriesChart` component along with additional information about the timeseries such as current data point (sensor value),
 meta data of the timeserie, description. It also shows group of radio buttons to control a time period for `TimeseriesChart`.
 
 #### Usage:
@@ -13,29 +13,11 @@ meta data of the timeserie, description. It also shows group of radio buttons to
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { Timeseries } from '@cogmnite/sdk';
 import { TimeseriesChart } from '@cognite/gearbox';
-
-const timeseries: Timeseries = {
-  id: 8681821313339919,
-  name: 'IA_21PT1019.AlarmByte',
-  isString: false,
-  unit: 'bar',
-  metadata: {
-    tag: 'IA_21PT1019.AlarmByte',
-    scan: '1',
-    span: '100',
-    step: '1',
-    zero: '0',
-  },
-  assetId: 4965555138606429,
-  isStep: false,
-  description: '21PT1019.AlarmByte',
-};
 
 function ExampleComponent(props) {
   return (
-    <TimeseriesChartMeta timeseries={timeseries} />
+    <TimeseriesChartMeta timeseriesId={8681821313339919} />
   );
   
 }
@@ -47,7 +29,7 @@ function ExampleComponent(props) {
 
 | Property        | Description                                        | Type         | Default |
 | --------------- | -------------------------------------------------- | ------------ | ------- |
-| `timeseries`    | `Timeseries` object retrieved from `@cognite/sdk` | `Timeseries` |         |
+| `timeseriesId`  | Timeseries Id                                      | `number`     |         |
 
 ##### Optionals:
 
@@ -66,14 +48,6 @@ function ExampleComponent(props) {
 
 
 #### Types:
-
-### Timeseries
-
-This type can be imported from `@cognite/sdk`:
-
-```typescript
-import { Timeseries } from '@cognite/sdk';
-```
 
 ### TimeseriesChartMetaPeriod
 

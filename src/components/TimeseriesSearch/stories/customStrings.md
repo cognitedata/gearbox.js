@@ -19,9 +19,12 @@ function ExampleComponent(props) {
   return (
     <TimeseriesSearch
       onTimeserieSelectionChange={onTimeserieSelectionChange}
+      rootAssetSelect={true}
       strings={{
         rootAssetSelectAll: 'No filter',
         searchPlaceholder: 'search for stuff!',
+        selectAll: 'Everything!',
+        selectNone: 'Nothing!',
       }}
     />
   );
