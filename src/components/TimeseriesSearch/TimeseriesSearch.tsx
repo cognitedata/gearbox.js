@@ -39,10 +39,6 @@ const ButtonRow = styled.div`
   margin-top: 5px;
 `;
 
-const SelectAllButton = styled((props: NativeButtonProps) => (
-  <Button {...props} />
-))``;
-
 const SelectNoneButton = styled((props: NativeButtonProps) => (
   <Button {...props} />
 ))`
@@ -359,14 +355,14 @@ export class TimeseriesSearch extends React.Component<
         />
         {searchResults.length > 0 && !single ? (
           <ButtonRow style={styles && styles.buttonRow}>
-            <SelectAllButton
+            <Button
               htmlType="button"
               onClick={this.onSelectAll}
               disabled={this.isAllSelected()}
               style={styles && styles.selectAllButton}
             >
               {lang.selectAll}
-            </SelectAllButton>
+            </Button>
             <SelectNoneButton
               htmlType="button"
               onClick={this.onSelectNone}
