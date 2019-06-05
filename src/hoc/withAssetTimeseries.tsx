@@ -1,9 +1,8 @@
 import { Timeseries } from '@cognite/sdk';
 import * as sdk from '@cognite/sdk';
 import React from 'react';
-import styled from 'styled-components';
 import { Subtract } from 'utility-types';
-import { LoadingOverlay } from '../components/common/LoadingOverlay/LoadingOverlay';
+import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
@@ -102,13 +101,7 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
       const { isLoading, assetTimeseries } = this.state;
 
       if (isLoading) {
-        return (
-          this.props.customSpinner || (
-            <SpinnerContainer>
-              <LoadingOverlay isLoading={true} backgroundColor={'none'} />
-            </SpinnerContainer>
-          )
-        );
+        return this.props.customSpinner || <LoadingBlock />;
       }
 
       if (assetTimeseries) {
@@ -123,8 +116,3 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
       return null;
     }
   };
-
-const SpinnerContainer = styled.div`
-  position: relative;
-  height: 300px;
-`;
