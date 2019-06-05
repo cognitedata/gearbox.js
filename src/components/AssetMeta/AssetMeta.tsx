@@ -1,4 +1,5 @@
 import { Asset } from '@cognite/sdk';
+import * as sdk from '@cognite/sdk';
 import { Tabs } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
@@ -8,6 +9,11 @@ import {
   DocumentTableStyles,
 } from '../../interfaces';
 import { MetaDocProps } from '../../interfaces/DocumentTypes';
+import {
+  CanceledPromiseException,
+  ComponentWithUnmountState,
+  connectPromiseToUnmountState,
+} from '../../utils/promise';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
 import { AssetDocumentsPanel } from '../AssetDocumentsPanel';
 import { AssetEventsPanel, MetaEventsProps } from '../AssetEventsPanel';
@@ -43,7 +49,8 @@ interface AssetMetaState {
   isLoading: boolean;
 }
 
-export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
+export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
+  implements ComponentWithUnmountState {
   static getDerivedStateFromProps(
     props: AssetMetaProps,
     state: AssetMetaState
@@ -59,6 +66,8 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
     }
   }
 
+  isComponentUnmounted = false;
+
   constructor(props: AssetMetaProps) {
     super(props);
     this.state = {
@@ -66,6 +75,39 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
       asset: null,
       isLoading: true,
     };
+  }
+
+  componentDidMount() {
+    if (!this.includesPanel('details') && this.props.assetId) {
+      this.loadAsset(this.props.assetId);
+    }
+  }
+
+  componentDidUpdate(prevProps: AssetMetaProps) {
+    if (
+      prevProps.assetId !== this.props.assetId &&
+      !this.includesPanel('details')
+    ) {
+      this.loadAsset(this.props.assetId);
+    }
+  }
+
+  componentWillUnmount() {
+    this.isComponentUnmounted = true;
+  }
+
+  async loadAsset(assetId: number) {
+    try {
+      const asset = await connectPromiseToUnmountState(
+        this,
+        sdk.Assets.retrieve(assetId)
+      );
+      this.handleAssetLoaded(asset);
+    } catch (error) {
+      if (error instanceof CanceledPromiseException !== true) {
+        throw error;
+      }
+    }
   }
 
   includesPanel = (pane: AssetPanelType): boolean =>
@@ -84,7 +126,7 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
     }
     const { styles } = this.props;
     return (
-      <TabPane tab="Details" key="details">
+      <TabPane tab="Details" key="details" forceRender={true}>
         <AssetDetailsPanel
           assetId={this.props.assetId}
           onAssetLoaded={this.handleAssetLoaded}
