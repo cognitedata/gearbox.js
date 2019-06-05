@@ -13,7 +13,7 @@ export interface WithAssetFilesDataProps {
   assetFiles: File[];
 }
 
-export interface WithAssetProps {
+export interface WithAssetFilesProps {
   assetId: number;
   customSpinner?: React.ReactNode;
   onAssetFilesLoaded?: (assetFiles: File[]) => void;
@@ -30,12 +30,12 @@ export const withAssetFiles = <P extends WithAssetFilesDataProps>(
 ) =>
   class
     extends React.Component<
-      Subtract<P, WithAssetFilesDataProps> & WithAssetProps,
+      Subtract<P, WithAssetFilesDataProps> & WithAssetFilesProps,
       WithAssetFilesState
     >
     implements ComponentWithUnmountState {
     static getDerivedStateFromProps(
-      props: P & WithAssetProps,
+      props: P & WithAssetFilesProps,
       state: WithAssetFilesState
     ) {
       if (props.assetId !== state.assetId) {
@@ -51,7 +51,7 @@ export const withAssetFiles = <P extends WithAssetFilesDataProps>(
 
     isComponentUnmounted = false;
 
-    constructor(props: P & WithAssetProps) {
+    constructor(props: P & WithAssetFilesProps) {
       super(props);
 
       this.state = {
@@ -69,7 +69,7 @@ export const withAssetFiles = <P extends WithAssetFilesDataProps>(
       this.isComponentUnmounted = true;
     }
 
-    componentDidUpdate(prevProps: P & WithAssetProps) {
+    componentDidUpdate(prevProps: P & WithAssetFilesProps) {
       if (prevProps.assetId !== this.props.assetId) {
         this.loadAssetFiles();
       }
@@ -98,16 +98,22 @@ export const withAssetFiles = <P extends WithAssetFilesDataProps>(
     }
 
     render() {
+      const {
+        assetId,
+        customSpinner,
+        onAssetFilesLoaded,
+        ...restProps
+      } = this.props;
       const { isLoading, assetFiles } = this.state;
 
       if (isLoading) {
-        return this.props.customSpinner || <LoadingBlock />;
+        return customSpinner || <LoadingBlock />;
       }
 
       if (assetFiles) {
         return (
           <WrapperComponent
-            {...(this.props as any) as P}
+            {...(restProps as any) as P}
             assetFiles={assetFiles}
           />
         );

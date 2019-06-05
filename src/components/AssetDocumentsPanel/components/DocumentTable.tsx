@@ -16,11 +16,13 @@ import {
 
 const { Panel } = Collapse;
 
-export interface DocumentTableProps
-  extends MetaDocProps,
-    WithAssetFilesDataProps {
+export interface DocumentsPanelStylesProps {
   styles?: DocumentTableStyles;
 }
+
+export type DocumentTableProps = MetaDocProps &
+  WithAssetFilesDataProps &
+  DocumentsPanelStylesProps;
 
 interface DocumentTableState {
   stateParam?: string;

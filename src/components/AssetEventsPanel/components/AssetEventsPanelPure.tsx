@@ -24,11 +24,13 @@ export interface MetaEventsProps extends TableDesignType {
   columns?: TableColumnType[];
 }
 
-export interface AssetEventsPanelProps
-  extends MetaEventsProps,
-    WithAssetEventsDataProps {
+export interface AssetEventsPanelStylesProps {
   styles?: AssetEventsPanelStyles;
 }
+
+export type AssetEventsPanelProps = MetaEventsProps &
+  WithAssetEventsDataProps &
+  AssetEventsPanelStylesProps;
 
 export class AssetEventsPanelPure extends Component<
   AssetEventsPanelProps,

@@ -98,14 +98,20 @@ export const withAsset = <P extends WithAssetDataProps>(
     }
 
     render() {
+      const {
+        assetId,
+        customSpinner,
+        onAssetLoaded,
+        ...restProps
+      } = this.props;
       const { isLoading, asset } = this.state;
 
       if (isLoading) {
-        return this.props.customSpinner || <LoadingBlock />;
+        return customSpinner || <LoadingBlock />;
       }
 
       if (asset) {
-        return <WrapperComponent {...(this.props as any) as P} asset={asset} />;
+        return <WrapperComponent {...(restProps as any) as P} asset={asset} />;
       }
 
       return null;

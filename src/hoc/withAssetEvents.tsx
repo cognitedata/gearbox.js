@@ -98,16 +98,22 @@ export const withAssetEvents = <P extends WithAssetEventsDataProps>(
     }
 
     render() {
+      const {
+        assetId,
+        customSpinner,
+        onAssetEventsLoaded,
+        ...restProps
+      } = this.props;
       const { isLoading, assetEvents } = this.state;
 
       if (isLoading) {
-        return this.props.customSpinner || <LoadingBlock />;
+        return customSpinner || <LoadingBlock />;
       }
 
       if (assetEvents) {
         return (
           <WrapperComponent
-            {...(this.props as any) as P}
+            {...(restProps as any) as P}
             assetEvents={assetEvents}
           />
         );

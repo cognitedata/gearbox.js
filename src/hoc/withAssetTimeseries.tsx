@@ -13,7 +13,7 @@ export interface WithAssetTimeseriesDataProps {
   assetTimeseries: Timeseries[];
 }
 
-export interface WithAssetProps {
+export interface WithAssetTimeseriesProps {
   assetId: number;
   customSpinner?: React.ReactNode;
   onAssetTimeseriesLoaded?: (assetTimeseries: Timeseries[]) => void;
@@ -30,12 +30,12 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
 ) =>
   class
     extends React.Component<
-      Subtract<P, WithAssetTimeseriesDataProps> & WithAssetProps,
+      Subtract<P, WithAssetTimeseriesDataProps> & WithAssetTimeseriesProps,
       WithAssetTimeseriesState
     >
     implements ComponentWithUnmountState {
     static getDerivedStateFromProps(
-      props: P & WithAssetProps,
+      props: P & WithAssetTimeseriesProps,
       state: WithAssetTimeseriesState
     ) {
       if (props.assetId !== state.assetId) {
@@ -51,7 +51,7 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
 
     isComponentUnmounted = false;
 
-    constructor(props: P & WithAssetProps) {
+    constructor(props: P & WithAssetTimeseriesProps) {
       super(props);
 
       this.state = {
@@ -69,7 +69,7 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
       this.isComponentUnmounted = true;
     }
 
-    componentDidUpdate(prevProps: P & WithAssetProps) {
+    componentDidUpdate(prevProps: P & WithAssetTimeseriesProps) {
       if (prevProps.assetId !== this.props.assetId) {
         this.loadAssetTimeseries();
       }
@@ -98,16 +98,22 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
     }
 
     render() {
+      const {
+        assetId,
+        customSpinner,
+        onAssetTimeseriesLoaded,
+        ...restProps
+      } = this.props;
       const { isLoading, assetTimeseries } = this.state;
 
       if (isLoading) {
-        return this.props.customSpinner || <LoadingBlock />;
+        return customSpinner || <LoadingBlock />;
       }
 
       if (assetTimeseries) {
         return (
           <WrapperComponent
-            {...(this.props as any) as P}
+            {...(restProps as any) as P}
             assetTimeseries={assetTimeseries}
           />
         );

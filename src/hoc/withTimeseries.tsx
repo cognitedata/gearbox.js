@@ -93,16 +93,17 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
     }
 
     render() {
+      const { timeseriesId, customSpinner, ...restProps } = this.props;
       const { isLoading, timeseries } = this.state;
 
       if (isLoading) {
-        return this.props.customSpinner || <LoadingBlock />;
+        return customSpinner || <LoadingBlock />;
       }
 
       if (timeseries) {
         return (
           <WrapperComponent
-            {...(this.props as any) as P}
+            {...(restProps as any) as P}
             timeseries={timeseries}
           />
         );

@@ -1,9 +1,10 @@
-import React from 'react';
 import { withAsset, WithAssetProps } from '../../hoc/withAsset';
-import { AssetDetailsPanelPure } from './AssetDetailsPanelPure';
+import {
+  AssetDetailsPanelPure,
+  AssetDetailsPanelStylesProps,
+} from './AssetDetailsPanelPure';
 
-export interface AssetDetailsPanelProps extends WithAssetProps {
-  styles?: React.CSSProperties;
-}
+export type AssetDetailsPanelProps = WithAssetProps &
+  AssetDetailsPanelStylesProps;
 
 export const AssetDetailsPanel = withAsset(AssetDetailsPanelPure);
