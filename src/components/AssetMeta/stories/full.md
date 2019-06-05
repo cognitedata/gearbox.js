@@ -44,6 +44,7 @@ function ExampleComponent(props) {
 | `timeseriesProps`| Object passed as props to inner component that presents timeseries pane | `MetaTimeseriesProps`                      |             |
 | `docsProps`    | Object passed as props to inner component that presents documents pane | `MetaDocProps`                                |             |
 | `eventProps`   | Object passed as props to inner component that presents events pane    | `MetaEventsProps`                             |             |
+| `customSpinner`| A custom spinner to be shown in tabs while data is being loaded        | `React.ReactNode`                             |             |
 | `styles`       | Object that defines inline CSS styles for inner elements of the component.| `AssetMetaStyles`, `DocumentTableStyles`, `AssetEventsPanelStyles`|             |
 
 ### Types

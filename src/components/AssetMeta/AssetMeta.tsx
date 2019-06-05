@@ -41,6 +41,7 @@ interface AssetMetaProps {
   hidePanels?: AssetPanelType[];
   onPaneChange?: (key: string) => void;
   styles?: AssetMetaStyles;
+  customSpinner?: React.ReactNode;
 }
 
 interface AssetMetaState {
@@ -124,13 +125,14 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
     if (!this.includesPanel('details')) {
       return null;
     }
-    const { styles } = this.props;
+    const { styles, customSpinner } = this.props;
     return (
       <TabPane tab="Details" key="details" forceRender={true}>
         <AssetDetailsPanel
           assetId={this.props.assetId}
           onAssetLoaded={this.handleAssetLoaded}
           styles={styles && styles.details}
+          customSpinner={customSpinner}
         />
       </TabPane>
     );
@@ -140,41 +142,43 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
     if (!this.includesPanel('timeseries')) {
       return null;
     }
-    const { assetId, timeseriesProps } = this.props;
+    const { assetId, timeseriesProps, customSpinner } = this.props;
     return (
       <TabPane tab="Timeseries" key="timeseries">
-        <AssetTimeseriesPanel assetId={assetId} {...timeseriesProps} />
+        <AssetTimeseriesPanel assetId={assetId} {...timeseriesProps} customSpinner={customSpinner} />
       </TabPane>
     );
   }
 
   renderDocuments() {
-    const { assetId, styles, docsProps } = this.props;
     if (!this.includesPanel('documents')) {
       return null;
     }
+    const { assetId, styles, docsProps, customSpinner } = this.props;
     return (
       <TabPane tab="Documents" key="documents">
         <AssetDocumentsPanel
           {...docsProps}
           assetId={assetId}
           styles={styles && styles.documents}
+          customSpinner={customSpinner}
         />
       </TabPane>
     );
   }
 
   renderEvents() {
-    const { assetId, styles, eventProps } = this.props;
     if (!this.includesPanel('events')) {
       return null;
     }
+    const { assetId, styles, eventProps, customSpinner } = this.props;
     return (
       <TabPane tab="Events" key="events">
         <AssetEventsPanel
           {...eventProps}
           assetId={assetId}
           styles={styles && styles.events}
+          customSpinner={customSpinner}
         />
       </TabPane>
     );

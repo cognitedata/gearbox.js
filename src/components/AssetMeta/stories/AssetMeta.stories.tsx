@@ -35,6 +35,7 @@ import fullDescription from './full.md';
 import hideTab from './hideTab.md';
 import selectedDocument from './selectedDocument.md';
 import selectedPane from './selectedPane.md';
+import customSpinner from './customSpinner.md';
 
 Assets.retrieve = (): Promise<Asset> => {
   return new Promise(resolve => {
@@ -262,6 +263,17 @@ storiesOf('AssetMeta/Examples', module)
     {
       readme: {
         content: customStyles,
+      },
+    }
+  )
+  .add(
+    'With custom spinner',
+    () => {
+      return <AssetMeta assetId={123456} customSpinner={<div>Loading...</div>} />;
+    },
+    {
+      readme: {
+        content: customSpinner,
       },
     }
   );
