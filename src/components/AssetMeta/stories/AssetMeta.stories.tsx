@@ -29,13 +29,13 @@ import basic from './basic.md';
 import customCategorySort from './customCategorySort.md';
 import customPriorityAndSort from './customPriorityAndSort.md';
 import customPriorityCategory from './customPriorityCategory.md';
+import customSpinner from './customSpinner.md';
 import customStyles from './customStyles.md';
 import customTimeseriesChartMeta from './customTimeseriesChartMeta.md';
 import fullDescription from './full.md';
 import hideTab from './hideTab.md';
 import selectedDocument from './selectedDocument.md';
 import selectedPane from './selectedPane.md';
-import customSpinner from './customSpinner.md';
 
 Assets.retrieve = (): Promise<Asset> => {
   return new Promise(resolve => {
@@ -269,7 +269,9 @@ storiesOf('AssetMeta/Examples', module)
   .add(
     'With custom spinner',
     () => {
-      return <AssetMeta assetId={123456} customSpinner={<div>Loading...</div>} />;
+      return (
+        <AssetMeta assetId={123456} customSpinner={<div>Loading...</div>} />
+      );
     },
     {
       readme: {

@@ -145,7 +145,11 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
     const { assetId, timeseriesProps, customSpinner } = this.props;
     return (
       <TabPane tab="Timeseries" key="timeseries">
-        <AssetTimeseriesPanel assetId={assetId} {...timeseriesProps} customSpinner={customSpinner} />
+        <AssetTimeseriesPanel
+          assetId={assetId}
+          {...timeseriesProps}
+          customSpinner={customSpinner}
+        />
       </TabPane>
     );
   }
