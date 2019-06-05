@@ -312,6 +312,10 @@ export class TimeseriesSearch extends React.Component<
     });
   };
 
+  onTimeseriesMouseOver = (index: number) => {
+    this.setState({ cursor: index });
+  };
+
   render() {
     const {
       allowStrings,
@@ -389,6 +393,7 @@ export class TimeseriesSearch extends React.Component<
               checked={this.isChecked(timeseries.id)}
               onContainerClick={() => this.onTimeSerieClicked(timeseries)}
               disabled={!allowStrings && !!timeseries.isString}
+              onContainerMouseOver={() => this.onTimeseriesMouseOver(index)}
             />
           ))}
         </TagList>

@@ -6,6 +6,7 @@ export const defaultTheme = {
   processingColor: '#1890ff',
   errorColor: '#f5222d',
   highlightColor: '#f5222d',
+  selectColor: '#e6f7ff',
   warningColor: '#faad14',
   normalColor: '#d9d9d9',
   white: '#fff',

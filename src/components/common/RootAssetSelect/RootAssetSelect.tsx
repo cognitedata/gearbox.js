@@ -1,7 +1,9 @@
 import * as sdk from '@cognite/sdk';
 import { Select } from 'antd';
 import React from 'react';
+import { createGlobalStyle } from 'styled-components';
 import { IdCallback, PureObject } from '../../../interfaces';
+import { defaultTheme } from '../../../theme/defaultTheme';
 
 async function getRootAssetList(): Promise<sdk.Asset[]> {
   const apiAssets = await sdk.Assets.list({ depth: 0 });
@@ -94,35 +96,61 @@ export class RootAssetSelect extends React.Component<
     const { all, loading } = lang;
 
     return assets === null || !assets.length ? (
-      <Select
-        value={0}
-        className={className}
-        dropdownMatchSelectWidth={false}
-        loading={true}
-      >
-        <Select.Option key="global:loading" value={0}>
-          {loading}
-        </Select.Option>
-      </Select>
+      <>
+        <GlobalStyle />
+        <Select
+          value={0}
+          className={className}
+          dropdownMatchSelectWidth={false}
+          loading={true}
+        >
+          <Select.Option key="global:loading" value={0}>
+            {loading}
+          </Select.Option>
+        </Select>
+      </>
     ) : (
-      <Select
-        value={current}
-        className={className}
-        onChange={this.onSelectAsset}
-        dropdownMatchSelectWidth={false}
-        style={styles && styles.select}
-      >
-        {allowAll && (
-          <Select.Option key="all" value={0}>
-            {all}
-          </Select.Option>
-        )}
-        {assets.map(asset => (
-          <Select.Option key={asset.id} value={asset.id}>
-            {asset.description || asset.name || asset.id}
-          </Select.Option>
-        ))}
-      </Select>
+      <>
+        <GlobalStyle />
+        <Select
+          value={current}
+          className={className}
+          onChange={this.onSelectAsset}
+          dropdownMatchSelectWidth={false}
+          style={styles && styles.select}
+        >
+          {allowAll && (
+            <Select.Option key="all" value={0}>
+              {all}
+            </Select.Option>
+          )}
+          {assets.map(asset => (
+            <Select.Option key={asset.id} value={asset.id}>
+              {asset.description || asset.name || asset.id}
+            </Select.Option>
+          ))}
+        </Select>
+      </>
     );
   }
 }
+
+const GlobalStyle = createGlobalStyle`
+  .ant-select-dropdown-menu-item-active {
+    background-color: ${(props: any) => props.theme.selectColor} !important;
+  }
+
+  .ant-select-dropdown-menu-item:hover {
+    background-color: transparent !important;
+  }
+
+  .ant-select-dropdown-menu-item-active.ant-select-dropdown-menu-item:hover {
+    background-color: ${(props: any) => props.theme.selectColor} !important;
+  }
+`;
+
+GlobalStyle.defaultProps = {
+  theme: {
+    gearbox: defaultTheme,
+  },
+};

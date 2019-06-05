@@ -1,6 +1,7 @@
 import { Checkbox } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
+import { defaultTheme } from '../../../theme/defaultTheme';
 
 const Container = styled.div`
   background: white;
@@ -15,15 +16,8 @@ const Container = styled.div`
   width: 100%;
   transition: 0.3s all;
 
-  &:hover {
-    background-color: #eeeeee;
-  }
-
   &.active {
-    background-color: #f2f2f2;
-    &:hover {
-      background-color: #e0e0e0;
-    }
+    background-color: ${({ theme }) => theme.gearbox.selectColor};
   }
 
   label {
@@ -31,11 +25,18 @@ const Container = styled.div`
   }
 `;
 
+Container.defaultProps = {
+  theme: {
+    gearbox: defaultTheme,
+  },
+};
+
 export interface DetailCheckboxProps {
   checked: boolean;
   description: string;
   disabled: boolean;
   onContainerClick: any;
+  onContainerMouseOver?: any;
   title: string;
   className: string;
   checkable: boolean;
@@ -54,11 +55,16 @@ export const DetailCheckbox: React.SFC<DetailCheckboxProps> = ({
   description,
   disabled,
   onContainerClick,
+  onContainerMouseOver,
   title,
   className,
   checkable,
 }) => (
-  <Container className={className} onClick={disabled ? null : onContainerClick}>
+  <Container
+    className={className}
+    onClick={disabled ? null : onContainerClick}
+    onMouseOver={onContainerMouseOver}
+  >
     <div style={{ wordBreak: 'break-all' }}>
       <span
         style={{
