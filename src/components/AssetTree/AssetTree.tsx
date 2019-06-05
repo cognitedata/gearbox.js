@@ -160,17 +160,31 @@ export class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
     });
   };
 
-  renderTreeNode = (nodes: TreeNodeType[]) =>
-    nodes.map(item => {
+  renderTreeNode = (nodes: TreeNodeType[]) => {
+    const { styles } = this.props;
+    return nodes.map(item => {
       if (item.children) {
         return (
-          <TreeNode title={item.title} key={item.key} dataRef={item}>
+          <TreeNode
+            title={item.title}
+            key={item.key}
+            dataRef={item}
+            style={styles && styles.list}
+          >
             {this.renderTreeNode(item.children)}
           </TreeNode>
         );
       }
-      return <TreeNode title={item.title} key={item.key} dataRef={item} />;
+      return (
+        <TreeNode
+          title={item.title}
+          key={item.key}
+          dataRef={item}
+          style={styles && styles.list}
+        />
+      );
     });
+  };
 
   render() {
     const { treeData, expandedKeys } = this.state;
