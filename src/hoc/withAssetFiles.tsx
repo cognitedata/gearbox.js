@@ -16,6 +16,7 @@ export interface WithAssetFilesDataProps {
 
 export interface WithAssetProps {
   assetId: number;
+  customSpinner?: React.ReactNode;
   onAssetFilesLoaded?: (assetFiles: File[]) => void;
 }
 
@@ -102,9 +103,11 @@ export const withAssetFiles = <P extends WithAssetFilesDataProps>(
 
       if (isLoading) {
         return (
-          <SpinnerContainer>
-            <LoadingOverlay isLoading={true} backgroundColor={'none'} />
-          </SpinnerContainer>
+          this.props.customSpinner || (
+            <SpinnerContainer>
+              <LoadingOverlay isLoading={true} backgroundColor={'none'} />
+            </SpinnerContainer>
+          )
         );
       }
 

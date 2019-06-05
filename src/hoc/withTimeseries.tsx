@@ -16,6 +16,7 @@ export interface WithTimeseriesDataProps {
 
 export interface WithTimeseriesProps {
   timeseriesId: number;
+  customSpinner?: React.ReactNode;
 }
 
 export interface WithTimeseriesState {
@@ -97,9 +98,11 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
 
       if (isLoading) {
         return (
-          <SpinnerContainer>
-            <LoadingOverlay isLoading={true} backgroundColor={'none'} />
-          </SpinnerContainer>
+          this.props.customSpinner || (
+            <SpinnerContainer>
+              <LoadingOverlay isLoading={true} backgroundColor={'none'} />
+            </SpinnerContainer>
+          )
         );
       }
 
@@ -118,5 +121,5 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
 
 const SpinnerContainer = styled.div`
   position: relative;
-  height: 300px;
+  height: 250px;
 `;

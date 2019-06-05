@@ -28,6 +28,18 @@ describe('withAsset', () => {
     expect(wrapper.find('span.ant-spin-dot.ant-spin-dot-spin')).toHaveLength(1);
   });
 
+  it('Should render custom spinner', () => {
+    const TestComponent = () => <div>Test Content</div>;
+    const WrappedComponent = withAsset(TestComponent);
+    const wrapper = mount(
+      <WrappedComponent
+        assetId={123}
+        customSpinner={<div className="my-custom-spinner" />}
+      />
+    );
+    expect(wrapper.find('div.my-custom-spinner')).toHaveLength(1);
+  });
+
   it('Wrapped component should receive asset data after loading', done => {
     const TestComponent: React.SFC<WithAssetDataProps> = props => (
       <div>

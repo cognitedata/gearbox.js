@@ -16,6 +16,7 @@ export interface WithAssetDataProps {
 
 export interface WithAssetProps {
   assetId: number;
+  customSpinner?: React.ReactNode;
   onAssetLoaded?: (asset: Asset) => void;
 }
 
@@ -102,9 +103,11 @@ export const withAsset = <P extends WithAssetDataProps>(
 
       if (isLoading) {
         return (
-          <SpinnerContainer>
-            <LoadingOverlay isLoading={true} backgroundColor={'none'} />
-          </SpinnerContainer>
+          this.props.customSpinner || (
+            <SpinnerContainer>
+              <LoadingOverlay isLoading={true} backgroundColor={'none'} />
+            </SpinnerContainer>
+          )
         );
       }
 

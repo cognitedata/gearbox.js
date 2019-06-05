@@ -29,6 +29,18 @@ describe('withAssetFiles', () => {
     wrapper.unmount();
   });
 
+  it('Should render custom spinner', () => {
+    const TestComponent = () => <div>Test Content</div>;
+    const WrappedComponent = withAssetFiles(TestComponent);
+    const wrapper = mount(
+      <WrappedComponent
+        assetId={123}
+        customSpinner={<div className="my-custom-spinner" />}
+      />
+    );
+    expect(wrapper.find('div.my-custom-spinner')).toHaveLength(1);
+  });
+
   it('Should call render spinner', done => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withAssetFiles(TestComponent);

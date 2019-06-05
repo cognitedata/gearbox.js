@@ -16,6 +16,7 @@ export interface WithAssetTimeseriesDataProps {
 
 export interface WithAssetProps {
   assetId: number;
+  customSpinner?: React.ReactNode;
   onAssetTimeseriesLoaded?: (assetTimeseries: Timeseries[]) => void;
 }
 
@@ -102,9 +103,11 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
 
       if (isLoading) {
         return (
-          <SpinnerContainer>
-            <LoadingOverlay isLoading={true} backgroundColor={'none'} />
-          </SpinnerContainer>
+          this.props.customSpinner || (
+            <SpinnerContainer>
+              <LoadingOverlay isLoading={true} backgroundColor={'none'} />
+            </SpinnerContainer>
+          )
         );
       }
 

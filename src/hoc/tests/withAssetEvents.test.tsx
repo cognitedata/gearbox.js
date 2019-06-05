@@ -41,6 +41,18 @@ describe('withAssetEvents', () => {
     });
   });
 
+  it('Should render custom spinner', () => {
+    const TestComponent = () => <div>Test Content</div>;
+    const WrappedComponent = withAssetEvents(TestComponent);
+    const wrapper = mount(
+      <WrappedComponent
+        assetId={123}
+        customSpinner={<div className="my-custom-spinner" />}
+      />
+    );
+    expect(wrapper.find('div.my-custom-spinner')).toHaveLength(1);
+  });
+
   it('Wrapped component should receive asset events  after loading', done => {
     const TestComponent: React.SFC<WithAssetEventsDataProps> = props => (
       <div>

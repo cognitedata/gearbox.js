@@ -30,6 +30,18 @@ describe('withTimeresries', () => {
     expect(wrapper.find('span.ant-spin-dot.ant-spin-dot-spin')).toHaveLength(1);
   });
 
+  it('Should render custom spinner', () => {
+    const TestComponent = () => <div>Test Content</div>;
+    const WrappedComponent = withTimeseries(TestComponent);
+    const wrapper = mount(
+      <WrappedComponent
+        timeseriesId={123}
+        customSpinner={<div className="my-custom-spinner" />}
+      />
+    );
+    expect(wrapper.find('div.my-custom-spinner')).toHaveLength(1);
+  });
+
   it('Wrapped component should receive timeseries data after loading', done => {
     const TestComponent: React.SFC<WithTimeseriesDataProps> = props => (
       <div>

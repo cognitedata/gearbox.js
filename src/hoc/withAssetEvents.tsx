@@ -14,8 +14,9 @@ export interface WithAssetEventsDataProps {
   assetEvents: Event[];
 }
 
-export interface WithAssetProps {
+export interface WithAssetEventsProps {
   assetId: number;
+  customSpinner?: React.ReactNode;
   onAssetEventsLoaded?: (assetEvents: Event[]) => void;
 }
 
@@ -30,12 +31,12 @@ export const withAssetEvents = <P extends WithAssetEventsDataProps>(
 ) =>
   class
     extends React.Component<
-      Subtract<P, WithAssetEventsDataProps> & WithAssetProps,
+      Subtract<P, WithAssetEventsDataProps> & WithAssetEventsProps,
       WithAssetEventsState
     >
     implements ComponentWithUnmountState {
     static getDerivedStateFromProps(
-      props: P & WithAssetProps,
+      props: P & WithAssetEventsProps,
       state: WithAssetEventsState
     ) {
       if (props.assetId !== state.assetId) {
@@ -51,7 +52,7 @@ export const withAssetEvents = <P extends WithAssetEventsDataProps>(
 
     isComponentUnmounted = false;
 
-    constructor(props: P & WithAssetProps) {
+    constructor(props: P & WithAssetEventsProps) {
       super(props);
 
       this.state = {
@@ -69,7 +70,7 @@ export const withAssetEvents = <P extends WithAssetEventsDataProps>(
       this.isComponentUnmounted = true;
     }
 
-    componentDidUpdate(prevProps: P & WithAssetProps) {
+    componentDidUpdate(prevProps: P & WithAssetEventsProps) {
       if (prevProps.assetId !== this.props.assetId) {
         this.loadAssetEvents();
       }
@@ -102,9 +103,11 @@ export const withAssetEvents = <P extends WithAssetEventsDataProps>(
 
       if (isLoading) {
         return (
-          <SpinnerContainer>
-            <LoadingOverlay isLoading={true} backgroundColor={'none'} />
-          </SpinnerContainer>
+          this.props.customSpinner || (
+            <SpinnerContainer>
+              <LoadingOverlay isLoading={true} backgroundColor={'none'} />
+            </SpinnerContainer>
+          )
         );
       }
 
