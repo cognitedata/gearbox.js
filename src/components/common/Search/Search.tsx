@@ -12,6 +12,7 @@ import {
   OnClick,
   PureObject,
 } from '../../../interfaces';
+import { defaultTheme } from '../../../theme/defaultTheme';
 import {
   defaultStrings as rootAssetSelectStrings,
   RootAssetSelect,
@@ -44,7 +45,7 @@ const LiveSearchWrapper = styled.div`
   top: 100%;
   left: 0px;
   width: 100%;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.gearbox.white};
   box-shadow: 0 1px 5px -2px rgba(0, 0, 0, 0.5);
   border-radius: 0;
 
@@ -57,19 +58,19 @@ const LiveSearchWrapper = styled.div`
     > li {
       padding: 0 10px;
       cursor: pointer;
-      &:hover {
-        background-color: #eeeeee;
-      }
 
       &.active {
-        background-color: #f2f2f2;
-        &:hover {
-          background-color: #e0e0e0;
-        }
+        background-color: ${({ theme }) => theme.gearbox.selectColor};
       }
     }
   }
 `;
+
+LiveSearchWrapper.defaultProps = {
+  theme: {
+    gearbox: defaultTheme,
+  },
+};
 
 export const defaultStrings: PureObject = {
   changeSearch: 'Change search',
@@ -289,7 +290,6 @@ export class Search extends React.Component<SearchProps, SearchState> {
     const { advancedSearch, rootAssetSelect, strings, styles } = this.props;
 
     const lang = { ...defaultStrings, ...strings };
-
     const {
       changeSearch,
       clear,
@@ -409,6 +409,10 @@ export class Search extends React.Component<SearchProps, SearchState> {
     );
   }
 
+  onMouseOver = (index: number) => {
+    this.setState({ cursor: index });
+  };
+
   private onSearchBlur() {
     this.setState({ liveSearchShow: false });
   }
@@ -425,6 +429,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
     const list = liveSearchResults.length ? (
       liveSearchResults.map((item, index) => (
         <li
+          onMouseOver={() => this.onMouseOver(index)}
           onMouseDown={() => this.onLiveSearchClick(item)}
           key={index}
           className={cursor === index ? 'active' : undefined}
