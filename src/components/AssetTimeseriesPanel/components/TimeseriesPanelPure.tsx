@@ -1,7 +1,7 @@
-import { Timeseries } from '@cognite/sdk';
 import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
+import { WithAssetTimeseriesDataProps } from '../../../hoc/withAssetTimeseries';
 import {
   TimeseriesChartMetaProps,
   TimeseriesChartMetaPure,
@@ -14,11 +14,13 @@ export interface MetaTimeseriesProps
   };
 }
 
-export interface TimeseriesPanelProps extends MetaTimeseriesProps {
-  timeseries?: Timeseries[];
-}
+export interface TimeseriesPanelProps
+  extends MetaTimeseriesProps,
+    WithAssetTimeseriesDataProps {}
 
-export class TimeseriesPanel extends React.PureComponent<TimeseriesPanelProps> {
+export class TimeseriesPanelPure extends React.PureComponent<
+  TimeseriesPanelProps
+> {
   static defaultProps = {
     strings: {
       noTimeseriesSign: 'No timeseries linked to this asset',
@@ -26,9 +28,9 @@ export class TimeseriesPanel extends React.PureComponent<TimeseriesPanelProps> {
   };
 
   render() {
-    const { strings, timeseries, ...rest } = this.props;
+    const { strings, assetTimeseries, ...rest } = this.props;
 
-    if (!timeseries || !timeseries.length) {
+    if (!assetTimeseries || !assetTimeseries.length) {
       return (
         <NoTimeseries data-test-id="no-timeseries">{`${
           strings!.noTimeseriesSign
@@ -40,8 +42,8 @@ export class TimeseriesPanel extends React.PureComponent<TimeseriesPanelProps> {
       <>
         <TableWrapper>
           <CollapseContainer>
-            {timeseries &&
-              timeseries.map(ts => (
+            {assetTimeseries &&
+              assetTimeseries.map(ts => (
                 <PanelWrapper header={ts.name} key={ts.id.toString()}>
                   <TimeseriesChartMetaPure
                     key={ts.id}

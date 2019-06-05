@@ -10,13 +10,12 @@ import {
 } from '../../interfaces';
 import { MetaDocProps } from '../../interfaces/DocumentTypes';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
-import { AssetEventsPanel } from '../AssetEventsPanel';
-import { DocumentTable } from './components/DocumentTable';
+import { AssetEventsPanel, MetaEventsProps } from '../AssetEventsPanel';
 import {
+  AssetTimeseriesPanel,
   MetaTimeseriesProps,
-  TimeseriesPanel,
-  TimeseriesPanelProps,
-} from './components/TimeseriesPanel';
+} from '../AssetTimeseriesPanel';
+import { DocumentTable } from './components/DocumentTable';
 
 const { TabPane } = Tabs;
 
@@ -32,7 +31,7 @@ interface AssetMetaProps {
   assetId: number;
   tab?: string;
   docsProps?: MetaDocProps;
-  // eventProps?: MetaEventsProps;
+  eventProps?: MetaEventsProps;
   timeseriesProps?: MetaTimeseriesProps;
   hidePanels?: AssetPanelType[];
   onPaneChange?: (key: string) => void;
@@ -42,25 +41,11 @@ interface AssetMetaProps {
 interface AssetMetaState {
   assetId: number;
   asset: Asset | null;
-  // assetEvents: AssetEventsPanelProps | null;
   docs: DocumentTableProps | null;
-  timeseries: TimeseriesPanelProps | null;
   isLoading: boolean;
 }
 
 export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
-  // componentDidMount() {
-  //   const { assetId } = this.props;
-  //   if (assetId) {
-  //     this.loadAll(assetId);
-  //   } else {
-  //     this.setState({
-  //       isLoading: false,
-  //     });
-  //     return;
-  //   }
-  // }
-
   static getDerivedStateFromProps(
     props: AssetMetaProps,
     state: AssetMetaState
@@ -82,7 +67,6 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
       assetId: props.assetId,
       asset: null,
       docs: null,
-      timeseries: null,
       isLoading: true,
     };
   }
@@ -164,10 +148,10 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
     if (!this.includesPanel('timeseries')) {
       return null;
     }
-    const { timeseries } = this.state;
+    const { assetId, timeseriesProps } = this.props;
     return (
       <TabPane tab="Timeseries" key="timeseries">
-        <TimeseriesPanel {...timeseries} />
+        <AssetTimeseriesPanel assetId={assetId} {...timeseriesProps} />
       </TabPane>
     );
   }
@@ -189,13 +173,17 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
   }
 
   renderEvents() {
-    const { assetId, styles } = this.props;
+    const { assetId, styles, eventProps } = this.props;
     if (!this.includesPanel('events')) {
       return null;
     }
     return (
       <TabPane tab="Events" key="events">
-        <AssetEventsPanel assetId={assetId} styles={styles && styles.events} />
+        <AssetEventsPanel
+          assetId={assetId}
+          {...eventProps}
+          styles={styles && styles.events}
+        />
       </TabPane>
     );
   }

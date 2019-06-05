@@ -62,7 +62,11 @@ Files.list = async ({
 };
 
 TimeSeries.list = async (): Promise<TimeseriesWithCursor> => {
-  return { items: timeseriesList };
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({ items: timeseriesList });
+    }, 1000);
+  });
 };
 
 Datapoints.retrieveLatest = async (name: string): Promise<Datapoint> => {
