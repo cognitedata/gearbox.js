@@ -55,10 +55,15 @@ Events.list = async (): Promise<EventDataWithCursor> => {
 Files.list = async ({
   assetId,
 }: FileListParams): Promise<FileMetadataWithCursor> => {
-  if (assetId === 12345) {
-    return { items: [] }; // simulate asset without documents
-  }
-  return { items: DOCUMENTS };
+  return new Promise(resolve => {
+    setTimeout(() => {
+      if (assetId === 12345) {
+        resolve({ items: [] }); // simulate asset without documents
+      } else {
+        resolve({ items: DOCUMENTS });
+      }
+    }, 1000);
+  });
 };
 
 TimeSeries.list = async (): Promise<TimeseriesWithCursor> => {

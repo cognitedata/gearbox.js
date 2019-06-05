@@ -63,8 +63,3 @@ export interface DocumentTableStyles {
   fileLink?: React.CSSProperties;
   fileTitle?: React.CSSProperties;
 }
-
-export interface DocumentTableProps extends MetaDocProps {
-  docs: Document[];
-  styles?: DocumentTableStyles;
-}

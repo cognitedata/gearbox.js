@@ -1,7 +1,12 @@
 import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { Document, DocumentTableProps } from '../../../interfaces';
+import { WithAssetFilesDataProps } from '../../../hoc/withAssetFiles';
+import {
+  Document,
+  DocumentTableStyles,
+  MetaDocProps,
+} from '../../../interfaces';
 import {
   getCategoryByPriority,
   getDocumentsByCategory,
@@ -10,6 +15,12 @@ import {
 } from '../../../utils/documents';
 
 const { Panel } = Collapse;
+
+export interface DocumentTableProps
+  extends MetaDocProps,
+    WithAssetFilesDataProps {
+  styles?: DocumentTableStyles;
+}
 
 interface DocumentTableState {
   stateParam?: string;
@@ -63,7 +74,7 @@ export class DocumentTable extends React.PureComponent<
 
   render() {
     const {
-      docs,
+      assetFiles,
       categoryPriorityList,
       unknownCategoryName,
       documentTypeField,
@@ -75,7 +86,7 @@ export class DocumentTable extends React.PureComponent<
     } = this.props;
 
     const documentsByCategory = getDocumentsByCategory(
-      docs || [],
+      assetFiles || [],
       unknownCategoryName,
       docTypes,
       documentTypeField

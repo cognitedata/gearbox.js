@@ -1,21 +1,20 @@
-import { Asset /*Event, File, Timeseries*/ } from '@cognite/sdk';
+import { Asset } from '@cognite/sdk';
 import { Tabs } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import {
   AssetEventsPanelStyles,
   AssetPanelType,
-  DocumentTableProps,
   DocumentTableStyles,
 } from '../../interfaces';
 import { MetaDocProps } from '../../interfaces/DocumentTypes';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
+import { AssetDocumentsPanel } from '../AssetDocumentsPanel';
 import { AssetEventsPanel, MetaEventsProps } from '../AssetEventsPanel';
 import {
   AssetTimeseriesPanel,
   MetaTimeseriesProps,
 } from '../AssetTimeseriesPanel';
-import { DocumentTable } from './components/DocumentTable';
 
 const { TabPane } = Tabs;
 
@@ -41,7 +40,6 @@ interface AssetMetaProps {
 interface AssetMetaState {
   assetId: number;
   asset: Asset | null;
-  docs: DocumentTableProps | null;
   isLoading: boolean;
 }
 
@@ -66,57 +64,9 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
     this.state = {
       assetId: props.assetId,
       asset: null,
-      docs: null,
       isLoading: true,
     };
   }
-
-  // componentDidUpdate(prevProps: AssetMetaProps) {
-  //   if (prevProps.assetId !== this.props.assetId) {
-  //     this.setState({
-  //       isLoading: true,
-  //     });
-  //   }
-  // }
-
-  /*loadAll = async (assetId: number) => {
-    const { eventProps, docsProps, timeseriesProps } = this.props;
-    const query = { assetId, limit: 1000 };
-
-    const promises: [
-      Promise<Event[]> | Promise<null>,
-      Promise<File[]> | Promise<null>,
-      Promise<Timeseries[]> | Promise<null>
-    ] = [
-      this.includesPanel('events')
-        ? getAssetEvent(query)
-        : Promise.resolve(null),
-      this.includesPanel('documents')
-        ? getAssetFiles(query)
-        : Promise.resolve(null),
-      this.includesPanel('timeseries')
-        ? getAssetTimeseries(query)
-        : Promise.resolve(null),
-    ];
-
-    try {
-      const [events, docs, timeseries] = await connectPromiseToUnmountState(
-        this,
-        Promise.all(promises)
-      );
-
-      this.setState({
-        isLoading: false,
-        assetEvents: events ? { ...eventProps, events } : null,
-        docs: docs ? { ...docsProps, docs } : null,
-        timeseries: timeseries ? { ...timeseriesProps, timeseries } : null,
-      });
-    } catch (error) {
-      if (error instanceof CanceledPromiseException !== true) {
-        throw error;
-      }
-    }
-  };*/
 
   includesPanel = (pane: AssetPanelType): boolean =>
     this.props.hidePanels ? this.props.hidePanels.indexOf(pane) < 0 : true;
@@ -157,15 +107,15 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
   }
 
   renderDocuments() {
-    const { styles } = this.props;
-    const { docs } = this.state;
+    const { assetId, styles, docsProps } = this.props;
     if (!this.includesPanel('documents')) {
       return null;
     }
     return (
       <TabPane tab="Documents" key="documents">
-        <DocumentTable
-          {...docs || { docs: [] }}
+        <AssetDocumentsPanel
+          {...docsProps}
+          assetId={assetId}
           styles={styles && styles.documents}
         />
       </TabPane>
@@ -180,8 +130,8 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState> {
     return (
       <TabPane tab="Events" key="events">
         <AssetEventsPanel
-          assetId={assetId}
           {...eventProps}
+          assetId={assetId}
           styles={styles && styles.events}
         />
       </TabPane>
