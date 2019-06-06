@@ -12,9 +12,9 @@ import { AssetTree } from '../AssetTree';
 
 import basic from './basic.md';
 import clickItem from './clickItem.md';
+import customStyles from './customStyles.md';
 import defaultExpanded from './defaultExpanded.md';
 import fullDescription from './full.md';
-import customStyles from './customStyles.md';
 
 const setupMocks = () => {
   sdk.Assets.list = async (_: sdk.AssetListParams) => {

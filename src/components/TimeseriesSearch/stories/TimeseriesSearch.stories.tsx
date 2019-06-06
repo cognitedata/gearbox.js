@@ -81,8 +81,6 @@ storiesOf('TimeseriesSearch', module).add(
   () => {
     setupMocks();
 
-    console.log(fullDescription);
-
     return (
       <TimeseriesSearch
         onTimeserieSelectionChange={onTimeserieSelectionChange}
