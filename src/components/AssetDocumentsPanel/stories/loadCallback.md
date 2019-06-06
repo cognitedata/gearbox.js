@@ -8,17 +8,17 @@
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { Asset } from '@cognite/sdk';
-import { AssetDetailsPanel } from '@cognite/gearbox';
+import { File } from '@cognite/sdk';
+import { AssetDocumentsPanel } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
 
-  const handleAssetLoaded = (asset: Asset) => { };
+  const handleAssetFilesLoaded = (files: File[]) => { };
 
   return (
-    <AssetDetailsPanel
+    <AssetDocumentsPanel
       assetId={4650652196144007}
-      onAssetLoaded={handleAssetLoaded}
+      onAssetFilesLoaded={handleAssetFilesLoaded}
     />
   );
   
