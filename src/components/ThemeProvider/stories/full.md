@@ -43,20 +43,19 @@ function ExampleComponent(props) {
 
 | Property           | Description                                  | Type                                                           | Default |
 | ------------------ | -------------------------------------------- | -------------------------------------------------------------- | ------- |
-| `theme`            | A custom theme                               | `GearboxTheme`                                                 |         |
+| `theme`            | A custom theme                               | `GearboxTheme`, `GearboxThemeOptional`                         |         |
 | `children`         | A child component wrapped with the theme     | `React.ReactChild`                                             |         |
 
 
 ### Types
 
-#### GearboxTheme
+#### GearboxTheme & GearboxThemeOptional
 
-The object that defines colours and some other CSS properties for `@cognite/gearbox` components.
+The objects that define colours and some other CSS properties for `@cognite/gearbox` components.
 
 Definition:
 
 ```typescript
-
 const defaultTheme = {
   // ant design colors
   primaryColor: '#1890ff',
@@ -82,8 +81,14 @@ const defaultTheme = {
   buttonDisabledColor: '#f5f5f5',
 };
 
+interface GearboxThemeOptional {
+  textFamily?: string;
+  textSize?: string;
+  listColor?: string;
+}
+
 type GearboxThemeKey = keyof typeof defaultTheme;
 
-type GearboxTheme = { [key in GearboxThemeKey]?: string };
+type GearboxTheme = { [key in GearboxThemeKey]?: string } & GearboxThemeOptional;
 
 ```
