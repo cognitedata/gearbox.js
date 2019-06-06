@@ -4,7 +4,14 @@ import { defaultTheme } from '../../theme/defaultTheme';
 
 type GearboxThemeKey = keyof typeof defaultTheme;
 
-export type GearboxTheme = { [key in GearboxThemeKey]?: string };
+export interface GearboxThemeOptional {
+  textFamily?: string;
+  textSize?: string;
+  listColor?: string;
+}
+
+export type GearboxTheme = { [key in GearboxThemeKey]?: string } &
+  GearboxThemeOptional;
 
 export interface ThemeProviderProps {
   theme: GearboxTheme;

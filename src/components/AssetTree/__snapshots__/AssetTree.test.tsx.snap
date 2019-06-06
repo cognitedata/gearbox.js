@@ -7,7 +7,7 @@ exports[`AssetTree renders correctly 1`] = `
   unselectable="on"
 >
   <li
-    className="ant-tree-treenode-switcher-open"
+    className="sc-bdVaJa jbRQnL ant-tree-treenode-switcher-open"
     role="treeitem"
   >
     <span
@@ -55,7 +55,7 @@ exports[`AssetTree renders correctly 1`] = `
       role="group"
     >
       <li
-        className="ant-tree-treenode-switcher-close"
+        className="sc-bdVaJa jbRQnL ant-tree-treenode-switcher-close"
         role="treeitem"
       >
         <span
@@ -101,7 +101,7 @@ exports[`AssetTree renders correctly 1`] = `
     </ul>
   </li>
   <li
-    className="ant-tree-treenode-switcher-close"
+    className="sc-bdVaJa jbRQnL ant-tree-treenode-switcher-close"
     role="treeitem"
   >
     <span

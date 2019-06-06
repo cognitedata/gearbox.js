@@ -3,7 +3,11 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { ASSET_LIST_CHILD, ASSET_ZERO_DEPTH_ARRAY } from '../../mocks';
+import {
+  ASSET_LIST_CHILD,
+  ASSET_TREE_STYLES,
+  ASSET_ZERO_DEPTH_ARRAY,
+} from '../../mocks';
 import { AssetTree } from './AssetTree';
 
 const zeroChild = ASSET_ZERO_DEPTH_ARRAY.findIndex(asset => asset.depth === 0);
@@ -46,6 +50,18 @@ describe('AssetTree', () => {
 
       expect(jestTest).toBeCalled();
       expect(typeof jestTest.mock.results).toBe('object');
+      done();
+    });
+  });
+  it('rednders correctly with passed styles prop', done => {
+    const wrapper = mount(<AssetTree styles={ASSET_TREE_STYLES} />);
+    setImmediate(() => {
+      wrapper.update();
+      const containerStyle = wrapper
+        .find('li')
+        .first()
+        .prop('style');
+      expect(containerStyle === ASSET_TREE_STYLES.list).toBeTruthy();
       done();
     });
   });
