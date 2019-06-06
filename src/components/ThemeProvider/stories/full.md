@@ -51,7 +51,7 @@ function ExampleComponent(props) {
 
 #### GearboxTheme
 
-The objects that define colours and some other CSS properties for `@cognite/gearbox` components.
+The object that defines colours and some other CSS properties for `@cognite/gearbox` components.
 
 Definition:
 
