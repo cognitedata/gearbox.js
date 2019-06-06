@@ -16,7 +16,7 @@ function ExampleComponent(props) {
     <AssetTree
       styles={{
         list: {
-          fontFamily: 'Consolas',
+          fontFamily: 'Courier New',
           fontSize: 'large',
           color: '#ffa3d2',
         }

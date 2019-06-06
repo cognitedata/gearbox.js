@@ -90,7 +90,7 @@ export const assetsList = [SKA, IAA, VAL];
 
 export const ASSET_TREE_STYLES: AssetTreeStyles = {
   list: {
-    fontFamily: 'Consolas',
+    fontFamily: 'Courier New',
     fontSize: 'large',
     color: '#ffa3d2',
   },
