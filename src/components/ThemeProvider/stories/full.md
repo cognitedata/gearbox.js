@@ -43,13 +43,13 @@ function ExampleComponent(props) {
 
 | Property           | Description                                  | Type                                                           | Default |
 | ------------------ | -------------------------------------------- | -------------------------------------------------------------- | ------- |
-| `theme`            | A custom theme                               | `GearboxTheme`, `GearboxThemeOptional`                         |         |
+| `theme`            | A custom theme                               | `GearboxTheme`                                                 |         |
 | `children`         | A child component wrapped with the theme     | `React.ReactChild`                                             |         |
 
 
 ### Types
 
-#### GearboxTheme & GearboxThemeOptional
+#### GearboxTheme
 
 The objects that define colours and some other CSS properties for `@cognite/gearbox` components.
 

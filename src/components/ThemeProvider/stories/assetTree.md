@@ -14,7 +14,7 @@ function ExampleComponent(props) {
   return (
     <ThemeProvider
       theme={{
-          textFamily: 'Consolas',
+          textFamily: 'Courier New',
           textSize: 'large',
           listColor: 'red',
         }}

@@ -69,7 +69,7 @@ storiesOf('ThemeProvider/Examples', module)
     () => (
       <ThemeProvider
         theme={{
-          textFamily: 'Consolas',
+          textFamily: 'Courier New',
           textSize: 'large',
           listColor: 'red',
         }}
