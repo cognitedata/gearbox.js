@@ -125,11 +125,11 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
     if (!this.includesPanel('details')) {
       return null;
     }
-    const { styles, customSpinner } = this.props;
+    const { assetId, styles, customSpinner } = this.props;
     return (
       <TabPane tab="Details" key="details" forceRender={true}>
         <AssetDetailsPanel
-          assetId={this.props.assetId}
+          assetId={assetId}
           onAssetLoaded={this.handleAssetLoaded}
           styles={styles && styles.details}
           customSpinner={customSpinner}
