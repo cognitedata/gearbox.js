@@ -3,8 +3,11 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { ASSET_DATA } from '../../../mocks';
-import { setupMocks as setupTimeseriesChartMocks } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
+import customSpinner from './customSpinner.md';
+import customStyles from './customStyles.md';
+import fullDescription from './full.md';
+import loadCallback from './loadCallback.md';
 
 Assets.retrieve = (): Promise<Asset> => {
   return new Promise(resolve => {
@@ -17,12 +20,11 @@ Assets.retrieve = (): Promise<Asset> => {
 storiesOf('AssetDetailsPanel', module).add(
   'Full Description',
   () => {
-    setupTimeseriesChartMocks();
     return <AssetDetailsPanel assetId={4650652196144007} />;
   },
   {
     readme: {
-      content: '',
+      content: fullDescription,
     },
   }
 );
@@ -31,7 +33,6 @@ storiesOf('AssetDetailsPanel/Examples', module)
   .add(
     'With custom styles',
     () => {
-      setupTimeseriesChartMocks();
       return (
         <AssetDetailsPanel
           assetId={4650652196144007}
@@ -41,14 +42,13 @@ storiesOf('AssetDetailsPanel/Examples', module)
     },
     {
       readme: {
-        content: '',
+        content: customStyles,
       },
     }
   )
   .add(
     'With load callback',
     () => {
-      setupTimeseriesChartMocks();
       return (
         <AssetDetailsPanel
           assetId={4650652196144007}
@@ -58,14 +58,13 @@ storiesOf('AssetDetailsPanel/Examples', module)
     },
     {
       readme: {
-        content: '',
+        content: loadCallback,
       },
     }
   )
   .add(
     'With custom spinner',
     () => {
-      setupTimeseriesChartMocks();
       return (
         <AssetDetailsPanel
           assetId={4650652196144007}
@@ -75,7 +74,7 @@ storiesOf('AssetDetailsPanel/Examples', module)
     },
     {
       readme: {
-        content: '',
+        content: customSpinner,
       },
     }
   );
