@@ -5,18 +5,18 @@ import React from 'react';
 
 import { TenantSelector } from '../TenantSelector';
 
-import * as advancedOptions from './advancedOptions.md';
-import * as basic from './basic.md';
-import * as customErrorMessageOnValidationError from './customErrorMessageOnValidationError.md';
-import * as customStyles from './customStyles.md';
-import * as customValidationError from './customValidationError.md';
-import * as customValidationSuccess from './customValidationSuccess.md';
-import * as fullDescription from './full.md';
-import * as headerText from './headerText.md';
-import * as initialTenant from './initialTenant.md';
-import * as loadsForever from './loadsForever.md';
-import * as loginText from './loginText.md';
-import * as placeholderTenant from './placeholderTenant.md';
+import advancedOptions from './advancedOptions.md';
+import basic from './basic.md';
+import customErrorMessageOnValidationError from './customErrorMessageOnValidationError.md';
+import customStyles from './customStyles.md';
+import customValidationError from './customValidationError.md';
+import customValidationSuccess from './customValidationSuccess.md';
+import fullDescription from './full.md';
+import headerText from './headerText.md';
+import initialTenant from './initialTenant.md';
+import loadsForever from './loadsForever.md';
+import loginText from './loginText.md';
+import placeholderTenant from './placeholderTenant.md';
 
 storiesOf('TenantSelector', module).add(
   'Full Description',

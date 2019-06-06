@@ -1,25 +1,32 @@
 import { Files } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
-import fetchMock from 'fetch-mock';
 import React from 'react';
 import styled from 'styled-components';
 import { ZoomCenter } from '../../../interfaces';
 import { SVG } from '../../../mocks/svg-viewer';
 import { SVGViewer } from '../SVGViewer';
 
-import * as classesDescription from './classes.md';
-import * as clickDescription from './click.md';
-import * as customDescription from './custom.md';
-import * as fullDescription from './full.md';
-import * as locateDescription from './locate.md';
-import * as zoomDescription from './zoom.md';
+import classesDescription from './classes.md';
+import clickDescription from './click.md';
+import customDescription from './custom.md';
+import fullDescription from './full.md';
+import locateDescription from './locate.md';
+import zoomDescription from './zoom.md';
 
 const API_REQUEST = 'https://example.com';
 
 const setupMocks = () => {
   Files.download = async (): Promise<string> => API_REQUEST;
-  fetchMock.restore().getOnce(API_REQUEST, SVG);
+
+  const nativeFetch = fetch;
+  // @ts-ignore
+  fetch = () => {
+    // @ts-ignore
+    fetch = nativeFetch;
+
+    return Promise.resolve(SVG);
+  };
 };
 
 const getTextFromMetadataNode = (node: Element) =>
