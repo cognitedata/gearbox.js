@@ -5,13 +5,13 @@ import React from 'react';
 import { assetsList } from '../../../mocks';
 import { AssetSearch, AssetSearchStyles } from '../AssetSearch';
 
-import * as advancedSearch from './advancedSearch.md';
-import * as basic from './basic.md';
-import * as customStyles from './customStyles.md';
-import * as empty from './empty.md';
-import * as error from './error.md';
-import * as full from './full.md';
-import * as rootAssetSelect from './rootAssetSelect.md';
+import advancedSearch from './advancedSearch.md';
+import basic from './basic.md';
+import customStyles from './customStyles.md';
+import empty from './empty.md';
+import error from './error.md';
+import full from './full.md';
+import rootAssetSelect from './rootAssetSelect.md';
 
 // Mock the SDK calls
 sdk.Assets.list = async (

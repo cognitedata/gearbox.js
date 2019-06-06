@@ -5,16 +5,16 @@ import React from 'react';
 import { assetsList, timeseriesList } from '../../../mocks';
 import { TimeseriesSearch } from '../TimeseriesSearch';
 
-import * as allowStrings from './allowStrings.md';
-import * as basic from './basic.md';
-import * as customFilter from './customFilter.md';
-import * as customStrings from './customStrings.md';
-import * as customStyles from './customStyles.md';
-import * as fullDescription from './full.md';
-import * as hideSelectedRow from './hideSelectedRow.md';
-import * as preselected from './preselected.md';
-import * as rootAssetSelect from './rootAssetSelect.md';
-import * as singleSelection from './singleSelection.md';
+import allowStrings from './allowStrings.md';
+import basic from './basic.md';
+import customFilter from './customFilter.md';
+import customStrings from './customStrings.md';
+import customStyles from './customStyles.md';
+import fullDescription from './full.md';
+import hideSelectedRow from './hideSelectedRow.md';
+import preselected from './preselected.md';
+import rootAssetSelect from './rootAssetSelect.md';
+import singleSelection from './singleSelection.md';
 
 const timeseriesNames = timeseriesList.map(ts => ts.name);
 const timeseriesIds = timeseriesList.map(ts => ts.id);
@@ -80,6 +80,7 @@ storiesOf('TimeseriesSearch', module).add(
   'Full Description',
   () => {
     setupMocks();
+
     return (
       <TimeseriesSearch
         onTimeserieSelectionChange={onTimeserieSelectionChange}
