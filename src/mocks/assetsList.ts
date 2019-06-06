@@ -1,5 +1,5 @@
 import { Asset } from '@cognite/sdk';
-import { AdvancedSearch } from '../interfaces';
+import { AdvancedSearch, AssetTreeStyles } from '../interfaces';
 
 export const vmateDba = 'wmate_dba.wmt_location';
 export const randomTime = '1999-09-01 07:00:00';
@@ -87,6 +87,14 @@ export const SearchValue: AdvancedSearch = {
 };
 
 export const assetsList = [SKA, IAA, VAL];
+
+export const ASSET_TREE_STYLES: AssetTreeStyles = {
+  list: {
+    fontFamily: 'Courier New',
+    fontSize: 'large',
+    color: '#ffa3d2',
+  },
+};
 
 export const ASSET_ZERO_DEPTH_ARRAY: Asset[] = [
   {

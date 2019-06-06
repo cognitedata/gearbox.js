@@ -57,9 +57,14 @@ export interface OnSelectAssetTreeParams {
   node?: Asset;
 }
 
+export interface AssetTreeStyles {
+  list?: React.CSSProperties;
+}
+
 export interface AssetTreeProps {
   onSelect?: (onSelect: OnSelectAssetTreeParams) => void;
   defaultExpandedKeys?: number[];
+  styles?: AssetTreeStyles;
 }
 
 export interface AdvancedSearch {
