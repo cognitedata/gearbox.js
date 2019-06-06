@@ -1,4 +1,5 @@
 import * as sdk from '@cognite/sdk';
+import { Select } from 'antd';
 import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -50,26 +51,19 @@ describe('RootAssetSelect', () => {
   // @ts-ignore
   sdk.Assets.list.mockResolvedValue({ items: [] });
 
-  it('should renders loading state', done => {
-    // @ts-ignore
-    sdk.Assets.list.mockResolvedValue({ items: [] });
-
+  it('should renders loading state', () => {
     const { loading } = defaultStrings;
     const wrapper = mount(<RootAssetSelect />);
-    setImmediate(() => {
-      wrapper.simulate('click');
+    wrapper.find(Select).simulate('click');
 
-      const dropList = wrapper.find('.ant-select-dropdown ul');
+    const dropList = wrapper.find('.ant-select-dropdown ul');
 
-      expect(dropList.children().length).toEqual(1);
-      expect(
-        dropList
-          .find('li')
-          .at(0)
-          .text()
-      ).toEqual(loading);
-
-      done();
-    });
+    expect(dropList.children().length).toEqual(1);
+    expect(
+      dropList
+        .find('li')
+        .at(0)
+        .text()
+    ).toEqual(loading);
   });
 });
