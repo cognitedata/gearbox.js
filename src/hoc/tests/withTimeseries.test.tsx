@@ -3,7 +3,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { timeseriesList } from '../../mocks';
-import { withTimeseries, WithTimeseriesDataProps } from './withTimeseries';
+import { withTimeseries, WithTimeseriesDataProps } from '../withTimeseries';
 
 configure({ adapter: new Adapter() });
 
@@ -28,6 +28,18 @@ describe('withTimeresries', () => {
     const wrapper = mount(<WrappedComponent timeseriesId={123} />);
 
     expect(wrapper.find('span.ant-spin-dot.ant-spin-dot-spin')).toHaveLength(1);
+  });
+
+  it('Should render custom spinner', () => {
+    const TestComponent = () => <div>Test Content</div>;
+    const WrappedComponent = withTimeseries(TestComponent);
+    const wrapper = mount(
+      <WrappedComponent
+        timeseriesId={123}
+        customSpinner={<div className="my-custom-spinner" />}
+      />
+    );
+    expect(wrapper.find('div.my-custom-spinner')).toHaveLength(1);
   });
 
   it('Wrapped component should receive timeseries data after loading', done => {

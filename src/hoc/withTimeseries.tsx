@@ -1,14 +1,13 @@
 import { Timeseries } from '@cognite/sdk';
 import * as sdk from '@cognite/sdk';
 import React from 'react';
-import styled from 'styled-components';
 import { Subtract } from 'utility-types';
-import { LoadingOverlay } from '../../components/common/LoadingOverlay/LoadingOverlay';
+import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
   connectPromiseToUnmountState,
-} from '../../utils/promise';
+} from '../utils/promise';
 
 export interface WithTimeseriesDataProps {
   timeseries: Timeseries;
@@ -16,6 +15,7 @@ export interface WithTimeseriesDataProps {
 
 export interface WithTimeseriesProps {
   timeseriesId: number;
+  customSpinner?: React.ReactNode;
 }
 
 export interface WithTimeseriesState {
@@ -93,20 +93,17 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
     }
 
     render() {
+      const { timeseriesId, customSpinner, ...restProps } = this.props;
       const { isLoading, timeseries } = this.state;
 
       if (isLoading) {
-        return (
-          <SpinnerContainer>
-            <LoadingOverlay isLoading={true} backgroundColor={'none'} />
-          </SpinnerContainer>
-        );
+        return customSpinner || <LoadingBlock />;
       }
 
       if (timeseries) {
         return (
           <WrapperComponent
-            {...(this.props as any) as P}
+            {...(restProps as any) as P}
             timeseries={timeseries}
           />
         );
@@ -115,8 +112,3 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
       return null;
     }
   };
-
-const SpinnerContainer = styled.div`
-  position: relative;
-  height: 300px;
-`;

@@ -12,6 +12,9 @@ Third pane "Documents" presents uploaded files related to the asset. Fourth pane
 The component requires only `assetId` prop and once passed it makes four API requests for asset metadata, timeseries, documents, and events.
 In case if some of the panes are not necessary it can be disabled by `hidePanels` prop.
 
+
+If you need to use one of these four panes separately without tabs please see following components: `AssetDetailsPanel`, `AssetTimeseriesPanel`, `AssetDocumentsPanel` and `AssetEventsPanel`.
+
 #### Usage:
 
 ```typescript jsx
@@ -44,6 +47,7 @@ function ExampleComponent(props) {
 | `timeseriesProps`| Object passed as props to inner component that presents timeseries pane | `MetaTimeseriesProps`                      |             |
 | `docsProps`    | Object passed as props to inner component that presents documents pane | `MetaDocProps`                                |             |
 | `eventProps`   | Object passed as props to inner component that presents events pane    | `MetaEventsProps`                             |             |
+| `customSpinner`| A custom spinner to be shown in tabs while data is being loaded        | `React.ReactNode`                             |             |
 | `styles`       | Object that defines inline CSS styles for inner elements of the component.| `AssetMetaStyles`, `DocumentTableStyles`, `AssetEventsPanelStyles`|             |
 
 ### Types

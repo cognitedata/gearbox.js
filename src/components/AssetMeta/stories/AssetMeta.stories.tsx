@@ -29,6 +29,7 @@ import basic from './basic.md';
 import customCategorySort from './customCategorySort.md';
 import customPriorityAndSort from './customPriorityAndSort.md';
 import customPriorityCategory from './customPriorityCategory.md';
+import customSpinner from './customSpinner.md';
 import customStyles from './customStyles.md';
 import customTimeseriesChartMeta from './customTimeseriesChartMeta.md';
 import fullDescription from './full.md';
@@ -45,20 +46,33 @@ Assets.retrieve = (): Promise<Asset> => {
 };
 
 Events.list = async (): Promise<EventDataWithCursor> => {
-  return { items: EVENTS };
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({ items: EVENTS });
+    }, 1000);
+  });
 };
 
 Files.list = async ({
   assetId,
 }: FileListParams): Promise<FileMetadataWithCursor> => {
-  if (assetId === 12345) {
-    return { items: [] }; // simulate asset without documents
-  }
-  return { items: DOCUMENTS };
+  return new Promise(resolve => {
+    setTimeout(() => {
+      if (assetId === 12345) {
+        resolve({ items: [] }); // simulate asset without documents
+      } else {
+        resolve({ items: DOCUMENTS });
+      }
+    }, 1000);
+  });
 };
 
 TimeSeries.list = async (): Promise<TimeseriesWithCursor> => {
-  return { items: timeseriesList };
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({ items: timeseriesList });
+    }, 1000);
+  });
 };
 
 Datapoints.retrieveLatest = async (name: string): Promise<Datapoint> => {
@@ -249,6 +263,19 @@ storiesOf('AssetMeta/Examples', module)
     {
       readme: {
         content: customStyles,
+      },
+    }
+  )
+  .add(
+    'With custom spinner',
+    () => {
+      return (
+        <AssetMeta assetId={123456} customSpinner={<div>Loading...</div>} />
+      );
+    },
+    {
+      readme: {
+        content: customSpinner,
       },
     }
   );

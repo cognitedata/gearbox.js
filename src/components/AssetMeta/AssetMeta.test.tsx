@@ -2,35 +2,30 @@ import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import {
-  getAssetEvent,
-  getAssetFiles,
-  getAssetTimeseries,
-  retrieveAsset,
-} from '../../api';
+
 import { ASSET_DATA, DOCUMENTS, EVENTS, timeseriesList } from '../../mocks';
 import { AssetMeta } from './AssetMeta';
 
 // @ts-ignore
-retrieveAsset = jest.fn();
+sdk.Assets.retrieve = jest.fn();
 // @ts-ignore
-getAssetEvent = jest.fn();
+sdk.Events.list = jest.fn();
 // @ts-ignore
-getAssetFiles = jest.fn();
+sdk.Files.list = jest.fn();
 // @ts-ignore
-getAssetTimeseries = jest.fn();
+sdk.TimeSeries.list = jest.fn();
 
 configure({ adapter: new Adapter() });
 
 beforeEach(() => {
   // @ts-ignore
-  retrieveAsset.mockResolvedValue(ASSET_DATA);
+  sdk.Assets.retrieve.mockResolvedValue(ASSET_DATA);
   // @ts-ignore
-  getAssetEvent.mockResolvedValue(EVENTS);
+  sdk.Events.list.mockResolvedValue({ items: EVENTS });
   // @ts-ignore
-  getAssetFiles.mockResolvedValue(DOCUMENTS);
+  sdk.Files.list.mockResolvedValue({ items: DOCUMENTS });
   // @ts-ignore
-  getAssetTimeseries.mockResolvedValue(timeseriesList);
+  sdk.TimeSeries.list.mockResolvedValue({ items: timeseriesList });
 });
 
 describe('AssetMeta', () => {
@@ -74,7 +69,7 @@ describe('AssetMeta', () => {
 
   it('should render spinner while loading asset, events and documents', () => {
     // @ts-ignore
-    retrieveAsset.mockImplementation(
+    sdk.Assets.retrieve.mockImplementation(
       (): Promise<sdk.Asset> => {
         return new Promise(resolve => {
           setTimeout(() => {
