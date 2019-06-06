@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { createFakeViewer, generateNumber } from '../../../mocks';
 import { mockCreateViewer, Model3DViewer } from '../Model3DViewer';
 
-import * as full from './full.md';
+import full from './full.md';
 
 const modelID = 0;
 const revisionID = 0;

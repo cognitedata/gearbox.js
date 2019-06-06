@@ -3,10 +3,10 @@ import React from 'react';
 import { ASSET_DATA } from '../../../mocks';
 import { DescriptionList } from '../DescriptionList';
 
-import * as basic from './basic.md';
-import * as fullDescription from './full.md';
-import * as noData from './noData.md';
-import * as withDescriptionText from './withDescriptionText.md';
+import basic from './basic.md';
+import fullDescription from './full.md';
+import noData from './noData.md';
+import withDescriptionText from './withDescriptionText.md';
 
 storiesOf('DescriptionList', module).add(
   'Full Description',

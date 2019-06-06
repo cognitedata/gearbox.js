@@ -5,7 +5,7 @@ exports[`TimeseriesPanelPure Should match the snapshot 1`] = `
   className="sc-jTzLTM jgohNR"
 >
   <div
-    className="ant-collapse sc-fjdhpX fAFgBy"
+    className="ant-collapse ant-collapse-icon-position-left sc-fjdhpX fAFgBy"
     role={null}
   >
     <div
@@ -28,6 +28,7 @@ exports[`TimeseriesPanelPure Should match the snapshot 1`] = `
             className=""
             data-icon="right"
             fill="currentColor"
+            focusable="false"
             height="1em"
             viewBox="64 64 896 896"
             width="1em"
@@ -60,6 +61,7 @@ exports[`TimeseriesPanelPure Should match the snapshot 1`] = `
             className=""
             data-icon="right"
             fill="currentColor"
+            focusable="false"
             height="1em"
             viewBox="64 64 896 896"
             width="1em"
@@ -92,6 +94,7 @@ exports[`TimeseriesPanelPure Should match the snapshot 1`] = `
             className=""
             data-icon="right"
             fill="currentColor"
+            focusable="false"
             height="1em"
             viewBox="64 64 896 896"
             width="1em"
