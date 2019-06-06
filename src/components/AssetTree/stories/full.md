@@ -32,8 +32,9 @@ No required props
 
 | Property              | Description                                 | Type                        | Default |
 | --------------------- | ------------------------------------------- | --------------------------- | ------- |
-| `onSelect`            | Triggers when a node is selected            | `(onSelect: OnSelectAssetTreeParams) => void` |         |
-| `defaultExpandedKeys` | List of node ids to be expanded by default  | `number[]`                  | [] |
+| `onSelect`            | Triggers when a node is selected            | `(onSelect: OnSelectAssetTreeParams) => void` | |
+| `defaultExpandedKeys` | List of node ids to be expanded by default  | `number[]`                  | [ ] |
+| `styles`              | Object that defines inline CSS styles for inner elements of the component.| `AssetTreeStyles` |  |
 
 
 ### Types
@@ -62,3 +63,26 @@ interface OnSelectAssetTreeParams {
 #### Asset
 
 The Asset type documentation can be found at https://js-sdk-docs.cogniteapp.com/interfaces/asset.html
+
+#### AssetTreeStyles
+This interface defines inline CSS styles for inner elements of `AssetTree` component.
+You can override styles of following blocks:
+<br>
+<img src="asset_tree/styling_schema.jpg" alt="List Styling" width="350px"><br><br>
+
+
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { AssetTreeStyles } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+interface AssetTreeStyles {
+  list?: React.CSSProperties;
+}
+```
+
+See more details in `Custom Styles` example.

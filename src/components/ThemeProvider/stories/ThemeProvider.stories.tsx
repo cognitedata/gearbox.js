@@ -2,9 +2,11 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 
+import { AssetTree } from '../../AssetTree';
 import { TenantSelector } from '../../TenantSelector';
 import { ThemeProvider } from '../ThemeProvider';
 
+import assetTree from './assetTree.md';
 import fullDescription from './full.md';
 import tenantSelector from './tenantSelector.md';
 
@@ -34,30 +36,50 @@ storiesOf('ThemeProvider', module).add(
   }
 );
 
-storiesOf('ThemeProvider/Examples', module).add(
-  'Tenant Selector',
-  () => (
-    <ThemeProvider
-      theme={{
-        primaryColor: 'purple',
-        textColor: '#DDD',
-        containerColor: '#666666',
-        lightGrey: 'black',
-        textColorDisabled: '#888',
-        lightShadow: 'none',
-        buttonBorderColor: '#666666',
-        buttonDisabledColor: '#777777',
-      }}
-    >
-      <TenantSelector
-        title="Example app"
-        onTenantSelected={action('onTenantSelected')}
-      />
-    </ThemeProvider>
-  ),
-  {
-    readme: {
-      content: tenantSelector,
-    },
-  }
-);
+storiesOf('ThemeProvider/Examples', module)
+  .add(
+    'Tenant Selector',
+    () => (
+      <ThemeProvider
+        theme={{
+          primaryColor: 'purple',
+          textColor: '#DDD',
+          containerColor: '#666666',
+          lightGrey: 'black',
+          textColorDisabled: '#888',
+          lightShadow: 'none',
+          buttonBorderColor: '#666666',
+          buttonDisabledColor: '#777777',
+        }}
+      >
+        <TenantSelector
+          title="Example app"
+          onTenantSelected={action('onTenantSelected')}
+        />
+      </ThemeProvider>
+    ),
+    {
+      readme: {
+        content: tenantSelector,
+      },
+    }
+  )
+  .add(
+    'Asset Tree',
+    () => (
+      <ThemeProvider
+        theme={{
+          textFamily: 'Courier New',
+          textSize: 'large',
+          listColor: 'red',
+        }}
+      >
+        <AssetTree />
+      </ThemeProvider>
+    ),
+    {
+      readme: {
+        content: assetTree,
+      },
+    }
+  );
