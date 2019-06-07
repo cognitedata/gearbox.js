@@ -44,7 +44,7 @@ function ExampleComponent(props) {
 | `documentRenderer`    | Custom render functions for documents                                  | `string`                                      |`DocumentRenderer` |
 | `customCategorySort`  | Sort function used to sort categories after priority categories        | `(a: string, b: string) => number`            |             |
 | `customSpinner`       | A custom spinner to be shown in tabs while data is being loaded        | `React.ReactNode`                             |             |
-| `styles`              | Object that defines inline CSS styles inner elements of the component  | `AssetDocumentsPanelStyles`                   |             |
+| `styles`              | Object that defines inline CSS styles for inner elements of the component  | `AssetDocumentsPanelStyles`                   |             |
 
 
 ### Types
