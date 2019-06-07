@@ -1,8 +1,9 @@
-import { Timeseries } from '@cognite/sdk';
+import { Timeseries, TimeseriesListParams } from '@cognite/sdk';
 import * as sdk from '@cognite/sdk';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
+import { SDK_LIST_LIMIT } from '../constants/sdk';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
@@ -15,6 +16,7 @@ export interface WithAssetTimeseriesDataProps {
 
 export interface WithAssetTimeseriesProps {
   assetId: number;
+  queryParams?: TimeseriesListParams;
   customSpinner?: React.ReactNode;
   onAssetTimeseriesLoaded?: (assetTimeseries: Timeseries[]) => void;
 }
@@ -77,9 +79,14 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
 
     async loadAssetTimeseries() {
       try {
+        const { assetId, queryParams } = this.props;
         const res = await connectPromiseToUnmountState(
           this,
-          sdk.TimeSeries.list({ assetId: this.props.assetId, limit: 1000 })
+          sdk.TimeSeries.list({
+            limit: SDK_LIST_LIMIT,
+            ...queryParams,
+            assetId,
+          })
         );
 
         this.setState({
@@ -113,7 +120,7 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
       if (assetTimeseries) {
         return (
           <WrapperComponent
-            {...(restProps as any) as P}
+            {...((restProps as any) as P)}
             assetTimeseries={assetTimeseries}
           />
         );

@@ -1,8 +1,9 @@
-import { Event } from '@cognite/sdk';
+import { Event, EventListParams } from '@cognite/sdk';
 import * as sdk from '@cognite/sdk';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
+import { SDK_LIST_LIMIT } from '../constants/sdk';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
@@ -15,6 +16,7 @@ export interface WithAssetEventsDataProps {
 
 export interface WithAssetEventsProps {
   assetId: number;
+  queryParams?: EventListParams;
   customSpinner?: React.ReactNode;
   onAssetEventsLoaded?: (assetEvents: Event[]) => void;
 }
@@ -77,9 +79,14 @@ export const withAssetEvents = <P extends WithAssetEventsDataProps>(
 
     async loadAssetEvents() {
       try {
+        const { assetId, queryParams } = this.props;
         const res = await connectPromiseToUnmountState(
           this,
-          sdk.Events.list({ assetId: this.props.assetId, limit: 1000 })
+          sdk.Events.list({
+            limit: SDK_LIST_LIMIT,
+            ...queryParams,
+            assetId,
+          })
         );
 
         this.setState({
@@ -113,7 +120,7 @@ export const withAssetEvents = <P extends WithAssetEventsDataProps>(
       if (assetEvents) {
         return (
           <WrapperComponent
-            {...(restProps as any) as P}
+            {...((restProps as any) as P)}
             assetEvents={assetEvents}
           />
         );

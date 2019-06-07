@@ -219,10 +219,7 @@ storiesOf('SensorOverlay/Examples', module)
         onSettingsClick={action('onSettingsClick')}
         onSensorPositionChange={action('onSensorPositionChange')}
       >
-        <img
-          src="https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-738495.jpg"
-          width="100%"
-        />
+        <img src="sensor_overlay/infographic-sample.jpg" width="100%" />
       </SensorOverlay>
     ),
     {
@@ -252,10 +249,7 @@ storiesOf('SensorOverlay/Examples', module)
         onSettingsClick={action('onSettingsClick')}
         onSensorPositionChange={action('onSensorPositionChange')}
       >
-        <img
-          src="https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-738495.jpg"
-          width="1000px"
-        />
+        <img src="sensor_overlay/infographic-sample.jpg" width="1000px" />
       </SensorOverlay>
     ),
     {

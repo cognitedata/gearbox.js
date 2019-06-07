@@ -1,8 +1,9 @@
-import { File } from '@cognite/sdk';
+import { File, FileListParams } from '@cognite/sdk';
 import * as sdk from '@cognite/sdk';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
+import { SDK_LIST_LIMIT } from '../constants/sdk';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
@@ -15,6 +16,7 @@ export interface WithAssetFilesDataProps {
 
 export interface WithAssetFilesProps {
   assetId: number;
+  queryParams?: FileListParams;
   customSpinner?: React.ReactNode;
   onAssetFilesLoaded?: (assetFiles: File[]) => void;
 }
@@ -77,9 +79,14 @@ export const withAssetFiles = <P extends WithAssetFilesDataProps>(
 
     async loadAssetFiles() {
       try {
+        const { assetId, queryParams } = this.props;
         const filesRes = await connectPromiseToUnmountState(
           this,
-          sdk.Files.list({ assetId: this.props.assetId, limit: 1000 })
+          sdk.Files.list({
+            limit: SDK_LIST_LIMIT,
+            ...queryParams,
+            assetId,
+          })
         );
 
         this.setState({
@@ -113,7 +120,7 @@ export const withAssetFiles = <P extends WithAssetFilesDataProps>(
       if (assetFiles) {
         return (
           <WrapperComponent
-            {...(restProps as any) as P}
+            {...((restProps as any) as P)}
             assetFiles={assetFiles}
           />
         );

@@ -111,7 +111,9 @@ export const withAsset = <P extends WithAssetDataProps>(
       }
 
       if (asset) {
-        return <WrapperComponent {...(restProps as any) as P} asset={asset} />;
+        return (
+          <WrapperComponent {...((restProps as any) as P)} asset={asset} />
+        );
       }
 
       return null;

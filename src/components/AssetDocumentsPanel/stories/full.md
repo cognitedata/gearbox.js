@@ -34,6 +34,7 @@ function ExampleComponent(props) {
 
 | Property              | Description                                                            | Type                                          | Default     |
 | --------------------- | ---------------------------------------------------------------------- | --------------------------------------------- | ----------- |
+| `queryParams`         | Additional parameters for SDK call. Please notice that `assetId` provided in props will override the one in `queryParams`| `FileListParams` | `{ limit: 1000 }` |
 | `handleDocumentClick` | Callback function triggered when user clicks on a file (document)      | `OnDocumentClick`                             |             |
 | `collapseProps`       | Object with props to be passed to `atnd` `Collapse` component          | `CollapseProps`                               |             |
 | `categoryPriorityList`| List of categories codes to be shown on the top of the list. Categories "P&ID" and "Logic Diagrams" are prioritized by default.| `string[]`                                    | `['XB', 'XL']`|
@@ -47,6 +48,14 @@ function ExampleComponent(props) {
 
 
 ### Types
+
+#### FileListParams
+
+This type can be imported from `@cognite/sdk`:
+
+```typescript
+import { FileListParams } from `@cognite/sdk`;
+```
 
 #### OnDocumentClick
 
