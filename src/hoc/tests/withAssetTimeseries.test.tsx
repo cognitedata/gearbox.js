@@ -2,6 +2,7 @@ import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
+import { SDK_LIST_LIMIT } from '../../constants/sdk';
 import { timeseriesList } from '../../mocks';
 import {
   withAssetTimeseries,
@@ -106,6 +107,32 @@ describe('withAssetTimeseries', () => {
     setImmediate(() => {
       expect(WrappedComponent.prototype.setState).not.toHaveBeenCalled();
       done();
+    });
+  });
+
+  it('Should merge query params with assetId', () => {
+    const WrappedComponent = withAssetTimeseries(() => <div />);
+    mount(
+      <WrappedComponent
+        assetId={123}
+        queryParams={{ assetId: 34234, limit: 78, path: 'some patth' }}
+      />
+    );
+
+    expect(sdk.TimeSeries.list).toBeCalledWith({
+      assetId: 123,
+      limit: 78,
+      path: 'some patth',
+    });
+  });
+
+  it('Should call sdk.TimeSeries.list with default limit', () => {
+    const WrappedComponent = withAssetTimeseries(() => <div />);
+    mount(<WrappedComponent assetId={123} />);
+
+    expect(sdk.TimeSeries.list).toBeCalledWith({
+      assetId: 123,
+      limit: SDK_LIST_LIMIT,
     });
   });
 });
