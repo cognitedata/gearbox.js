@@ -3,8 +3,10 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { DOCUMENTS } from '../../../mocks';
+import { ASSET_META_SERIES_STYLES } from '../../../mocks/events';
 import { AssetTimeseriesPanel } from '../AssetTimeseriesPanel';
 import customSpinner from './customSpinner.md';
+import customStyles from './customStyles.md';
 import customTimeseriesChartMeta from './customTimeseriesChartMeta.md';
 import fullDescription from './full.md';
 import loadCallback from './loadCallback.md';
@@ -81,6 +83,22 @@ storiesOf('AssetTimeseriesPanel/Examples', module)
     {
       readme: {
         content: customTimeseriesChartMeta,
+      },
+    }
+  )
+  .add(
+    'With custom stylrs',
+    () => {
+      return (
+        <AssetTimeseriesPanel
+          assetId={4650652196144007}
+          styles={ASSET_META_SERIES_STYLES}
+        />
+      );
+    },
+    {
+      readme: {
+        content: customStyles,
       },
     }
   );

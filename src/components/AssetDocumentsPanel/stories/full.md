@@ -4,7 +4,7 @@
 
 ### Description:
 
-This component loads list of documents related to the asset and presents it in the list of categories. 
+This component loads list of documents related to the asset and presents it in the list of categories.
 Each item in the list can be expanded showing list of files.
 The component is used as one of the panes in `AssetMeta` component.
 
@@ -43,7 +43,7 @@ function ExampleComponent(props) {
 | `documentRenderer`    | Custom render functions for documents                                  | `string`                                      |`DocumentRenderer` |
 | `customCategorySort`  | Sort function used to sort categories after priority categories        | `(a: string, b: string) => number`            |             |
 | `customSpinner`       | A custom spinner to be shown in tabs while data is being loaded        | `React.ReactNode`                             |             |
-| `styles`              | Object that defines inline CSS styles inner elements of the component  | `DocumentTableStyles`                         |             |
+| `styles`              | Object that defines inline CSS styles inner elements of the component  | `AssetDocumentsPanelStyles`                   |             |
 
 
 ### Types
@@ -83,7 +83,14 @@ type DocumentRenderer = (
 
 ```
 
-#### DocumentTableStyles
+#### AssetDocumentsPanelStyles
+
+This interface defines inline CSS styles for inner elements of `AssetDocumentsPanel` component.
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { AssetDocumentsPanelStyles } from '@cognite/gearbox';
+```
 
 Definition:
 
@@ -94,5 +101,5 @@ interface DocumentTableStyles {
   fileLink?: React.CSSProperties;
   fileTitle?: React.CSSProperties;
 }
-
 ```
+See more details in Asset Meta component documentation.

@@ -181,6 +181,8 @@ This interface defines inline CSS styles for inner elements of `AssetMeta` compo
 You can override styles of following blocks:
 <p>Details tab:</p>
 <img src="asset_meta/styling_schema1.jpg" alt="Tenant Styling" width="700px"><br><br>
+<p>Timeseries tab:</p>
+<img src="asset_meta/styling_schema4.jpg" alt="Tenant Styling" width="700px"><br><br>
 <p>Documents tab:</p>
 <img src="asset_meta/styling_schema2.jpg" alt="Tenant Styling" width="700px"><br><br>
 <p>Events tab:</p>
@@ -189,7 +191,7 @@ You can override styles of following blocks:
 The type can be imported from `@cognite/gearbox`:
 
 ```typescript
-import { AssetMetaStyles, AssetTimeseriesPanelStyles, DocumentTableStyles, AssetEventsPanelStyles } from '@cognite/gearbox';
+import { AssetMetaStyles, AssetTimeseriesPanelStyles, AssetDocumentsPanelStyles, AssetEventsPanelStyles } from '@cognite/gearbox';
 ```
 
 Definition:
@@ -211,7 +213,7 @@ interface AssetTimeseriesPanelStyles {
 }
 ```
 ```typescript
-interface DocumentTableStyles {
+interface AssetDocumentsPanelStyles {
   wrapper?: React.CSSProperties;
   fileContainer?: React.CSSProperties;
   fileLink?: React.CSSProperties;
