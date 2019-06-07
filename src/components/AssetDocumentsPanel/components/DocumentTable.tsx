@@ -3,8 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { WithAssetFilesDataProps } from '../../../hoc/withAssetFiles';
 import {
+  AssetDocumentsPanelStyles,
   Document,
-  DocumentTableStyles,
   MetaDocProps,
 } from '../../../interfaces';
 import {
@@ -17,7 +17,7 @@ import {
 const { Panel } = Collapse;
 
 export interface DocumentsPanelStylesProps {
-  styles?: DocumentTableStyles;
+  styles?: AssetDocumentsPanelStyles;
 }
 
 export type DocumentTableProps = MetaDocProps &
