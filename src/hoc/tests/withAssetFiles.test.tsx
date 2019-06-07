@@ -2,6 +2,7 @@ import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
+import { SDK_LIST_LIMIT } from '../../constants/sdk';
 import { DOCUMENTS } from '../../mocks';
 import { withAssetFiles, WithAssetFilesDataProps } from '../withAssetFiles';
 
@@ -99,6 +100,32 @@ describe('withAssetFiles', () => {
     setImmediate(() => {
       expect(WrappedComponent.prototype.setState).not.toHaveBeenCalled();
       done();
+    });
+  });
+
+  it('Should merge query params with assetId', () => {
+    const WrappedComponent = withAssetFiles(() => <div />);
+    mount(
+      <WrappedComponent
+        assetId={123}
+        queryParams={{ assetId: 34234, limit: 78, sort: 'sort option' }}
+      />
+    );
+
+    expect(sdk.Files.list).toBeCalledWith({
+      assetId: 123,
+      limit: 78,
+      sort: 'sort option',
+    });
+  });
+
+  it('Should call sdk.Events.list with default limit', () => {
+    const WrappedComponent = withAssetFiles(() => <div />);
+    mount(<WrappedComponent assetId={123} />);
+
+    expect(sdk.Files.list).toBeCalledWith({
+      assetId: 123,
+      limit: SDK_LIST_LIMIT,
     });
   });
 });

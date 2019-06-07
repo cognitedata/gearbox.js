@@ -34,9 +34,18 @@ function ExampleComponent(props) {
 
 | Property              | Description                                                            | Type                                          | Default     |
 | --------------------- | ---------------------------------------------------------------------- | --------------------------------------------- | ----------- |
+| `queryParams`         | Additional parameters for SDK call. Please notice that `assetId` provided in props will override the one in `queryParams`| `TimeseriesListParams` | `{ limit: 1000 }` |
 | `customSpinner`       | A custom spinner to be shown in tabs while data is being loaded        | `React.ReactNode`                             |             |
 | `strings`             | Object that defines strings to be passed to the component              | `{ noTimeseriesSign?: string }`               | `'No timeseries linked to this asset'`|                  
 
 #### Optional Props for TimeseriesChartMeta:
 
 This component also takes all optional props of `TimeseriesChartMeta` component. These props are passed to every instance of `TimeseriesChartMeta` in the list of timeseries. See `TimeseriesChartMeta` component for more details.
+
+#### TimeseriesListParams
+
+This type can be imported from `@cognite/sdk`:
+
+```typescript
+import { TimeseriesListParams } from `@cognite/sdk`;
+```
