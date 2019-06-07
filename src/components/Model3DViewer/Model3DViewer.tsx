@@ -148,10 +148,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
         viewer.off('cameraChange', onCameraChange);
       }
     });
-
-    if (fromCache) {
-      this.highlightNodes();
-    }
   }
 
   async componentDidUpdate(prevProps: Model3DViewerProps) {
