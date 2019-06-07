@@ -4,7 +4,7 @@
 
 ### Description:
 
-This component loads a list of events related to the asset and presents it as a table with four columns and pagination. 
+This component loads a list of events related to the asset and presents it as a table with four columns and pagination.
 Click on a row of the table shows more detailed information about the event in the modal pop-up window.
 The component is used as one of the panes in `AssetMeta` component.
 
@@ -65,6 +65,13 @@ interface TableColumnType {
 
 #### AssetEventsPanelStyles
 
+This interface defines inline CSS styles for inner elements of `AssetEventsPanel` component.
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { AssetEventsPanelStyles } from '@cognite/gearbox';
+```
+
 Definition:
 
 ```typescript
@@ -74,4 +81,4 @@ interface AssetEventsPanelStyles {
   tableCell?: React.CSSProperties;
 }
 ```
-
+See more details in AssetMeta component documentation.

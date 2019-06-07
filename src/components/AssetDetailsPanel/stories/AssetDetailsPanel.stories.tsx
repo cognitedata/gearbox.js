@@ -31,22 +31,6 @@ storiesOf('AssetDetailsPanel', module).add(
 
 storiesOf('AssetDetailsPanel/Examples', module)
   .add(
-    'With custom styles',
-    () => {
-      return (
-        <AssetDetailsPanel
-          assetId={4650652196144007}
-          styles={{ border: '1px solid red' }}
-        />
-      );
-    },
-    {
-      readme: {
-        content: customStyles,
-      },
-    }
-  )
-  .add(
     'With load callback',
     () => {
       return (
@@ -75,6 +59,22 @@ storiesOf('AssetDetailsPanel/Examples', module)
     {
       readme: {
         content: customSpinner,
+      },
+    }
+  )
+  .add(
+    'With custom styles',
+    () => {
+      return (
+        <AssetDetailsPanel
+          assetId={4650652196144007}
+          styles={{ border: '1px solid red' }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: customStyles,
       },
     }
   );

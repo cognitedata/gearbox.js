@@ -57,7 +57,7 @@ export interface MetaDocProps {
   customCategorySort?: (a: string, b: string) => number;
 }
 
-export interface DocumentTableStyles {
+export interface AssetDocumentsPanelStyles {
   wrapper?: React.CSSProperties;
   fileContainer?: React.CSSProperties;
   fileLink?: React.CSSProperties;

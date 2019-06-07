@@ -2,7 +2,11 @@
 import { Event as ApiEvent } from '@cognite/sdk';
 import moment from 'moment-timezone';
 import { AssetMetaStyles } from '../components/AssetMeta';
-import { AssetEventsPanelStyles, DocumentTableStyles } from '../interfaces';
+import { AssetTimeseriesPanelStyles } from '../components/AssetTimeseriesPanel/components/TimeseriesPanelPure';
+import {
+  AssetDocumentsPanelStyles,
+  AssetEventsPanelStyles,
+} from '../interfaces';
 
 const EVENT_DESCRIPTION = 'PRODUCTION WELL A-23, SLOT-09 (101109)';
 
@@ -53,9 +57,19 @@ export const eventWithout = (field: string) => ({
 
 const baseTimestamp = 1556120152466;
 
-export const ASSET_META_DOCS_STYLES: DocumentTableStyles = {
+export const ASSET_META_SERIES_STYLES: AssetTimeseriesPanelStyles = {
   wrapper: {
-    backgroundColor: 'yellow',
+    border: '2px red solid',
+    width: '70%',
+  },
+  timeseriesContainer: {
+    backgroundColor: '#efefef',
+  },
+};
+
+export const ASSET_META_DOCS_STYLES: AssetDocumentsPanelStyles = {
+  wrapper: {
+    backgroundColor: '#ffea0c',
   },
   fileTitle: {
     textAlign: 'right',
@@ -75,7 +89,7 @@ export const ASSET_META_EVENTS_STYLES: AssetEventsPanelStyles = {
     width: '80%',
   },
   tableRow: {
-    background: '#00FF00',
+    backgroundColor: '#00FF00',
   },
   tableCell: {
     fontStyle: 'italic',
@@ -87,7 +101,7 @@ export const ASSET_META_STYLES: AssetMetaStyles = {
     textAlign: 'center',
     fontFamily: 'Comic Sans MS',
     fontSize: '1.2em',
-    background: '#ffa3d2',
+    backgroundColor: '#ffa3d2',
   },
   emptyTab: {
     color: 'yellow',
@@ -96,6 +110,7 @@ export const ASSET_META_STYLES: AssetMetaStyles = {
     fontSize: '1.2em',
     color: 'green',
   },
+  timeseries: ASSET_META_SERIES_STYLES,
   documents: ASSET_META_DOCS_STYLES,
   events: ASSET_META_EVENTS_STYLES,
 };

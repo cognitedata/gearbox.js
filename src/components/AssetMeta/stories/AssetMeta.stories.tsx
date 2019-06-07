@@ -256,17 +256,6 @@ storiesOf('AssetMeta/Examples', module)
     }
   )
   .add(
-    'Custom Styles',
-    () => {
-      return <AssetMeta assetId={123456} styles={ASSET_META_STYLES} />;
-    },
-    {
-      readme: {
-        content: customStyles,
-      },
-    }
-  )
-  .add(
     'With custom spinner',
     () => {
       return (
@@ -276,6 +265,17 @@ storiesOf('AssetMeta/Examples', module)
     {
       readme: {
         content: customSpinner,
+      },
+    }
+  )
+  .add(
+    'Custom Styles',
+    () => {
+      return <AssetMeta assetId={123456} styles={ASSET_META_STYLES} />;
+    },
+    {
+      readme: {
+        content: customStyles,
       },
     }
   );
