@@ -120,7 +120,7 @@ export const withAssetFiles = <P extends WithAssetFilesDataProps>(
       if (assetFiles) {
         return (
           <WrapperComponent
-            {...((restProps as any) as P)}
+            {...(restProps as any) as P}
             assetFiles={assetFiles}
           />
         );

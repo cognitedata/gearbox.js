@@ -103,7 +103,7 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
       if (timeseries) {
         return (
           <WrapperComponent
-            {...((restProps as any) as P)}
+            {...(restProps as any) as P}
             timeseries={timeseries}
           />
         );

@@ -120,7 +120,7 @@ export const withAssetEvents = <P extends WithAssetEventsDataProps>(
       if (assetEvents) {
         return (
           <WrapperComponent
-            {...((restProps as any) as P)}
+            {...(restProps as any) as P}
             assetEvents={assetEvents}
           />
         );
