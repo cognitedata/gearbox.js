@@ -25,7 +25,10 @@ const setupMocks = () => {
     // @ts-ignore
     fetch = nativeFetch;
 
-    return Promise.resolve(SVG);
+    return Promise.resolve({
+      status: 200,
+      text: () => SVG,
+    });
   };
 };
 
