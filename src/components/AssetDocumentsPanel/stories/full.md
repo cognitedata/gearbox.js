@@ -111,4 +111,4 @@ interface DocumentTableStyles {
   fileTitle?: React.CSSProperties;
 }
 ```
-See more details in Asset Meta component documentation.
+See more details in AssetMeta component documentation.
