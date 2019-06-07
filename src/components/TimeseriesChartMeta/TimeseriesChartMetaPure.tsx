@@ -126,9 +126,9 @@ export class TimeseriesChartMetaPure extends React.PureComponent<
           <CenterWrapper>
             <Radio.Group value={timePeriod} onChange={this.handlePeriodChange}>
               {Object.keys(timeScales).map(key => (
-                <Radio.Button key={key} value={key}>{`${
-                  timeScales[key].number
-                } ${timeScales[key].unit}`}</Radio.Button>
+                <Radio.Button key={key} value={key}>
+                  {`${timeScales[key].number} ${timeScales[key].unit}`}
+                </Radio.Button>
               ))}
             </Radio.Group>
           </CenterWrapper>
