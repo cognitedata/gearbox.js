@@ -182,39 +182,35 @@ export class TimeseriesSearch extends React.Component<
       query,
       limit: 100,
     })
-      .then(
-        (data: sdk.TimeseriesWithCursor): void => {
-          if (fetchId !== this.state.lastFetchId) {
-            // for fetch callback order
-            return;
-          }
-
-          const { items } = data;
-          if (this.props.filterRule) {
-            const resultsFiltered = items.filter(this.props.filterRule);
-            this.setState({
-              searchResults: resultsFiltered,
-              fetching: false,
-            });
-          } else {
-            this.setState({
-              searchResults: items,
-              fetching: false,
-            });
-          }
+      .then((data: sdk.TimeseriesWithCursor): void => {
+        if (fetchId !== this.state.lastFetchId) {
+          // for fetch callback order
+          return;
         }
-      )
-      .catch(
-        (error: Error): void => {
+
+        const { items } = data;
+        if (this.props.filterRule) {
+          const resultsFiltered = items.filter(this.props.filterRule);
           this.setState({
+            searchResults: resultsFiltered,
             fetching: false,
           });
-          const { onError } = this.props;
-          if (onError) {
-            onError(error);
-          }
+        } else {
+          this.setState({
+            searchResults: items,
+            fetching: false,
+          });
         }
-      );
+      })
+      .catch((error: Error): void => {
+        this.setState({
+          fetching: false,
+        });
+        const { onError } = this.props;
+        if (onError) {
+          onError(error);
+        }
+      });
   };
 
   isChecked = (id: number): boolean =>

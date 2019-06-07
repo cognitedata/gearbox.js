@@ -120,7 +120,7 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
       if (assetTimeseries) {
         return (
           <WrapperComponent
-            {...(restProps as any) as P}
+            {...((restProps as any) as P)}
             assetTimeseries={assetTimeseries}
           />
         );
