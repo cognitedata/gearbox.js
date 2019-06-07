@@ -87,7 +87,7 @@ storiesOf('AssetTimeseriesPanel/Examples', module)
     }
   )
   .add(
-    'With custom stylrs',
+    'With custom styles',
     () => {
       return (
         <AssetTimeseriesPanel
