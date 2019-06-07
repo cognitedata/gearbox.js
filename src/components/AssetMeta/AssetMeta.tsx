@@ -4,9 +4,9 @@ import { Tabs } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import {
+  AssetDocumentsPanelStyles,
   AssetEventsPanelStyles,
   AssetPanelType,
-  DocumentTableStyles,
 } from '../../interfaces';
 import { MetaDocProps } from '../../interfaces/DocumentTypes';
 import {
@@ -19,6 +19,7 @@ import { AssetDocumentsPanel } from '../AssetDocumentsPanel';
 import { AssetEventsPanel, MetaEventsProps } from '../AssetEventsPanel';
 import {
   AssetTimeseriesPanel,
+  AssetTimeseriesPanelStyles,
   MetaTimeseriesProps,
 } from '../AssetTimeseriesPanel';
 
@@ -28,7 +29,8 @@ export interface AssetMetaStyles {
   header?: React.CSSProperties;
   emptyTab?: React.CSSProperties;
   details?: React.CSSProperties;
-  documents?: DocumentTableStyles;
+  timeseries?: AssetTimeseriesPanelStyles;
+  documents?: AssetDocumentsPanelStyles;
   events?: AssetEventsPanelStyles;
 }
 
@@ -142,13 +144,14 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
     if (!this.includesPanel('timeseries')) {
       return null;
     }
-    const { assetId, timeseriesProps, customSpinner } = this.props;
+    const { assetId, timeseriesProps, customSpinner, styles } = this.props;
     return (
       <TabPane tab="Timeseries" key="timeseries">
         <AssetTimeseriesPanel
           assetId={assetId}
           {...timeseriesProps}
           customSpinner={customSpinner}
+          styles={styles && styles.timeseries}
         />
       </TabPane>
     );

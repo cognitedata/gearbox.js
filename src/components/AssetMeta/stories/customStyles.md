@@ -28,6 +28,15 @@ function ExampleComponent(props) {
           fontSize: '1.2em',
           color: 'green',
         },
+        timeseries: {
+          wrapper: {
+            border: '2px red solid',
+            width: '70%',
+          },
+          timeseriesContainer: {
+            backgroundColor: '#efefef',
+          },
+        },
         documents: {
           wrapper: {
             backgroundColor: 'yellow',

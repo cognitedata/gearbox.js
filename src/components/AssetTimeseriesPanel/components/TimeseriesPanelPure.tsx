@@ -7,11 +7,17 @@ import {
   TimeseriesChartMetaPure,
 } from '../../TimeseriesChartMeta/TimeseriesChartMetaPure';
 
+export interface AssetTimeseriesPanelStyles {
+  wrapper?: React.CSSProperties;
+  timeseriesContainer?: React.CSSProperties;
+}
+
 export interface MetaTimeseriesProps
   extends Omit<TimeseriesChartMetaProps, 'timeseries'> {
   strings?: {
     noTimeseriesSign?: string;
   };
+  styles?: AssetTimeseriesPanelStyles;
 }
 
 export interface TimeseriesPanelProps
@@ -28,7 +34,7 @@ export class TimeseriesPanelPure extends React.PureComponent<
   };
 
   render() {
-    const { strings, assetTimeseries, ...rest } = this.props;
+    const { strings, assetTimeseries, styles, ...rest } = this.props;
 
     if (!assetTimeseries || !assetTimeseries.length) {
       return (
@@ -41,10 +47,14 @@ export class TimeseriesPanelPure extends React.PureComponent<
     return (
       <>
         <TableWrapper>
-          <CollapseContainer>
+          <CollapseContainer style={styles && styles.wrapper}>
             {assetTimeseries &&
               assetTimeseries.map(ts => (
-                <PanelWrapper header={ts.name} key={ts.id.toString()}>
+                <PanelWrapper
+                  header={ts.name}
+                  key={ts.id.toString()}
+                  style={styles && styles.timeseriesContainer}
+                >
                   <TimeseriesChartMetaPure
                     key={ts.id}
                     timeseries={ts}
