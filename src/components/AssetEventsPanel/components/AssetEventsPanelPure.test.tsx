@@ -3,17 +3,21 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import renderer from 'react-test-renderer';
 import { ASSET_META_EVENTS_STYLES, EVENTS } from '../../../mocks';
-import { AssetEventsPanel } from './AssetEventsPanel';
+import { AssetEventsPanelPure } from './AssetEventsPanelPure';
 
 configure({ adapter: new Adapter() });
 
 describe('AssetEventsPanel', () => {
   it('renders correctly', () => {
-    const tree = renderer.create(<AssetEventsPanel events={EVENTS} />).toJSON();
+    const tree = renderer
+      .create(<AssetEventsPanelPure assetEvents={EVENTS} />)
+      .toJSON();
     expect(tree).toMatchSnapshot();
   });
   it('checks if the modal is opened', done => {
-    const eventPanelModal = mount(<AssetEventsPanel events={EVENTS} />);
+    const eventPanelModal = mount(
+      <AssetEventsPanelPure assetEvents={EVENTS} />
+    );
 
     expect(eventPanelModal.state('selectedEvent')).toEqual(null);
 
@@ -35,7 +39,10 @@ describe('AssetEventsPanel', () => {
     'should render component with passed inline styles',
     ({ inlineStyle, element }) => {
       const eventPanel = mount(
-        <AssetEventsPanel events={EVENTS} styles={ASSET_META_EVENTS_STYLES} />
+        <AssetEventsPanelPure
+          assetEvents={EVENTS}
+          styles={ASSET_META_EVENTS_STYLES}
+        />
       );
       const containerStyle = eventPanel
         .find(element)

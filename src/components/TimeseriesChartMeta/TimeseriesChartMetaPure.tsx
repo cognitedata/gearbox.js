@@ -2,7 +2,7 @@ import Radio, { RadioChangeEvent } from 'antd/lib/radio';
 import moment from 'moment-timezone';
 import React from 'react';
 import styled from 'styled-components';
-import { WithTimeseriesDataProps } from '../../hoc/withTimeseries/withTimeseries';
+import { WithTimeseriesDataProps } from '../../hoc/withTimeseries';
 import { TimeseriesChart } from '../TimeseriesChart';
 import { TimeseriesMetaInfo } from './components/TimeseriesMetaInfo';
 import { TimeseriesValue } from './components/TimeseriesValue';

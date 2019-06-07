@@ -1,4 +1,4 @@
-import { withTimeseries } from '../../hoc/withTimeseries/withTimeseries';
+import { withTimeseries } from '../../hoc/withTimeseries';
 import {
   TimeseriesChartMetaPeriod,
   TimeseriesChartMetaProps,

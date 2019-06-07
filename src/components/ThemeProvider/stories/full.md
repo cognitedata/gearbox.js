@@ -56,7 +56,6 @@ The object that defines colours and some other CSS properties for `@cognite/gear
 Definition:
 
 ```typescript
-
 const defaultTheme = {
   // ant design colors
   primaryColor: '#1890ff',
@@ -82,8 +81,14 @@ const defaultTheme = {
   buttonDisabledColor: '#f5f5f5',
 };
 
+interface GearboxThemeOptional {
+  textFamily?: string;
+  textSize?: string;
+  listColor?: string;
+}
+
 type GearboxThemeKey = keyof typeof defaultTheme;
 
-type GearboxTheme = { [key in GearboxThemeKey]?: string };
+type GearboxTheme = { [key in GearboxThemeKey]?: string } & GearboxThemeOptional;
 
 ```

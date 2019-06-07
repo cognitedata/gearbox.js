@@ -236,7 +236,8 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
   render() {
     return (
-      <React.Fragment>
+      // Need this div since caching uses replaceChild on divWrapper ref, so need a surrounding div
+      <div style={{ width: '100%', height: '100%' }}>
         <input
           type="text"
           onBlur={this.onBlur}
@@ -248,7 +249,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
           style={{ width: '100%', height: '100%', fontSize: 0 }}
           ref={this.divWrapper}
         />
-      </React.Fragment>
+      </div>
     );
   }
   private async findMappedNodes(): Promise<sdk.AssetMapping[]> {

@@ -6,10 +6,10 @@ import styled from 'styled-components';
 import { Callback, ErrorResponse } from '../../../interfaces';
 import { ASNotifyTypes, AssetScanner } from '../AssetScanner';
 
-import * as customButtonDoc from './custom-button.md';
-import * as full from './full.md';
-import * as customNotificationsDoc from './notifications.md';
-import * as ocrRequestDoc from './ocr-request.md';
+import customButtonDoc from './custom-button.md';
+import full from './full.md';
+import customNotificationsDoc from './notifications.md';
+import ocrRequestDoc from './ocr-request.md';
 
 const onOcrError = (error: ErrorResponse) => {
   action('onOcrError')(error);

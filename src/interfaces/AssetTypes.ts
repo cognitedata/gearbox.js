@@ -1,4 +1,4 @@
-import { Asset, Event } from '@cognite/sdk';
+import { Asset } from '@cognite/sdk';
 import { MetadataId } from './index';
 
 export type AssetPanelType = 'details' | 'events' | 'documents' | 'timeseries';
@@ -38,21 +38,11 @@ export interface TableDesignType {
   style?: object;
 }
 
-export interface MetaEventsProps extends TableDesignType {
-  columns?: TableColumnType[];
-}
-
 export interface AssetEventsPanelStyles {
   table?: React.CSSProperties;
   tableRow?: React.CSSProperties;
   tableCell?: React.CSSProperties;
 }
-
-export interface AssetEventsPanelProps extends MetaEventsProps {
-  events?: Event[];
-  styles?: AssetEventsPanelStyles;
-}
-
 export interface TreeNodeType {
   title: string;
   description?: string;
@@ -67,9 +57,14 @@ export interface OnSelectAssetTreeParams {
   node?: Asset;
 }
 
+export interface AssetTreeStyles {
+  list?: React.CSSProperties;
+}
+
 export interface AssetTreeProps {
   onSelect?: (onSelect: OnSelectAssetTreeParams) => void;
   defaultExpandedKeys?: number[];
+  styles?: AssetTreeStyles;
 }
 
 export interface AdvancedSearch {

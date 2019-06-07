@@ -18,12 +18,14 @@ const ANT_COLLAPSE_HEADER = '.ant-collapse-header';
 // tslint:disable:no-big-function
 describe('DocumentTable', () => {
   it('Renders without exploding', () => {
-    const wrapper = mount(<DocumentTable docs={[]} />);
+    const wrapper = mount(<DocumentTable assetFiles={[]} />);
     expect(wrapper).toHaveLength(1);
   });
 
   it('Correctly renders unknown category', () => {
-    const wrapper = mount(<DocumentTable docs={[DOCUMENT_WITHOUT_TYPE]} />);
+    const wrapper = mount(
+      <DocumentTable assetFiles={[DOCUMENT_WITHOUT_TYPE]} />
+    );
     expect(
       wrapper
         .find(ANT_COLLAPSE_HEADER)
@@ -35,7 +37,7 @@ describe('DocumentTable', () => {
   it('Correctly renders custom unknown category', () => {
     const wrapper = mount(
       <DocumentTable
-        docs={[DOCUMENT_WITHOUT_TYPE]}
+        assetFiles={[DOCUMENT_WITHOUT_TYPE]}
         unknownCategoryName="Unknown"
       />
     );
@@ -48,7 +50,9 @@ describe('DocumentTable', () => {
   });
 
   it('Correctly renders without metadata', () => {
-    const wrapper = mount(<DocumentTable docs={[DOCUMENT_WITHOUT_METADATA]} />);
+    const wrapper = mount(
+      <DocumentTable assetFiles={[DOCUMENT_WITHOUT_METADATA]} />
+    );
     expect(
       wrapper
         .find(ANT_COLLAPSE_HEADER)
@@ -60,7 +64,7 @@ describe('DocumentTable', () => {
   it('Correctly finds type in name', () => {
     const wrapper = mount(
       <DocumentTable
-        docs={[
+        assetFiles={[
           {
             id: 1,
             fileName: 'DN02-SM-P-XB-2103-01-11L.svg',
@@ -79,7 +83,7 @@ describe('DocumentTable', () => {
   it('Correctly finds category from custom field', () => {
     const wrapper = mount(
       <DocumentTable
-        docs={[DOCUMENT_WITH_CUSTOM_TYPE_FIELD]}
+        assetFiles={[DOCUMENT_WITH_CUSTOM_TYPE_FIELD]}
         documentTypeField="Type"
       />
     );
@@ -94,7 +98,7 @@ describe('DocumentTable', () => {
   it('Correctly finds title from custom field', () => {
     const wrapper = mount(
       <DocumentTable
-        docs={[DOCUMENT_WITH_CUSTOM_TITLE_FIELD]}
+        assetFiles={[DOCUMENT_WITH_CUSTOM_TITLE_FIELD]}
         documentTitleField="Title"
       />
     );
@@ -113,7 +117,7 @@ describe('DocumentTable', () => {
   it('Correctly finds types from custom docTypes', () => {
     const wrapper = mount(
       <DocumentTable
-        docs={[
+        assetFiles={[
           {
             id: 1,
             fileName: 'file name 1',
@@ -139,7 +143,7 @@ describe('DocumentTable', () => {
   it('Correctly prioritize based on categoryPriorityList', () => {
     const wrapper = mount(
       <DocumentTable
-        docs={[
+        assetFiles={[
           generateDocumentWithDocType(1, 'a', 'XB'),
           generateDocumentWithDocType(2, 'b', 'FA'),
         ]}
@@ -166,7 +170,7 @@ describe('DocumentTable', () => {
     const handleDocumentClick = jest.fn();
     const wrapper = mount(
       <DocumentTable
-        docs={[generateDocumentWithDocType(1, null, 'XB')]}
+        assetFiles={[generateDocumentWithDocType(1, null, 'XB')]}
         handleDocumentClick={handleDocumentClick}
       />
     );
@@ -183,7 +187,9 @@ describe('DocumentTable', () => {
   });
 
   it('No documents linked sign shown properly', () => {
-    const wrapper = mount(<DocumentTable docs={[]} noDocumentsSign="None" />);
+    const wrapper = mount(
+      <DocumentTable assetFiles={[]} noDocumentsSign="None" />
+    );
     expect(
       wrapper
         .find('[data-test-id="no-documents"]')
@@ -196,7 +202,7 @@ describe('DocumentTable', () => {
     const handleCategoryClick = jest.fn();
     const wrapper = mount(
       <DocumentTable
-        docs={[generateDocumentWithDocType(1, null, 'XB')]}
+        assetFiles={[generateDocumentWithDocType(1, null, 'XB')]}
         collapseProps={{
           onChange: handleCategoryClick,
         }}
@@ -214,7 +220,7 @@ describe('DocumentTable', () => {
       a > b ? -1 : a < b ? 1 : 0;
     const wrapper = mount(
       <DocumentTable
-        docs={DOCUMENTS}
+        assetFiles={DOCUMENTS}
         categoryPriorityList={[]}
         customCategorySort={customCategorySort}
       />

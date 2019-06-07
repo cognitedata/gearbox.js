@@ -89,15 +89,11 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
       this.state.hasUserMedia &&
       this.stream
     ) {
-      if (this.stream.stop) {
-        this.stream.stop();
-      } else {
-        if (this.stream.getVideoTracks) {
-          this.stream.getVideoTracks().forEach(track => track.stop());
-        }
-        if (this.stream.getAudioTracks) {
-          this.stream.getAudioTracks().forEach(track => track.stop());
-        }
+      if (this.stream.getVideoTracks) {
+        this.stream.getVideoTracks().forEach(track => track.stop());
+      }
+      if (this.stream.getAudioTracks) {
+        this.stream.getAudioTracks().forEach(track => track.stop());
       }
       Webcam.userMediaRequested = false;
       window.URL.revokeObjectURL(this.state.src);

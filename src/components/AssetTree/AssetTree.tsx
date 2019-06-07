@@ -1,14 +1,16 @@
 import { Asset, AssetListDescendantsParams } from '@cognite/sdk';
 import * as sdk from '@cognite/sdk';
 import { Tree } from 'antd';
-import { AntTreeNode } from 'antd/lib/tree';
+import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import {
   AssetTreeProps,
   OnSelectAssetTreeParams,
   TreeNodeData,
   TreeNodeType,
 } from '../../interfaces';
+import { defaultTheme } from '../../theme/defaultTheme';
 
 const { TreeNode } = Tree;
 
@@ -160,17 +162,31 @@ export class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
     });
   };
 
-  renderTreeNode = (nodes: TreeNodeType[]) =>
-    nodes.map(item => {
+  renderTreeNode = (nodes: TreeNodeType[]) => {
+    const { styles } = this.props;
+    return nodes.map(item => {
       if (item.children) {
         return (
-          <TreeNode title={item.title} key={item.key} dataRef={item}>
+          <TreeNodeWrapper
+            title={item.title}
+            key={item.key}
+            dataRef={item}
+            style={styles && styles.list}
+          >
             {this.renderTreeNode(item.children)}
-          </TreeNode>
+          </TreeNodeWrapper>
         );
       }
-      return <TreeNode title={item.title} key={item.key} dataRef={item} />;
+      return (
+        <TreeNodeWrapper
+          title={item.title}
+          key={item.key}
+          dataRef={item}
+          style={styles && styles.list}
+        />
+      );
     });
+  };
 
   render() {
     const { treeData, expandedKeys } = this.state;
@@ -186,3 +202,15 @@ export class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
     );
   }
 }
+
+const TreeNodeWrapper = styled(TreeNode)<AntTreeNodeProps>`
+  font-family: ${({ theme }) => theme.gearbox.textFamily};
+  font-size: ${({ theme }) => theme.gearbox.textSize};
+  color: ${({ theme }) => theme.gearbox.listColor};
+`;
+
+TreeNodeWrapper.defaultProps = {
+  theme: {
+    gearbox: defaultTheme,
+  },
+};

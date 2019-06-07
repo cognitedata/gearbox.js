@@ -2,7 +2,12 @@ import { Event } from '@cognite/sdk';
 import { Icon, Modal, Table } from 'antd';
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { AssetEventsPanelProps } from '../../../interfaces';
+import { WithAssetEventsDataProps } from '../../../hoc/withAssetEvents';
+import {
+  AssetEventsPanelStyles,
+  TableColumnType,
+  TableDesignType,
+} from '../../../interfaces';
 import { momentFromTimestamp } from '../../../utils/formatters';
 
 interface EventAddonsProp extends Event {
@@ -15,7 +20,19 @@ interface AssetEventsPanelState {
   selectedEvent: EventAddonsProp | null;
 }
 
-export class AssetEventsPanel extends Component<
+export interface MetaEventsProps extends TableDesignType {
+  columns?: TableColumnType[];
+}
+
+export interface AssetEventsPanelStylesProps {
+  styles?: AssetEventsPanelStyles;
+}
+
+export type AssetEventsPanelProps = MetaEventsProps &
+  WithAssetEventsDataProps &
+  AssetEventsPanelStylesProps;
+
+export class AssetEventsPanelPure extends Component<
   AssetEventsPanelProps,
   AssetEventsPanelState
 > {
@@ -101,11 +118,11 @@ export class AssetEventsPanel extends Component<
   });
 
   onEventClick = (id: number) => {
-    const { events } = this.props;
-    if (!events) {
+    const { assetEvents } = this.props;
+    if (!assetEvents) {
       return;
     }
-    const selectedEvent = events.find(e => e.id === id);
+    const selectedEvent = assetEvents.find(e => e.id === id);
     if (!selectedEvent) {
       return;
     }
@@ -140,7 +157,7 @@ export class AssetEventsPanel extends Component<
 
     const {
       columns = defaultColumns,
-      events = [],
+      assetEvents = [],
       pagination = { pageSize: 12 },
       scroll,
       bordered = false,
@@ -155,7 +172,7 @@ export class AssetEventsPanel extends Component<
         <StyledTable
           key="styleTable"
           columns={columns}
-          dataSource={events.map(this.mapEvent)}
+          dataSource={assetEvents.map(this.mapEvent)}
           rowKey="id"
           showHeader={showHeader}
           pagination={pagination}
