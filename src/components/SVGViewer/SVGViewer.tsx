@@ -484,6 +484,10 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
             this.pinchZoomInstance.container.clientHeight / 2 +
             this.pinchZoomInstance.offset.y,
         };
+        // Zoom may create invalid position
+        this.pinchZoomInstance.offset = this.pinchZoomInstance.sanitizeOffset(
+          this.pinchZoomInstance.offset
+        );
         this.pinchZoomInstance.update();
       }
     });
