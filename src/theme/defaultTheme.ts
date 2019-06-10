@@ -15,12 +15,14 @@ export const defaultTheme = {
   textColor: 'rgba(0,0,0, 0.65)',
   textColorSecondary: 'rgba(0,0,0, 0.45)',
   textColorInverse: '#fff',
+  textColorAccent: '#40a9ff',
 
   // gearbox colors and styles
   lightGrey: '#f5f5f5',
   lightShadow:
     'rgba(0, 0, 0, 0.05) 1px 6px 20px 8px, rgba(0, 0, 0, 0.11) 0px 6px 6px',
   containerColor: '#fff',
+  containerBorderColor: '#EEE',
 
   textColorDisabled: 'rgba(0,0,0, 0.25)',
   buttonBorderColor: '#d9d9d9',
