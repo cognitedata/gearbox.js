@@ -1,13 +1,13 @@
-import { Event as ApiEvent } from '@cognite/sdk';
+import { CogniteEvent } from '@cognite/sdk-alpha/dist/src/types/types';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { eventPreviewStrings, EVENTS, eventWithout } from '../../../mocks';
+import { eventPreviewStrings, eventWithout, fakeEvents } from '../../../mocks';
 import { defaultStrings, EventPreviewView } from './EventPreviewView';
 
 configure({ adapter: new Adapter() });
 
-const event = EVENTS[0];
+const event = fakeEvents[0];
 
 describe('EventPreview', () => {
   it('Renders without exploding', () => {
@@ -19,7 +19,7 @@ describe('EventPreview', () => {
     const missingMetadataEvent = eventWithout('metadata');
     const wrapper = mount(
       <EventPreviewView
-        event={(missingMetadataEvent as any) as ApiEvent}
+        event={(missingMetadataEvent as any) as CogniteEvent}
         strings={eventPreviewStrings}
       />
     );
@@ -34,7 +34,7 @@ describe('EventPreview', () => {
     const missingDescriptionEvent = eventWithout('description');
     const wrapper = mount(
       <EventPreviewView
-        event={(missingDescriptionEvent as any) as ApiEvent}
+        event={(missingDescriptionEvent as any) as CogniteEvent}
         strings={eventPreviewStrings}
       />
     );
@@ -46,19 +46,10 @@ describe('EventPreview', () => {
   it('Applies default strings in case of undefined "strings" property', () => {
     const missingMetadataEvent = eventWithout('description');
     const wrapper = mount(
-      <EventPreviewView event={(missingMetadataEvent as any) as ApiEvent} />
+      <EventPreviewView event={(missingMetadataEvent as any) as CogniteEvent} />
     );
 
     const { noDescription } = defaultStrings;
     expect(wrapper.contains(noDescription as string)).toBeTruthy();
-  });
-
-  it('Should not render type and subtype', () => {
-    const wrapper = mount(
-      <EventPreviewView event={event} hideProperties={['type', 'subtype']} />
-    );
-    const text = wrapper.text();
-    expect(text.indexOf(event.type!)).toBe(-1);
-    expect(text.indexOf(event.subtype!)).toBe(-1);
   });
 });

@@ -2,6 +2,7 @@ export * from './components/AssetMeta/AssetMeta';
 export { AssetScanner } from './components/AssetScanner/AssetScanner';
 export { AssetSearch } from './components/AssetSearch/AssetSearch';
 export * from './components/AssetTree/AssetTree';
+export * from './components/ClientSDKProvider/ClientSDKProvider';
 export * from './components/DescriptionList/DescriptionList';
 export { EventPreview } from './components/EventPreview/EventPreview';
 export { Model3DViewer } from './components/Model3DViewer/Model3DViewer';

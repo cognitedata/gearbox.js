@@ -1,7 +1,8 @@
-import { Event as ApiEvent, Events } from '@cognite/sdk';
+import { CogniteEvent } from '@cognite/sdk-alpha/dist/src/types/types';
 import { Spin } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
+import { ClientSDKContext } from '../../context/clientSDKContext';
 import { PureObject } from '../../interfaces';
 import {
   EventPreviewStyles,
@@ -25,21 +26,24 @@ const LoadingSpinner: React.SFC = () => (
 
 export interface EventPreviewProps {
   eventId: number;
-  onShowDetails?: (e: ApiEvent) => void;
+  onShowDetails?: (e: CogniteEvent) => void;
   strings?: PureObject;
-  hideProperties?: (keyof ApiEvent)[];
+  hideProperties?: (keyof CogniteEvent)[];
   hideLoadingSpinner?: boolean;
   styles?: EventPreviewStyles;
 }
 
 interface EventPreviewState {
-  event: ApiEvent | null;
+  event: CogniteEvent | null;
 }
 
 export class EventPreview extends React.Component<
   EventPreviewProps,
   EventPreviewState
 > {
+  static contextType = ClientSDKContext;
+  context!: React.ContextType<typeof ClientSDKContext>;
+
   isComponentUnmount: boolean = false;
 
   constructor(props: EventPreviewProps) {
@@ -65,9 +69,23 @@ export class EventPreview extends React.Component<
   }
 
   async loadEvent() {
-    const event = await Events.retrieve(this.props.eventId);
+    if (!this.context) {
+      console.error(
+        'Client SDK Context has not been provided. Use ClientSDKProvider to wrap the component.'
+      );
+      return;
+    }
+
+    const events = await this.context.events.retrieve([
+      { id: this.props.eventId },
+    ]);
+    if (events.length !== 1) {
+      console.error('API request returned unexpected results');
+      return;
+    }
+
     if (!this.isComponentUnmount) {
-      this.setState({ event });
+      this.setState({ event: events[0] });
     }
   }
 
