@@ -1,8 +1,11 @@
+import * as sdk from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 
+import { EVENTS } from '../../../mocks';
 import { AssetTree } from '../../AssetTree';
+import { EventPreview } from '../../EventPreview';
 import { TenantSelector } from '../../TenantSelector';
 import { ThemeProvider } from '../ThemeProvider';
 
@@ -77,6 +80,30 @@ storiesOf('ThemeProvider/Examples', module)
         <AssetTree />
       </ThemeProvider>
     ),
+    {
+      readme: {
+        content: assetTree,
+      },
+    }
+  )
+  .add(
+    'Event Preview',
+    () => {
+      sdk.Events.retrieve = () => Promise.resolve(EVENTS[0]);
+      return (
+        <ThemeProvider
+          theme={{
+            textFamily: 'Trebuchet MS',
+            textColorSecondary: '#555577',
+            textColorAccent: 'red',
+            containerColor: '#DDD',
+            containerBorderColor: '#777',
+          }}
+        >
+          <EventPreview eventId={123} />
+        </ThemeProvider>
+      );
+    },
     {
       readme: {
         content: assetTree,

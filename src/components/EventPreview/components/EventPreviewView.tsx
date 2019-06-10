@@ -3,7 +3,9 @@ import { Button } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import { PureObject } from '../../../interfaces';
+import { defaultTheme } from '../../../theme/defaultTheme';
 import { formatDatetime } from '../../../utils/formatters';
+import { applyThemeFontFamily } from '../../../utils/theme';
 import { ComplexString } from '../../common/ComplexString/ComplexString';
 
 const EventTitle = styled.div`
@@ -12,9 +14,15 @@ const EventTitle = styled.div`
 `;
 const EventType = styled.div`
   font-size: 1.2rem;
-  color: #40a9ff;
+  color: ${({ theme }) => theme.gearbox.textColorAccent};
   padding-bottom: 8px;
 `;
+EventType.defaultProps = {
+  theme: {
+    gearbox: defaultTheme,
+  },
+};
+
 const EventDetailsBlock = styled.div`
   font-size: 1.1rem;
   padding-bottom: 16px;
@@ -24,14 +32,20 @@ const EventDetailsBlock = styled.div`
 `;
 
 const Container = styled.div`
-  color: rgba(0, 0, 0, 0.45);
+  color: ${({ theme }) => theme.gearbox.textColorSecondary};
   padding: 16px;
   width: 300px;
-  background: white;
+  background-color: ${({ theme }) => theme.gearbox.containerColor};
   border-radius: 4px;
-  border: 1px solid #eee;
+  border: 1px solid ${({ theme }) => theme.gearbox.containerBorderColor};
   margin-top: 32px;
+  ${({ theme }) => applyThemeFontFamily(theme.gearbox)};
 `;
+Container.defaultProps = {
+  theme: {
+    gearbox: defaultTheme,
+  },
+};
 
 export const defaultStrings: PureObject = {
   noDescription: 'No description',
