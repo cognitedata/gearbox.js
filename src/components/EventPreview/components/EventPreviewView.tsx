@@ -1,4 +1,4 @@
-import { Event as ApiEvent } from '@cognite/sdk';
+import { CogniteEvent } from '@cognite/sdk-alpha/dist/src/types/types';
 import { Button } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
@@ -12,16 +12,6 @@ const EventTitle = styled.div`
   font-size: 1.4rem;
   padding-bottom: 16px;
 `;
-const EventType = styled.div`
-  font-size: 1.2rem;
-  color: ${({ theme }) => theme.gearbox.textColorAccent};
-  padding-bottom: 8px;
-`;
-EventType.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
 
 const EventDetailsBlock = styled.div`
   font-size: 1.1rem;
@@ -67,10 +57,10 @@ export interface EventPreviewStyles {
 }
 
 export interface EventPreviewProps {
-  event: ApiEvent;
-  onShowDetails?: (event: ApiEvent) => void;
+  event: CogniteEvent;
+  onShowDetails?: (event: CogniteEvent) => void;
   strings?: PureObject;
-  hideProperties?: (keyof ApiEvent)[];
+  hideProperties?: (keyof CogniteEvent)[];
   styles?: EventPreviewStyles;
 }
 
@@ -82,7 +72,7 @@ export const EventPreviewView = ({
   styles = {},
 }: EventPreviewProps) => {
   const lang = { ...defaultStrings, ...strings };
-  const { startTime, endTime, type, subtype, description, metadata } = event;
+  const { startTime, endTime, description, metadata } = event;
   const {
     noDescription,
     start,
@@ -98,14 +88,6 @@ export const EventPreviewView = ({
 
   return (
     <Container key="container" style={styles.wrapper}>
-      <EventType style={styles.eventType}>
-        {[
-          hideProperties.includes('type') ? '' : type,
-          hideProperties.includes('subtype') ? '' : subtype,
-        ]
-          .filter(Boolean)
-          .join(' / ')}
-      </EventType>
       {!hideProperties.includes('description') && (
         <EventTitle style={styles.description}>
           {description || noDescription}

@@ -48,6 +48,7 @@
     "@babel/preset-react": "^7.0.0",
     "@cognite/griff-react": "^0.4.2",
     "@cognite/sdk": "^1.7.1",
+    "@cognite/sdk-alpha": "npm:@cognite/sdk@2.0.0-alpha.6",
     "@storybook/addon-actions": "^5.0.11",
     "@storybook/addons": "^5.0.11",
     "@storybook/react": "^5.0.11",

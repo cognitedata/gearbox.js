@@ -1,9 +1,13 @@
-import { Event, Events } from '@cognite/sdk';
-import { Event as ApiEvent } from '@cognite/sdk';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
+import {
+  CogniteEvent,
+  IdEither,
+} from '@cognite/sdk-alpha/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { EVENTS } from '../../../mocks';
+import { fakeEvents } from '../../../mocks';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { EventPreview, EventPreviewStyles } from '../EventPreview';
 import basic from './basic.md';
 import customStyles from './customStyles.md';
@@ -13,26 +17,36 @@ import hideDateTime from './hideDateTime.md';
 import hideDescription from './hideDescription.md';
 import hideLoadingSpinner from './hideLoadingSpinner.md';
 import hideMetadata from './hideMetadata.md';
-import hideType from './hideType.md';
 import missingProperties from './missingProperties.md';
 import withCustomText from './withCustomText.md';
 
-Events.retrieve = (eventId: number): Promise<Event> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const event = EVENTS.find(e => e.id === eventId);
-      resolve(event);
-    }, 1000); // simulate load delay
-  });
+const fakeClient: API = {
+  // @ts-ignore
+  events: {
+    retrieve: (ids: IdEither[]): Promise<CogniteEvent[]> => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          // @ts-ignore
+          const event = fakeEvents.find(e => e.id === ids[0].id);
+          // @ts-ignore
+          resolve([event]);
+        }, 1000); // simulate load delay
+      });
+    },
+  },
 };
 
-const onShowDetails = (e: ApiEvent) => {
+const onShowDetails = (e: CogniteEvent) => {
   action('onShowDetails')(e);
 };
 
 storiesOf('EventPreview', module).add(
   'Full Description',
-  () => <EventPreview eventId={25496029326330} onShowDetails={onShowDetails} />,
+  () => (
+    <ClientSDKProvider client={fakeClient}>
+      <EventPreview eventId={25496029326330} onShowDetails={onShowDetails} />
+    </ClientSDKProvider>
+  ),
   {
     readme: {
       content: fullDescription,
@@ -44,7 +58,9 @@ storiesOf('EventPreview/Examples', module)
   .add(
     'Basic',
     () => (
-      <EventPreview eventId={25496029326330} onShowDetails={onShowDetails} />
+      <ClientSDKProvider client={fakeClient}>
+        <EventPreview eventId={25496029326330} onShowDetails={onShowDetails} />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -53,28 +69,15 @@ storiesOf('EventPreview/Examples', module)
     }
   )
   .add(
-    'Hidden type',
-    () => (
-      <EventPreview
-        eventId={25496029326330}
-        onShowDetails={onShowDetails}
-        hideProperties={['type']}
-      />
-    ),
-    {
-      readme: {
-        content: hideType,
-      },
-    }
-  )
-  .add(
     'Hidden description',
     () => (
-      <EventPreview
-        eventId={25496029326330}
-        onShowDetails={onShowDetails}
-        hideProperties={['description']}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <EventPreview
+          eventId={25496029326330}
+          onShowDetails={onShowDetails}
+          hideProperties={['description']}
+        />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -85,11 +88,13 @@ storiesOf('EventPreview/Examples', module)
   .add(
     'Hidden start/end times',
     () => (
-      <EventPreview
-        eventId={25496029326330}
-        onShowDetails={onShowDetails}
-        hideProperties={['startTime', 'endTime']}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <EventPreview
+          eventId={25496029326330}
+          onShowDetails={onShowDetails}
+          hideProperties={['startTime', 'endTime']}
+        />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -100,11 +105,13 @@ storiesOf('EventPreview/Examples', module)
   .add(
     'Hidden metadata',
     () => (
-      <EventPreview
-        eventId={25496029326330}
-        onShowDetails={onShowDetails}
-        hideProperties={['metadata']}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <EventPreview
+          eventId={25496029326330}
+          onShowDetails={onShowDetails}
+          hideProperties={['metadata']}
+        />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -114,7 +121,11 @@ storiesOf('EventPreview/Examples', module)
   )
   .add(
     'Hidden details button',
-    () => <EventPreview eventId={25496029326330} />,
+    () => (
+      <ClientSDKProvider client={fakeClient}>
+        <EventPreview eventId={25496029326330} />
+      </ClientSDKProvider>
+    ),
     {
       readme: {
         content: hideButton,
@@ -124,7 +135,9 @@ storiesOf('EventPreview/Examples', module)
   .add(
     'With missing properties',
     () => (
-      <EventPreview eventId={35593709738145} onShowDetails={onShowDetails} />
+      <ClientSDKProvider client={fakeClient}>
+        <EventPreview eventId={35593709738145} onShowDetails={onShowDetails} />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -135,11 +148,13 @@ storiesOf('EventPreview/Examples', module)
   .add(
     'Without loading spinner',
     () => (
-      <EventPreview
-        eventId={25496029326330}
-        onShowDetails={onShowDetails}
-        hideLoadingSpinner={true}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <EventPreview
+          eventId={25496029326330}
+          onShowDetails={onShowDetails}
+          hideLoadingSpinner={true}
+        />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -150,16 +165,18 @@ storiesOf('EventPreview/Examples', module)
   .add(
     'With custom text',
     () => (
-      <EventPreview
-        eventId={25496029326330}
-        onShowDetails={onShowDetails}
-        strings={{
-          start: 'From',
-          end: 'To',
-          details: 'More Details',
-          metadataSummary: 'Contains {{count}} more',
-        }}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <EventPreview
+          eventId={25496029326330}
+          onShowDetails={onShowDetails}
+          strings={{
+            start: 'From',
+            end: 'To',
+            details: 'More Details',
+            metadataSummary: 'Contains {{count}} more',
+          }}
+        />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -179,11 +196,13 @@ storiesOf('EventPreview/Examples', module)
         metadata: { backgroundColor: 'lightblue' },
       };
       return (
-        <EventPreview
-          eventId={25496029326330}
-          onShowDetails={onShowDetails}
-          styles={styles}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <EventPreview
+            eventId={25496029326330}
+            onShowDetails={onShowDetails}
+            styles={styles}
+          />
+        </ClientSDKProvider>
       );
     },
     {
