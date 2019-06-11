@@ -274,6 +274,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     if (length === 1) {
       const { nodeId } = this.nodes[0];
 
+      // @ts-ignore
       this.model.updateMatrixWorld();
 
       const reusableBox = new THREE.Box3();
