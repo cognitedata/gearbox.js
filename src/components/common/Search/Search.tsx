@@ -106,7 +106,7 @@ export interface SearchProps {
   loading: boolean;
   rootAssetSelect: boolean;
   advancedSearch: boolean;
-  liveSearch: boolean;
+  showLiveSearchResults: boolean;
   strings: PureObject;
   liveSearchResults: any[];
   assetId?: number;
@@ -136,19 +136,22 @@ export class Search extends React.Component<SearchProps, SearchState> {
     loading: false,
     advancedSearch: false,
     rootAssetSelect: false,
-    liveSearch: false,
+    showLiveSearchResults: false,
     strings: {},
   };
 
   static getDerivedStateFromProps(props: SearchProps, state: SearchState) {
-    const { liveSearch, liveSearchResults: propsSearchResults } = props;
+    const {
+      showLiveSearchResults,
+      liveSearchResults: propsSearchResults,
+    } = props;
     const {
       liveSearchResults: stateSearchResults,
       query,
       advancedSearchQuery,
     } = state;
 
-    if (!liveSearch) {
+    if (!showLiveSearchResults) {
       return null;
     }
 
@@ -244,7 +247,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
   };
 
   onKeyDown = (e: KeyboardEvent) => {
-    const { liveSearch, onKeyDown } = this.props;
+    const { showLiveSearchResults, onKeyDown } = this.props;
     const { cursor, liveSearchResults, liveSearchShow } = this.state;
 
     if (onKeyDown) {
@@ -254,7 +257,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
       e.preventDefault();
     }
 
-    if (!liveSearch || !liveSearchShow) {
+    if (!showLiveSearchResults || !liveSearchShow) {
       return;
     }
 
@@ -418,11 +421,11 @@ export class Search extends React.Component<SearchProps, SearchState> {
   }
 
   private renderLiveSearch(strings: PureObject) {
-    const { liveSearch, liveSearchResults, styles } = this.props;
+    const { showLiveSearchResults, liveSearchResults, styles } = this.props;
     const { liveSearchShow, cursor } = this.state;
     const { emptyLiveSearch } = strings;
 
-    if (!liveSearch || !liveSearchShow) {
+    if (!showLiveSearchResults || !liveSearchShow) {
       return null;
     }
 

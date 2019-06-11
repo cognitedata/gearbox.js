@@ -13,6 +13,7 @@ configure({ adapter: new Adapter() });
 const propsCallbacks: { [name: string]: Mock } = {
   onError: jest.fn(),
   onLiveSearchSelect: jest.fn(),
+  onSearchResult: jest.fn(),
 };
 
 // ignore debounce
@@ -44,7 +45,8 @@ describe('AssetSearch', () => {
 
   it('should search when input changes', done => {
     const { onLiveSearchSelect } = propsCallbacks;
-    const props = { onLiveSearchSelect };
+    const showLiveSearchResults = true;
+    const props = { onLiveSearchSelect, showLiveSearchResults };
     const wrapper = mount(<AssetSearch {...props} />);
 
     wrapper
@@ -61,6 +63,24 @@ describe('AssetSearch', () => {
         .props()
         .onMouseDown();
       expect(onLiveSearchSelect).toHaveBeenCalled();
+      done();
+    });
+  });
+  it("should call onSearchResult when it's present and pass search results in parameter", done => {
+    const { onSearchResult } = propsCallbacks;
+    const showLiveSearchResults = false;
+    const props = { onSearchResult, showLiveSearchResults };
+    const wrapper = mount(<AssetSearch {...props} />);
+
+    wrapper
+      .find(Input)
+      .find('input')
+      .simulate('change', { target: { value: 'value' } });
+
+    setImmediate(() => {
+      wrapper.update();
+      expect(onSearchResult).toHaveBeenCalled();
+      expect(Array.isArray(onSearchResult.mock.calls[0][0])).toBeTruthy();
       done();
     });
   });
