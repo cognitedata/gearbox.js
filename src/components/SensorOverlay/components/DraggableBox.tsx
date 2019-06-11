@@ -1,5 +1,4 @@
-import * as sdk from '@cognite/sdk';
-import { Datapoint, Timeseries } from '@cognite/sdk';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk-alpha/dist/src/types/types';
 import { Icon } from 'antd';
 import numeral from 'numeral';
 import React, { Component } from 'react';
@@ -12,6 +11,7 @@ import {
 } from 'react-dnd';
 import Odometer from 'react-odometerjs';
 import styled from 'styled-components';
+import { ClientSDKContext } from '../../../context/clientSDKContext';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
@@ -189,8 +189,14 @@ interface DraggableBoxProps extends DragSourceProps {
   alertColor: string;
 }
 
+export interface Datapoint {
+  isString: boolean;
+  value: number | string;
+  timestamp: Date;
+}
+
 interface DraggableBoxState {
-  tag: Timeseries | null;
+  tag: GetTimeSeriesMetadataDTO | null;
   dataPoint: Datapoint | null;
   hovering: boolean;
 }
@@ -213,6 +219,9 @@ export class DraggableBox
     },
     alertColor: '#e74c3c',
   };
+
+  static contextType = ClientSDKContext;
+  context!: React.ContextType<typeof ClientSDKContext>;
 
   isComponentUnmounted = false;
 
@@ -266,13 +275,16 @@ export class DraggableBox
   };
 
   fetchTimeSeries = async (id: number) => {
+    if (!this.context) {
+      return;
+    }
     try {
-      const timeserie = await connectPromiseToUnmountState(
+      const timeseries = await connectPromiseToUnmountState(
         this,
-        sdk.TimeSeries.retrieve(id, true)
+        this.context.timeseries.retrieve([{ id }])
       );
       this.setState({
-        tag: timeserie,
+        tag: timeseries[0],
       });
       if (this.interval) {
         clearInterval(this.interval);
@@ -288,12 +300,24 @@ export class DraggableBox
   };
 
   updateValue = async () => {
+    if (!this.context) {
+      return;
+    }
     try {
-      const data = await connectPromiseToUnmountState(
+      const datapoints = await connectPromiseToUnmountState(
         this,
-        sdk.Datapoints.retrieveLatest(this.state.tag!.name)
+        this.context.datapoints.retrieveLatest([
+          { id: this.state.tag!.id, before: 'now' },
+        ])
       );
-      if (!data) {
+      if (!datapoints || datapoints.length !== 1) {
+        this.setState({
+          dataPoint: null,
+        });
+        return;
+      }
+      const datapoint = datapoints[0];
+      if (!datapoint.datapoints || datapoint.datapoints.length === 0) {
         this.setState({
           dataPoint: null,
         });
@@ -301,12 +325,16 @@ export class DraggableBox
       }
       if (
         this.state.dataPoint &&
-        data.timestamp < this.state.dataPoint.timestamp
+        datapoint.datapoints[0].timestamp < this.state.dataPoint.timestamp
       ) {
         return; // got old data point - skip it
       }
       this.setState({
-        dataPoint: data,
+        dataPoint: {
+          isString: datapoint.isString,
+          value: datapoint.datapoints[0].value,
+          timestamp: datapoint.datapoints[0].timestamp,
+        },
       });
     } catch (error) {
       if (error instanceof CanceledPromiseException !== true) {

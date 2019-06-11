@@ -1,4 +1,3 @@
-import { Datapoint } from '@cognite/sdk';
 import { omit, sortedIndex } from 'lodash';
 import React, { Component } from 'react';
 import {
@@ -13,7 +12,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { withSize } from 'react-sizeme';
 import { getColorByString } from '../../utils/colors';
 import { clampNumber } from '../../utils/utils';
-import DraggableBox from './components/DraggableBox';
+import DraggableBox, { Datapoint } from './components/DraggableBox';
 import DraggablePoint from './components/DraggablePoint';
 import SvgLine from './components/SvgLine';
 import { DragTargets } from './constants';
