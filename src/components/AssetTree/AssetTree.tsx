@@ -210,6 +210,9 @@ const TreeNodeWrapper = styled(TreeNode)<AntTreeNodeProps>`
   & span {
     color: ${({ theme }) => theme.gearbox.textColor};
   }
+  & .ant-tree-node-selected {
+    background: ${({ theme }) => theme.gearbox.highlightColor} !important;
+  }
 `;
 
 TreeNodeWrapper.defaultProps = {
