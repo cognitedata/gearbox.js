@@ -10,6 +10,7 @@ import { TenantSelector } from '../../TenantSelector';
 import { ThemeProvider } from '../ThemeProvider';
 
 import assetTree from './assetTree.md';
+import eventPreview from './eventPreview.md';
 import fullDescription from './full.md';
 import tenantSelector from './tenantSelector.md';
 
@@ -72,9 +73,10 @@ storiesOf('ThemeProvider/Examples', module)
     () => (
       <ThemeProvider
         theme={{
-          textFamily: 'Courier New',
-          textSize: 'large',
-          listColor: 'red',
+          fontFamily: 'Courier New',
+          fontSize: 'large',
+          textColor: '#a88400',
+          listHighlight: '#00b893',
         }}
       >
         <AssetTree />
@@ -93,7 +95,7 @@ storiesOf('ThemeProvider/Examples', module)
       return (
         <ThemeProvider
           theme={{
-            textFamily: 'Trebuchet MS',
+            fontFamily: 'Trebuchet MS',
             textColorSecondary: '#555577',
             textColorAccent: 'red',
             containerColor: '#DDD',
@@ -106,7 +108,7 @@ storiesOf('ThemeProvider/Examples', module)
     },
     {
       readme: {
-        content: assetTree,
+        content: eventPreview,
       },
     }
   );

@@ -82,9 +82,8 @@ const defaultTheme = {
 };
 
 interface GearboxThemeOptional {
-  textFamily?: string;
-  textSize?: string;
-  listColor?: string;
+  fontFamily?: string;
+  fontSize?: string;
 }
 
 type GearboxThemeKey = keyof typeof defaultTheme;
