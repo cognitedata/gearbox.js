@@ -72,9 +72,9 @@ storiesOf('ThemeProvider/Examples', module)
     () => (
       <ThemeProvider
         theme={{
-          textFamily: 'Courier New',
-          textSize: 'large',
-          listColor: 'red',
+          fontFamily: 'Courier New',
+          fontSize: 'large',
+          textColor: 'red',
         }}
       >
         <AssetTree />
@@ -93,7 +93,7 @@ storiesOf('ThemeProvider/Examples', module)
       return (
         <ThemeProvider
           theme={{
-            textFamily: 'Trebuchet MS',
+            fontFamily: 'Trebuchet MS',
             textColorSecondary: '#555577',
             textColorAccent: 'red',
             containerColor: '#DDD',
