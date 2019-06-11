@@ -16,7 +16,7 @@ function ExampleComponent(props) {
       theme={{
           fontFamily: 'Courier New',
           fontSize: 'large',
-          textColor: '#752f32',
+          textColor: '#a88400',
           highlightColor: '#00b893',
         }}
     >

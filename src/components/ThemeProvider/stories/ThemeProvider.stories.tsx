@@ -75,8 +75,8 @@ storiesOf('ThemeProvider/Examples', module)
         theme={{
           fontFamily: 'Courier New',
           fontSize: 'large',
-          textColor: '#752f32',
-          highlightColor: '#00b893',
+          textColor: '#a88400',
+          listHighlight: '#00b893',
         }}
       >
         <AssetTree />
