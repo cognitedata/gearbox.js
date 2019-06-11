@@ -10,6 +10,7 @@ import { TenantSelector } from '../../TenantSelector';
 import { ThemeProvider } from '../ThemeProvider';
 
 import assetTree from './assetTree.md';
+import eventPreview from './eventPreview.md';
 import fullDescription from './full.md';
 import tenantSelector from './tenantSelector.md';
 
@@ -106,7 +107,7 @@ storiesOf('ThemeProvider/Examples', module)
     },
     {
       readme: {
-        content: assetTree,
+        content: eventPreview,
       },
     }
   );
