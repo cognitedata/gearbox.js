@@ -36,7 +36,7 @@ const fakeClient: API = {
   },
   // @ts-ignore
   datapoints: {
-    retrieveLatest: items => {
+    retrieveLatest: _ => {
       return Promise.resolve([
         {
           id: 1,

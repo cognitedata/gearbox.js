@@ -1,4 +1,7 @@
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk-alpha/dist/src/types/types';
+import {
+  DatapointsGetDatapoint,
+  GetTimeSeriesMetadataDTO,
+} from '@cognite/sdk-alpha/dist/src/types/types';
 import { Icon } from 'antd';
 import numeral from 'numeral';
 import React, { Component } from 'react';
@@ -255,6 +258,7 @@ export class DraggableBox
 
   onMouseOver = (e: React.MouseEvent) => {
     e.stopPropagation();
+    console.log('------------------------onMouseOver----------------');
     this.setState({
       hovering: true,
     });
@@ -304,11 +308,12 @@ export class DraggableBox
       return;
     }
     try {
-      const datapoints = await connectPromiseToUnmountState(
+      const datapoints: DatapointsGetDatapoint[] = await connectPromiseToUnmountState(
         this,
-        this.context.datapoints.retrieveLatest([
-          { id: this.state.tag!.id, before: 'now' },
-        ])
+        this.context.datapoints.retrieveLatest({
+          // @ts-ignore
+          items: [{ id: this.props.id, before: 'now' }],
+        }) // TODO: remove `{items: }` wrapper after fixing SDK endpoint
       );
       if (!datapoints || datapoints.length !== 1) {
         this.setState({

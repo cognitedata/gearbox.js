@@ -348,6 +348,7 @@ export const fakeTimeseries: GetTimeSeriesMetadataDTO[] = [
     createdTime: new Date(0),
     lastUpdatedTime: new Date(0),
     name: 'VAL_23-LT-96182-03:X.Value',
+    unit: 'bar',
     isString: false,
     metadata: {
       tag: 'VAL_23-LT-96182-03:X.Value',
