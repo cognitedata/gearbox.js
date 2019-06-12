@@ -67,7 +67,9 @@ export interface TimeseriesSearchProps {
   filterRule?: (timeseries: GetTimeSeriesMetadataDTO) => boolean;
   onError?: (error: Error) => void;
   styles?: TimeseriesSearchStyles;
-  rootAssetSelect: boolean;
+
+  // assetSubtree query is not supported yet. CHeck with f1
+  // rootAssetSelect: boolean;
   strings: PureObject;
 }
 export const defaultStrings: PureObject = {
@@ -98,7 +100,8 @@ export class TimeseriesSearch extends React.Component<
     filterRule: undefined,
     hideSelected: false,
     allowStrings: false,
-    rootAssetSelect: false,
+    // assetSubtree query is not supported yet. Check with f1
+    // rootAssetSelect: false,
     single: false,
     onError: undefined,
     rootAsset: undefined,
@@ -173,7 +176,7 @@ export class TimeseriesSearch extends React.Component<
   };
 
   fetchTimeseries = (apiQuery: ApiQuery): void => {
-    const { query, assetSubtrees } = apiQuery;
+    const { query } = apiQuery;
     let { lastFetchId } = this.state;
     lastFetchId += 1;
     const fetchId = lastFetchId;
@@ -193,8 +196,8 @@ export class TimeseriesSearch extends React.Component<
       .search({
         limit: 100,
         filter: {
-          // @ts-ignore
-          assetSubtrees: assetSubtrees == null ? undefined : assetSubtrees,
+          // assetSubtrees is not supported yet. Check with f1.
+          // assetSubtrees: assetSubtrees == null ? undefined : assetSubtrees,
         },
         search: {
           query,
@@ -334,7 +337,8 @@ export class TimeseriesSearch extends React.Component<
       allowStrings,
       single,
       hideSelected,
-      rootAssetSelect,
+      // assetSubtree query is not supported yet. Check with f1
+      // rootAssetSelect,
       styles,
       strings,
     } = this.props;
@@ -359,7 +363,9 @@ export class TimeseriesSearch extends React.Component<
           />
         )}
         <Search
-          rootAssetSelect={rootAssetSelect}
+          // assetSubtree query is not supported yet. Check with f1
+          // rootAssetSelect={rootAssetSelect}
+          rootAssetSelect={false}
           onAssetSelected={this.onSelectAsset}
           assetId={assetId || 0}
           onSearch={this.fetchTimeseries}

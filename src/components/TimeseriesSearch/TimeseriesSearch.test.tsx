@@ -105,7 +105,8 @@ describe('TimeseriesSearch', () => {
     });
   });
 
-  it('should update assetId with user-selected root asset id', done => {
+  // assetSubtree query is not supported yet. Check with f1
+  xit('should update assetId with user-selected root asset id', done => {
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = {
       onTimeserieSelectionChange,

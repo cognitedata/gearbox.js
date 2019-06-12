@@ -21,6 +21,7 @@ import customStyles from './customStyles.md';
 import fullDescription from './full.md';
 import hideSelectedRow from './hideSelectedRow.md';
 import preselected from './preselected.md';
+// @ts-ignore
 import rootAssetSelect from './rootAssetSelect.md';
 import singleSelection from './singleSelection.md';
 
@@ -158,25 +159,26 @@ storiesOf('TimeseriesSearch/Examples', module)
       },
     }
   )
-  .add(
-    'Show root asset select',
-    () => {
-      setupMocks();
-      return (
-        <ClientSDKProvider client={fakeClient}>
-          <TimeseriesSearch
-            onTimeserieSelectionChange={onTimeserieSelectionChange}
-            rootAssetSelect={true}
-          />
-        </ClientSDKProvider>
-      );
-    },
-    {
-      readme: {
-        content: injectTimeseriesNames(rootAssetSelect.toString()),
-      },
-    }
-  )
+  // assetSubtree query is not supported yet. Check with f1
+  // .add(
+  //   'Show root asset select',
+  //   () => {
+  //     setupMocks();
+  //     return (
+  //       <ClientSDKProvider client={fakeClient}>
+  //         <TimeseriesSearch
+  //           onTimeserieSelectionChange={onTimeserieSelectionChange}
+  //           rootAssetSelect={true}
+  //         />
+  //       </ClientSDKProvider>
+  //     );
+  //   },
+  //   {
+  //     readme: {
+  //       content: injectTimeseriesNames(rootAssetSelect.toString()),
+  //     },
+  //   }
+  // )
   .add(
     'Hide selected row',
     () => {
