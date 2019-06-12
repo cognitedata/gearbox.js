@@ -31,7 +31,7 @@ function ExampleComponent(props) {
 
 | Property                | Description                                                        | Type                             | Default |
 | ---------------------   | ------------------------------------------------------------------ | -------------------------------- | ------- |
-| `showLiveSearchResults` | flag to show live search results dropdown list                     | `boolean`                        | `true`  |
+| `showLiveSearchResults` | flag to show live search results in dropdown list                     | `boolean`                        | `true`  |
 | `onLiveSearchSelect`    | Triggers after selecting one of items from live search results list. Required when showLiveSearchResults == true | `(asset: sdk.Asset) => void;`    |         |
 | `onError`               | Triggers when search error occurs                                  | `(error: any) => void`           |         |
 | `strings`               | Object of strings to be placed in component                        | `{ [name: string]: string }`     |         |

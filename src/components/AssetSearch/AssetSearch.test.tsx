@@ -66,7 +66,7 @@ describe('AssetSearch', () => {
       done();
     });
   });
-  it("should call onSearchResult when it's present and pass search results in parameter", done => {
+  it("should call onSearchResult when it is defined", done => {
     const { onSearchResult } = propsCallbacks;
     const showLiveSearchResults = false;
     const props = { onSearchResult, showLiveSearchResults };
@@ -80,6 +80,22 @@ describe('AssetSearch', () => {
     setImmediate(() => {
       wrapper.update();
       expect(onSearchResult).toHaveBeenCalled();
+      done();
+    });
+  });
+  it('should call onSearchResult with empty array in parameter when input is an empty string', done => {
+    const { onSearchResult } = propsCallbacks;
+    const showLiveSearchResults = false;
+    const props = { onSearchResult, showLiveSearchResults };
+    const wrapper = mount(<AssetSearch {...props} />);
+
+    wrapper
+      .find(Input)
+      .find('input')
+      .simulate('change', { target: { value: '' } });
+
+    setImmediate(() => {
+      wrapper.update();
       expect(Array.isArray(onSearchResult.mock.calls[0][0])).toBeTruthy();
       done();
     });

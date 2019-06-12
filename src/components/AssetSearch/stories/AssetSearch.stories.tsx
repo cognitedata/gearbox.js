@@ -11,7 +11,7 @@ import customStyles from './customStyles.md';
 import empty from './empty.md';
 import error from './error.md';
 import full from './full.md';
-import handlingSearchResults from './handleSearchResults.md';
+import handleSearchResults from './handleSearchResults.md';
 import rootAssetSelect from './rootAssetSelect.md';
 
 // Mock the SDK calls
@@ -194,7 +194,7 @@ storiesOf('AssetSearch/Examples', module)
     }
   )
   .add(
-    'Handle Search Results',
+    'Handle search results',
     () => {
       class WrapperComponent extends React.Component {
         state = {
@@ -226,7 +226,7 @@ storiesOf('AssetSearch/Examples', module)
     },
     {
       readme: {
-        content: handlingSearchResults,
+        content: handleSearchResults,
       },
     }
   );
