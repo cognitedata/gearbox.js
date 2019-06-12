@@ -18,7 +18,6 @@ function ExampleComponent(props) {
         list: {
           fontFamily: 'Courier New',
           fontSize: 'large',
-          color: '#ffa3d2',
         }
       }}
     />

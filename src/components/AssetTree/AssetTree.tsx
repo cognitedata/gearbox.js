@@ -11,6 +11,11 @@ import {
   TreeNodeType,
 } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
+import {
+  applyThemeFontFamily,
+  applyThemeFontSize,
+  applyThemeListHighlight,
+} from '../../utils/theme';
 
 const { TreeNode } = Tree;
 
@@ -204,9 +209,14 @@ export class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
 }
 
 const TreeNodeWrapper = styled(TreeNode)<AntTreeNodeProps>`
-  font-family: ${({ theme }) => theme.gearbox.textFamily};
-  font-size: ${({ theme }) => theme.gearbox.textSize};
-  color: ${({ theme }) => theme.gearbox.listColor};
+  ${({ theme }) => applyThemeFontFamily(theme.gearbox)}
+  ${({ theme }) => applyThemeFontSize(theme.gearbox)}
+  & span {
+    color: ${({ theme }) => theme.gearbox.textColor};
+  }
+  & .ant-tree-node-selected {
+    ${({ theme }) => applyThemeListHighlight(theme.gearbox)}
+  }
 `;
 
 TreeNodeWrapper.defaultProps = {
