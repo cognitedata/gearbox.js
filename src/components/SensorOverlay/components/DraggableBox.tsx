@@ -14,6 +14,10 @@ import {
 } from 'react-dnd';
 import Odometer from 'react-odometerjs';
 import styled from 'styled-components';
+import {
+  ERROR_API_UNEXPECTED_RESULTS,
+  ERROR_NO_SDK_CLIENT,
+} from '../../../constants/errorMessages';
 import { ClientSDKContext } from '../../../context/clientSDKContext';
 import {
   CanceledPromiseException,
@@ -21,10 +25,6 @@ import {
   connectPromiseToUnmountState,
 } from '../../../utils/promise';
 import { ComplexString } from '../../common/ComplexString/ComplexString';
-import {
-  ERROR_API_UNEXPECTED_RESULTS,
-  ERROR_NO_SDK_CLIENT,
-} from '../../../constants/errorMessages';
 import { DragTargets } from '../constants';
 import { SensorMinMaxRange } from '../SensorOverlay';
 import StyledOdometer from './StyledOdometer';
@@ -236,6 +236,7 @@ export class DraggableBox
 
   constructor(props: DraggableBoxProps) {
     super(props);
+
     this.state = {
       hovering: false,
       tag: null,
@@ -244,6 +245,10 @@ export class DraggableBox
   }
 
   componentDidMount() {
+    if (!this.context) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
     this.fetchTimeSeries(this.props.id);
     this.updateValue();
     this.interval = setInterval(this.updateValue, this.props.refreshInterval);
@@ -290,14 +295,10 @@ export class DraggableBox
   };
 
   fetchTimeSeries = async (id: number) => {
-    if (!this.context) {
-      console.error(ERROR_NO_SDK_CLIENT);
-      return;
-    }
     try {
       const timeseries = await connectPromiseToUnmountState(
         this,
-        this.context.timeseries.retrieve([{ id }])
+        this.context!.timeseries.retrieve([{ id }])
       );
       if (timeseries.length !== 1) {
         console.error(ERROR_API_UNEXPECTED_RESULTS);
@@ -314,14 +315,10 @@ export class DraggableBox
   };
 
   updateValue = async () => {
-    if (!this.context) {
-      console.error(ERROR_NO_SDK_CLIENT);
-      return;
-    }
     try {
       const datapoints: DatapointsGetDatapoint[] = await connectPromiseToUnmountState(
         this,
-        this.context.datapoints.retrieveLatest({
+        this.context!.datapoints.retrieveLatest({
           // @ts-ignore
           items: [{ id: this.props.id, before: 'now' }],
         }) // TODO: remove `{items: }` wrapper after fixing SDK endpoint

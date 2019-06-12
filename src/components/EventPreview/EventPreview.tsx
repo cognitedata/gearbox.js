@@ -58,6 +58,10 @@ export class EventPreview extends React.Component<
   }
 
   componentDidMount() {
+    if (!this.context) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
     this.loadEvent();
   }
 
@@ -73,12 +77,7 @@ export class EventPreview extends React.Component<
   }
 
   async loadEvent() {
-    if (!this.context) {
-      console.error(ERROR_NO_SDK_CLIENT);
-      return;
-    }
-
-    const events = await this.context.events.retrieve([
+    const events = await this.context!.events.retrieve([
       { id: this.props.eventId },
     ]);
     if (events.length !== 1) {
