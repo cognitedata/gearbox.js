@@ -1,14 +1,23 @@
-import * as sdk from '@cognite/sdk';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { timeseriesList } from '../../../mocks';
+import { fakeTimeseries } from '../../../mocks';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DraggableBox, Link, Tag } from './DraggableBox';
 
 configure({ adapter: new Adapter() });
 
-sdk.TimeSeries.retrieve = jest.fn();
-sdk.Datapoints.retrieveLatest = jest.fn();
+const fakeClient: API = {
+  // @ts-ignore
+  timeseries: {
+    retrieve: jest.fn(),
+  },
+  // @ts-ignore
+  datapoints: {
+    retrieveLatest: jest.fn(),
+  },
+};
 
 const propsCallbacks = {
   onClick: jest.fn(),
@@ -17,7 +26,7 @@ const propsCallbacks = {
   onDragHandleDoubleClick: jest.fn(),
 };
 
-const testTimeserie = timeseriesList[0];
+const testTimeserie = fakeTimeseries[0];
 const containerSize = {
   width: 1000,
   height: 500,
@@ -25,47 +34,57 @@ const containerSize = {
 
 beforeEach(() => {
   // @ts-ignore
-  sdk.TimeSeries.retrieve.mockResolvedValue(testTimeserie);
+  fakeClient.timeseries.retrieve.mockResolvedValue([testTimeserie]);
   // @ts-ignore
-  sdk.Datapoints.retrieveLatest.mockResolvedValue({
-    timestamp: Date.now(),
-    value: 50.0,
-  });
+  fakeClient.datapoints.retrieveLatest.mockResolvedValue([
+    {
+      id: 1,
+      isString: false,
+      datapoints: [
+        {
+          timestamp: new Date(),
+          value: 50.0,
+        },
+      ],
+    },
+  ]);
 });
 
 afterEach(() => {
   // @ts-ignore
-  sdk.TimeSeries.retrieve.mockClear();
+  fakeClient.timeseries.retrieve.mockClear();
   // @ts-ignore
-  sdk.Datapoints.retrieveLatest.mockClear();
+  fakeClient.datapoints.retrieveLatest.mockClear();
 });
 
 describe('SensorOverlay - DraggableBox', () => {
   it('Renders without exploding', () => {
     const wrapper = mount(
-      <div
-        style={{
-          position: 'relative',
-          ...containerSize,
-        }}
-      >
-        <DraggableBox
-          id={testTimeserie.id}
-          left={0.2 * containerSize.width}
-          top={0.2 * containerSize.height}
-          color={'green'}
-          sticky={false}
-          onLinkClick={propsCallbacks.onLinkClick}
-          isDraggable={false}
-          flipped={false}
-          onDragHandleDoubleClick={propsCallbacks.onDragHandleDoubleClick}
-          onClick={propsCallbacks.onClick}
-          onSettingsClick={propsCallbacks.onSettingsClick}
-          isDragging={false}
-          connectDragSource={(v: any) => v}
-          connectDragPreview={(v: any) => v}
-        />
-      </div>
+      <ClientSDKProvider client={fakeClient}>
+        <div
+          style={{
+            position: 'relative',
+            ...containerSize,
+          }}
+        >
+          <DraggableBox
+            id={testTimeserie.id}
+            left={0.2 * containerSize.width}
+            top={0.2 * containerSize.height}
+            color={'green'}
+            sticky={false}
+            onLinkClick={propsCallbacks.onLinkClick}
+            isDraggable={false}
+            flipped={false}
+            onDragHandleDoubleClick={propsCallbacks.onDragHandleDoubleClick}
+            onClick={propsCallbacks.onClick}
+            onSettingsClick={propsCallbacks.onSettingsClick}
+            isDragging={false}
+            connectDragSource={(v: any) => v}
+            connectDragPreview={(v: any) => v}
+          />
+        </div>
+      </ClientSDKProvider>
     );
     expect(wrapper).toHaveLength(1);
     expect(wrapper.exists()).toBe(true);
@@ -73,29 +92,31 @@ describe('SensorOverlay - DraggableBox', () => {
 
   it('Should call callbacks on mouse events', () => {
     const wrapper = mount(
-      <div
-        style={{
-          position: 'relative',
-          ...containerSize,
-        }}
-      >
-        <DraggableBox
-          id={testTimeserie.id}
-          left={0.2 * containerSize.width}
-          top={0.2 * containerSize.height}
-          color={'green'}
-          sticky={false}
-          onLinkClick={propsCallbacks.onLinkClick}
-          isDraggable={true}
-          flipped={false}
-          onDragHandleDoubleClick={propsCallbacks.onDragHandleDoubleClick}
-          onClick={propsCallbacks.onClick}
-          onSettingsClick={propsCallbacks.onSettingsClick}
-          isDragging={false}
-          connectDragSource={(v: any) => v}
-          connectDragPreview={(v: any) => v}
-        />
-      </div>
+      <ClientSDKProvider client={fakeClient}>
+        <div
+          style={{
+            position: 'relative',
+            ...containerSize,
+          }}
+        >
+          <DraggableBox
+            id={testTimeserie.id}
+            left={0.2 * containerSize.width}
+            top={0.2 * containerSize.height}
+            color={'green'}
+            sticky={false}
+            onLinkClick={propsCallbacks.onLinkClick}
+            isDraggable={true}
+            flipped={false}
+            onDragHandleDoubleClick={propsCallbacks.onDragHandleDoubleClick}
+            onClick={propsCallbacks.onClick}
+            onSettingsClick={propsCallbacks.onSettingsClick}
+            isDragging={false}
+            connectDragSource={(v: any) => v}
+            connectDragPreview={(v: any) => v}
+          />
+        </div>
+      </ClientSDKProvider>
     );
 
     const tag = wrapper.find(Tag);
@@ -117,34 +138,39 @@ describe('SensorOverlay - DraggableBox', () => {
     expect(dragHandle).toHaveLength(1);
     dragHandle.simulate('dblclick');
     expect(propsCallbacks.onDragHandleDoubleClick).toHaveBeenCalled();
+
+    wrapper.unmount();
   });
 
   it('Should show/hide tooltips on mouse over/leave', done => {
     const wrapper = mount(
-      <div
-        style={{
-          position: 'relative',
-          ...containerSize,
-        }}
-      >
-        <DraggableBox
-          id={testTimeserie.id}
-          left={0.2 * containerSize.width}
-          top={0.2 * containerSize.height}
-          color={'green'}
-          sticky={false}
-          isDraggable={true}
-          flipped={false}
-          onDragHandleDoubleClick={propsCallbacks.onDragHandleDoubleClick}
-          isDragging={false}
-          connectDragSource={(v: any) => v}
-          connectDragPreview={(v: any) => v}
-        />
-      </div>
+      <ClientSDKProvider client={fakeClient}>
+        <div
+          style={{
+            position: 'relative',
+            ...containerSize,
+          }}
+        >
+          <DraggableBox
+            id={testTimeserie.id}
+            left={0.2 * containerSize.width}
+            top={0.2 * containerSize.height}
+            color={'green'}
+            sticky={false}
+            isDraggable={true}
+            flipped={false}
+            onDragHandleDoubleClick={propsCallbacks.onDragHandleDoubleClick}
+            isDragging={false}
+            connectDragSource={(v: any) => v}
+            connectDragPreview={(v: any) => v}
+          />
+        </div>
+      </ClientSDKProvider>
     );
 
     setImmediate(() => {
       // need to wait because the component fetches data
+      wrapper.update();
       const tag = wrapper.find(Tag);
       tag.simulate('mouseover');
 
@@ -152,6 +178,7 @@ describe('SensorOverlay - DraggableBox', () => {
       expect(hovers).toHaveLength(2);
 
       tag.simulate('mouseleave');
+
       hovers = wrapper.find('div.hovering');
       expect(hovers).toHaveLength(0);
 
@@ -161,26 +188,28 @@ describe('SensorOverlay - DraggableBox', () => {
 
   it('Should render nothing while dragging', () => {
     const wrapper = mount(
-      <div
-        style={{
-          position: 'relative',
-          ...containerSize,
-        }}
-      >
-        <DraggableBox
-          id={testTimeserie.id}
-          left={0.2 * containerSize.width}
-          top={0.2 * containerSize.height}
-          color={'green'}
-          sticky={false}
-          isDraggable={true}
-          flipped={false}
-          onDragHandleDoubleClick={propsCallbacks.onDragHandleDoubleClick}
-          isDragging={true}
-          connectDragSource={(v: any) => v}
-          connectDragPreview={(v: any) => v}
-        />
-      </div>
+      <ClientSDKProvider client={fakeClient}>
+        <div
+          style={{
+            position: 'relative',
+            ...containerSize,
+          }}
+        >
+          <DraggableBox
+            id={testTimeserie.id}
+            left={0.2 * containerSize.width}
+            top={0.2 * containerSize.height}
+            color={'green'}
+            sticky={false}
+            isDraggable={true}
+            flipped={false}
+            onDragHandleDoubleClick={propsCallbacks.onDragHandleDoubleClick}
+            isDragging={true}
+            connectDragSource={(v: any) => v}
+            connectDragPreview={(v: any) => v}
+          />
+        </div>
+      </ClientSDKProvider>
     );
 
     const draggableBox = wrapper.find(DraggableBox);
@@ -191,27 +220,29 @@ describe('SensorOverlay - DraggableBox', () => {
 
   it('Should render min-max alert', done => {
     const wrapper = mount(
-      <div
-        style={{
-          position: 'relative',
-          ...containerSize,
-        }}
-      >
-        <DraggableBox
-          id={testTimeserie.id}
-          left={0.2 * containerSize.width}
-          top={0.2 * containerSize.height}
-          color={'green'}
-          sticky={true}
-          isDraggable={true}
-          flipped={false}
-          onDragHandleDoubleClick={propsCallbacks.onDragHandleDoubleClick}
-          isDragging={false}
-          connectDragSource={(v: any) => v}
-          connectDragPreview={(v: any) => v}
-          minMaxRange={{ min: 0, max: 10 }}
-        />
-      </div>
+      <ClientSDKProvider client={fakeClient}>
+        <div
+          style={{
+            position: 'relative',
+            ...containerSize,
+          }}
+        >
+          <DraggableBox
+            id={testTimeserie.id}
+            left={0.2 * containerSize.width}
+            top={0.2 * containerSize.height}
+            color={'green'}
+            sticky={true}
+            isDraggable={true}
+            flipped={false}
+            onDragHandleDoubleClick={propsCallbacks.onDragHandleDoubleClick}
+            isDragging={false}
+            connectDragSource={(v: any) => v}
+            connectDragPreview={(v: any) => v}
+            minMaxRange={{ min: 0, max: 10 }}
+          />
+        </div>
+      </ClientSDKProvider>
     );
 
     setImmediate(() => {

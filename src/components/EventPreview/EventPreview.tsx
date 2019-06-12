@@ -2,6 +2,10 @@ import { CogniteEvent } from '@cognite/sdk-alpha/dist/src/types/types';
 import { Spin } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
+import {
+  ERROR_API_UNEXPECTED_RESULTS,
+  ERROR_NO_SDK_CLIENT,
+} from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';
 import { PureObject } from '../../interfaces';
 import {
@@ -54,6 +58,10 @@ export class EventPreview extends React.Component<
   }
 
   componentDidMount() {
+    if (!this.context) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
     this.loadEvent();
   }
 
@@ -69,18 +77,11 @@ export class EventPreview extends React.Component<
   }
 
   async loadEvent() {
-    if (!this.context) {
-      console.error(
-        'Client SDK Context has not been provided. Use ClientSDKProvider to wrap the component.'
-      );
-      return;
-    }
-
-    const events = await this.context.events.retrieve([
+    const events = await this.context!.events.retrieve([
       { id: this.props.eventId },
     ]);
     if (events.length !== 1) {
-      console.error('API request returned unexpected results');
+      console.error(ERROR_API_UNEXPECTED_RESULTS);
       return;
     }
 
