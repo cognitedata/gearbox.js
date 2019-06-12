@@ -21,6 +21,10 @@ import {
   connectPromiseToUnmountState,
 } from '../../../utils/promise';
 import { ComplexString } from '../../common/ComplexString/ComplexString';
+import {
+  ERROR_API_UNEXPECTED_RESULTS,
+  ERROR_NO_SDK_CLIENT,
+} from '../../../constants/errorMessages';
 import { DragTargets } from '../constants';
 import { SensorMinMaxRange } from '../SensorOverlay';
 import StyledOdometer from './StyledOdometer';
@@ -287,6 +291,7 @@ export class DraggableBox
 
   fetchTimeSeries = async (id: number) => {
     if (!this.context) {
+      console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
     try {
@@ -294,6 +299,10 @@ export class DraggableBox
         this,
         this.context.timeseries.retrieve([{ id }])
       );
+      if (timeseries.length !== 1) {
+        console.error(ERROR_API_UNEXPECTED_RESULTS);
+        return;
+      }
       this.setState({
         tag: timeseries[0],
       });
@@ -306,6 +315,7 @@ export class DraggableBox
 
   updateValue = async () => {
     if (!this.context) {
+      console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
     try {
@@ -327,6 +337,7 @@ export class DraggableBox
         this.setState({
           dataPoint: null,
         });
+        console.error(ERROR_API_UNEXPECTED_RESULTS);
         return;
       }
       if (
