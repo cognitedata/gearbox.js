@@ -11,6 +11,7 @@ import customStyles from './customStyles.md';
 import empty from './empty.md';
 import error from './error.md';
 import full from './full.md';
+import handlingSearchResults from './handleSearchResults.md';
 import rootAssetSelect from './rootAssetSelect.md';
 
 // Mock the SDK calls
@@ -189,6 +190,43 @@ storiesOf('AssetSearch/Examples', module)
     {
       readme: {
         content: customStyles,
+      },
+    }
+  )
+  .add(
+    'Handle Search Results',
+    () => {
+      class WrapperComponent extends React.Component {
+        state = {
+          items: [],
+        };
+        onSearchResult = (assets: sdk.Asset[]) => {
+          this.setState({
+            items: assets,
+          });
+        };
+        render() {
+          const { items } = this.state;
+          return (
+            <React.Fragment>
+              <AssetSearch
+                showLiveSearchResults={false}
+                onSearchResult={this.onSearchResult}
+              />
+              <br />
+              <p>
+                Search results: [
+                {items.map((item: sdk.Asset) => item.name).join(', ')}]
+              </p>
+            </React.Fragment>
+          );
+        }
+      }
+      return <WrapperComponent />;
+    },
+    {
+      readme: {
+        content: handlingSearchResults,
       },
     }
   );

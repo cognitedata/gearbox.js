@@ -38,7 +38,7 @@ export class AssetSearch extends React.Component<
   static defaultProps = {
     rootAssetSelect: false,
     advancedSearch: false,
-    showLiveSearchResults: false,
+    showLiveSearchResults: true,
   };
   constructor(props: AssetSearchProps) {
     super(props);
@@ -53,7 +53,12 @@ export class AssetSearch extends React.Component<
   async onSearch(query: ApiQuery) {
     const { onError, onSearchResult } = this.props;
     if (!query.query && !query.advancedSearch) {
-      return this.setState({ items: [] });
+      const items: sdk.Asset[] = [];
+      this.setState({ items });
+      if (onSearchResult) {
+        onSearchResult(items);
+      }
+      return;
     }
 
     this.setState({ loading: true });
@@ -74,7 +79,7 @@ export class AssetSearch extends React.Component<
     try {
       const { items } = await sdk.Assets.search(assetQuery);
       this.setState({ items, loading: false });
-      if (typeof onSearchResult === 'function') {
+      if (onSearchResult) {
         onSearchResult(items);
       }
     } catch (e) {
