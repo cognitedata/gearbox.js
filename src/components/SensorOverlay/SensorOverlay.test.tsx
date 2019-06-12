@@ -285,7 +285,6 @@ describe('SensorOverlay', () => {
             size={{ width: 1000, height: 500 }}
           />
         ),
-        // timeseriesIds: [fakeTimeseries[0].id, fakeTimeseries[1].id],
       },
       () => {
         const draggableBoxes = wrapper.find(DraggableBox);
@@ -360,7 +359,6 @@ describe('SensorOverlay', () => {
             size={{ width: 1000, height: 500 }}
           />
         ),
-        // timeseriesIds: [fakeTimeseries[0].id, fakeTimeseries[1].id],
       },
       () => {
         const newSensor = wrapper
@@ -400,10 +398,6 @@ describe('SensorOverlay', () => {
             size={{ width: 1000, height: 500 }}
           />
         ),
-        // timeseriesIds: [fakeTimeseries[0].id],
-        // colorMap: {
-        //   [fakeTimeseries[0].id]: 'magenta',
-        // },
       },
       () => {
         const updatedBox = wrapper.find(DraggableBox);
