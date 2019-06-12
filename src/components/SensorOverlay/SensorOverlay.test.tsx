@@ -236,7 +236,6 @@ describe('SensorOverlay', () => {
   it('Should render new sensors if they were added in props', done => {
     const wrapper = mount(
       <ClientSDKProvider client={fakeClient}>
-        \
         <SensorOverlay
           timeseriesIds={[fakeTimeseries[0].id]}
           size={{ width: 1000, height: 500 }}
