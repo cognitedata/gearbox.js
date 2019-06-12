@@ -1,8 +1,16 @@
 import * as sdk from '@cognite/sdk';
+import * as sdk2 from '@cognite/sdk-alpha';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
+import {
+  GetTimeSeriesMetadataDTO,
+  TimeseriesIdEither,
+  TimeSeriesSearchDTO,
+} from '@cognite/sdk-alpha/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { assetsList, timeseriesList } from '../../../mocks';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesSearch } from '../TimeseriesSearch';
 
 import allowStrings from './allowStrings.md';
@@ -18,6 +26,40 @@ import singleSelection from './singleSelection.md';
 
 const timeseriesNames = timeseriesList.map(ts => ts.name);
 const timeseriesIds = timeseriesList.map(ts => ts.id);
+
+const fakeClient: API = {
+  timeseries: {
+    retrieve: (
+      ids: TimeseriesIdEither[]
+    ): Promise<GetTimeSeriesMetadataDTO[]> => {
+      const idsAsString = ids.map(x => x.id.toString());
+      return new Promise(resolve => {
+        setTimeout(() => {
+          console.log(timeseriesList);
+          const result = timeseriesList.filter((x: GetTimeSeriesMetadataDTO) =>
+            idsAsString.includes(x.id.toString())
+          );
+          resolve(result || []);
+        }, 1000); // simulate load delay
+      });
+    },
+    search: (
+      query: TimeSeriesSearchDTO
+    ): Promise<GetTimeSeriesMetadataDTO[]> => {
+      action('client.search')(query);
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const result = timeseriesList.filter(
+            (x: GetTimeSeriesMetadataDTO) =>
+              x.name.toUpperCase().indexOf(query.search.query.toUpperCase()) >=
+              0
+          );
+          resolve(result || []);
+        }, 1000);
+      });
+    },
+  },
+};
 
 // Mock the SDK calls
 const setupMocks = () => {
@@ -66,12 +108,12 @@ const injectTimeseriesNames = (content: string) => {
   return content.replace('${names}', timeseriesNames.join(', '));
 };
 
-const filterRule = (timeseries: sdk.Timeseries): boolean =>
+const filterRule = (timeseries: GetTimeSeriesMetadataDTO): boolean =>
   !timeseries.isString;
 
 const onTimeserieSelectionChange = (
   newTimeseries: number[],
-  timeseries: sdk.Timeseries | null
+  timeseries: GetTimeSeriesMetadataDTO | null
 ) => {
   action('onTimeserieSelectionChange')(newTimeseries, timeseries);
 };
@@ -82,9 +124,11 @@ storiesOf('TimeseriesSearch', module).add(
     setupMocks();
 
     return (
-      <TimeseriesSearch
-        onTimeserieSelectionChange={onTimeserieSelectionChange}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <TimeseriesSearch
+          onTimeserieSelectionChange={onTimeserieSelectionChange}
+        />
+      </ClientSDKProvider>
     );
   },
   {
@@ -101,9 +145,11 @@ storiesOf('TimeseriesSearch/Examples', module)
     () => {
       setupMocks();
       return (
-        <TimeseriesSearch
-          onTimeserieSelectionChange={onTimeserieSelectionChange}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <TimeseriesSearch
+            onTimeserieSelectionChange={onTimeserieSelectionChange}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -117,10 +163,12 @@ storiesOf('TimeseriesSearch/Examples', module)
     () => {
       setupMocks();
       return (
-        <TimeseriesSearch
-          onTimeserieSelectionChange={onTimeserieSelectionChange}
-          rootAssetSelect={true}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <TimeseriesSearch
+            onTimeserieSelectionChange={onTimeserieSelectionChange}
+            rootAssetSelect={true}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -134,10 +182,12 @@ storiesOf('TimeseriesSearch/Examples', module)
     () => {
       setupMocks();
       return (
-        <TimeseriesSearch
-          onTimeserieSelectionChange={onTimeserieSelectionChange}
-          hideSelected={true}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <TimeseriesSearch
+            onTimeserieSelectionChange={onTimeserieSelectionChange}
+            hideSelected={true}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -151,10 +201,12 @@ storiesOf('TimeseriesSearch/Examples', module)
     () => {
       setupMocks();
       return (
-        <TimeseriesSearch
-          onTimeserieSelectionChange={onTimeserieSelectionChange}
-          single={true}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <TimeseriesSearch
+            onTimeserieSelectionChange={onTimeserieSelectionChange}
+            single={true}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -168,10 +220,12 @@ storiesOf('TimeseriesSearch/Examples', module)
     () => {
       setupMocks();
       return (
-        <TimeseriesSearch
-          onTimeserieSelectionChange={onTimeserieSelectionChange}
-          allowStrings={true}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <TimeseriesSearch
+            onTimeserieSelectionChange={onTimeserieSelectionChange}
+            allowStrings={true}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -185,10 +239,12 @@ storiesOf('TimeseriesSearch/Examples', module)
     () => {
       setupMocks();
       return (
-        <TimeseriesSearch
-          onTimeserieSelectionChange={onTimeserieSelectionChange}
-          selectedTimeseries={[timeseriesIds[1], timeseriesIds[3]]}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <TimeseriesSearch
+            onTimeserieSelectionChange={onTimeserieSelectionChange}
+            selectedTimeseries={[timeseriesIds[1], timeseriesIds[3]]}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -202,10 +258,12 @@ storiesOf('TimeseriesSearch/Examples', module)
     () => {
       setupMocks();
       return (
-        <TimeseriesSearch
-          onTimeserieSelectionChange={onTimeserieSelectionChange}
-          filterRule={filterRule}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <TimeseriesSearch
+            onTimeserieSelectionChange={onTimeserieSelectionChange}
+            filterRule={filterRule}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -219,18 +277,20 @@ storiesOf('TimeseriesSearch/Examples', module)
     () => {
       setupMocks();
       return (
-        <TimeseriesSearch
-          onTimeserieSelectionChange={onTimeserieSelectionChange}
-          styles={{
-            list: { height: '200px' },
-            buttonRow: { marginTop: '30px' },
-            selectAllButton: { backgroundColor: 'lightblue' },
-            selectNoneButton: {
-              backgroundColor: 'magenta',
-              marginLeft: '50px',
-            },
-          }}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <TimeseriesSearch
+            onTimeserieSelectionChange={onTimeserieSelectionChange}
+            styles={{
+              list: { height: '200px' },
+              buttonRow: { marginTop: '30px' },
+              selectAllButton: { backgroundColor: 'lightblue' },
+              selectNoneButton: {
+                backgroundColor: 'magenta',
+                marginLeft: '50px',
+              },
+            }}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -244,16 +304,18 @@ storiesOf('TimeseriesSearch/Examples', module)
     () => {
       setupMocks();
       return (
-        <TimeseriesSearch
-          onTimeserieSelectionChange={onTimeserieSelectionChange}
-          rootAssetSelect={true}
-          strings={{
-            rootAssetSelectAll: 'No filter',
-            searchPlaceholder: 'search for stuff!',
-            selectAll: 'Everything!',
-            selectNone: 'Nothing!',
-          }}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <TimeseriesSearch
+            onTimeserieSelectionChange={onTimeserieSelectionChange}
+            rootAssetSelect={true}
+            strings={{
+              rootAssetSelectAll: 'No filter',
+              searchPlaceholder: 'search for stuff!',
+              selectAll: 'Everything!',
+              selectNone: 'Nothing!',
+            }}
+          />
+        </ClientSDKProvider>
       );
     },
     {
