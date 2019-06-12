@@ -66,7 +66,7 @@ describe('AssetSearch', () => {
       done();
     });
   });
-  it("should call onSearchResult when it is defined", done => {
+  it('should call onSearchResult when it is defined', done => {
     const { onSearchResult } = propsCallbacks;
     const showLiveSearchResults = false;
     const props = { onSearchResult, showLiveSearchResults };
