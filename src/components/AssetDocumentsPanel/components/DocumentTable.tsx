@@ -152,7 +152,6 @@ const LinkContainer = styled.div`
 `;
 
 const CollapseContainer = styled(Collapse)`
-  background-color: green;
   width: 100%;
 `;
 
