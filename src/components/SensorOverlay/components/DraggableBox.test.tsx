@@ -34,7 +34,7 @@ const containerSize = {
 
 beforeEach(() => {
   // @ts-ignore
-  fakeClient.timeseries.retrieve.mockResolvedValue(testTimeserie);
+  fakeClient.timeseries.retrieve.mockResolvedValue([testTimeserie]);
   // @ts-ignore
   fakeClient.datapoints.retrieveLatest.mockResolvedValue([
     {
@@ -142,15 +142,15 @@ describe('SensorOverlay - DraggableBox', () => {
     wrapper.unmount();
   });
 
-  fit('Should show/hide tooltips on mouse over/leave', done => {
+  it('Should show/hide tooltips on mouse over/leave', done => {
     const wrapper = mount(
-      <div
-        style={{
-          position: 'relative',
-          ...containerSize,
-        }}
-      >
-        <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={fakeClient}>
+        <div
+          style={{
+            position: 'relative',
+            ...containerSize,
+          }}
+        >
           <DraggableBox
             id={testTimeserie.id}
             left={0.2 * containerSize.width}
@@ -164,24 +164,21 @@ describe('SensorOverlay - DraggableBox', () => {
             connectDragSource={(v: any) => v}
             connectDragPreview={(v: any) => v}
           />
-        </ClientSDKProvider>
-      </div>
+        </div>
+      </ClientSDKProvider>
     );
 
     setImmediate(() => {
       // need to wait because the component fetches data
       wrapper.update();
       const tag = wrapper.find(Tag);
-      console.log('tag', tag.debug());
-      // expect(Tag).toHaveLength(1);
       tag.simulate('mouseover');
-      wrapper.update();
 
       let hovers = wrapper.find('div.hovering');
       expect(hovers).toHaveLength(2);
 
       tag.simulate('mouseleave');
-      wrapper.update();
+
       hovers = wrapper.find('div.hovering');
       expect(hovers).toHaveLength(0);
 

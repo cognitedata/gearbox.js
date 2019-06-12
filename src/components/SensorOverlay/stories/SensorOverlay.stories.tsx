@@ -53,31 +53,34 @@ const fakeClient: API = {
   },
 };
 
-storiesOf('SensorOverlay', module).add(
-  'Full description',
-  () => (
-    <ClientSDKProvider client={fakeClient}>
+const ClientSDKDecorator = (storyFn: any) => (
+  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
+);
+
+storiesOf('SensorOverlay', module)
+  .addDecorator(ClientSDKDecorator)
+  .add(
+    'Full description',
+    () => (
       <SensorOverlay timeseriesIds={[fakeTimeseries[0].id]}>
         <div style={{ width: '100%', height: '160px', background: '#EEE' }} />
       </SensorOverlay>
-    </ClientSDKProvider>
-  ),
-  {
-    readme: {
-      content: fullDescription,
-    },
-  }
-);
+    ),
+    {
+      readme: {
+        content: fullDescription,
+      },
+    }
+  );
 
 storiesOf('SensorOverlay/Examples', module)
+  .addDecorator(ClientSDKDecorator)
   .add(
     'Basic',
     () => (
-      <ClientSDKProvider client={fakeClient}>
-        <SensorOverlay timeseriesIds={[fakeTimeseries[0].id]}>
-          <div style={{ width: '100%', height: '200px', background: '#EEE' }} />
-        </SensorOverlay>
-      </ClientSDKProvider>
+      <SensorOverlay timeseriesIds={[fakeTimeseries[0].id]}>
+        <div style={{ width: '100%', height: '200px', background: '#EEE' }} />
+      </SensorOverlay>
     ),
     {
       readme: {
@@ -88,18 +91,16 @@ storiesOf('SensorOverlay/Examples', module)
   .add(
     'With many sensors',
     () => (
-      <ClientSDKProvider client={fakeClient}>
-        <SensorOverlay
-          timeseriesIds={[
-            fakeTimeseries[0].id,
-            fakeTimeseries[1].id,
-            fakeTimeseries[2].id,
-            fakeTimeseries[3].id,
-          ]}
-        >
-          <div style={{ width: '100%', height: '220px', background: '#EEE' }} />
-        </SensorOverlay>
-      </ClientSDKProvider>
+      <SensorOverlay
+        timeseriesIds={[
+          fakeTimeseries[0].id,
+          fakeTimeseries[1].id,
+          fakeTimeseries[2].id,
+          fakeTimeseries[3].id,
+        ]}
+      >
+        <div style={{ width: '100%', height: '220px', background: '#EEE' }} />
+      </SensorOverlay>
     ),
     {
       readme: {
@@ -110,27 +111,25 @@ storiesOf('SensorOverlay/Examples', module)
   .add(
     'Default position and color',
     () => (
-      <ClientSDKProvider client={fakeClient}>
-        <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
-          colorMap={{ [fakeTimeseries[0].id]: '#33AA33' }}
-          defaultPositionMap={{
-            [fakeTimeseries[0].id]: {
-              left: 0.5,
-              top: 0.2,
-              pointer: {
-                left: 0.4,
-                top: 0.8,
-              },
+      <SensorOverlay
+        timeseriesIds={[fakeTimeseries[0].id]}
+        colorMap={{ [fakeTimeseries[0].id]: '#33AA33' }}
+        defaultPositionMap={{
+          [fakeTimeseries[0].id]: {
+            left: 0.5,
+            top: 0.2,
+            pointer: {
+              left: 0.4,
+              top: 0.8,
             },
-          }}
-          onClick={action('onClick')}
-          onSettingsClick={action('onSettingsClick')}
-          onSensorPositionChange={action('onSensorPositionChange')}
-        >
-          <div style={{ width: '100%', height: '250px', background: '#EEE' }} />
-        </SensorOverlay>
-      </ClientSDKProvider>
+          },
+        }}
+        onClick={action('onClick')}
+        onSettingsClick={action('onSettingsClick')}
+        onSensorPositionChange={action('onSensorPositionChange')}
+      >
+        <div style={{ width: '100%', height: '250px', background: '#EEE' }} />
+      </SensorOverlay>
     ),
     {
       readme: {
@@ -141,15 +140,13 @@ storiesOf('SensorOverlay/Examples', module)
   .add(
     'Disabled Dragging',
     () => (
-      <ClientSDKProvider client={fakeClient}>
-        <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
-          isTagDraggable={false}
-          isPointerDraggable={false}
-        >
-          <div style={{ width: '100%', height: '200px', background: '#EEE' }} />
-        </SensorOverlay>
-      </ClientSDKProvider>
+      <SensorOverlay
+        timeseriesIds={[fakeTimeseries[0].id]}
+        isTagDraggable={false}
+        isPointerDraggable={false}
+      >
+        <div style={{ width: '100%', height: '200px', background: '#EEE' }} />
+      </SensorOverlay>
     ),
     {
       readme: {
@@ -160,18 +157,16 @@ storiesOf('SensorOverlay/Examples', module)
   .add(
     'With link',
     () => (
-      <ClientSDKProvider client={fakeClient}>
-        <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
-          linksMap={{ [fakeTimeseries[0].id]: true }}
-          onClick={action('onClick')}
-          onLinkClick={action('onLinkClick')}
-        >
-          <div
-            style={{ width: '100%', height: '200px', background: '#DDDDDD' }}
-          />
-        </SensorOverlay>
-      </ClientSDKProvider>
+      <SensorOverlay
+        timeseriesIds={[fakeTimeseries[0].id]}
+        linksMap={{ [fakeTimeseries[0].id]: true }}
+        onClick={action('onClick')}
+        onLinkClick={action('onLinkClick')}
+      >
+        <div
+          style={{ width: '100%', height: '200px', background: '#DDDDDD' }}
+        />
+      </SensorOverlay>
     ),
     {
       readme: {
@@ -182,24 +177,22 @@ storiesOf('SensorOverlay/Examples', module)
   .add(
     'With sticky tooltips',
     () => (
-      <ClientSDKProvider client={fakeClient}>
-        <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
-          stickyMap={{ [8681821313339919]: true }}
-          defaultPositionMap={{
-            [8681821313339919]: {
-              left: 0.5,
-              top: 0.5,
-              pointer: {
-                left: 0.4,
-                top: 0.8,
-              },
+      <SensorOverlay
+        timeseriesIds={[fakeTimeseries[0].id]}
+        stickyMap={{ [8681821313339919]: true }}
+        defaultPositionMap={{
+          [8681821313339919]: {
+            left: 0.5,
+            top: 0.5,
+            pointer: {
+              left: 0.4,
+              top: 0.8,
             },
-          }}
-        >
-          <div style={{ width: '100%', height: '250px', background: '#EEE' }} />
-        </SensorOverlay>
-      </ClientSDKProvider>
+          },
+        }}
+      >
+        <div style={{ width: '100%', height: '250px', background: '#EEE' }} />
+      </SensorOverlay>
     ),
     {
       readme: {
@@ -210,21 +203,19 @@ storiesOf('SensorOverlay/Examples', module)
   .add(
     'With min-max limit',
     () => (
-      <ClientSDKProvider client={fakeClient}>
-        <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
-          stickyMap={{ [8681821313339919]: true }}
-          alertColor={'magenta'}
-          minMaxMap={{
-            [8681821313339919]: {
-              min: 5,
-              max: 10,
-            },
-          }}
-        >
-          <div style={{ width: '100%', height: '250px', background: '#EEE' }} />
-        </SensorOverlay>
-      </ClientSDKProvider>
+      <SensorOverlay
+        timeseriesIds={[fakeTimeseries[0].id]}
+        stickyMap={{ [8681821313339919]: true }}
+        alertColor={'magenta'}
+        minMaxMap={{
+          [8681821313339919]: {
+            min: 5,
+            max: 10,
+          },
+        }}
+      >
+        <div style={{ width: '100%', height: '250px', background: '#EEE' }} />
+      </SensorOverlay>
     ),
     {
       readme: {
@@ -235,27 +226,25 @@ storiesOf('SensorOverlay/Examples', module)
   .add(
     'With Image',
     () => (
-      <ClientSDKProvider client={fakeClient}>
-        <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
-          colorMap={{ [fakeTimeseries[0].id]: 'orange' }}
-          defaultPositionMap={{
-            [fakeTimeseries[0].id]: {
-              left: 0.2,
-              top: 0.2,
-              pointer: {
-                left: 0.3,
-                top: 0.4,
-              },
+      <SensorOverlay
+        timeseriesIds={[fakeTimeseries[0].id]}
+        colorMap={{ [fakeTimeseries[0].id]: 'orange' }}
+        defaultPositionMap={{
+          [fakeTimeseries[0].id]: {
+            left: 0.2,
+            top: 0.2,
+            pointer: {
+              left: 0.3,
+              top: 0.4,
             },
-          }}
-          onClick={action('onClick')}
-          onSettingsClick={action('onSettingsClick')}
-          onSensorPositionChange={action('onSensorPositionChange')}
-        >
-          <img src="sensor_overlay/infographic-sample.jpg" width="100%" />
-        </SensorOverlay>
-      </ClientSDKProvider>
+          },
+        }}
+        onClick={action('onClick')}
+        onSettingsClick={action('onSettingsClick')}
+        onSensorPositionChange={action('onSensorPositionChange')}
+      >
+        <img src="sensor_overlay/infographic-sample.jpg" width="100%" />
+      </SensorOverlay>
     ),
     {
       readme: {
@@ -266,28 +255,26 @@ storiesOf('SensorOverlay/Examples', module)
   .add(
     'With Fixed Width',
     () => (
-      <ClientSDKProvider client={fakeClient}>
-        <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
-          colorMap={{ [fakeTimeseries[0].id]: 'orange' }}
-          defaultPositionMap={{
-            [fakeTimeseries[0].id]: {
-              left: 0.2,
-              top: 0.2,
-              pointer: {
-                left: 0.3,
-                top: 0.4,
-              },
+      <SensorOverlay
+        timeseriesIds={[fakeTimeseries[0].id]}
+        colorMap={{ [fakeTimeseries[0].id]: 'orange' }}
+        defaultPositionMap={{
+          [fakeTimeseries[0].id]: {
+            left: 0.2,
+            top: 0.2,
+            pointer: {
+              left: 0.3,
+              top: 0.4,
             },
-          }}
-          fixedWidth={1000}
-          onClick={action('onClick')}
-          onSettingsClick={action('onSettingsClick')}
-          onSensorPositionChange={action('onSensorPositionChange')}
-        >
-          <img src="sensor_overlay/infographic-sample.jpg" width="1000px" />
-        </SensorOverlay>
-      </ClientSDKProvider>
+          },
+        }}
+        fixedWidth={1000}
+        onClick={action('onClick')}
+        onSettingsClick={action('onSettingsClick')}
+        onSensorPositionChange={action('onSensorPositionChange')}
+      >
+        <img src="sensor_overlay/infographic-sample.jpg" width="1000px" />
+      </SensorOverlay>
     ),
     {
       readme: {
@@ -320,17 +307,15 @@ storiesOf('SensorOverlay/Examples', module)
               >
                 Add Sensor
               </button>
-              <ClientSDKProvider client={fakeClient}>
-                <SensorOverlay timeseriesIds={this.state.timeseriesIds}>
-                  <div
-                    style={{
-                      width: '100%',
-                      height: '300px',
-                      background: '#EEE',
-                    }}
-                  />
-                </SensorOverlay>
-              </ClientSDKProvider>
+              <SensorOverlay timeseriesIds={this.state.timeseriesIds}>
+                <div
+                  style={{
+                    width: '100%',
+                    height: '300px',
+                    background: '#EEE',
+                  }}
+                />
+              </SensorOverlay>
             </div>
           );
         }

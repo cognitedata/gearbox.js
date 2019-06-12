@@ -1,4 +1,4 @@
-import * as sdk from '@cognite/sdk';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -6,7 +6,8 @@ import { DragDropContext } from 'react-dnd';
 import DNDTestBackend from 'react-dnd-test-backend';
 import sizeMe from 'react-sizeme';
 import sinon from 'sinon';
-import { timeseriesList } from '../../mocks';
+import { fakeTimeseries } from '../../mocks';
+import { ClientSDKProvider } from '../ClientSDKProvider';
 import { DraggableBox, Tag } from './components/DraggableBox';
 import { DraggablePoint } from './components/DraggablePoint';
 import SvgLine from './components/SvgLine';
@@ -20,8 +21,16 @@ const SensorOverlay = DragDropContext(DNDTestBackend)(
   OriginalSensorOverlay.DecoratedComponent
 );
 
-sdk.TimeSeries.retrieve = jest.fn();
-sdk.Datapoints.retrieveLatest = jest.fn();
+const fakeClient: API = {
+  // @ts-ignore
+  timeseries: {
+    retrieve: jest.fn(),
+  },
+  // @ts-ignore
+  datapoints: {
+    retrieveLatest: jest.fn(),
+  },
+};
 
 const propsCallbacks = {
   onClick: jest.fn(),
@@ -32,16 +41,20 @@ const propsCallbacks = {
 
 beforeEach(() => {
   // @ts-ignore
-  sdk.TimeSeries.retrieve.mockImplementation((id: number) => {
-    return Promise.resolve(timeseriesList.find(ts => ts.id === id));
-  });
+  fakeClient.timeseries.retrieve.mockResolvedValue([fakeTimeseries[0]]);
   // @ts-ignore
-  sdk.Datapoints.retrieveLatest.mockImplementation(() => {
-    return Promise.resolve({
-      timestamp: Date.now(),
-      value: 50.0,
-    });
-  });
+  fakeClient.datapoints.retrieveLatest.mockResolvedValue([
+    {
+      id: 1,
+      isString: false,
+      datapoints: [
+        {
+          timestamp: new Date(),
+          value: 50.0,
+        },
+      ],
+    },
+  ]);
 });
 
 afterEach(() => {
@@ -49,15 +62,21 @@ afterEach(() => {
   propsCallbacks.onLinkClick.mockClear();
   propsCallbacks.onSettingClick.mockClear();
   propsCallbacks.onSensorPositionChange.mockClear();
+  // @ts-ignore
+  fakeClient.timeseries.retrieve.mockClear();
+  // @ts-ignore
+  fakeClient.datapoints.retrieveLatest.mockClear();
 });
 // tslint:disable:no-big-function
 describe('SensorOverlay', () => {
   it('Renders without exploding', () => {
     const wrapper = mount(
-      <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
-        size={{ width: 1000, height: 500 }}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <SensorOverlay
+          timeseriesIds={[fakeTimeseries[0].id]}
+          size={{ width: 1000, height: 500 }}
+        />
+      </ClientSDKProvider>
     );
     expect(wrapper).toHaveLength(1);
     expect(wrapper.exists()).toBe(true);
@@ -65,12 +84,14 @@ describe('SensorOverlay', () => {
 
   it('Includes all required components', () => {
     const wrapper = mount(
-      <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
-        size={{ width: 1000, height: 500 }}
-      >
-        <div style={{ width: 1000, height: 500 }} />
-      </SensorOverlay>
+      <ClientSDKProvider client={fakeClient}>
+        <SensorOverlay
+          timeseriesIds={[fakeTimeseries[0].id]}
+          size={{ width: 1000, height: 500 }}
+        >
+          <div style={{ width: 1000, height: 500 }} />
+        </SensorOverlay>
+      </ClientSDKProvider>
     );
 
     const draggableBox = wrapper.find(DraggableBox);
@@ -85,17 +106,19 @@ describe('SensorOverlay', () => {
 
   it('Calls callbacks on mouse events', () => {
     const wrapper = mount(
-      <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
-        linksMap={{ [timeseriesList[0].id]: true }}
-        onClick={propsCallbacks.onClick}
-        onLinkClick={propsCallbacks.onLinkClick}
-        onSettingsClick={propsCallbacks.onSettingClick}
-        onSensorPositionChange={propsCallbacks.onSensorPositionChange}
-        size={{ width: 1000, height: 500 }}
-      >
-        <div style={{ width: 1000, height: 500 }} />
-      </SensorOverlay>
+      <ClientSDKProvider client={fakeClient}>
+        <SensorOverlay
+          timeseriesIds={[fakeTimeseries[0].id]}
+          linksMap={{ [fakeTimeseries[0].id]: true }}
+          onClick={propsCallbacks.onClick}
+          onLinkClick={propsCallbacks.onLinkClick}
+          onSettingsClick={propsCallbacks.onSettingClick}
+          onSensorPositionChange={propsCallbacks.onSensorPositionChange}
+          size={{ width: 1000, height: 500 }}
+        >
+          <div style={{ width: 1000, height: 500 }} />
+        </SensorOverlay>
+      </ClientSDKProvider>
     );
 
     const tag = wrapper.find(Tag);
@@ -132,19 +155,24 @@ describe('SensorOverlay', () => {
 
   it('Tag and pointer should be draggable', () => {
     const wrapper = mount(
-      <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
-        linksMap={{ [timeseriesList[0].id]: true }}
-        onClick={propsCallbacks.onClick}
-        onSensorPositionChange={propsCallbacks.onSensorPositionChange}
-        size={{ width: 1000, height: 500 }}
-      >
-        <div style={{ width: 1000, height: 500 }} />
-      </SensorOverlay>
+      <ClientSDKProvider client={fakeClient}>
+        <SensorOverlay
+          timeseriesIds={[fakeTimeseries[0].id]}
+          linksMap={{ [fakeTimeseries[0].id]: true }}
+          onClick={propsCallbacks.onClick}
+          onSensorPositionChange={propsCallbacks.onSensorPositionChange}
+          size={{ width: 1000, height: 500 }}
+        >
+          <div style={{ width: 1000, height: 500 }} />
+        </SensorOverlay>
+      </ClientSDKProvider>
     );
 
-    // @ts-ignore
-    const manager = wrapper.instance().getManager();
+    const manager = wrapper
+      .find(SensorOverlay)
+      .instance()
+      // @ts-ignore
+      .getManager();
     const backend = manager.getBackend();
     const monitor = manager.getMonitor();
     const dragSourceBox = wrapper.find('DragSource(DraggableBox)');
@@ -187,10 +215,12 @@ describe('SensorOverlay', () => {
 
   it('Should render nothing if there is no space in container', () => {
     const wrapper = mount(
-      <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
-        size={{ width: 1000, height: 0 }}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <SensorOverlay
+          timeseriesIds={[fakeTimeseries[0].id]}
+          size={{ width: 1000, height: 0 }}
+        />
+      </ClientSDKProvider>
     );
 
     const draggableBox = wrapper.find(DraggableBox);
@@ -205,15 +235,23 @@ describe('SensorOverlay', () => {
 
   it('Should render new sensors if they were added in props', done => {
     const wrapper = mount(
-      <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
-        size={{ width: 1000, height: 500 }}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        \
+        <SensorOverlay
+          timeseriesIds={[fakeTimeseries[0].id]}
+          size={{ width: 1000, height: 500 }}
+        />
+      </ClientSDKProvider>
     );
 
     wrapper.setProps(
       {
-        timeseriesIds: [timeseriesList[0].id, timeseriesList[1].id],
+        children: (
+          <SensorOverlay
+            timeseriesIds={[fakeTimeseries[0].id, fakeTimeseries[1].id]}
+            size={{ width: 1000, height: 500 }}
+          />
+        ),
       },
       () => {
         const draggableBox = wrapper.find(DraggableBox);
@@ -232,15 +270,23 @@ describe('SensorOverlay', () => {
 
   it('Newly added sensor should have be shifted position and different color', done => {
     const wrapper = mount(
-      <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
-        size={{ width: 1000, height: 500 }}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <SensorOverlay
+          timeseriesIds={[fakeTimeseries[0].id]}
+          size={{ width: 1000, height: 500 }}
+        />
+      </ClientSDKProvider>
     );
 
     wrapper.setProps(
       {
-        timeseriesIds: [timeseriesList[0].id, timeseriesList[1].id],
+        children: (
+          <SensorOverlay
+            timeseriesIds={[fakeTimeseries[0].id, fakeTimeseries[1].id]}
+            size={{ width: 1000, height: 500 }}
+          />
+        ),
+        // timeseriesIds: [fakeTimeseries[0].id, fakeTimeseries[1].id],
       },
       () => {
         const draggableBoxes = wrapper.find(DraggableBox);
@@ -267,13 +313,15 @@ describe('SensorOverlay', () => {
 
   it('if first sensor has been dragged the next added one should appear in first default slot', done => {
     const wrapper = mount(
-      <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
-        size={{ width: 1000, height: 500 }}
-        onSensorPositionChange={propsCallbacks.onSensorPositionChange}
-      >
-        <div style={{ width: 1000, height: 500 }} />
-      </SensorOverlay>
+      <ClientSDKProvider client={fakeClient}>
+        <SensorOverlay
+          timeseriesIds={[fakeTimeseries[0].id]}
+          size={{ width: 1000, height: 500 }}
+          onSensorPositionChange={propsCallbacks.onSensorPositionChange}
+        >
+          <div style={{ width: 1000, height: 500 }} />
+        </SensorOverlay>
+      </ClientSDKProvider>
     );
 
     const firstBox = wrapper.find(DraggableBox);
@@ -283,8 +331,11 @@ describe('SensorOverlay', () => {
       top: firstBox.prop('top'),
     };
 
-    // @ts-ignore
-    const manager = wrapper.instance().getManager();
+    const manager = wrapper
+      .find(SensorOverlay)
+      .instance()
+      // @ts-ignore
+      .getManager();
     const backend = manager.getBackend();
 
     const dragSourceBox = wrapper.find('DragSource(DraggableBox)');
@@ -304,12 +355,18 @@ describe('SensorOverlay', () => {
 
     wrapper.setProps(
       {
-        timeseriesIds: [timeseriesList[0].id, timeseriesList[1].id],
+        children: (
+          <SensorOverlay
+            timeseriesIds={[fakeTimeseries[0].id, fakeTimeseries[1].id]}
+            size={{ width: 1000, height: 500 }}
+          />
+        ),
+        // timeseriesIds: [fakeTimeseries[0].id, fakeTimeseries[1].id],
       },
       () => {
         const newSensor = wrapper
           .find(DraggableBox)
-          .find({ id: timeseriesList[1].id });
+          .find({ id: fakeTimeseries[1].id });
         expect(newSensor).toHaveLength(1);
 
         expect(firstDefaultSlot.left).toEqual(newSensor.prop('left'));
@@ -322,10 +379,12 @@ describe('SensorOverlay', () => {
 
   it('Sensor should change default color if a new color has been given in colorMap', done => {
     const wrapper = mount(
-      <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
-        size={{ width: 1000, height: 500 }}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <SensorOverlay
+          timeseriesIds={[fakeTimeseries[0].id]}
+          size={{ width: 1000, height: 500 }}
+        />
+      </ClientSDKProvider>
     );
 
     const draggableBox = wrapper.find(DraggableBox);
@@ -333,10 +392,19 @@ describe('SensorOverlay', () => {
 
     wrapper.setProps(
       {
-        timeseriesIds: [timeseriesList[0].id],
-        colorMap: {
-          [timeseriesList[0].id]: 'magenta',
-        },
+        children: (
+          <SensorOverlay
+            timeseriesIds={[fakeTimeseries[0].id]}
+            colorMap={{
+              [fakeTimeseries[0].id]: 'magenta',
+            }}
+            size={{ width: 1000, height: 500 }}
+          />
+        ),
+        // timeseriesIds: [fakeTimeseries[0].id],
+        // colorMap: {
+        //   [fakeTimeseries[0].id]: 'magenta',
+        // },
       },
       () => {
         const updatedBox = wrapper.find(DraggableBox);

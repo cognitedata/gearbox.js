@@ -241,6 +241,8 @@ export class DraggableBox
 
   componentDidMount() {
     this.fetchTimeSeries(this.props.id);
+    this.updateValue();
+    this.interval = setInterval(this.updateValue, this.props.refreshInterval);
   }
 
   componentWillUnmount() {
@@ -252,13 +254,18 @@ export class DraggableBox
 
   componentDidUpdate(nextProps: DraggableBoxProps) {
     if (this.props.id !== nextProps.id) {
+      if (this.interval) {
+        clearInterval(this.interval);
+        this.interval = null;
+      }
       this.fetchTimeSeries(nextProps.id);
+      this.updateValue();
+      this.interval = setInterval(this.updateValue, this.props.refreshInterval);
     }
   }
 
   onMouseOver = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log('------------------------onMouseOver----------------');
     this.setState({
       hovering: true,
     });
@@ -290,12 +297,6 @@ export class DraggableBox
       this.setState({
         tag: timeseries[0],
       });
-      if (this.interval) {
-        clearInterval(this.interval);
-        this.interval = null;
-      }
-      this.updateValue();
-      this.interval = setInterval(this.updateValue, this.props.refreshInterval);
     } catch (error) {
       if (error instanceof CanceledPromiseException !== true) {
         throw error;
