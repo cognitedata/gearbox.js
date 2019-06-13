@@ -1,35 +1,47 @@
-import { Asset, Assets } from '@cognite/sdk';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { ASSET_DATA } from '../../../mocks';
+import { fakeAsset } from '../../../mocks';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
 import customSpinner from './customSpinner.md';
 import customStyles from './customStyles.md';
 import fullDescription from './full.md';
 import loadCallback from './loadCallback.md';
 
-Assets.retrieve = (): Promise<Asset> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(ASSET_DATA);
-    }, 1000);
-  });
+const fakeClient: API = {
+  // @ts-ignore
+  assets: {
+    retrieve: () =>
+      new Promise(resolve => {
+        setTimeout(() => {
+          resolve([fakeAsset]);
+        }, 1000);
+      }),
+  },
 };
 
-storiesOf('AssetDetailsPanel', module).add(
-  'Full Description',
-  () => {
-    return <AssetDetailsPanel assetId={4650652196144007} />;
-  },
-  {
-    readme: {
-      content: fullDescription,
-    },
-  }
+const ClientSDKDecorator = (storyFn: any) => (
+  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
 );
 
+storiesOf('AssetDetailsPanel', module)
+  .addDecorator(ClientSDKDecorator)
+  .add(
+    'Full Description',
+    () => {
+      return <AssetDetailsPanel assetId={4650652196144007} />;
+    },
+    {
+      readme: {
+        content: fullDescription,
+      },
+    }
+  );
+
 storiesOf('AssetDetailsPanel/Examples', module)
+  .addDecorator(ClientSDKDecorator)
   .add(
     'With load callback',
     () => {

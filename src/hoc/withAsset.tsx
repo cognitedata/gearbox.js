@@ -1,8 +1,12 @@
-import { Asset } from '@cognite/sdk';
-import * as sdk from '@cognite/sdk';
+import { Asset } from '@cognite/sdk-alpha/dist/src/types/types';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
+import {
+  ERROR_API_UNEXPECTED_RESULTS,
+  ERROR_NO_SDK_CLIENT,
+} from '../constants/errorMessages';
+import { ClientSDKContext } from '../context/clientSDKContext';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
@@ -34,6 +38,8 @@ export const withAsset = <P extends WithAssetDataProps>(
       WithAssetState
     >
     implements ComponentWithUnmountState {
+    static contextType = ClientSDKContext;
+
     static getDerivedStateFromProps(
       props: P & WithAssetProps,
       state: WithAssetState
@@ -48,6 +54,7 @@ export const withAsset = <P extends WithAssetDataProps>(
 
       return null;
     }
+    context!: React.ContextType<typeof ClientSDKContext>;
 
     isComponentUnmounted = false;
 
@@ -62,6 +69,10 @@ export const withAsset = <P extends WithAssetDataProps>(
     }
 
     componentDidMount() {
+      if (!this.context) {
+        console.error(ERROR_NO_SDK_CLIENT);
+        return;
+      }
       this.loadAsset();
     }
 
@@ -77,18 +88,23 @@ export const withAsset = <P extends WithAssetDataProps>(
 
     async loadAsset() {
       try {
-        const asset = await connectPromiseToUnmountState(
+        const assets = await connectPromiseToUnmountState(
           this,
-          sdk.Assets.retrieve(this.props.assetId)
+          this.context!.assets.retrieve([{ id: this.props.assetId }])
         );
+
+        if (!assets || assets.length !== 1) {
+          console.error(ERROR_API_UNEXPECTED_RESULTS);
+          return;
+        }
 
         this.setState({
           isLoading: false,
-          asset,
+          asset: assets[0],
         });
 
         if (this.props.onAssetLoaded) {
-          this.props.onAssetLoaded(asset);
+          this.props.onAssetLoaded(assets[0]);
         }
       } catch (error) {
         if (error instanceof CanceledPromiseException !== true) {
