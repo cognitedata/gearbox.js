@@ -8,6 +8,8 @@ This component loads a list of events related to the asset and presents it as a 
 Click on a row of the table shows more detailed information about the event in the modal pop-up window.
 The component is used as one of the panes in `AssetMeta` component.
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx
@@ -34,7 +36,7 @@ function ExampleComponent(props) {
 
 | Property              | Description                                                                | Type                                          | Default     |
 | --------------------- | -------------------------------------------------------------------------- | --------------------------------------------- | ----------- |
-| `queryParams`         | Additional parameters for SDK call. Please notice that `assetId` provided in props will override the one in `queryParams`| `EventListParams` | `{ limit: 1000 }` |
+| `queryParams`         | Additional parameters for SDK call. Please notice that `assetId` provided in props will override propperty `assetIds` in `queryParams`| `EventFilterRequest` | `{ limit: 1000 }` |
 | `columns`             | Array of objects that customize titles of the columns in the table         | `TableColumnType[]`                           |             |
 | `customSpinner`       | A custom spinner to be shown in tabs while data is being loaded            | `React.ReactNode`                             |             |
 | `styles`              | Object that defines inline CSS styles for inner elements of the component  | `AssetEventsPanelStyles`                      |             |
@@ -47,7 +49,7 @@ function ExampleComponent(props) {
 This type can be imported from `@cognite/sdk`:
 
 ```typescript
-import { EventListParams } from `@cognite/sdk`;
+import { EventFilterRequest } from `@cognite/sdk`;
 ```
 
 #### TableColumnType
