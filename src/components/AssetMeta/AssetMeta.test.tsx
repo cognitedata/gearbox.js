@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
-import { DOCUMENTS, EVENTS, fakeAsset, timeseriesList } from '../../mocks';
+import { DOCUMENTS, fakeAsset, fakeEvents, timeseriesList } from '../../mocks';
 import { AssetMeta } from './AssetMeta';
 
 const fakeClient: API = {
@@ -13,10 +13,12 @@ const fakeClient: API = {
   assets: {
     retrieve: jest.fn(),
   },
+  // @ts-ignore
+  events: {
+    list: jest.fn(),
+  },
 };
 
-// @ts-ignore
-sdk.Events.list = jest.fn();
 // @ts-ignore
 sdk.Files.list = jest.fn();
 // @ts-ignore
@@ -28,7 +30,9 @@ beforeEach(() => {
   // @ts-ignore
   fakeClient.assets.retrieve.mockResolvedValue([fakeAsset]);
   // @ts-ignore
-  sdk.Events.list.mockResolvedValue({ items: EVENTS });
+  fakeClient.events.list.mockReturnValue({
+    autoPagingToArray: () => Promise.resolve(fakeEvents),
+  });
   // @ts-ignore
   sdk.Files.list.mockResolvedValue({ items: DOCUMENTS });
   // @ts-ignore
