@@ -179,7 +179,7 @@ describe('Search', () => {
   it('should render live search feature', () => {
     const { onLiveSearchSelect } = propsCallbacks;
     const props = {
-      liveSearch: true,
+      showLiveSearchResults: true,
       liveSearchResults: [],
       onLiveSearchSelect,
     };
@@ -207,7 +207,7 @@ describe('Search', () => {
   it('should select search result on arrow keys', () => {
     const { onLiveSearchSelect } = propsCallbacks;
     const props = {
-      liveSearch: true,
+      showLiveSearchResults: true,
       liveSearchResults: [],
       onLiveSearchSelect,
     };

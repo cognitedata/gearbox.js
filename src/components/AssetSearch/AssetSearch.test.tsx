@@ -13,6 +13,7 @@ configure({ adapter: new Adapter() });
 const propsCallbacks: { [name: string]: Mock } = {
   onError: jest.fn(),
   onLiveSearchSelect: jest.fn(),
+  onSearchResult: jest.fn(),
 };
 
 // ignore debounce
@@ -44,7 +45,8 @@ describe('AssetSearch', () => {
 
   it('should search when input changes', done => {
     const { onLiveSearchSelect } = propsCallbacks;
-    const props = { onLiveSearchSelect };
+    const showLiveSearchResults = true;
+    const props = { onLiveSearchSelect, showLiveSearchResults };
     const wrapper = mount(<AssetSearch {...props} />);
 
     wrapper
@@ -61,6 +63,40 @@ describe('AssetSearch', () => {
         .props()
         .onMouseDown();
       expect(onLiveSearchSelect).toHaveBeenCalled();
+      done();
+    });
+  });
+  it('should call onSearchResult when it is defined', done => {
+    const { onSearchResult } = propsCallbacks;
+    const showLiveSearchResults = false;
+    const props = { onSearchResult, showLiveSearchResults };
+    const wrapper = mount(<AssetSearch {...props} />);
+
+    wrapper
+      .find(Input)
+      .find('input')
+      .simulate('change', { target: { value: 'value' } });
+
+    setImmediate(() => {
+      wrapper.update();
+      expect(onSearchResult).toHaveBeenCalled();
+      done();
+    });
+  });
+  it('should call onSearchResult with empty array in parameter when input is an empty string', done => {
+    const { onSearchResult } = propsCallbacks;
+    const showLiveSearchResults = false;
+    const props = { onSearchResult, showLiveSearchResults };
+    const wrapper = mount(<AssetSearch {...props} />);
+
+    wrapper
+      .find(Input)
+      .find('input')
+      .simulate('change', { target: { value: '' } });
+
+    setImmediate(() => {
+      wrapper.update();
+      expect(onSearchResult.mock.calls[0][0].length).toBe(0);
       done();
     });
   });
