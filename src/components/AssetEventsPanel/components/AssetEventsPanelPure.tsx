@@ -1,4 +1,4 @@
-import { Event } from '@cognite/sdk';
+import { CogniteEvent } from '@cognite/sdk-alpha/dist/src/types/types';
 import { Icon, Modal, Table } from 'antd';
 import React, { Component } from 'react';
 import styled from 'styled-components';
@@ -10,7 +10,7 @@ import {
 } from '../../../interfaces';
 import { momentFromTimestamp } from '../../../utils/formatters';
 
-interface EventAddonsProp extends Event {
+interface EventAddonsProp extends CogniteEvent {
   typeAndSubtype: React.ReactNode;
   start: string;
   end: string;
@@ -72,6 +72,7 @@ export class AssetEventsPanelPure extends Component<
   renderEventDetails = (event: EventAddonsProp) => (
     <EventDetails key="event-detail">
       <div key="event-type">
+        // @ts-ignore // TODO - remove this after fixing CogniteEvent
         <strong>{event.type},</strong> {event.subtype}
       </div>
       {event.description && (
@@ -98,11 +99,13 @@ export class AssetEventsPanelPure extends Component<
     </EventMetadataList>
   );
 
-  mapEvent = (event: Event): EventAddonsProp => ({
+  mapEvent = (event: CogniteEvent): EventAddonsProp => ({
     ...event,
     typeAndSubtype: (
       <span>
+        // @ts-ignore // TODO: Remove @ts-ignore one SDK will be fixed
         <strong style={{ display: 'block' }}>{event.type}</strong>
+        // @ts-ignore // TODO: Remove @ts-ignore one SDK will be fixed
         <span style={{ fontSize: 12, opacity: 0.8 }}>{event.subtype}</span>
       </span>
     ),

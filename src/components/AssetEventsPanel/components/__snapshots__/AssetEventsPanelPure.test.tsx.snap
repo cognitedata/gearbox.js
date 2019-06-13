@@ -164,15 +164,15 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                       }
                     />
                     <span>
+                      // @ts-ignore // TODO: Remove @ts-ignore one SDK will be fixed
                       <strong
                         style={
                           Object {
                             "display": "block",
                           }
                         }
-                      >
-                        failure
-                      </strong>
+                      />
+                      // @ts-ignore // TODO: Remove @ts-ignore one SDK will be fixed
                       <span
                         style={
                           Object {
@@ -180,9 +180,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                             "opacity": 0.8,
                           }
                         }
-                      >
-                        Valhall
-                      </span>
+                      />
                     </span>
                   </td>
                   <td
@@ -217,15 +215,15 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                       }
                     />
                     <span>
+                      // @ts-ignore // TODO: Remove @ts-ignore one SDK will be fixed
                       <strong
                         style={
                           Object {
                             "display": "block",
                           }
                         }
-                      >
-                        alert
-                      </strong>
+                      />
+                      // @ts-ignore // TODO: Remove @ts-ignore one SDK will be fixed
                       <span
                         style={
                           Object {
@@ -233,9 +231,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                             "opacity": 0.8,
                           }
                         }
-                      >
-                        Val
-                      </span>
+                      />
                     </span>
                   </td>
                   <td
@@ -270,15 +266,15 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                       }
                     />
                     <span>
+                      // @ts-ignore // TODO: Remove @ts-ignore one SDK will be fixed
                       <strong
                         style={
                           Object {
                             "display": "block",
                           }
                         }
-                      >
-                        workorder
-                      </strong>
+                      />
+                      // @ts-ignore // TODO: Remove @ts-ignore one SDK will be fixed
                       <span
                         style={
                           Object {
@@ -286,9 +282,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                             "opacity": 0.8,
                           }
                         }
-                      >
-                        Val
-                      </span>
+                      />
                     </span>
                   </td>
                   <td
@@ -323,15 +317,15 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                       }
                     />
                     <span>
+                      // @ts-ignore // TODO: Remove @ts-ignore one SDK will be fixed
                       <strong
                         style={
                           Object {
                             "display": "block",
                           }
                         }
-                      >
-                        failure
-                      </strong>
+                      />
+                      // @ts-ignore // TODO: Remove @ts-ignore one SDK will be fixed
                       <span
                         style={
                           Object {
@@ -339,9 +333,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                             "opacity": 0.8,
                           }
                         }
-                      >
-                        Val
-                      </span>
+                      />
                     </span>
                   </td>
                   <td
@@ -376,15 +368,15 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                       }
                     />
                     <span>
+                      // @ts-ignore // TODO: Remove @ts-ignore one SDK will be fixed
                       <strong
                         style={
                           Object {
                             "display": "block",
                           }
                         }
-                      >
-                        alert
-                      </strong>
+                      />
+                      // @ts-ignore // TODO: Remove @ts-ignore one SDK will be fixed
                       <span
                         style={
                           Object {
@@ -392,9 +384,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                             "opacity": 0.8,
                           }
                         }
-                      >
-                        Val
-                      </span>
+                      />
                     </span>
                   </td>
                   <td
@@ -429,6 +419,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                       }
                     />
                     <span>
+                      // @ts-ignore // TODO: Remove @ts-ignore one SDK will be fixed
                       <strong
                         style={
                           Object {
@@ -436,6 +427,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       />
+                      // @ts-ignore // TODO: Remove @ts-ignore one SDK will be fixed
                       <span
                         style={
                           Object {
