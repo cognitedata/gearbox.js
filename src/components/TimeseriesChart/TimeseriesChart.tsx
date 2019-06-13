@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {
   cogniteloader as griffloader,
+  setContext,
   y0Accessor,
   y1Accessor,
   yAccessor,
@@ -16,6 +17,7 @@ import {
   Ruler,
 } from '@cognite/griff-react';
 import { Spin } from 'antd';
+import { ClientSDKContext } from '../../context/clientSDKContext';
 import { decimalTickFormatter } from '../../utils/axisSigFix';
 import { getColorByString } from '../../utils/colors';
 
@@ -65,6 +67,7 @@ export class TimeseriesChart extends React.Component<
   TimeseriesChartProps,
   TimeseriesChartState
 > {
+  static contextType = ClientSDKContext;
   static defaultProps = {
     startTime: Date.now() - 60 * 60 * 1000,
     endTime: Date.now(),
@@ -88,9 +91,25 @@ export class TimeseriesChart extends React.Component<
       throw e;
     },
   };
-  state = {
-    loaded: false,
-  };
+
+  context!: React.ContextType<typeof ClientSDKContext>;
+
+  constructor(props: TimeseriesChartProps) {
+    super(props);
+    this.state = {
+      loaded: false,
+    };
+  }
+
+  componentDidMount() {
+    if (!this.context) {
+      console.error(
+        'Client SDK Context has not been provided. Use ClientSDKProvider to wrap the component.'
+      );
+      return;
+    }
+    setContext(this.context);
+  }
 
   onFetchData = () => {
     if (!this.state.loaded) {
