@@ -17,8 +17,8 @@ import { Document } from '../../../interfaces';
 import {
   ASSET_META_STYLES,
   DOCUMENTS,
-  EVENTS,
   fakeAsset,
+  fakeEvents,
   timeseriesList,
 } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
@@ -47,14 +47,18 @@ const fakeClient: API = {
         }, 1000);
       }),
   },
-};
-
-Events.list = async (): Promise<EventDataWithCursor> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({ items: EVENTS });
-    }, 1000);
-  });
+  events: {
+    // @ts-ignore
+    list: () => ({
+      autoPagingToArray: () => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(fakeEvents);
+          }, 1000);
+        });
+      },
+    }),
+  },
 };
 
 Files.list = async ({
