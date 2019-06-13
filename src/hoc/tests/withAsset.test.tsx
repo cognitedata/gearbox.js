@@ -11,7 +11,6 @@ configure({ adapter: new Adapter() });
 const fakeClient: API = {
   // @ts-ignore
   assets: {
-    // @ts-ignore
     retrieve: jest.fn(),
   },
 };
