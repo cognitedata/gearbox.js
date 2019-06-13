@@ -36,14 +36,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  // @ts-ignore
-  fakeClient.assets.retrieve.mockClear();
-  // @ts-ignore
-  sdk.Events.list.mockClear();
-  // @ts-ignore
-  sdk.Files.list.mockClear();
-  // @ts-ignore
-  sdk.TimeSeries.list.mockClear();
+  jest.clearAllMocks();
 });
 
 describe('AssetMeta', () => {
