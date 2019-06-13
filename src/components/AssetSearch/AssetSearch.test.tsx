@@ -96,7 +96,6 @@ describe('AssetSearch', () => {
 
     setImmediate(() => {
       wrapper.update();
-      expect(Array.isArray(onSearchResult.mock.calls[0][0])).toBeTruthy();
       expect(onSearchResult.mock.calls[0][0].length).toBe(0);
       done();
     });
