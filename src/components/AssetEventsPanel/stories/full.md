@@ -36,7 +36,7 @@ function ExampleComponent(props) {
 
 | Property              | Description                                                                | Type                                          | Default     |
 | --------------------- | -------------------------------------------------------------------------- | --------------------------------------------- | ----------- |
-| `queryParams`         | Additional parameters for SDK call. Please notice that `assetId` provided in props will override propperty `assetIds` in `queryParams`| `EventFilterRequest` | `{ limit: 1000 }` |
+| `queryParams`         | Additional parameters for SDK call. Please notice that `assetId` provided in props will override property `assetIds` in `queryParams.filter`| `EventFilterRequest` | `{ limit: 1000 }` |
 | `columns`             | Array of objects that customize titles of the columns in the table         | `TableColumnType[]`                           |             |
 | `customSpinner`       | A custom spinner to be shown in tabs while data is being loaded            | `React.ReactNode`                             |             |
 | `styles`              | Object that defines inline CSS styles for inner elements of the component  | `AssetEventsPanelStyles`                      |             |
