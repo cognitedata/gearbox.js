@@ -72,8 +72,7 @@ export class AssetEventsPanelPure extends Component<
   renderEventDetails = (event: EventAddonsProp) => (
     <EventDetails key="event-detail">
       <div key="event-type">
-        {/*  TODO - remove type cast to any after fixing CogniteEvent */}
-        <strong>{(event as any).type},</strong> {(event as any).subtype}
+        <strong>{event.type},</strong> {event.subtype}
       </div>
       {event.description && (
         <div className="description">{event.description}</div>
@@ -103,12 +102,8 @@ export class AssetEventsPanelPure extends Component<
     ...event,
     typeAndSubtype: (
       <span>
-        {/* TODO: remove type cast to any ones CogniteEvent will be fixed */}
-        <strong style={{ display: 'block' }}>{(event as any).type}</strong>
-        {/* TODO: remove type cast to any ones CogniteEvent will be fixed */}
-        <span style={{ fontSize: 12, opacity: 0.8 }}>
-          {(event as any).subtype}
-        </span>
+        <strong style={{ display: 'block' }}>{event.type}</strong>
+        <span style={{ fontSize: 12, opacity: 0.8 }}>{event.subtype}</span>
       </span>
     ),
     description: event.description || 'No description',
