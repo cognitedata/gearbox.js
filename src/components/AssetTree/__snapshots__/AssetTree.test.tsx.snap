@@ -1,148 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`AssetTree Checks if onSelect returns node 1`] = `
+<ul
+  className="ant-tree ant-tree-icon-hide"
+  role="tree"
+  unselectable="on"
+/>
+`;
+
+exports[`AssetTree rednders correctly with passed styles prop 1`] = `
+<ul
+  className="ant-tree ant-tree-icon-hide"
+  role="tree"
+  unselectable="on"
+/>
+`;
+
 exports[`AssetTree renders correctly 1`] = `
 <ul
   className="ant-tree ant-tree-icon-hide"
   role="tree"
   unselectable="on"
->
-  <li
-    className="sc-bdVaJa fYHvCl ant-tree-treenode-switcher-open"
-    role="treeitem"
-  >
-    <span
-      className="ant-tree-switcher ant-tree-switcher_open"
-      onClick={[Function]}
-    >
-      <i
-        aria-label="icon: caret-down"
-        className="anticon anticon-caret-down ant-tree-switcher-icon"
-      >
-        <svg
-          aria-hidden="true"
-          className=""
-          data-icon="caret-down"
-          fill="currentColor"
-          focusable="false"
-          height="1em"
-          viewBox="0 0 1024 1024"
-          width="1em"
-        >
-          <path
-            d="M840.4 300H183.6c-19.7 0-30.7 20.8-18.5 35l328.4 380.8c9.4 10.9 27.5 10.9 37 0L858.9 335c12.2-14.2 1.2-35-18.5-35z"
-          />
-        </svg>
-      </i>
-    </span>
-    <span
-      className="ant-tree-node-content-wrapper ant-tree-node-content-wrapper-open"
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDoubleClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      title="Aker BP: Aker BP"
-    >
-      <span
-        className="ant-tree-title"
-      >
-        Aker BP: Aker BP
-      </span>
-    </span>
-    <ul
-      className="ant-tree-child-tree ant-tree-child-tree-open"
-      data-expanded={true}
-      role="group"
-    >
-      <li
-        className="sc-bdVaJa fYHvCl ant-tree-treenode-switcher-close"
-        role="treeitem"
-      >
-        <span
-          className="ant-tree-switcher ant-tree-switcher_close"
-          onClick={[Function]}
-        >
-          <i
-            aria-label="icon: caret-down"
-            className="anticon anticon-caret-down ant-tree-switcher-icon"
-          >
-            <svg
-              aria-hidden="true"
-              className=""
-              data-icon="caret-down"
-              fill="currentColor"
-              focusable="false"
-              height="1em"
-              viewBox="0 0 1024 1024"
-              width="1em"
-            >
-              <path
-                d="M840.4 300H183.6c-19.7 0-30.7 20.8-18.5 35l328.4 380.8c9.4 10.9 27.5 10.9 37 0L858.9 335c12.2-14.2 1.2-35-18.5-35z"
-              />
-            </svg>
-          </i>
-        </span>
-        <span
-          className="ant-tree-node-content-wrapper ant-tree-node-content-wrapper-close"
-          onClick={[Function]}
-          onContextMenu={[Function]}
-          onDoubleClick={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
-          title="VAL : Valhall plattform"
-        >
-          <span
-            className="ant-tree-title"
-          >
-            VAL : Valhall plattform
-          </span>
-        </span>
-      </li>
-    </ul>
-  </li>
-  <li
-    className="sc-bdVaJa fYHvCl ant-tree-treenode-switcher-close"
-    role="treeitem"
-  >
-    <span
-      className="ant-tree-switcher ant-tree-switcher_close"
-      onClick={[Function]}
-    >
-      <i
-        aria-label="icon: caret-down"
-        className="anticon anticon-caret-down ant-tree-switcher-icon"
-      >
-        <svg
-          aria-hidden="true"
-          className=""
-          data-icon="caret-down"
-          fill="currentColor"
-          focusable="false"
-          height="1em"
-          viewBox="0 0 1024 1024"
-          width="1em"
-        >
-          <path
-            d="M840.4 300H183.6c-19.7 0-30.7 20.8-18.5 35l328.4 380.8c9.4 10.9 27.5 10.9 37 0L858.9 335c12.2-14.2 1.2-35-18.5-35z"
-          />
-        </svg>
-      </i>
-    </span>
-    <span
-      className="ant-tree-node-content-wrapper ant-tree-node-content-wrapper-close"
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDoubleClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      title="VAL: Valhall plattform"
-    >
-      <span
-        className="ant-tree-title"
-      >
-        VAL: Valhall plattform
-      </span>
-    </span>
-  </li>
-</ul>
+/>
 `;
