@@ -1,4 +1,4 @@
-import * as sdk from '@cognite/sdk';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
@@ -7,46 +7,61 @@ import {
   ASSET_LIST_CHILD,
   ASSET_TREE_STYLES,
   ASSET_ZERO_DEPTH_ARRAY,
-} from '../../../mocks';
+} from '../../../mocks/assetsListV2';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetTree } from '../AssetTree';
-
 import basic from './basic.md';
 import clickItem from './clickItem.md';
 import customStyles from './customStyles.md';
 import defaultExpanded from './defaultExpanded.md';
 import fullDescription from './full.md';
 
-const setupMocks = () => {
-  sdk.Assets.list = async (_: sdk.AssetListParams) => {
-    return { items: ASSET_ZERO_DEPTH_ARRAY };
-  };
-
-  sdk.Assets.listDescendants = async (assetId: number) => {
-    return {
-      items: ASSET_LIST_CHILD.sort(a => (a.id === assetId ? -1 : 1)),
-    };
-  };
-};
 const zeroChild = ASSET_ZERO_DEPTH_ARRAY.findIndex(asset => asset.depth === 0);
 
-storiesOf('AssetTree', module).add(
-  'Full description',
-  () => {
-    setupMocks();
-    return <AssetTree />;
+export const fakeClient: API = {
+  // @ts-ignore
+  assets: {
+    // @ts-ignore
+    list: scope => ({
+      autoPagingToArray: () => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            if (scope && scope.filter) {
+              const { parentIds } = scope.filter;
+              ASSET_LIST_CHILD.sort(a => (a.id === parentIds![0] ? -1 : 1));
+              resolve(ASSET_LIST_CHILD);
+            }
+            resolve(ASSET_ZERO_DEPTH_ARRAY);
+          }, 300);
+        });
+      },
+    }),
   },
-  {
-    readme: {
-      content: fullDescription,
-    },
-  }
+};
+
+const clientSDKDecorator = (storyFn: any) => (
+  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
 );
 
+storiesOf('AssetTree', module)
+  .addDecorator(clientSDKDecorator)
+  .add(
+    'Full Description',
+    () => {
+      return <AssetTree />;
+    },
+    {
+      readme: {
+        content: fullDescription,
+      },
+    }
+  );
+
 storiesOf('AssetTree/Examples', module)
+  .addDecorator(clientSDKDecorator)
   .add(
     'Basic',
     () => {
-      setupMocks();
       return <AssetTree />;
     },
     {
@@ -58,7 +73,6 @@ storiesOf('AssetTree/Examples', module)
   .add(
     'Default expanded node',
     () => {
-      setupMocks();
       return (
         <AssetTree
           defaultExpandedKeys={[ASSET_ZERO_DEPTH_ARRAY[zeroChild].id]}
@@ -74,7 +88,6 @@ storiesOf('AssetTree/Examples', module)
   .add(
     'Click item in tree',
     () => {
-      setupMocks();
       return (
         <AssetTree
           onSelect={(e: OnSelectAssetTreeParams) => action('onSelect')(e)}
@@ -90,7 +103,6 @@ storiesOf('AssetTree/Examples', module)
   .add(
     'Custom Styles',
     () => {
-      setupMocks();
       return <AssetTree styles={ASSET_TREE_STYLES} />;
     },
     {
