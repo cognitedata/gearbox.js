@@ -111,10 +111,10 @@ export class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
     const result = await this.context!.assets.list({
       filter: { parentIds: [assetId] },
     }).autoPagingToArray();
-    if (!result && !Array.isArray(result)) {
+    if (!result || !Array.isArray(result)) {
       console.error(ERROR_API_UNEXPECTED_RESULTS);
     }
-    return [...result];
+    return result;
   };
 
   onLoadData = async (treeNode: AntTreeNode) => {
