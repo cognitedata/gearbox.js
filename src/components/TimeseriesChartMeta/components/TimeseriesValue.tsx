@@ -1,6 +1,7 @@
-import * as sdk from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
+import { ERROR_NO_SDK_CLIENT } from '../../../constants/errorMessages';
+import { ClientSDKContext } from '../../../context/clientSDKContext';
 import { defaultTheme } from '../../../theme/defaultTheme';
 import {
   CanceledPromiseException,
@@ -18,12 +19,13 @@ interface TimeseriesValueProps {
 
 interface TimeseriesValueState {
   value: string | null;
-  lastTimestamp: number | null;
+  lastTimestamp: Date | null;
 }
 
 export class TimeseriesValue
   extends React.PureComponent<TimeseriesValueProps, TimeseriesValueState>
   implements ComponentWithUnmountState {
+  static contextType = ClientSDKContext;
   static defaultProps = {
     liveUpdate: true,
     timeseriesDescription: '',
@@ -31,6 +33,7 @@ export class TimeseriesValue
   };
 
   isComponentUnmounted = false;
+  context!: React.ContextType<typeof ClientSDKContext>;
 
   state = {
     value: null,
@@ -40,6 +43,10 @@ export class TimeseriesValue
   private interval: number | null = null;
 
   componentDidMount() {
+    if (!this.context) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
     this.getLatestDatapoint();
     if (this.props.liveUpdate) {
       this.interval = setInterval(
@@ -71,18 +78,27 @@ export class TimeseriesValue
 
   getLatestDatapoint = async () => {
     try {
-      const datapoint = await connectPromiseToUnmountState(
+      const datapoints = await connectPromiseToUnmountState(
         this,
-        sdk.Datapoints.retrieveLatest(this.props.timeseriesName)
+        // @ts-ignore
+        this.context.datapoints.retrieveLatest([
+          { externalId: this.props.timeseriesName, before: 'now' },
+        ])
       );
 
-      if (!datapoint) {
+      if (
+        !datapoints ||
+        !datapoints[0] ||
+        !datapoints[0].datapoints ||
+        !datapoints[0].datapoints[0]
+      ) {
         this.setState({
           value: null,
           lastTimestamp: null,
         });
         return;
       }
+      const datapoint = datapoints[0].datapoints[0];
       if (
         this.state.lastTimestamp !== null &&
         datapoint.timestamp < this.state.lastTimestamp!

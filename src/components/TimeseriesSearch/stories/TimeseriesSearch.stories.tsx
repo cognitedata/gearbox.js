@@ -7,7 +7,7 @@ import {
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { assetsList, timeseriesListV2 } from '../../../mocks';
+import { timeseriesListV2 } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesSearch } from '../TimeseriesSearch';
 
@@ -208,7 +208,6 @@ storiesOf('TimeseriesSearch/Examples', module)
   .add(
     'Custom filter rule',
     () => {
-      setupMocks();
       return (
         <ClientSDKProvider client={fakeClient}>
           <TimeseriesSearch

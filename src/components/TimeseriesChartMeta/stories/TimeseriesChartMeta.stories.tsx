@@ -47,6 +47,26 @@ const fakeClient: API = {
       });
     },
   },
+  datapoints: {
+    ...timeseriesChartFakeClient.datapoints,
+    retrieveLatest: () =>
+      new Promise(resolve => {
+        setTimeout(() => {
+          resolve([
+            {
+              isString: false,
+              id: 123,
+              datapoints: [
+                {
+                  timestamp: new Date(Date.now()),
+                  value: 15 + Math.random() * 5.0,
+                },
+              ],
+            },
+          ]);
+        }, 1000);
+      }),
+  },
 };
 
 const clientSdkDecorator = (storyFn: any) => (

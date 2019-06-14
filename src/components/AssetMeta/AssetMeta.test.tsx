@@ -1,11 +1,10 @@
-import * as sdk from '@cognite/sdk';
 import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
-import { DOCUMENTS, fakeAsset, fakeEvents, timeseriesList } from '../../mocks';
+import { fakeAsset, fakeEvents } from '../../mocks';
 import { AssetMeta } from './AssetMeta';
 
 const fakeClient: API = {
@@ -19,11 +18,6 @@ const fakeClient: API = {
   },
 };
 
-// @ts-ignore
-sdk.Files.list = jest.fn();
-// @ts-ignore
-sdk.TimeSeries.list = jest.fn();
-
 configure({ adapter: new Adapter() });
 
 beforeEach(() => {
@@ -33,10 +27,6 @@ beforeEach(() => {
   fakeClient.events.list.mockReturnValue({
     autoPagingToArray: () => Promise.resolve(fakeEvents),
   });
-  // @ts-ignore
-  sdk.Files.list.mockResolvedValue({ items: DOCUMENTS });
-  // @ts-ignore
-  sdk.TimeSeries.list.mockResolvedValue({ items: timeseriesList });
 });
 
 afterEach(() => {
