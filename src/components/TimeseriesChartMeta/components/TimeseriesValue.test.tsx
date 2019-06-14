@@ -2,14 +2,14 @@ import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { datapoints, timeseriesList } from '../../../mocks';
+import { datapoints, timeseriesListV2 } from '../../../mocks';
 import { TimeseriesValue } from './TimeseriesValue';
 
 configure({ adapter: new Adapter() });
 
 sdk.Datapoints.retrieveLatest = jest.fn();
 
-const timeseries = timeseriesList[0];
+const timeseries = timeseriesListV2[0];
 const datapopint = datapoints[0];
 
 beforeEach(() => {
@@ -26,7 +26,7 @@ describe('TimeseriesValue', () => {
   it('Should render without exploding', () => {
     const wrapper = mount(
       <TimeseriesValue
-        timeseriesName={timeseries.name}
+        timeseriesName={timeseries.name || ''}
         timeseriesDescription={timeseries.description}
         liveUpdate={false}
       />
@@ -39,7 +39,7 @@ describe('TimeseriesValue', () => {
   it('Should  request latest datapoint', () => {
     mount(
       <TimeseriesValue
-        timeseriesName={timeseries.name}
+        timeseriesName={timeseries.name || ''}
         timeseriesDescription={timeseries.description}
         liveUpdate={false}
       />
@@ -51,7 +51,7 @@ describe('TimeseriesValue', () => {
   it('Should retrieve latest datapoint twice if timeseriesName has been changed ', () => {
     const wrapper = mount(
       <TimeseriesValue
-        timeseriesName={timeseries.name}
+        timeseriesName={timeseries.name || ''}
         timeseriesDescription={timeseries.description}
         liveUpdate={false}
       />
@@ -66,7 +66,7 @@ describe('TimeseriesValue', () => {
     jest.useFakeTimers();
     const wrapper = mount(
       <TimeseriesValue
-        timeseriesName={timeseries.name}
+        timeseriesName={timeseries.name || ''}
         timeseriesDescription={timeseries.description}
       />
     );
@@ -80,7 +80,7 @@ describe('TimeseriesValue', () => {
     jest.useFakeTimers();
     const wrapper = mount(
       <TimeseriesValue
-        timeseriesName={timeseries.name}
+        timeseriesName={timeseries.name || ''}
         timeseriesDescription={timeseries.description}
       />
     );
@@ -94,7 +94,7 @@ describe('TimeseriesValue', () => {
 
     const wrapper = mount(
       <TimeseriesValue
-        timeseriesName={timeseries.name}
+        timeseriesName={timeseries.name || ''}
         timeseriesDescription={timeseries.description}
         liveUpdate={false}
       />

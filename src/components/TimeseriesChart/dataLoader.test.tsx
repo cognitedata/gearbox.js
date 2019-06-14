@@ -4,7 +4,7 @@ import {
   GetDoubleDatapoint,
   GetStringDatapoint,
 } from '@cognite/sdk-alpha/dist/src/types/types';
-import { datapointsList, timeseriesList } from '../../mocks';
+import { datapointsList, timeseriesListV2 } from '../../mocks';
 import {
   AccessorFunc,
   cogniteloader,
@@ -91,7 +91,7 @@ describe('dataLoader', () => {
     beforeEach(() => {
       setContext(mockedClient);
       // @ts-ignore
-      mockedClient.timeseries.retrieve.mockResolvedValue([timeseriesList[0]]);
+      mockedClient.timeseries.retrieve.mockResolvedValue([timeseriesListV2[0]]);
       // @ts-ignore
       mockedClient.datapoints.retrieve.mockResolvedValue([datapointsList]);
     });
