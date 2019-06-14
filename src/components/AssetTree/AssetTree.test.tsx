@@ -23,8 +23,8 @@ configure({ adapter: new Adapter() });
 
 beforeEach(() => {
   // @ts-ignore
-  mockedClient.assets.list.mockResolvedValue({
-    autoPagingToArray: async () => [ASSET_ZERO_DEPTH_ARRAY],
+  mockedClient.assets.list.mockReturnValue({
+    autoPagingToArray: async () => ASSET_ZERO_DEPTH_ARRAY,
   });
 });
 
@@ -47,7 +47,7 @@ describe('AssetTree', () => {
     });
   });
 
-  xit('Checks if onSelect returns node', done => {
+  it('Checks if onSelect returns node', done => {
     const jestTest = jest.fn();
     const AssetTreeModal = mount(
       <ClientSDKProvider client={mockedClient}>
@@ -65,14 +65,19 @@ describe('AssetTree', () => {
       done();
     });
   });
-  xit('rednders correctly with passed styles prop', done => {
-    const wrapper = mount(<AssetTree styles={ASSET_TREE_STYLES} />);
+  it('rednders correctly with passed styles prop', done => {
+    const wrapper = mount(
+      <ClientSDKProvider client={mockedClient}>
+        <AssetTree styles={ASSET_TREE_STYLES} />
+      </ClientSDKProvider>
+    );
     setImmediate(() => {
       wrapper.update();
       const containerStyle = wrapper
-        .find('li')
+        .find('.ant-tree-treenode-switcher-close')
         .first()
         .prop('style');
+
       expect(containerStyle === ASSET_TREE_STYLES.list).toBeTruthy();
       done();
     });
