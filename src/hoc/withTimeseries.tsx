@@ -2,6 +2,7 @@ import { GetTimeSeriesMetadataDTO } from '@cognite/sdk-alpha/dist/src/types/type
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
+import { ERROR_NO_SDK_CLIENT } from '../constants/errorMessages';
 import { ClientSDKContext } from '../context/clientSDKContext';
 import {
   CanceledPromiseException,
@@ -77,9 +78,7 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
     async loadTimeseries() {
       try {
         if (!this.context) {
-          console.error(
-            'Client SDK Context has not been provided. Use ClientSDKProvider to wrap the component.'
-          );
+          console.error(ERROR_NO_SDK_CLIENT);
           return;
         }
         const timeseries = await connectPromiseToUnmountState(

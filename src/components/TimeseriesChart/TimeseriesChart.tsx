@@ -17,6 +17,7 @@ import {
   Ruler,
 } from '@cognite/griff-react';
 import { Spin } from 'antd';
+import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';
 import { decimalTickFormatter } from '../../utils/axisSigFix';
 import { getColorByString } from '../../utils/colors';
@@ -103,9 +104,7 @@ export class TimeseriesChart extends React.Component<
 
   componentDidMount() {
     if (!this.context) {
-      console.error(
-        'Client SDK Context has not been provided. Use ClientSDKProvider to wrap the component.'
-      );
+      console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
     setContext(this.context);
