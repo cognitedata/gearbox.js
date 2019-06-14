@@ -49,34 +49,35 @@ const fakeClient: API = {
   },
 };
 
-storiesOf('TimeseriesChartMeta', module).add(
-  'Full description',
-  () => {
-    return (
-      <ClientSDKProvider client={fakeClient}>
-        <TimeseriesChartMeta timeseriesId={123} />
-      </ClientSDKProvider>
-    );
-  },
-  {
-    readme: {
-      content: full,
-    },
-  }
+const clientSdkDecorator = (storyFn: any) => (
+  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
 );
 
+storiesOf('TimeseriesChartMeta', module)
+  .addDecorator(clientSdkDecorator)
+  .add(
+    'Full description',
+    () => {
+      return <TimeseriesChartMeta timeseriesId={123} />;
+    },
+    {
+      readme: {
+        content: full,
+      },
+    }
+  );
+
 storiesOf('TimeseriesChartMeta/Examples', module)
-  .addDecorator(story => <div style={{ width: '100%' }}>{story()}</div>)
+  .addDecorator(story => (
+    <div style={{ width: '100%' }}>
+      <ClientSDKProvider client={fakeClient}>{story()}</ClientSDKProvider>
+    </div>
+  ))
   .add(
     'Predefined Period',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
-          <TimeseriesChartMeta
-            timeseriesId={123}
-            defaultTimePeriod="lastMonth"
-          />
-        </ClientSDKProvider>
+        <TimeseriesChartMeta timeseriesId={123} defaultTimePeriod="lastMonth" />
       );
     },
     {
@@ -89,16 +90,14 @@ storiesOf('TimeseriesChartMeta/Examples', module)
     'Hide elements',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
-          <TimeseriesChartMeta
-            timeseriesId={123}
-            showChart={true}
-            showDescription={false}
-            showDatapoint={false}
-            showMetadata={false}
-            showPeriods={false}
-          />
-        </ClientSDKProvider>
+        <TimeseriesChartMeta
+          timeseriesId={123}
+          showChart={true}
+          showDescription={false}
+          showDatapoint={false}
+          showMetadata={false}
+          showPeriods={false}
+        />
       );
     },
     {
@@ -110,11 +109,7 @@ storiesOf('TimeseriesChartMeta/Examples', module)
   .add(
     'Disable live updates',
     () => {
-      return (
-        <ClientSDKProvider client={fakeClient}>
-          <TimeseriesChartMeta timeseriesId={123} liveUpdate={false} />
-        </ClientSDKProvider>
-      );
+      return <TimeseriesChartMeta timeseriesId={123} liveUpdate={false} />;
     },
     {
       readme: {
@@ -126,13 +121,11 @@ storiesOf('TimeseriesChartMeta/Examples', module)
     'Custom update interval',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
-          <TimeseriesChartMeta
-            timeseriesId={123}
-            liveUpdate={true}
-            updateIntervalMillis={1000}
-          />
-        </ClientSDKProvider>
+        <TimeseriesChartMeta
+          timeseriesId={123}
+          liveUpdate={true}
+          updateIntervalMillis={1000}
+        />
       );
     },
     {
@@ -145,15 +138,13 @@ storiesOf('TimeseriesChartMeta/Examples', module)
     'Custom base period',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
-          <TimeseriesChartMeta
-            timeseriesId={123}
-            defaultBasePeriod={{
-              startTime: Date.now() - 10 * 24 * 60 * 60 * 1000, // 10 days ago
-              endTime: Date.now(),
-            }}
-          />
-        </ClientSDKProvider>
+        <TimeseriesChartMeta
+          timeseriesId={123}
+          defaultBasePeriod={{
+            startTime: Date.now() - 10 * 24 * 60 * 60 * 1000, // 10 days ago
+            endTime: Date.now(),
+          }}
+        />
       );
     },
     {

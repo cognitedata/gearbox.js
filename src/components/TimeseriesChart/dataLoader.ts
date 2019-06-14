@@ -49,7 +49,7 @@ export const getGranularity = (id: number) =>
 function determineIfIsGetDoubleDatapoint(
   toBeDetermined: GetDoubleDatapoint | GetAggregateDatapoint
 ): toBeDetermined is GetDoubleDatapoint {
-  if ((toBeDetermined as GetDoubleDatapoint).value) {
+  if (typeof (toBeDetermined as GetDoubleDatapoint).value === 'number') {
     return true;
   }
   return false;

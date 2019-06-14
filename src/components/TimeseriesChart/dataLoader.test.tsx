@@ -30,7 +30,7 @@ const xAccessor: AccessorFunc = (d: GetAggregateDatapoint) => +d.timestamp;
 
 // tslint:disable:no-big-function
 describe('dataLoader', () => {
-  xdescribe('MergeInsert', () => {
+  describe('MergeInsert', () => {
     it('[base[0] <= toInsert[0] <= toInsert[1] <= base[1]]', () => {
       const base = toPoints([1, 5, 10, 15], 'base');
       const toInsert = toPoints([6, 7, 8], 'insert');
