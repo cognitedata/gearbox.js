@@ -15,7 +15,7 @@ const zeroChild = ASSET_ZERO_DEPTH_ARRAY.findIndex(asset => asset.depth === 0);
 const mockedClient: API = {
   // @ts-ignore
   assets: {
-    retrieve: jest.fn(),
+    list: jest.fn(),
   },
 };
 
