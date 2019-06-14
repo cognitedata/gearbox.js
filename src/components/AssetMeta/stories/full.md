@@ -106,7 +106,7 @@ Definition:
 
 ```typescript
 import { CollapseProps } from 'antd/lib/collapse';
-import { File as Document } from '@cognite/sdk';
+import { FileMetadata as Document } from '@cognite/sdk/dist/src/types/types';
 
 interface MetaDocProps {
   handleDocumentClick?: OnDocumentClick;

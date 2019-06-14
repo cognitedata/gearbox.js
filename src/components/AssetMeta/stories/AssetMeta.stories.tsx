@@ -1,11 +1,6 @@
 import {
   Datapoint,
   Datapoints,
-  EventDataWithCursor,
-  Events,
-  FileListParams,
-  FileMetadataWithCursor,
-  Files,
   TimeSeries,
   TimeseriesWithCursor,
 } from '@cognite/sdk';
@@ -59,20 +54,18 @@ const fakeClient: API = {
       },
     }),
   },
-};
-
-Files.list = async ({
-  assetId,
-}: FileListParams): Promise<FileMetadataWithCursor> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      if (assetId === 12345) {
-        resolve({ items: [] }); // simulate asset without documents
-      } else {
-        resolve({ items: DOCUMENTS });
-      }
-    }, 1000);
-  });
+  files: {
+    // @ts-ignore
+    list: () => ({
+      autoPagingToArray: () => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(DOCUMENTS);
+          }, 1000);
+        });
+      },
+    }),
+  },
 };
 
 TimeSeries.list = async (): Promise<TimeseriesWithCursor> => {
