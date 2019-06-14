@@ -1,7 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import { AxisDisplayMode } from '@cognite/griff-react';
 import * as sdk from '@cognite/sdk';
-import * as sdk2 from '@cognite/sdk-alpha';
 import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import {
   DatapointsGetAggregateDatapoint,
@@ -9,7 +8,6 @@ import {
   DatapointsGetStringDatapoint,
   DatapointsMultiQuery,
   GetTimeSeriesMetadataDTO,
-  TimeseriesIdEither,
 } from '@cognite/sdk-alpha/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
@@ -114,7 +112,7 @@ export const setupMocks = (n = 100) => {
   };
 };
 
-const fakeClient: API = {
+export const fakeClient: API = {
   // @ts-ignore
   timeseries: {
     retrieve: (): Promise<GetTimeSeriesMetadataDTO[]> => {

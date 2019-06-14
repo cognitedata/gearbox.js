@@ -36,7 +36,6 @@ const fakeClient: API = {
       const idsAsString = ids.map(x => x.id.toString());
       return new Promise(resolve => {
         setTimeout(() => {
-          console.log(timeseriesList);
           const result = timeseriesList.filter((x: GetTimeSeriesMetadataDTO) =>
             idsAsString.includes(x.id.toString())
           );

@@ -1,31 +1,41 @@
-import * as sdk from '@cognite/sdk';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { timeseriesList } from '../../mocks';
+import { ClientSDKProvider } from '../../components/ClientSDKProvider';
+import { timeseriesListV2 } from '../../mocks';
 import { withTimeseries, WithTimeseriesDataProps } from '../withTimeseries';
 
 configure({ adapter: new Adapter() });
 
-sdk.TimeSeries.retrieve = jest.fn();
+const timeseries = timeseriesListV2[0];
 
-const timeseries = timeseriesList[0];
+const mockedClient: API = {
+  // @ts-ignore
+  timeseries: {
+    retrieve: jest.fn(),
+  },
+};
 
 describe('withTimeresries', () => {
   beforeEach(() => {
     // @ts-ignore
-    sdk.TimeSeries.retrieve.mockResolvedValue(timeseries);
+    mockedClient.timeseries.retrieve.mockResolvedValue([timeseries]);
   });
 
   afterEach(() => {
     // @ts-ignore
-    sdk.TimeSeries.retrieve.mockClear();
+    jest.clearAllMocks();
   });
 
   it('Should render spinner', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withTimeseries(TestComponent);
-    const wrapper = mount(<WrappedComponent timeseriesId={123} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={mockedClient}>
+        <WrappedComponent timeseriesId={123} />
+      </ClientSDKProvider>
+    );
 
     expect(wrapper.find('span.ant-spin-dot.ant-spin-dot-spin')).toHaveLength(1);
   });
@@ -34,10 +44,12 @@ describe('withTimeresries', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withTimeseries(TestComponent);
     const wrapper = mount(
-      <WrappedComponent
-        timeseriesId={123}
-        customSpinner={<div className="my-custom-spinner" />}
-      />
+      <ClientSDKProvider client={mockedClient}>
+        <WrappedComponent
+          timeseriesId={123}
+          customSpinner={<div className="my-custom-spinner" />}
+        />
+      </ClientSDKProvider>
     );
     expect(wrapper.find('div.my-custom-spinner')).toHaveLength(1);
   });
@@ -50,7 +62,11 @@ describe('withTimeresries', () => {
       </div>
     );
     const WrappedComponent = withTimeseries(TestComponent);
-    const wrapper = mount(<WrappedComponent timeseriesId={123} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={mockedClient}>
+        <WrappedComponent timeseriesId={123} />
+      </ClientSDKProvider>
+    );
 
     setImmediate(() => {
       wrapper.update();
@@ -65,12 +81,18 @@ describe('withTimeresries', () => {
   it('Should request for timeseries if timeseriesId has been changed', done => {
     const TestComponent = () => <div />;
     const WrappedComponent = withTimeseries(TestComponent);
-    const wrapper = mount(<WrappedComponent timeseriesId={123} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={mockedClient}>
+        <WrappedComponent timeseriesId={123} />
+      </ClientSDKProvider>
+    );
 
-    wrapper.setProps({ timeseriesId: 1234 });
+    wrapper.setProps({
+      children: <WrappedComponent timeseriesId={1234} />,
+    });
 
     setImmediate(() => {
-      expect(sdk.TimeSeries.retrieve).toBeCalledTimes(2);
+      expect(mockedClient.timeseries.retrieve).toBeCalledTimes(2);
       done();
     });
   });
@@ -79,7 +101,11 @@ describe('withTimeresries', () => {
     const TestComponent = () => <div />;
     const WrappedComponent = withTimeseries(TestComponent);
     WrappedComponent.prototype.setState = jest.fn();
-    const wrapper = mount(<WrappedComponent timeseriesId={123} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={mockedClient}>
+        <WrappedComponent timeseriesId={123} />
+      </ClientSDKProvider>
+    );
 
     wrapper.unmount();
 

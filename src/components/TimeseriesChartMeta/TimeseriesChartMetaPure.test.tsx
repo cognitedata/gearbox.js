@@ -1,26 +1,12 @@
-import * as sdk from '@cognite/sdk';
 import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { datapoints, timeseriesList } from '../../mocks';
+import { timeseriesListV2 } from '../../mocks';
 import { TimeseriesChartMetaPure } from './TimeseriesChartMetaPure';
 
 configure({ adapter: new Adapter() });
 
-sdk.Datapoints.retrieveLatest = jest.fn();
-
-const timeseries = timeseriesList[0];
-const datapopint = datapoints[0];
-
-beforeEach(() => {
-  // @ts-ignore
-  sdk.Datapoints.retrieveLatest.mockResolvedValue(datapopint);
-});
-
-afterEach(() => {
-  // @ts-ignore
-  sdk.Datapoints.retrieveLatest.mockClear();
-});
+const timeseries = timeseriesListV2[0];
 
 describe('TimeseriesChartMeta', () => {
   const activeLabelSelector = 'label.ant-radio-button-wrapper-checked';

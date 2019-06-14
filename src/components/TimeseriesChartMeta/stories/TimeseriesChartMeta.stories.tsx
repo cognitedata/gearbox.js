@@ -1,8 +1,10 @@
 /* eslint-disable react/no-multi-comp */
-import * as sdk from '@cognite/sdk';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk-alpha/dist/src/types/types';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { setupMocks as setupTimeseriesChartMocks } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
+import { fakeClient as timeseriesChartFakeClient } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { TimeseriesChartMeta } from '../TimeseriesChartMeta';
 
 import customBasePeriod from './customBasePeriod.md';
@@ -12,40 +14,49 @@ import full from './full.md';
 import hideElements from './hideElements.md';
 import predefinedPeriod from './predefinedPeriod.md';
 
-const setupMocks = () => {
-  setupTimeseriesChartMocks();
+const fakeClient: API = {
+  ...timeseriesChartFakeClient,
   // @ts-ignore
-  sdk.TimeSeries.retrieve = () => {
-    return new Promise(resolve => {
-      setTimeout(
-        () =>
-          resolve({
-            id: 8681821313339919,
-            name: 'IA_21PT1019.AlarmByte',
-            isString: false,
-            unit: 'bar',
-            metadata: {
-              tag: 'IA_21PT1019.AlarmByte',
-              scan: '1',
-              span: '100',
-              step: '1',
-              zero: '0',
-            },
-            assetId: 4965555138606429,
-            isStep: false,
-            description: '21PT1019.AlarmByte',
-          }),
-        1000
-      );
-    });
-  };
+  timeseries: {
+    retrieve: (): Promise<GetTimeSeriesMetadataDTO[]> => {
+      return new Promise(resolve => {
+        setTimeout(
+          () =>
+            resolve([
+              {
+                id: 8681821313339919,
+                name: 'IA_21PT1019.AlarmByte',
+                isString: false,
+                unit: 'bar',
+                metadata: {
+                  tag: 'IA_21PT1019.AlarmByte',
+                  scan: '1',
+                  span: '100',
+                  step: '1',
+                  zero: '0',
+                },
+                assetId: 4965555138606429,
+                isStep: false,
+                description: '21PT1019.AlarmByte',
+                createdTime: new Date(0),
+                lastUpdatedTime: new Date(0),
+              },
+            ]),
+          1000
+        );
+      });
+    },
+  },
 };
 
 storiesOf('TimeseriesChartMeta', module).add(
   'Full description',
   () => {
-    setupMocks();
-    return <TimeseriesChartMeta timeseriesId={123} />;
+    return (
+      <ClientSDKProvider client={fakeClient}>
+        <TimeseriesChartMeta timeseriesId={123} />
+      </ClientSDKProvider>
+    );
   },
   {
     readme: {
@@ -59,9 +70,13 @@ storiesOf('TimeseriesChartMeta/Examples', module)
   .add(
     'Predefined Period',
     () => {
-      setupMocks();
       return (
-        <TimeseriesChartMeta timeseriesId={123} defaultTimePeriod="lastMonth" />
+        <ClientSDKProvider client={fakeClient}>
+          <TimeseriesChartMeta
+            timeseriesId={123}
+            defaultTimePeriod="lastMonth"
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -73,16 +88,17 @@ storiesOf('TimeseriesChartMeta/Examples', module)
   .add(
     'Hide elements',
     () => {
-      setupMocks();
       return (
-        <TimeseriesChartMeta
-          timeseriesId={123}
-          showChart={true}
-          showDescription={false}
-          showDatapoint={false}
-          showMetadata={false}
-          showPeriods={false}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <TimeseriesChartMeta
+            timeseriesId={123}
+            showChart={true}
+            showDescription={false}
+            showDatapoint={false}
+            showMetadata={false}
+            showPeriods={false}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -94,8 +110,11 @@ storiesOf('TimeseriesChartMeta/Examples', module)
   .add(
     'Disable live updates',
     () => {
-      setupMocks();
-      return <TimeseriesChartMeta timeseriesId={123} liveUpdate={false} />;
+      return (
+        <ClientSDKProvider client={fakeClient}>
+          <TimeseriesChartMeta timeseriesId={123} liveUpdate={false} />
+        </ClientSDKProvider>
+      );
     },
     {
       readme: {
@@ -106,13 +125,14 @@ storiesOf('TimeseriesChartMeta/Examples', module)
   .add(
     'Custom update interval',
     () => {
-      setupMocks();
       return (
-        <TimeseriesChartMeta
-          timeseriesId={123}
-          liveUpdate={true}
-          updateIntervalMillis={1000}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <TimeseriesChartMeta
+            timeseriesId={123}
+            liveUpdate={true}
+            updateIntervalMillis={1000}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -124,15 +144,16 @@ storiesOf('TimeseriesChartMeta/Examples', module)
   .add(
     'Custom base period',
     () => {
-      setupMocks();
       return (
-        <TimeseriesChartMeta
-          timeseriesId={123}
-          defaultBasePeriod={{
-            startTime: Date.now() - 10 * 24 * 60 * 60 * 1000, // 10 days ago
-            endTime: Date.now(),
-          }}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <TimeseriesChartMeta
+            timeseriesId={123}
+            defaultBasePeriod={{
+              startTime: Date.now() - 10 * 24 * 60 * 60 * 1000, // 10 days ago
+              endTime: Date.now(),
+            }}
+          />
+        </ClientSDKProvider>
       );
     },
     {
