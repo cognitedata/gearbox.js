@@ -90,28 +90,6 @@ const randomData2 = (
   return { datapoints: data, id: 1337 };
 };
 
-export const setupMocks = (n = 100) => {
-  sdk.TimeSeries.retrieve = async (id: number, _): Promise<sdk.Timeseries> => {
-    action('sdk.TimeSeries.retrieve')(id);
-    return { id, name: 'name' };
-  };
-
-  sdk.Datapoints.retrieve = async (
-    id: number,
-    params?: sdk.DatapointsRetrieveParams | undefined
-  ): Promise<sdk.DataDatapoints> => {
-    action('sdk.Datapoints.retrieve')(id, params);
-    return {
-      name: 'name',
-      datapoints: randomData(
-        params ? params.start || 0 : 0,
-        params ? params.end || 100 : 100,
-        n
-      ),
-    };
-  };
-};
-
 export const fakeClient: API = {
   // @ts-ignore
   timeseries: {
