@@ -1,16 +1,19 @@
 import { FilesMetadata } from '@cognite/sdk-alpha/dist/src/types/types';
 
-function generateDocumentBase(id: number) {
+function generateDocumentBase(id: number): FilesMetadata {
   return {
     id,
-    fileName: `file name ${id}`,
+    name: `file name ${id}`,
+    uploaded: true,
+    createdTime: new Date(0),
+    lastUpdatedTime: new Date(0),
   };
 }
 
 export function generateDocumentWithMetadata(
   id: number,
   metadata: { [key: string]: string }
-) {
+): FilesMetadata {
   return {
     ...generateDocumentBase(id),
     metadata,
@@ -21,7 +24,7 @@ export function generateDocumentWithDocType(
   id: number,
   title: null | string,
   type: null | string
-) {
+): FilesMetadata {
   const metadata: { [key: string]: string } = {};
   if (title) {
     metadata.DOC_TITLE = title;

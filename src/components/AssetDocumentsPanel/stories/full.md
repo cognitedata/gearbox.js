@@ -8,6 +8,8 @@ This component loads list of documents related to the asset and presents it in t
 Each item in the list can be expanded showing list of files.
 The component is used as one of the panes in `AssetMeta` component.
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx
@@ -34,7 +36,7 @@ function ExampleComponent(props) {
 
 | Property              | Description                                                            | Type                                          | Default     |
 | --------------------- | ---------------------------------------------------------------------- | --------------------------------------------- | ----------- |
-| `queryParams`         | Additional parameters for SDK call. Please notice that `assetId` provided in props will override the one in `queryParams`| `FileListParams` | `{ limit: 1000 }` |
+| `queryParams`         | Additional parameters for SDK call. Please notice that `assetId` provided in props will override property `assetIds` in `queryParams.filter` | `FileRequestFilter` | `{ limit: 1000 }` |
 | `handleDocumentClick` | Callback function triggered when user clicks on a file (document)      | `OnDocumentClick`                             |             |
 | `collapseProps`       | Object with props to be passed to `atnd` `Collapse` component          | `CollapseProps`                               |             |
 | `categoryPriorityList`| List of categories codes to be shown on the top of the list. Categories "P&ID" and "Logic Diagrams" are prioritized by default.| `string[]`                                    | `['XB', 'XL']`|
@@ -49,12 +51,12 @@ function ExampleComponent(props) {
 
 ### Types
 
-#### FileListParams
+#### FileRequestFilter
 
 This type can be imported from `@cognite/sdk`:
 
 ```typescript
-import { FileListParams } from `@cognite/sdk`;
+import { FileRequestFilter } from `@cognite/sdk/dist/src/types/types`;
 ```
 
 #### OnDocumentClick
@@ -81,12 +83,12 @@ import { CollapseProps } from 'antd/lib/collapse';
 Definition:
 
 ```typescript
-import { File } from `@cognite/sdk`;
+import { FileMetadata } from `@cognite/sdk/dist/src/types/types`;
 
 type DocumentRenderer = (
-  document: File,
+  document: FileMetadata,
   i: number,
-  documents: File[]
+  documents: FileMetadata[]
 
 ) => React.ReactNode;
 

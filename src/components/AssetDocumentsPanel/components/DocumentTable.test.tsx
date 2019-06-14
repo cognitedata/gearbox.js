@@ -7,6 +7,7 @@ import {
   DOCUMENT_WITHOUT_METADATA,
   DOCUMENT_WITHOUT_TYPE,
   DOCUMENTS,
+  // fakeFiles,
   generateDocumentWithDocType,
 } from '../../../mocks';
 import { DocumentTable } from './DocumentTable';
@@ -65,9 +66,10 @@ describe('DocumentTable', () => {
     const wrapper = mount(
       <DocumentTable
         assetFiles={[
+          // @ts-ignore
           {
             id: 1,
-            fileName: 'DN02-SM-P-XB-2103-01-11L.svg',
+            name: 'DN02-SM-P-XB-2103-01-11L.svg',
           },
         ]}
       />
@@ -118,9 +120,10 @@ describe('DocumentTable', () => {
     const wrapper = mount(
       <DocumentTable
         assetFiles={[
+          // @ts-ignore
           {
             id: 1,
-            fileName: 'file name 1',
+            name: 'file name 1',
             metadata: {
               DOC_TITLE: 'document title 1',
               DOC_TYPE: 'Test',
