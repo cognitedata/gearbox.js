@@ -1,7 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import { message } from 'antd';
-import React from 'react';
+import React, { SyntheticEvent, useState } from 'react';
 import styled from 'styled-components';
 import { Callback, ErrorResponse } from '../../../interfaces';
 import { ASNotifyTypes, AssetScanner } from '../AssetScanner';
@@ -10,6 +10,43 @@ import customButtonDoc from './custom-button.md';
 import full from './full.md';
 import customNotificationsDoc from './notifications.md';
 import ocrRequestDoc from './ocr-request.md';
+
+const FileInputComponent = (props: any) => {
+  const [image, setImage] = useState('');
+
+  const onChange = async (e: SyntheticEvent) => {
+    // @ts-ignore
+    const file = e.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    const fr = new FileReader();
+    fr.readAsDataURL(file);
+
+    const uploadedImage = await new Promise(resolve => {
+      fr.onloadend = res => {
+        if (res) {
+          // @ts-ignore
+          resolve(res.currentTarget.result);
+        }
+      };
+    });
+
+    // @ts-ignore
+    setImage(uploadedImage);
+  };
+
+  return (
+    <>
+      {props.render(image)}
+      <p style={{ margin: '10px' }}>
+        <input type="file" accept={'image/png'} onChange={onChange} />
+      </p>
+    </>
+  );
+};
 
 const onOcrError = (error: ErrorResponse) => {
   action('onOcrError')(error);
@@ -136,4 +173,16 @@ storiesOf('AssetScanner/Examples', module)
         content: customNotificationsDoc,
       },
     }
-  );
+  )
+  .add('Input image', () => (
+    <FileInputComponent
+      render={(image: string) => (
+        <AssetScanner
+          onError={onError}
+          ocrRequest={ocrRequest}
+          onImageRecognizeFinish={onImageRecognizeFinish}
+          image={image}
+        />
+      )}
+    />
+  ));

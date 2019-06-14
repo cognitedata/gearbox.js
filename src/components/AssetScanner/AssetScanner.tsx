@@ -53,6 +53,7 @@ export interface AssetScannerStyles {
 
 export interface AssetScannerProps {
   ocrRequest: (ocrParams: OcrRequest) => Promise<string[]>;
+  image?: string;
   ocrKey?: string;
   button?: ButtonRenderProp;
   extractOcrStrings?: (ocrResult: any) => string[];
@@ -105,6 +106,17 @@ export class AssetScanner extends React.Component<
     this.resetSearch();
   }
 
+  async componentDidUpdate(prevProps: Readonly<AssetScannerProps>) {
+    const { image } = this.props;
+    const { image: prevImage } = prevProps;
+    const { scannedImageSrc } = this.state;
+
+    if (image && image !== prevImage && image !== scannedImageSrc) {
+      const strings = await this.doRecognizeImageProcess(image);
+      await this.doFetchFoundAssets(strings);
+    }
+  }
+
   setRef(video: HTMLVideoElement | null) {
     this.video = video;
   }
@@ -126,22 +138,12 @@ export class AssetScanner extends React.Component<
     });
   }
 
-  async capture() {
-    const {
-      onImageRecognizeFinish,
-      onImageRecognizeStart,
-      onImageRecognizeEmpty,
-      onAssetFetchResult,
-    } = this.props;
-    const { recognizeSuccess, recognizeFails } = ASNotifyTypes;
+  async doRecognizeImageProcess(imageString: string): Promise<string[] | null> {
+    const { onImageRecognizeFinish, onImageRecognizeStart } = this.props;
+    const { isLoading } = this.state;
 
-    this.startLoading();
-
-    const imageString = await this.getImageFromCanvas();
-
-    if (!imageString) {
-      this.endLoading();
-      return;
+    if (!isLoading) {
+      this.startLoading();
     }
 
     if (onImageRecognizeStart) {
@@ -157,6 +159,13 @@ export class AssetScanner extends React.Component<
     if (onImageRecognizeFinish) {
       onImageRecognizeFinish(strings);
     }
+
+    return strings;
+  }
+
+  async doFetchFoundAssets(strings: string[] | null) {
+    const { onImageRecognizeEmpty, onAssetFetchResult } = this.props;
+    const { recognizeSuccess, recognizeFails } = ASNotifyTypes;
 
     if (strings !== null && strings.length >= 1) {
       const assets = await this.getAssetsHandler(strings);
@@ -177,6 +186,21 @@ export class AssetScanner extends React.Component<
         onImageRecognizeEmpty();
       }
     }
+  }
+
+  async capture() {
+    this.startLoading();
+
+    const imageString = await this.getImageFromCanvas();
+
+    if (!imageString) {
+      this.endLoading();
+      return;
+    }
+
+    const strings = await this.doRecognizeImageProcess(imageString);
+
+    await this.doFetchFoundAssets(strings);
   }
 
   render() {

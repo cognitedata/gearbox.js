@@ -1,8 +1,9 @@
-import * as sdk from '@cognite/sdk';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { EVENTS } from '../../../mocks';
+import { fakeEvents } from '../../../mocks';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetEventsPanel } from '../AssetEventsPanel';
 import customColumnNames from './customColumnNames.md';
 import customSpinner from './customSpinner.md';
@@ -10,27 +11,41 @@ import customStyles from './customStyles.md';
 import fullDescription from './full.md';
 import loadCallback from './loadCallback.md';
 
-sdk.Events.list = () => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({ items: EVENTS });
-    }, 1000);
-  });
+const fakeClient: API = {
+  events: {
+    // @ts-ignore
+    list: () => ({
+      autoPagingToArray: () => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(fakeEvents);
+          }, 1000);
+        });
+      },
+    }),
+  },
 };
 
-storiesOf('AssetEventsPanel', module).add(
-  'Full Description',
-  () => {
-    return <AssetEventsPanel assetId={4650652196144007} />;
-  },
-  {
-    readme: {
-      content: fullDescription,
-    },
-  }
+const clientSDKDecorator = (storyFn: any) => (
+  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
 );
 
+storiesOf('AssetEventsPanel', module)
+  .addDecorator(clientSDKDecorator)
+  .add(
+    'Full Description',
+    () => {
+      return <AssetEventsPanel assetId={4650652196144007} />;
+    },
+    {
+      readme: {
+        content: fullDescription,
+      },
+    }
+  );
+
 storiesOf('AssetEventsPanel/Examples', module)
+  .addDecorator(clientSDKDecorator)
   .add(
     'With load callback',
     () => {

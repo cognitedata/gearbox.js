@@ -1,6 +1,4 @@
 import {
-  Asset,
-  Assets,
   Datapoint,
   Datapoints,
   EventDataWithCursor,
@@ -11,17 +9,19 @@ import {
   TimeSeries,
   TimeseriesWithCursor,
 } from '@cognite/sdk';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { Document } from '../../../interfaces';
 import {
-  ASSET_DATA,
   ASSET_META_STYLES,
   DOCUMENTS,
-  EVENTS,
+  fakeAsset,
+  fakeEvents,
   timeseriesList,
 } from '../../../mocks';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { setupMocks as setupTimeseriesChartMocks } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { AssetMeta } from '../AssetMeta';
 import alternatePane from './alternatePane.md';
@@ -37,20 +37,28 @@ import hideTab from './hideTab.md';
 import selectedDocument from './selectedDocument.md';
 import selectedPane from './selectedPane.md';
 
-Assets.retrieve = (): Promise<Asset> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(ASSET_DATA);
-    }, 1000); // simulate load delay
-  });
-};
-
-Events.list = async (): Promise<EventDataWithCursor> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({ items: EVENTS });
-    }, 1000);
-  });
+const fakeClient: API = {
+  // @ts-ignore
+  assets: {
+    retrieve: () =>
+      new Promise(resolve => {
+        setTimeout(() => {
+          resolve([fakeAsset]);
+        }, 1000);
+      }),
+  },
+  events: {
+    // @ts-ignore
+    list: () => ({
+      autoPagingToArray: () => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(fakeEvents);
+          }, 1000);
+        });
+      },
+    }),
+  },
 };
 
 Files.list = async ({
@@ -82,6 +90,10 @@ Datapoints.retrieveLatest = async (name: string): Promise<Datapoint> => {
   };
 };
 
+const clientSDKDecorator = (storyFn: any) => (
+  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
+);
+
 const onPaneChange = (key: string) => action('onPaneChange')(key);
 const handleDocumentClick = (
   document: Document,
@@ -91,20 +103,23 @@ const handleDocumentClick = (
   action('handleDocumentClick')(document, category, description);
 };
 
-storiesOf('AssetMeta', module).add(
-  'Full Description',
-  () => {
-    setupTimeseriesChartMocks();
-    return <AssetMeta assetId={4650652196144007} />;
-  },
-  {
-    readme: {
-      content: fullDescription,
+storiesOf('AssetMeta', module)
+  .addDecorator(clientSDKDecorator)
+  .add(
+    'Full Description',
+    () => {
+      setupTimeseriesChartMocks();
+      return <AssetMeta assetId={4650652196144007} />;
     },
-  }
-);
+    {
+      readme: {
+        content: fullDescription,
+      },
+    }
+  );
 
 storiesOf('AssetMeta/Examples', module)
+  .addDecorator(clientSDKDecorator)
   .add(
     'Basic',
     () => {

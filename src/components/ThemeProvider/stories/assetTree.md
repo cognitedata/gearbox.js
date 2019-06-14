@@ -14,9 +14,10 @@ function ExampleComponent(props) {
   return (
     <ThemeProvider
       theme={{
-          textFamily: 'Courier New',
-          textSize: 'large',
-          listColor: 'red',
+          fontFamily: 'Courier New',
+          fontSize: 'large',
+          textColor: '#a88400',
+          highlightColor: '#00b893',
         }}
     >
       <AssetTree/>

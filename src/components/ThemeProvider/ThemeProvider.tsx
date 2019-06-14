@@ -5,9 +5,9 @@ import { defaultTheme } from '../../theme/defaultTheme';
 type GearboxThemeKey = keyof typeof defaultTheme;
 
 export interface GearboxThemeOptional {
-  textFamily?: string;
-  textSize?: string;
-  listColor?: string;
+  fontFamily?: string;
+  fontSize?: string;
+  listHighlight?: string;
 }
 
 export type GearboxTheme = { [key in GearboxThemeKey]?: string } &

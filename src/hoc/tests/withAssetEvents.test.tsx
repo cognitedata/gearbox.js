@@ -1,30 +1,42 @@
-import * as sdk from '@cognite/sdk';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
+import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { SDK_LIST_LIMIT } from '../../constants/sdk';
-import { EVENTS } from '../../mocks';
+import { fakeEvents } from '../../mocks';
 import { withAssetEvents, WithAssetEventsDataProps } from '../withAssetEvents';
 
 configure({ adapter: new Adapter() });
 
-sdk.Events.list = jest.fn();
+const fakeClient: API = {
+  // @ts-ignore
+  events: {
+    list: jest.fn(),
+  },
+};
 
 describe('withAssetEvents', () => {
   beforeEach(() => {
     // @ts-ignore
-    sdk.Events.list.mockResolvedValue({ items: EVENTS });
+    fakeClient.events.list.mockReturnValue({
+      autoPagingToArray: () => Promise.resolve(fakeEvents),
+    });
   });
 
   afterEach(() => {
     // @ts-ignore
-    sdk.Events.list.mockClear();
+    fakeClient.events.list.mockClear();
   });
 
   it('Should render spinner', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withAssetEvents(TestComponent);
-    const wrapper = mount(<WrappedComponent assetId={123} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={fakeClient}>
+        <WrappedComponent assetId={123} />
+      </ClientSDKProvider>
+    );
 
     expect(wrapper.find('span.ant-spin-dot.ant-spin-dot-spin')).toHaveLength(1);
     wrapper.unmount();
@@ -34,7 +46,11 @@ describe('withAssetEvents', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withAssetEvents(TestComponent);
     const loadHandler = jest.fn();
-    mount(<WrappedComponent assetId={123} onAssetEventsLoaded={loadHandler} />);
+    mount(
+      <ClientSDKProvider client={fakeClient}>
+        <WrappedComponent assetId={123} onAssetEventsLoaded={loadHandler} />
+      </ClientSDKProvider>
+    );
 
     setImmediate(() => {
       expect(loadHandler).toBeCalled();
@@ -46,15 +62,17 @@ describe('withAssetEvents', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withAssetEvents(TestComponent);
     const wrapper = mount(
-      <WrappedComponent
-        assetId={123}
-        customSpinner={<div className="my-custom-spinner" />}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <WrappedComponent
+          assetId={123}
+          customSpinner={<div className="my-custom-spinner" />}
+        />
+      </ClientSDKProvider>
     );
     expect(wrapper.find('div.my-custom-spinner')).toHaveLength(1);
   });
 
-  it('Wrapped component should receive asset events  after loading', done => {
+  it('Wrapped component should receive asset events after loading', done => {
     const TestComponent: React.SFC<WithAssetEventsDataProps> = props => (
       <div>
         <p className="events-number">{props.assetEvents.length}</p>
@@ -64,15 +82,19 @@ describe('withAssetEvents', () => {
       </div>
     );
     const WrappedComponent = withAssetEvents(TestComponent);
-    const wrapper = mount(<WrappedComponent assetId={123} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={fakeClient}>
+        <WrappedComponent assetId={123} />
+      </ClientSDKProvider>
+    );
 
     setImmediate(() => {
       wrapper.update();
       expect(wrapper.find('p.events-number').text()).toEqual(
-        EVENTS.length.toString()
+        fakeEvents.length.toString()
       );
       expect(wrapper.find('p.first-event-description').text()).toEqual(
-        EVENTS[0].description
+        fakeEvents[0].description
       );
       done();
     });
@@ -81,12 +103,16 @@ describe('withAssetEvents', () => {
   it('Should request for an asset if assetId has been changed', done => {
     const TestComponent = () => <div />;
     const WrappedComponent = withAssetEvents(TestComponent);
-    const wrapper = mount(<WrappedComponent assetId={123} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={fakeClient}>
+        <WrappedComponent assetId={123} />
+      </ClientSDKProvider>
+    );
 
-    wrapper.setProps({ assetId: 1234 });
+    wrapper.setProps({ children: <WrappedComponent assetId={1234} /> });
 
     setImmediate(() => {
-      expect(sdk.Events.list).toBeCalledTimes(2);
+      expect(fakeClient.events.list).toBeCalledTimes(2);
       done();
     });
   });
@@ -95,7 +121,11 @@ describe('withAssetEvents', () => {
     const TestComponent = () => <div />;
     const WrappedComponent = withAssetEvents(TestComponent);
     WrappedComponent.prototype.setState = jest.fn();
-    const wrapper = mount(<WrappedComponent assetId={123} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={fakeClient}>
+        <WrappedComponent assetId={123} />
+      </ClientSDKProvider>
+    );
 
     wrapper.unmount();
 
@@ -108,26 +138,36 @@ describe('withAssetEvents', () => {
   it('Should merge query params with assetId', () => {
     const WrappedComponent = withAssetEvents(() => <div />);
     mount(
-      <WrappedComponent
-        assetId={123}
-        queryParams={{ limit: 78, sort: 'sort option' }}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <WrappedComponent
+          assetId={123}
+          queryParams={{ limit: 78, filter: { startTime: { min: 1, max: 2 } } }}
+        />
+      </ClientSDKProvider>
     );
 
-    expect(sdk.Events.list).toBeCalledWith({
-      assetId: 123,
+    expect(fakeClient.events.list).toBeCalledWith({
       limit: 78,
-      sort: 'sort option',
+      filter: {
+        assetIds: [123],
+        startTime: { min: 1, max: 2 },
+      },
     });
   });
 
-  it('Should call sdk.Events.list with default limit', () => {
+  it('Should call sdkClient.events.list with default limit', () => {
     const WrappedComponent = withAssetEvents(() => <div />);
-    mount(<WrappedComponent assetId={123} />);
+    mount(
+      <ClientSDKProvider client={fakeClient}>
+        <WrappedComponent assetId={123} />
+      </ClientSDKProvider>
+    );
 
-    expect(sdk.Events.list).toBeCalledWith({
-      assetId: 123,
+    expect(fakeClient.events.list).toBeCalledWith({
       limit: SDK_LIST_LIMIT,
+      filter: {
+        assetIds: [123],
+      },
     });
   });
 });
