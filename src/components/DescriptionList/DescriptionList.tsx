@@ -77,7 +77,7 @@ export const DescriptionList = (props: DescriptionListProps) => {
           aria-describedby={description ? description.descriptionId : ''}
         >
           {arrayValues.map((valSet: ValueListType) => (
-            <React.Fragment key={valSet.key || valSet.name}>
+            <React.Fragment key={valSet.key}>
               <dt>{valSet.name}</dt>
               <dl>{valSet.value}</dl>
             </React.Fragment>
