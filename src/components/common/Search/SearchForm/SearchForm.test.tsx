@@ -1,3 +1,4 @@
+import { Input } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -57,5 +58,81 @@ describe('Search', () => {
     expect(wrapper.find('input[name="description"]').prop('value')).toEqual(
       SearchValue.description
     );
+  });
+
+  it('Should call onPressEnter on enter', () => {
+    const props = {
+      value: SearchValue,
+      onPressEnter: propsCallbacks.onPressEnter,
+    };
+    const wrapper = mount(<SearchForm {...props} />);
+
+    // @ts-ignore
+    wrapper
+      .find(Input)
+      .first()
+      .props()
+      // @ts-ignore
+      // tslint:disable-next-line: no-empty
+      .onPressEnter({ preventDefault: () => {} });
+
+    expect(propsCallbacks.onPressEnter).toHaveBeenCalled();
+  });
+
+  it('Should call onChange on form change', () => {
+    const { onChange } = propsCallbacks;
+    const props = { value: null, onChange };
+    const wrapper = mount(<SearchForm {...props} />);
+    wrapper
+      .find(Input)
+      .find('.name')
+      .first()
+      .simulate('change', { target: { value: 'name' } });
+
+    expect(onChange).toHaveBeenCalled();
+  });
+
+  it('Should return fields on submit', () => {
+    const props = {
+      value: null,
+      onSubmit: propsCallbacks.onSubmit,
+    };
+    const { search } = defaultStrings;
+    const wrapper = mount(<SearchForm {...props} />);
+
+    wrapper
+      .find(Input)
+      .find('.name')
+      .first()
+      .simulate('change', { target: { value: 'name' } });
+    wrapper
+      .find(Input)
+      .find('.description')
+      .first()
+      .simulate('change', { target: { value: 'description' } });
+
+    wrapper
+      .find(Input)
+      .find('.meta-key')
+      .first()
+      .simulate('change', { target: { value: 'metaId' } });
+
+    wrapper
+      .find(Input)
+      .find('.meta-value')
+      .first()
+      .simulate('change', { target: { value: 'metaValue' } });
+
+    const submitBtn = wrapper.findWhere(
+      n => n.text() === search && n.type() === 'button'
+    );
+
+    submitBtn.simulate('submit');
+    expect(propsCallbacks.onSubmit).toHaveBeenCalled();
+    expect(propsCallbacks.onSubmit).toHaveBeenCalledWith({
+      name: 'name',
+      description: 'description',
+      metadata: [{ id: expect.any(String), key: 'metaId', value: 'metaValue' }],
+    });
   });
 });

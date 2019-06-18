@@ -113,7 +113,9 @@ const SearchForm = ({
     }
   };
 
-  const onChangeInput = (key: string, index: number) => (e: SyntheticEvent) => {
+  const onChangeMetadataInput = (key: string, index: number) => (
+    e: SyntheticEvent
+  ) => {
     const md = metadata.map((field: MetadataField, i: number) => {
       const target = e.target as HTMLInputElement;
 
@@ -145,7 +147,7 @@ const SearchForm = ({
           placeholder={metadataKey as string}
           value={data.key}
           onPressEnter={pressEnter}
-          onChange={onChangeInput('key', index)}
+          onChange={onChangeMetadataInput('key', index)}
         />
 
         <Input
@@ -164,7 +166,7 @@ const SearchForm = ({
           value={data.value}
           placeholder={metadataValue as string}
           onPressEnter={pressEnter}
-          onChange={onChangeInput('value', index)}
+          onChange={onChangeMetadataInput('value', index)}
         />
         {metadata.length > 1 ? (
           <Icon
@@ -244,7 +246,6 @@ const SearchFormHOC = Form.create({
   name: 'asset-search',
   onValuesChange(props: SearchProps, _, allValues: AdvancedSearch = {}) {
     const { onChange } = props;
-
     if (onChange) {
       onChange(allValues);
     }
