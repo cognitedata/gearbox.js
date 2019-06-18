@@ -8,13 +8,12 @@
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { SensorOverlay } from '@cognite/gearbox';
-import { Datapoint } from '@cognite/sdk';
+import { SensorOverlay, SensorDatapoint } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
   const timeseriesIds = [8681821313339919];
   const handleClick = (timeserieId: number) => {};
-  const handleLinkClick = (timeserieId: number, datapoint: Datapoint) => {};
+  const handleLinkClick = (timeserieId: number, datapoint: SensorDatapoint) => {};
 
   return (
     <SensorOverlay
