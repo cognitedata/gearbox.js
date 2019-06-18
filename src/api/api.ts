@@ -1,9 +1,4 @@
-import {
-  Asset,
-  Assets,
-  Revision,
-  ThreeD,
-} from '@cognite/sdk';
+import { Asset, Assets, Revision, ThreeD } from '@cognite/sdk';
 import { ApiAssetList } from '../interfaces';
 
 export async function getAssetList({

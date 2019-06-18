@@ -1,6 +1,4 @@
-import { DataDatapoints, Datapoint } from '@cognite/sdk';
-
-export const datapoints: Datapoint[] = [
+export const datapoints = [
   {
     timestamp: 1552726800000,
     average: 36.26105251209135,
@@ -920,7 +918,7 @@ export const datapoints: Datapoint[] = [
   },
 ];
 
-export const datapointsList: DataDatapoints = {
+export const datapointsList = {
   name: 'abc',
   datapoints,
 };
