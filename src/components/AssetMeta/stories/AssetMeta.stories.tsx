@@ -32,8 +32,13 @@ const fakeClient: API = {
   timeseries: {
     ...timeseriesChartFakeClient.timeseries,
     list: (): CogniteAsyncIterator<GetTimeSeriesMetadataDTO[]> => {
-      // @ts-ignore
-      return { autoPagingToArray: async () => [timeseriesListV2] };
+      return {
+        // @ts-ignore
+        autoPagingToArray: async () => {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          return timeseriesListV2;
+        },
+      };
     },
   },
   // @ts-ignore

@@ -92,7 +92,7 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
       }
       try {
         const { assetId, queryParams } = this.props;
-        const res = await connectPromiseToUnmountState(
+        const assetTimeseries = ((await connectPromiseToUnmountState(
           this,
           this.context.timeseries
             .list({
@@ -101,18 +101,14 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
               assetIds: [assetId],
             })
             .autoPagingToArray()
-            .then(timeseriesArray => {
-              const result: GetTimeSeriesMetadataDTO[] = [];
-              return result.concat.apply([], timeseriesArray);
-            })
-        );
+        )) as any) as GetTimeSeriesMetadataDTO[];
         this.setState({
           isLoading: false,
-          assetTimeseries: res,
+          assetTimeseries,
         });
 
         if (this.props.onAssetTimeseriesLoaded) {
-          this.props.onAssetTimeseriesLoaded(res);
+          this.props.onAssetTimeseriesLoaded(assetTimeseries);
         }
       } catch (error) {
         if (error instanceof CanceledPromiseException !== true) {

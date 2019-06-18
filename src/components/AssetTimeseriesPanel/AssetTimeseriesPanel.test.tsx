@@ -24,7 +24,7 @@ describe('AssetTimeseriesPanel', () => {
   beforeEach(() => {
     // @ts-ignore
     mockedClient.timeseries.list.mockReturnValue({
-      autoPagingToArray: async () => [timeseriesListV2],
+      autoPagingToArray: async () => timeseriesListV2,
     });
   });
 
