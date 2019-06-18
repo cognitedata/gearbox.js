@@ -318,10 +318,9 @@ export class DraggableBox
     try {
       const datapoints: DatapointsGetDatapoint[] = await connectPromiseToUnmountState(
         this,
-        this.context!.datapoints.retrieveLatest({
-          // @ts-ignore
-          items: [{ id: this.props.id, before: 'now' }],
-        }) // TODO: remove `{items: }` wrapper after fixing SDK endpoint
+        this.context!.datapoints.retrieveLatest([
+          { id: this.props.id, before: 'now' },
+        ])
       );
       if (!datapoints || datapoints.length !== 1) {
         this.setState({

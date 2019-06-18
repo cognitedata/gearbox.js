@@ -5,6 +5,8 @@ import React from 'react';
 
 import { EVENTS } from '../../../mocks';
 import { AssetTree } from '../../AssetTree';
+import { fakeClient } from '../../AssetTree/stories/AssetTree.stories';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { EventPreview } from '../../EventPreview';
 import { TenantSelector } from '../../TenantSelector';
 import { ThemeProvider } from '../ThemeProvider';
@@ -13,6 +15,10 @@ import assetTree from './assetTree.md';
 import eventPreview from './eventPreview.md';
 import fullDescription from './full.md';
 import tenantSelector from './tenantSelector.md';
+
+const clientSDKDecorator = (storyFn: any) => (
+  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
+);
 
 storiesOf('ThemeProvider', module).add(
   'Full Description',
@@ -41,6 +47,7 @@ storiesOf('ThemeProvider', module).add(
 );
 
 storiesOf('ThemeProvider/Examples', module)
+  .addDecorator(clientSDKDecorator)
   .add(
     'Tenant Selector',
     () => (
