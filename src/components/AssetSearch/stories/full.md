@@ -26,21 +26,19 @@ function ExampleComponent(props) {
 ```
 
 #### Available props:
-##### Required:
-
-| Property              | Description                                                        | Type                  | Default |
-| --------------------- | ------------------------------------------------------------------ | --------------------- | ------- |
-| `onLiveSearchSelect`  | Trigger after selecting one of items from live search results list | `(asset: sdk.Asset) => void;`            |         |
 
 ##### Optionals:
 
-| Property              | Description                                 | Type                        | Default |
-| --------------------- | ------------------------------------------- | --------------------------- | ------- |
-| `onError`             | Triggers when search error occurs           | `(error: any) => void`      |         |
-| `strings`             | Object of strings to be placed in component | `{ [name: string]: string }`|         |
-| `rootAssetSelect`     | Enable root asset selection                 | `boolean`                   | `false` |
-| `advancedSearch`      | Enable root advanced search                 | `boolean`                   | `false` |
-| `styles`              | Custom styles                               | `AssetSearchStyles`         |         |
+| Property                | Description                                                        | Type                             | Default |
+| ---------------------   | ------------------------------------------------------------------ | -------------------------------- | ------- |
+| `showLiveSearchResults` | flag to show live search results in dropdown list                     | `boolean`                        | `true`  |
+| `onLiveSearchSelect`    | Triggers after selecting one of items from live search results list. Required when showLiveSearchResults == true | `(asset: sdk.Asset) => void;`    |         |
+| `onError`               | Triggers when search error occurs                                  | `(error: any) => void`           |         |
+| `strings`               | Object of strings to be placed in component                        | `{ [name: string]: string }`     |         |
+| `rootAssetSelect`       | Enable root asset selection                                        | `boolean`                        | `false` |
+| `advancedSearch`        | Enable root advanced search                                        | `boolean`                        | `false` |
+| `styles`                | Custom styles                                                      | `AssetSearchStyles`              |         |
+| `onSearchResult`        | Triggers when search request finishes                              | `(assets: sdk.Asset[]) => void;` |         |
 
 **strings** default fields is:
 
