@@ -1,9 +1,8 @@
-import * as sdk from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 
-import { EVENTS } from '../../../mocks';
+import { fakeEvents } from '../../../mocks';
 import { AssetTree } from '../../AssetTree';
 import { fakeClient } from '../../AssetTree/stories/AssetTree.stories';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
@@ -98,7 +97,10 @@ storiesOf('ThemeProvider/Examples', module)
   .add(
     'Event Preview',
     () => {
-      sdk.Events.retrieve = () => Promise.resolve(EVENTS[0]);
+      // @ts-ignore
+      fakeClient.events = {
+        retrieve: () => Promise.resolve([fakeEvents[0]]),
+      };
       return (
         <ThemeProvider
           theme={{
