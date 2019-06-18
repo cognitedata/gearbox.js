@@ -1,5 +1,3 @@
-import * as sdk from '@cognite/sdk';
-import * as sdk2 from '@cognite/sdk-alpha';
 import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import {
   GetTimeSeriesMetadataDTO,
@@ -9,7 +7,7 @@ import {
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { assetsList, timeseriesList } from '../../../mocks';
+import { timeseriesListV2 } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesSearch } from '../TimeseriesSearch';
 
@@ -25,10 +23,11 @@ import preselected from './preselected.md';
 import rootAssetSelect from './rootAssetSelect.md';
 import singleSelection from './singleSelection.md';
 
-const timeseriesNames = timeseriesList.map(ts => ts.name);
-const timeseriesIds = timeseriesList.map(ts => ts.id);
+const timeseriesNames = timeseriesListV2.map(ts => ts.name);
+const timeseriesIds = timeseriesListV2.map(ts => ts.id);
 
 const fakeClient: API = {
+  // @ts-ignore
   timeseries: {
     retrieve: (
       ids: TimeseriesIdEither[]
@@ -36,9 +35,9 @@ const fakeClient: API = {
       const idsAsString = ids.map(x => x.id.toString());
       return new Promise(resolve => {
         setTimeout(() => {
-          console.log(timeseriesList);
-          const result = timeseriesList.filter((x: GetTimeSeriesMetadataDTO) =>
-            idsAsString.includes(x.id.toString())
+          const result = timeseriesListV2.filter(
+            (x: GetTimeSeriesMetadataDTO) =>
+              idsAsString.includes(x.id.toString())
           );
           resolve(result || []);
         }, 1000); // simulate load delay
@@ -50,8 +49,9 @@ const fakeClient: API = {
       action('client.search')(query);
       return new Promise(resolve => {
         setTimeout(() => {
-          const result = timeseriesList.filter(
+          const result = timeseriesListV2.filter(
             (x: GetTimeSeriesMetadataDTO) =>
+              // @ts-ignore
               x.name.toUpperCase().indexOf(query.search.query.toUpperCase()) >=
               0
           );
@@ -60,49 +60,6 @@ const fakeClient: API = {
       });
     },
   },
-};
-
-// Mock the SDK calls
-const setupMocks = () => {
-  sdk.Assets.list = async (
-    input: sdk.AssetListParams
-  ): Promise<sdk.AssetDataWithCursor> => {
-    action('sdk.Assets.list')(input);
-    return {
-      items: assetsList.map(
-        (a: sdk.Asset): sdk.Asset => {
-          return {
-            id: a.id,
-            name: a.name,
-            description: a.description,
-          };
-        }
-      ),
-    };
-  };
-
-  sdk.TimeSeries.retrieveMultiple = async (
-    ids: number[]
-  ): Promise<sdk.Timeseries[]> => {
-    return timeseriesList.filter(timeseries => ids.includes(timeseries.id));
-  };
-
-  sdk.TimeSeries.search = async (
-    input: sdk.TimeseriesSearchParams
-  ): Promise<sdk.TimeseriesWithCursor> => {
-    action('sdk.TimeSeries.search')(input);
-    if (!input.query) {
-      return {
-        items: timeseriesList,
-      };
-    }
-    return {
-      items: timeseriesList.filter(
-        // @ts-ignore
-        ts => ts.name.toUpperCase().indexOf(input.query.toUpperCase()) >= 0
-      ),
-    };
-  };
 };
 
 const injectTimeseriesNames = (content: string) => {
@@ -122,8 +79,6 @@ const onTimeserieSelectionChange = (
 storiesOf('TimeseriesSearch', module).add(
   'Full Description',
   () => {
-    setupMocks();
-
     return (
       <ClientSDKProvider client={fakeClient}>
         <TimeseriesSearch
@@ -144,7 +99,6 @@ storiesOf('TimeseriesSearch/Examples', module)
     'Basic',
     // tslint:disable-next-line: no-identical-functions
     () => {
-      setupMocks();
       return (
         <ClientSDKProvider client={fakeClient}>
           <TimeseriesSearch
@@ -182,7 +136,6 @@ storiesOf('TimeseriesSearch/Examples', module)
   .add(
     'Hide selected row',
     () => {
-      setupMocks();
       return (
         <ClientSDKProvider client={fakeClient}>
           <TimeseriesSearch
@@ -201,7 +154,6 @@ storiesOf('TimeseriesSearch/Examples', module)
   .add(
     'Single selection',
     () => {
-      setupMocks();
       return (
         <ClientSDKProvider client={fakeClient}>
           <TimeseriesSearch
@@ -220,7 +172,6 @@ storiesOf('TimeseriesSearch/Examples', module)
   .add(
     'Allow strings',
     () => {
-      setupMocks();
       return (
         <ClientSDKProvider client={fakeClient}>
           <TimeseriesSearch
@@ -239,7 +190,6 @@ storiesOf('TimeseriesSearch/Examples', module)
   .add(
     'Preselected',
     () => {
-      setupMocks();
       return (
         <ClientSDKProvider client={fakeClient}>
           <TimeseriesSearch
@@ -258,7 +208,6 @@ storiesOf('TimeseriesSearch/Examples', module)
   .add(
     'Custom filter rule',
     () => {
-      setupMocks();
       return (
         <ClientSDKProvider client={fakeClient}>
           <TimeseriesSearch
@@ -277,7 +226,6 @@ storiesOf('TimeseriesSearch/Examples', module)
   .add(
     'Custom styles',
     () => {
-      setupMocks();
       return (
         <ClientSDKProvider client={fakeClient}>
           <TimeseriesSearch
@@ -304,7 +252,6 @@ storiesOf('TimeseriesSearch/Examples', module)
   .add(
     'Custom strings',
     () => {
-      setupMocks();
       return (
         <ClientSDKProvider client={fakeClient}>
           <TimeseriesSearch

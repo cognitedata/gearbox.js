@@ -2,7 +2,7 @@ import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { fakeTimeseries } from '../../../mocks';
+import { timeseriesListV2 } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DraggableBox, Link, Tag } from './DraggableBox';
 
@@ -26,7 +26,7 @@ const propsCallbacks = {
   onDragHandleDoubleClick: jest.fn(),
 };
 
-const testTimeserie = fakeTimeseries[0];
+const testTimeserie = timeseriesListV2[0];
 const containerSize = {
   width: 1000,
   height: 500,

@@ -1,13 +1,13 @@
-import * as sdk from '@cognite/sdk';
 import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
-import { DOCUMENTS, fakeAsset, fakeEvents, timeseriesList } from '../../mocks';
+import { fakeAsset, fakeEvents } from '../../mocks';
 import { AssetMeta } from './AssetMeta';
 
+console.error = jest.fn();
 const fakeClient: API = {
   // @ts-ignore
   assets: {
@@ -19,11 +19,6 @@ const fakeClient: API = {
   },
 };
 
-// @ts-ignore
-sdk.Files.list = jest.fn();
-// @ts-ignore
-sdk.TimeSeries.list = jest.fn();
-
 configure({ adapter: new Adapter() });
 
 beforeEach(() => {
@@ -33,10 +28,6 @@ beforeEach(() => {
   fakeClient.events.list.mockReturnValue({
     autoPagingToArray: () => Promise.resolve(fakeEvents),
   });
-  // @ts-ignore
-  sdk.Files.list.mockResolvedValue({ items: DOCUMENTS });
-  // @ts-ignore
-  sdk.TimeSeries.list.mockResolvedValue({ items: timeseriesList });
 });
 
 afterEach(() => {
@@ -57,10 +48,16 @@ describe('AssetMeta', () => {
       expect(wrapper.find('h3')).toHaveLength(1);
       expect(wrapper.find('h3 + p')).toHaveLength(1);
       expect(wrapper.find('TabBar')).toHaveLength(1);
+      // tslint:disable-next-line: no-duplicate-string
       expect(wrapper.find('div.ant-tabs-tab')).toHaveLength(4);
       expect(wrapper.find('TabPane')).toHaveLength(4);
       done();
     });
+  });
+
+  it('should fail if ClientSDKProvider is missing', () => {
+    mount(<AssetMeta assetId={123} />);
+    expect(console.error).toHaveBeenCalledTimes(1);
   });
 
   it('should render "no asset" if assetId was not passed', () => {
@@ -131,5 +128,32 @@ describe('AssetMeta', () => {
       expect(onPaneChange).toBeCalledWith('details');
       done();
     });
+  });
+
+  it('should load asset even if details are hidden', done => {
+    const wrapper = mount(
+      <ClientSDKProvider client={fakeClient}>
+        <AssetMeta assetId={123} hidePanels={['details']} />
+      </ClientSDKProvider>
+    );
+    setImmediate(() => {
+      wrapper.update();
+      expect(fakeClient.assets.retrieve).toHaveBeenCalled();
+      done();
+    });
+  });
+
+  it('should hide panels when specified', () => {
+    const wrapper = mount(
+      <ClientSDKProvider client={fakeClient}>
+        <AssetMeta
+          assetId={123}
+          hidePanels={['details', 'events', 'documents', 'timeseries']}
+        />
+      </ClientSDKProvider>
+    );
+
+    const tabs = wrapper.find('div.ant-tabs-tab');
+    expect(tabs).toHaveLength(0);
   });
 });

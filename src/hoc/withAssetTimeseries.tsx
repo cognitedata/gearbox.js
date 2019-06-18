@@ -1,9 +1,13 @@
-import { Timeseries, TimeseriesListParams } from '@cognite/sdk';
-import * as sdk from '@cognite/sdk';
+import {
+  GetTimeSeriesMetadataDTO,
+  TimeseriesFilter,
+} from '@cognite/sdk-alpha/dist/src/types/types';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
+import { ERROR_NO_SDK_CLIENT } from '../constants/errorMessages';
 import { SDK_LIST_LIMIT } from '../constants/sdk';
+import { ClientSDKContext } from '../context/clientSDKContext';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
@@ -11,19 +15,21 @@ import {
 } from '../utils/promise';
 
 export interface WithAssetTimeseriesDataProps {
-  assetTimeseries: Timeseries[];
+  assetTimeseries: GetTimeSeriesMetadataDTO[];
 }
 
 export interface WithAssetTimeseriesProps {
   assetId: number;
-  queryParams?: TimeseriesListParams;
+  queryParams?: TimeseriesFilter;
   customSpinner?: React.ReactNode;
-  onAssetTimeseriesLoaded?: (assetTimeseries: Timeseries[]) => void;
+  onAssetTimeseriesLoaded?: (
+    assetTimeseries: GetTimeSeriesMetadataDTO[]
+  ) => void;
 }
 
 export interface WithAssetTimeseriesState {
   isLoading: boolean;
-  assetTimeseries: Timeseries[] | null;
+  assetTimeseries: GetTimeSeriesMetadataDTO[] | null;
   assetId: number;
 }
 
@@ -36,6 +42,8 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
       WithAssetTimeseriesState
     >
     implements ComponentWithUnmountState {
+    static contextType = ClientSDKContext;
+
     static getDerivedStateFromProps(
       props: P & WithAssetTimeseriesProps,
       state: WithAssetTimeseriesState
@@ -50,7 +58,7 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
 
       return null;
     }
-
+    context!: React.ContextType<typeof ClientSDKContext>;
     isComponentUnmounted = false;
 
     constructor(props: P & WithAssetTimeseriesProps) {
@@ -78,24 +86,29 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
     }
 
     async loadAssetTimeseries() {
+      if (!this.context || !this.context.timeseries) {
+        console.error(ERROR_NO_SDK_CLIENT);
+        return;
+      }
       try {
         const { assetId, queryParams } = this.props;
-        const res = await connectPromiseToUnmountState(
+        const assetTimeseries = ((await connectPromiseToUnmountState(
           this,
-          sdk.TimeSeries.list({
-            limit: SDK_LIST_LIMIT,
-            ...queryParams,
-            assetId,
-          })
-        );
-
+          this.context.timeseries
+            .list({
+              limit: SDK_LIST_LIMIT,
+              ...queryParams,
+              assetIds: [assetId],
+            })
+            .autoPagingToArray()
+        )) as any) as GetTimeSeriesMetadataDTO[];
         this.setState({
           isLoading: false,
-          assetTimeseries: res.items,
+          assetTimeseries,
         });
 
         if (this.props.onAssetTimeseriesLoaded) {
-          this.props.onAssetTimeseriesLoaded(res.items);
+          this.props.onAssetTimeseriesLoaded(assetTimeseries);
         }
       } catch (error) {
         if (error instanceof CanceledPromiseException !== true) {

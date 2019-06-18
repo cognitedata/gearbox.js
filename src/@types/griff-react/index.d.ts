@@ -1,10 +1,13 @@
 declare module '@cognite/griff-react' {
   import {
-    DataDatapoints,
-    Datapoint,
-    Timeseries,
-    TimeseriesWithCursor,
-  } from '@cognite/sdk';
+    DatapointsGetAggregateDatapoint,
+    DatapointsGetDatapoint,
+    DatapointsGetDoubleDatapoint,
+    GetStringDatapoint,
+    GetAggregateDatapoint,
+    GetDoubleDatapoint,
+    GetTimeSeriesMetadataDTO,
+  } from '@cognite/sdk-alpha/dist/src/types/types';
 
   export interface AxisDisplayModeType {
     id: string;
@@ -24,9 +27,9 @@ declare module '@cognite/griff-react' {
   }
 
   export interface Series {
-    data: Datapoint[];
+    data: GetAggregateDatapoint[];
     step: boolean;
-    xAccessor: (point: Datapoint) => number;
+    xAccessor: (point: GetAggregateDatapoint) => number;
   }
 
   export interface DataProviderLoaderParams {
@@ -90,8 +93,8 @@ declare module '@cognite/griff-react' {
 
   export interface Ruler {
     visible?: boolean;
-    timeLabel?: (point: Datapoint) => number;
-    yLabel?: (point: Datapoint) => string;
+    timeLabel?: (point: GetAggregateDatapoint) => number;
+    yLabel?: (point: GetAggregateDatapoint) => string;
     timestamp?: number;
     getTimeLabelPosition?: (defaultPosition: number, params: any) => number;
   }

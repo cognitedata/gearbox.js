@@ -87,6 +87,7 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
   }
 
   componentDidMount() {
+    // @ts-ignore
     if (!this.includesPanel('details') && this.props.assetId) {
       if (!this.context) {
         console.error(ERROR_NO_SDK_CLIENT);

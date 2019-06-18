@@ -6,7 +6,7 @@ import { DragDropContext } from 'react-dnd';
 import DNDTestBackend from 'react-dnd-test-backend';
 import sizeMe from 'react-sizeme';
 import sinon from 'sinon';
-import { fakeTimeseries } from '../../mocks';
+import { timeseriesListV2 } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { DraggableBox, Tag } from './components/DraggableBox';
 import { DraggablePoint } from './components/DraggablePoint';
@@ -41,7 +41,7 @@ const propsCallbacks = {
 
 beforeEach(() => {
   // @ts-ignore
-  fakeClient.timeseries.retrieve.mockResolvedValue([fakeTimeseries[0]]);
+  fakeClient.timeseries.retrieve.mockResolvedValue([timeseriesListV2[0]]);
   // @ts-ignore
   fakeClient.datapoints.retrieveLatest.mockResolvedValue([
     {
@@ -73,7 +73,7 @@ describe('SensorOverlay', () => {
     const wrapper = mount(
       <ClientSDKProvider client={fakeClient}>
         <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
+          timeseriesIds={[timeseriesListV2[0].id]}
           size={{ width: 1000, height: 500 }}
         />
       </ClientSDKProvider>
@@ -86,7 +86,7 @@ describe('SensorOverlay', () => {
     const wrapper = mount(
       <ClientSDKProvider client={fakeClient}>
         <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
+          timeseriesIds={[timeseriesListV2[0].id]}
           size={{ width: 1000, height: 500 }}
         >
           <div style={{ width: 1000, height: 500 }} />
@@ -108,8 +108,8 @@ describe('SensorOverlay', () => {
     const wrapper = mount(
       <ClientSDKProvider client={fakeClient}>
         <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
-          linksMap={{ [fakeTimeseries[0].id]: true }}
+          timeseriesIds={[timeseriesListV2[0].id]}
+          linksMap={{ [timeseriesListV2[0].id]: true }}
           onClick={propsCallbacks.onClick}
           onLinkClick={propsCallbacks.onLinkClick}
           onSettingsClick={propsCallbacks.onSettingClick}
@@ -157,8 +157,8 @@ describe('SensorOverlay', () => {
     const wrapper = mount(
       <ClientSDKProvider client={fakeClient}>
         <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
-          linksMap={{ [fakeTimeseries[0].id]: true }}
+          timeseriesIds={[timeseriesListV2[0].id]}
+          linksMap={{ [timeseriesListV2[0].id]: true }}
           onClick={propsCallbacks.onClick}
           onSensorPositionChange={propsCallbacks.onSensorPositionChange}
           size={{ width: 1000, height: 500 }}
@@ -217,7 +217,7 @@ describe('SensorOverlay', () => {
     const wrapper = mount(
       <ClientSDKProvider client={fakeClient}>
         <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
+          timeseriesIds={[timeseriesListV2[0].id]}
           size={{ width: 1000, height: 0 }}
         />
       </ClientSDKProvider>
@@ -237,7 +237,7 @@ describe('SensorOverlay', () => {
     const wrapper = mount(
       <ClientSDKProvider client={fakeClient}>
         <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
+          timeseriesIds={[timeseriesListV2[0].id]}
           size={{ width: 1000, height: 500 }}
         />
       </ClientSDKProvider>
@@ -247,7 +247,7 @@ describe('SensorOverlay', () => {
       {
         children: (
           <SensorOverlay
-            timeseriesIds={[fakeTimeseries[0].id, fakeTimeseries[1].id]}
+            timeseriesIds={[timeseriesListV2[0].id, timeseriesListV2[1].id]}
             size={{ width: 1000, height: 500 }}
           />
         ),
@@ -271,7 +271,7 @@ describe('SensorOverlay', () => {
     const wrapper = mount(
       <ClientSDKProvider client={fakeClient}>
         <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
+          timeseriesIds={[timeseriesListV2[0].id]}
           size={{ width: 1000, height: 500 }}
         />
       </ClientSDKProvider>
@@ -281,7 +281,7 @@ describe('SensorOverlay', () => {
       {
         children: (
           <SensorOverlay
-            timeseriesIds={[fakeTimeseries[0].id, fakeTimeseries[1].id]}
+            timeseriesIds={[timeseriesListV2[0].id, timeseriesListV2[1].id]}
             size={{ width: 1000, height: 500 }}
           />
         ),
@@ -313,7 +313,7 @@ describe('SensorOverlay', () => {
     const wrapper = mount(
       <ClientSDKProvider client={fakeClient}>
         <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
+          timeseriesIds={[timeseriesListV2[0].id]}
           size={{ width: 1000, height: 500 }}
           onSensorPositionChange={propsCallbacks.onSensorPositionChange}
         >
@@ -355,7 +355,7 @@ describe('SensorOverlay', () => {
       {
         children: (
           <SensorOverlay
-            timeseriesIds={[fakeTimeseries[0].id, fakeTimeseries[1].id]}
+            timeseriesIds={[timeseriesListV2[0].id, timeseriesListV2[1].id]}
             size={{ width: 1000, height: 500 }}
           />
         ),
@@ -363,7 +363,7 @@ describe('SensorOverlay', () => {
       () => {
         const newSensor = wrapper
           .find(DraggableBox)
-          .find({ id: fakeTimeseries[1].id });
+          .find({ id: timeseriesListV2[1].id });
         expect(newSensor).toHaveLength(1);
 
         expect(firstDefaultSlot.left).toEqual(newSensor.prop('left'));
@@ -378,7 +378,7 @@ describe('SensorOverlay', () => {
     const wrapper = mount(
       <ClientSDKProvider client={fakeClient}>
         <SensorOverlay
-          timeseriesIds={[fakeTimeseries[0].id]}
+          timeseriesIds={[timeseriesListV2[0].id]}
           size={{ width: 1000, height: 500 }}
         />
       </ClientSDKProvider>
@@ -391,9 +391,9 @@ describe('SensorOverlay', () => {
       {
         children: (
           <SensorOverlay
-            timeseriesIds={[fakeTimeseries[0].id]}
+            timeseriesIds={[timeseriesListV2[0].id]}
             colorMap={{
-              [fakeTimeseries[0].id]: 'magenta',
+              [timeseriesListV2[0].id]: 'magenta',
             }}
             size={{ width: 1000, height: 500 }}
           />

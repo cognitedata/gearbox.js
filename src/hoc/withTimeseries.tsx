@@ -1,8 +1,9 @@
-import { Timeseries } from '@cognite/sdk';
-import * as sdk from '@cognite/sdk';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk-alpha/dist/src/types/types';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
+import { ERROR_NO_SDK_CLIENT } from '../constants/errorMessages';
+import { ClientSDKContext } from '../context/clientSDKContext';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
@@ -10,7 +11,7 @@ import {
 } from '../utils/promise';
 
 export interface WithTimeseriesDataProps {
-  timeseries: Timeseries;
+  timeseries: GetTimeSeriesMetadataDTO;
 }
 
 export interface WithTimeseriesProps {
@@ -20,7 +21,7 @@ export interface WithTimeseriesProps {
 
 export interface WithTimeseriesState {
   isLoading: boolean;
-  timeseries: Timeseries | null;
+  timeseries: GetTimeSeriesMetadataDTO | null;
   timeseriesId: number;
 }
 
@@ -33,6 +34,7 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
       WithTimeseriesState
     >
     implements ComponentWithUnmountState {
+    static contextType = ClientSDKContext;
     static getDerivedStateFromProps(
       props: P & WithTimeseriesProps,
       state: WithTimeseriesState
@@ -47,9 +49,8 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
 
       return null;
     }
-
     isComponentUnmounted = false;
-
+    context!: React.ContextType<typeof ClientSDKContext>;
     constructor(props: P & WithTimeseriesProps) {
       super(props);
 
@@ -61,6 +62,10 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
     }
 
     componentDidMount() {
+      if (!this.context) {
+        console.error(ERROR_NO_SDK_CLIENT);
+        return;
+      }
       this.loadTimeseries();
     }
 
@@ -78,12 +83,11 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
       try {
         const timeseries = await connectPromiseToUnmountState(
           this,
-          sdk.TimeSeries.retrieve(this.props.timeseriesId, true)
+          this.context!.timeseries.retrieve([{ id: this.props.timeseriesId }])
         );
-
         this.setState({
           isLoading: false,
-          timeseries,
+          timeseries: timeseries[0],
         });
       } catch (error) {
         if (error instanceof CanceledPromiseException !== true) {

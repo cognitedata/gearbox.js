@@ -3,7 +3,7 @@ import { GetTimeSeriesMetadataDTO } from '@cognite/sdk-alpha/dist/src/types/type
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { fakeTimeseries } from '../../../mocks';
+import { timeseriesListV2 as fakeTimeseries } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { SensorOverlay } from '../SensorOverlay';
 import addDynamically from './addDynamically.md';
