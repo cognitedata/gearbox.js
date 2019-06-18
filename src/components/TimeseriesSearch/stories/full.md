@@ -14,9 +14,9 @@ import 'antd/dist/antd.css';
 
 import React from 'react';
 import { TimeseriesSearch } from '@cognite/gearbox';
-import { Timeseries} from '@cognite/sdk';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
 
-const onTimeserieSelectionChange = (newTimeseriesIds: number[], selectedTimeseries: Timeseries) => {}
+const onTimeserieSelectionChange = (newTimeseriesIds: number[], selectedTimeseries: GetTimeSeriesMetadataDTO) => {}
 function ExampleComponent(props) {
   return (
     <TimeseriesSearch
@@ -47,16 +47,16 @@ You can search for `${names}`
 | `single`             | Removes the checkboxes from search result and will only callback with one id | `boolean`                                 | `false`     |
 | `hideSelected`       | Hides the row with selected timeseries above the search bar                  | `boolean`                                 | `false`     |
 | `allowStrings`       | Allows the user to select search results that are strings                    | `boolean`                                 | `false`     |
-| `filterRule`         | Custom rule to filter search results                                         | `(timeseries: Timeseries) => boolean`     |             |
+| `filterRule`         | Custom rule to filter search results                                         | `(timeseries: GetTimeSeriesMetadataDTO) => boolean`     |             |
 | `onError`            | Function called on fetch timeseries error                                    | `(error: Error) => void`                  |             |
 | `styles`             | Custom styles for the component                                              | `TimeseriesSearchStyles`                  |             |
 
 ### Types
 
-### Timeseries
+### GetTimeSeriesMetadataDTO
 
 This type describes what the cognite API returns when fetching timeseries.
-It can be imported from `@cognite/sdk`.
+It can be imported from `@cognite/sdk/dist/src/types/types`.
 Documentation can be found at https://js-sdk-docs.cogniteapp.com/interfaces/timeseries.html.
 
 ### TimeseriesSearchStyles
