@@ -1,6 +1,5 @@
 /* eslint-disable react/no-multi-comp */
 import { AxisDisplayMode } from '@cognite/griff-react';
-import * as sdk from '@cognite/sdk';
 import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import {
   DatapointsGetAggregateDatapoint,
@@ -40,30 +39,7 @@ import startEnd from './startEnd.md';
 import xAxisHeight from './xAxisHeight.md';
 import zoomable from './zoomable.md';
 
-const randomData = (start: number, end: number, n: number): sdk.Datapoint[] => {
-  const data = [];
-  const dt = (end - start) / n;
-  for (let i = start; i <= end; i += dt) {
-    const values = [0, 0, 0]
-      .map(
-        () =>
-          Math.sin(i / 20) * 50 +
-          Math.cos(Math.PI - i / 40) * 50 +
-          Math.random() * 40
-      )
-      .sort((a: number, b: number) => a - b);
-    data.push({
-      timestamp: i,
-      average: values[1],
-      min: values[0],
-      max: values[2],
-      count: 7000,
-    });
-  }
-  return data;
-};
-
-const randomData2 = (
+const randomData = (
   start: number,
   end: number,
   n: number
@@ -114,7 +90,7 @@ export const fakeClient: API = {
       action('client.datapoints.retrieve')(query);
       return new Promise(resolve => {
         setTimeout(() => {
-          const result = randomData2(
+          const result = randomData(
             (query.items[0].start && +query.items[0].start) || 0,
             (query.items[0].end && +query.items[0].end) || 0,
             100
@@ -155,7 +131,7 @@ const fakeZoomableClient: API = {
           const granularity = query.items[0].granularity || '10s';
           const n =
             granularity === 's' ? 2 : granularity.includes('s') ? 10 : 250;
-          const result = randomData2(
+          const result = randomData(
             (query.items[0].start && +query.items[0].start) || 0,
             (query.items[0].end && +query.items[0].end) || 100,
             n
