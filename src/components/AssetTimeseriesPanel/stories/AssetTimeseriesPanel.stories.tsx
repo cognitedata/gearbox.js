@@ -23,6 +23,7 @@ const fakeClient: API = {
     list: (): CogniteAsyncIterator<GetTimeSeriesMetadataDTO[]> => {
       // @ts-ignore
       return {
+        // @ts-ignore TODO - remove this ts-ignore after fixing SDK
         autoPagingToArray: async () => {
           await new Promise(resolve => setTimeout(resolve, 1000));
           return timeseriesListV2;

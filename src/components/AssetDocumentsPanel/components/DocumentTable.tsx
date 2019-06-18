@@ -62,7 +62,7 @@ export class DocumentTable extends React.PureComponent<
           tabIndex={-1}
           style={styles && styles.fileLink}
         >
-          {document.fileName}
+          {document.name}
         </LinkStyle>
         <TextContainerTop
           data-test-id="document-title"

@@ -1,9 +1,16 @@
-import { File, FileListParams } from '@cognite/sdk';
-import * as sdk from '@cognite/sdk';
+import {
+  FileRequestFilter,
+  FilesMetadata,
+} from '@cognite/sdk-alpha/dist/src/types/types';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
+import {
+  ERROR_API_UNEXPECTED_RESULTS,
+  ERROR_NO_SDK_CLIENT,
+} from '../constants/errorMessages';
 import { SDK_LIST_LIMIT } from '../constants/sdk';
+import { ClientSDKContext } from '../context/clientSDKContext';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
@@ -11,19 +18,19 @@ import {
 } from '../utils/promise';
 
 export interface WithAssetFilesDataProps {
-  assetFiles: File[];
+  assetFiles: FilesMetadata[];
 }
 
 export interface WithAssetFilesProps {
   assetId: number;
-  queryParams?: FileListParams;
+  queryParams?: FileRequestFilter;
   customSpinner?: React.ReactNode;
-  onAssetFilesLoaded?: (assetFiles: File[]) => void;
+  onAssetFilesLoaded?: (assetFiles: FilesMetadata[]) => void;
 }
 
 export interface WithAssetFilesState {
   isLoading: boolean;
-  assetFiles: File[] | null;
+  assetFiles: FilesMetadata[] | null;
   assetId: number;
 }
 
@@ -36,6 +43,7 @@ export const withAssetFiles = <P extends WithAssetFilesDataProps>(
       WithAssetFilesState
     >
     implements ComponentWithUnmountState {
+    static contextType = ClientSDKContext;
     static getDerivedStateFromProps(
       props: P & WithAssetFilesProps,
       state: WithAssetFilesState
@@ -51,6 +59,8 @@ export const withAssetFiles = <P extends WithAssetFilesDataProps>(
       return null;
     }
 
+    context!: React.ContextType<typeof ClientSDKContext>;
+
     isComponentUnmounted = false;
 
     constructor(props: P & WithAssetFilesProps) {
@@ -64,6 +74,10 @@ export const withAssetFiles = <P extends WithAssetFilesDataProps>(
     }
 
     componentDidMount() {
+      if (!this.context) {
+        console.error(ERROR_NO_SDK_CLIENT);
+        return;
+      }
       this.loadAssetFiles();
     }
 
@@ -80,22 +94,30 @@ export const withAssetFiles = <P extends WithAssetFilesDataProps>(
     async loadAssetFiles() {
       try {
         const { assetId, queryParams } = this.props;
-        const filesRes = await connectPromiseToUnmountState(
+        const files = await connectPromiseToUnmountState(
           this,
-          sdk.Files.list({
+          this.context!.files.list({
             limit: SDK_LIST_LIMIT,
             ...queryParams,
-            assetId,
-          })
+            filter: {
+              ...(queryParams && queryParams.filter ? queryParams.filter : {}),
+              assetIds: [assetId],
+            },
+          }).autoPagingToArray()
         );
+
+        if (!files || !Array.isArray(files)) {
+          console.error(ERROR_API_UNEXPECTED_RESULTS);
+          return;
+        }
 
         this.setState({
           isLoading: false,
-          assetFiles: filesRes.items,
+          assetFiles: files,
         });
 
         if (this.props.onAssetFilesLoaded) {
-          this.props.onAssetFilesLoaded(filesRes.items);
+          this.props.onAssetFilesLoaded(files);
         }
       } catch (error) {
         if (error instanceof CanceledPromiseException !== true) {

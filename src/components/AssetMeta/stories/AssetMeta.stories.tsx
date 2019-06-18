@@ -1,12 +1,11 @@
-import { CogniteAsyncIterator } from '@cognite/sdk-alpha/dist/src/autoPagination';
 import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk-alpha/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { Document } from '../../../interfaces';
 import {
   ASSET_META_STYLES,
+  DOCUMENTS,
   fakeAsset,
   fakeEvents,
   timeseriesListV2,
@@ -31,9 +30,9 @@ const fakeClient: API = {
   ...timeseriesChartFakeClient,
   timeseries: {
     ...timeseriesChartFakeClient.timeseries,
-    list: (): CogniteAsyncIterator<GetTimeSeriesMetadataDTO[]> => {
+    // @ts-ignore
+    list: () => {
       return {
-        // @ts-ignore
         autoPagingToArray: async () => {
           await new Promise(resolve => setTimeout(resolve, 1000));
           return timeseriesListV2;
@@ -57,6 +56,18 @@ const fakeClient: API = {
         return new Promise(resolve => {
           setTimeout(() => {
             resolve(fakeEvents);
+          }, 1000);
+        });
+      },
+    }),
+  },
+  files: {
+    // @ts-ignore
+    list: () => ({
+      autoPagingToArray: () => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(DOCUMENTS);
           }, 1000);
         });
       },

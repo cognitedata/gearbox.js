@@ -1,8 +1,8 @@
-import { File } from '@cognite/sdk';
+import { FilesMetadata } from '@cognite/sdk-alpha/dist/src/types/types';
 import { CollapseProps } from 'antd/lib/collapse';
 import React from 'react';
 
-export type Document = File;
+export type Document = FilesMetadata;
 
 export type OnDocumentClick = (
   document: Document,

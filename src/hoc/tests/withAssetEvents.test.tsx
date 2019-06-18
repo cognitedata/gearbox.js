@@ -100,7 +100,7 @@ describe('withAssetEvents', () => {
     });
   });
 
-  it('Should request for an asset if assetId has been changed', done => {
+  it('Should request list of events if assetId has been changed', done => {
     const TestComponent = () => <div />;
     const WrappedComponent = withAssetEvents(TestComponent);
     const wrapper = mount(
