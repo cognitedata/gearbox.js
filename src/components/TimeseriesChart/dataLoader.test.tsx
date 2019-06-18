@@ -1,14 +1,32 @@
-import { Datapoint, Datapoints, TimeSeries } from '@cognite/sdk';
-import { datapointsList, timeseriesList } from '../../mocks';
-import { AccessorFunc, cogniteloader, mergeInsert } from './dataLoader';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
+import {
+  GetAggregateDatapoint,
+  GetDoubleDatapoint,
+  GetStringDatapoint,
+} from '@cognite/sdk-alpha/dist/src/types/types';
+import { datapointsList, timeseriesListV2 } from '../../mocks';
+import {
+  AccessorFunc,
+  cogniteloader,
+  mergeInsert,
+  setContext,
+} from './dataLoader';
 
-TimeSeries.retrieve = jest.fn();
-Datapoints.retrieve = jest.fn();
+const mockedClient: API = {
+  // @ts-ignore
+  timeseries: {
+    retrieve: jest.fn(),
+  },
+  // @ts-ignore
+  datapoints: {
+    retrieve: jest.fn(),
+  },
+};
 
-const toPoints = (arr: number[], from: string): Datapoint[] =>
-  arr.map((d: number) => ({ timestamp: d, value: from }));
+const toPoints = (arr: number[], from: string): GetAggregateDatapoint[] =>
+  arr.map((d: number) => ({ timestamp: new Date(d), value: from }));
 
-const xAccessor: AccessorFunc = (d: Datapoint) => d.timestamp;
+const xAccessor: AccessorFunc = (d: GetAggregateDatapoint) => +d.timestamp;
 
 // tslint:disable:no-big-function
 describe('dataLoader', () => {
@@ -16,29 +34,29 @@ describe('dataLoader', () => {
     it('[base[0] <= toInsert[0] <= toInsert[1] <= base[1]]', () => {
       const base = toPoints([1, 5, 10, 15], 'base');
       const toInsert = toPoints([6, 7, 8], 'insert');
-      const expectedOutput: Datapoint[] = [
+      const expectedOutput: GetStringDatapoint[] = [
         {
-          timestamp: 1,
+          timestamp: new Date(1),
           value: 'base',
         },
         {
-          timestamp: 6,
+          timestamp: new Date(6),
           value: 'insert',
         },
         {
-          timestamp: 7,
+          timestamp: new Date(7),
           value: 'insert',
         },
         {
-          timestamp: 8,
+          timestamp: new Date(8),
           value: 'insert',
         },
         {
-          timestamp: 10,
+          timestamp: new Date(10),
           value: 'base',
         },
         {
-          timestamp: 15,
+          timestamp: new Date(15),
           value: 'base',
         },
       ];
@@ -49,9 +67,9 @@ describe('dataLoader', () => {
     it('Merge insert [empty base]', () => {
       const base = toPoints([], 'base');
       const toInsert = toPoints([1, 5], 'insert');
-      const expectedOutput: Datapoint[] = [
-        { timestamp: 1, value: 'insert' },
-        { timestamp: 5, value: 'insert' },
+      const expectedOutput: GetStringDatapoint[] = [
+        { timestamp: new Date(1), value: 'insert' },
+        { timestamp: new Date(5), value: 'insert' },
       ];
       const merged = mergeInsert(base, toInsert, xAccessor, [0, 5]);
       expect(merged).toEqual(expectedOutput);
@@ -60,9 +78,9 @@ describe('dataLoader', () => {
     it('Merge insert [One insert point]', () => {
       const base = toPoints([1, 5], 'base');
       const toInsert = toPoints([5], 'insert');
-      const expectedOutput: Datapoint[] = [
-        { timestamp: 1, value: 'base' },
-        { timestamp: 5, value: 'insert' },
+      const expectedOutput: GetStringDatapoint[] = [
+        { timestamp: new Date(1), value: 'base' },
+        { timestamp: new Date(5), value: 'insert' },
       ];
       const merged = mergeInsert(base, toInsert, xAccessor, [3, 5]);
       expect(merged).toEqual(expectedOutput);
@@ -71,10 +89,11 @@ describe('dataLoader', () => {
 
   describe('cogniteloader', () => {
     beforeEach(() => {
+      setContext(mockedClient);
       // @ts-ignore
-      TimeSeries.retrieve.mockResolvedValue(timeseriesList[0]);
+      mockedClient.timeseries.retrieve.mockResolvedValue([timeseriesListV2[0]]);
       // @ts-ignore
-      Datapoints.retrieve.mockResolvedValue(datapointsList);
+      mockedClient.datapoints.retrieve.mockResolvedValue([datapointsList]);
     });
 
     afterEach(() => {
@@ -105,29 +124,34 @@ describe('dataLoader', () => {
             oldSeries: {},
             reason: 'MOUNTED',
           });
-          expect(Datapoints.retrieve).toHaveBeenCalledTimes(1);
-          expect(Datapoints.retrieve).toHaveBeenCalledWith(
-            123,
-            expect.objectContaining({ granularity: expectedGranularity })
-          );
+          expect(mockedClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
+          expect(mockedClient.datapoints.retrieve).toHaveBeenCalledWith({
+            items: [
+              expect.objectContaining({
+                granularity: expectedGranularity,
+              }),
+            ],
+          });
           expect(result.drawPoints).toBeFalsy();
           expect(result.data).toEqual(datapointsList.datapoints);
         }
       );
 
       it('should draw raw data points if total number of points is less than half of pointsPerSeries', async () => {
-        const datapoints: Datapoint[] = [
+        const datapoints: GetDoubleDatapoint[] = [
           {
-            timestamp: 1552726800000,
+            timestamp: new Date(1552726800000),
             value: 36.26105251209135,
           },
           {
-            timestamp: 1552734000000,
+            timestamp: new Date(1552734000000),
             value: 36.2421327365039,
           },
         ];
         // @ts-ignore
-        Datapoints.retrieve.mockResolvedValue({ name: 'abc', datapoints });
+        mockedClient.datapoints.retrieve.mockResolvedValue([
+          { name: 'abc', datapoints },
+        ]);
 
         const startTime = Date.now() - 24 * 60 * 60 * 1000;
         const result = await cogniteloader({
@@ -139,13 +163,13 @@ describe('dataLoader', () => {
           reason: 'MOUNTED',
         });
 
-        const expectedDatapoints: Datapoint[] = [
+        const expectedDatapoints: GetAggregateDatapoint[] = [
           {
-            timestamp: 1552726800000,
+            timestamp: new Date(1552726800000),
             average: 36.26105251209135,
           },
           {
-            timestamp: 1552734000000,
+            timestamp: new Date(1552734000000),
             average: 36.2421327365039,
           },
         ];
@@ -181,29 +205,35 @@ describe('dataLoader', () => {
             oldSeries: {},
             reason: 'INTERVAL',
           });
-          expect(Datapoints.retrieve).toHaveBeenCalledTimes(1);
-          expect(Datapoints.retrieve).toHaveBeenCalledWith(
-            123,
-            expect.objectContaining({ granularity: expectedGranularity })
-          );
+          expect(mockedClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
+          expect(mockedClient.datapoints.retrieve).toHaveBeenCalledWith({
+            items: [
+              expect.objectContaining({ granularity: expectedGranularity }),
+            ],
+          });
           expect(result.drawPoints).toBeFalsy();
           expect(result.data).toEqual(datapointsList.datapoints);
         }
       );
 
       it('should fetch raw data when old series fetched raw data', async () => {
-        const datapoints: Datapoint[] = [
+        const datapoints: GetDoubleDatapoint[] = [
           {
-            timestamp: 1552726800000,
+            timestamp: new Date(1552726800000),
             value: 36.26105251209135,
           },
           {
-            timestamp: 1552734000000,
+            timestamp: new Date(1552734000000),
             value: 36.2421327365039,
           },
         ];
         // @ts-ignore
-        Datapoints.retrieve.mockResolvedValue({ name: 'abc', datapoints });
+        mockedClient.datapoints.retrieve.mockResolvedValue([
+          {
+            name: 'abc',
+            datapoints,
+          },
+        ]);
 
         const result = await cogniteloader({
           id: 123,
@@ -216,7 +246,7 @@ describe('dataLoader', () => {
           reason: 'INTERVAL',
         });
 
-        const expectedDatapoints: Datapoint[] = [
+        const expectedDatapoints = [
           {
             timestamp: 1552726800000,
             average: 36.26105251209135,
@@ -249,7 +279,7 @@ describe('dataLoader', () => {
           reason: 'UPDATE_SUBDOMAIN',
         });
 
-        expect(Datapoints.retrieve).toHaveBeenCalledTimes(1);
+        expect(mockedClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
         expect(result.drawPoints).toBeFalsy();
         expect(result.data).toEqual(datapointsList.datapoints);
         expect(mergeInsert).toHaveBeenCalledTimes(1);

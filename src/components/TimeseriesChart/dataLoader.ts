@@ -1,20 +1,43 @@
 import { DataProviderLoaderParams, Series } from '@cognite/griff-react';
-import * as sdk from '@cognite/sdk';
-import { DataDatapoints, Datapoint, Timeseries } from '@cognite/sdk';
+import { DataPointsAPI } from '@cognite/sdk-alpha/dist/src/resources/dataPoints/dataPointsApi';
+import { TimeSeriesAPI } from '@cognite/sdk-alpha/dist/src/resources/timeSeries/timeSeriesApi';
+import {
+  DatapointsGetAggregateDatapoint,
+  DatapointsGetDatapoint,
+  GetAggregateDatapoint,
+  GetDoubleDatapoint,
+  GetStringDatapoint,
+  GetTimeSeriesMetadataDTO,
+} from '@cognite/sdk-alpha/dist/src/types/types';
+import { ClientSDKContext } from '../../context/clientSDKContext';
 
 interface GriffSeries {
-  firstSeries: Datapoint[];
+  firstSeries: GetAggregateDatapoint[];
   subDomain: number[];
   granularity: string;
 }
 
 const SERIES_GETTERS: Map<number, GriffSeries> = new Map<number, GriffSeries>();
 
-export declare type AccessorFunc = (point: Datapoint) => number;
+export declare type AccessorFunc = (point: GetAggregateDatapoint) => number;
 
 const timeseries = {
-  results: new Map<number, Promise<Timeseries>>(),
-  requests: new Map<number, Promise<Timeseries>>(),
+  results: new Map<number, Promise<GetTimeSeriesMetadataDTO>>(),
+  requests: new Map<number, Promise<GetTimeSeriesMetadataDTO>>(),
+};
+
+let timeseriesApi: TimeSeriesAPI;
+let datapointApi: DataPointsAPI;
+
+export const setContext = (
+  context: React.ContextType<typeof ClientSDKContext>
+) => {
+  if (!context) {
+    console.error('Context argument is undefined');
+    return;
+  }
+  timeseriesApi = context.timeseries;
+  datapointApi = context.datapoints;
 };
 
 export const getSubdomain = (id: number) =>
@@ -23,8 +46,17 @@ export const getSubdomain = (id: number) =>
 export const getGranularity = (id: number) =>
   id ? (SERIES_GETTERS.get(id) || { granularity: '1d' }).granularity : '1d';
 
-export const yAccessor = (d: Datapoint) => {
-  if (d.value !== undefined) {
+function determineIfIsGetDoubleDatapoint(
+  toBeDetermined: GetDoubleDatapoint | GetAggregateDatapoint
+): toBeDetermined is GetDoubleDatapoint {
+  if (typeof (toBeDetermined as GetDoubleDatapoint).value === 'number') {
+    return true;
+  }
+  return false;
+}
+
+export const yAccessor = (d: GetDoubleDatapoint | GetAggregateDatapoint) => {
+  if (determineIfIsGetDoubleDatapoint(d)) {
     return +d.value;
   }
   if (d.stepInterpolation !== undefined) {
@@ -40,10 +72,10 @@ export const yAccessor = (d: Datapoint) => {
   return 0;
 };
 
-export const y0Accessor = (data: Datapoint) =>
+export const y0Accessor = (data: GetAggregateDatapoint) =>
   data.min ? data.min : yAccessor(data);
 
-export const y1Accessor = (data: Datapoint) =>
+export const y1Accessor = (data: GetAggregateDatapoint) =>
   data.max ? data.max : yAccessor(data);
 
 const calculateGranularity = (domain: number[], pps: number) => {
@@ -75,7 +107,7 @@ const calculateGranularity = (domain: number[], pps: number) => {
   return 'day';
 };
 
-const getTimeSeries = (id: number): Promise<Timeseries> => {
+const getTimeSeries = (id: number): Promise<GetTimeSeriesMetadataDTO> => {
   if (timeseries.requests.has(id)) {
     // @ts-ignore - We're checking for undefined with the "has" check.
     return timeseries.requests.get(id);
@@ -84,11 +116,16 @@ const getTimeSeries = (id: number): Promise<Timeseries> => {
     // @ts-ignore - We're checking for undefined with the "has" check.
     return timeseries.results.get(id);
   }
-  const promise = sdk.TimeSeries.retrieve(id).then((timeserie: Timeseries) => {
-    timeseries.results = timeseries.results.set(id, Promise.resolve(timeserie));
-    timeseries.requests.delete(id);
-    return timeserie;
-  });
+  const promise = timeseriesApi
+    .retrieve([{ id }])
+    .then((timeseriesList: GetTimeSeriesMetadataDTO[]) => {
+      timeseries.results = timeseries.results.set(
+        id,
+        Promise.resolve(timeseriesList[0])
+      );
+      timeseries.requests.delete(id);
+      return timeseriesList[0];
+    });
   timeseries.requests = timeseries.requests.set(id, promise);
   return promise;
 };
@@ -105,18 +142,35 @@ const getRawDataPoints = ({
   start: number;
   end: number;
   limit?: number;
-}): Promise<Datapoint[]> =>
-  sdk.Datapoints.retrieve(id, { start, end, limit }).then(
-    (data: DataDatapoints) =>
-      data.datapoints.map((d: Datapoint) => ({
-        [`${step ? 'stepInterpolation' : 'average'}`]: d.value,
-        timestamp: d.timestamp,
-      }))
-  );
+}): Promise<GetAggregateDatapoint[]> =>
+  datapointApi
+    .retrieve({
+      items: [
+        {
+          id,
+          start,
+          end,
+          limit,
+        },
+      ],
+    })
+    .then(
+      (data: (DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]) => {
+        const temp = (data[0].datapoints as unknown) as GetDoubleDatapoint[];
+        return temp.map(
+          (d: GetDoubleDatapoint): GetAggregateDatapoint => {
+            return {
+              [`${step ? 'stepInterpolation' : 'average'}`]: d.value,
+              timestamp: d.timestamp,
+            };
+          }
+        );
+      }
+    );
 
 export const mergeInsert = (
-  base: Datapoint[],
-  toInsert: Datapoint[],
+  base: GetAggregateDatapoint[],
+  toInsert: GetAggregateDatapoint[],
   xAccessor: AccessorFunc,
   subDomain: number[]
 ) => {
@@ -125,7 +179,7 @@ export const mergeInsert = (
   }
 
   // Remove the points from base within the subdoconstn
-  const strippedBase: Datapoint[] = base.filter(
+  const strippedBase: GetAggregateDatapoint[] = base.filter(
     point => xAccessor(point) < subDomain[0] || xAccessor(point) > subDomain[1]
   );
   return [...strippedBase, ...toInsert].sort(
@@ -164,20 +218,43 @@ export const cogniteloader = async ({
       startTime = xAccessor(oldData[oldData.length - 1]) + 1;
     }
     const { step } = oldSeries;
-    const requestPromise: Promise<Datapoint[]> = oldSeries.drawPoints
+    const requestPromise: Promise<
+      GetAggregateDatapoint[]
+    > = oldSeries.drawPoints
       ? getRawDataPoints({
           id,
           start: startTime,
           end: Date.now(),
           step,
         })
-      : sdk.Datapoints.retrieve(id, {
-          start: startTime,
-          end: Date.now(),
-          granularity,
-          aggregates: `min,max,${step ? 'stepInterpolation' : 'average'}`,
-        }).then((data: DataDatapoints) => data.datapoints);
-    const newDatapoints: Datapoint[] = await requestPromise;
+      : datapointApi
+          .retrieve({
+            items: [
+              {
+                id,
+                start: startTime,
+                end: Date.now(),
+                granularity,
+                aggregates: [
+                  'count',
+                  'min',
+                  'max',
+                  step ? 'stepInterpolation' : 'average',
+                ],
+              },
+            ],
+          })
+          .then(
+            (
+              data: (DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]
+            ) => (data.length === 0 ? [] : data[0].datapoints)
+          );
+    const newDatapoints = (await requestPromise).map(
+      (x: GetAggregateDatapoint) => ({
+        ...x,
+        timestamp: +x.timestamp,
+      })
+    );
     requestsInFlight[id] = false;
     if (oldData) {
       return { ...oldSeries, data: [...oldData, ...newDatapoints] };
@@ -196,84 +273,121 @@ export const cogniteloader = async ({
     // Zooming REALLY far in (1 ms end to end)
     return oldSeries;
   }
-  return getTimeSeries(id).then((timeseriesResponse: Timeseries) => {
-    const { isStep: step } = timeseriesResponse;
-    return (
-      sdk.Datapoints.retrieve(id, {
-        granularity,
-        aggregates: `${step ? 'step' : 'avg'},count,min,max`,
-        start: fetchDomain[0],
-        end: fetchDomain[1],
-        limit: pointsPerSeries,
-      })
-        .then(async (items: DataDatapoints) => {
-          const { datapoints: points } = items;
-          if (
-            points.reduce((p: number, c: Datapoint) => p + (c.count || 0), 0) <
-            pointsPerSeries / 2
-          ) {
-            // If there are less than x points, show raw values
-            const result = await getRawDataPoints({
-              id,
-              step,
-              start: fetchDomain[0],
-              end: fetchDomain[1],
-              limit: pointsPerSeries,
-            });
-            let data = result;
-            if (step && points.length) {
-              // Use the last-known value from step-interpolation to create a fake point at the left-boundary
-              if (data.length && points[0].timestamp < data[0].timestamp) {
-                data = [points[0], ...data];
-              } else if (!data.length) {
-                data = [points[0]];
+  return getTimeSeries(id).then(
+    (timeseriesResponse: GetTimeSeriesMetadataDTO) => {
+      const { isStep: step } = timeseriesResponse;
+      return (
+        datapointApi
+          .retrieve({
+            items: [
+              {
+                id,
+                granularity,
+                aggregates: [
+                  'count',
+                  'min',
+                  'max',
+                  step ? 'stepInterpolation' : 'average',
+                ],
+                start: fetchDomain[0],
+                end: fetchDomain[1],
+                limit: pointsPerSeries,
+              },
+            ],
+          })
+          .then(
+            async (
+              response: (
+                | DatapointsGetAggregateDatapoint
+                | DatapointsGetDatapoint)[]
+            ) => {
+              const { datapoints: points } = response[0];
+              // @ts-ignore
+              const numberOfPoints = points.reduce(
+                (
+                  p: number,
+                  c:
+                    | GetAggregateDatapoint
+                    | GetDoubleDatapoint
+                    | GetStringDatapoint
+                ) => {
+                  // @ts-ignore
+                  return p + (c.count || 0);
+                },
+                0
+              );
+              if (numberOfPoints < pointsPerSeries / 2) {
+                // If there are less than x points, show raw values
+                const result = await getRawDataPoints({
+                  id,
+                  step,
+                  start: fetchDomain[0],
+                  end: fetchDomain[1],
+                  limit: pointsPerSeries,
+                });
+                let data = result;
+                if (step && points.length) {
+                  // Use the last-known value from step-interpolation to create a fake point at the left-boundary
+                  if (data.length && points[0].timestamp < data[0].timestamp) {
+                    data = [points[0], ...data];
+                  } else if (!data.length) {
+                    data = [points[0]];
+                  }
+                }
+                return {
+                  data,
+                  drawPoints: true,
+                  step: !!step,
+                };
               }
+              return {
+                // @ts-ignore
+                data: points.map((x: GetAggregateDatapoint) => ({
+                  ...x,
+                  timestamp: +x.timestamp,
+                })),
+                step: !!step,
+              };
             }
-            return {
-              data,
-              drawPoints: true,
-              step: !!step,
-            };
-          }
-          return { data: points, step: !!step };
-        })
-        .then((newSeries: any) => {
-          const { firstSeries } = seriesInfo;
-          const { xAccessor } = oldSeries;
-          if (reason === 'UPDATE_SUBDOMAIN') {
-            const val = SERIES_GETTERS.get(id);
-            SERIES_GETTERS.set(id, {
-              ...val,
-              firstSeries: val ? val.firstSeries : [],
-              subDomain,
-              granularity,
-            });
-            const data = mergeInsert(
-              firstSeries,
-              newSeries.data,
-              xAccessor,
-              subDomain
-            );
-            return { ...newSeries, data };
-          }
-          return newSeries;
-        })
-        .then((newSeries: Series) => {
-          if (reason === 'MOUNTED') {
-            const val = SERIES_GETTERS.get(id);
-            SERIES_GETTERS.set(id, {
-              ...val,
-              firstSeries: newSeries.data,
-              subDomain,
-              granularity,
-            });
-          }
-          return { ...newSeries, yAccessor };
-        })
-        // Do not crash the app in case of error, just return no data
-        .catch(() => {
-          return { data: [], step };
-        })
-    );
-  });
+          )
+          .then((newSeries: any) => {
+            const { firstSeries } = seriesInfo;
+            const { xAccessor } = oldSeries;
+            if (reason === 'UPDATE_SUBDOMAIN') {
+              const val = SERIES_GETTERS.get(id);
+              SERIES_GETTERS.set(id, {
+                ...val,
+                firstSeries: val ? val.firstSeries : [],
+                subDomain,
+                granularity,
+              });
+              const data = mergeInsert(
+                firstSeries,
+                newSeries.data,
+                xAccessor,
+                subDomain
+              );
+              return { ...newSeries, data };
+            }
+            return newSeries;
+          })
+          .then((newSeries: Series) => {
+            if (reason === 'MOUNTED') {
+              const val = SERIES_GETTERS.get(id);
+              SERIES_GETTERS.set(id, {
+                ...val,
+                firstSeries: newSeries.data,
+                subDomain,
+                granularity,
+              });
+            }
+            return { ...newSeries, yAccessor };
+          })
+          // Do not crash the app in case of error, just return no data
+          .catch(() => {
+            return { data: [], step };
+          })
+      );
+    }
+  );
 };

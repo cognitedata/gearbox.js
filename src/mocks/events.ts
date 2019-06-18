@@ -217,7 +217,7 @@ export const EVENTS: ApiEvent[] = [
 ];
 
 export const fakeEvents: CogniteEvent[] = [
-  ({
+  {
     id: 1995162693488,
     type: 'Workorder',
     subtype: 'VAL',
@@ -231,8 +231,8 @@ export const fakeEvents: CogniteEvent[] = [
     source: 'akerbp-cdpr',
     createdTime: new Date(1538252247102),
     lastUpdatedTime: new Date(1538252247102),
-  } as any) as CogniteEvent, // TODO remove type cast after fixing CogniteEvent
-  ({
+  },
+  {
     id: 8825861064387,
     type: 'Workitem',
     subtype: 'VAL',
@@ -250,8 +250,8 @@ export const fakeEvents: CogniteEvent[] = [
     source: 'akerbp-cdp',
     createdTime: new Date(1544644816746),
     lastUpdatedTime: new Date(1544644816746),
-  } as any) as CogniteEvent, // TODO remove type cast after fixing CogniteEvent
-  ({
+  },
+  {
     id: 25496029326330,
     type: 'Workorder',
     subtype: 'VAL',
@@ -267,8 +267,8 @@ export const fakeEvents: CogniteEvent[] = [
     source: 'akerbp-cdp',
     createdTime: new Date(1548932470085),
     lastUpdatedTime: new Date(1548932470085),
-  } as any) as CogniteEvent, // TODO remove type cast after fixing CogniteEvent
-  ({
+  },
+  {
     id: 33766051546406,
     type: 'Workitem',
     subtype: 'VAL',
@@ -283,8 +283,8 @@ export const fakeEvents: CogniteEvent[] = [
     source: 'akerbp-cdp',
     createdTime: new Date(1548273625540),
     lastUpdatedTime: new Date(1548273625540),
-  } as any) as CogniteEvent, // TODO remove type cast after fixing CogniteEvent
-  ({
+  },
+  {
     id: 35593709738144,
     type: 'Workpackage',
     subtype: 'VAL',
@@ -300,7 +300,7 @@ export const fakeEvents: CogniteEvent[] = [
     source: 'akerbp-cdp3',
     createdTime: new Date(1548932461186),
     lastUpdatedTime: new Date(1548932461186),
-  } as any) as CogniteEvent, // TODO remove type cast after fixing CogniteEvent
+  },
   {
     id: 35593709738145,
     assetIds: [4650652196144007],

@@ -4,6 +4,7 @@ import { NativeButtonProps } from 'antd/lib/button/button';
 import { debounce } from 'lodash';
 import React, { KeyboardEvent } from 'react';
 import styled from 'styled-components';
+import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';
 import { ApiQuery, PureObject } from '../../interfaces';
 import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
@@ -135,9 +136,7 @@ export class TimeseriesSearch extends React.Component<
 
   async componentDidMount() {
     if (!this.context) {
-      console.error(
-        'Client SDK Context has not been provided. Use ClientSDKProvider to wrap the component.'
-      );
+      console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
 
