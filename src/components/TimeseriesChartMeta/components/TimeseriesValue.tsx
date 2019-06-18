@@ -11,7 +11,7 @@ import {
 
 interface TimeseriesValueProps {
   timeseriesDescription?: string;
-  timeseriesName: string;
+  timeseriesId: number;
   liveUpdate?: boolean;
   updatePeriodMillis?: number;
   unit?: string;
@@ -64,7 +64,7 @@ export class TimeseriesValue
   }
 
   componentDidUpdate(prevProps: TimeseriesValueProps) {
-    if (prevProps.timeseriesName !== this.props.timeseriesName) {
+    if (prevProps.timeseriesId !== this.props.timeseriesId) {
       if (this.interval) {
         clearInterval(this.interval);
       }
@@ -82,7 +82,7 @@ export class TimeseriesValue
         this,
         // @ts-ignore
         this.context.datapoints.retrieveLatest([
-          { externalId: this.props.timeseriesName, before: 'now' },
+          { id: this.props.timeseriesId, before: 'now' },
         ])
       );
 

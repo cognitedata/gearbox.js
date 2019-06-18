@@ -62,6 +62,10 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
     }
 
     componentDidMount() {
+      if (!this.context) {
+        console.error(ERROR_NO_SDK_CLIENT);
+        return;
+      }
       this.loadTimeseries();
     }
 
@@ -77,13 +81,9 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
 
     async loadTimeseries() {
       try {
-        if (!this.context) {
-          console.error(ERROR_NO_SDK_CLIENT);
-          return;
-        }
         const timeseries = await connectPromiseToUnmountState(
           this,
-          this.context.timeseries.retrieve([{ id: this.props.timeseriesId }])
+          this.context!.timeseries.retrieve([{ id: this.props.timeseriesId }])
         );
         this.setState({
           isLoading: false,

@@ -68,7 +68,7 @@ const fakeClient: API = {
               id: 123,
               datapoints: [
                 {
-                  timestamp: new Date(Date.now()),
+                  timestamp: new Date(),
                   value: 15 + Math.random() * 5.0,
                 },
               ],
@@ -190,7 +190,6 @@ storiesOf('AssetMeta/Examples', module)
   .add(
     'Custom categories sort',
     () => {
-      setupTimeseriesChartMocks();
       const customSort = (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0);
       return (
         <AssetMeta

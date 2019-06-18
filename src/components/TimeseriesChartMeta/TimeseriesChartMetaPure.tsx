@@ -145,7 +145,7 @@ export class TimeseriesChartMetaPure extends React.PureComponent<
         {showDatapoint && (
           <CenterWrapper>
             <TimeseriesValue
-              timeseriesName={timeseries.name || ''}
+              timeseriesId={timeseries.id}
               timeseriesDescription={timeseries.description}
               liveUpdate={liveUpdate}
               updatePeriodMillis={updateIntervalMillis}

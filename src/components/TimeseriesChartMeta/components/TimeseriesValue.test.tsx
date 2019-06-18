@@ -34,7 +34,7 @@ describe('TimeseriesValue', () => {
     const wrapper = mount(
       <ClientSDKProvider client={mockedClient}>
         <TimeseriesValue
-          timeseriesName={timeseries.name || ''}
+          timeseriesId={timeseries.id}
           timeseriesDescription={timeseries.description}
           liveUpdate={false}
         />
@@ -49,7 +49,7 @@ describe('TimeseriesValue', () => {
     mount(
       <ClientSDKProvider client={mockedClient}>
         <TimeseriesValue
-          timeseriesName={timeseries.name || ''}
+          timeseriesId={timeseries.id}
           timeseriesDescription={timeseries.description}
           liveUpdate={false}
         />
@@ -59,11 +59,11 @@ describe('TimeseriesValue', () => {
     expect(mockedClient.datapoints.retrieveLatest).toBeCalled();
   });
 
-  it('Should retrieve latest datapoint twice if timeseriesName has been changed ', () => {
+  it('Should retrieve latest datapoint twice if timeseriesId has been changed ', () => {
     const wrapper = mount(
       <ClientSDKProvider client={mockedClient}>
         <TimeseriesValue
-          timeseriesName={timeseries.name || ''}
+          timeseriesId={timeseries.id}
           timeseriesDescription={timeseries.description}
           liveUpdate={false}
         />
@@ -75,7 +75,7 @@ describe('TimeseriesValue', () => {
         <TimeseriesValue
           timeseriesDescription={timeseries.description}
           liveUpdate={false}
-          timeseriesName={'some other timeseries'}
+          timeseriesId={1234}
         />
       ),
     });
@@ -88,7 +88,7 @@ describe('TimeseriesValue', () => {
     const wrapper = mount(
       <ClientSDKProvider client={mockedClient}>
         <TimeseriesValue
-          timeseriesName={timeseries.name || ''}
+          timeseriesId={timeseries.id}
           timeseriesDescription={timeseries.description}
         />
       </ClientSDKProvider>
@@ -99,12 +99,12 @@ describe('TimeseriesValue', () => {
     expect(clearInterval).toHaveBeenCalledTimes(1);
   });
 
-  it('Should clear interval after changing timeseriesName ', () => {
+  it('Should clear interval after changing timeseriesId ', () => {
     jest.useFakeTimers();
     const wrapper = mount(
       <ClientSDKProvider client={mockedClient}>
         <TimeseriesValue
-          timeseriesName={timeseries.name || ''}
+          timeseriesId={timeseries.id}
           timeseriesDescription={timeseries.description}
         />
       </ClientSDKProvider>
@@ -114,7 +114,7 @@ describe('TimeseriesValue', () => {
       children: (
         <TimeseriesValue
           timeseriesDescription={timeseries.description}
-          timeseriesName={'some other timeseries'}
+          timeseriesId={1234}
         />
       ),
     });
@@ -127,7 +127,7 @@ describe('TimeseriesValue', () => {
     const wrapper = mount(
       <ClientSDKProvider client={mockedClient}>
         <TimeseriesValue
-          timeseriesName={timeseries.name || ''}
+          timeseriesId={timeseries.id}
           timeseriesDescription={timeseries.description}
           liveUpdate={false}
         />

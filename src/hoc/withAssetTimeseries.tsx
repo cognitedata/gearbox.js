@@ -92,9 +92,7 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
       }
       try {
         const { assetId, queryParams } = this.props;
-        const res = await connectPromiseToUnmountState<
-          GetTimeSeriesMetadataDTO[]
-        >(
+        const res = await connectPromiseToUnmountState(
           this,
           this.context.timeseries
             .list({
