@@ -184,14 +184,12 @@ export class DataLoader {
 
   cogniteloader = async ({
     id,
-    timeDomain,
-    timeSubDomain,
+    timeDomain: baseDomain,
+    timeSubDomain: subDomain,
     pointsPerSeries,
     oldSeries,
     reason,
   }: DataProviderLoaderParams) => {
-    const baseDomain = timeDomain;
-    const subDomain = timeSubDomain;
     const fetchDomain = (reason === 'MOUNTED' ? baseDomain : subDomain).map(
       Math.round
     );
