@@ -52,4 +52,13 @@ describe('EventPreview', () => {
     const { noDescription } = defaultStrings;
     expect(wrapper.contains(noDescription as string)).toBeTruthy();
   });
+
+  it('Should not render type and subtype', () => {
+    const wrapper = mount(
+      <EventPreviewView event={event} hideProperties={['type', 'subtype']} />
+    );
+    const text = wrapper.text();
+    expect(text.indexOf(event.type!)).toBe(-1);
+    expect(text.indexOf(event.subtype!)).toBe(-1);
+  });
 });
