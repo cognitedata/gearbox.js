@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk';
+import { Asset } from '@cognite/sdk-alpha/dist/src/types/types';
 import { AdvancedSearch } from '../interfaces';
 
 export const vmateDba = 'wmate_dba.wmt_location';
@@ -30,6 +30,9 @@ export const SKA: Asset = {
     WMT_LOCATION_USEPLOTALTITUDE: 'Y',
     WMT_LOCATION_WORKSTART: randomTime,
   },
+  createdTime: new Date(1),
+  lastUpdatedTime: new Date(2),
+  depth: 1,
 };
 
 export const IAA: Asset = {
@@ -49,6 +52,9 @@ export const IAA: Asset = {
     TYPE: 'AssetHierarchy',
     UID: 'IAA',
   },
+  createdTime: new Date(1),
+  lastUpdatedTime: new Date(2),
+  depth: 1,
 };
 
 export const VAL: Asset = {
@@ -75,6 +81,9 @@ export const VAL: Asset = {
     WMT_LOCATION_USEPLOTALTITUDE: 'Y',
     WMT_LOCATION_WORKSTART: randomTime,
   },
+  createdTime: new Date(1),
+  lastUpdatedTime: new Date(2),
+  depth: 1,
 };
 
 export const SearchValue: AdvancedSearch = {

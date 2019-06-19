@@ -1,4 +1,3 @@
-import * as sdk from '@cognite/sdk';
 import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import { Button, Input, Tag } from 'antd';
 import { configure, mount } from 'enzyme';
@@ -31,16 +30,11 @@ const mockedClient: API = {
   },
 };
 
-// @ts-ignore
-sdk.Assets.list = jest.fn();
-
 beforeEach(() => {
   // @ts-ignore
   mockedClient.timeseries.retrieve.mockResolvedValue(timeseriesListV2);
   // @ts-ignore
   mockedClient.timeseries.search.mockResolvedValue(timeseriesListV2);
-  // @ts-ignore
-  sdk.Assets.list.mockResolvedValue({ items: assetsList });
 });
 
 afterEach(() => {
