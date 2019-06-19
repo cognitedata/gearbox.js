@@ -8,9 +8,6 @@ import { datapointsList, timeseriesListV2 } from '../../mocks';
 import {
   AccessorFunc,
   DataLoader,
-  // cogniteloader,
-  // mergeInsert,
-  // setContext,
 } from './dataLoader';
 
 const mockedClient: API = {
