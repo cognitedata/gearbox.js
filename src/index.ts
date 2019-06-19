@@ -13,4 +13,6 @@ export * from './components/TimeseriesChartMeta/TimeseriesChartMeta';
 export * from './components/TimeseriesSearch/TimeseriesSearch';
 export * from './components/ThemeProvider/ThemeProvider';
 
+export * from './utils/sdk-configure';
+
 export * from './interfaces';
