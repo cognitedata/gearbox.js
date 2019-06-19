@@ -13,7 +13,7 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { timeseriesListV2 } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { y0Accessor, y1Accessor, yAccessor } from '../dataLoader';
+import { DataLoader } from '../dataLoader';
 import { TimeseriesChart } from '../TimeseriesChart';
 
 import annotations from './annotations.md';
@@ -531,16 +531,16 @@ storiesOf('TimeseriesChart/Examples', module)
           color: 'green',
           yAxisDisplayMode: AxisDisplayMode.ALL,
           hidden: false,
-          y0Accessor,
-          y1Accessor,
-          yAccessor,
+          y0Accessor: DataLoader.y0Accessor,
+          y1Accessor: DataLoader.y1Accessor,
+          yAccessor: DataLoader.yAccessor,
         },
         {
           id: 456,
           color: 'red',
-          y0Accessor,
-          y1Accessor,
-          yAccessor,
+          y0Accessor: DataLoader.y0Accessor,
+          y1Accessor: DataLoader.y1Accessor,
+          yAccessor: DataLoader.yAccessor,
         },
       ];
       return (
