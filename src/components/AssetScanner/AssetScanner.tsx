@@ -1,8 +1,10 @@
-import { Asset } from '@cognite/sdk';
+import { Asset } from '@cognite/sdk-alpha/dist/src/types/types';
 import React from 'react';
 import styled from 'styled-components';
 
-import { getAssetList, ocrRecognize } from '../../api';
+import { ocrRecognize } from '../../api';
+import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
+import { ClientSDKContext } from '../../context/clientSDKContext';
 import {
   Callback,
   EmptyCallback,
@@ -86,6 +88,10 @@ export class AssetScanner extends React.Component<
     enableNotification: false,
   };
 
+  static contextType = ClientSDKContext;
+
+  context!: React.ContextType<typeof ClientSDKContext>;
+
   notification: ASNotification = this.prepareNotifications();
 
   state: AssetScannerState = {
@@ -103,6 +109,9 @@ export class AssetScanner extends React.Component<
   }
 
   componentDidMount() {
+    if (!this.context) {
+      console.error(ERROR_NO_SDK_CLIENT);
+    }
     this.resetSearch();
   }
 
@@ -280,11 +289,17 @@ export class AssetScanner extends React.Component<
   }
 
   private async getAssets(strings: string[]): Promise<Asset[]> {
-    return (await Promise.all(
-      strings.map((s: string) => getAssetList({ query: s }))
-    ))
+    return (await Promise.all(strings.map((s: string) => this.getAssetList(s))))
       .filter(asset => asset.length)
       .reduce((res, current) => res.concat(current));
+  }
+
+  private getAssetList(query: string): Promise<Asset[]> {
+    return this.context!.assets.list({
+      filter: {
+        name: query,
+      },
+    }).autoPagingToArray();
   }
 
   // Made async to provide better UX for component
