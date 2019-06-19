@@ -83,12 +83,12 @@ import { CollapseProps } from 'antd/lib/collapse';
 Definition:
 
 ```typescript
-import { FileMetadata } from `@cognite/sdk/dist/src/types/types`;
+import { FilesMetadata } from `@cognite/sdk/dist/src/types/types`;
 
 type DocumentRenderer = (
-  document: FileMetadata,
+  document: FilesMetadata,
   i: number,
-  documents: FileMetadata[]
+  documents: FilesMetadata[]
 
 ) => React.ReactNode;
 

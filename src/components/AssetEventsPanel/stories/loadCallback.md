@@ -8,12 +8,12 @@
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { Event } from '@cognite/sdk';
+import { CogniteEvent } from '@cognite/sdk';
 import { AssetEventsPanel } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
 
-  const handleAssetEventsLoaded = (events: Event[]) => { };
+  const handleAssetEventsLoaded = (events: CogniteEvent[]) => { };
 
   return (
     <AssetEventsPanel
