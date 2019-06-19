@@ -101,9 +101,9 @@ interface SensorMinMaxRange {
 ```
 
 #### SensorDatapoint
-This type can be imported from `@cognite\gearbox`:
+This type can be imported from `@cognite/gearbox`:
 ```typescript
-import { SensorDatapoint } from '@cognite\gearbox';
+import { SensorDatapoint } from '@cognite/gearbox';
 ```
 
 Definition:
