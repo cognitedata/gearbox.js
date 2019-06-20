@@ -13,6 +13,17 @@ const EventTitle = styled.div`
   padding-bottom: 16px;
 `;
 
+const EventType = styled.div`
+  font-size: 1.2rem;
+  color: ${({ theme }) => theme.gearbox.textColorAccent};
+  padding-bottom: 8px;
+`;
+EventType.defaultProps = {
+  theme: {
+    gearbox: defaultTheme,
+  },
+};
+
 const EventDetailsBlock = styled.div`
   font-size: 1.1rem;
   padding-bottom: 16px;
@@ -72,7 +83,7 @@ export const EventPreviewView = ({
   styles = {},
 }: EventPreviewProps) => {
   const lang = { ...defaultStrings, ...strings };
-  const { startTime, endTime, description, metadata } = event;
+  const { startTime, endTime, description, metadata, type, subtype } = event;
   const {
     noDescription,
     start,
@@ -88,6 +99,14 @@ export const EventPreviewView = ({
 
   return (
     <Container key="container" style={styles.wrapper}>
+      <EventType style={styles.eventType}>
+        {[
+          hideProperties.includes('type') ? '' : type,
+          hideProperties.includes('subtype') ? '' : subtype,
+        ]
+          .filter(Boolean)
+          .join(' / ')}
+      </EventType>
       {!hideProperties.includes('description') && (
         <EventTitle style={styles.description}>
           {description || noDescription}
