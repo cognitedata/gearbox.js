@@ -1,12 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {
-  cogniteloader as griffloader,
-  setContext,
-  y0Accessor,
-  y1Accessor,
-  yAccessor,
-} from './dataLoader';
+import { DataLoader } from './dataLoader';
 
 import {
   Annotation,
@@ -95,19 +89,21 @@ export class TimeseriesChart extends React.Component<
 
   context!: React.ContextType<typeof ClientSDKContext>;
 
-  constructor(props: TimeseriesChartProps) {
+  dataLoader!: DataLoader;
+
+  constructor(
+    props: TimeseriesChartProps,
+    context: React.ContextType<typeof ClientSDKContext>
+  ) {
     super(props);
     this.state = {
       loaded: false,
     };
-  }
-
-  componentDidMount() {
-    if (!this.context) {
+    if (!context) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
-    setContext(this.context);
+    this.dataLoader = new DataLoader(context);
   }
 
   onFetchData = () => {
@@ -160,18 +156,18 @@ export class TimeseriesChart extends React.Component<
           yAxisDisplayMode:
             s.yAxisDisplayMode || AxisDisplayMode[yAxisDisplayMode],
           hidden: s.hidden || hiddenSeries[s.id],
-          yAccessor: s.yAccessor || yAccessor,
-          y0Accessor: s.y0Accessor || y0Accessor,
-          y1Accessor: s.y1Accessor || y1Accessor,
+          yAccessor: s.yAccessor || DataLoader.yAccessor,
+          y0Accessor: s.y0Accessor || DataLoader.y0Accessor,
+          y1Accessor: s.y1Accessor || DataLoader.y1Accessor,
         }))
       : timeseriesIds.map((id: number) => ({
           id,
           color: timeseriesColors[id] || getColorByString(id.toString()),
           yAxisDisplayMode: AxisDisplayMode[yAxisDisplayMode],
           hidden: hiddenSeries[id],
-          yAccessor,
-          y0Accessor,
-          y1Accessor,
+          yAccessor: DataLoader.yAccessor,
+          y0Accessor: DataLoader.y0Accessor,
+          y1Accessor: DataLoader.y1Accessor,
         }));
 
     return (
@@ -179,7 +175,7 @@ export class TimeseriesChart extends React.Component<
         <Spin spinning={!loaded}>
           <Wrapper style={styles && styles.container}>
             <DataProvider
-              defaultLoader={griffloader}
+              defaultLoader={this.dataLoader.cogniteloader}
               onFetchData={this.onFetchData}
               pointsPerSeries={pointsPerSeries}
               series={griffSeries}
