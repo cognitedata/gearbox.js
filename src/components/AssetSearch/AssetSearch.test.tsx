@@ -1,4 +1,7 @@
-import * as sdk from '@cognite/sdk';
+// import * as sdk from '@cognite/sdk';
+import { Asset, AssetSearchFilter } from '@cognite/sdk-alpha/dist/src/types/types';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
+
 import { Input } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -6,6 +9,7 @@ import lodash from 'lodash';
 import React from 'react';
 import { assetsList } from '../../mocks';
 import { AssetSearch } from './AssetSearch';
+import { ClientSDKProvider } from '../ClientSDKProvider';
 import Mock = jest.Mock;
 
 configure({ adapter: new Adapter() });
@@ -21,15 +25,33 @@ jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
   return f;
 });
 
-sdk.Assets.search = jest.fn();
-sdk.Assets.list = jest.fn();
+const fakeClient: API = {
+  // @ts-ignore
+  assets: {
+    search: jest.fn(),
+    list: jest.fn()
+  }
+}
+
+// sdk.Assets.search = jest.fn();
+// sdk.Assets.list = jest.fn();
 
 beforeEach(() => {
   // @ts-ignore
-  sdk.Assets.list.mockResolvedValue({ items: assetsList });
+  // sdk.Assets.list.mockResolvedValue({ items: assetsList });
+  fakeClient.assets.list.mockResolvedValue({ items: assetsList });
   // @ts-ignore
-  sdk.Assets.search.mockResolvedValue({ items: assetsList });
+  // sdk.Assets.search.mockResolvedValue({ items: assetsList });
+  fakeClient.assets.search.mockResolvedValue({ items: assetsList });
 });
+
+const createWrapper = (props: any) => {
+  return mount(
+    <ClientSDKProvider client={fakeClient}>
+      <AssetSearch {...props} />
+    </ClientSDKProvider>
+  );
+}
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -39,7 +61,7 @@ describe('AssetSearch', () => {
   it('should renders without exploding', () => {
     const { onLiveSearchSelect } = propsCallbacks;
     const props = { onLiveSearchSelect };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -47,7 +69,7 @@ describe('AssetSearch', () => {
     const { onLiveSearchSelect } = propsCallbacks;
     const showLiveSearchResults = true;
     const props = { onLiveSearchSelect, showLiveSearchResults };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
 
     wrapper
       .find(Input)
@@ -70,7 +92,7 @@ describe('AssetSearch', () => {
     const { onSearchResult } = propsCallbacks;
     const showLiveSearchResults = false;
     const props = { onSearchResult, showLiveSearchResults };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
 
     wrapper
       .find(Input)
@@ -87,7 +109,7 @@ describe('AssetSearch', () => {
     const { onSearchResult } = propsCallbacks;
     const showLiveSearchResults = false;
     const props = { onSearchResult, showLiveSearchResults };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
 
     wrapper
       .find(Input)
@@ -103,11 +125,11 @@ describe('AssetSearch', () => {
 
   it('should call onError when error', done => {
     // @ts-ignore
-    sdk.Assets.search.mockRejectedValue(new Error('error'));
+    fakeClient.assets.search.mockRejectedValue(new Error('error'));
 
     const { onLiveSearchSelect, onError } = propsCallbacks;
     const props = { onLiveSearchSelect, onError };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
 
     wrapper
       .find(Input)
@@ -123,11 +145,11 @@ describe('AssetSearch', () => {
   it('should fetch root assets when rootAssetSelect is true', done => {
     const { onLiveSearchSelect } = propsCallbacks;
     const props = { onLiveSearchSelect, rootAssetSelect: true };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
 
     setImmediate(() => {
       wrapper.update();
-      expect(sdk.Assets.list).toHaveBeenCalled();
+      expect(fakeClient.assets.list).toHaveBeenCalled();
       done();
     });
   });
@@ -135,11 +157,11 @@ describe('AssetSearch', () => {
   it('should not fetch root assets when rootAssetSelect is false', done => {
     const { onLiveSearchSelect } = propsCallbacks;
     const props = { onLiveSearchSelect, rootAssetSelect: false };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
 
     setImmediate(() => {
       wrapper.update();
-      expect(sdk.Assets.list).not.toHaveBeenCalled();
+      expect(fakeClient.assets.list).not.toHaveBeenCalled();
       done();
     });
   });
@@ -147,7 +169,7 @@ describe('AssetSearch', () => {
   it('should fetch root assets when rootAssetSelect changes from false to true', done => {
     const { onLiveSearchSelect } = propsCallbacks;
     const props = { onLiveSearchSelect, rootAssetSelect: false };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
 
     setImmediate(() => {
       wrapper.update();
@@ -155,7 +177,7 @@ describe('AssetSearch', () => {
       // tslint:disable-next-line: no-identical-functions
       setImmediate(() => {
         wrapper.update();
-        expect(sdk.Assets.list).toHaveBeenCalled();
+        expect(fakeClient.assets.list).toHaveBeenCalled();
         done();
       });
     });
