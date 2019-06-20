@@ -5,10 +5,7 @@ import {
   GetStringDatapoint,
 } from '@cognite/sdk-alpha/dist/src/types/types';
 import { datapointsList, timeseriesListV2 } from '../../mocks';
-import {
-  AccessorFunc,
-  DataLoader,
-} from './dataLoader';
+import { AccessorFunc, DataLoader } from './dataLoader';
 
 const mockedClient: API = {
   // @ts-ignore
