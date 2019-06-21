@@ -13,7 +13,7 @@ import 'antd/dist/antd.css';
 
 import React from 'react';
 import { AssetSearch } from '@cognite/gearbox';
-import { Asset } from '@cognite/sdk';
+import { Asset } from '@cognite/sdk-alpha/dist/src/types/types';
 
 function ExampleComponent(props) {
   const onLiveSearchSelect = (item: Asset): void => {};
@@ -32,13 +32,12 @@ function ExampleComponent(props) {
 | Property                | Description                                                        | Type                             | Default |
 | ---------------------   | ------------------------------------------------------------------ | -------------------------------- | ------- |
 | `showLiveSearchResults` | flag to show live search results in dropdown list                     | `boolean`                        | `true`  |
-| `onLiveSearchSelect`    | Triggers after selecting one of items from live search results list. Required when showLiveSearchResults == true | `(asset: sdk.Asset) => void;`    |         |
+| `onLiveSearchSelect`    | Triggers after selecting one of items from live search results list. Required when showLiveSearchResults == true | `(asset: Asset) => void;` | |
 | `onError`               | Triggers when search error occurs                                  | `(error: any) => void`           |         |
 | `strings`               | Object of strings to be placed in component                        | `{ [name: string]: string }`     |         |
-| `rootAssetSelect`       | Enable root asset selection                                        | `boolean`                        | `false` |
 | `advancedSearch`        | Enable root advanced search                                        | `boolean`                        | `false` |
 | `styles`                | Custom styles                                                      | `AssetSearchStyles`              |         |
-| `onSearchResult`        | Triggers when search request finishes                              | `(assets: sdk.Asset[]) => void;` |         |
+| `onSearchResult`        | Triggers when search request finishes                              | `(assets: Asset[]) => void;`     |         |
 
 **strings** default fields is:
 
@@ -64,7 +63,6 @@ Definition:
 
 ```typescript
 interface AssetSearchStyles {
-  rootAssetSelect?: React.CSSProperties;
   advancedSearchButton?: React.CSSProperties;
   searchResultList?: {
     container?: React.CSSProperties;

@@ -29,7 +29,7 @@ export interface AssetSearchProps {
   showLiveSearchResults?: boolean;
   onError?: Callback;
   strings?: PureObject;
-  rootAssetSelect: boolean;
+  // rootAssetSelect: boolean; // TODO disabled due to rootAssetSelect changes in SDK 2.0
   advancedSearch: boolean;
   styles?: AssetSearchStyles;
   onSearchResult?: SearchResultCallback;
@@ -87,7 +87,7 @@ export class AssetSearch extends React.Component<
     this.setState({ loading: true });
 
     const assetQuery: AssetSearchFilter = {
-      filter: {
+      filter: !query.advancedSearch ? undefined : {
         // assetSubtrees is not supported yet.
         // assetSubtrees: query.assetSubtrees || undefined,
         metadata:
@@ -108,7 +108,7 @@ export class AssetSearch extends React.Component<
     try {
       const items = await assetsApi.search(assetQuery);
       if (!items || !Array.isArray(items)) {
-        console.log(ERROR_API_UNEXPECTED_RESULTS);
+        console.error(ERROR_API_UNEXPECTED_RESULTS, items);
         return;
       }
       this.setState({ items, loading: false });
@@ -126,7 +126,7 @@ export class AssetSearch extends React.Component<
   render() {
     const {
       showLiveSearchResults,
-      rootAssetSelect,
+      // rootAssetSelect,
       advancedSearch,
       strings,
       styles,
@@ -145,7 +145,7 @@ export class AssetSearch extends React.Component<
         onLiveSearchSelect={onLiveSearchSelect}
         strings={resultStrings}
         loading={loading}
-        rootAssetSelect={rootAssetSelect}
+        // rootAssetSelect={rootAssetSelect}
         advancedSearch={advancedSearch}
         styles={styles}
       />

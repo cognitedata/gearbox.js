@@ -1,9 +1,11 @@
-import * as sdk from '@cognite/sdk';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { assetsList } from '../../../mocks';
 import { AssetSearch, AssetSearchStyles } from '../AssetSearch';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
+import { Asset, AssetSearchFilter, AssetListScope } from '@cognite/sdk-alpha/dist/src/types/types';
 
 import advancedSearch from './advancedSearch.md';
 import basic from './basic.md';
@@ -12,53 +14,71 @@ import empty from './empty.md';
 import error from './error.md';
 import full from './full.md';
 import handleSearchResults from './handleSearchResults.md';
-import rootAssetSelect from './rootAssetSelect.md';
+// import rootAssetSelect from './rootAssetSelect.md';
 
 // Mock the SDK calls
-sdk.Assets.list = async (
-  input: sdk.AssetListParams
-): Promise<sdk.AssetDataWithCursor> => {
-  action('sdk.Assets.list')(input);
-  return {
-    items: assetsList.map(
-      (a: sdk.Asset): sdk.Asset => {
-        return {
-          id: a.id,
-          name: a.name,
-          description: a.description,
-        };
+export const fakeClient: API = {
+  // @ts-ignore
+  assets: {
+    // @ts-ignore
+    list: (scope: AssetListScope) => {
+      action('assets.list')(scope);
+      const items = assetsList.map(
+        (a: Asset): Asset => {
+          return {
+            id: a.id,
+            name: a.name,
+            description: a.description,
+            lastUpdatedTime: a.lastUpdatedTime,
+            createdTime: a.createdTime,
+            depth: a.depth,
+            path: a.path
+          };
+        }
+      );
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(items)
+        })
+      });
+    },
+    search: (query: AssetSearchFilter) => {
+      action('Assets.search')(query);
+      if (query.search && query.search.name === 'empty') {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve([])
+          })
+        });
       }
-    ),
-  };
+
+      if (query.search && query.search.name === 'error') {
+        throw { message: 'sdk search request failed' };
+      }
+
+      const items = assetsList.map(
+        (a: Asset): Asset => {
+          return {
+            id: a.id,
+            name: a.name,
+            description: a.description,
+            lastUpdatedTime: a.lastUpdatedTime,
+            createdTime: a.createdTime,
+            depth: a.depth,
+            path: a.path
+          };
+        }
+      );
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(items)
+        })
+      });
+    }
+  }
 };
 
-sdk.Assets.search = async (
-  query: sdk.AssetSearchParams
-): Promise<sdk.AssetDataWithCursor> => {
-  action('sdk.Assets.search')(query);
-  if (query.query === 'empty') {
-    return { items: [] };
-  }
-
-  if (query.query === 'error') {
-    throw { message: 'sdk search request failed' };
-  }
-
-  return {
-    items: assetsList.map(
-      // tslint:disable-next-line: no-identical-functions
-      (a: sdk.Asset): sdk.Asset => {
-        return {
-          id: a.id,
-          name: a.name,
-          description: a.description,
-        };
-      }
-    ),
-  };
-};
-
-const onLiveSearchSelect = (asset: sdk.Asset) =>
+const onLiveSearchSelect = (asset: Asset) =>
   action('onLiveSearchSelect')(asset);
 const onError = (e: any) => action('onError')(e);
 const basicStrings = {
@@ -75,7 +95,11 @@ const errorStrings = {
 
 storiesOf('AssetSearch', module).add(
   'Full description',
-  () => <AssetSearch onLiveSearchSelect={onLiveSearchSelect} />,
+  () => (
+    <ClientSDKProvider client={fakeClient}>
+      <AssetSearch onLiveSearchSelect={onLiveSearchSelect} />
+    </ClientSDKProvider>
+    ),
   {
     readme: {
       content: full,
@@ -87,10 +111,11 @@ storiesOf('AssetSearch/Examples', module)
   .add(
     'Basic',
     () => (
-      <AssetSearch
-        onLiveSearchSelect={onLiveSearchSelect}
-        strings={basicStrings}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <AssetSearch
+          onLiveSearchSelect={onLiveSearchSelect}
+          strings={basicStrings} />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -101,10 +126,11 @@ storiesOf('AssetSearch/Examples', module)
   .add(
     'Empty results',
     () => (
-      <AssetSearch
-        onLiveSearchSelect={onLiveSearchSelect}
-        strings={emptyStrings}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <AssetSearch
+          onLiveSearchSelect={onLiveSearchSelect}
+          strings={emptyStrings} />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -115,11 +141,12 @@ storiesOf('AssetSearch/Examples', module)
   .add(
     'Error handling',
     () => (
-      <AssetSearch
-        onError={onError}
-        onLiveSearchSelect={onLiveSearchSelect}
-        strings={errorStrings}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <AssetSearch
+          onError={onError}
+          onLiveSearchSelect={onLiveSearchSelect}
+          strings={errorStrings} />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -127,27 +154,30 @@ storiesOf('AssetSearch/Examples', module)
       },
     }
   )
+  /* TODO disabled due to rootAssetSelect changes in SDK 2.0
   .add(
     'Root asset select',
     () => (
-      <AssetSearch
-        onLiveSearchSelect={onLiveSearchSelect}
-        rootAssetSelect={true}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <AssetSearch
+          onLiveSearchSelect={onLiveSearchSelect}
+        rootAssetSelect={true} />
+      </ClientSDKProvider>
     ),
     {
       readme: {
         content: rootAssetSelect,
       },
     }
-  )
+  ) */
   .add(
     'Advanced search',
     () => (
-      <AssetSearch
-        onLiveSearchSelect={onLiveSearchSelect}
-        advancedSearch={true}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <AssetSearch
+          onLiveSearchSelect={onLiveSearchSelect}
+          advancedSearch={true} />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -160,7 +190,7 @@ storiesOf('AssetSearch/Examples', module)
     () => {
       const styles: AssetSearchStyles = {
         advancedSearchButton: { backgroundColor: 'red' },
-        rootAssetSelect: { width: '40%' },
+        // rootAssetSelect: { width: '40%' },
         searchResultList: {
           container: {
             backgroundColor: 'purple',
@@ -179,12 +209,14 @@ storiesOf('AssetSearch/Examples', module)
         },
       };
       return (
-        <AssetSearch
-          onLiveSearchSelect={onLiveSearchSelect}
-          styles={styles}
-          advancedSearch={true}
-          rootAssetSelect={true}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <AssetSearch
+            onLiveSearchSelect={onLiveSearchSelect}
+            styles={styles}
+            advancedSearch={true}
+            // rootAssetSelect={true}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -200,7 +232,7 @@ storiesOf('AssetSearch/Examples', module)
         state = {
           items: [],
         };
-        onSearchResult = (assets: sdk.Asset[]) => {
+        onSearchResult = (assets: Asset[]) => {
           this.setState({
             items: assets,
           });
@@ -209,14 +241,16 @@ storiesOf('AssetSearch/Examples', module)
           const { items } = this.state;
           return (
             <React.Fragment>
-              <AssetSearch
-                showLiveSearchResults={false}
-                onSearchResult={this.onSearchResult}
-              />
+              <ClientSDKProvider client={fakeClient}>
+                <AssetSearch
+                  showLiveSearchResults={false}
+                  onSearchResult={this.onSearchResult}
+                />
+              </ClientSDKProvider>
               <br />
               <p>
                 Search results: [
-                {items.map((item: sdk.Asset) => item.name).join(', ')}]
+                {items.map((item: Asset) => item.name).join(', ')}]
               </p>
             </React.Fragment>
           );
