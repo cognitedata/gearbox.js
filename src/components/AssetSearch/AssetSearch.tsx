@@ -1,13 +1,15 @@
 import React from 'react';
 
+import { AssetsAPI } from '@cognite/sdk-alpha/dist/src/resources/assets/assetsApi';
+import {
+  Asset,
+  AssetSearchFilter,
+} from '@cognite/sdk-alpha/dist/src/types/types';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';
-import { AssetsAPI } from '@cognite/sdk-alpha/dist/src/resources/assets/assetsApi';
-import { Asset, AssetSearchFilter } from '@cognite/sdk-alpha/dist/src/types/types';
-
 
 import { ApiQuery, Callback, PureObject } from '../../interfaces';
 import {
@@ -87,24 +89,32 @@ export class AssetSearch extends React.Component<
     this.setState({ loading: true });
 
     const assetQuery: AssetSearchFilter = {
-      filter: !query.advancedSearch ? undefined : {
-        // assetSubtrees is not supported yet.
-        // assetSubtrees: query.assetSubtrees || undefined,
-        metadata:
-          (query.advancedSearch &&
-            query.advancedSearch.metadata &&
-            query.advancedSearch.metadata.reduce(
-              (a, c) => ({ ...a, [c.key]: c.value }),
-              {}
-            )) ||
-          undefined,
-      },
+      filter: !query.advancedSearch
+        ? undefined
+        : {
+            // assetSubtrees is not supported yet.
+            // assetSubtrees: query.assetSubtrees || undefined,
+            metadata:
+              (query.advancedSearch &&
+                query.advancedSearch.metadata &&
+                query.advancedSearch.metadata.reduce(
+                  (a, c) => ({ ...a, [c.key]: c.value }),
+                  {}
+                )) ||
+              undefined,
+          },
       search: {
-        name: (query.advancedSearch && query.advancedSearch.name) ? query.advancedSearch.name : (query.query || undefined),
-        description: (query.advancedSearch && query.advancedSearch.description) ? query.advancedSearch.description : undefined
+        name:
+          query.advancedSearch && query.advancedSearch.name
+            ? query.advancedSearch.name
+            : query.query || undefined,
+        description:
+          query.advancedSearch && query.advancedSearch.description
+            ? query.advancedSearch.description
+            : undefined,
       },
-      limit: query.fetchingLimit || undefined
-    }
+      limit: query.fetchingLimit || undefined,
+    };
     try {
       const items = await assetsApi.search(assetQuery);
       if (!items || !Array.isArray(items)) {

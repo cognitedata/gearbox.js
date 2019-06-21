@@ -1,11 +1,15 @@
 import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
+import {
+  Asset,
+  AssetListScope,
+  AssetSearchFilter,
+} from '@cognite/sdk-alpha/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { assetsList } from '../../../mocks';
-import { AssetSearch, AssetSearchStyles } from '../AssetSearch';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { Asset, AssetSearchFilter, AssetListScope } from '@cognite/sdk-alpha/dist/src/types/types';
+import { AssetSearch, AssetSearchStyles } from '../AssetSearch';
 
 import advancedSearch from './advancedSearch.md';
 import basic from './basic.md';
@@ -32,14 +36,14 @@ export const fakeClient: API = {
             lastUpdatedTime: a.lastUpdatedTime,
             createdTime: a.createdTime,
             depth: a.depth,
-            path: a.path
+            path: a.path,
           };
         }
       );
       return new Promise(resolve => {
         setTimeout(() => {
-          resolve(items)
-        })
+          resolve(items);
+        });
       });
     },
     search: (query: AssetSearchFilter) => {
@@ -47,8 +51,8 @@ export const fakeClient: API = {
       if (query.search && query.search.name === 'empty') {
         return new Promise(resolve => {
           setTimeout(() => {
-            resolve([])
-          })
+            resolve([]);
+          });
         });
       }
 
@@ -65,17 +69,17 @@ export const fakeClient: API = {
             lastUpdatedTime: a.lastUpdatedTime,
             createdTime: a.createdTime,
             depth: a.depth,
-            path: a.path
+            path: a.path,
           };
         }
       );
       return new Promise(resolve => {
         setTimeout(() => {
-          resolve(items)
-        })
+          resolve(items);
+        });
       });
-    }
-  }
+    },
+  },
 };
 
 const onLiveSearchSelect = (asset: Asset) =>
@@ -99,7 +103,7 @@ storiesOf('AssetSearch', module).add(
     <ClientSDKProvider client={fakeClient}>
       <AssetSearch onLiveSearchSelect={onLiveSearchSelect} />
     </ClientSDKProvider>
-    ),
+  ),
   {
     readme: {
       content: full,
@@ -114,7 +118,8 @@ storiesOf('AssetSearch/Examples', module)
       <ClientSDKProvider client={fakeClient}>
         <AssetSearch
           onLiveSearchSelect={onLiveSearchSelect}
-          strings={basicStrings} />
+          strings={basicStrings}
+        />
       </ClientSDKProvider>
     ),
     {
@@ -129,7 +134,8 @@ storiesOf('AssetSearch/Examples', module)
       <ClientSDKProvider client={fakeClient}>
         <AssetSearch
           onLiveSearchSelect={onLiveSearchSelect}
-          strings={emptyStrings} />
+          strings={emptyStrings}
+        />
       </ClientSDKProvider>
     ),
     {
@@ -145,7 +151,8 @@ storiesOf('AssetSearch/Examples', module)
         <AssetSearch
           onError={onError}
           onLiveSearchSelect={onLiveSearchSelect}
-          strings={errorStrings} />
+          strings={errorStrings}
+        />
       </ClientSDKProvider>
     ),
     {
@@ -176,7 +183,8 @@ storiesOf('AssetSearch/Examples', module)
       <ClientSDKProvider client={fakeClient}>
         <AssetSearch
           onLiveSearchSelect={onLiveSearchSelect}
-          advancedSearch={true} />
+          advancedSearch={true}
+        />
       </ClientSDKProvider>
     ),
     {

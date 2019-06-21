@@ -1,4 +1,3 @@
-// import * as sdk from '@cognite/sdk';
 import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 
 import { Input } from 'antd';
@@ -7,8 +6,8 @@ import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
 import React from 'react';
 import { assetsList } from '../../mocks';
-import { AssetSearch } from './AssetSearch';
 import { ClientSDKProvider } from '../ClientSDKProvider';
+import { AssetSearch } from './AssetSearch';
 import Mock = jest.Mock;
 
 configure({ adapter: new Adapter() });
@@ -28,13 +27,13 @@ const fakeClient: API = {
   // @ts-ignore
   assets: {
     search: jest.fn(),
-    list: jest.fn()
-  }
-}
+    list: jest.fn(),
+  },
+};
 
 beforeEach(() => {
   // @ts-ignore
-  fakeClient.assets.list.mockResolvedValue(assetsList );
+  fakeClient.assets.list.mockResolvedValue(assetsList);
   // @ts-ignore
   fakeClient.assets.search.mockResolvedValue(assetsList);
 });
@@ -45,7 +44,7 @@ const createWrapper = (props: any) => {
       <AssetSearch {...props} />
     </ClientSDKProvider>
   );
-}
+};
 
 afterEach(() => {
   jest.clearAllMocks();
