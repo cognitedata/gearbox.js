@@ -65,7 +65,10 @@ const onError = (error: any) => {
   action('onError')(error);
 };
 
-const renderButton = (capture: Callback, image?: string): React.ReactNode => {
+const renderButton = (
+  capture: Callback,
+  isReady?: boolean = true
+): React.ReactNode => {
   const Button = styled('button')`
     border-radius: 10px;
     height: 50px;
@@ -75,7 +78,7 @@ const renderButton = (capture: Callback, image?: string): React.ReactNode => {
     left: 30px;
     transform: translateY(-50%);
   `;
-  return <Button onClick={capture}>{image ? 'Reset' : 'Capture'}</Button>;
+  return <Button onClick={capture}>{!isReady ? 'Reset' : 'Capture'}</Button>;
 };
 
 const customNotification: (type: ASNotifyTypes) => any = (

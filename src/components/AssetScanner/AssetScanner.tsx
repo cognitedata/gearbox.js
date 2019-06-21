@@ -156,11 +156,6 @@ export class AssetScanner extends React.Component<
 
   async doRecognizeImageProcess(imageString: string): Promise<string[] | null> {
     const { onImageRecognizeFinish, onImageRecognizeStart } = this.props;
-    const { isLoading } = this.state;
-
-    if (!isLoading) {
-      this.startLoading();
-    }
 
     if (onImageRecognizeStart) {
       onImageRecognizeStart(imageString);
@@ -349,6 +344,8 @@ export class AssetScanner extends React.Component<
       }
 
       this.notification(errorOccurred);
+
+      this.endLoading();
 
       return null;
     }
