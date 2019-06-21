@@ -75,9 +75,9 @@ export function WebcamScanner({
   isReady = true,
 }: WebcamScannerProps) {
   const onCaptureClick = () => {
-    if (!imageSrc && capture) {
+    if (isReady && capture) {
       capture();
-    } else if (imageSrc && onReset) {
+    } else if (!isReady && onReset) {
       onReset();
     }
   };
@@ -93,6 +93,7 @@ export function WebcamScanner({
         setRef={setRef}
         className="camera"
         onError={onError}
+        style={imageSrc ? { opacity: 0, visability: 'hidden' } : {}}
       />
       {!isLoading &&
         (button ? (

@@ -20,7 +20,7 @@ import {
   ocrNoTextFound,
   ocrSuccess,
 } from '../../utils/notifications';
-import { getCanvas } from '../../utils/utils';
+import { getCanvas, removeImageBase } from '../../utils/utils';
 import { WebcamScanner } from './WebcamScanner/WebcamScanner';
 
 const Wrapper = styled.div`
@@ -87,24 +87,6 @@ export class AssetScanner extends React.Component<
     enableNotification: false,
   };
 
-  static getDerivedStateFromProps(
-    props: AssetScannerProps,
-    state: AssetScannerState
-  ) {
-    const { image } = props;
-    const { imageSrc, isLoading } = state;
-
-    if (!isLoading && image && image !== imageSrc) {
-      return {
-        ...state,
-        imageSrc: image,
-        ready: true,
-      };
-    } else {
-      return null;
-    }
-  }
-
   notification: ASNotification = this.prepareNotifications();
 
   state: AssetScannerState = {
@@ -132,8 +114,10 @@ export class AssetScanner extends React.Component<
     this.video = video;
   }
 
-  setReady(isReady: boolean = true) {
-    this.setState({ ready: isReady });
+  setReady(isReady: boolean = true): Promise<void> {
+    return new Promise(resolve => {
+      this.setState({ ready: isReady }, () => resolve());
+    });
   }
 
   resetSearch() {
@@ -154,6 +138,23 @@ export class AssetScanner extends React.Component<
     });
   }
 
+  componentDidUpdate(prevProps: AssetScannerProps) {
+    if (!this.props.image) {
+      return;
+    }
+
+    const image = removeImageBase(this.props.image);
+    const { imageSrc, isLoading } = this.state;
+
+    if (
+      !isLoading &&
+      image !== imageSrc &&
+      this.props.image !== prevProps.image
+    ) {
+      this.setState({ imageSrc: image });
+    }
+  }
+
   async doRecognizeImageProcess(imageString: string): Promise<string[] | null> {
     const { onImageRecognizeFinish, onImageRecognizeStart } = this.props;
 
@@ -161,7 +162,7 @@ export class AssetScanner extends React.Component<
       onImageRecognizeStart(imageString);
     }
 
-    const imageSrc = imageString.split(',')[1];
+    const imageSrc = removeImageBase(imageString);
 
     this.setImageSrc(imageSrc);
 
@@ -201,7 +202,7 @@ export class AssetScanner extends React.Component<
 
   async capture() {
     this.startLoading();
-    this.setReady(false);
+    await this.setReady(false);
 
     const imageString = await this.getImage();
 
