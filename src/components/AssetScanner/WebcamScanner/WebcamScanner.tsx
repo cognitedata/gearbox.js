@@ -59,6 +59,7 @@ interface WebcamScannerProps {
   styles?: WebcamScannerStyles;
   strings?: PureObject;
   onError?: Callback;
+  isReady?: boolean;
 }
 
 export function WebcamScanner({
@@ -71,6 +72,7 @@ export function WebcamScanner({
   strings = {},
   onError,
   button,
+  isReady = true,
 }: WebcamScannerProps) {
   const onCaptureClick = () => {
     if (!imageSrc && capture) {
@@ -94,14 +96,14 @@ export function WebcamScanner({
       />
       {!isLoading &&
         (button ? (
-          button(onCaptureClick, imageSrc)
+          button(onCaptureClick, isReady)
         ) : (
           <CameraButton
             onClick={onCaptureClick}
             data-test-id="scanner-camera-button"
             style={styles && styles.button}
           >
-            {imageSrc ? resultStrings.reset : ''}
+            {!isReady ? resultStrings.reset : ''}
           </CameraButton>
         ))}
     </Wrapper>

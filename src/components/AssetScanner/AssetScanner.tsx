@@ -44,7 +44,7 @@ type ASNotification = (type: ASNotifyTypes) => any;
 
 export type ButtonRenderProp = (
   onCapture: Callback,
-  image?: string
+  isReady: boolean
 ) => React.ReactNode;
 
 export interface AssetScannerStyles {
@@ -74,7 +74,8 @@ export interface AssetScannerProps {
 
 interface AssetScannerState {
   isLoading: boolean;
-  scannedImageSrc: string;
+  ready: boolean;
+  imageSrc: string;
 }
 
 export class AssetScanner extends React.Component<
@@ -86,11 +87,30 @@ export class AssetScanner extends React.Component<
     enableNotification: false,
   };
 
+  static getDerivedStateFromProps(
+    props: AssetScannerProps,
+    state: AssetScannerState
+  ) {
+    const { image } = props;
+    const { imageSrc, isLoading } = state;
+
+    if (!isLoading && image && image !== imageSrc) {
+      return {
+        ...state,
+        imageSrc: image,
+        ready: true,
+      };
+    } else {
+      return null;
+    }
+  }
+
   notification: ASNotification = this.prepareNotifications();
 
   state: AssetScannerState = {
     isLoading: false,
-    scannedImageSrc: '',
+    ready: true,
+    imageSrc: '',
   };
   video: HTMLVideoElement | null = null;
 
@@ -100,25 +120,20 @@ export class AssetScanner extends React.Component<
 
   constructor(props: AssetScannerProps) {
     super(props);
-  }
 
-  componentDidMount() {
-    this.resetSearch();
-  }
+    const { image } = props;
 
-  async componentDidUpdate(prevProps: Readonly<AssetScannerProps>) {
-    const { image } = this.props;
-    const { image: prevImage } = prevProps;
-    const { scannedImageSrc } = this.state;
-
-    if (image && image !== prevImage && image !== scannedImageSrc) {
-      const strings = await this.doRecognizeImageProcess(image);
-      await this.doFetchFoundAssets(strings);
+    if (image) {
+      this.state.imageSrc = image;
     }
   }
 
   setRef(video: HTMLVideoElement | null) {
     this.video = video;
+  }
+
+  setReady(isReady: boolean = true) {
+    this.setState({ ready: isReady });
   }
 
   resetSearch() {
@@ -133,8 +148,9 @@ export class AssetScanner extends React.Component<
     }
 
     this.setState({
-      scannedImageSrc: '',
+      imageSrc: '',
       isLoading: false,
+      ready: true,
     });
   }
 
@@ -152,7 +168,7 @@ export class AssetScanner extends React.Component<
 
     const imageSrc = imageString.split(',')[1];
 
-    this.setScannedImageSrc(imageSrc);
+    this.setImageSrc(imageSrc);
 
     const strings = await this.recognizeImage(imageSrc);
 
@@ -190,8 +206,9 @@ export class AssetScanner extends React.Component<
 
   async capture() {
     this.startLoading();
+    this.setReady(false);
 
-    const imageString = await this.getImageFromCanvas();
+    const imageString = await this.getImage();
 
     if (!imageString) {
       this.endLoading();
@@ -204,14 +221,14 @@ export class AssetScanner extends React.Component<
   }
 
   render() {
-    const { isLoading, scannedImageSrc } = this.state;
+    const { isLoading, imageSrc, ready } = this.state;
     const { styles, strings, onError, button } = this.props;
 
     return (
       <Wrapper>
         <WebcamScanner
           isLoading={isLoading}
-          imageSrc={scannedImageSrc}
+          imageSrc={imageSrc}
           capture={this.captureBound}
           setRef={this.setRefBound}
           onReset={this.resetSearchBound}
@@ -219,6 +236,7 @@ export class AssetScanner extends React.Component<
           styles={styles}
           onError={onError}
           button={button}
+          isReady={ready}
         />
       </Wrapper>
     );
@@ -252,8 +270,8 @@ export class AssetScanner extends React.Component<
     }
   }
 
-  private setScannedImageSrc(scannedImageSrc: string = '') {
-    this.setState({ scannedImageSrc });
+  private setImageSrc(imageSrc: string = '') {
+    this.setState({ imageSrc });
   }
 
   private prepareNotifications(): ASNotification {
@@ -285,6 +303,12 @@ export class AssetScanner extends React.Component<
     ))
       .filter(asset => asset.length)
       .reduce((res, current) => res.concat(current));
+  }
+
+  private getImage(): Promise<string> {
+    const { imageSrc } = this.state;
+
+    return imageSrc ? Promise.resolve(imageSrc) : this.getImageFromCanvas();
   }
 
   // Made async to provide better UX for component
