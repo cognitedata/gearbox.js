@@ -38,7 +38,33 @@ See the up-to-date storybook [here](https://cognitedata.github.io/gearbox.js).
 
 ## Development
 
+#### Requirements
+
 To build the library locally it's required to have version of `node` installed not lower than `10.10`
+
+#### Usage of `yarn link`
+
+If you want to link your local version of gearbox package via `yarn link` command, you need manually configure imported sdk instance, which uses in gearbox, inside your application. You can do this via providing configuration object:
+```typescript
+import { configureSdk } from '@cognite/gearbox'
+
+configureSdk({
+  apiKey: 'your_api_key',
+  project: 'project_name',
+  ...
+})
+```
+
+or you can run through the login process passing tenant name like below:
+```typescript
+import { authSdk } from '@cognite/gearbox'
+
+async function loginIn(tenant: string) {
+  
+  // main login process, and if success do next
+  const authResult = await authSdk(tenant);
+}
+```
 
 ## Tests
 
