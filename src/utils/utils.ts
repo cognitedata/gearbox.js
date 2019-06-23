@@ -40,3 +40,9 @@ export function extractValidStrings(
 
   return [...new Set(validStrings)];
 }
+
+export function removeImageBase(imageString: string = ''): string {
+  const [base, src] = imageString.split(',');
+
+  return src || base;
+}

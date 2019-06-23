@@ -67,7 +67,7 @@ const onError = (error: any) => {
 
 const renderButton = (
   capture: Callback,
-  isReady?: boolean = true
+  isReady: boolean = true
 ): React.ReactNode => {
   const Button = styled('button')`
     border-radius: 10px;
