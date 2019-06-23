@@ -88,33 +88,8 @@ export class AssetSearch extends React.Component<
 
     this.setState({ loading: true });
 
-    const assetQuery: AssetSearchFilter = {
-      filter: !query.advancedSearch
-        ? undefined
-        : {
-            // assetSubtrees is not supported yet.
-            // assetSubtrees: query.assetSubtrees || undefined,
-            metadata:
-              (query.advancedSearch &&
-                query.advancedSearch.metadata &&
-                query.advancedSearch.metadata.reduce(
-                  (a, c) => ({ ...a, [c.key]: c.value }),
-                  {}
-                )) ||
-              undefined,
-          },
-      search: {
-        name:
-          query.advancedSearch && query.advancedSearch.name
-            ? query.advancedSearch.name
-            : query.query || undefined,
-        description:
-          query.advancedSearch && query.advancedSearch.description
-            ? query.advancedSearch.description
-            : undefined,
-      },
-      limit: query.fetchingLimit || undefined,
-    };
+    const assetQuery: AssetSearchFilter = this.getPayload(query);
+
     try {
       const items = await assetsApi.search(assetQuery);
       if (!items || !Array.isArray(items)) {
@@ -160,5 +135,34 @@ export class AssetSearch extends React.Component<
         styles={styles}
       />
     );
+  }
+
+  private getPayload(query: ApiQuery): AssetSearchFilter {
+    return {
+      filter: !query.advancedSearch
+        ? undefined
+        : {
+            // assetSubtrees is not supported yet.
+            // assetSubtrees: query.assetSubtrees || undefined,
+            metadata:
+              (query.advancedSearch &&
+                query.advancedSearch.metadata &&
+                query.advancedSearch.metadata.reduce(
+                  (a, c) => ({ ...a, [c.key]: c.value }),
+                  {}
+                )) ||
+              undefined,
+          },
+      search: {
+        name:
+          query.advancedSearch && query.advancedSearch.name
+            ? query.advancedSearch.name
+            : query.query || undefined,
+        description:
+          query.advancedSearch && query.advancedSearch.description
+            ? query.advancedSearch.description
+            : undefined,
+      },
+    };
   }
 }

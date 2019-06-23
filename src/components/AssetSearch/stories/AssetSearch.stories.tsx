@@ -6,6 +6,7 @@ import {
 } from '@cognite/sdk-alpha/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
+import { pick } from 'lodash';
 import React from 'react';
 import { assetsList } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
@@ -18,7 +19,6 @@ import empty from './empty.md';
 import error from './error.md';
 import full from './full.md';
 import handleSearchResults from './handleSearchResults.md';
-// import rootAssetSelect from './rootAssetSelect.md';
 
 // Mock the SDK calls
 export const fakeClient: API = {
@@ -27,18 +27,18 @@ export const fakeClient: API = {
     // @ts-ignore
     list: (scope: AssetListScope) => {
       action('assets.list')(scope);
-      const items = assetsList.map(
-        (a: Asset): Asset => {
-          return {
-            id: a.id,
-            name: a.name,
-            description: a.description,
-            lastUpdatedTime: a.lastUpdatedTime,
-            createdTime: a.createdTime,
-            depth: a.depth,
-            path: a.path,
-          };
-        }
+      // @ts-ignore
+      // pick only required fields
+      const items: Asset[] = assetsList.map(asset =>
+        pick(asset, [
+          'id',
+          'name',
+          'description',
+          'lastUpdatedTime',
+          'createdTime',
+          'depth',
+          'paths',
+        ])
       );
       return new Promise(resolve => {
         setTimeout(() => {
@@ -60,19 +60,19 @@ export const fakeClient: API = {
         throw { message: 'sdk search request failed' };
       }
 
-      const items = assetsList.map(
-        (a: Asset): Asset => {
-          return {
-            id: a.id,
-            name: a.name,
-            description: a.description,
-            lastUpdatedTime: a.lastUpdatedTime,
-            createdTime: a.createdTime,
-            depth: a.depth,
-            path: a.path,
-          };
-        }
+      // @ts-ignore
+      const items: Asset[] = assetsList.map(asset =>
+        pick(asset, [
+          'id',
+          'name',
+          'description',
+          'lastUpdatedTime',
+          'createdTime',
+          'depth',
+          'paths',
+        ])
       );
+      // tslint:disable-next-line: no-identical-functions
       return new Promise(resolve => {
         setTimeout(() => {
           resolve(items);
