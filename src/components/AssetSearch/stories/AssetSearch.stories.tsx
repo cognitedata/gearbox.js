@@ -24,6 +24,7 @@ import handleSearchResults from './handleSearchResults.md';
 export const fakeClient: API = {
   // @ts-ignore
   assets: {
+    /* TODO this is used by rootAssetSelect and actually is disabled due to rootAssetSelect changes in SDK 2.0
     // @ts-ignore
     list: (scope: AssetListScope) => {
       action('assets.list')(scope);
@@ -45,7 +46,7 @@ export const fakeClient: API = {
           resolve(items);
         });
       });
-    },
+    }, */
     search: (query: AssetSearchFilter) => {
       action('Assets.search')(query);
       if (query.search && query.search.name === 'empty') {

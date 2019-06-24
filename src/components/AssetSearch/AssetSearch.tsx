@@ -42,8 +42,6 @@ interface AssetSearchState {
   loading: boolean;
 }
 
-let assetsApi: AssetsAPI;
-
 export class AssetSearch extends React.Component<
   AssetSearchProps,
   AssetSearchState
@@ -56,6 +54,7 @@ export class AssetSearch extends React.Component<
 
   static contextType = ClientSDKContext;
   context!: React.ContextType<typeof ClientSDKContext>;
+  assetsApi!: AssetsAPI;
 
   constructor(props: AssetSearchProps) {
     super(props);
@@ -72,7 +71,7 @@ export class AssetSearch extends React.Component<
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
-    assetsApi = this.context.assets;
+    this.assetsApi = this.context.assets;
   }
 
   async onSearch(query: ApiQuery) {
@@ -91,7 +90,7 @@ export class AssetSearch extends React.Component<
     const assetQuery: AssetSearchFilter = this.getPayload(query);
 
     try {
-      const items = await assetsApi.search(assetQuery);
+      const items = await this.assetsApi.search(assetQuery);
       if (!items || !Array.isArray(items)) {
         console.error(ERROR_API_UNEXPECTED_RESULTS, items);
         return;
