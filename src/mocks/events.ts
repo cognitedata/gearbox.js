@@ -1,5 +1,4 @@
 /* tslint:disable:no-duplicate-string */
-import { Event as ApiEvent } from '@cognite/sdk';
 import { CogniteEvent } from '@cognite/sdk-alpha/dist/src/types/types';
 import moment from 'moment-timezone';
 import { AssetMetaStyles } from '../components/AssetMeta';
@@ -115,106 +114,6 @@ export const ASSET_META_STYLES: AssetMetaStyles = {
   documents: ASSET_META_DOCS_STYLES,
   events: ASSET_META_EVENTS_STYLES,
 };
-
-export const EVENTS: ApiEvent[] = [
-  {
-    id: 1995162693488,
-    type: 'failure',
-    subtype: 'Valhall',
-    metadata: {
-      source: 'akerbp-cdp1',
-      sourceId: '8357488757942266',
-    },
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    startTime: baseTimestamp,
-    assetIds: [4650652196144007],
-    source: 'akerbp-cdpr',
-    sourceId: '8357488757942266',
-    createdTime: 1538252247102,
-    lastUpdatedTime: 1538252247102,
-  },
-  {
-    id: 8825861064387,
-    type: 'alert',
-    subtype: 'Val',
-    metadata: {
-      source: 'akerbp-cdp9',
-      sourceId: '5712479887811020',
-    },
-    description:
-      'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' +
-      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris' +
-      ' nisi ut aliquip ex ea commodo consequat.',
-    startTime: baseTimestamp + 3 * 24 * 60 * 60 * 1000,
-    endTime: baseTimestamp + 6 * 24 * 60 * 60 * 1000,
-    assetIds: [4650652196144007],
-    source: 'akerbp-cdp',
-    sourceId: '5712479887811020',
-    createdTime: 1544644816746,
-    lastUpdatedTime: 1544644816746,
-  },
-  {
-    id: 25496029326330,
-    type: 'workorder',
-    subtype: 'Val',
-    metadata: {
-      source: 'akerbp-cdp5',
-      sourceId: '2045316963854017',
-    },
-    description:
-      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-    startTime: baseTimestamp + 13 * 24 * 60 * 60 * 1000,
-    endTime: baseTimestamp + 20 * 24 * 60 * 60 * 1000,
-    assetIds: [4650652196144007],
-    source: 'akerbp-cdp',
-    sourceId: '2045316963854017',
-    createdTime: 1548932470085,
-    lastUpdatedTime: 1548932470085,
-  },
-  {
-    id: 33766051546406,
-    type: 'failure',
-    subtype: 'Val',
-    metadata: {
-      source: 'akerbp-cdp2',
-      sourceId: '6122324097482222',
-    },
-    description: 'Excepteur sint occaecat cupidatat non proident',
-    startTime: baseTimestamp - 20 * 24 * 60 * 60 * 1000,
-    endTime: baseTimestamp - 10 * 24 * 60 * 60 * 1000,
-    assetIds: [4650652196144007],
-    source: 'akerbp-cdp',
-    sourceId: '6122324097482222',
-    createdTime: 1548273625540,
-    lastUpdatedTime: 1548273625540,
-  },
-  {
-    id: 35593709738144,
-    type: 'alert',
-    subtype: 'Val',
-    metadata: {
-      source: 'akerbp-cdp4',
-      sourceId: '3080723126388384',
-    },
-    description:
-      'Sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    startTime: baseTimestamp + 43 * 24 * 60 * 60 * 1000,
-    endTime: baseTimestamp + 50 * 24 * 60 * 60 * 1000,
-    assetIds: [4650652196144007],
-    source: 'akerbp-cdp3',
-    sourceId: '3080723126388384',
-    createdTime: 1548932461186,
-    lastUpdatedTime: 1548932461186,
-  },
-  {
-    id: 35593709738145,
-    assetIds: [4650652196144007],
-    source: 'akerbp-cdp3',
-    sourceId: '3080723126388384',
-    createdTime: 1548932461186,
-    lastUpdatedTime: 1548932461186,
-  },
-];
 
 export const fakeEvents: CogniteEvent[] = [
   {

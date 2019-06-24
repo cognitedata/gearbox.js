@@ -1,8 +1,8 @@
-import { Files } from '@cognite/sdk';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
 
-export const getDocumentDownloadLink = async (id: number) => {
-  const url = await Files.download(id);
-
+export const getDocumentDownloadLink = async (client: API, id: number) => {
+  const urls = await client.files.getDownloadUrls([{ id }]);
+  const url = urls[0].downloadUrl;
   const response = await fetch(url);
 
   if (response.status !== 200) {

@@ -6,9 +6,3 @@ export interface ApiQuery {
   query: string;
   advancedSearch: AdvancedSearch | null;
 }
-
-export interface ApiAssetList {
-  query: string;
-  fuzziness?: number;
-  fuzzLimit?: number;
-}

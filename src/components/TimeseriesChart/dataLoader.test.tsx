@@ -5,12 +5,7 @@ import {
   GetStringDatapoint,
 } from '@cognite/sdk-alpha/dist/src/types/types';
 import { datapointsList, timeseriesListV2 } from '../../mocks';
-import {
-  AccessorFunc,
-  cogniteloader,
-  mergeInsert,
-  setContext,
-} from './dataLoader';
+import { AccessorFunc, DataLoader } from './dataLoader';
 
 const mockedClient: API = {
   // @ts-ignore
@@ -27,6 +22,8 @@ const toPoints = (arr: number[], from: string): GetAggregateDatapoint[] =>
   arr.map((d: number) => ({ timestamp: new Date(d), value: from }));
 
 const xAccessor: AccessorFunc = (d: GetAggregateDatapoint) => +d.timestamp;
+
+const dataLoader = new DataLoader(mockedClient);
 
 // tslint:disable:no-big-function
 describe('dataLoader', () => {
@@ -60,7 +57,7 @@ describe('dataLoader', () => {
           value: 'base',
         },
       ];
-      const merged = mergeInsert(base, toInsert, xAccessor, [5, 8]);
+      const merged = DataLoader.mergeInsert(base, toInsert, xAccessor, [5, 8]);
       expect(merged).toEqual(expectedOutput);
     });
 
@@ -71,7 +68,7 @@ describe('dataLoader', () => {
         { timestamp: new Date(1), value: 'insert' },
         { timestamp: new Date(5), value: 'insert' },
       ];
-      const merged = mergeInsert(base, toInsert, xAccessor, [0, 5]);
+      const merged = DataLoader.mergeInsert(base, toInsert, xAccessor, [0, 5]);
       expect(merged).toEqual(expectedOutput);
     });
 
@@ -82,14 +79,13 @@ describe('dataLoader', () => {
         { timestamp: new Date(1), value: 'base' },
         { timestamp: new Date(5), value: 'insert' },
       ];
-      const merged = mergeInsert(base, toInsert, xAccessor, [3, 5]);
+      const merged = DataLoader.mergeInsert(base, toInsert, xAccessor, [3, 5]);
       expect(merged).toEqual(expectedOutput);
     });
   });
 
   describe('cogniteloader', () => {
     beforeEach(() => {
-      setContext(mockedClient);
       // @ts-ignore
       mockedClient.timeseries.retrieve.mockResolvedValue([timeseriesListV2[0]]);
       // @ts-ignore
@@ -116,7 +112,7 @@ describe('dataLoader', () => {
           pps: number;
           expectedGranularity: string;
         }) => {
-          const result = await cogniteloader({
+          const result = await dataLoader.cogniteloader({
             id: 123,
             timeDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
             timeSubDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
@@ -154,7 +150,7 @@ describe('dataLoader', () => {
         ]);
 
         const startTime = Date.now() - 24 * 60 * 60 * 1000;
-        const result = await cogniteloader({
+        const result = await dataLoader.cogniteloader({
           id: 123,
           timeDomain: [startTime, Date.now()],
           timeSubDomain: [startTime, Date.now()],
@@ -197,7 +193,7 @@ describe('dataLoader', () => {
           expectedGranularity: string;
           // tslint:disable-next-line: no-identical-functions
         }) => {
-          const result = await cogniteloader({
+          const result = await dataLoader.cogniteloader({
             id: 123,
             timeDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
             timeSubDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
@@ -235,7 +231,7 @@ describe('dataLoader', () => {
           },
         ]);
 
-        const result = await cogniteloader({
+        const result = await dataLoader.cogniteloader({
           id: 123,
           timeDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
           timeSubDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
@@ -264,13 +260,13 @@ describe('dataLoader', () => {
 
     describe('reason UPDATE_SUBDOMAIN', () => {
       it('should merge subdomain points', async () => {
-        const mergeInsertImpl = mergeInsert;
+        const mergeInsertImpl = DataLoader.mergeInsert;
         // @ts-ignore
-        mergeInsert = jest.fn();
+        DataLoader.mergeInsert = jest.fn();
         // @ts-ignore
-        mergeInsert.mockReturnValue(datapointsList.datapoints);
+        DataLoader.mergeInsert.mockReturnValue(datapointsList.datapoints);
 
-        const result = await cogniteloader({
+        const result = await dataLoader.cogniteloader({
           id: 123,
           timeDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
           timeSubDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
@@ -282,10 +278,10 @@ describe('dataLoader', () => {
         expect(mockedClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
         expect(result.drawPoints).toBeFalsy();
         expect(result.data).toEqual(datapointsList.datapoints);
-        expect(mergeInsert).toHaveBeenCalledTimes(1);
+        expect(DataLoader.mergeInsert).toHaveBeenCalledTimes(1);
 
         // @ts-ignore
-        mergeInsert = mergeInsertImpl;
+        DataLoader.mergeInsert = mergeInsertImpl;
       });
     });
   });

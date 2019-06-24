@@ -1,4 +1,4 @@
-## Hidden Event Metadata 
+## Basic 
 
 <!-- STORY -->
 
@@ -17,8 +17,8 @@ function ExampleComponent(props) {
   return (
     <EventPreview 
       eventId={4650652196144007}
-      onShowDetails={onShowDetails}
-      hideProperties={['metadata']}
+      onShowDetails={onShowDetails} 
+      hideProperties={['type']}
     />
   );
 

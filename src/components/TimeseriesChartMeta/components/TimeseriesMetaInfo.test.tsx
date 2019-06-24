@@ -1,4 +1,3 @@
-import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -6,8 +5,6 @@ import { timeseriesListV2 } from '../../../mocks';
 import { TimeseriesMetaInfo } from './TimeseriesMetaInfo';
 
 configure({ adapter: new Adapter() });
-
-sdk.Datapoints.retrieveLatest = jest.fn();
 
 const timeseries = timeseriesListV2[0];
 

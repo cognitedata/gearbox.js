@@ -73,6 +73,8 @@ export interface SensorPosition {
   };
 }
 
+export type SensorDatapoint = Datapoint;
+
 export interface SensorMinMaxRange {
   min?: number;
   max?: number;

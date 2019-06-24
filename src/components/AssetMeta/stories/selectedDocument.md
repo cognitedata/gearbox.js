@@ -9,12 +9,12 @@ import 'antd/dist/antd.css';
 
 import React from 'react';
 import { AssetMeta } from '@cognite/gearbox';
-import { File as Document } from '@cognite/sdk';
+import { FilesMetadata } from '@cognite/sdk';
 
 function ExampleComponent(props) {
 
   const handleDocumentClick = (
-    document: Document,
+    document: FilesMetadata,
     category: string,
     description: string
     ) => { };

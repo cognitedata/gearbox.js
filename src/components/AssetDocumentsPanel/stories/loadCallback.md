@@ -8,12 +8,12 @@
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { File } from '@cognite/sdk';
+import { FilesMetadata } from '@cognite/sdk';
 import { AssetDocumentsPanel } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
 
-  const handleAssetFilesLoaded = (files: File[]) => { };
+  const handleAssetFilesLoaded = (files: FilesMetadata[]) => { };
 
   return (
     <AssetDocumentsPanel
