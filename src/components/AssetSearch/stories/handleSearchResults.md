@@ -1,4 +1,4 @@
-## Root asset select
+## Handle search results
 
 <!-- STORY -->
 
@@ -12,12 +12,12 @@ import { AssetSearch } from '@cognite/gearbox';
 import { Asset } from '@cognite/sdk-alpha/dist/src/types/types';
 
 function ExampleComponent(props) {
-  const onLiveSearchSelect = (item: Asset): void => {};
+  const onSearchResult = (assets: Asset[]): void => {};
 
   return (
     <AssetSearch
-      onLiveSearchSelect={onLiveSearchSelect}
-      rootAssetSelect={true}
+      showLiveSearchResults={false}
+      onSearchResult={onSearchResult}
     />
   );
 

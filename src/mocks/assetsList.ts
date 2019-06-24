@@ -3,12 +3,17 @@ import { AdvancedSearch } from '../interfaces';
 
 export const vmateDba = 'wmate_dba.wmt_location';
 export const randomTime = '1999-09-01 07:00:00';
+export const randomTimeDateObj1 = new Date('2002-02-02 02:02:02');
+export const randomTimeDateObj2 = new Date('2002-02-22 22:22:22');
 export const valDescription = 'Valhall plattform';
 export const gasCompressionString = 'GAS COMPRESSION AND RE-INJECTION (PH)';
 export const wmtag = 'wmate_dba.wmt_tag';
 
 export const SKA: Asset = {
   id: 8129784932439587,
+  lastUpdatedTime: randomTimeDateObj2,
+  createdTime: randomTimeDateObj1,
+  depth: 1,
   path: [8129784932439587],
   name: 'SKA',
   description: 'Skarv',
@@ -30,13 +35,13 @@ export const SKA: Asset = {
     WMT_LOCATION_USEPLOTALTITUDE: 'Y',
     WMT_LOCATION_WORKSTART: randomTime,
   },
-  createdTime: new Date(1),
-  lastUpdatedTime: new Date(2),
-  depth: 1,
 };
 
 export const IAA: Asset = {
   id: 7793176078609329,
+  lastUpdatedTime: randomTimeDateObj2,
+  createdTime: randomTimeDateObj1,
+  depth: 1,
   path: [7793176078609329],
   name: 'IAA',
   description: 'IAA Root node',
@@ -52,13 +57,13 @@ export const IAA: Asset = {
     TYPE: 'AssetHierarchy',
     UID: 'IAA',
   },
-  createdTime: new Date(1),
-  lastUpdatedTime: new Date(2),
-  depth: 1,
 };
 
 export const VAL: Asset = {
   id: 3623339785663936,
+  lastUpdatedTime: randomTimeDateObj2,
+  createdTime: randomTimeDateObj1,
+  depth: 1,
   path: [3623339785663936],
   name: 'VAL',
   description: valDescription,
@@ -81,9 +86,6 @@ export const VAL: Asset = {
     WMT_LOCATION_USEPLOTALTITUDE: 'Y',
     WMT_LOCATION_WORKSTART: randomTime,
   },
-  createdTime: new Date(1),
-  lastUpdatedTime: new Date(2),
-  depth: 1,
 };
 
 export const SearchValue: AdvancedSearch = {

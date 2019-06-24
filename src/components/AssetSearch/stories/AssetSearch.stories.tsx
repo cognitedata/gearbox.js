@@ -1,8 +1,15 @@
-import * as sdk from '@cognite/sdk';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
+import {
+  Asset,
+  AssetListScope,
+  AssetSearchFilter,
+} from '@cognite/sdk-alpha/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
+import { pick } from 'lodash';
 import React from 'react';
 import { assetsList } from '../../../mocks';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetSearch, AssetSearchStyles } from '../AssetSearch';
 
 import advancedSearch from './advancedSearch.md';
@@ -11,53 +18,72 @@ import customStyles from './customStyles.md';
 import empty from './empty.md';
 import error from './error.md';
 import full from './full.md';
-import rootAssetSelect from './rootAssetSelect.md';
+import handleSearchResults from './handleSearchResults.md';
 
 // Mock the SDK calls
-sdk.Assets.list = async (
-  input: sdk.AssetListParams
-): Promise<sdk.AssetDataWithCursor> => {
-  action('sdk.Assets.list')(input);
-  return {
-    items: assetsList.map(
-      (a: sdk.Asset): sdk.Asset => {
-        return {
-          id: a.id,
-          name: a.name,
-          description: a.description,
-        };
+export const fakeClient: API = {
+  // @ts-ignore
+  assets: {
+    /* TODO this is used by rootAssetSelect and actually is disabled due to rootAssetSelect changes in SDK 2.0
+    // @ts-ignore
+    list: (scope: AssetListScope) => {
+      action('assets.list')(scope);
+      // @ts-ignore
+      // pick only required fields
+      const items: Asset[] = assetsList.map(asset =>
+        pick(asset, [
+          'id',
+          'name',
+          'description',
+          'lastUpdatedTime',
+          'createdTime',
+          'depth',
+          'paths',
+        ])
+      );
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(items);
+        });
+      });
+    }, */
+    search: (query: AssetSearchFilter) => {
+      action('Assets.search')(query);
+      if (query.search && query.search.name === 'empty') {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve([]);
+          });
+        });
       }
-    ),
-  };
-};
 
-sdk.Assets.search = async (
-  query: sdk.AssetSearchParams
-): Promise<sdk.AssetDataWithCursor> => {
-  action('sdk.Assets.search')(query);
-  if (query.query === 'empty') {
-    return { items: [] };
-  }
+      if (query.search && query.search.name === 'error') {
+        throw { message: 'sdk search request failed' };
+      }
 
-  if (query.query === 'error') {
-    throw { message: 'sdk search request failed' };
-  }
-
-  return {
-    items: assetsList.map(
+      // @ts-ignore
+      const items: Asset[] = assetsList.map(asset =>
+        pick(asset, [
+          'id',
+          'name',
+          'description',
+          'lastUpdatedTime',
+          'createdTime',
+          'depth',
+          'paths',
+        ])
+      );
       // tslint:disable-next-line: no-identical-functions
-      (a: sdk.Asset): sdk.Asset => {
-        return {
-          id: a.id,
-          name: a.name,
-          description: a.description,
-        };
-      }
-    ),
-  };
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(items);
+        });
+      });
+    },
+  },
 };
 
-const onLiveSearchSelect = (asset: sdk.Asset) =>
+const onLiveSearchSelect = (asset: Asset) =>
   action('onLiveSearchSelect')(asset);
 const onError = (e: any) => action('onError')(e);
 const basicStrings = {
@@ -74,7 +100,11 @@ const errorStrings = {
 
 storiesOf('AssetSearch', module).add(
   'Full description',
-  () => <AssetSearch onLiveSearchSelect={onLiveSearchSelect} />,
+  () => (
+    <ClientSDKProvider client={fakeClient}>
+      <AssetSearch onLiveSearchSelect={onLiveSearchSelect} />
+    </ClientSDKProvider>
+  ),
   {
     readme: {
       content: full,
@@ -86,10 +116,12 @@ storiesOf('AssetSearch/Examples', module)
   .add(
     'Basic',
     () => (
-      <AssetSearch
-        onLiveSearchSelect={onLiveSearchSelect}
-        strings={basicStrings}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <AssetSearch
+          onLiveSearchSelect={onLiveSearchSelect}
+          strings={basicStrings}
+        />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -100,10 +132,12 @@ storiesOf('AssetSearch/Examples', module)
   .add(
     'Empty results',
     () => (
-      <AssetSearch
-        onLiveSearchSelect={onLiveSearchSelect}
-        strings={emptyStrings}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <AssetSearch
+          onLiveSearchSelect={onLiveSearchSelect}
+          strings={emptyStrings}
+        />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -114,11 +148,13 @@ storiesOf('AssetSearch/Examples', module)
   .add(
     'Error handling',
     () => (
-      <AssetSearch
-        onError={onError}
-        onLiveSearchSelect={onLiveSearchSelect}
-        strings={errorStrings}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <AssetSearch
+          onError={onError}
+          onLiveSearchSelect={onLiveSearchSelect}
+          strings={errorStrings}
+        />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -126,27 +162,31 @@ storiesOf('AssetSearch/Examples', module)
       },
     }
   )
+  /* TODO disabled due to rootAssetSelect changes in SDK 2.0
   .add(
     'Root asset select',
     () => (
-      <AssetSearch
-        onLiveSearchSelect={onLiveSearchSelect}
-        rootAssetSelect={true}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <AssetSearch
+          onLiveSearchSelect={onLiveSearchSelect}
+        rootAssetSelect={true} />
+      </ClientSDKProvider>
     ),
     {
       readme: {
         content: rootAssetSelect,
       },
     }
-  )
+  ) */
   .add(
     'Advanced search',
     () => (
-      <AssetSearch
-        onLiveSearchSelect={onLiveSearchSelect}
-        advancedSearch={true}
-      />
+      <ClientSDKProvider client={fakeClient}>
+        <AssetSearch
+          onLiveSearchSelect={onLiveSearchSelect}
+          advancedSearch={true}
+        />
+      </ClientSDKProvider>
     ),
     {
       readme: {
@@ -159,7 +199,7 @@ storiesOf('AssetSearch/Examples', module)
     () => {
       const styles: AssetSearchStyles = {
         advancedSearchButton: { backgroundColor: 'red' },
-        rootAssetSelect: { width: '40%' },
+        // rootAssetSelect: { width: '40%' },
         searchResultList: {
           container: {
             backgroundColor: 'purple',
@@ -178,17 +218,58 @@ storiesOf('AssetSearch/Examples', module)
         },
       };
       return (
-        <AssetSearch
-          onLiveSearchSelect={onLiveSearchSelect}
-          styles={styles}
-          advancedSearch={true}
-          rootAssetSelect={true}
-        />
+        <ClientSDKProvider client={fakeClient}>
+          <AssetSearch
+            onLiveSearchSelect={onLiveSearchSelect}
+            styles={styles}
+            advancedSearch={true}
+            // rootAssetSelect={true}
+          />
+        </ClientSDKProvider>
       );
     },
     {
       readme: {
         content: customStyles,
+      },
+    }
+  )
+  .add(
+    'Handle search results',
+    () => {
+      class WrapperComponent extends React.Component {
+        state = {
+          items: [],
+        };
+        onSearchResult = (assets: Asset[]) => {
+          this.setState({
+            items: assets,
+          });
+        };
+        render() {
+          const { items } = this.state;
+          return (
+            <React.Fragment>
+              <ClientSDKProvider client={fakeClient}>
+                <AssetSearch
+                  showLiveSearchResults={false}
+                  onSearchResult={this.onSearchResult}
+                />
+              </ClientSDKProvider>
+              <br />
+              <p>
+                Search results: [
+                {items.map((item: Asset) => item.name).join(', ')}]
+              </p>
+            </React.Fragment>
+          );
+        }
+      }
+      return <WrapperComponent />;
+    },
+    {
+      readme: {
+        content: handleSearchResults,
       },
     }
   );
