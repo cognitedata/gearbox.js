@@ -188,4 +188,20 @@ storiesOf('AssetScanner/Examples', module)
         />
       )}
     />
-  ));
+  ))
+  .add(
+    'Crop placeholder',
+    () => (
+      <AssetScanner
+        onError={onError}
+        ocrRequest={ocrRequest}
+        onImageRecognizeFinish={onImageRecognizeFinish}
+        cropSize={{ width: 400, height: 200 }}
+      />
+    ),
+    {
+      readme: {
+        content: ocrRequestDoc,
+      },
+    }
+  );

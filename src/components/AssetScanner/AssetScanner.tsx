@@ -20,7 +20,7 @@ import {
   ocrNoTextFound,
   ocrSuccess,
 } from '../../utils/notifications';
-import { getCanvas, removeImageBase } from '../../utils/utils';
+import { CropSize, getCanvas, removeImageBase } from '../../utils/utils';
 import { WebcamScanner } from './WebcamScanner/WebcamScanner';
 
 const Wrapper = styled.div`
@@ -70,6 +70,7 @@ export interface AssetScannerProps {
   onImageReset?: Callback;
   styles?: AssetScannerStyles;
   strings?: PureObject;
+  cropSize?: CropSize;
 }
 
 interface AssetScannerState {
@@ -201,6 +202,7 @@ export class AssetScanner extends React.Component<
   }
 
   async capture() {
+    console.log('Capturing');
     this.startLoading();
     await this.setReady(false);
 
@@ -218,7 +220,7 @@ export class AssetScanner extends React.Component<
 
   render() {
     const { isLoading, imageSrc, ready } = this.state;
-    const { styles, strings, onError, button } = this.props;
+    const { styles, strings, onError, button, cropSize } = this.props;
 
     return (
       <Wrapper>
@@ -233,6 +235,7 @@ export class AssetScanner extends React.Component<
           onError={onError}
           button={button}
           isReady={ready}
+          cropSize={cropSize}
         />
       </Wrapper>
     );
@@ -296,11 +299,13 @@ export class AssetScanner extends React.Component<
   private getImage(): Promise<string> {
     const { imageSrc } = this.state;
 
-    return imageSrc ? Promise.resolve(imageSrc) : this.getImageFromCanvas();
+    return imageSrc
+      ? Promise.resolve(imageSrc)
+      : this.getImageFromCanvas(this.props.cropSize);
   }
 
   // Made async to provide better UX for component
-  private getImageFromCanvas(): Promise<string> {
+  private getImageFromCanvas(cropSize?: CropSize): Promise<string> {
     const { errorVideoAccess } = ASNotifyTypes;
 
     if (!this.video) {
@@ -313,7 +318,8 @@ export class AssetScanner extends React.Component<
     const canvas = getCanvas(
       this.video,
       this.video.clientWidth,
-      this.video.clientWidth / aspectRatio
+      this.video.clientWidth / aspectRatio,
+      cropSize
     );
 
     return new Promise(resolve =>

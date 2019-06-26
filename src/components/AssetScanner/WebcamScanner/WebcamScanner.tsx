@@ -7,15 +7,17 @@ import {
   PureObject,
   SetVideoRefCallback,
 } from '../../../interfaces';
+import { CropSize } from '../../../utils/utils';
 import { LoadingOverlay } from '../../common/LoadingOverlay/LoadingOverlay';
 import { ButtonRenderProp } from '../AssetScanner';
 import { Webcam } from '../Webcam/Webcam';
+import { WebcamCropPlaceholder } from '../WebcamCropPlaceholder/WebcamCropPlaceholder';
 import { WebcamScreenshot } from '../WebcamScreenshot/WebcamScreenshot';
 
 const CameraButton = styled.button`
   position: absolute;
   top: 50%;
-  left: 20px;
+  left: 25px;
   border-radius: 100%;
   width: 75px;
   height: 75px;
@@ -29,6 +31,7 @@ const CameraButton = styled.button`
   :hover {
     opacity: 1;
   }
+  z-index: 9999
 `;
 
 const Wrapper = styled.div`
@@ -60,6 +63,7 @@ interface WebcamScannerProps {
   strings?: PureObject;
   onError?: Callback;
   isReady?: boolean;
+  cropSize?: CropSize;
 }
 
 export function WebcamScanner({
@@ -73,8 +77,10 @@ export function WebcamScanner({
   onError,
   button,
   isReady = true,
+  cropSize,
 }: WebcamScannerProps) {
   const onCaptureClick = () => {
+    console.log('Clicked');
     if (isReady && capture) {
       capture();
     } else if (!isReady && onReset) {
@@ -107,6 +113,12 @@ export function WebcamScanner({
             {!isReady ? resultStrings.reset : ''}
           </CameraButton>
         ))}
+      {cropSize && !imageSrc && (
+        <WebcamCropPlaceholder
+          height={cropSize.height}
+          width={cropSize.width}
+        />
+      )}
     </Wrapper>
   );
 }
