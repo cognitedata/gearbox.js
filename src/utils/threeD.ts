@@ -4,8 +4,7 @@ import {
   OnProgressData,
   THREE,
 } from '@cognite/3d-viewer';
-import * as sdk from '@cognite/sdk';
-import { fetch3DModelRevision } from '../api';
+import { Revision3D } from '@cognite/sdk-alpha/dist/src/types/types';
 import { CacheObject, Callback, EventHandlers } from '../interfaces';
 
 interface ViewerConfig {
@@ -19,7 +18,6 @@ interface ViewerConfig {
 export interface ViewerConfigResponse {
   viewer: Cognite3DViewer;
   modelPromise: Promise<Cognite3DModel>;
-  revisionPromise: Promise<sdk.Revision>;
   addEvent: (events: [ViewerEventTypes, Callback][]) => void;
   removeEvent: (events?: [ViewerEventTypes, Callback][]) => void;
   fromCache?: boolean;
@@ -49,7 +47,7 @@ export function parseBoundingBox(
 export function setCameraPosition(
   viewer: Cognite3DViewer,
   model: Cognite3DModel,
-  revision: sdk.Revision,
+  revision: Revision3D,
   boundingBox?: THREE.Box3
 ) {
   const { Vector3 } = THREE;
@@ -102,7 +100,6 @@ export function createViewer({
     };
   }
 
-  const revisionPromise = fetch3DModelRevision(modelId, revisionId);
   const viewer = new Cognite3DViewer({ domElement });
 
   const listeners: EventHandlers = {
@@ -131,7 +128,6 @@ export function createViewer({
     domElement,
     viewer,
     modelPromise,
-    revisionPromise,
     addEvent: addEvent.bind(null, listeners),
     removeEvent: removeEvent.bind(null, listeners),
   };
