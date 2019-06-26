@@ -1,6 +1,11 @@
 import { Cognite3DModel, Cognite3DViewer, THREE } from '@cognite/3d-viewer';
-import * as sdk from '@cognite/sdk';
+import {
+  AssetMapping3D,
+  Revision3D,
+} from '@cognite/sdk-alpha/dist/src/types/types';
 import React, { RefObject } from 'react';
+import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
+import { ClientSDKContext } from '../../context/clientSDKContext';
 import { CacheObject, Callback, MouseScreenPosition } from '../../interfaces';
 import {
   createViewer as originalCreateViewer,
@@ -37,6 +42,9 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     enableKeyboardNavigation: true,
     useDefaultCameraPosition: true,
   };
+  static contextType = ClientSDKContext;
+
+  context!: React.ContextType<typeof ClientSDKContext>;
 
   disposeCalls: any[] = [];
   divWrapper: RefObject<HTMLDivElement> = React.createRef();
@@ -44,9 +52,9 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   model: Cognite3DModel | null = null;
   onClickHandlerBounded: ClickHandler;
   onCompleteBounded: Callback;
-  revision: sdk.Revision | null = null;
+  revision: Revision3D | null = null;
   viewer: Cognite3DViewer | null = null;
-  nodes: sdk.AssetMapping[] = [];
+  nodes: AssetMapping3D[] = [];
 
   constructor(props: Model3DViewerProps) {
     super(props);
@@ -56,6 +64,10 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   }
 
   async componentDidMount() {
+    if (!this.context) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
     if (!this.divWrapper.current || !this.inputWrapper.current) {
       return;
     }
@@ -76,7 +88,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       viewer,
       addEvent,
       removeEvent,
-      revisionPromise,
       modelPromise,
       fromCache,
       domElement,
@@ -104,13 +115,13 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     });
 
     let model: Cognite3DModel;
-    let revision: sdk.Revision;
-    let nodes: sdk.AssetMapping[];
+    let revision: Revision3D;
+    let nodes: AssetMapping3D[];
 
     try {
       [model, revision, nodes] = await Promise.all([
         modelPromise,
-        revisionPromise,
+        this.getRevision(),
         this.findMappedNodes(),
       ]);
     } catch (e) {
@@ -248,18 +259,23 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       </div>
     );
   }
-  private async findMappedNodes(): Promise<sdk.AssetMapping[]> {
+
+  private async findMappedNodes(): Promise<AssetMapping3D[]> {
     const { assetId, modelId, revisionId } = this.props;
 
     if (!assetId) {
       return Promise.resolve([]);
     }
 
-    const { items } = await sdk.ThreeD.listAssetMappings(modelId, revisionId, {
+    return await this.context!.assetMappings3D.list(modelId, revisionId, {
       assetId,
-    });
+    }).autoPagingToArray();
+  }
 
-    return items;
+  private getRevision() {
+    const { modelId, revisionId } = this.props;
+
+    return this.context!.revisions3D.retrieve(modelId, revisionId);
   }
 
   private highlightNodes() {
@@ -286,7 +302,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
         this.viewer.fitCameraToBoundingBox(bb);
       }
     } else {
-      this.nodes.forEach((node: sdk.AssetMapping) =>
+      this.nodes.forEach((node: AssetMapping3D) =>
         // @ts-ignore
         this.model.selectNode(node.nodeId)
       );

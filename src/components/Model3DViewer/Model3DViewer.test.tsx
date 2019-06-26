@@ -1,6 +1,8 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
+import { fakeModel3DViewerClient } from '../../mocks';
+import { ClientSDKProvider } from '../ClientSDKProvider';
 import { mockCreateViewer, Model3DViewer } from './Model3DViewer';
 
 configure({ adapter: new Adapter() });
@@ -10,6 +12,7 @@ const onComplete = jest.fn();
 const onReady = jest.fn();
 const addEvent = jest.fn();
 const removeEvent = jest.fn();
+const onError = jest.fn(e => console.log(e));
 
 const viewer = {
   on: jest.fn(),
@@ -23,7 +26,6 @@ const callbacksCreateViewer = jest.fn(() => ({
   addEvent,
   removeEvent,
   modelPromise: Promise.resolve(),
-  revisionPromise: Promise.resolve(),
   viewer,
   domElement,
 }));
@@ -41,7 +43,11 @@ describe('Model3DViewer', () => {
       revisionId: 0,
     };
 
-    const wrapper = mount(<Model3DViewer {...props} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={fakeModel3DViewerClient}>
+        <Model3DViewer {...props} />
+      </ClientSDKProvider>
+    );
     expect(wrapper.exists()).toBe(true);
     done();
   });
@@ -53,9 +59,14 @@ describe('Model3DViewer', () => {
       onProgress,
       onComplete,
       onReady,
+      onError,
     };
 
-    const wrapper = mount(<Model3DViewer {...props} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={fakeModel3DViewerClient}>
+        <Model3DViewer {...props} />
+      </ClientSDKProvider>
+    );
     setImmediate(() => {
       expect(addEvent).toHaveBeenCalledTimes(2);
       expect(onReady).toHaveBeenCalledTimes(1);
