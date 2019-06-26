@@ -74,8 +74,7 @@ export function createFakeViewer({
 export const fakeModel3DViewerClient: API = {
   // @ts-ignore
   revisions3D: {
-    // @ts-ignore
-    retrieve: (): Revision3D => revision3D,
+    retrieve: (): Promise<Revision3D> => Promise.resolve(revision3D),
   },
 };
 

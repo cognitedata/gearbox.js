@@ -272,7 +272,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     }).autoPagingToArray();
   }
 
-  private async getRevision() {
+  private getRevision() {
     const { modelId, revisionId } = this.props;
 
     return this.context!.revisions3D.retrieve(modelId, revisionId);
