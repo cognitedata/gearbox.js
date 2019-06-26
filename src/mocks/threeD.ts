@@ -1,4 +1,6 @@
 import { Cognite3DViewer, OnProgressData, THREE } from '@cognite/3d-viewer';
+import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
+import { Revision3D } from '@cognite/sdk-alpha/dist/src/types/types';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { CacheObject, Callback, EventHandlers } from '../interfaces';
 import {
@@ -61,7 +63,6 @@ export function createFakeViewer({
   cache[project] = {
     viewer,
     modelPromise: Promise.resolve(null),
-    revisionPromise: Promise.resolve(null),
     addEvent: addEvent.bind(null, listeners),
     removeEvent: removeEvent.bind(null, listeners),
     domElement,
@@ -69,3 +70,27 @@ export function createFakeViewer({
 
   return cache[project];
 }
+
+export const fakeModel3DViewerClient: API = {
+  // @ts-ignore
+  revisions3D: {
+    retrieve: (): Promise<Revision3D> => Promise.resolve(revision3D),
+  },
+};
+
+const revision3D: Revision3D = {
+  id: 1000,
+  fileId: 1000,
+  published: false,
+  rotation: [0, 0, 0],
+  camera: {
+    target: [0, 0, 0],
+    position: [0, 0, 0],
+  },
+  status: 'Done',
+  thumbnailThreedFileId: 1000,
+  thumbnailURL:
+    'https://api.cognitedata.com/api/v1/project/myproject/3d/files/1000',
+  assetMappingCount: 0,
+  createdTime: new Date(),
+};
