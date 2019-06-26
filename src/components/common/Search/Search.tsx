@@ -145,11 +145,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
       showLiveSearchResults,
       liveSearchResults: propsSearchResults,
     } = props;
-    const {
-      liveSearchResults: stateSearchResults,
-      query,
-      advancedSearchQuery,
-    } = state;
+    const { liveSearchResults: stateSearchResults, query } = state;
 
     if (!showLiveSearchResults) {
       return null;
