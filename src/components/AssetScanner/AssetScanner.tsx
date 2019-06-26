@@ -182,7 +182,7 @@ export class AssetScanner extends React.Component<
     if (strings !== null && strings.length >= 1) {
       const assets = await this.getAssetsHandler(strings);
 
-      await this.endLoading();
+      this.endLoading();
 
       this.notification(recognizeSuccess);
 
@@ -190,7 +190,7 @@ export class AssetScanner extends React.Component<
         onAssetFetchResult(assets);
       }
     } else if (strings !== null) {
-      await this.endLoading();
+      this.endLoading();
 
       this.notification(recognizeFails);
 
@@ -207,7 +207,7 @@ export class AssetScanner extends React.Component<
     const imageString = await this.getImage();
 
     if (!imageString) {
-      await this.endLoading();
+      this.endLoading();
       return;
     }
 
@@ -241,10 +241,6 @@ export class AssetScanner extends React.Component<
   private startLoading() {
     const { onStartLoading } = this.props;
 
-    if (this.video) {
-      this.video.pause();
-    }
-
     this.setState({ isLoading: true });
 
     if (onStartLoading) {
@@ -252,16 +248,8 @@ export class AssetScanner extends React.Component<
     }
   }
 
-  private async endLoading() {
+  private endLoading() {
     const { onEndLoading } = this.props;
-
-    if (this.video) {
-      try {
-        await this.video.play();
-      } catch (e) {
-        console.error('Fail to play web-camera stream', e);
-      }
-    }
 
     this.setState({ isLoading: false });
 
@@ -350,7 +338,7 @@ export class AssetScanner extends React.Component<
 
       this.notification(errorOccurred);
 
-      await this.endLoading();
+      this.endLoading();
 
       return null;
     }
