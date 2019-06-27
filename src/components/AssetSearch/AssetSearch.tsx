@@ -146,9 +146,10 @@ export class AssetSearch extends React.Component<
             metadata:
               (query.advancedSearch &&
                 query.advancedSearch.metadata &&
-                query.advancedSearch.metadata
-                  .filter(meta => meta.key !== '')
-                  .reduce((a, c) => ({ ...a, [c.key]: c.value }), {})) ||
+                query.advancedSearch.metadata.reduce(
+                  (a, c) => (c.key ? { ...a, [c.key]: c.value } : a),
+                  {}
+                )) ||
               undefined,
           },
       search: {
