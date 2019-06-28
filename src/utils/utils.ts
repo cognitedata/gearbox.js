@@ -15,7 +15,7 @@ export function getMiddlePixelsOfContainer(
   parentHeight: number
 ) {
   return {
-    sx: Math.ceil((parentWidth - width) / 2),
+    sx: Math.floor((parentWidth - width) / 2),
     sy: Math.ceil((parentHeight - height) / 2),
     sw: width,
     sh: height,
@@ -37,23 +37,13 @@ export function getCanvas(
   cropSize?: CropSize
 ) {
   const canvas = document.createElement('canvas');
-
   canvas.width = width;
   canvas.height = height;
 
   const ctx = canvas.getContext('2d');
 
   const cropProps = cropSize
-    ? {
-        sx: Math.ceil((canvas.width - cropSize.width) / 2),
-        sy: Math.ceil((canvas.height - cropSize.height) / 2),
-        sw: cropSize.width,
-        sh: cropSize.height,
-        dx: Math.ceil((canvas.width - cropSize.width) / 2),
-        dy: Math.ceil((canvas.height - cropSize.height) / 2),
-        dw: cropSize.width,
-        dh: cropSize.height,
-      }
+    ? getMiddlePixelsOfContainer(cropSize.width, cropSize.height, width, height)
     : {
         sx: 0,
         sy: 0,
@@ -66,7 +56,9 @@ export function getCanvas(
       };
 
   if (ctx) {
-    console.log('Cropping', 'W:', width, ' H:', height);
+    console.log('video CH:', img.clientHeight, 'video CW:', img.clientWidth);
+    console.log('Video sizes', ' VH:', height, 'VW:', width);
+    console.log('Crop sizes', cropSize);
     console.log(cropProps);
     ctx.drawImage(
       img,
@@ -83,6 +75,8 @@ export function getCanvas(
 
   return canvas;
 }
+
+export const calculateAdjustedCropSize = () => {};
 
 export function extractValidStrings(
   textAnnotations: Asset[] = [],

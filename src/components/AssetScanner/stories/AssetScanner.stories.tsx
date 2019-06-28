@@ -204,4 +204,38 @@ storiesOf('AssetScanner/Examples', module)
         content: ocrRequestDoc,
       },
     }
+  )
+  .add(
+    'Horizontal placeholder with custom button',
+    () => (
+      <AssetScanner
+        onError={onError}
+        ocrRequest={ocrRequest}
+        onImageRecognizeFinish={onImageRecognizeFinish}
+        cropSize={{ width: 800, height: 250 }}
+        button={renderButton}
+      />
+    ),
+    {
+      readme: {
+        content: ocrRequestDoc,
+      },
+    }
+  )
+  .add(
+    'Vertical crop placeholder with custom button',
+    () => (
+      <AssetScanner
+        onError={onError}
+        ocrRequest={ocrRequest}
+        onImageRecognizeFinish={onImageRecognizeFinish}
+        cropSize={{ width: 200, height: 400 }}
+        button={renderButton}
+      />
+    ),
+    {
+      readme: {
+        content: ocrRequestDoc,
+      },
+    }
   );

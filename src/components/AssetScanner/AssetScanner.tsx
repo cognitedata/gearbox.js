@@ -304,6 +304,11 @@ export class AssetScanner extends React.Component<
       : this.getImageFromCanvas(this.props.cropSize);
   }
 
+  private isCameraHorizontal = (video: HTMLVideoElement) => {
+    const { videoHeight, videoWidth } = video;
+    return videoWidth / videoHeight >= 1;
+  };
+
   // Made async to provide better UX for component
   private getImageFromCanvas(cropSize?: CropSize): Promise<string> {
     const { errorVideoAccess } = ASNotifyTypes;
@@ -313,13 +318,31 @@ export class AssetScanner extends React.Component<
 
       return Promise.resolve('');
     }
+    const horizontal = this.isCameraHorizontal(this.video);
+    let clientHeight = this.video.clientHeight;
+    let clientWidth = this.video.clientWidth;
+    if (horizontal) {
+      clientHeight =
+        (this.video.clientWidth * this.video.videoHeight) /
+        this.video.videoWidth;
+    } else {
+      clientWidth =
+        (this.video.videoWidth * this.video.clientHeight) /
+        this.video.videoHeight;
+    }
 
-    const aspectRatio = this.video.videoWidth / this.video.videoHeight;
+    console.log(' CH:', clientHeight, 'CW: ', clientWidth);
+    const cropSizeAdjusted = cropSize
+      ? {
+          height: (cropSize.height * this.video.videoHeight) / clientHeight,
+          width: (cropSize.width * this.video.videoWidth) / clientWidth,
+        }
+      : cropSize;
     const canvas = getCanvas(
       this.video,
-      this.video.clientWidth,
-      this.video.clientWidth / aspectRatio,
-      cropSize
+      this.video.videoWidth,
+      this.video.videoHeight,
+      cropSizeAdjusted
     );
 
     return new Promise(resolve =>

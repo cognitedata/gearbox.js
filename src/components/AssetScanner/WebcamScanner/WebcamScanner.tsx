@@ -31,7 +31,6 @@ const CameraButton = styled.button`
   :hover {
     opacity: 1;
   }
-  z-index: 9999
 `;
 
 const Wrapper = styled.div`
@@ -101,6 +100,12 @@ export function WebcamScanner({
         onError={onError}
         style={imageSrc ? { opacity: 0, visability: 'hidden' } : {}}
       />
+      {cropSize && !imageSrc && (
+        <WebcamCropPlaceholder
+          height={cropSize.height}
+          width={cropSize.width}
+        />
+      )}
       {!isLoading &&
         (button ? (
           button(onCaptureClick, isReady)
@@ -113,12 +118,6 @@ export function WebcamScanner({
             {!isReady ? resultStrings.reset : ''}
           </CameraButton>
         ))}
-      {cropSize && !imageSrc && (
-        <WebcamCropPlaceholder
-          height={cropSize.height}
-          width={cropSize.width}
-        />
-      )}
     </Wrapper>
   );
 }
