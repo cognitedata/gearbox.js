@@ -85,21 +85,18 @@ describe('utils', () => {
       });
       const cropSize = { width: 400, height: 200 };
       it('should scale 1 to 1', () => {
-        const scaled = scaleCropSizeToVideoResolution(
-          1000,
-          1000,
-          1000,
-          1000,
-          cropSize
-        );
+        const px = 1000;
+        const scaled = scaleCropSizeToVideoResolution(px, px, px, px, cropSize);
         expect(scaled).toEqual({ width: 400, height: 200 });
       });
+
       it('should scale 1 to 2', () => {
+        const px = 1000;
         const scaled = scaleCropSizeToVideoResolution(
-          500,
-          500,
-          1000,
-          1000,
+          px / 2,
+          px / 2,
+          px,
+          px,
           cropSize
         );
         expect(scaled).toEqual({ width: 200, height: 100 });
