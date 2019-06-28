@@ -72,7 +72,59 @@ export function getCanvas(
   return canvas;
 }
 
-export const calculateAdjustedCropSize = () => {};
+export const shouldScaleYAxis = (
+  videoHeight: number,
+  videoWidth: number,
+  clientHeight: number,
+  clientWidth: number
+): boolean => {
+  const clientRatio = clientWidth / clientHeight;
+  const videoRatio = videoWidth / videoHeight;
+  return clientRatio < videoRatio;
+};
+
+export const scaleDomToVideoResolution = (
+  videoHeight: number,
+  videoWidth: number,
+  sourceClientHeight: number,
+  sourceClientWidth: number
+): { clientHeight: number; clientWidth: number } => {
+  const isScalingYAxis = shouldScaleYAxis(
+    videoHeight,
+    videoWidth,
+    sourceClientHeight,
+    sourceClientWidth
+  );
+  const scaledClient = {
+    clientHeight: sourceClientHeight,
+    clientWidth: sourceClientWidth,
+  };
+  if (isScalingYAxis) {
+    scaledClient.clientHeight = Math.round(
+      (sourceClientWidth * videoHeight) / videoWidth
+    );
+  } else {
+    scaledClient.clientWidth = Math.round(
+      (videoWidth * sourceClientHeight) / videoHeight
+    );
+  }
+  return scaledClient;
+};
+
+export const scaleCropSizeToVideoResolution = (
+  videoHeight: number,
+  videoWidth: number,
+  clientHeight: number,
+  clientWidth: number,
+  initialCropSize?: CropSize
+): CropSize | undefined => {
+  return initialCropSize
+    ? {
+        height: initialCropSize.height * (videoHeight / clientHeight),
+        width: initialCropSize.width * (videoWidth / clientWidth),
+      }
+    : undefined;
+};
 
 export function extractValidStrings(
   textAnnotations: Asset[] = [],

@@ -20,7 +20,13 @@ import {
   ocrNoTextFound,
   ocrSuccess,
 } from '../../utils/notifications';
-import { CropSize, getCanvas, removeImageBase } from '../../utils/utils';
+import {
+  CropSize,
+  getCanvas,
+  removeImageBase,
+  scaleCropSizeToVideoResolution,
+  scaleDomToVideoResolution,
+} from '../../utils/utils';
 import { WebcamScanner } from './WebcamScanner/WebcamScanner';
 
 const Wrapper = styled.div`
@@ -303,11 +309,6 @@ export class AssetScanner extends React.Component<
       : this.getImageFromCanvas(this.props.cropSize);
   }
 
-  private isCameraHorizontal = (video: HTMLVideoElement) => {
-    const { videoHeight, videoWidth } = video;
-    return videoWidth / videoHeight >= 1;
-  };
-
   // Made async to provide better UX for component
   private getImageFromCanvas(cropSize?: CropSize): Promise<string> {
     const { errorVideoAccess } = ASNotifyTypes;
@@ -317,30 +318,25 @@ export class AssetScanner extends React.Component<
 
       return Promise.resolve('');
     }
-    const horizontal = this.isCameraHorizontal(this.video);
-    let clientHeight = this.video.clientHeight;
-    let clientWidth = this.video.clientWidth;
-    if (horizontal) {
-      clientHeight =
-        (this.video.clientWidth * this.video.videoHeight) /
-        this.video.videoWidth;
-    } else {
-      clientWidth =
-        (this.video.videoWidth * this.video.clientHeight) /
-        this.video.videoHeight;
-    }
-
-    const cropSizeAdjusted = cropSize
-      ? {
-          height: (cropSize.height * this.video.videoHeight) / clientHeight,
-          width: (cropSize.width * this.video.videoWidth) / clientWidth,
-        }
-      : cropSize;
+    const { videoHeight, videoWidth } = this.video;
+    const { clientHeight, clientWidth } = scaleDomToVideoResolution(
+      videoHeight,
+      videoWidth,
+      this.video.clientHeight,
+      this.video.clientWidth
+    );
+    const cropSizeScaled = scaleCropSizeToVideoResolution(
+      videoHeight,
+      videoWidth,
+      clientHeight,
+      clientWidth,
+      cropSize
+    );
     const canvas = getCanvas(
       this.video,
-      this.video.videoWidth,
-      this.video.videoHeight,
-      cropSizeAdjusted
+      videoWidth,
+      videoHeight,
+      cropSizeScaled
     );
 
     return new Promise(resolve =>

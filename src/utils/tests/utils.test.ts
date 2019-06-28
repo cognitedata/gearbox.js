@@ -3,6 +3,9 @@ import Adapter from 'enzyme-adapter-react-16';
 import {
   clampNumber,
   extractValidStrings,
+  scaleCropSizeToVideoResolution,
+  scaleDomToVideoResolution,
+  shouldScaleYAxis,
   sortStringsAlphabetically,
 } from '../utils';
 
@@ -62,5 +65,80 @@ describe('utils', () => {
         expect(extractValidStrings(arr, maxLen, minLen)).toEqual(expected);
       }
     );
+  });
+
+  describe('WebCamCropper', () => {
+    describe('Camera direction', () => {
+      it('should be horizontal', () => {
+        expect(shouldScaleYAxis(720, 1280, 1029, 1631)).toBeTruthy();
+      });
+      it('should be vertical', () => {
+        expect(shouldScaleYAxis(720, 1280, 1029, 1948)).toBeFalsy();
+      });
+    });
+
+    describe('AdjustCropSizeToVideoResolution', () => {
+      it('should return undefined when cropsize is undefined', () => {
+        expect(
+          scaleCropSizeToVideoResolution(0, 0, 0, 0, undefined)
+        ).toBeUndefined();
+      });
+      const cropSize = { width: 400, height: 200 };
+      it('should scale 1 to 1', () => {
+        const scaled = scaleCropSizeToVideoResolution(
+          1000,
+          1000,
+          1000,
+          1000,
+          cropSize
+        );
+        expect(scaled).toEqual({ width: 400, height: 200 });
+      });
+      it('should scale 1 to 2', () => {
+        const scaled = scaleCropSizeToVideoResolution(
+          500,
+          500,
+          1000,
+          1000,
+          cropSize
+        );
+        expect(scaled).toEqual({ width: 200, height: 100 });
+      });
+    });
+
+    describe('ScaleDomToVideoResolution', () => {
+      it('should scale correctly', () => {
+        const scaled = scaleDomToVideoResolution(10, 10, 20, 20);
+        expect(scaled).toBeDefined();
+      });
+      it('should scale horizontaly with height but not width', () => {
+        const sourceClientWidth = 1154;
+        const sourceClientHeight = 1029;
+        const scaled = scaleDomToVideoResolution(
+          720,
+          1280,
+          sourceClientHeight,
+          sourceClientWidth
+        );
+        expect(scaled).toEqual({
+          clientHeight: 649, // this is scaled
+          clientWidth: sourceClientWidth,
+        });
+      });
+      it('should scale vertically with width but not height', () => {
+        const sourceClientWidth = 2000;
+        const sourceClientHeight = 1001;
+        const scaled = scaleDomToVideoResolution(
+          720,
+          1280,
+          sourceClientHeight,
+          sourceClientWidth
+        );
+        expect(scaled).toEqual({
+          clientHeight: sourceClientHeight,
+          clientWidth: 1780, // this is scaled
+        });
+      });
+    });
   });
 });
