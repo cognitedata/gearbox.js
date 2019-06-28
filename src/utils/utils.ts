@@ -42,18 +42,20 @@ export function getCanvas(
 
   const ctx = canvas.getContext('2d');
 
+  const fullContainer = {
+    sx: 0,
+    sy: 0,
+    sw: canvas.width,
+    sh: canvas.height,
+    dx: 0,
+    dy: 0,
+    dw: canvas.width,
+    dh: canvas.height,
+  };
+
   const cropProps = cropSize
     ? getMiddlePixelsOfContainer(cropSize.width, cropSize.height, width, height)
-    : {
-        sx: 0,
-        sy: 0,
-        sw: canvas.width,
-        sh: canvas.height,
-        dx: 0,
-        dy: 0,
-        dw: canvas.width,
-        dh: canvas.height,
-      };
+    : fullContainer;
 
   if (ctx) {
     ctx.drawImage(
