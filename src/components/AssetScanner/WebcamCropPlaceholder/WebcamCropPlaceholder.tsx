@@ -31,7 +31,7 @@ export const WebcamCropPlaceholder = (props: WebcamCropPlaceholderProps) => {
       <Item />
       <Item />
       <Item />
-      <CropperPlaceholder />
+      <CropperPlaceholder data-test-id="cropper-placeholder" />
       <Item />
       <Item />
       <Item />

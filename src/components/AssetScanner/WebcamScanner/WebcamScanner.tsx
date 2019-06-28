@@ -51,7 +51,7 @@ export interface WebcamScannerStyles {
   button: React.CSSProperties;
 }
 
-interface WebcamScannerProps {
+export interface WebcamScannerProps {
   isLoading: boolean;
   capture: EmptyCallback;
   setRef: SetVideoRefCallback;
@@ -102,6 +102,7 @@ export function WebcamScanner({
       />
       {cropSize && !imageSrc && (
         <WebcamCropPlaceholder
+          data-test-id="webcam-crop-placeholder"
           height={cropSize.height}
           width={cropSize.width}
         />
