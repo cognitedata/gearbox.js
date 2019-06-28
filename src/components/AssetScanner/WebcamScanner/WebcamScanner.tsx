@@ -79,7 +79,6 @@ export function WebcamScanner({
   cropSize,
 }: WebcamScannerProps) {
   const onCaptureClick = () => {
-    console.log('Clicked');
     if (isReady && capture) {
       capture();
     } else if (!isReady && onReset) {

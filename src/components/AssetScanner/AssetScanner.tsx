@@ -202,7 +202,6 @@ export class AssetScanner extends React.Component<
   }
 
   async capture() {
-    console.log('Capturing');
     this.startLoading();
     await this.setReady(false);
 
@@ -331,7 +330,6 @@ export class AssetScanner extends React.Component<
         this.video.videoHeight;
     }
 
-    console.log(' CH:', clientHeight, 'CW: ', clientWidth);
     const cropSizeAdjusted = cropSize
       ? {
           height: (cropSize.height * this.video.videoHeight) / clientHeight,

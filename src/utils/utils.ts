@@ -56,10 +56,6 @@ export function getCanvas(
       };
 
   if (ctx) {
-    console.log('video CH:', img.clientHeight, 'video CW:', img.clientWidth);
-    console.log('Video sizes', ' VH:', height, 'VW:', width);
-    console.log('Crop sizes', cropSize);
-    console.log(cropProps);
     ctx.drawImage(
       img,
       cropProps.sx,
