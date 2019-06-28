@@ -19,33 +19,30 @@ describe('WebcamScanner', () => {
     expect(wrapper).toBeDefined();
   });
 
-  it('Should render crop placeholder', () => {
-    const props: WebcamScannerProps = {
-      ...baseProps,
-      cropSize: { height: 400, width: 200 },
-    };
-    const wrapper = mount(<WebcamScanner {...props} />);
-    expect(
-      wrapper.find('[data-test-id="webcam-crop-placeholder"]').hostNodes()
-    ).toHaveLength(1);
-  });
+  describe('WebcamCropPlaceholder in WebcamScanner logic', () => {
+    const cropPlaceholderSelector = '[data-test-id="webcam-crop-placeholder"]';
+    it('Should render crop placeholder', () => {
+      const props: WebcamScannerProps = {
+        ...baseProps,
+        cropSize: { height: 400, width: 200 },
+      };
+      const wrapper = mount(<WebcamScanner {...props} />);
+      expect(wrapper.find(cropPlaceholderSelector).hostNodes()).toHaveLength(1);
+    });
 
-  it('Should not render crop placeholder', () => {
-    const wrapper = mount(<WebcamScanner {...baseProps} />);
-    expect(
-      wrapper.find('[data-test-id="webcam-crop-placeholder"]').hostNodes()
-    ).toHaveLength(0);
-  });
+    it('Should not render crop placeholder', () => {
+      const wrapper = mount(<WebcamScanner {...baseProps} />);
+      expect(wrapper.find(cropPlaceholderSelector).hostNodes()).toHaveLength(0);
+    });
 
-  it('Should hide crop placeholder when image is captured', () => {
-    const props: WebcamScannerProps = {
-      ...baseProps,
-      imageSrc: 'random imageSrc',
-      cropSize: { height: 400, width: 200 },
-    };
-    const wrapper = mount(<WebcamScanner {...props} />);
-    expect(
-      wrapper.find('[data-test-id="webcam-crop-placeholder"]').hostNodes()
-    ).toHaveLength(0);
+    it('Should hide crop placeholder when image is captured', () => {
+      const props: WebcamScannerProps = {
+        ...baseProps,
+        imageSrc: 'random imageSrc',
+        cropSize: { height: 400, width: 200 },
+      };
+      const wrapper = mount(<WebcamScanner {...props} />);
+      expect(wrapper.find(cropPlaceholderSelector).hostNodes()).toHaveLength(0);
+    });
   });
 });
