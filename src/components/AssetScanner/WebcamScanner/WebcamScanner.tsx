@@ -17,7 +17,7 @@ import { WebcamScreenshot } from '../WebcamScreenshot/WebcamScreenshot';
 const CameraButton = styled.button`
   position: absolute;
   top: 50%;
-  left: 25px;
+  left: 20px;
   border-radius: 100%;
   width: 75px;
   height: 75px;
