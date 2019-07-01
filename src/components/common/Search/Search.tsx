@@ -145,11 +145,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
       showLiveSearchResults,
       liveSearchResults: propsSearchResults,
     } = props;
-    const {
-      liveSearchResults: stateSearchResults,
-      query,
-      advancedSearchQuery,
-    } = state;
+    const { liveSearchResults: stateSearchResults, query } = state;
 
     if (!showLiveSearchResults) {
       return null;
@@ -158,7 +154,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
     if (propsSearchResults !== stateSearchResults) {
       return {
         liveSearchResults: propsSearchResults,
-        liveSearchShow: !!query || !!advancedSearchQuery,
+        liveSearchShow: !!query,
       };
     }
 
