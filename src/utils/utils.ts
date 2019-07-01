@@ -113,6 +113,10 @@ export const scaleDomToVideoResolution = (
   return scaledClient;
 };
 
+/**
+ * Because the canvas uses the video resolution, we need to scale the clientPx to fit the videoPx
+ * That way the users perception of the cropped area is the same as the actual cropping.
+ */
 export const scaleCropSizeToVideoResolution = (
   videoHeight: number,
   videoWidth: number,
