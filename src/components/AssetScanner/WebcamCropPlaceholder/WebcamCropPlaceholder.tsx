@@ -4,6 +4,8 @@ import styled from 'styled-components';
 export interface WebcamCropPlaceholderProps {
   height: number;
   width: number;
+  backgroundColor?: string;
+  Component?: React.ComponentType;
 }
 
 const Container = styled.div`
@@ -11,31 +13,51 @@ const Container = styled.div`
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-columns: auto ${(props: WebcamCropPlaceholderProps) =>
-      props.width}px auto;
-  grid-template-rows: auto ${(props: WebcamCropPlaceholderProps) =>
-      props.height}px auto;
+  grid-template-columns: auto ${({ width }: WebcamCropPlaceholderProps) =>
+      width}px auto;
+  grid-template-rows: auto ${({ height }: WebcamCropPlaceholderProps) =>
+      height}px auto;
 `;
 
 const Item = styled.div`
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: ${({ backgroundColor }: WebcamCropPlaceholderProps) =>
+    backgroundColor ? backgroundColor : 'rgba(0,0,0,0.8)'};
   color: #fff;
 `;
 
-const CropperPlaceholder = styled.div``;
+const CropperPlaceholder = styled.div`
+  z-index: 1;
+`;
+
+const CustomClientOverlayWrapper = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
 
 export const WebcamCropPlaceholder = (props: WebcamCropPlaceholderProps) => {
+  const { Component } = props;
   return (
-    <Container {...props}>
-      <Item />
-      <Item />
-      <Item />
-      <Item />
-      <CropperPlaceholder data-test-id="cropper-placeholder" />
-      <Item />
-      <Item />
-      <Item />
-      <Item />
-    </Container>
+    <>
+      <Container {...props}>
+        <Item {...props} />
+        <Item {...props} />
+        <Item {...props} />
+        <Item {...props} />
+        <CropperPlaceholder data-test-id="cropper-placeholder" />
+        <Item {...props} />
+        <Item {...props} />
+        <Item {...props} />
+        <Item {...props} />
+      </Container>
+      {Component && (
+        <CustomClientOverlayWrapper>
+          <Component />
+        </CustomClientOverlayWrapper>
+      )}
+    </>
   );
 };

@@ -63,6 +63,7 @@ export interface WebcamScannerProps {
   onError?: Callback;
   isReady?: boolean;
   cropSize?: CropSize;
+  webcamCropOverlay?: React.ComponentType;
 }
 
 export function WebcamScanner({
@@ -77,6 +78,7 @@ export function WebcamScanner({
   button,
   isReady = true,
   cropSize,
+  webcamCropOverlay,
 }: WebcamScannerProps) {
   const onCaptureClick = () => {
     if (isReady && capture) {
@@ -104,6 +106,7 @@ export function WebcamScanner({
           data-test-id="webcam-crop-placeholder"
           height={cropSize.height}
           width={cropSize.width}
+          Component={webcamCropOverlay}
         />
       )}
       {!isLoading &&
@@ -121,3 +124,4 @@ export function WebcamScanner({
     </Wrapper>
   );
 }
+

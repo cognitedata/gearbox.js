@@ -77,6 +77,7 @@ export interface AssetScannerProps {
   styles?: AssetScannerStyles;
   strings?: PureObject;
   cropSize?: CropSize;
+  webcamCropOverlay?: React.ComponentType;
 }
 
 interface AssetScannerState {
@@ -225,7 +226,14 @@ export class AssetScanner extends React.Component<
 
   render() {
     const { isLoading, imageSrc, ready } = this.state;
-    const { styles, strings, onError, button, cropSize } = this.props;
+    const {
+      styles,
+      strings,
+      onError,
+      button,
+      cropSize,
+      webcamCropOverlay,
+    } = this.props;
 
     return (
       <Wrapper>
@@ -241,6 +249,7 @@ export class AssetScanner extends React.Component<
           button={button}
           isReady={ready}
           cropSize={cropSize}
+          webcamCropOverlay={webcamCropOverlay}
         />
       </Wrapper>
     );

@@ -238,4 +238,30 @@ storiesOf('AssetScanner/Examples', module)
         content: ocrRequestDoc,
       },
     }
+  )
+  .add(
+    'Crop placeholder with custom overlay',
+    () => (
+      <AssetScanner
+        onError={onError}
+        ocrRequest={ocrRequest}
+        onImageRecognizeFinish={onImageRecognizeFinish}
+        cropSize={{ width: 200, height: 400 }}
+        button={renderButton}
+        webcamCropOverlay={() => (
+          <div
+            style={{
+              border: '20px solid red',
+              height: '440px',
+              width: '240px',
+            }}
+          />
+        )}
+      />
+    ),
+    {
+      readme: {
+        content: ocrRequestDoc,
+      },
+    }
   );
