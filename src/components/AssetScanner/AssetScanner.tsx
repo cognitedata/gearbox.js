@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { getAssetList, ocrRecognize } from '../../api';
 import {
   Callback,
+  CropSize,
   EmptyCallback,
   OcrRequest,
   OnAssetListCallback,
@@ -21,7 +22,6 @@ import {
   ocrSuccess,
 } from '../../utils/notifications';
 import {
-  CropSize,
   getCanvas,
   removeImageBase,
   scaleCropSizeToVideoResolution,
@@ -312,10 +312,11 @@ export class AssetScanner extends React.Component<
 
   private getImage(): Promise<string> {
     const { imageSrc } = this.state;
+    const { cropSize } = this.props;
 
     return imageSrc
       ? Promise.resolve(imageSrc)
-      : this.getImageFromCanvas(this.props.cropSize);
+      : this.getImageFromCanvas(cropSize);
   }
 
   // Made async to provide better UX for component

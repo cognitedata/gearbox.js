@@ -1,4 +1,5 @@
 import { Asset } from '@cognite/sdk';
+import { CropSize } from '..';
 
 export function clampNumber(v: number, minValue: number, maxValue: number) {
   return Math.max(Math.min(v, maxValue), minValue);
@@ -26,10 +27,6 @@ export function getMiddlePixelsOfContainer(
   };
 }
 
-export interface CropSize {
-  width: number;
-  height: number;
-}
 export function getCanvas(
   img: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement,
   width: number,

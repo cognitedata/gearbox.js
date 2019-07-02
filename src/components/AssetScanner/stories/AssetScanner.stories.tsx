@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { Callback, ErrorResponse } from '../../../interfaces';
 import { ASNotifyTypes, AssetScanner } from '../AssetScanner';
 
+import cropPlaceholderCustomOverlayDoc from './crop-placeholder-custom-overlay.md';
+import cropPlaceholderDoc from './crop-placeholder.md';
 import customButtonDoc from './custom-button.md';
 import full from './full.md';
 import customNotificationsDoc from './notifications.md';
@@ -190,52 +192,34 @@ storiesOf('AssetScanner/Examples', module)
     />
   ))
   .add(
-    'Crop placeholder',
-    () => (
-      <AssetScanner
-        onError={onError}
-        ocrRequest={ocrRequest}
-        onImageRecognizeFinish={onImageRecognizeFinish}
-        cropSize={{ width: 400, height: 200 }}
-      />
-    ),
-    {
-      readme: {
-        content: ocrRequestDoc,
-      },
-    }
-  )
-  .add(
-    'Horizontal placeholder with custom button',
+    'Crop placeholder horizontal',
     () => (
       <AssetScanner
         onError={onError}
         ocrRequest={ocrRequest}
         onImageRecognizeFinish={onImageRecognizeFinish}
         cropSize={{ width: 800, height: 250 }}
-        button={renderButton}
       />
     ),
     {
       readme: {
-        content: ocrRequestDoc,
+        content: cropPlaceholderDoc,
       },
     }
   )
   .add(
-    'Vertical crop placeholder with custom button',
+    'Crop placeholder vertical',
     () => (
       <AssetScanner
         onError={onError}
         ocrRequest={ocrRequest}
         onImageRecognizeFinish={onImageRecognizeFinish}
         cropSize={{ width: 200, height: 400 }}
-        button={renderButton}
       />
     ),
     {
       readme: {
-        content: ocrRequestDoc,
+        content: cropPlaceholderDoc,
       },
     }
   )
@@ -247,7 +231,6 @@ storiesOf('AssetScanner/Examples', module)
         ocrRequest={ocrRequest}
         onImageRecognizeFinish={onImageRecognizeFinish}
         cropSize={{ width: 200, height: 400 }}
-        button={renderButton}
         webcamCropOverlay={() => (
           <div
             style={{
@@ -261,7 +244,7 @@ storiesOf('AssetScanner/Examples', module)
     ),
     {
       readme: {
-        content: ocrRequestDoc,
+        content: cropPlaceholderCustomOverlayDoc,
       },
     }
   );

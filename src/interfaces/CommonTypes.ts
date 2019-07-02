@@ -47,3 +47,8 @@ export interface MouseScreenPosition {
   offsetX: number;
   offsetY: number;
 }
+
+export interface CropSize {
+  width: number;
+  height: number;
+}

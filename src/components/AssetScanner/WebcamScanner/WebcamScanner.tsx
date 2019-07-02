@@ -3,11 +3,11 @@ import styled from 'styled-components';
 
 import {
   Callback,
+  CropSize,
   EmptyCallback,
   PureObject,
   SetVideoRefCallback,
 } from '../../../interfaces';
-import { CropSize } from '../../../utils/utils';
 import { LoadingOverlay } from '../../common/LoadingOverlay/LoadingOverlay';
 import { ButtonRenderProp } from '../AssetScanner';
 import { Webcam } from '../Webcam/Webcam';
