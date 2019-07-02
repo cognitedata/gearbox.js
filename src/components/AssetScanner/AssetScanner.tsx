@@ -74,6 +74,7 @@ export interface AssetScannerProps {
   onOcrError?: Callback;
   onError?: Callback;
   onImageReset?: Callback;
+  imageAltText?: string;
   styles?: AssetScannerStyles;
   strings?: PureObject;
   cropSize?: CropSize;
@@ -233,6 +234,7 @@ export class AssetScanner extends React.Component<
       button,
       cropSize,
       webcamCropOverlay,
+      imageAltText,
     } = this.props;
 
     return (
@@ -240,6 +242,7 @@ export class AssetScanner extends React.Component<
         <WebcamScanner
           isLoading={isLoading}
           imageSrc={imageSrc}
+          imageAltText={imageAltText}
           capture={this.captureBound}
           setRef={this.setRefBound}
           onReset={this.resetSearchBound}
