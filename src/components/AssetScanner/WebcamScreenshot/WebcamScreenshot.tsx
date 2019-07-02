@@ -21,18 +21,20 @@ const ImgWrapper = styled.img`
 
 interface WebcamScreenshotProps {
   src: string;
+  altText?: string;
   className?: string;
 }
 
 export function WebcamScreenshot({
   src,
+  altText = 'Captured from webcam',
   className = '',
 }: WebcamScreenshotProps) {
   return (
     <Wrapper>
       <ImgWrapper
         src={`data:image/png;base64,${src}`}
-        alt="Captured from webcam"
+        alt={altText}
         id="freezeFrame"
         className={className}
       />
