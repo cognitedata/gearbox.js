@@ -57,6 +57,7 @@ export interface WebcamScannerProps {
   setRef: SetVideoRefCallback;
   button?: ButtonRenderProp;
   imageSrc?: string;
+  imgAltText?: string;
   onReset?: EmptyCallback;
   styles?: WebcamScannerStyles;
   strings?: PureObject;
@@ -79,6 +80,7 @@ export function WebcamScanner({
   isReady = true,
   cropSize,
   webcamCropOverlay,
+  imgAltText,
 }: WebcamScannerProps) {
   const onCaptureClick = () => {
     if (isReady && capture) {
@@ -93,7 +95,7 @@ export function WebcamScanner({
   return (
     <Wrapper>
       <LoadingOverlay size={'large'} isLoading={isLoading} />
-      {imageSrc && <WebcamScreenshot src={imageSrc} />}
+      {imageSrc && <WebcamScreenshot src={imageSrc} altText={imgAltText} />}
       <Webcam
         audio={false}
         setRef={setRef}
