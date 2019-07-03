@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { getAssetList, ocrRecognize } from '../../api';
 import {
   Callback,
+  CropSize,
   EmptyCallback,
   OcrRequest,
   OnAssetListCallback,
@@ -20,7 +21,12 @@ import {
   ocrNoTextFound,
   ocrSuccess,
 } from '../../utils/notifications';
-import { getCanvas, removeImageBase } from '../../utils/utils';
+import {
+  getCanvas,
+  removeImageBase,
+  scaleCropSizeToVideoResolution,
+  scaleDomToVideoResolution,
+} from '../../utils/utils';
 import { WebcamScanner } from './WebcamScanner/WebcamScanner';
 
 const Wrapper = styled.div`
@@ -68,8 +74,11 @@ export interface AssetScannerProps {
   onOcrError?: Callback;
   onError?: Callback;
   onImageReset?: Callback;
+  imageAltText?: string;
   styles?: AssetScannerStyles;
   strings?: PureObject;
+  cropSize?: CropSize;
+  webcamCropOverlay?: React.ComponentType;
 }
 
 interface AssetScannerState {
@@ -218,13 +227,22 @@ export class AssetScanner extends React.Component<
 
   render() {
     const { isLoading, imageSrc, ready } = this.state;
-    const { styles, strings, onError, button } = this.props;
+    const {
+      styles,
+      strings,
+      onError,
+      button,
+      cropSize,
+      webcamCropOverlay,
+      imageAltText,
+    } = this.props;
 
     return (
       <Wrapper>
         <WebcamScanner
           isLoading={isLoading}
           imageSrc={imageSrc}
+          imageAltText={imageAltText}
           capture={this.captureBound}
           setRef={this.setRefBound}
           onReset={this.resetSearchBound}
@@ -233,6 +251,8 @@ export class AssetScanner extends React.Component<
           onError={onError}
           button={button}
           isReady={ready}
+          cropSize={cropSize}
+          webcamCropOverlay={webcamCropOverlay}
         />
       </Wrapper>
     );
@@ -295,12 +315,15 @@ export class AssetScanner extends React.Component<
 
   private getImage(): Promise<string> {
     const { imageSrc } = this.state;
+    const { cropSize } = this.props;
 
-    return imageSrc ? Promise.resolve(imageSrc) : this.getImageFromCanvas();
+    return imageSrc
+      ? Promise.resolve(imageSrc)
+      : this.getImageFromCanvas(cropSize);
   }
 
   // Made async to provide better UX for component
-  private getImageFromCanvas(): Promise<string> {
+  private getImageFromCanvas(cropSize?: CropSize): Promise<string> {
     const { errorVideoAccess } = ASNotifyTypes;
 
     if (!this.video) {
@@ -308,12 +331,25 @@ export class AssetScanner extends React.Component<
 
       return Promise.resolve('');
     }
-
-    const aspectRatio = this.video.videoWidth / this.video.videoHeight;
+    const { videoHeight, videoWidth } = this.video;
+    const { clientHeight, clientWidth } = scaleDomToVideoResolution(
+      videoHeight,
+      videoWidth,
+      this.video.clientHeight,
+      this.video.clientWidth
+    );
+    const cropSizeScaled = scaleCropSizeToVideoResolution(
+      videoHeight,
+      videoWidth,
+      clientHeight,
+      clientWidth,
+      cropSize
+    );
     const canvas = getCanvas(
       this.video,
-      this.video.clientWidth,
-      this.video.clientWidth / aspectRatio
+      videoWidth,
+      videoHeight,
+      cropSizeScaled
     );
 
     return new Promise(resolve =>

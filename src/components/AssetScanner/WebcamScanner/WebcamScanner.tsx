@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import {
   Callback,
+  CropSize,
   EmptyCallback,
   PureObject,
   SetVideoRefCallback,
@@ -10,6 +11,7 @@ import {
 import { LoadingOverlay } from '../../common/LoadingOverlay/LoadingOverlay';
 import { ButtonRenderProp } from '../AssetScanner';
 import { Webcam } from '../Webcam/Webcam';
+import { WebcamCropPlaceholder } from '../WebcamCropPlaceholder/WebcamCropPlaceholder';
 import { WebcamScreenshot } from '../WebcamScreenshot/WebcamScreenshot';
 
 const CameraButton = styled.button`
@@ -49,17 +51,20 @@ export interface WebcamScannerStyles {
   button: React.CSSProperties;
 }
 
-interface WebcamScannerProps {
+export interface WebcamScannerProps {
   isLoading: boolean;
   capture: EmptyCallback;
   setRef: SetVideoRefCallback;
   button?: ButtonRenderProp;
   imageSrc?: string;
+  imageAltText?: string;
   onReset?: EmptyCallback;
   styles?: WebcamScannerStyles;
   strings?: PureObject;
   onError?: Callback;
   isReady?: boolean;
+  cropSize?: CropSize;
+  webcamCropOverlay?: React.ComponentType;
 }
 
 export function WebcamScanner({
@@ -73,6 +78,9 @@ export function WebcamScanner({
   onError,
   button,
   isReady = true,
+  cropSize,
+  webcamCropOverlay,
+  imageAltText,
 }: WebcamScannerProps) {
   const onCaptureClick = () => {
     if (isReady && capture) {
@@ -87,7 +95,7 @@ export function WebcamScanner({
   return (
     <Wrapper>
       <LoadingOverlay size={'large'} isLoading={isLoading} />
-      {imageSrc && <WebcamScreenshot src={imageSrc} />}
+      {imageSrc && <WebcamScreenshot src={imageSrc} altText={imageAltText} />}
       <Webcam
         audio={false}
         setRef={setRef}
@@ -95,6 +103,14 @@ export function WebcamScanner({
         onError={onError}
         style={imageSrc ? { opacity: 0, visability: 'hidden' } : {}}
       />
+      {cropSize && !imageSrc && (
+        <WebcamCropPlaceholder
+          data-test-id="webcam-crop-placeholder"
+          height={cropSize.height}
+          width={cropSize.width}
+          Component={webcamCropOverlay}
+        />
+      )}
       {!isLoading &&
         (button ? (
           button(onCaptureClick, isReady)

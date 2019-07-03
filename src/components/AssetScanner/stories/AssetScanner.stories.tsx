@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { Callback, ErrorResponse } from '../../../interfaces';
 import { ASNotifyTypes, AssetScanner } from '../AssetScanner';
 
+import cropPlaceholderCustomOverlayDoc from './crop-placeholder-custom-overlay.md';
+import cropPlaceholderDoc from './crop-placeholder.md';
 import customButtonDoc from './custom-button.md';
 import full from './full.md';
 import customNotificationsDoc from './notifications.md';
@@ -188,4 +190,61 @@ storiesOf('AssetScanner/Examples', module)
         />
       )}
     />
-  ));
+  ))
+  .add(
+    'Crop placeholder horizontal',
+    () => (
+      <AssetScanner
+        onError={onError}
+        ocrRequest={ocrRequest}
+        onImageRecognizeFinish={onImageRecognizeFinish}
+        cropSize={{ width: 800, height: 250 }}
+      />
+    ),
+    {
+      readme: {
+        content: cropPlaceholderDoc,
+      },
+    }
+  )
+  .add(
+    'Crop placeholder vertical',
+    () => (
+      <AssetScanner
+        onError={onError}
+        ocrRequest={ocrRequest}
+        onImageRecognizeFinish={onImageRecognizeFinish}
+        cropSize={{ width: 200, height: 400 }}
+      />
+    ),
+    {
+      readme: {
+        content: cropPlaceholderDoc,
+      },
+    }
+  )
+  .add(
+    'Crop placeholder with custom overlay',
+    () => (
+      <AssetScanner
+        onError={onError}
+        ocrRequest={ocrRequest}
+        onImageRecognizeFinish={onImageRecognizeFinish}
+        cropSize={{ width: 200, height: 400 }}
+        webcamCropOverlay={() => (
+          <div
+            style={{
+              border: '20px solid red',
+              height: '440px',
+              width: '240px',
+            }}
+          />
+        )}
+      />
+    ),
+    {
+      readme: {
+        content: cropPlaceholderCustomOverlayDoc,
+      },
+    }
+  );
