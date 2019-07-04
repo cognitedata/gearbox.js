@@ -247,4 +247,20 @@ storiesOf('AssetScanner/Examples', module)
         content: cropPlaceholderCustomOverlayDoc,
       },
     }
+  )
+  .add(
+    'Custom asset search',
+    () => (
+      <AssetScanner
+        onError={onError}
+        ocrRequest={ocrRequest}
+        onImageRecognizeFinish={onImageRecognizeFinish}
+        getAssetsHandlerCustom={() => Promise.resolve([])}
+      />
+    ),
+    {
+      readme: {
+        content: cropPlaceholderCustomOverlayDoc,
+      },
+    }
   );
