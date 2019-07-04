@@ -79,6 +79,7 @@ export interface AssetScannerProps {
   strings?: PureObject;
   cropSize?: CropSize;
   webcamCropOverlay?: React.ComponentType;
+  getAssetsHandlerCustom?: (strings: string[]) => Promise<Asset[]>;
 }
 
 interface AssetScannerState {
@@ -189,7 +190,9 @@ export class AssetScanner extends React.Component<
     const { recognizeSuccess, recognizeFails } = ASNotifyTypes;
 
     if (strings !== null && strings.length >= 1) {
-      const assets = await this.getAssetsHandler(strings);
+      const assets = this.props.getAssetsHandlerCustom
+        ? await this.props.getAssetsHandlerCustom(strings)
+        : await this.getAssetsHandlerDefault(strings);
 
       this.endLoading();
 
@@ -380,7 +383,7 @@ export class AssetScanner extends React.Component<
     }
   }
 
-  private async getAssetsHandler(strings: string[]): Promise<Asset[]> {
+  private async getAssetsHandlerDefault(strings: string[]): Promise<Asset[]> {
     const { onError } = this.props;
     const { errorOccurred } = ASNotifyTypes;
 
