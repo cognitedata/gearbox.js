@@ -186,12 +186,16 @@ export class AssetScanner extends React.Component<
   }
 
   async doFetchFoundAssets(strings: string[] | null) {
-    const { onImageRecognizeEmpty, onAssetFetchResult } = this.props;
+    const {
+      onImageRecognizeEmpty,
+      onAssetFetchResult,
+      getAssetsHandlerCustom,
+    } = this.props;
     const { recognizeSuccess, recognizeFails } = ASNotifyTypes;
 
     if (strings !== null && strings.length >= 1) {
-      const assets = this.props.getAssetsHandlerCustom
-        ? await this.props.getAssetsHandlerCustom(strings)
+      const assets = getAssetsHandlerCustom
+        ? await getAssetsHandlerCustom(strings)
         : await this.getAssetsHandlerDefault(strings);
 
       this.endLoading();
