@@ -8,6 +8,7 @@ import { ASNotifyTypes, AssetScanner } from '../AssetScanner';
 
 import cropPlaceholderCustomOverlayDoc from './crop-placeholder-custom-overlay.md';
 import cropPlaceholderDoc from './crop-placeholder.md';
+import customAssetHandler from './custom-asset-handler.md';
 import customButtonDoc from './custom-button.md';
 import full from './full.md';
 import customNotificationsDoc from './notifications.md';
@@ -208,22 +209,6 @@ storiesOf('AssetScanner/Examples', module)
     }
   )
   .add(
-    'Crop placeholder vertical',
-    () => (
-      <AssetScanner
-        onError={onError}
-        ocrRequest={ocrRequest}
-        onImageRecognizeFinish={onImageRecognizeFinish}
-        cropSize={{ width: 200, height: 400 }}
-      />
-    ),
-    {
-      readme: {
-        content: cropPlaceholderDoc,
-      },
-    }
-  )
-  .add(
     'Crop placeholder with custom overlay',
     () => (
       <AssetScanner
@@ -260,7 +245,7 @@ storiesOf('AssetScanner/Examples', module)
     ),
     {
       readme: {
-        content: cropPlaceholderCustomOverlayDoc,
+        content: customAssetHandler,
       },
     }
   );
