@@ -65,6 +65,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       revisionId,
       cache,
       boundingBox,
+      enableKeyboardNavigation,
       useDefaultCameraPosition,
       onProgress,
       onReady,
@@ -91,6 +92,10 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     this.viewer = viewer;
     // Looks like replaceChild looses onClick event handler, so adding it this way instead
     domElement.addEventListener('click', this.onContainerClick);
+
+    if (!enableKeyboardNavigation) {
+      this.viewer.disableKeyboardNavigation();
+    }
 
     if (onProgress) {
       addEvent([[progress, onProgress]]);
