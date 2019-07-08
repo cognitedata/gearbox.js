@@ -61,7 +61,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     }
 
     const {
-      assetId,
       modelId,
       revisionId,
       cache,
@@ -135,10 +134,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
     if (useDefaultCameraPosition && !fromCache) {
       this.resetCameraPosition();
-    }
-
-    if (assetId && fromCache) {
-      this.highlightNodes();
     }
 
     if (onReady) {
