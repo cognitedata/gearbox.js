@@ -15,9 +15,9 @@ type ClickHandler = (position: MouseScreenPosition) => void;
 export interface Model3DViewerProps {
   modelId: number;
   revisionId: number;
+  assetId?: number;
   boundingBox?: THREE.Box3;
   cache?: CacheObject;
-  assetId?: number;
   enableKeyboardNavigation?: boolean;
   onError?: Callback;
   onProgress?: Callback;
@@ -61,6 +61,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     }
 
     const {
+      assetId,
       modelId,
       revisionId,
       cache,
@@ -134,6 +135,10 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
     if (useDefaultCameraPosition && !fromCache) {
       this.resetCameraPosition();
+    }
+
+    if (assetId && fromCache) {
+      this.highlightNodes();
     }
 
     if (onReady) {
@@ -282,7 +287,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       this.model.updateMatrixWorld();
 
       const reusableBox = new THREE.Box3();
-
       const bb = this.model.getBoundingBox(nodeId, reusableBox);
 
       this.model.selectNode(nodeId);
@@ -299,7 +303,11 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   }
 
   private onComplete() {
-    const { onComplete } = this.props;
+    const { onComplete, assetId } = this.props;
+
+    if (assetId) {
+      this.highlightNodes();
+    }
 
     if (onComplete) {
       onComplete();
