@@ -23,11 +23,13 @@ function ExampleComponent(props) {
 
   return (
     <AssetScanner
-        onError={onError}
-        ocrRequest={ocrRequest}
-        onImageRecognizeFinish={onImageRecognizeFinish}
-        cropSize={{ width: 400, height: 200 }}
-      />
+      onError={onError}
+      ocrRequest={ocrRequest}
+      onImageRecognizeFinish={onImageRecognizeFinish}
+      cropSize={{ width: 400, height: 200 }}
+    />
+    
   );
+  
 }
 ```

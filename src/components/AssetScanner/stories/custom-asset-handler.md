@@ -12,6 +12,7 @@ import { AssetScanner } from '@cognite/gearbox';
 
 import { doOcr } from 'your-ocr-implementation';
 import { extractStrings } from 'your-extract-strings-implementation';
+import { customAssetSearch } from 'your-asset-search-implementation';
 
 function ExampleComponent(props) {
   const onError = (error: any): void => {};
@@ -20,24 +21,16 @@ function ExampleComponent(props) {
     const recognise = await doOcr(image); 
     return extractStrings(recognise);
   };
+  const getAssetHandlerCustom = async (strings) => await customAssetSearch(strings); 
 
   return (
     <AssetScanner
       onError={onError}
       ocrRequest={ocrRequest}
       onImageRecognizeFinish={onImageRecognizeFinish}
-      cropSize={{ width: 200, height: 400 }}
-      webcamCropOverlay={() => (
-        <div
-          style={{
-            border: '20px solid red',
-            height: '440px',
-            width: '240px',
-          }}
-        />
-      )}
+      getAssetHandlerCustom={getAssetHandlerCustom}
     />
-    
+      
   );
   
 }
