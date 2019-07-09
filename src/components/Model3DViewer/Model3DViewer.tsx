@@ -15,9 +15,9 @@ type ClickHandler = (position: MouseScreenPosition) => void;
 export interface Model3DViewerProps {
   modelId: number;
   revisionId: number;
+  assetId?: number;
   boundingBox?: THREE.Box3;
   cache?: CacheObject;
-  assetId?: number;
   enableKeyboardNavigation?: boolean;
   onError?: Callback;
   onProgress?: Callback;
@@ -65,6 +65,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       revisionId,
       cache,
       boundingBox,
+      enableKeyboardNavigation,
       useDefaultCameraPosition,
       onProgress,
       onReady,
@@ -91,6 +92,10 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     this.viewer = viewer;
     // Looks like replaceChild looses onClick event handler, so adding it this way instead
     domElement.addEventListener('click', this.onContainerClick);
+
+    if (!enableKeyboardNavigation) {
+      this.viewer.disableKeyboardNavigation();
+    }
 
     if (onProgress) {
       addEvent([[progress, onProgress]]);
@@ -277,7 +282,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       this.model.updateMatrixWorld();
 
       const reusableBox = new THREE.Box3();
-
       const bb = this.model.getBoundingBox(nodeId, reusableBox);
 
       this.model.selectNode(nodeId);
@@ -294,7 +298,11 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   }
 
   private onComplete() {
-    const { onComplete } = this.props;
+    const { onComplete, assetId } = this.props;
+
+    if (assetId) {
+      this.highlightNodes();
+    }
 
     if (onComplete) {
       onComplete();
