@@ -11,7 +11,7 @@ import {
   NODE_MAINLIST,
   NODE_SUBLIST,
 } from '../../../mocks';
-import { NodeTree } from '../NodeTree';
+import { ThreeDNodeTree } from '../ThreeDNodeTree';
 import clickItem from './clickItem.md';
 import customStyles from './customStyles.md';
 import defaultExpanded from './defaultExpanded.md';
@@ -43,11 +43,11 @@ const setupMocks = () => {
   };
 };
 
-storiesOf('NodeTree', module).add(
+storiesOf('ThreeDNodeTree', module).add(
   'Full description',
   () => {
     setupMocks();
-    return <NodeTree />;
+    return <ThreeDNodeTree />;
   },
   {
     readme: {
@@ -56,13 +56,13 @@ storiesOf('NodeTree', module).add(
   }
 );
 
-storiesOf('NodeTree/Examples', module)
+storiesOf('ThreeDNodeTree/Examples', module)
   .add(
     'Click item in tree',
     () => {
       setupMocks();
       return (
-        <NodeTree
+        <ThreeDNodeTree
           onSelect={(e: OnSelectNodeTreeParams) => action('onSelect')(e)}
         />
       );
@@ -77,7 +77,7 @@ storiesOf('NodeTree/Examples', module)
     'Default expanded node',
     () => {
       setupMocks();
-      return <NodeTree defaultExpandedKeys={KEY_LIST} />;
+      return <ThreeDNodeTree defaultExpandedKeys={KEY_LIST} />;
     },
     {
       readme: {
@@ -89,7 +89,7 @@ storiesOf('NodeTree/Examples', module)
     'Custom Styles',
     () => {
       setupMocks();
-      return <NodeTree styles={ASSET_TREE_STYLES} />;
+      return <ThreeDNodeTree styles={ASSET_TREE_STYLES} />;
     },
     {
       readme: {

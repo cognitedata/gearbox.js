@@ -49,7 +49,7 @@ const cursorApiRequest = async (
   return [...data, ...result.items];
 };
 
-export class NodeTree extends Component<NodeTreeProps, NodeTreeState> {
+export class ThreeDNodeTree extends Component<NodeTreeProps, NodeTreeState> {
   static defaultProps = {
     modelId: 0,
     revisionId: 0,
@@ -78,7 +78,7 @@ export class NodeTree extends Component<NodeTreeProps, NodeTreeState> {
       threeDNodes: [],
       treeData: [],
       expandedKeys: defaultExpandedKeys
-        ? NodeTree.toKeys(defaultExpandedKeys)
+        ? ThreeDNodeTree.toKeys(defaultExpandedKeys)
         : {},
       modelId: props.modelId,
       revisionId: props.revisionId,
@@ -106,7 +106,7 @@ export class NodeTree extends Component<NodeTreeProps, NodeTreeState> {
 
     threeDNodes.forEach(threeDNode => {
       if (threeDNode.depth === 0) {
-        nodes[threeDNode.id] = NodeTree.returnPretty(threeDNode);
+        nodes[threeDNode.id] = ThreeDNodeTree.returnPretty(threeDNode);
       }
     });
 
@@ -117,7 +117,6 @@ export class NodeTree extends Component<NodeTreeProps, NodeTreeState> {
         return;
       }
       node.isLeaf = false;
-      console.log(parentId);
     });
     return Object.keys(nodes).map(id => {
       if (nodes[id].isLeaf) {
@@ -135,12 +134,12 @@ export class NodeTree extends Component<NodeTreeProps, NodeTreeState> {
       return;
     }
     const eventKey = treeNode.props.eventKey;
-    const assetId = eventKey ? Number.parseInt(eventKey, 10) : undefined;
+    const threeDnodeId = eventKey ? Number.parseInt(eventKey, 10) : undefined;
 
-    if (assetId && !Number.isNaN(assetId)) {
+    if (threeDnodeId && !Number.isNaN(threeDnodeId)) {
       const query = {
         depth: 2,
-        nodeId: assetId,
+        nodeId: threeDnodeId,
       };
 
       const loadedData = await cursorApiRequest(
@@ -182,16 +181,16 @@ export class NodeTree extends Component<NodeTreeProps, NodeTreeState> {
     }
   };
 
-  onSelectNode = (returnAsset: OnSelectNodeTreeParams) => {
+  onSelectNode = (returnNode: OnSelectNodeTreeParams) => {
     const { onSelect } = this.props;
     if (onSelect) {
-      onSelect(returnAsset);
+      onSelect(returnNode);
     }
   };
 
   onExpand = (expandedKeys: string[]) => {
     this.setState({
-      expandedKeys: NodeTree.toKeys(
+      expandedKeys: ThreeDNodeTree.toKeys(
         expandedKeys.map(key => Number.parseInt(key, 10))
       ),
     });

@@ -8,12 +8,12 @@
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { NodeTree } from '@cognite/gearbox';
+import { ThreeDNodeTree } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
 
   return (
-    <NodeTree
+    <ThreeDNodeTree
       modelId = {0} revisionId = {0} defaultExpandedKeys={[1, 2, 3]}
     />
   );

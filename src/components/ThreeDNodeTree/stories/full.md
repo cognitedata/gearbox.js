@@ -1,4 +1,4 @@
-# Node Tree
+# ThreeDNode Tree
 <!-- STORY -->
 
 #### Description:
@@ -16,12 +16,12 @@ To retrieve a tree you need to provide:
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { NodeTree } from '@cognite/gearbox';
+import { ThreeDNodeTree } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
 
   return (
-    <NodeTree modelId = {0} revisionId = {0}/>
+    <ThreeDNodeTree modelId = {0} revisionId = {0}/>
   );
 
 }
@@ -58,7 +58,7 @@ import { OnSelectNodeTreeParams } from '@cognite/gearbox';
 Definition:
 
 ```typescript
-interface OnSelectAssetTreeParams {
+interface OnSelectNodeTreeParams {
   key: number | string;
   title: string;
   isLeaf?: boolean;
