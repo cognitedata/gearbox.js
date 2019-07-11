@@ -11,6 +11,7 @@ import cropPlaceholderDoc from './crop-placeholder.md';
 import customAssetHandler from './custom-asset-handler.md';
 import customButtonDoc from './custom-button.md';
 import full from './full.md';
+import inputImage from './input-image.md';
 import customNotificationsDoc from './notifications.md';
 import ocrRequestDoc from './ocr-request.md';
 
@@ -180,18 +181,26 @@ storiesOf('AssetScanner/Examples', module)
       },
     }
   )
-  .add('Input image', () => (
-    <FileInputComponent
-      render={(image: string) => (
-        <AssetScanner
-          onError={onError}
-          ocrRequest={ocrRequest}
-          onImageRecognizeFinish={onImageRecognizeFinish}
-          image={image}
-        />
-      )}
-    />
-  ))
+  .add(
+    'Input image',
+    () => (
+      <FileInputComponent
+        render={(image: string) => (
+          <AssetScanner
+            onError={onError}
+            ocrRequest={ocrRequest}
+            onImageRecognizeFinish={onImageRecognizeFinish}
+            image={image}
+          />
+        )}
+      />
+    ),
+    {
+      readme: {
+        content: inputImage,
+      },
+    }
+  )
   .add(
     'Crop placeholder horizontal',
     () => (
