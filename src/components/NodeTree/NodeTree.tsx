@@ -1,4 +1,4 @@
-import { Node, ThreeDListNodesParams} from '@cognite/sdk';
+import { Node, ThreeDListNodesParams } from '@cognite/sdk';
 import * as sdk from '@cognite/sdk';
 import { Tree } from 'antd';
 import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';
@@ -27,16 +27,16 @@ interface NodeTreeState {
   threeDNodes: Node[];
   treeData: TreeNodeData[];
   expandedKeys: ExpandedKeysMap;
-  modelId: number,
-  revisionId: number
-  loadedKeys: string[]
+  modelId: number;
+  revisionId: number;
+  loadedKeys: string[];
 }
 
 const cursorApiRequest = async (
   modelId: number,
   revisionId: number,
   params: ThreeDListNodesParams,
-  data: Node[] = [],
+  data: Node[] = []
 ): Promise<Node[]> => {
   const result = await sdk.ThreeD.listNodes(modelId, revisionId, params);
   const { nextCursor: cursor } = result;
@@ -49,15 +49,63 @@ const cursorApiRequest = async (
   return [...data, ...result.items];
 };
 
-
-
 export class NodeTree extends Component<NodeTreeProps, NodeTreeState> {
+  static defaultProps = {
+    modelId: 0,
+    revisionId: 0,
+    onSelect: (selectedNode: OnSelectNodeTreeParams) => {
+      return selectedNode.key;
+    },
+  };
+
+  static returnPretty(threeDNode: Node) {
+    return {
+      title: `${threeDNode.name}`,
+      key: threeDNode.id,
+      node: threeDNode,
+      isLeaf: true,
+    };
+  }
+
+  static toKeys(path: number[], initial = {}): ExpandedKeysMap {
+    return path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
+  }
+
+  constructor(props: NodeTreeProps) {
+    super(props);
+    const { defaultExpandedKeys } = props;
+    this.state = {
+      threeDNodes: [],
+      treeData: [],
+      expandedKeys: defaultExpandedKeys
+        ? NodeTree.toKeys(defaultExpandedKeys)
+        : {},
+      modelId: props.modelId,
+      revisionId: props.revisionId,
+      loadedKeys: [],
+    };
+  }
+
+  async componentDidMount() {
+    const threeDNodes = await sdk.ThreeD.listNodes(
+      this.state.modelId,
+      this.state.revisionId,
+      { depth: 1 }
+    );
+    this.setState({
+      threeDNodes: threeDNodes.items,
+      treeData:
+        threeDNodes && threeDNodes.items.length > 0
+          ? this.mapDataNodes(threeDNodes.items)
+          : [],
+    });
+  }
 
   mapDataNodes(threeDNodes: Node[]): TreeNodeData[] {
     const nodes: { [name: string]: TreeNodeData } = {};
 
     threeDNodes.forEach(threeDNode => {
-      if (threeDNode.depth == 0) {
+      if (threeDNode.depth === 0) {
         nodes[threeDNode.id] = NodeTree.returnPretty(threeDNode);
       }
     });
@@ -76,57 +124,9 @@ export class NodeTree extends Component<NodeTreeProps, NodeTreeState> {
         this.state.loadedKeys.push(`${id}`);
       }
       this.setState({
-        loadedKeys: [...this.state.loadedKeys]
+        loadedKeys: [...this.state.loadedKeys],
       });
       return nodes[id];
-    });
-  }
-
-  static returnPretty(threeDNode: Node) {
-    return {
-      title: `${threeDNode.name}`,
-      key: threeDNode.id,
-      node: threeDNode,
-      isLeaf: true,
-    };
-  }
-
-  static toKeys(path: number[], initial = {}): ExpandedKeysMap {
-    return path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
-  }
-
-  static defaultProps = {
-    modelId: 0,
-    revisionId: 0,
-    onSelect:  (selectedNode : OnSelectNodeTreeParams) => {
-      // console.log(selectedNode.key);
-      return selectedNode.key;
-    }
-  }
-
-  constructor(props: NodeTreeProps) {
-    super(props);
-    const { defaultExpandedKeys } = props;
-    this.state = {
-      threeDNodes: [],
-      treeData: [],
-      expandedKeys: defaultExpandedKeys
-        ? NodeTree.toKeys(defaultExpandedKeys)
-        : {},
-      modelId: props.modelId,
-      revisionId: props.revisionId,
-      loadedKeys: []
-    };
-  }
-
-  async componentDidMount() {
-    const threeDNodes = await sdk.ThreeD.listNodes(this.state.modelId, this.state.revisionId, {depth: 1});
-    this.setState({
-      threeDNodes: threeDNodes.items,
-      treeData:
-      threeDNodes && threeDNodes.items.length > 0
-          ? this.mapDataNodes(threeDNodes.items)
-          : [],
     });
   }
 
@@ -140,10 +140,14 @@ export class NodeTree extends Component<NodeTreeProps, NodeTreeState> {
     if (assetId && !Number.isNaN(assetId)) {
       const query = {
         depth: 2,
-        nodeId: assetId
+        nodeId: assetId,
       };
 
-      const loadedData = await cursorApiRequest(this.state.modelId, this.state.revisionId, query);
+      const loadedData = await cursorApiRequest(
+        this.state.modelId,
+        this.state.revisionId,
+        query
+      );
       if (loadedData.length > 1) {
         treeNode.props.dataRef.children = loadedData
           .slice(1)
@@ -153,23 +157,23 @@ export class NodeTree extends Component<NodeTreeProps, NodeTreeState> {
           .map(x => {
             if (loadedData.filter(y => y.parentId === x.id).length <= 0) {
               this.state.loadedKeys.push(`${x.id}`);
-              return ({
+              return {
                 title: `${x.name}`,
                 key: x.id,
                 node: x,
                 isLeaf: true,
-              });
+              };
             } else {
-              return ({
+              return {
                 title: `${x.name}`,
                 key: x.id,
                 node: x,
                 isLeaf: false,
-              });
+              };
             }
           });
         this.setState({
-          loadedKeys: [... this.state.loadedKeys],
+          loadedKeys: [...this.state.loadedKeys],
           treeData: [...this.state.treeData],
         });
       } else {
@@ -227,7 +231,7 @@ export class NodeTree extends Component<NodeTreeProps, NodeTreeState> {
         onSelect={(_, e) => this.onSelectNode(e.node.props.dataRef)}
         expandedKeys={Object.keys(expandedKeys)}
         onExpand={this.onExpand}
-        loadedKeys = {this.state.loadedKeys}
+        loadedKeys={this.state.loadedKeys}
       >
         {this.renderTreeNode(treeData)}
       </Tree>
