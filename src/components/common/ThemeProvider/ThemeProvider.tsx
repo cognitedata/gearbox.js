@@ -1,6 +1,7 @@
 import React from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { defaultTheme } from '../../theme/defaultTheme';
+import { AnyIfEmpty } from '../../../interfaces';
+import { defaultTheme } from '../../../theme/defaultTheme';
 
 type GearboxThemeKey = keyof typeof defaultTheme;
 
@@ -14,15 +15,17 @@ export type GearboxTheme = { [key in GearboxThemeKey]?: string } &
   GearboxThemeOptional;
 
 export interface ThemeProviderProps {
-  theme: GearboxTheme;
+  theme?: AnyIfEmpty<{}> & { gearbox?: GearboxTheme };
   children: React.ReactChild;
 }
 
 export const ThemeProvider = (props: ThemeProviderProps) => {
+  const external =
+    props.theme && props.theme.gearbox ? props.theme.gearbox : {};
   const theme = {
     gearbox: {
       ...defaultTheme,
-      ...props.theme,
+      ...external,
     },
   };
   return (

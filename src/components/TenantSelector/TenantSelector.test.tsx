@@ -171,7 +171,11 @@ describe('TenantSelector', () => {
 
     optionApiInput.simulate('change', { target: { value: apiUrlString } });
 
-    const { apiUrl } = wrapper.state('advanced');
+    const instance = wrapper.childAt(0).instance();
+
+    // TODO: need to be redone in another way
+    // @ts-ignore
+    const { apiUrl } = instance.state.advanced;
 
     expect(apiUrl).toEqual(apiUrlString);
   });

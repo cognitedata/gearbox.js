@@ -2,7 +2,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import styled from 'styled-components';
-import { defaultTheme } from '../../theme/defaultTheme';
+import { defaultTheme } from '../../../theme/defaultTheme';
 import { ThemeProvider } from './ThemeProvider';
 
 configure({ adapter: new Adapter() });
@@ -28,7 +28,9 @@ describe('ThemeProvider', () => {
     `;
 
     mount(
-      <ThemeProvider theme={{ primaryColor: 'red', textColor: 'magenta' }}>
+      <ThemeProvider
+        theme={{ gearbox: { primaryColor: 'red', textColor: 'magenta' } }}
+      >
         <Child />
       </ThemeProvider>
     );
@@ -47,7 +49,7 @@ describe('ThemeProvider', () => {
     `;
 
     mount(
-      <ThemeProvider theme={{ containerColor: 'green' }}>
+      <ThemeProvider theme={{ gearbox: { containerColor: 'green' } }}>
         <Child />
       </ThemeProvider>
     );

@@ -2,10 +2,11 @@ import { Button, Collapse, Form, Input as AntInput, Spin } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
 import { InputProps } from 'antd/lib/input';
 import React from 'react';
-import styled from 'styled-components';
-import { PureObject } from '../../interfaces';
+import styled, { withTheme } from 'styled-components';
+import { AnyIfEmpty, PureObject } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
 import { isEmptyString, sanitizeTenant } from '../../utils/sanitize';
+import { ThemeProvider } from '../common/ThemeProvider';
 
 const Panel = Collapse.Panel;
 
@@ -42,6 +43,7 @@ export interface TenantSelectorProps {
   ) => Promise<boolean>;
   advancedOptions?: PureObject;
   styles?: TenantSelectorStyles;
+  theme?: AnyIfEmpty<{}>;
 }
 
 interface TenantSelectorState {
@@ -50,12 +52,13 @@ interface TenantSelectorState {
   advanced: PureObject;
 }
 
-export class TenantSelector extends React.Component<
+class TenantSelector extends React.Component<
   TenantSelectorProps,
   TenantSelectorState
 > {
   static defaultProps = {
     advancedOptions: {},
+    theme: { ...defaultTheme },
   };
 
   constructor(props: TenantSelectorProps) {
@@ -114,6 +117,7 @@ export class TenantSelector extends React.Component<
       title,
       unknownMessage,
       styles,
+      theme,
     } = this.props;
 
     const { tenant, validity } = this.state;
@@ -133,39 +137,41 @@ export class TenantSelector extends React.Component<
     }
 
     return (
-      <LoginWrapper style={styles && styles.wrapper}>
-        <Title style={styles && styles.title}>{title}</Title>
-        {header && typeof header !== 'string' ? (
-          header
-        ) : (
-          <SubTitle style={styles && styles.subTitle}>
-            {header || 'Enter your company name'}
-          </SubTitle>
-        )}
-        <Form>
-          <Form.Item hasFeedback={true} {...formItemProps}>
-            <Input
-              style={styles && styles.input}
-              data-id="tenant-input"
-              autoFocus={true}
-              onChange={this.onTenantChange}
-              onPressEnter={this.checkTenantValidity}
-              value={tenant}
-              defaultValue={tenant}
-              placeholder={placeholder || 'cognite'}
-            />
-          </Form.Item>
-          {this.renderAdvancedOptions()}
-        </Form>
-        <LoginButton
-          style={styles && styles.button}
-          htmlType="button"
-          disabled={checkingValidity || invalidTenant || tenant === ''}
-          onClick={this.checkTenantValidity}
-        >
-          {checkingValidity ? <Spin size="small" /> : loginText || 'Login'}
-        </LoginButton>
-      </LoginWrapper>
+      <ThemeProvider theme={theme}>
+        <LoginWrapper style={styles && styles.wrapper}>
+          <Title style={styles && styles.title}>{title}</Title>
+          {header && typeof header !== 'string' ? (
+            header
+          ) : (
+            <SubTitle style={styles && styles.subTitle}>
+              {header || 'Enter your company name'}
+            </SubTitle>
+          )}
+          <Form>
+            <Form.Item hasFeedback={true} {...formItemProps}>
+              <Input
+                style={styles && styles.input}
+                data-id="tenant-input"
+                autoFocus={true}
+                onChange={this.onTenantChange}
+                onPressEnter={this.checkTenantValidity}
+                value={tenant}
+                defaultValue={tenant}
+                placeholder={placeholder || 'cognite'}
+              />
+            </Form.Item>
+            {this.renderAdvancedOptions()}
+          </Form>
+          <LoginButton
+            style={styles && styles.button}
+            htmlType="button"
+            disabled={checkingValidity || invalidTenant || tenant === ''}
+            onClick={this.checkTenantValidity}
+          >
+            {checkingValidity ? <Spin size="small" /> : loginText || 'Login'}
+          </LoginButton>
+        </LoginWrapper>
+      </ThemeProvider>
     );
   }
 
@@ -258,32 +264,14 @@ const LoginWrapper = styled.div`
   overflow: auto;
 `;
 
-LoginWrapper.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
-
 const Title = styled.h1`
   font-weight: bold;
   color: ${({ theme }) => theme.gearbox.textColor};
 `;
 
-Title.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
-
 const SubTitle = styled.h3`
   color: ${({ theme }) => theme.gearbox.textColor};
 `;
-
-SubTitle.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
 
 const Input = styled((props: InputProps) => <AntInput {...props} />)`
   && {
@@ -308,12 +296,6 @@ const Input = styled((props: InputProps) => <AntInput {...props} />)`
     }
   }
 `;
-
-Input.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
 
 const LoginButton = styled((props: NativeButtonProps) => <Button {...props} />)`
   font-weight: bold;
@@ -344,12 +326,6 @@ const LoginButton = styled((props: NativeButtonProps) => <Button {...props} />)`
   }
 `;
 
-LoginButton.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
-
 const CollapseWrapper = styled(Collapse)`
   .ant-collapse-item {
     border-bottom: none !important;
@@ -374,8 +350,6 @@ const CollapseWrapper = styled(Collapse)`
   }
 `;
 
-CollapseWrapper.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
+const Component = withTheme(TenantSelector);
+
+export { Component as TenantSelector };
