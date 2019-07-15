@@ -159,24 +159,15 @@ describe('TenantSelector', () => {
 
     const button = wrapper.find('button');
     const input = wrapper.find(tenantInputDataId);
-    input.simulate('change', { target: { value: tenantName } });
-
-    button.simulate('click');
-
-    expect(validateTenant.lastCall.args[1]).toMatchObject({
-      comment: 'Comment',
-    });
-
     const optionApiInput = wrapper.find('input[name="apiUrl"]');
 
     optionApiInput.simulate('change', { target: { value: apiUrlString } });
+    input.simulate('change', { target: { value: tenantName } });
+    button.simulate('click');
 
-    const instance = wrapper.childAt(0).instance();
-
-    // TODO: need to be redone in another way
-    // @ts-ignore
-    const { apiUrl } = instance.state.advanced;
-
-    expect(apiUrl).toEqual(apiUrlString);
+    expect(validateTenant.lastCall.args[1]).toMatchObject({
+      apiUrl: apiUrlString,
+      comment: 'Comment',
+    });
   });
 });

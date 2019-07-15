@@ -2,11 +2,11 @@ import { Button, Collapse, Form, Input as AntInput, Spin } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
 import { InputProps } from 'antd/lib/input';
 import React from 'react';
-import styled, { withTheme } from 'styled-components';
+import styled from 'styled-components';
+import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { AnyIfEmpty, PureObject } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
 import { isEmptyString, sanitizeTenant } from '../../utils/sanitize';
-import { ThemeProvider } from '../common/ThemeProvider';
 
 const Panel = Collapse.Panel;
 
@@ -117,7 +117,6 @@ class TenantSelector extends React.Component<
       title,
       unknownMessage,
       styles,
-      theme,
     } = this.props;
 
     const { tenant, validity } = this.state;
@@ -137,41 +136,39 @@ class TenantSelector extends React.Component<
     }
 
     return (
-      <ThemeProvider theme={theme}>
-        <LoginWrapper style={styles && styles.wrapper}>
-          <Title style={styles && styles.title}>{title}</Title>
-          {header && typeof header !== 'string' ? (
-            header
-          ) : (
-            <SubTitle style={styles && styles.subTitle}>
-              {header || 'Enter your company name'}
-            </SubTitle>
-          )}
-          <Form>
-            <Form.Item hasFeedback={true} {...formItemProps}>
-              <Input
-                style={styles && styles.input}
-                data-id="tenant-input"
-                autoFocus={true}
-                onChange={this.onTenantChange}
-                onPressEnter={this.checkTenantValidity}
-                value={tenant}
-                defaultValue={tenant}
-                placeholder={placeholder || 'cognite'}
-              />
-            </Form.Item>
-            {this.renderAdvancedOptions()}
-          </Form>
-          <LoginButton
-            style={styles && styles.button}
-            htmlType="button"
-            disabled={checkingValidity || invalidTenant || tenant === ''}
-            onClick={this.checkTenantValidity}
-          >
-            {checkingValidity ? <Spin size="small" /> : loginText || 'Login'}
-          </LoginButton>
-        </LoginWrapper>
-      </ThemeProvider>
+      <LoginWrapper style={styles && styles.wrapper}>
+        <Title style={styles && styles.title}>{title}</Title>
+        {header && typeof header !== 'string' ? (
+          header
+        ) : (
+          <SubTitle style={styles && styles.subTitle}>
+            {header || 'Enter your company name'}
+          </SubTitle>
+        )}
+        <Form>
+          <Form.Item hasFeedback={true} {...formItemProps}>
+            <Input
+              style={styles && styles.input}
+              data-id="tenant-input"
+              autoFocus={true}
+              onChange={this.onTenantChange}
+              onPressEnter={this.checkTenantValidity}
+              value={tenant}
+              defaultValue={tenant}
+              placeholder={placeholder || 'cognite'}
+            />
+          </Form.Item>
+          {this.renderAdvancedOptions()}
+        </Form>
+        <LoginButton
+          style={styles && styles.button}
+          htmlType="button"
+          disabled={checkingValidity || invalidTenant || tenant === ''}
+          onClick={this.checkTenantValidity}
+        >
+          {checkingValidity ? <Spin size="small" /> : loginText || 'Login'}
+        </LoginButton>
+      </LoginWrapper>
     );
   }
 
@@ -350,6 +347,7 @@ const CollapseWrapper = styled(Collapse)`
   }
 `;
 
-const Component = withTheme(TenantSelector);
+const Component = withDefaultTheme(TenantSelector);
+Component.displayName = 'TenantSelector';
 
 export { Component as TenantSelector };

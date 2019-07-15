@@ -1,4 +1,4 @@
-import { GearboxTheme } from '../components/common/ThemeProvider';
+import { GearboxTheme } from '../hoc/withDefaultTheme';
 
 export const applyThemeFontFamily = (gearboxTheme: GearboxTheme) =>
   gearboxTheme.fontFamily ? `font-family: ${gearboxTheme.fontFamily}` : '';
