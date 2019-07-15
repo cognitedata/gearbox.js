@@ -7,6 +7,10 @@ Gearbox.js
 [![Build Status](https://travis-ci.org/cognitedata/gearbox.js.svg?branch=master)](https://travis-ci.org/cognitedata/gearbox.js)
 [![codecov](https://codecov.io/gh/cognitedata/gearbox.js/branch/master/graph/badge.svg)](https://codecov.io/gh/cognitedata/gearbox.js)
 
+## Description
+
+Gearbox is a set of React components natively integrated with Cognite Data Fusion [(CDF)](https://cognite.com/cognite/cognite-data-fusion/). Gearbox was built to make it easier to build web applications on top of CDF. We have also created some example applications using gearbox that you can find [here](https://github.com/cognitedata/javascript-getting-started).
+
 ## Install
 
 Run `yarn add @cognite/gearbox` or `npm install @cognite/gearbox --save`.
@@ -30,7 +34,7 @@ You can also import separate components. This approach reduces bundle size of yo
 import {
   TenantSelector
 } from "@cognite/gearbox/dist/components/TenantSelector";
-``` 
+```
 
 ## Storybook
 
@@ -60,7 +64,7 @@ or you can run through the login process passing tenant name like below:
 import { authSdk } from '@cognite/gearbox'
 
 async function loginIn(tenant: string) {
-  
+
   // main login process, and if success do next
   const authResult = await authSdk(tenant);
 }
