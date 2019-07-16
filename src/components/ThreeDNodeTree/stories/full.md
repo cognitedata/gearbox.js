@@ -40,6 +40,7 @@ function ExampleComponent(props) {
 | Property              | Description                                 | Type                        | Default |
 | --------------------- | ------------------------------------------- | --------------------------- | ------- |
 | `onSelect`            | Triggers when a node is selected            | `(onSelect: OnSelectNodeTreeParams) => void` | `onSelect:  (selectedNode : OnSelectNodeTreeParams) => selectedNode.key`|
+| `onRightClick`            | Triggers when a node is right clicked            | `(onRightClick: OnRightClickNodeTreeParams) => void` | |
 | `defaultExpandedKeys` | List of node ids to be expanded by default  | `number[]`                  | [ ] |
 | `styles`              | Object that defines inline CSS styles for inner elements of the component.| `NodeTreeStyles` |  |
 
@@ -63,6 +64,25 @@ interface OnSelectNodeTreeParams {
   title: string;
   isLeaf?: boolean;
   node?: Node;
+}
+
+```
+
+#### OnRightClickNodeTreeParams
+
+This type describes the parameters the `onRightClick` function is called with.
+The type can be imported from @cognite/gearbox:
+
+```typescript
+import { OnRightClickNodeTreeParams } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+interface OnRightClickNodeTreeParams {
+  event: React.MouseEvent<any>;
+  node: AntTreeNodeProps;
 }
 
 ```

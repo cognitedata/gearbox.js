@@ -1,7 +1,11 @@
 import { Node, ThreeDListNodesParams } from '@cognite/sdk';
 import * as sdk from '@cognite/sdk';
 import { Tree } from 'antd';
-import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';
+import {
+  AntTreeNode,
+  AntTreeNodeMouseEvent,
+  AntTreeNodeProps,
+} from 'antd/lib/tree';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import {
@@ -188,6 +192,13 @@ export class ThreeDNodeTree extends Component<NodeTreeProps, NodeTreeState> {
     }
   };
 
+  onRightClickNode = (event: AntTreeNodeMouseEvent) => {
+    const { onRightClick } = this.props;
+    if (onRightClick) {
+      onRightClick(event);
+    }
+  };
+
   onExpand = (expandedKeys: string[]) => {
     this.setState({
       expandedKeys: ThreeDNodeTree.toKeys(
@@ -231,6 +242,7 @@ export class ThreeDNodeTree extends Component<NodeTreeProps, NodeTreeState> {
         expandedKeys={Object.keys(expandedKeys)}
         onExpand={this.onExpand}
         loadedKeys={this.state.loadedKeys}
+        onRightClick={this.onRightClickNode}
       >
         {this.renderTreeNode(treeData)}
       </Tree>
