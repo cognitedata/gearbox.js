@@ -17,6 +17,7 @@ import initialTenant from './initialTenant.md';
 import loadsForever from './loadsForever.md';
 import loginText from './loginText.md';
 import placeholderTenant from './placeholderTenant.md';
+import withTheme from './withTheme.md';
 
 const themeExample = {
   gearbox: {
@@ -243,11 +244,19 @@ storiesOf('TenantSelector/Examples', module)
       },
     }
   )
-  .add('With Theme', () => (
-    <ThemeProvider theme={themeExample}>
-      <TenantSelector
-        title="Styled App"
-        onTenantSelected={action('onTenantSelected')}
-      />
-    </ThemeProvider>
-  ));
+  .add(
+    'With Theme',
+    () => (
+      <ThemeProvider theme={themeExample}>
+        <TenantSelector
+          title="Styled App"
+          onTenantSelected={action('onTenantSelected')}
+        />
+      </ThemeProvider>
+    ),
+    {
+      readme: {
+        content: withTheme,
+      },
+    }
+  );
