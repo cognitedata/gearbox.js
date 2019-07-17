@@ -2,6 +2,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import sinon from 'sinon';
+import { ThemeProvider } from 'styled-components';
 import { TenantSelector } from './TenantSelector';
 
 configure({ adapter: new Adapter() });
@@ -169,5 +170,27 @@ describe('TenantSelector', () => {
       apiUrl: apiUrlString,
       comment: 'Comment',
     });
+  });
+
+  it('renders with passed custom theme', () => {
+    const onTenantSelected = sinon.fake();
+    const themeExample = {
+      custom: {
+        primaryColor: 'orange',
+        textColor: '#999',
+        containerColor: '#F4F4F4',
+        lightGrey: 'white',
+        buttonDisabledColor: '#DDD',
+        lightShadow: 'rgba(0, 0, 0, 0.15) 10px 10px 8px 8px',
+      },
+    };
+
+    const wrapper = mount(
+      <ThemeProvider theme={themeExample}>
+        <TenantSelector title="Unit Test" onTenantSelected={onTenantSelected} />
+      </ThemeProvider>
+    );
+
+    expect(wrapper).toHaveLength(1);
   });
 });
