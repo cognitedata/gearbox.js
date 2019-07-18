@@ -1,4 +1,4 @@
-import { CogniteEvent } from '@cognite/sdk-alpha/dist/src/types/types';
+import { CogniteEvent } from '@cognite/sdk/dist/src/types/types';
 import { Button } from 'antd';
 import React from 'react';
 import styled from 'styled-components';

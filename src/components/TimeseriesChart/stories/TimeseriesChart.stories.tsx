@@ -1,13 +1,13 @@
 /* eslint-disable react/no-multi-comp */
 import { AxisDisplayMode } from '@cognite/griff-react';
-import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
+import { API } from '@cognite/sdk/dist/src/resources/api';
 import {
   DatapointsGetAggregateDatapoint,
   DatapointsGetDoubleDatapoint,
   DatapointsGetStringDatapoint,
   DatapointsMultiQuery,
   GetTimeSeriesMetadataDTO,
-} from '@cognite/sdk-alpha/dist/src/types/types';
+} from '@cognite/sdk/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';

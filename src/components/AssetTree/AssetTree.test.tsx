@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
+import { API } from '@cognite/sdk/dist/src/resources/api';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -9,7 +9,7 @@ import {
 } from '../../mocks/assetsListV2';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { AssetTree } from './AssetTree';
-
+// TODO update to work with SDK 2.0 latest changes in Asset
 const zeroChild = ASSET_ZERO_DEPTH_ARRAY.findIndex(asset => asset.depth === 0);
 
 const mockedClient: API = {

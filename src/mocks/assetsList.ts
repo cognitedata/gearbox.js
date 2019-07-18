@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk-alpha/dist/src/types/types';
+import { Asset } from '@cognite/sdk/dist/src/types/types';
 import { AdvancedSearch } from '../interfaces';
 
 export const vmateDba = 'wmate_dba.wmt_location';
@@ -13,8 +13,6 @@ export const SKA: Asset = {
   id: 8129784932439587,
   lastUpdatedTime: randomTimeDateObj2,
   createdTime: randomTimeDateObj1,
-  depth: 1,
-  path: [8129784932439587],
   name: 'SKA',
   description: 'Skarv',
   metadata: {
@@ -41,8 +39,6 @@ export const IAA: Asset = {
   id: 7793176078609329,
   lastUpdatedTime: randomTimeDateObj2,
   createdTime: randomTimeDateObj1,
-  depth: 1,
-  path: [7793176078609329],
   name: 'IAA',
   description: 'IAA Root node',
   metadata: {
@@ -63,8 +59,6 @@ export const VAL: Asset = {
   id: 3623339785663936,
   lastUpdatedTime: randomTimeDateObj2,
   createdTime: randomTimeDateObj1,
-  depth: 1,
-  path: [3623339785663936],
   name: 'VAL',
   description: valDescription,
   metadata: {

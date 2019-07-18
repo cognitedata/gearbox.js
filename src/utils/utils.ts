@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk-alpha/dist/src/types/types';
+import { Asset } from '@cognite/sdk/dist/src/types/types';
 
 export function clampNumber(v: number, minValue: number, maxValue: number) {
   return Math.max(Math.min(v, maxValue), minValue);

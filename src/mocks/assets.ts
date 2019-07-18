@@ -1,9 +1,7 @@
-import { Asset } from '@cognite/sdk-alpha/dist/src/types/types';
+import { Asset } from '@cognite/sdk/dist/src/types/types';
 
 export const ASSET_DATA = {
   id: 4650652196144007,
-  path: [6687602007296940, 4650652196144007],
-  depth: 1,
   name: 'VAL',
   parentId: 6687602007296940,
   description: 'Valhall plattform',
@@ -52,19 +50,5 @@ export const fakeAsset: Asset = {
   },
   id: 5156972057719,
   createdTime: new Date(0),
-  lastUpdatedTime: new Date(0),
-  path: [
-    6687602007296940,
-    4650652196144007,
-    3111454725058294,
-    6895991969886325,
-    4518112062673878,
-    7372310232665628,
-    4856008121737468,
-    3904753668320840,
-    2539007469802785,
-    8515799768286580,
-    5156972057719,
-  ],
-  depth: 10,
+  lastUpdatedTime: new Date(0)
 };

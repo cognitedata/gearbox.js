@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk-alpha/dist/src/types/types';
+import { Asset } from '@cognite/sdk/dist/src/types/types';
 import { Tree } from 'antd';
 import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';
 import React, { Component } from 'react';
@@ -76,7 +76,7 @@ export class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
       isLeaf: true,
     };
   }
-
+  // TODO path?
   static toKeys(path: number[], initial = {}): ExpandedKeysMap {
     return path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
   }

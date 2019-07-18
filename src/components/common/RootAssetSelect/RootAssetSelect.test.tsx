@@ -1,4 +1,4 @@
-import * as sdk from '@cognite/sdk';
+import * as sdk from '@cognite/sdk'; // TODO
 import { Select } from 'antd';
 import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -10,7 +10,7 @@ configure({ adapter: new Adapter() });
 
 const onAssetSelected = jest.fn();
 
-sdk.Assets.list = jest.fn();
+sdk.Assets.list = jest.fn(); // TODO
 
 beforeEach(() => {
   // @ts-ignore

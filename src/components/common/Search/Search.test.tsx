@@ -1,10 +1,11 @@
-import * as sdk from '@cognite/sdk';
+import { API } from '@cognite/sdk/dist/src/resources/api';
 import { Input } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { assetsList, SearchValue } from '../../../mocks';
 import { defaultStrings, Search } from './Search';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import Mock = jest.Mock;
 
 configure({ adapter: new Adapter() });
@@ -16,11 +17,17 @@ const propsCallbacks: { [name: string]: Mock } = {
   onLiveSearchSelect: jest.fn(),
 };
 
-sdk.Assets.list = jest.fn();
+const fakeClient: API = {
+  // @ts-ignore
+  assets: {
+    search: jest.fn(),
+    list: jest.fn(),
+  },
+};
 
 beforeEach(() => {
   // @ts-ignore
-  sdk.Assets.list.mockResolvedValue({ items: assetsList });
+  fakeClient.assets.list.mockResolvedValue(assetsList);
 });
 
 afterEach(() => {
@@ -29,17 +36,25 @@ afterEach(() => {
   );
 });
 
+const createWrapper = (props: any) => {
+  return mount(
+    <ClientSDKProvider client={fakeClient}>
+      <Search {...props} />
+    </ClientSDKProvider>
+  );
+};
+
 // tslint:disable:no-big-function
 describe('Search', () => {
   it('should renders without exploding', () => {
     const props = { assets: assetsList };
-    const wrapper = mount(<Search {...props} />);
+    const wrapper = createWrapper(props);
     expect(wrapper.exists()).toBe(true);
   });
 
   it('should get expected default values', () => {
     const props = { assets: assetsList };
-    const wrapper = mount(<Search {...props} />);
+    const wrapper = createWrapper(props);
 
     expect(wrapper.prop('fetchingLimit')).toEqual(25);
     expect(wrapper.prop('debounceTime')).toEqual(200);
@@ -59,7 +74,7 @@ describe('Search', () => {
       advancedSearch: true,
       onFilterIconClick,
     };
-    const wrapper = mount(<Search {...props} />);
+    const wrapper = createWrapper(props);
 
     wrapper.find('.anticon.anticon-filter').simulate('click');
     expect(onFilterIconClick).toHaveBeenCalledTimes(1);
@@ -73,7 +88,7 @@ describe('Search', () => {
       rootAssetSelect: true,
       onAssetSelected,
     };
-    const wrapper = mount(<Search {...props} />);
+    const wrapper = createWrapper(props);
 
     setImmediate(() => {
       wrapper.find('.ant-select').simulate('click');
@@ -90,7 +105,7 @@ describe('Search', () => {
   it('should trigger state change while changing input', () => {
     const { onSearch } = propsCallbacks;
     const props = { assets: assetsList, onSearch };
-    const wrapper = mount(<Search {...props} />);
+    const wrapper = createWrapper(props);
     const instance: Search = wrapper.instance() as Search;
     const onSearchQueryInput = jest.spyOn(instance, 'onSearchQueryInput');
     const input = 'test';
@@ -106,7 +121,7 @@ describe('Search', () => {
 
   it('should trigger modal callback on user actions', () => {
     const props = { assets: assetsList, advancedSearch: true };
-    const wrapper = mount(<Search {...props} />);
+    const wrapper = createWrapper(props);
     const instance = wrapper.instance() as Search;
     const onSearchClear = jest.spyOn(instance, 'onModalCancel');
     const onSearchSubmit = jest.spyOn(instance, 'onModalOk');
@@ -140,7 +155,7 @@ describe('Search', () => {
   it('should call debounceSearch function with right params', () => {
     const { onSearch } = propsCallbacks;
     const props = { onSearch };
-    const wrapper = mount(<Search {...props} />);
+    const wrapper = createWrapper(props);
     const instance: Search = wrapper.instance() as Search;
 
     wrapper.setState({ assetId: 1, query: 'test' });
@@ -157,7 +172,7 @@ describe('Search', () => {
 
   it('should change onSearchChange state value', () => {
     const props = { assets: assetsList };
-    const wrapper = mount(<Search {...props} />);
+    const wrapper = createWrapper(props);
     const instance = wrapper.instance() as Search;
 
     instance.onSearchChange(SearchValue);
@@ -167,7 +182,7 @@ describe('Search', () => {
   it('should change asset value', () => {
     const { onAssetSelected } = propsCallbacks;
     const props = { assets: assetsList, onAssetSelected };
-    const wrapper = mount(<Search {...props} />);
+    const wrapper = createWrapper(props);
     const instance = wrapper.instance() as Search;
     const assetId = 2;
 
@@ -183,7 +198,7 @@ describe('Search', () => {
       liveSearchResults: [],
       onLiveSearchSelect,
     };
-    const wrapper = mount(<Search {...props} />);
+    const wrapper = createWrapper(props);
 
     wrapper.setState({ query: 'test' });
     wrapper.setProps({ liveSearchResults: assetsList });
@@ -211,7 +226,7 @@ describe('Search', () => {
       liveSearchResults: [],
       onLiveSearchSelect,
     };
-    const wrapper = mount(<Search {...props} />);
+    const wrapper = createWrapper(props);
 
     wrapper.setState({ query: 'test' });
     wrapper.setProps({ liveSearchResults: assetsList });

@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
+import { API } from '@cognite/sdk/dist/src/resources/api';
 import React from 'react';
 import { ClientSDKContext } from '../../context/clientSDKContext';
 

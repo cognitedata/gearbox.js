@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk-alpha/dist/src/types/types';
+import { Asset } from '@cognite/sdk/dist/src/types/types';
 import React from 'react';
 import styled from 'styled-components';
 

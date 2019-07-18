@@ -7,7 +7,7 @@ declare module '@cognite/griff-react' {
     GetAggregateDatapoint,
     GetDoubleDatapoint,
     GetTimeSeriesMetadataDTO,
-  } from '@cognite/sdk-alpha/dist/src/types/types';
+  } from '@cognite/sdk/dist/src/types/types';
 
   export interface AxisDisplayModeType {
     id: string;

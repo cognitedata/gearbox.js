@@ -1,4 +1,4 @@
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk-alpha/dist/src/types/types';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
 import { Button, Spin } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
 import { debounce } from 'lodash';

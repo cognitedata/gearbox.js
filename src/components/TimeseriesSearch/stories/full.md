@@ -14,7 +14,7 @@ import 'antd/dist/antd.css';
 
 import React from 'react';
 import { TimeseriesSearch } from '@cognite/gearbox';
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 
 const onTimeserieSelectionChange = (newTimeseriesIds: number[], selectedTimeseries: GetTimeSeriesMetadataDTO) => {}
 function ExampleComponent(props) {
@@ -56,7 +56,7 @@ You can search for `${names}`
 ### GetTimeSeriesMetadataDTO
 
 This type describes what the cognite API returns when fetching timeseries.
-It can be imported from `@cognite/sdk/dist/src/types/types`.
+It can be imported from `@cognite/sdk`.
 Documentation can be found at https://js-sdk-docs.cogniteapp.com/interfaces/timeseries.html.
 
 ### TimeseriesSearchStyles

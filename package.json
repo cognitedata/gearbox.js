@@ -47,8 +47,7 @@
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
     "@cognite/griff-react": "^0.4.2",
-    "@cognite/sdk": "^1.7.1",
-    "@cognite/sdk-alpha": "npm:@cognite/sdk@2.0.0-beta.1",
+    "@cognite/sdk": "^2.0.1",
     "@storybook/addon-actions": "^5.0.11",
     "@storybook/addons": "^5.0.11",
     "@storybook/react": "^5.0.11",
@@ -101,7 +100,6 @@
   },
   "peerDependencies": {
     "@cognite/griff-react": "^0.4.2",
-    "@cognite/sdk": "^1.7.1",
     "antd": "^3.14.1",
     "react": "16",
     "styled-components": "^4.1.3"

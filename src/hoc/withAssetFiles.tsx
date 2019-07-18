@@ -1,7 +1,7 @@
 import {
   FileRequestFilter,
   FilesMetadata,
-} from '@cognite/sdk-alpha/dist/src/types/types';
+} from '@cognite/sdk/dist/src/types/types';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';

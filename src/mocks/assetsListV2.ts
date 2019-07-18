@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk-alpha/dist/src/types/types';
+import { Asset } from '@cognite/sdk/dist/src/types/types';
 import { AssetTreeStyles } from '../interfaces';
 
 export const vmateDba = 'wmate_dba.wmt_location';

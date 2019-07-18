@@ -31,7 +31,7 @@ import {
   Cognite3DModel,
   OnProgressData,
 } from '@cognite/3d-viewer';
-import { Revision3D } from '@cognite/sdk-alpha/dist/src/types/types';
+import { Revision3D } from '@cognite/sdk/dist/src/types/types';
 import { Model3DViewer } from '@cognite/gearbox';
 
 function ExampleComponent(props) {

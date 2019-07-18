@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
+import { API } from '@cognite/sdk/dist/src/resources/api';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';

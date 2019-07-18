@@ -1,9 +1,9 @@
-import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
+import { API } from '@cognite/sdk/dist/src/resources/api';
 import {
   Asset,
   AssetListScope,
   AssetSearchFilter,
-} from '@cognite/sdk-alpha/dist/src/types/types';
+} from '@cognite/sdk/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import { pick } from 'lodash';
@@ -37,8 +37,6 @@ export const fakeClient: API = {
           'description',
           'lastUpdatedTime',
           'createdTime',
-          'depth',
-          'paths',
         ])
       );
       return new Promise(resolve => {
@@ -69,8 +67,6 @@ export const fakeClient: API = {
           'description',
           'lastUpdatedTime',
           'createdTime',
-          'depth',
-          'paths',
         ])
       );
       // tslint:disable-next-line: no-identical-functions

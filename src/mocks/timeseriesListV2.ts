@@ -1,5 +1,5 @@
 /* tslint:disable:no-duplicate-string */
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk-alpha/dist/src/types/types';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
 
 const IAA_21PT1019: GetTimeSeriesMetadataDTO[] = [
   {

@@ -7,7 +7,6 @@ export interface AssetViewProps {
   asset: {
     id: number;
     name?: string;
-    path?: string[];
     description?: string;
     metadata?: {
       ASSETSCOPENAME?: string;

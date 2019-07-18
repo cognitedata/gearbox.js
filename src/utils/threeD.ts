@@ -4,7 +4,7 @@ import {
   OnProgressData,
   THREE,
 } from '@cognite/3d-viewer';
-import { Revision3D } from '@cognite/sdk-alpha/dist/src/types/types';
+import { Revision3D } from '@cognite/sdk/dist/src/types/types';
 import { CacheObject, Callback, EventHandlers } from '../interfaces';
 
 interface ViewerConfig {

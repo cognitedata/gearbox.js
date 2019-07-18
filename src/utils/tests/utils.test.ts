@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk-alpha/dist/src/types/types';
+import { Asset } from '@cognite/sdk/dist/src/types/types';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import {

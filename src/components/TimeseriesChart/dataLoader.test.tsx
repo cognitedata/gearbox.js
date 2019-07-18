@@ -1,9 +1,9 @@
-import { API } from '@cognite/sdk-alpha/dist/src/resources/api';
+import { API } from '@cognite/sdk/dist/src/resources/api';
 import {
   GetAggregateDatapoint,
   GetDoubleDatapoint,
   GetStringDatapoint,
-} from '@cognite/sdk-alpha/dist/src/types/types';
+} from '@cognite/sdk/dist/src/types/types';
 import { datapointsList, timeseriesListV2 } from '../../mocks';
 import { AccessorFunc, DataLoader } from './dataLoader';
 

@@ -12,7 +12,7 @@ import 'antd/dist/antd.css';
 
 import React from 'react';
 import { TimeseriesSearch } from '@cognite/gearbox';
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 
 const onTimeserieSelectionChange = (newTimeseriesIds: number[], selectedTimeseries: GetTimeSeriesMetadataDTO) => {}
 function ExampleComponent(props) {

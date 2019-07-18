@@ -2,7 +2,7 @@ import { Cognite3DModel, Cognite3DViewer, THREE } from '@cognite/3d-viewer';
 import {
   AssetMapping3D,
   Revision3D,
-} from '@cognite/sdk-alpha/dist/src/types/types';
+} from '@cognite/sdk/dist/src/types/types';
 import React, { RefObject } from 'react';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';

@@ -1,10 +1,10 @@
-import * as sdk from '@cognite/sdk';
+import * as sdk from '@cognite/sdk'; // TODO
 import { Select } from 'antd';
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { IdCallback, PureObject } from '../../../interfaces';
 import { defaultTheme } from '../../../theme/defaultTheme';
-
+// TODO update to work with SDK 2.0
 async function getRootAssetList(): Promise<sdk.Asset[]> {
   const apiAssets = await sdk.Assets.list({ depth: 0 });
 
