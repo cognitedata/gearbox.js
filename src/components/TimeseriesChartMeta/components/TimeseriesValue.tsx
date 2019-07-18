@@ -1,6 +1,8 @@
 import * as sdk from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
+import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
+import { AnyIfEmpty } from '../../../interfaces';
 import { defaultTheme } from '../../../theme/defaultTheme';
 import {
   CanceledPromiseException,
@@ -14,6 +16,7 @@ interface TimeseriesValueProps {
   liveUpdate?: boolean;
   updatePeriodMillis?: number;
   unit?: string;
+  theme?: AnyIfEmpty<{}>;
 }
 
 interface TimeseriesValueState {
@@ -21,13 +24,14 @@ interface TimeseriesValueState {
   lastTimestamp: number | null;
 }
 
-export class TimeseriesValue
+class TimeseriesValue
   extends React.PureComponent<TimeseriesValueProps, TimeseriesValueState>
   implements ComponentWithUnmountState {
   static defaultProps = {
     liveUpdate: true,
     timeseriesDescription: '',
     updatePeriodMillis: 5000,
+    theme: { ...defaultTheme },
   };
 
   isComponentUnmounted = false;
@@ -126,19 +130,12 @@ const Value = styled.div`
   color: ${({ theme }) => theme.gearbox.textColor};
 `;
 
-Value.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
-
 const Description = styled.div`
   font-size: 12px;
   color: ${({ theme }) => theme.gearbox.textColorSecondary};
 `;
 
-Description.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
+const Component = withDefaultTheme(TimeseriesValue);
+Component.displayName = 'TimeseriesValue';
+
+export { Component as TimeseriesValue };
