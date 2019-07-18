@@ -132,7 +132,10 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
           data-test-id="svg-viewer"
         >
           <StyledHeaderContainer>
-            <MobileModalClose onClick={this.handleCloseModal}>
+            <MobileModalClose
+              data-test-id="close-svgviewer-btn"
+              onClick={this.handleCloseModal}
+            >
               <Icon type="arrow-left" />
             </MobileModalClose>
             <StyledHeaderTitle>
@@ -193,7 +196,10 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
           </div>
           {!isDesktop && !this.state.isSearchFocused ? (
             <ModalMobileFooter>
-              <MobileSearchButton onClick={this.openSearch}>
+              <MobileSearchButton
+                data-test-id="search-button-svgviewer"
+                onClick={this.openSearch}
+              >
                 <CustomIcon.FindInPage />
               </MobileSearchButton>
             </ModalMobileFooter>
