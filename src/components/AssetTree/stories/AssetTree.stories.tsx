@@ -111,7 +111,7 @@ storiesOf('AssetTree/Examples', module)
     }
   )
   .add(
-    'Wuth Theme',
+    'With Theme',
     () => {
       setupMocks();
       return (
