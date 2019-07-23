@@ -12,6 +12,12 @@ let createViewer = originalCreateViewer;
 
 type ClickHandler = (position: MouseScreenPosition) => void;
 
+export interface SlicingProps {
+  x?: { coord: number; direction: boolean };
+  y?: { coord: number; direction: boolean };
+  z?: { coord: number; direction: boolean };
+}
+
 export interface Model3DViewerProps {
   modelId: number;
   revisionId: number;
@@ -26,6 +32,7 @@ export interface Model3DViewerProps {
   onClick?: Callback;
   onCameraChange?: Callback;
   useDefaultCameraPosition?: boolean;
+  slice?: SlicingProps;
 }
 
 export function mockCreateViewer(mockFunction: any) {
@@ -71,6 +78,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       onReady,
       onCameraChange,
       onError,
+      slice,
     } = this.props;
     const { progress, complete } = ViewerEventTypes;
     const {
@@ -144,6 +152,10 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
     if (onCameraChange) {
       viewer.on('cameraChange', onCameraChange);
+    }
+
+    if (slice) {
+      this.slice(slice);
     }
 
     this.addDisposeCall(() => {
@@ -232,6 +244,34 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   onFocus = () => {
     if (this.viewer && this.props.enableKeyboardNavigation) {
       this.viewer.enableKeyboardNavigation();
+    }
+  };
+
+  slice = (sliceProps: SlicingProps) => {
+    if (this.viewer) {
+      const planes = [];
+      if (sliceProps.x) {
+        const plane = new THREE.Plane(
+          new THREE.Vector3(sliceProps.x.direction ? 1 : -1, 0, 0),
+          sliceProps.x.coord
+        );
+        planes.push(plane);
+      }
+      if (sliceProps.y) {
+        const plane = new THREE.Plane(
+          new THREE.Vector3(0, sliceProps.y.direction ? 1 : -1, 0),
+          sliceProps.y.coord
+        );
+        planes.push(plane);
+      }
+      if (sliceProps.z) {
+        const plane = new THREE.Plane(
+          new THREE.Vector3(0, 0, sliceProps.z.direction ? 1 : -1),
+          sliceProps.z.coord
+        );
+        planes.push(plane);
+      }
+      this.viewer.setSlicingPlanes(planes);
     }
   };
 
