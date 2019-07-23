@@ -3,10 +3,12 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import styled from 'styled-components';
+import * as THREE from 'three';
 import { createFakeViewer, generateNumber } from '../../../mocks';
 import { mockCreateViewer, Model3DViewer } from '../Model3DViewer';
-
 import full from './full.md';
+import screenshot from './screenshot.md';
+import slice from './slice.md';
 
 const modelID = 0;
 const revisionID = 0;
@@ -16,8 +18,12 @@ const Wrapper = styled.div`
   padding: 20px;
 `;
 
-const onClick = (modelId: number) =>
-  action('onClick')(modelId || generateNumber());
+const onClick = (modelId: number, point: THREE.Vector3) =>
+  action('onClick')(
+    modelId || generateNumber(),
+    point ||
+      new THREE.Vector3(generateNumber(), generateNumber(), generateNumber())
+  );
 const onProgress = (progress: OnProgressData) => action('onProgress')(progress);
 const onComplete = () => action('onComplete')();
 const onReady = () =>
@@ -52,3 +58,52 @@ storiesOf('Model3DViewer', module).add(
     },
   }
 );
+
+storiesOf('Model3DViewer/Examples', module)
+  .add(
+    'Take Screenshots',
+    () => {
+      mockCreateViewer(createFakeViewer);
+      return (
+        <Wrapper>
+          <Model3DViewer
+            modelId={modelID}
+            revisionId={revisionID}
+            showScreenshotButton={true}
+            onScreenshot={(url: string) => {
+              const img = document.createElement('img');
+              img.src = url;
+              document.body.append(img);
+            }}
+          />
+        </Wrapper>
+      );
+    },
+    {
+      readme: {
+        content: screenshot,
+      },
+    }
+  )
+  .add(
+    'Slice',
+    () => {
+      mockCreateViewer(createFakeViewer);
+      return (
+        <Wrapper>
+          <Model3DViewer
+            modelId={modelID}
+            revisionId={revisionID}
+            slice={{
+              y: { coord: 0, direction: false },
+            }}
+          />
+        </Wrapper>
+      );
+    },
+    {
+      readme: {
+        content: slice,
+      },
+    }
+  );
