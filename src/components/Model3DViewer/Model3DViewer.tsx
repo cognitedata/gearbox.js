@@ -1,5 +1,6 @@
 import { Cognite3DModel, Cognite3DViewer, THREE } from '@cognite/3d-viewer';
 import * as sdk from '@cognite/sdk';
+import { Button } from 'antd';
 import React, { RefObject } from 'react';
 import { CacheObject, Callback, MouseScreenPosition } from '../../interfaces';
 import {
@@ -33,6 +34,8 @@ export interface Model3DViewerProps {
   onCameraChange?: Callback;
   useDefaultCameraPosition?: boolean;
   slice?: SlicingProps;
+  showScreenshotButton?: boolean;
+  onScreenshot?: (url: string) => void;
 }
 
 export function mockCreateViewer(mockFunction: any) {
@@ -43,6 +46,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   static defaultProps = {
     enableKeyboardNavigation: true,
     useDefaultCameraPosition: true,
+    showScreenshotButton: false,
   };
 
   disposeCalls: any[] = [];
@@ -275,10 +279,24 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     }
   };
 
+  takeScreenShot = async () => {
+    if (this.viewer) {
+      const url = await this.viewer.getScreenshot();
+      if (this.props.onScreenshot) {
+        this.props.onScreenshot(url);
+      }
+    }
+  };
+
   render() {
     return (
       // Need this div since caching uses replaceChild on divWrapper ref, so need a surrounding div
       <div style={{ width: '100%', height: '100%' }}>
+        {this.props.showScreenshotButton ? (
+          <Button onClick={this.takeScreenShot}>Take ScreenShot</Button>
+        ) : (
+          <></>
+        )}
         <input
           type="text"
           onBlur={this.onBlur}
