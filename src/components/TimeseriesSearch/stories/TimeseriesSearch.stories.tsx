@@ -248,6 +248,7 @@ storiesOf('TimeseriesSearch/Examples', module)
       const ExampleTheme = {
         gearbox: {
           selectColor: 'red',
+          white: '#fff',
         },
       };
       return (
