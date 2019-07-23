@@ -213,7 +213,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     if (intersection === null) {
       onClick(null);
     } else {
-      onClick(intersection.nodeId);
+      onClick(intersection.nodeId, intersection.point);
     }
   }
 
