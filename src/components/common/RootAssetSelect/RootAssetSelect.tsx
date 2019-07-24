@@ -52,7 +52,7 @@ interface RootAssetSelectState {
   assets: sdk.Asset[] | null;
 }
 
-class RootAssetSelect extends React.Component<
+export class RootAssetSelectComponent extends React.Component<
   RootAssetSelectProps,
   RootAssetSelectState
 > {
@@ -158,7 +158,6 @@ GlobalStyle.defaultProps = {
   },
 };
 
-const Component = withDefaultTheme(RootAssetSelect);
-Component.displayName = 'RootAssetSelect';
+const Component = withDefaultTheme(RootAssetSelectComponent);
 
 export { Component as RootAssetSelect };

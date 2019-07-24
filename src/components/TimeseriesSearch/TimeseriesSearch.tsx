@@ -341,21 +341,18 @@ export class TimeseriesSearch extends React.Component<
             onItemClose={this.onItemClose}
           />
         )}
-        {
-          <Search
-            rootAssetSelect={rootAssetSelect}
-            onAssetSelected={this.onSelectAsset}
-            assetId={assetId || 0}
-            onSearch={this.fetchTimeseries}
-            strings={{
-              searchPlaceholder: lang.searchPlaceholder,
-              rootAssetSelectAll: lang.rootAssetSelectAll,
-              rootAssetSelectLoading: lang.rootAssetSelectLoading,
-            }}
-            onKeyDown={this.onKeyDown}
-          />
-        }
-
+        <Search
+          rootAssetSelect={rootAssetSelect}
+          onAssetSelected={this.onSelectAsset}
+          assetId={assetId || 0}
+          onSearch={this.fetchTimeseries}
+          strings={{
+            searchPlaceholder: lang.searchPlaceholder,
+            rootAssetSelectAll: lang.rootAssetSelectAll,
+            rootAssetSelectLoading: lang.rootAssetSelectLoading,
+          }}
+          onKeyDown={this.onKeyDown}
+        />
         {searchResults.length > 0 && !single ? (
           <ButtonRow style={styles && styles.buttonRow}>
             <Button

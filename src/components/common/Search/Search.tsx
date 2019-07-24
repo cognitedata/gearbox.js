@@ -252,7 +252,6 @@ export class SearchComponent extends React.Component<SearchProps, SearchState> {
       <React.Fragment>
         <InputGroup compact={true}>
           {rootAssetSelect && (
-            // @ts-ignore
             <RootAssetSelectStyled
               onAssetSelected={this.onAssetSelected}
               assetId={assetId}

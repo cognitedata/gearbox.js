@@ -1,10 +1,14 @@
 import * as sdk from '@cognite/sdk';
 import { Select } from 'antd';
-import { configure, mount, shallow } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { assetsList } from '../../../mocks';
-import { defaultStrings, RootAssetSelect } from './RootAssetSelect';
+import {
+  defaultStrings,
+  RootAssetSelect,
+  RootAssetSelectComponent,
+} from './RootAssetSelect';
 
 configure({ adapter: new Adapter() });
 
@@ -28,21 +32,29 @@ describe('RootAssetSelect', () => {
   });
 
   it('onSelectAsset should be triggered', async done => {
-    const wrapper = shallow(
-      <RootAssetSelect onAssetSelected={onAssetSelected} />
+    const wrapper = mount(
+      <RootAssetSelectComponent onAssetSelected={onAssetSelected} />
     );
-    const instance = wrapper.instance() as RootAssetSelect;
+    const instance: RootAssetSelectComponent = wrapper
+      .find(RootAssetSelectComponent)
+      .instance() as RootAssetSelectComponent;
     const onSelectAsset = jest.spyOn(instance, 'onSelectAsset');
     const assetId = assetsList[0].id;
+
+    wrapper
+      .find(Select)
+      .find('Select')
+      .at(0)
+      .simulate('change', { target: { value: assetId } });
 
     setImmediate(() => {
       instance.forceUpdate();
 
-      wrapper.find('Select').simulate('change', assetId);
-
       expect(onSelectAsset).toHaveBeenCalledWith(assetId);
       expect(onAssetSelected).toHaveBeenCalledWith(assetId);
-      expect(wrapper.state('current')).toEqual(assetId);
+      expect(wrapper.find(RootAssetSelectComponent).state('current')).toEqual(
+        assetId
+      );
 
       done();
     });
