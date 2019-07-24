@@ -342,7 +342,6 @@ export class TimeseriesSearch extends React.Component<
           />
         )}
         {
-          // @ts-ignore
           <Search
             rootAssetSelect={rootAssetSelect}
             onAssetSelected={this.onSelectAsset}

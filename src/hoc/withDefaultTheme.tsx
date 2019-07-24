@@ -35,15 +35,42 @@ ThemeWrapper.defaultProps = { theme: { gearbox: { ...defaultTheme } } };
 
 const WithThemeComponent = withTheme(ThemeWrapper);
 
-export function withDefaultTheme<P>(
-  WrapperComponent: React.ComponentType<P>
-): React.FunctionComponent<P> {
-  return (props: P) => {
-    const { ...otherProps } = props;
-    return (
-      <WithThemeComponent>
-        <WrapperComponent {...otherProps} />
-      </WithThemeComponent>
-    );
+export const withDefaultTheme = <
+  C extends React.ComponentType<React.ComponentProps<C>>,
+  ResolvedProps = JSX.LibraryManagedAttributes<C, React.ComponentProps<C>>
+>(
+  Component: C
+): React.ComponentType<ResolvedProps> => {
+  return class ThemeWrappedComponent extends React.Component<ResolvedProps> {
+    static displayName = `${Component.displayName}`;
+
+    render() {
+      return (
+        <WithThemeComponent>
+          <Component
+            {...(this.props as JSX.LibraryManagedAttributes<
+              C,
+              React.ComponentProps<C>
+            >)}
+            key=""
+          />
+        </WithThemeComponent>
+      );
+    }
   };
-}
+};
+
+// export function withDefaultTheme<P>(WrapperComponent: React.ComponentType<P>) {
+//   type AllowableMyComponentProps = JSX.LibraryManagedAttributes<
+//     typeof WrapperComponent,
+//     P
+//   >;
+//
+//   return (props: AllowableMyComponentProps) => {
+//     return (
+//       <WithThemeComponent>
+//         <WrapperComponent {...props} />
+//       </WithThemeComponent>
+//     );
+//   };
+// }

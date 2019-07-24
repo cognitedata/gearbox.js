@@ -78,7 +78,7 @@ interface SearchState {
   cursor?: number;
 }
 
-class Search extends React.Component<SearchProps, SearchState> {
+export class SearchComponent extends React.Component<SearchProps, SearchState> {
   static defaultProps = {
     liveSearchResults: [],
     fetchingLimit: 25,
@@ -492,7 +492,6 @@ const LiveSearchWrapper = styled.div`
   }
 `;
 
-const Component = withDefaultTheme(Search);
-Component.displayName = 'Search';
+const Component = withDefaultTheme(SearchComponent);
 
 export { Component as Search };
