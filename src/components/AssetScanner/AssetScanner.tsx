@@ -155,13 +155,13 @@ export class AssetScanner extends React.Component<
 
     const image = removeImageBase(this.props.image);
     const { imageSrc, isLoading } = this.state;
-
     if (
       !isLoading &&
       image !== imageSrc &&
       this.props.image !== prevProps.image
     ) {
       this.setState({ imageSrc: image });
+      this.capture();
     }
   }
 
