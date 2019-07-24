@@ -107,6 +107,7 @@ export class AssetSearch extends React.Component<
 
     return (
       <Search
+        // @ts-ignore
         showLiveSearchResults={showLiveSearchResults}
         onSearch={this.onSearch}
         liveSearchResults={items}

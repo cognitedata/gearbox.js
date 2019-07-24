@@ -1,13 +1,16 @@
 import { Event } from '@cognite/sdk';
 import { Icon, Modal, Table } from 'antd';
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { WithAssetEventsDataProps } from '../../../hoc/withAssetEvents';
+import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
 import {
+  AnyIfEmpty,
   AssetEventsPanelStyles,
   TableColumnType,
   TableDesignType,
 } from '../../../interfaces';
+import { defaultTheme } from '../../../theme/defaultTheme';
 import { momentFromTimestamp } from '../../../utils/formatters';
 
 interface EventAddonsProp extends Event {
@@ -28,14 +31,23 @@ export interface AssetEventsPanelStylesProps {
   styles?: AssetEventsPanelStyles;
 }
 
+export interface AssetEventsPanelThemeProps {
+  theme?: AnyIfEmpty<{}>;
+}
+
 export type AssetEventsPanelProps = MetaEventsProps &
   WithAssetEventsDataProps &
-  AssetEventsPanelStylesProps;
+  AssetEventsPanelStylesProps &
+  AssetEventsPanelThemeProps;
 
-export class AssetEventsPanelPure extends Component<
+class AssetEventsPanelPure extends React.Component<
   AssetEventsPanelProps,
   AssetEventsPanelState
 > {
+  static defaultProps = {
+    theme: { ...defaultTheme },
+  };
+
   constructor(props: AssetEventsPanelProps) {
     super(props);
     this.state = {
@@ -236,3 +248,8 @@ const EventMetadataList = styled.div`
     }
   }
 `;
+
+const Component = withDefaultTheme(AssetEventsPanelPure);
+Component.displayName = 'AssetEventsPanelPure';
+
+export { Component as AssetEventsPanelPure };
