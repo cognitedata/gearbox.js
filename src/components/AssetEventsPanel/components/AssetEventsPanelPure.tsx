@@ -40,7 +40,7 @@ export type AssetEventsPanelProps = MetaEventsProps &
   AssetEventsPanelStylesProps &
   AssetEventsPanelThemeProps;
 
-class AssetEventsPanelPure extends React.Component<
+export class AssetEventsPanelPureComponent extends React.Component<
   AssetEventsPanelProps,
   AssetEventsPanelState
 > {
@@ -249,7 +249,6 @@ const EventMetadataList = styled.div`
   }
 `;
 
-const Component = withDefaultTheme(AssetEventsPanelPure);
-Component.displayName = 'AssetEventsPanelPure';
+const Component = withDefaultTheme(AssetEventsPanelPureComponent);
 
 export { Component as AssetEventsPanelPure };

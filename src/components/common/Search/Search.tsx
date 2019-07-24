@@ -485,7 +485,7 @@ const LiveSearchWrapper = styled.div`
       cursor: pointer;
 
       &.active {
-        background-color: green;
+        background-color: ${({ theme }) => theme.gearbox.selectColor};
       }
     }
   }
