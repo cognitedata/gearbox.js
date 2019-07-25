@@ -77,14 +77,18 @@ describe('TenantSelector', () => {
   });
 
   it('Handles empty tenants (with callback)', done => {
-    const validateTenant = sinon.fake.rejects(new Error('Testing'));
-    const onInvalidTenant = sinon.fake();
     const wrapper = mount(
       <TenantSelector
-        onInvalidTenant={onInvalidTenant}
-        onTenantSelected={done.fail}
+        onInvalidTenant={() =>
+          done.fail('onInvalidTenant should not be called without text')
+        }
+        onTenantSelected={() =>
+          done.fail('onTenantSelected should not be called without text')
+        }
         title="Unit Test"
-        validateTenant={validateTenant}
+        validateTenant={() =>
+          done.fail('validateTenant should not be called without text')
+        }
       />
     );
 
@@ -94,12 +98,8 @@ describe('TenantSelector', () => {
     const input = wrapper.find(tenantInputDataId);
 
     // Without any text entered, clicking the button doesn't do anything.
-    expect(validateTenant.callCount).toEqual(0);
     input.simulate('change', { target: { value: '' } });
     input.simulate('keydown', { keyCode: 13 });
-    expect(validateTenant.callCount).toEqual(0);
-    expect(onInvalidTenant.callCount).toEqual(1);
-    expect(onInvalidTenant.lastCall.args[0]).toEqual('');
     done();
   });
 

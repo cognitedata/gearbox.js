@@ -149,7 +149,7 @@ export class TenantSelector extends React.Component<
               data-id="tenant-input"
               autoFocus={true}
               onChange={this.onTenantChange}
-              onPressEnter={this.checkTenantValidity}
+              onPressEnter={tenant ? this.checkTenantValidity : undefined}
               value={tenant}
               defaultValue={tenant}
               placeholder={placeholder || 'cognite'}
