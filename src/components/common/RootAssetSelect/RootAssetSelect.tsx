@@ -159,5 +159,6 @@ GlobalStyle.defaultProps = {
 };
 
 const Component = withDefaultTheme(RootAssetSelectComponent);
+Component.displayName = 'RootAssetSelect';
 
 export { Component as RootAssetSelect };

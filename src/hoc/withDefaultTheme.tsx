@@ -42,7 +42,7 @@ export const withDefaultTheme = <
   Component: C
 ): React.ComponentType<ResolvedProps> => {
   return class ThemeWrappedComponent extends React.Component<ResolvedProps> {
-    static displayName = `${Component.displayName}`;
+    static displayName = `${Component.displayName || Component.name}`;
 
     render() {
       return (
