@@ -31,7 +31,7 @@ describe('RootAssetSelect', () => {
     expect(wrapper.exists()).toBeTruthy();
   });
 
-  xit('onSelectAsset should be triggered', async done => {
+  it('onSelectAsset should be triggered', async done => {
     const wrapper = mount(
       <RootAssetSelect onAssetSelected={onAssetSelected} />
     );
@@ -41,23 +41,28 @@ describe('RootAssetSelect', () => {
     const onSelectAsset = jest.spyOn(instance, 'onSelectAsset');
     const assetId = assetsList[0].id;
 
+    await instance.componentDidMount();
+
     wrapper
-      .find(Select)
-      .find('Select')
+      .find('.ant-select-arrow')
       .at(0)
-      .simulate('change', { target: { value: assetId } });
+      .simulate('click');
 
-    setImmediate(() => {
-      instance.forceUpdate();
+    wrapper
+      .find('Connect(MenuItem)')
+      .at(1)
+      .simulate('click');
 
-      expect(onSelectAsset).toHaveBeenCalledWith(assetId);
-      expect(onAssetSelected).toHaveBeenCalledWith(assetId);
-      expect(wrapper.find(RootAssetSelectComponent).state('current')).toEqual(
-        assetId
-      );
+    const liElement = wrapper.find('.ant-select-dropdown-menu-item-selected');
 
-      done();
-    });
+    expect(onSelectAsset).toHaveBeenCalled();
+    expect(onAssetSelected).toHaveBeenCalled();
+    expect(liElement.text()).toBe(assetsList[0].description);
+    expect(wrapper.find(RootAssetSelectComponent).state('current')).toEqual(
+      assetId
+    );
+
+    done();
   });
 
   // @ts-ignore

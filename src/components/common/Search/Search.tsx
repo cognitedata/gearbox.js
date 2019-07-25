@@ -492,5 +492,6 @@ const LiveSearchWrapper = styled.div`
 `;
 
 const Component = withDefaultTheme(SearchComponent);
+Component.displayName = 'Search';
 
 export { Component as Search };

@@ -250,5 +250,6 @@ const EventMetadataList = styled.div`
 `;
 
 const Component = withDefaultTheme(AssetEventsPanelPureComponent);
+Component.displayName = 'AssetEventsPanelPure';
 
 export { Component as AssetEventsPanelPure };
