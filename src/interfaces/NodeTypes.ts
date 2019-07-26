@@ -1,4 +1,5 @@
 import { Node } from '@cognite/sdk';
+import { AnyIfEmpty } from './CommonTypes';
 
 export type NodePanelType = 'details' | 'events' | 'documents' | 'timeseries';
 
@@ -19,4 +20,5 @@ export interface NodeTreeProps {
   onSelect?: (onSelect: OnSelectNodeTreeParams) => void;
   defaultExpandedKeys?: number[];
   styles?: NodeTreeStyles;
+  theme?: AnyIfEmpty<{}>;
 }

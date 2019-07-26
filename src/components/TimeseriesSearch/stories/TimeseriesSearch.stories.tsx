@@ -2,6 +2,7 @@ import * as sdk from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
+import { ThemeProvider } from 'styled-components';
 import { assetsList, timeseriesList } from '../../../mocks';
 import { TimeseriesSearch } from '../TimeseriesSearch';
 
@@ -15,6 +16,7 @@ import hideSelectedRow from './hideSelectedRow.md';
 import preselected from './preselected.md';
 import rootAssetSelect from './rootAssetSelect.md';
 import singleSelection from './singleSelection.md';
+import withTheme from './withTheme.md';
 
 const timeseriesNames = timeseriesList.map(ts => ts.name);
 const timeseriesIds = timeseriesList.map(ts => ts.id);
@@ -236,6 +238,30 @@ storiesOf('TimeseriesSearch/Examples', module)
     {
       readme: {
         content: injectTimeseriesNames(customStyles.toString()),
+      },
+    }
+  )
+  .add(
+    'With Theme',
+    () => {
+      setupMocks();
+      const ExampleTheme = {
+        gearbox: {
+          selectColor: 'red',
+          white: '#fff',
+        },
+      };
+      return (
+        <ThemeProvider theme={ExampleTheme}>
+          <TimeseriesSearch
+            onTimeserieSelectionChange={onTimeserieSelectionChange}
+          />
+        </ThemeProvider>
+      );
+    },
+    {
+      readme: {
+        content: injectTimeseriesNames(withTheme.toString()),
       },
     }
   )

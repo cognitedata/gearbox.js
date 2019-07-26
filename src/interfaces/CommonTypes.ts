@@ -9,9 +9,9 @@ export type OnAdvancedSearchChange = (searchFields: AdvancedSearch) => void;
 
 export type Callback = (...args: any[]) => void;
 export type EmptyCallback = () => void;
-export type StringsCallback = (strings: string[]) => void;
 export type IdCallback = (id: number) => void;
 export type SetVideoRefCallback = (element: HTMLVideoElement | null) => void;
+export type AnyIfEmpty<T extends object> = keyof T extends never ? any : T;
 
 export interface EventHandlers {
   [name: string]: Callback[];

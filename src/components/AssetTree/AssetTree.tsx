@@ -2,8 +2,9 @@ import { Asset, AssetListDescendantsParams } from '@cognite/sdk';
 import * as sdk from '@cognite/sdk';
 import { Tree } from 'antd';
 import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import {
   AssetTreeProps,
   OnSelectAssetTreeParams,
@@ -45,7 +46,10 @@ const cursorApiRequest = async (
   return [...data, ...result.items];
 };
 
-export class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
+class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
+  static defaultProps = {
+    theme: { ...defaultTheme },
+  };
   static mapDataAssets(assets: Asset[]): TreeNodeData[] {
     const nodes: { [name: string]: TreeNodeData } = {};
 
@@ -219,8 +223,7 @@ const TreeNodeWrapper = styled(TreeNode)<AntTreeNodeProps>`
   }
 `;
 
-TreeNodeWrapper.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
+const Component = withDefaultTheme(AssetTree);
+Component.displayName = 'AssetTree';
+
+export { Component as AssetTree };

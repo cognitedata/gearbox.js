@@ -2,6 +2,9 @@ import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import { WithAssetTimeseriesDataProps } from '../../../hoc/withAssetTimeseries';
+import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
+import { AnyIfEmpty } from '../../../interfaces';
+import { defaultTheme } from '../../../theme/defaultTheme';
 import {
   TimeseriesChartMetaProps,
   TimeseriesChartMetaPure,
@@ -18,19 +21,21 @@ export interface MetaTimeseriesProps
     noTimeseriesSign?: string;
   };
   styles?: AssetTimeseriesPanelStyles;
+  theme?: AnyIfEmpty<{}>;
 }
 
 export interface TimeseriesPanelProps
   extends MetaTimeseriesProps,
     WithAssetTimeseriesDataProps {}
 
-export class TimeseriesPanelPure extends React.PureComponent<
+export class TimeseriesPanelPureComponent extends React.PureComponent<
   TimeseriesPanelProps
 > {
   static defaultProps = {
     strings: {
       noTimeseriesSign: 'No timeseries linked to this asset',
     },
+    theme: { ...defaultTheme },
   };
 
   render() {
@@ -86,3 +91,7 @@ const CollapseContainer = styled(Collapse)`
 const NoTimeseries = styled.div`
   padding: 16px;
 `;
+
+const Component = withDefaultTheme(TimeseriesPanelPureComponent);
+
+export { Component as TimeseriesPanelPure };

@@ -3,6 +3,7 @@ import { Event as ApiEvent } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
+import { ThemeProvider } from 'styled-components';
 import { EVENTS } from '../../../mocks';
 import { EventPreview, EventPreviewStyles } from '../EventPreview';
 import basic from './basic.md';
@@ -16,6 +17,7 @@ import hideMetadata from './hideMetadata.md';
 import hideType from './hideType.md';
 import missingProperties from './missingProperties.md';
 import withCustomText from './withCustomText.md';
+import withTheme from './withTheme.md';
 
 Events.retrieve = (eventId: number): Promise<Event> => {
   return new Promise(resolve => {
@@ -189,6 +191,32 @@ storiesOf('EventPreview/Examples', module)
     {
       readme: {
         content: customStyles,
+      },
+    }
+  )
+  .add(
+    'With Theme',
+    () => {
+      const exampleTheme = {
+        gearbox: {
+          containerColor: 'AliceBlue',
+          containerBorderColor: 'Aqua',
+          textColorAccent: 'Coral',
+          textColorSecondary: 'ForestGreen',
+        },
+      };
+      return (
+        <ThemeProvider theme={exampleTheme}>
+          <EventPreview
+            eventId={25496029326330}
+            onShowDetails={onShowDetails}
+          />
+        </ThemeProvider>
+      );
+    },
+    {
+      readme: {
+        content: withTheme,
       },
     }
   );

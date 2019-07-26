@@ -1,4 +1,5 @@
 import { Asset } from '@cognite/sdk';
+import { AnyIfEmpty } from '../interfaces';
 import { MetadataId } from './index';
 
 export type AssetPanelType = 'details' | 'events' | 'documents' | 'timeseries';
@@ -65,6 +66,7 @@ export interface AssetTreeProps {
   onSelect?: (onSelect: OnSelectAssetTreeParams) => void;
   defaultExpandedKeys?: number[];
   styles?: AssetTreeStyles;
+  theme?: AnyIfEmpty<{}>;
 }
 
 export interface AdvancedSearch {

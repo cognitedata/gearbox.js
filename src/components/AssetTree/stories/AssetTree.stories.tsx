@@ -2,6 +2,7 @@ import * as sdk from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
+import { ThemeProvider } from 'styled-components';
 import { OnSelectAssetTreeParams } from '../../../interfaces';
 import {
   ASSET_LIST_CHILD,
@@ -15,6 +16,16 @@ import clickItem from './clickItem.md';
 import customStyles from './customStyles.md';
 import defaultExpanded from './defaultExpanded.md';
 import fullDescription from './full.md';
+import withTheme from './withTheme.md';
+
+const ExampleTheme = {
+  gearbox: {
+    fontFamily: 'Courier New',
+    fontSize: 'large',
+    textColor: '#a88400',
+    highlightColor: '#00b893',
+  },
+};
 
 const setupMocks = () => {
   sdk.Assets.list = async (_: sdk.AssetListParams) => {
@@ -96,6 +107,22 @@ storiesOf('AssetTree/Examples', module)
     {
       readme: {
         content: customStyles,
+      },
+    }
+  )
+  .add(
+    'With Theme',
+    () => {
+      setupMocks();
+      return (
+        <ThemeProvider theme={ExampleTheme}>
+          <AssetTree />
+        </ThemeProvider>
+      );
+    },
+    {
+      readme: {
+        content: withTheme,
       },
     }
   );
