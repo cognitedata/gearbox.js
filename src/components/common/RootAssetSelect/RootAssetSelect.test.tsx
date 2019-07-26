@@ -31,7 +31,7 @@ describe('RootAssetSelect', () => {
     expect(wrapper.exists()).toBeTruthy();
   });
 
-  it('onSelectAsset should be triggered', async done => {
+  it('onSelectAsset should be triggered', async () => {
     const wrapper = mount(
       <RootAssetSelect onAssetSelected={onAssetSelected} />
     );
@@ -61,8 +61,6 @@ describe('RootAssetSelect', () => {
     expect(wrapper.find(RootAssetSelectComponent).state('current')).toEqual(
       assetId
     );
-
-    done();
   });
 
   // @ts-ignore

@@ -59,18 +59,3 @@ export const withDefaultTheme = <
     }
   };
 };
-
-// export function withDefaultTheme<P>(WrapperComponent: React.ComponentType<P>) {
-//   type AllowableMyComponentProps = JSX.LibraryManagedAttributes<
-//     typeof WrapperComponent,
-//     P
-//   >;
-//
-//   return (props: AllowableMyComponentProps) => {
-//     return (
-//       <WithThemeComponent>
-//         <WrapperComponent {...props} />
-//       </WithThemeComponent>
-//     );
-//   };
-// }
