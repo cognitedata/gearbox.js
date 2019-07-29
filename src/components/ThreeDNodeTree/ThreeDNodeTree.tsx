@@ -8,6 +8,7 @@ import {
 } from 'antd/lib/tree';
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import {
   NodeTreeProps,
   OnSelectNodeTreeParams,
@@ -53,13 +54,14 @@ const cursorApiRequest = async (
   return [...data, ...result.items];
 };
 
-export class ThreeDNodeTree extends Component<NodeTreeProps, NodeTreeState> {
+class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
   static defaultProps = {
     modelId: 0,
     revisionId: 0,
     onSelect: (selectedNode: OnSelectNodeTreeParams) => {
       return selectedNode.key;
     },
+    theme: { ...defaultTheme },
   };
 
   static returnPretty(threeDNode: Node) {
@@ -261,8 +263,7 @@ const TreeNodeWrapper = styled(TreeNode)<AntTreeNodeProps>`
   }
 `;
 
-TreeNodeWrapper.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
+const Component = withDefaultTheme(ThreeDNodeTree);
+Component.displayName = 'ThreeDNodeTree';
+
+export { Component as ThreeDNodeTree };

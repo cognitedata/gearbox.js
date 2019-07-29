@@ -2,11 +2,14 @@ import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import { WithAssetFilesDataProps } from '../../../hoc/withAssetFiles';
+import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
 import {
+  AnyIfEmpty,
   AssetDocumentsPanelStyles,
   Document,
   MetaDocProps,
 } from '../../../interfaces';
+import { defaultTheme } from '../../../theme/defaultTheme';
 import {
   getCategoryByPriority,
   getDocumentsByCategory,
@@ -20,21 +23,27 @@ export interface DocumentsPanelStylesProps {
   styles?: AssetDocumentsPanelStyles;
 }
 
+export interface DocumentsPanelThemeProps {
+  theme?: AnyIfEmpty<{}>;
+}
+
 export type DocumentTableProps = MetaDocProps &
   WithAssetFilesDataProps &
-  DocumentsPanelStylesProps;
+  DocumentsPanelStylesProps &
+  DocumentsPanelThemeProps;
 
 interface DocumentTableState {
   stateParam?: string;
 }
 
-export class DocumentTable extends React.PureComponent<
+class DocumentTable extends React.PureComponent<
   DocumentTableProps,
   DocumentTableState
 > {
   static defaultProps = {
     handleDocumentClick: () => null,
     categoryPriorityList: ['XB', 'XL'], // categories "P&ID" and "Logic Diagrams" are prioritized by default
+    theme: { ...defaultTheme },
   };
 
   renderDocument = (category: string, description: string) => (
@@ -176,3 +185,8 @@ const LinkStyle = styled.a`
 const NoDocuments = styled.div`
   padding: 16px;
 `;
+
+const Component = withDefaultTheme(DocumentTable);
+Component.displayName = 'DocumentTable';
+
+export { Component as DocumentTable };

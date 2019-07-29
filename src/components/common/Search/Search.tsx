@@ -3,8 +3,10 @@ import { NativeButtonProps } from 'antd/lib/button/button';
 import { debounce } from 'lodash';
 import React, { KeyboardEvent, SyntheticEvent } from 'react';
 import styled from 'styled-components';
+import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
 import {
   AdvancedSearch,
+  AnyIfEmpty,
   ApiQuery,
   Callback,
   EmptyCallback,
@@ -18,59 +20,6 @@ import {
   RootAssetSelect,
 } from '../RootAssetSelect/RootAssetSelect';
 import { SearchForm } from './SearchForm/SearchForm';
-
-const InputGroup = styled(Input.Group)`
-  display: flex !important;
-  flex-grow: 1;
-  overflow: visible;
-  position: relative;
-
-  > span {
-    z-index: 1;
-  }
-`;
-
-const ChangeSearchButton = styled((props: NativeButtonProps) => (
-  <Button {...props} />
-))`
-  width: 100%;
-`;
-
-const RootAssetSelectStyled = styled(RootAssetSelect)`
-  width: 35%;
-`;
-
-const LiveSearchWrapper = styled.div`
-  position: absolute;
-  top: 100%;
-  left: 0px;
-  width: 100%;
-  background-color: ${({ theme }) => theme.gearbox.white};
-  box-shadow: 0 1px 5px -2px rgba(0, 0, 0, 0.5);
-  border-radius: 0;
-
-  > ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    line-height: 1.9;
-
-    > li {
-      padding: 0 10px;
-      cursor: pointer;
-
-      &.active {
-        background-color: ${({ theme }) => theme.gearbox.selectColor};
-      }
-    }
-  }
-`;
-
-LiveSearchWrapper.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
 
 export const defaultStrings: PureObject = {
   changeSearch: 'Change search',
@@ -116,6 +65,7 @@ export interface SearchProps {
   onLiveSearchSelect?: Callback;
   onKeyDown?: (e: KeyboardEvent) => void;
   styles?: SearchStyles;
+  theme?: AnyIfEmpty<{}>;
 }
 
 interface SearchState {
@@ -128,7 +78,7 @@ interface SearchState {
   cursor?: number;
 }
 
-export class Search extends React.Component<SearchProps, SearchState> {
+export class SearchComponent extends React.Component<SearchProps, SearchState> {
   static defaultProps = {
     liveSearchResults: [],
     fetchingLimit: 25,
@@ -138,6 +88,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
     rootAssetSelect: false,
     showLiveSearchResults: false,
     strings: {},
+    theme: { ...defaultTheme },
   };
 
   static getDerivedStateFromProps(props: SearchProps, state: SearchState) {
@@ -492,3 +443,55 @@ export class Search extends React.Component<SearchProps, SearchState> {
     });
   }
 }
+
+const InputGroup = styled(Input.Group)`
+  display: flex !important;
+  flex-grow: 1;
+  overflow: visible;
+  position: relative;
+
+  > span {
+    z-index: 1;
+  }
+`;
+
+const ChangeSearchButton = styled((props: NativeButtonProps) => (
+  <Button {...props} />
+))`
+  width: 100%;
+`;
+
+const RootAssetSelectStyled = styled(RootAssetSelect)`
+  width: 35%;
+`;
+
+const LiveSearchWrapper = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0px;
+  width: 100%;
+  background-color: ${({ theme }) => theme.gearbox.white};
+  box-shadow: 0 1px 5px -2px rgba(0, 0, 0, 0.5);
+  border-radius: 0;
+
+  > ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    line-height: 1.9;
+
+    > li {
+      padding: 0 10px;
+      cursor: pointer;
+
+      &.active {
+        background-color: ${({ theme }) => theme.gearbox.selectColor};
+      }
+    }
+  }
+`;
+
+const Component = withDefaultTheme(SearchComponent);
+Component.displayName = 'Search';
+
+export { Component as Search };

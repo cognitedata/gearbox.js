@@ -2,7 +2,8 @@ import * as sdk from '@cognite/sdk';
 import { Select } from 'antd';
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
-import { IdCallback, PureObject } from '../../../interfaces';
+import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
+import { AnyIfEmpty, IdCallback, PureObject } from '../../../interfaces';
 import { defaultTheme } from '../../../theme/defaultTheme';
 
 async function getRootAssetList(): Promise<sdk.Asset[]> {
@@ -43,6 +44,7 @@ export interface RootAssetSelectProps {
   strings: PureObject;
   onAssetSelected?: IdCallback;
   styles?: RootAssetSelectStyles;
+  theme?: AnyIfEmpty<{}>;
 }
 
 interface RootAssetSelectState {
@@ -50,7 +52,7 @@ interface RootAssetSelectState {
   assets: sdk.Asset[] | null;
 }
 
-export class RootAssetSelect extends React.Component<
+export class RootAssetSelectComponent extends React.Component<
   RootAssetSelectProps,
   RootAssetSelectState
 > {
@@ -59,6 +61,7 @@ export class RootAssetSelect extends React.Component<
     assetId: 0,
     className: '',
     strings: {},
+    theme: { ...defaultTheme },
   };
 
   constructor(props: RootAssetSelectProps) {
@@ -154,3 +157,8 @@ GlobalStyle.defaultProps = {
     gearbox: defaultTheme,
   },
 };
+
+const Component = withDefaultTheme(RootAssetSelectComponent);
+Component.displayName = 'RootAssetSelect';
+
+export { Component as RootAssetSelect };
