@@ -2,15 +2,16 @@
 import * as sdk from '@cognite/sdk';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
+import { ThemeProvider } from 'styled-components';
 import { setupMocks as setupTimeseriesChartMocks } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { TimeseriesChartMeta } from '../TimeseriesChartMeta';
-
 import customBasePeriod from './customBasePeriod.md';
 import customInterval from './customInterval.md';
 import disableUpdates from './disableUpdates.md';
 import full from './full.md';
 import hideElements from './hideElements.md';
 import predefinedPeriod from './predefinedPeriod.md';
+import withTheme from './withTheme.md';
 
 const setupMocks = () => {
   setupTimeseriesChartMocks();
@@ -138,6 +139,34 @@ storiesOf('TimeseriesChartMeta/Examples', module)
     {
       readme: {
         content: customBasePeriod,
+      },
+    }
+  )
+  .add(
+    'With Theme',
+    () => {
+      setupMocks();
+      const exampleTheme = {
+        gearbox: {
+          textColor: 'Red',
+          textColorSecondary: 'Coral',
+        },
+      };
+      return (
+        <ThemeProvider theme={exampleTheme}>
+          <TimeseriesChartMeta
+            timeseriesId={123}
+            defaultBasePeriod={{
+              startTime: Date.now() - 10 * 24 * 60 * 60 * 1000, // 10 days ago
+              endTime: Date.now(),
+            }}
+          />
+        </ThemeProvider>
+      );
+    },
+    {
+      readme: {
+        content: withTheme,
       },
     }
   );

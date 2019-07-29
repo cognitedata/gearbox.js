@@ -1,5 +1,6 @@
 import { Node } from '@cognite/sdk';
 import { AntTreeNodeProps } from 'antd/lib/tree';
+import { AnyIfEmpty } from './CommonTypes';
 
 export type NodePanelType = 'details' | 'events' | 'documents' | 'timeseries';
 
@@ -26,4 +27,5 @@ export interface NodeTreeProps {
   defaultExpandedKeys?: number[];
   styles?: NodeTreeStyles;
   onRightClick?: (event: OnRightClickNodeTreeParams) => void;
+  theme?: AnyIfEmpty<{}>;
 }

@@ -1,35 +1,8 @@
 import { Checkbox } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { defaultTheme } from '../../../theme/defaultTheme';
-
-const Container = styled.div`
-  background: white;
-  border: 'none';
-  border-radius: 3px;
-  display: inline-flex;
-  justify-content: space-between;
-  padding: 8px;
-  margin-right: 'inherit';
-  cursor: pointer;
-  margin-bottom: 4px;
-  width: 100%;
-  transition: 0.3s all;
-
-  &.active {
-    background-color: ${({ theme }) => theme.gearbox.selectColor};
-  }
-
-  label {
-    margin: auto 16px auto 32px;
-  }
-`;
-
-Container.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
+import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
+import { AnyIfEmpty } from '../../../interfaces';
 
 export interface DetailCheckboxProps {
   checked: boolean;
@@ -40,6 +13,7 @@ export interface DetailCheckboxProps {
   title: string;
   className: string;
   checkable: boolean;
+  theme?: AnyIfEmpty<{}>;
 }
 
 const defaultProps = {
@@ -50,7 +24,7 @@ const defaultProps = {
   className: 'detail-checkbox',
 };
 
-export const DetailCheckbox: React.SFC<DetailCheckboxProps> = ({
+const DetailCheckbox: React.SFC<DetailCheckboxProps> = ({
   checked,
   description,
   disabled,
@@ -94,3 +68,30 @@ export const DetailCheckbox: React.SFC<DetailCheckboxProps> = ({
 );
 
 DetailCheckbox.defaultProps = defaultProps;
+
+const Container = styled.div`
+  background: white;
+  border: 'none';
+  border-radius: 3px;
+  display: inline-flex;
+  justify-content: space-between;
+  padding: 8px;
+  margin-right: 'inherit';
+  cursor: pointer;
+  margin-bottom: 4px;
+  width: 100%;
+  transition: 0.3s all;
+
+  &.active {
+    background-color: ${({ theme }) => theme.gearbox.selectColor};
+  }
+
+  label {
+    margin: auto 16px auto 32px;
+  }
+`;
+
+const Component = withDefaultTheme(DetailCheckbox);
+Component.displayName = 'DetailCheckbox';
+
+export { Component as DetailCheckbox };
