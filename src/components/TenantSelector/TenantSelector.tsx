@@ -1,6 +1,10 @@
-import { Button, Collapse, Form, Input as AntInput, Spin } from 'antd';
+import Button from 'antd/lib/button';
 import { NativeButtonProps } from 'antd/lib/button/button';
+import Collapse from 'antd/lib/collapse';
+import Form from 'antd/lib/form';
+import Input from 'antd/lib/input';
 import { InputProps } from 'antd/lib/input';
+import Spin from 'antd/lib/spin';
 import React from 'react';
 import styled from 'styled-components';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
@@ -85,7 +89,7 @@ class TenantSelector extends React.Component<
     const inputs = keys.map(option => {
       return (
         <Form.Item key={option}>
-          <Input
+          <InputForm
             style={styles && styles.input}
             name={option}
             onChange={e => this.onAdvancedOptionChange(e, option)}
@@ -147,7 +151,7 @@ class TenantSelector extends React.Component<
         )}
         <Form>
           <Form.Item hasFeedback={true} {...formItemProps}>
-            <Input
+            <InputForm
               style={styles && styles.input}
               data-id="tenant-input"
               autoFocus={true}
@@ -270,7 +274,7 @@ const SubTitle = styled.h3`
   color: ${({ theme }) => theme.gearbox.textColor};
 `;
 
-const Input = styled((props: InputProps) => <AntInput {...props} />)`
+const InputForm = styled((props: InputProps) => <Input {...props} />)`
   && {
     border: none;
     background-color: ${({ theme }) => theme.gearbox.lightGrey};
