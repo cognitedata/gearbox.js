@@ -6,7 +6,7 @@ import {
   AntTreeNodeMouseEvent,
   AntTreeNodeProps,
 } from 'antd/lib/tree';
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {
   NodeTreeProps,
@@ -53,7 +53,10 @@ const cursorApiRequest = async (
   return [...data, ...result.items];
 };
 
-export class ThreeDNodeTree extends Component<NodeTreeProps, NodeTreeState> {
+export class ThreeDNodeTree extends React.Component<
+  NodeTreeProps,
+  NodeTreeState
+> {
   static defaultProps = {
     modelId: 0,
     revisionId: 0,
