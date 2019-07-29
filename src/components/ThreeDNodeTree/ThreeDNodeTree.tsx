@@ -1,7 +1,11 @@
 import { Node, ThreeDListNodesParams } from '@cognite/sdk';
 import * as sdk from '@cognite/sdk';
 import { Tree } from 'antd';
-import { AntTreeNode, AntTreeNodeProps, AntTreeNodeMouseEvent } from 'antd/lib/tree';
+import {
+  AntTreeNode,
+  AntTreeNodeMouseEvent,
+  AntTreeNodeProps,
+} from 'antd/lib/tree';
 import React from 'react';
 import styled from 'styled-components';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
