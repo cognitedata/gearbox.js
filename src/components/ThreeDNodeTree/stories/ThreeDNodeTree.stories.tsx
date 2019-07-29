@@ -1,9 +1,15 @@
 import * as sdk from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
+import { Menu } from 'antd';
+import { ClickParam } from 'antd/lib/menu';
+import MenuItem from 'antd/lib/menu/MenuItem';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
-import { OnSelectNodeTreeParams } from '../../../interfaces';
+import {
+  OnRightClickNodeTreeParams,
+  OnSelectNodeTreeParams,
+} from '../../../interfaces';
 import {
   ASSET_TREE_STYLES,
   KEY_LIST,
@@ -17,6 +23,7 @@ import clickItem from './clickItem.md';
 import customStyles from './customStyles.md';
 import defaultExpanded from './defaultExpanded.md';
 import fullDescription from './full.md';
+import rightClickItem from './rightClickItem.md';
 import withTheme from './withTheme.md';
 
 const setupMocks = () => {
@@ -44,6 +51,82 @@ const setupMocks = () => {
     return { items: NODE_LIST };
   };
 };
+
+interface RightClickState {
+  visible: boolean;
+  rightClickedNode?: string;
+  menuStyle: {
+    [_: string]: string;
+  };
+}
+
+class RightClickExample extends React.Component<{}, RightClickState> {
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      visible: false,
+      menuStyle: {},
+    };
+  }
+  showSubMenu = () => {
+    return this.state.visible ? (
+      <Menu
+        theme="dark"
+        style={this.state.menuStyle}
+        onClick={(params: ClickParam) => {
+          if (this.state.rightClickedNode) {
+            switch (params.key) {
+              case '1': {
+                alert('1: ' + this.state.rightClickedNode);
+                break;
+              }
+              case '2': {
+                alert('2: ' + this.state.rightClickedNode);
+                break;
+              }
+              default:
+                break;
+            }
+          }
+        }}
+      >
+        <MenuItem key="1">Menu Item 1</MenuItem>
+        <MenuItem key="2">Menu Item 2</MenuItem>
+      </Menu>
+    ) : (
+      <></>
+    );
+  };
+  componentDidMount() {
+    document.addEventListener('click', () => {
+      this.setState({
+        visible: false,
+      });
+    });
+  }
+  render() {
+    return (
+      <>
+        <ThreeDNodeTree
+          modelId={6265454237631097}
+          revisionId={3496204575166890}
+          onRightClick={(e: OnRightClickNodeTreeParams) => {
+            this.setState({
+              visible: true,
+              menuStyle: {
+                position: 'fixed',
+                top: `${e.event.clientY}px`,
+                left: `${e.event.clientX + 20}px`,
+              },
+              rightClickedNode: e.node.props.title,
+            });
+          }}
+        />
+        {this.showSubMenu()}
+      </>
+    );
+  }
+}
 
 storiesOf('ThreeDNodeTree', module).add(
   'Full description',
@@ -74,6 +157,18 @@ storiesOf('ThreeDNodeTree/Examples', module)
     {
       readme: {
         content: clickItem,
+      },
+    }
+  )
+  .add(
+    'Right Click Item in Tree',
+    () => {
+      setupMocks();
+      return <RightClickExample />;
+    },
+    {
+      readme: {
+        content: rightClickItem,
       },
     }
   )
