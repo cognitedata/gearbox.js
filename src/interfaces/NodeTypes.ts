@@ -12,7 +12,7 @@ export interface OnSelectNodeTreeParams {
 }
 
 export interface OnRightClickNodeTreeParams {
-  event: React.MouseEvent<any>;
+  event: React.MouseEvent<HTMLElement>;
   node: AntTreeNodeProps;
 }
 

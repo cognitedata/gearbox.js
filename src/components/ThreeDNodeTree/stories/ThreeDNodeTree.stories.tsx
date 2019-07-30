@@ -2,7 +2,6 @@ import * as sdk from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import { Menu } from 'antd';
-import { ClickParam } from 'antd/lib/menu';
 import MenuItem from 'antd/lib/menu/MenuItem';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
@@ -61,6 +60,7 @@ interface RightClickState {
 }
 
 class RightClickExample extends React.Component<{}, RightClickState> {
+  menu: HTMLDivElement | null = null;
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -68,37 +68,31 @@ class RightClickExample extends React.Component<{}, RightClickState> {
       menuStyle: {},
     };
   }
-  showSubMenu = () => {
+  renderSubMenu = () => {
     return this.state.visible ? (
       <Menu
         theme="dark"
         style={this.state.menuStyle}
-        onClick={(params: ClickParam) => {
+        onClick={() => {
           if (this.state.rightClickedNode) {
-            switch (params.key) {
-              case '1': {
-                alert('1: ' + this.state.rightClickedNode);
-                break;
-              }
-              case '2': {
-                alert('2: ' + this.state.rightClickedNode);
-                break;
-              }
-              default:
-                break;
-            }
+            alert(this.state.rightClickedNode);
           }
         }}
       >
-        <MenuItem key="1">Menu Item 1</MenuItem>
-        <MenuItem key="2">Menu Item 2</MenuItem>
+        <MenuItem>Menu Item 1</MenuItem>
+        <MenuItem>Menu Item 2</MenuItem>
       </Menu>
     ) : (
       <></>
     );
   };
   componentDidMount() {
-    document.addEventListener('click', () => {
+    document.body.addEventListener('click', (e: MouseEvent) => {
+      // Ignore clicks on the context menu itself
+      if (this.menu && this.menu.contains(e.target as Node)) {
+        return;
+      }
+      // Close context menu when click outside of it
       this.setState({
         visible: false,
       });
@@ -122,7 +116,7 @@ class RightClickExample extends React.Component<{}, RightClickState> {
             });
           }}
         />
-        {this.showSubMenu()}
+        <div ref={node => (this.menu = node)}>{this.renderSubMenu()}</div>
       </>
     );
   }
