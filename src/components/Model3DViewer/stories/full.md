@@ -87,7 +87,10 @@ function ExampleComponent(props) {
 | `onClick`                  | on model click handler                                                                               | `(nodeId: number) => void;`                                                         |         |
 | `onCameraChange`           | on scene camera change position callback                                                             | `(position: THREE.Vector3) => void;`                                                |         |
 | `useDefaultCameraPosition` | use default camera position                                                                          | `boolean`                                                                           | true    |
-
+| `slice` | set the slicing property of viewer | `{x?: { coord: number; direction: boolean }; y?: { coord: number; direction: boolean }; z?: { coord: number; direction: boolean };}`|    |
+| `showScreenshotButton`| enable screenshot button in viewer | `boolean` | false|
+| `onScreenshot` | callback after screenshot is taken | `(url: string) => void;`| ||
+| `slider` | enable visual sliders for the viewer | `(url: string) => void;`| ||
 ##### Interfaces:
 
 ```typescript jsx
