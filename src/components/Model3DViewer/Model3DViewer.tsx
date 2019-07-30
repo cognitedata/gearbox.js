@@ -131,18 +131,6 @@ export class Model3DViewer extends React.Component<
     // Looks like replaceChild looses onClick event handler, so adding it this way instead
     domElement.addEventListener('click', this.onContainerClick);
 
-    // const xplane = new THREE.Plane(new THREE.Vector3(1, 0, 0), 1.5);
-    // const xhelper = new THREE.PlaneHelper(xplane, 1, 0xffff00);
-
-    // const yplane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 1.5);
-    // const yhelper = new THREE.PlaneHelper(yplane, 1, 0xffff00);
-
-    // const zplane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 1.5);
-    // const zhelper = new THREE.PlaneHelper(zplane, 1, 0xffff00);
-    // viewer.addObject3D(xhelper);
-    // viewer.addObject3D(yhelper);
-    // viewer.addObject3D(zhelper);
-
     if (!enableKeyboardNavigation) {
       this.viewer.disableKeyboardNavigation();
     }
