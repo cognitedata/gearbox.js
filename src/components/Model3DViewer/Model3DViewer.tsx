@@ -455,9 +455,9 @@ export class Model3DViewer extends React.Component<
         style={{
           background: 'white',
           position: 'absolute',
-          width: '33vw',
+          width: '25vw',
           marginTop: '2vh',
-          marginLeft: '60vw',
+          marginLeft: '66vw',
           padding: '1%',
         }}
       >
