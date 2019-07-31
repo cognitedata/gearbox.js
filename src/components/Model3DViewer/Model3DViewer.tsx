@@ -55,6 +55,13 @@ export function mockCreateViewer(mockFunction: any) {
   createViewer = mockFunction || originalCreateViewer;
 }
 
+const containerStyles = {
+  paddingTop: '2vh',
+  display: 'flex',
+  flexWrap: 'nowrap',
+  justifyContent: 'spaceAround',
+} as React.CSSProperties;
+
 export class Model3DViewer extends React.Component<
   Model3DViewerProps,
   Model3DViewerState
@@ -374,8 +381,8 @@ export class Model3DViewer extends React.Component<
     if (this.props.slider.x) {
       const x = this.props.slider.x;
       xSlider = (
-        <div style={{ paddingTop: '2vh', width: '100%' }}>
-          <span style={{ float: 'left', marginTop: '0.5vh' }}>
+        <div style={containerStyles}>
+          <span style={{ marginTop: '0.5vh' }}>
             <h4>x</h4>
           </span>
           <Slider
@@ -383,7 +390,7 @@ export class Model3DViewer extends React.Component<
             min={x.min}
             max={x.max}
             defaultValue={x.max}
-            style={{ width: '80%', float: 'left', paddingTop: '0' }}
+            style={{ width: '18vw' }}
             onChange={(val: SliderValue) => this.onchange(val as number, 'x')}
           />
           <Button
@@ -399,8 +406,8 @@ export class Model3DViewer extends React.Component<
     if (this.props.slider.y) {
       const y = this.props.slider.y;
       ySlider = (
-        <div style={{ paddingTop: '2vh', width: '100%' }}>
-          <span style={{ float: 'left', marginTop: '0.5vh' }}>
+        <div style={containerStyles}>
+          <span style={{ marginTop: '0.5vh' }}>
             <h4>y</h4>
           </span>
           <Slider
@@ -408,11 +415,7 @@ export class Model3DViewer extends React.Component<
             min={y.min}
             max={y.max}
             defaultValue={y.max}
-            style={{
-              width: '80%',
-              float: 'left',
-              paddingTop: '0',
-            }}
+            style={{ width: '18vw' }}
             onChange={(val: SliderValue) => this.onchange(val as number, 'y')}
           />
           <Button
@@ -428,8 +431,8 @@ export class Model3DViewer extends React.Component<
     if (this.props.slider.z) {
       const z = this.props.slider.z;
       zSlider = (
-        <div style={{ paddingTop: '2vh', width: '100%' }}>
-          <span style={{ float: 'left', marginTop: '0.5vh' }}>
+        <div style={{ paddingTop: '2vh', display: 'flex', flexWrap: 'nowrap' }}>
+          <span style={{ marginTop: '0.5vh' }}>
             <h4>z</h4>
           </span>
           <Slider
@@ -437,7 +440,7 @@ export class Model3DViewer extends React.Component<
             min={z.min}
             max={z.max}
             defaultValue={z.max}
-            style={{ width: '80%', float: 'left', paddingTop: '0' }}
+            style={{ width: '18vw' }}
             onChange={(val: SliderValue) => this.onchange(val as number, 'z')}
           />
           <Button
@@ -459,6 +462,8 @@ export class Model3DViewer extends React.Component<
           marginTop: '2vh',
           marginLeft: '66vw',
           padding: '1%',
+          display: 'flex',
+          flexWrap: 'wrap',
         }}
       >
         {xSlider}
