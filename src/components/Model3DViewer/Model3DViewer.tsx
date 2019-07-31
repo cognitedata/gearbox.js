@@ -374,7 +374,7 @@ export class Model3DViewer extends React.Component<
     if (this.props.slider.x) {
       const x = this.props.slider.x;
       xSlider = (
-        <div style={{ paddingTop: '2vh' }}>
+        <div style={{ paddingTop: '2vh', width: '100%' }}>
           <span style={{ float: 'left', marginTop: '0.5vh' }}>
             <h4>x</h4>
           </span>
@@ -399,7 +399,7 @@ export class Model3DViewer extends React.Component<
     if (this.props.slider.y) {
       const y = this.props.slider.y;
       ySlider = (
-        <div style={{ paddingTop: '2vh' }}>
+        <div style={{ paddingTop: '2vh', width: '100%' }}>
           <span style={{ float: 'left', marginTop: '0.5vh' }}>
             <h4>y</h4>
           </span>
@@ -428,7 +428,7 @@ export class Model3DViewer extends React.Component<
     if (this.props.slider.z) {
       const z = this.props.slider.z;
       zSlider = (
-        <div style={{ paddingTop: '2vh' }}>
+        <div style={{ paddingTop: '2vh', width: '100%' }}>
           <span style={{ float: 'left', marginTop: '0.5vh' }}>
             <h4>z</h4>
           </span>
