@@ -90,7 +90,7 @@ function ExampleComponent(props) {
 | `slice` | set the slicing property of viewer | `{x?: { coord: number; direction: boolean }; y?: { coord: number; direction: boolean }; z?: { coord: number; direction: boolean };}`|    |
 | `showScreenshotButton`| enable screenshot button in viewer | `boolean` | false|
 | `onScreenshot` | callback after screenshot is taken | `(url: string) => void;`| ||
-| `slider` | enable visual sliders for the viewer | `(url: string) => void;`| ||
+| `slider` | enable visual sliders for the viewer | `{x?: { max: number; min: number }; y?: { max: number; min: number }; z?: { max: number; min: number };}`| ||
 ##### Interfaces:
 
 ```typescript jsx

@@ -1,6 +1,9 @@
 ## Take screenshots of the model
 
 <!-- STORY -->
+#### Description:
+Set showScreenshotButton to true to add a button that takes screenshot of the model after being clicked.
+Set the onScreenshot property to customize what you want to do witht the screenshots.
 
 #### Usage:
 

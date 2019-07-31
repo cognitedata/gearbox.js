@@ -1,6 +1,9 @@
 ## Add Visual Sliders
 
 <!-- STORY -->
+#### Description:
+Specify the mininal and maximal lengths you want to slice from the corresponding axis to 
+add visual sliders to the model.
 
 #### Usage:
 

@@ -1,6 +1,9 @@
 ## Slice the model
 
 <!-- STORY -->
+#### Description:
+Specify the direction and the length you want to slice from the corresponding axis to render
+a sliced model.
 
 #### Usage:
 
