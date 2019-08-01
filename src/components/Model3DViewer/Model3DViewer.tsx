@@ -14,16 +14,26 @@ let createViewer = originalCreateViewer;
 
 type ClickHandler = (position: MouseScreenPosition) => void;
 
+interface SliderRange {
+  max: number;
+  min: number;
+}
+
+interface SlicingDetail {
+  coord: number;
+  direction: boolean;
+}
+
 export interface SlicingProps {
-  x?: { coord: number; direction: boolean };
-  y?: { coord: number; direction: boolean };
-  z?: { coord: number; direction: boolean };
+  x?: SlicingDetail;
+  y?: SlicingDetail;
+  z?: SlicingDetail;
 }
 
 export interface SliderProps {
-  x?: { max: number; min: number };
-  y?: { max: number; min: number };
-  z?: { max: number; min: number };
+  x?: SliderRange;
+  y?: SliderRange;
+  z?: SliderRange;
 }
 
 export interface Model3DViewerProps {
@@ -312,7 +322,7 @@ export class Model3DViewer extends React.Component<
     }
   };
 
-  takeScreenShot = async () => {
+  takeScreenshot = async () => {
     if (this.viewer) {
       const url = await this.viewer.getScreenshot();
       if (this.props.onScreenshot) {
@@ -321,138 +331,57 @@ export class Model3DViewer extends React.Component<
     }
   };
 
-  onchange = (val: number, axis: string) => {
+  onChange = (val: number, axis: number) => {
     const planes = this.state.planes;
     const flipped = this.state.flipped;
-    switch (axis) {
-      case 'x': {
-        planes[0].set(planes[0].normal, flipped[0] ? val : -val);
-        break;
-      }
-      case 'y': {
-        planes[1].set(planes[1].normal, flipped[1] ? val : -val);
-        break;
-      }
-      case 'z': {
-        planes[2].set(planes[2].normal, flipped[2] ? val : -val);
-        break;
-      }
-      default: {
-        break;
-      }
-    }
+    planes[axis].set(planes[axis].normal, flipped[axis] ? val : -val);
     this.setState({ planes });
   };
 
-  flipSlider = (axis: string) => {
+  flipSlider = (axis: number) => {
     const planes = this.state.planes;
     const flipped = this.state.flipped;
-    switch (axis) {
-      case 'x': {
-        planes[0].negate();
-        flipped[0] = !flipped[0];
-        break;
-      }
-      case 'y': {
-        planes[1].negate();
-        flipped[1] = !flipped[1];
-        break;
-      }
-      case 'z': {
-        planes[2].negate();
-        flipped[2] = !flipped[2];
-        break;
-      }
-      default: {
-        break;
-      }
-    }
+    planes[axis].negate();
+    flipped[axis] = !flipped[axis];
     this.setState({ planes });
     this.setState({ flipped });
   };
 
-  renderSliders = () => {
-    if (!this.props.slider) {
+  renderSlider = (range: SliderRange | undefined, axis: number) => {
+    if (!range) {
       return <></>;
     }
-    let xSlider = <></>;
-    let ySlider = <></>;
-    let zSlider = <></>;
-    if (this.props.slider.x) {
-      const x = this.props.slider.x;
-      xSlider = (
-        <div style={containerStyles}>
-          <span style={{ marginTop: '0.5vh' }}>
-            <h4>x</h4>
-          </span>
-          <Slider
-            step={(x.max - x.min) / 100}
-            min={x.min}
-            max={x.max}
-            defaultValue={x.max}
-            style={{ width: '18vw' }}
-            onChange={(val: SliderValue) => this.onchange(val as number, 'x')}
-          />
-          <Button
-            type="primary"
-            icon="redo"
-            size="small"
-            style={{ marginLeft: '2%' }}
-            onClick={() => this.flipSlider('x')}
-          />
-        </div>
-      );
+    return (
+      <div style={containerStyles}>
+        <span style={{ marginTop: '0.5vh' }}>
+          <h4>x</h4>
+        </span>
+        <Slider
+          step={(range.max - range.min) / 100}
+          min={range.min}
+          max={range.max}
+          defaultValue={range.max}
+          style={{ width: '18vw' }}
+          onChange={(val: SliderValue) => this.onChange(val as number, axis)}
+        />
+        <Button
+          type="primary"
+          icon="redo"
+          size="small"
+          style={{ marginLeft: '2%' }}
+          onClick={() => this.flipSlider(axis)}
+        />
+      </div>
+    );
+  };
+
+  renderSliders = () => {
+    if (!this.props.slider) {
+      return null;
     }
-    if (this.props.slider.y) {
-      const y = this.props.slider.y;
-      ySlider = (
-        <div style={containerStyles}>
-          <span style={{ marginTop: '0.5vh' }}>
-            <h4>y</h4>
-          </span>
-          <Slider
-            step={(y.max - y.min) / 100}
-            min={y.min}
-            max={y.max}
-            defaultValue={y.max}
-            style={{ width: '18vw' }}
-            onChange={(val: SliderValue) => this.onchange(val as number, 'y')}
-          />
-          <Button
-            type="primary"
-            icon="redo"
-            size="small"
-            style={{ marginLeft: '2%' }}
-            onClick={() => this.flipSlider('y')}
-          />
-        </div>
-      );
-    }
-    if (this.props.slider.z) {
-      const z = this.props.slider.z;
-      zSlider = (
-        <div style={{ paddingTop: '2vh', display: 'flex', flexWrap: 'nowrap' }}>
-          <span style={{ marginTop: '0.5vh' }}>
-            <h4>z</h4>
-          </span>
-          <Slider
-            step={(z.max - z.min) / 100}
-            min={z.min}
-            max={z.max}
-            defaultValue={z.max}
-            style={{ width: '18vw' }}
-            onChange={(val: SliderValue) => this.onchange(val as number, 'z')}
-          />
-          <Button
-            type="primary"
-            icon="redo"
-            size="small"
-            style={{ marginLeft: '2%' }}
-            onClick={() => this.flipSlider('z')}
-          />
-        </div>
-      );
-    }
+    const xSlider = this.renderSlider(this.props.slider.x, 0);
+    const ySlider = this.renderSlider(this.props.slider.x, 0);
+    const zSlider = this.renderSlider(this.props.slider.x, 0);
     return (
       <div
         style={{
@@ -488,7 +417,7 @@ export class Model3DViewer extends React.Component<
               marginLeft: '2vw',
             }}
           >
-            <Button onClick={this.takeScreenShot}>Take ScreenShot</Button>
+            <Button onClick={this.takeScreenshot}>Take ScreenShot</Button>
           </div>
         ) : (
           <></>
