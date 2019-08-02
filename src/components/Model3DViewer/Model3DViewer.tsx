@@ -294,30 +294,21 @@ export class Model3DViewer extends React.Component<
     }
   };
 
+  sliceByAxis = (sliceDetail: SlicingDetail, axisNumber: number) => {
+    const vector = [0, 0, 0];
+    vector[axisNumber] = sliceDetail.direction ? 1 : -1;
+    return new THREE.Plane(
+      new THREE.Vector3(vector[0], vector[1], vector[2]),
+      sliceDetail.coord
+    );
+  };
+
   slice = (sliceProps: SlicingProps) => {
     if (this.viewer) {
       const planes = this.state.planes;
-      if (sliceProps.x) {
-        const plane = new THREE.Plane(
-          new THREE.Vector3(sliceProps.x.direction ? 1 : -1, 0, 0),
-          sliceProps.x.coord
-        );
-        planes[0] = plane;
-      }
-      if (sliceProps.y) {
-        const plane = new THREE.Plane(
-          new THREE.Vector3(0, sliceProps.y.direction ? 1 : -1, 0),
-          sliceProps.y.coord
-        );
-        planes[1] = plane;
-      }
-      if (sliceProps.z) {
-        const plane = new THREE.Plane(
-          new THREE.Vector3(0, 0, sliceProps.z.direction ? 1 : -1),
-          sliceProps.z.coord
-        );
-        planes[2] = plane;
-      }
+      planes[0] = sliceProps.x ? this.sliceByAxis(sliceProps.x, 0) : planes[0];
+      planes[1] = sliceProps.y ? this.sliceByAxis(sliceProps.y, 1) : planes[1];
+      planes[2] = sliceProps.z ? this.sliceByAxis(sliceProps.z, 2) : planes[2];
       this.setState({ planes });
     }
   };
@@ -331,25 +322,28 @@ export class Model3DViewer extends React.Component<
     }
   };
 
-  onChange = (val: number, axis: number) => {
+  onChange = (val: number, axisNumber: number) => {
     const planes = this.state.planes;
     const flipped = this.state.flipped;
-    planes[axis].set(planes[axis].normal, flipped[axis] ? val : -val);
+    planes[axisNumber].set(
+      planes[axisNumber].normal,
+      flipped[axisNumber] ? val : -val - val
+    );
     this.setState({ planes });
   };
 
-  flipSlider = (axis: number) => {
+  flipSlider = (axisNumber: number) => {
     const planes = this.state.planes;
     const flipped = this.state.flipped;
-    planes[axis].negate();
-    flipped[axis] = !flipped[axis];
+    planes[axisNumber].negate();
+    flipped[axisNumber] = !flipped[axisNumber];
     this.setState({ planes });
     this.setState({ flipped });
   };
 
-  renderSlider = (range: SliderRange | undefined, axis: number) => {
+  renderSlider = (range: SliderRange | undefined, axisNumber: number) => {
     if (!range) {
-      return <></>;
+      return null;
     }
     return (
       <div style={containerStyles}>
@@ -362,14 +356,16 @@ export class Model3DViewer extends React.Component<
           max={range.max}
           defaultValue={range.max}
           style={{ width: '18vw' }}
-          onChange={(val: SliderValue) => this.onChange(val as number, axis)}
+          onChange={(val: SliderValue) =>
+            this.onChange(val as number, axisNumber)
+          }
         />
         <Button
           type="primary"
           icon="redo"
           size="small"
           style={{ marginLeft: '2%' }}
-          onClick={() => this.flipSlider(axis)}
+          onClick={() => this.flipSlider(axisNumber)}
         />
       </div>
     );
@@ -380,8 +376,8 @@ export class Model3DViewer extends React.Component<
       return null;
     }
     const xSlider = this.renderSlider(this.props.slider.x, 0);
-    const ySlider = this.renderSlider(this.props.slider.x, 0);
-    const zSlider = this.renderSlider(this.props.slider.x, 0);
+    const ySlider = this.renderSlider(this.props.slider.y, 1);
+    const zSlider = this.renderSlider(this.props.slider.z, 2);
     return (
       <div
         style={{
@@ -419,9 +415,7 @@ export class Model3DViewer extends React.Component<
           >
             <Button onClick={this.takeScreenshot}>Take ScreenShot</Button>
           </div>
-        ) : (
-          <></>
-        )}
+        ) : null}
         {this.renderSliders()}
         <div
           style={{
