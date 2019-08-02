@@ -19,6 +19,7 @@ import empty from './empty.md';
 import error from './error.md';
 import full from './full.md';
 import handleSearchResults from './handleSearchResults.md';
+import rootAssetSelect from './rootAssetSelect.md';
 
 // Mock the SDK calls
 export const fakeClient: API = {

@@ -7,12 +7,15 @@ import {
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';
+import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import {
+  AnyIfEmpty,
   AssetDocumentsPanelStyles,
   AssetEventsPanelStyles,
   AssetPanelType,
 } from '../../interfaces';
 import { MetaDocProps } from '../../interfaces/DocumentTypes';
+import { defaultTheme } from '../../theme/defaultTheme';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
@@ -48,6 +51,7 @@ interface AssetMetaProps {
   onPaneChange?: (key: string) => void;
   styles?: AssetMetaStyles;
   customSpinner?: React.ReactNode;
+  theme?: AnyIfEmpty<{}>;
 }
 
 interface AssetMetaState {
@@ -56,9 +60,12 @@ interface AssetMetaState {
   isLoading: boolean;
 }
 
-export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
+class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
   implements ComponentWithUnmountState {
   static contextType = ClientSDKContext;
+  static defaultProps = {
+    theme: { ...defaultTheme },
+  };
   static getDerivedStateFromProps(
     props: AssetMetaProps,
     state: AssetMetaState
@@ -236,3 +243,8 @@ export class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
 const AssetMetaHeader = styled.div<{ isLoading: boolean }>`
   visibility: ${({ isLoading }) => (isLoading ? 'hidden' : 'visible')};
 `;
+
+const Component = withDefaultTheme(AssetMeta);
+Component.displayName = 'AssetMeta';
+
+export { Component as AssetMeta };

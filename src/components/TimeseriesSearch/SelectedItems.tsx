@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { getColorByString } from './../../utils/colors';
 
 const Wrapper = styled.div`
-  flex-directoin: row;
+  display: flex;
+  flex-direction: row;
   margin-bottom: 8px;
 `;
 

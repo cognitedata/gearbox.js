@@ -1,10 +1,7 @@
 import React from 'react';
 
 import { AssetsAPI } from '@cognite/sdk/dist/src/resources/assets/assetsApi';
-import {
-  Asset,
-  AssetSearchFilter,
-} from '@cognite/sdk/dist/src/types/types';
+import { Asset, AssetSearchFilter } from '@cognite/sdk/dist/src/types/types';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
@@ -86,9 +83,20 @@ export class AssetSearch extends React.Component<
     }
 
     this.setState({ loading: true });
-
-    const assetQuery: AssetSearchFilter = this.getPayload(query);
-
+    const assetQuery: sdk.AssetSearchParams = {
+      query: query.query,
+      assetSubtrees: query.assetSubtrees || undefined,
+      description:
+        (query.advancedSearch && query.advancedSearch.description) || undefined,
+      metadata:
+        (query.advancedSearch &&
+          query.advancedSearch.metadata &&
+          query.advancedSearch.metadata.reduce(
+            (a, c) => (c.key ? { ...a, [c.key]: c.value } : a),
+            {}
+          )) ||
+        undefined,
+    };
     try {
       const items = await this.assetsApi.search(assetQuery);
       if (!items || !Array.isArray(items)) {
@@ -110,7 +118,7 @@ export class AssetSearch extends React.Component<
   render() {
     const {
       showLiveSearchResults,
-      // rootAssetSelect,
+      rootAssetSelect,
       advancedSearch,
       strings,
       styles,

@@ -3,10 +3,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { ocrRecognize } from '../../api';
-import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';
 import {
   Callback,
+  CropSize,
   EmptyCallback,
   OcrRequest,
   OnAssetListCallback,
@@ -22,7 +22,12 @@ import {
   ocrNoTextFound,
   ocrSuccess,
 } from '../../utils/notifications';
-import { getCanvas } from '../../utils/utils';
+import {
+  getCanvas,
+  removeImageBase,
+  scaleCropSizeToVideoResolution,
+  scaleDomToVideoResolution,
+} from '../../utils/utils';
 import { WebcamScanner } from './WebcamScanner/WebcamScanner';
 
 const Wrapper = styled.div`
@@ -46,7 +51,7 @@ type ASNotification = (type: ASNotifyTypes) => any;
 
 export type ButtonRenderProp = (
   onCapture: Callback,
-  image?: string
+  isReady: boolean
 ) => React.ReactNode;
 
 export interface AssetScannerStyles {
@@ -70,13 +75,18 @@ export interface AssetScannerProps {
   onOcrError?: Callback;
   onError?: Callback;
   onImageReset?: Callback;
+  imageAltText?: string;
   styles?: AssetScannerStyles;
   strings?: PureObject;
+  cropSize?: CropSize;
+  webcamCropOverlay?: React.ComponentType;
+  getAssetsHandlerCustom?: (strings: string[]) => Promise<Asset[]>;
 }
 
 interface AssetScannerState {
   isLoading: boolean;
-  scannedImageSrc: string;
+  ready: boolean;
+  imageSrc: string;
 }
 
 export class AssetScanner extends React.Component<
@@ -96,7 +106,8 @@ export class AssetScanner extends React.Component<
 
   state: AssetScannerState = {
     isLoading: false,
-    scannedImageSrc: '',
+    ready: true,
+    imageSrc: '',
   };
   video: HTMLVideoElement | null = null;
 
@@ -106,28 +117,22 @@ export class AssetScanner extends React.Component<
 
   constructor(props: AssetScannerProps) {
     super(props);
-  }
 
-  componentDidMount() {
-    if (!this.context) {
-      console.error(ERROR_NO_SDK_CLIENT);
-    }
-    this.resetSearch();
-  }
+    const { image } = props;
 
-  async componentDidUpdate(prevProps: Readonly<AssetScannerProps>) {
-    const { image } = this.props;
-    const { image: prevImage } = prevProps;
-    const { scannedImageSrc } = this.state;
-
-    if (image && image !== prevImage && image !== scannedImageSrc) {
-      const strings = await this.doRecognizeImageProcess(image);
-      await this.doFetchFoundAssets(strings);
+    if (image) {
+      this.state.imageSrc = image;
     }
   }
 
   setRef(video: HTMLVideoElement | null) {
     this.video = video;
+  }
+
+  setReady(isReady: boolean = true): Promise<void> {
+    return new Promise(resolve => {
+      this.setState({ ready: isReady }, () => resolve());
+    });
   }
 
   resetSearch() {
@@ -142,26 +147,39 @@ export class AssetScanner extends React.Component<
     }
 
     this.setState({
-      scannedImageSrc: '',
+      imageSrc: '',
       isLoading: false,
+      ready: true,
     });
+  }
+
+  componentDidUpdate(prevProps: AssetScannerProps) {
+    if (!this.props.image) {
+      return;
+    }
+
+    const image = removeImageBase(this.props.image);
+    const { imageSrc, isLoading } = this.state;
+    if (
+      !isLoading &&
+      image !== imageSrc &&
+      this.props.image !== prevProps.image
+    ) {
+      this.setState({ imageSrc: image });
+      this.capture();
+    }
   }
 
   async doRecognizeImageProcess(imageString: string): Promise<string[] | null> {
     const { onImageRecognizeFinish, onImageRecognizeStart } = this.props;
-    const { isLoading } = this.state;
-
-    if (!isLoading) {
-      this.startLoading();
-    }
 
     if (onImageRecognizeStart) {
       onImageRecognizeStart(imageString);
     }
 
-    const imageSrc = imageString.split(',')[1];
+    const imageSrc = removeImageBase(imageString);
 
-    this.setScannedImageSrc(imageSrc);
+    this.setImageSrc(imageSrc);
 
     const strings = await this.recognizeImage(imageSrc);
 
@@ -173,11 +191,17 @@ export class AssetScanner extends React.Component<
   }
 
   async doFetchFoundAssets(strings: string[] | null) {
-    const { onImageRecognizeEmpty, onAssetFetchResult } = this.props;
+    const {
+      onImageRecognizeEmpty,
+      onAssetFetchResult,
+      getAssetsHandlerCustom,
+    } = this.props;
     const { recognizeSuccess, recognizeFails } = ASNotifyTypes;
 
     if (strings !== null && strings.length >= 1) {
-      const assets = await this.getAssetsHandler(strings);
+      const assets = getAssetsHandlerCustom
+        ? await getAssetsHandlerCustom(strings)
+        : await this.getAssetsHandlerDefault(strings);
 
       this.endLoading();
 
@@ -199,8 +223,9 @@ export class AssetScanner extends React.Component<
 
   async capture() {
     this.startLoading();
+    await this.setReady(false);
 
-    const imageString = await this.getImageFromCanvas();
+    const imageString = await this.getImage();
 
     if (!imageString) {
       this.endLoading();
@@ -213,14 +238,23 @@ export class AssetScanner extends React.Component<
   }
 
   render() {
-    const { isLoading, scannedImageSrc } = this.state;
-    const { styles, strings, onError, button } = this.props;
+    const { isLoading, imageSrc, ready } = this.state;
+    const {
+      styles,
+      strings,
+      onError,
+      button,
+      cropSize,
+      webcamCropOverlay,
+      imageAltText,
+    } = this.props;
 
     return (
       <Wrapper>
         <WebcamScanner
           isLoading={isLoading}
-          imageSrc={scannedImageSrc}
+          imageSrc={imageSrc}
+          imageAltText={imageAltText}
           capture={this.captureBound}
           setRef={this.setRefBound}
           onReset={this.resetSearchBound}
@@ -228,6 +262,9 @@ export class AssetScanner extends React.Component<
           styles={styles}
           onError={onError}
           button={button}
+          isReady={ready}
+          cropSize={cropSize}
+          webcamCropOverlay={webcamCropOverlay}
         />
       </Wrapper>
     );
@@ -235,10 +272,6 @@ export class AssetScanner extends React.Component<
 
   private startLoading() {
     const { onStartLoading } = this.props;
-
-    if (this.video) {
-      this.video.pause();
-    }
 
     this.setState({ isLoading: true });
 
@@ -250,10 +283,6 @@ export class AssetScanner extends React.Component<
   private endLoading() {
     const { onEndLoading } = this.props;
 
-    if (this.video) {
-      this.video.play();
-    }
-
     this.setState({ isLoading: false });
 
     if (onEndLoading) {
@@ -261,8 +290,8 @@ export class AssetScanner extends React.Component<
     }
   }
 
-  private setScannedImageSrc(scannedImageSrc: string = '') {
-    this.setState({ scannedImageSrc });
+  private setImageSrc(imageSrc: string = '') {
+    this.setState({ imageSrc });
   }
 
   private prepareNotifications(): ASNotification {
@@ -302,8 +331,17 @@ export class AssetScanner extends React.Component<
     }).autoPagingToArray();
   }
 
+  private getImage(): Promise<string> {
+    const { imageSrc } = this.state;
+    const { cropSize } = this.props;
+
+    return imageSrc
+      ? Promise.resolve(imageSrc)
+      : this.getImageFromCanvas(cropSize);
+  }
+
   // Made async to provide better UX for component
-  private getImageFromCanvas(): Promise<string> {
+  private getImageFromCanvas(cropSize?: CropSize): Promise<string> {
     const { errorVideoAccess } = ASNotifyTypes;
 
     if (!this.video) {
@@ -311,12 +349,25 @@ export class AssetScanner extends React.Component<
 
       return Promise.resolve('');
     }
-
-    const aspectRatio = this.video.videoWidth / this.video.videoHeight;
+    const { videoHeight, videoWidth } = this.video;
+    const { clientHeight, clientWidth } = scaleDomToVideoResolution(
+      videoHeight,
+      videoWidth,
+      this.video.clientHeight,
+      this.video.clientWidth
+    );
+    const cropSizeScaled = scaleCropSizeToVideoResolution(
+      videoHeight,
+      videoWidth,
+      clientHeight,
+      clientWidth,
+      cropSize
+    );
     const canvas = getCanvas(
       this.video,
-      this.video.clientWidth,
-      this.video.clientWidth / aspectRatio
+      videoWidth,
+      videoHeight,
+      cropSizeScaled
     );
 
     return new Promise(resolve =>
@@ -341,11 +392,13 @@ export class AssetScanner extends React.Component<
 
       this.notification(errorOccurred);
 
+      this.endLoading();
+
       return null;
     }
   }
 
-  private async getAssetsHandler(strings: string[]): Promise<Asset[]> {
+  private async getAssetsHandlerDefault(strings: string[]): Promise<Asset[]> {
     const { onError } = this.props;
     const { errorOccurred } = ASNotifyTypes;
 

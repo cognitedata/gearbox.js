@@ -1,7 +1,47 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ValueListType } from '../../interfaces';
+import { withDefaultTheme } from '../../hoc/withDefaultTheme';
+import { AnyIfEmpty, ValueListType } from '../../interfaces';
 import { mapMetaData } from '../../utils/formatters';
+
+export interface DescriptionListProps {
+  description?: {
+    descriptionId: string;
+    descriptionText: string;
+  };
+  valueSet: { [name: string]: any };
+  styles?: React.CSSProperties;
+  theme?: AnyIfEmpty<{}>;
+}
+
+const DescriptionList = (props: DescriptionListProps) => {
+  const { description, valueSet } = props;
+
+  const arrayValues = mapMetaData(valueSet);
+
+  return (
+    <>
+      {description && (
+        <p id={description.descriptionId}>{description.descriptionText}</p>
+      )}
+      {arrayValues.length >= 1 ? (
+        <DL
+          style={props.styles}
+          aria-describedby={description ? description.descriptionId : ''}
+        >
+          {arrayValues.map((valSet: ValueListType) => (
+            <React.Fragment key={valSet.key}>
+              <dt>{valSet.name}</dt>
+              <dl>{valSet.value}</dl>
+            </React.Fragment>
+          ))}
+        </DL>
+      ) : (
+        <NoData>No data</NoData>
+      )}
+    </>
+  );
+};
 
 const DL = styled('dl')`
   display: flex;
@@ -52,42 +92,7 @@ const NoData = styled('p')`
   text-align: center;
 `;
 
-export interface DescriptionListProps {
-  description?: {
-    descriptionId: string;
-    descriptionText: string;
-  };
-  valueSet: { [name: string]: any };
-  styles?: React.CSSProperties;
-}
+const Component = withDefaultTheme(DescriptionList);
+Component.displayName = 'DescriptionList';
 
-export const DescriptionList = (props: DescriptionListProps) => {
-  const { description, valueSet } = props;
-
-  const arrayValues = mapMetaData(valueSet);
-
-  return (
-    <>
-      {description && (
-        <p id={description.descriptionId}>{description.descriptionText}</p>
-      )}
-      {arrayValues.length >= 1 ? (
-        <DL
-          style={props.styles}
-          aria-describedby={description ? description.descriptionId : ''}
-        >
-          {arrayValues.map((valSet: ValueListType) => (
-            <React.Fragment key={valSet.key || valSet.name}>
-              <dt>{valSet.name}</dt>
-              <dl>{valSet.value}</dl>
-            </React.Fragment>
-          ))}
-        </DL>
-      ) : (
-        <NoData>No data</NoData>
-      )}
-    </>
-  );
-};
-
-DescriptionList.displayName = 'DescriptionList';
+export { Component as DescriptionList };

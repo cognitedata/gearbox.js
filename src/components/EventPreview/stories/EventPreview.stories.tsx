@@ -8,6 +8,8 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { fakeEvents } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
+import { ThemeProvider } from 'styled-components';
+import { EVENTS } from '../../../mocks';
 import { EventPreview, EventPreviewStyles } from '../EventPreview';
 import basic from './basic.md';
 import customStyles from './customStyles.md';
@@ -20,6 +22,7 @@ import hideMetadata from './hideMetadata.md';
 import hideType from './hideType.md';
 import missingProperties from './missingProperties.md';
 import withCustomText from './withCustomText.md';
+import withTheme from './withTheme.md';
 
 const fakeClient: API = {
   // @ts-ignore
@@ -209,6 +212,32 @@ storiesOf('EventPreview/Examples', module)
     {
       readme: {
         content: customStyles,
+      },
+    }
+  )
+  .add(
+    'With Theme',
+    () => {
+      const exampleTheme = {
+        gearbox: {
+          containerColor: 'AliceBlue',
+          containerBorderColor: 'Aqua',
+          textColorAccent: 'Coral',
+          textColorSecondary: 'ForestGreen',
+        },
+      };
+      return (
+        <ThemeProvider theme={exampleTheme}>
+          <EventPreview
+            eventId={25496029326330}
+            onShowDetails={onShowDetails}
+          />
+        </ThemeProvider>
+      );
+    },
+    {
+      readme: {
+        content: withTheme,
       },
     }
   );

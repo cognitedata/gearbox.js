@@ -3,7 +3,10 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import renderer from 'react-test-renderer';
 import { ASSET_META_EVENTS_STYLES, fakeEvents } from '../../../mocks';
-import { AssetEventsPanelPure } from './AssetEventsPanelPure';
+import {
+  AssetEventsPanelPure,
+  AssetEventsPanelPureComponent,
+} from './AssetEventsPanelPure';
 
 configure({ adapter: new Adapter() });
 
@@ -19,7 +22,9 @@ describe('AssetEventsPanel', () => {
       <AssetEventsPanelPure assetEvents={fakeEvents} />
     );
 
-    expect(eventPanelModal.state('selectedEvent')).toEqual(null);
+    expect(
+      eventPanelModal.find(AssetEventsPanelPureComponent).state('selectedEvent')
+    ).toEqual(null);
 
     const clickableRow = eventPanelModal.find('td').first();
     clickableRow.simulate('click');

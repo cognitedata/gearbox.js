@@ -19,4 +19,22 @@ describe('AssetDetailsPanel', () => {
       .toJSON();
     expect(tree).toMatchSnapshot();
   });
+
+  it('should render description', () => {
+    const tree = renderer
+      .create(
+        <div>
+          <DescriptionList
+            valueSet={ASSET_DATA.metadata}
+            description={{
+              descriptionId: '123',
+              descriptionText: 'description',
+            }}
+          />
+          <DescriptionList valueSet={[]} />
+        </div>
+      )
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
 });

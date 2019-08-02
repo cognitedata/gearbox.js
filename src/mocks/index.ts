@@ -6,3 +6,4 @@ export * from './events';
 export * from './threeD';
 export * from './timeseriesListV2';
 export * from './timeseriesDataPointsList';
+export * from './threeDNodesList';

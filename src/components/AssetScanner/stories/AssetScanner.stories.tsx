@@ -6,8 +6,12 @@ import styled from 'styled-components';
 import { Callback, ErrorResponse } from '../../../interfaces';
 import { ASNotifyTypes, AssetScanner } from '../AssetScanner';
 
+import cropPlaceholderCustomOverlayDoc from './crop-placeholder-custom-overlay.md';
+import cropPlaceholderDoc from './crop-placeholder.md';
+import customAssetHandler from './custom-asset-handler.md';
 import customButtonDoc from './custom-button.md';
 import full from './full.md';
+import inputImage from './input-image.md';
 import customNotificationsDoc from './notifications.md';
 import ocrRequestDoc from './ocr-request.md';
 
@@ -65,7 +69,10 @@ const onError = (error: any) => {
   action('onError')(error);
 };
 
-const renderButton = (capture: Callback, image?: string): React.ReactNode => {
+const renderButton = (
+  capture: Callback,
+  isReady: boolean = true
+): React.ReactNode => {
   const Button = styled('button')`
     border-radius: 10px;
     height: 50px;
@@ -75,7 +82,7 @@ const renderButton = (capture: Callback, image?: string): React.ReactNode => {
     left: 30px;
     transform: translateY(-50%);
   `;
-  return <Button onClick={capture}>{image ? 'Reset' : 'Capture'}</Button>;
+  return <Button onClick={capture}>{!isReady ? 'Reset' : 'Capture'}</Button>;
 };
 
 const customNotification: (type: ASNotifyTypes) => any = (
@@ -174,15 +181,80 @@ storiesOf('AssetScanner/Examples', module)
       },
     }
   )
-  .add('Input image', () => (
-    <FileInputComponent
-      render={(image: string) => (
-        <AssetScanner
-          onError={onError}
-          ocrRequest={ocrRequest}
-          onImageRecognizeFinish={onImageRecognizeFinish}
-          image={image}
-        />
-      )}
-    />
-  ));
+  .add(
+    'Input image',
+    () => (
+      <FileInputComponent
+        render={(image: string) => (
+          <AssetScanner
+            onError={onError}
+            ocrRequest={ocrRequest}
+            onImageRecognizeFinish={onImageRecognizeFinish}
+            image={image}
+          />
+        )}
+      />
+    ),
+    {
+      readme: {
+        content: inputImage,
+      },
+    }
+  )
+  .add(
+    'Crop placeholder horizontal',
+    () => (
+      <AssetScanner
+        onError={onError}
+        ocrRequest={ocrRequest}
+        onImageRecognizeFinish={onImageRecognizeFinish}
+        cropSize={{ width: 800, height: 250 }}
+      />
+    ),
+    {
+      readme: {
+        content: cropPlaceholderDoc,
+      },
+    }
+  )
+  .add(
+    'Crop placeholder with custom overlay',
+    () => (
+      <AssetScanner
+        onError={onError}
+        ocrRequest={ocrRequest}
+        onImageRecognizeFinish={onImageRecognizeFinish}
+        cropSize={{ width: 200, height: 400 }}
+        webcamCropOverlay={() => (
+          <div
+            style={{
+              border: '20px solid red',
+              height: '440px',
+              width: '240px',
+            }}
+          />
+        )}
+      />
+    ),
+    {
+      readme: {
+        content: cropPlaceholderCustomOverlayDoc,
+      },
+    }
+  )
+  .add(
+    'Custom asset search',
+    () => (
+      <AssetScanner
+        onError={onError}
+        ocrRequest={ocrRequest}
+        onImageRecognizeFinish={onImageRecognizeFinish}
+        getAssetsHandlerCustom={() => Promise.resolve([])}
+      />
+    ),
+    {
+      readme: {
+        content: customAssetHandler,
+      },
+    }
+  );

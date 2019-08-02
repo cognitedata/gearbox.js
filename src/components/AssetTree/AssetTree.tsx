@@ -1,13 +1,14 @@
 import { Asset } from '@cognite/sdk/dist/src/types/types';
 import { Tree } from 'antd';
 import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';
+import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import {
   AssetTreeProps,
   OnSelectAssetTreeParams,
@@ -33,8 +34,27 @@ interface AssetTreeState {
   expandedKeys: ExpandedKeysMap;
 }
 
-export class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
+const cursorApiRequest = async (
+  assetId: number,
+  params: AssetListDescendantsParams,
+  data: Asset[] = []
+): Promise<Asset[]> => {
+  const result = await this.context!.listDescendants(assetId, params);
+  const { nextCursor: cursor } = result;
+  if (result.nextCursor) {
+    return cursorApiRequest(assetId, { ...params, cursor }, [
+      ...data,
+      ...result.items,
+    ]);
+  }
+  return [...data, ...result.items];
+};
+
+class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   static contextType = ClientSDKContext;
+  static defaultProps = {
+    theme: { ...defaultTheme },
+  };
   static mapDataAssets(assets: Asset[]): TreeNodeData[] {
     const nodes: { [name: string]: TreeNodeData } = {};
 
@@ -216,8 +236,7 @@ const TreeNodeWrapper = styled(TreeNode)<AntTreeNodeProps>`
   }
 `;
 
-TreeNodeWrapper.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
+const Component = withDefaultTheme(AssetTree);
+Component.displayName = 'AssetTree';
+
+export { Component as AssetTree };

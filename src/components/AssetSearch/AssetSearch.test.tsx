@@ -62,7 +62,7 @@ describe('AssetSearch', () => {
     const { onLiveSearchSelect } = propsCallbacks;
     const showLiveSearchResults = true;
     const props = { onLiveSearchSelect, showLiveSearchResults };
-    const wrapper = createWrapper(props);
+    const wrapper = mount(<AssetSearch {...props} />);
 
     wrapper
       .find(Input)
@@ -85,7 +85,7 @@ describe('AssetSearch', () => {
     const { onSearchResult } = propsCallbacks;
     const showLiveSearchResults = false;
     const props = { onSearchResult, showLiveSearchResults };
-    const wrapper = createWrapper(props);
+    const wrapper = mount(<AssetSearch {...props} />);
 
     wrapper
       .find(Input)
@@ -102,7 +102,7 @@ describe('AssetSearch', () => {
     const { onSearchResult } = propsCallbacks;
     const showLiveSearchResults = false;
     const props = { onSearchResult, showLiveSearchResults };
-    const wrapper = createWrapper(props);
+    const wrapper = mount(<AssetSearch {...props} />);
 
     wrapper
       .find(Input)

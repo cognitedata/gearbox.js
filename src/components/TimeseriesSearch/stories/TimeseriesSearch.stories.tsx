@@ -7,7 +7,9 @@ import {
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
+import { ThemeProvider } from 'styled-components';
 import { timeseriesListV2 } from '../../../mocks';
+import { assetsList } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesSearch } from '../TimeseriesSearch';
 
@@ -22,6 +24,7 @@ import preselected from './preselected.md';
 // @ts-ignore
 import rootAssetSelect from './rootAssetSelect.md';
 import singleSelection from './singleSelection.md';
+import withTheme from './withTheme.md';
 
 const timeseriesNames = timeseriesListV2.map(ts => ts.name);
 const timeseriesIds = timeseriesListV2.map(ts => ts.id);
@@ -246,6 +249,30 @@ storiesOf('TimeseriesSearch/Examples', module)
     {
       readme: {
         content: injectTimeseriesNames(customStyles.toString()),
+      },
+    }
+  )
+  .add(
+    'With Theme',
+    () => {
+      setupMocks();
+      const ExampleTheme = {
+        gearbox: {
+          selectColor: 'red',
+          white: '#fff',
+        },
+      };
+      return (
+        <ThemeProvider theme={ExampleTheme}>
+          <TimeseriesSearch
+            onTimeserieSelectionChange={onTimeserieSelectionChange}
+          />
+        </ThemeProvider>
+      );
+    },
+    {
+      readme: {
+        content: injectTimeseriesNames(withTheme.toString()),
       },
     }
   )

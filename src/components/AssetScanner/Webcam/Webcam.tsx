@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Callback, SetVideoRefCallback } from '../../../interfaces';
+import { Callback, PureObject, SetVideoRefCallback } from '../../../interfaces';
 
 const StyledVideo = styled.video`
   background: rgba(0, 0, 0, 0.5);
@@ -31,6 +31,7 @@ interface WebcamProps {
   videoSource?: string | null;
   isDesktop?: boolean;
   onError?: Callback;
+  style: PureObject;
 }
 
 interface WebcamState {
@@ -165,7 +166,7 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
   }
 
   render() {
-    const { isDesktop, setRef } = this.props;
+    const { isDesktop, setRef, style } = this.props;
     const videoStyles = isDesktop ? {} : { objectFit: 'cover' as 'cover' };
     return (
       <StyledVideo
@@ -174,6 +175,7 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
         className={this.props.className}
         style={{
           ...videoStyles,
+          ...style,
         }}
         ref={ref => {
           this.video = ref;

@@ -2,51 +2,11 @@ import { CogniteEvent } from '@cognite/sdk/dist/src/types/types';
 import { Button } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { PureObject } from '../../../interfaces';
-import { defaultTheme } from '../../../theme/defaultTheme';
+import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
+import { AnyIfEmpty, PureObject } from '../../../interfaces';
 import { formatDatetime } from '../../../utils/formatters';
 import { applyThemeFontFamily } from '../../../utils/theme';
 import { ComplexString } from '../../common/ComplexString/ComplexString';
-
-const EventTitle = styled.div`
-  font-size: 1.4rem;
-  padding-bottom: 16px;
-`;
-
-const EventType = styled.div`
-  font-size: 1.2rem;
-  color: ${({ theme }) => theme.gearbox.textColorAccent};
-  padding-bottom: 8px;
-`;
-EventType.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
-
-const EventDetailsBlock = styled.div`
-  font-size: 1.1rem;
-  padding-bottom: 16px;
-  p {
-    margin: 0;
-  }
-`;
-
-const Container = styled.div`
-  color: ${({ theme }) => theme.gearbox.textColorSecondary};
-  padding: 16px;
-  width: 300px;
-  background-color: ${({ theme }) => theme.gearbox.containerColor};
-  border-radius: 4px;
-  border: 1px solid ${({ theme }) => theme.gearbox.containerBorderColor};
-  margin-top: 32px;
-  ${({ theme }) => applyThemeFontFamily(theme.gearbox)};
-`;
-Container.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
 
 export const defaultStrings: PureObject = {
   noDescription: 'No description',
@@ -73,9 +33,10 @@ export interface EventPreviewProps {
   strings?: PureObject;
   hideProperties?: (keyof CogniteEvent)[];
   styles?: EventPreviewStyles;
+  theme?: AnyIfEmpty<{}>;
 }
 
-export const EventPreviewView = ({
+const EventPreviewView = ({
   onShowDetails,
   event,
   strings = {},
@@ -145,3 +106,37 @@ export const EventPreviewView = ({
     </Container>
   );
 };
+
+const EventTitle = styled.div`
+  font-size: 1.4rem;
+  padding-bottom: 16px;
+`;
+const EventType = styled.div`
+  font-size: 1.2rem;
+  color: ${({ theme }) => theme.gearbox.textColorAccent};
+  padding-bottom: 8px;
+`;
+
+const EventDetailsBlock = styled.div`
+  font-size: 1.1rem;
+  padding-bottom: 16px;
+  p {
+    margin: 0;
+  }
+`;
+
+const Container = styled.div`
+  color: ${({ theme }) => theme.gearbox.textColorSecondary};
+  padding: 16px;
+  width: 300px;
+  background-color: ${({ theme }) => theme.gearbox.containerColor};
+  border-radius: 4px;
+  border: 1px solid ${({ theme }) => theme.gearbox.containerBorderColor};
+  margin-top: 32px;
+  ${({ theme }) => applyThemeFontFamily(theme.gearbox)};
+`;
+
+const Component = withDefaultTheme(EventPreviewView);
+Component.displayName = 'EventPreviewView';
+
+export { Component as EventPreviewView };

@@ -4,8 +4,8 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { assetsList, SearchValue } from '../../../mocks';
-import { defaultStrings, Search } from './Search';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
+import { defaultStrings, Search, SearchComponent } from './Search';
 import Mock = jest.Mock;
 
 configure({ adapter: new Adapter() });
@@ -47,14 +47,12 @@ const createWrapper = (props: any) => {
 // tslint:disable:no-big-function
 describe('Search', () => {
   it('should renders without exploding', () => {
-    const props = { assets: assetsList };
-    const wrapper = createWrapper(props);
+    const wrapper = mount(<Search />);
     expect(wrapper.exists()).toBe(true);
   });
 
   it('should get expected default values', () => {
-    const props = { assets: assetsList };
-    const wrapper = createWrapper(props);
+    const wrapper = mount(<Search />).find(SearchComponent);
 
     expect(wrapper.prop('fetchingLimit')).toEqual(25);
     expect(wrapper.prop('debounceTime')).toEqual(200);
@@ -74,7 +72,7 @@ describe('Search', () => {
       advancedSearch: true,
       onFilterIconClick,
     };
-    const wrapper = createWrapper(props);
+    const wrapper = mount(<Search {...props} />).find(SearchComponent);
 
     wrapper.find('.anticon.anticon-filter').simulate('click');
     expect(onFilterIconClick).toHaveBeenCalledTimes(1);
@@ -105,8 +103,8 @@ describe('Search', () => {
   it('should trigger state change while changing input', () => {
     const { onSearch } = propsCallbacks;
     const props = { assets: assetsList, onSearch };
-    const wrapper = createWrapper(props);
-    const instance: Search = wrapper.instance() as Search;
+    const wrapper = mount(<Search {...props} />).find(SearchComponent);
+    const instance: SearchComponent = wrapper.instance() as SearchComponent;
     const onSearchQueryInput = jest.spyOn(instance, 'onSearchQueryInput');
     const input = 'test';
 
@@ -121,8 +119,10 @@ describe('Search', () => {
 
   it('should trigger modal callback on user actions', () => {
     const props = { assets: assetsList, advancedSearch: true };
-    const wrapper = createWrapper(props);
-    const instance = wrapper.instance() as Search;
+    const wrapper = mount(<Search {...props} />);
+    const instance: SearchComponent = wrapper
+      .find(SearchComponent)
+      .instance() as SearchComponent;
     const onSearchClear = jest.spyOn(instance, 'onModalCancel');
     const onSearchSubmit = jest.spyOn(instance, 'onModalOk');
 
@@ -131,6 +131,7 @@ describe('Search', () => {
     const clearButton = wrapper.findWhere(
       n => n.text() === defaultStrings.clear && n.type() === 'button'
     );
+
     const searchButton = wrapper.findWhere(
       n => n.text() === defaultStrings.search && n.type() === 'button'
     );
@@ -140,7 +141,7 @@ describe('Search', () => {
     clearButton.simulate('click');
 
     expect(onSearchClear).toHaveBeenCalled();
-    expect(wrapper.state()).toMatchObject({
+    expect(wrapper.find(SearchComponent).state()).toMatchObject({
       advancedSearchQuery: null,
       isModalOpen: false,
       query: '',
@@ -148,15 +149,15 @@ describe('Search', () => {
 
     searchButton.simulate('click');
     expect(onSearchSubmit).toHaveBeenCalled();
-    expect(wrapper.state('isModalOpen')).toEqual(false);
+    expect(wrapper.find(SearchComponent).state('isModalOpen')).toEqual(false);
   });
 
   // We have to check it directly because of debounce wrapper
   it('should call debounceSearch function with right params', () => {
     const { onSearch } = propsCallbacks;
     const props = { onSearch };
-    const wrapper = createWrapper(props);
-    const instance: Search = wrapper.instance() as Search;
+    const wrapper = mount(<Search {...props} />).find(SearchComponent);
+    const instance = wrapper.instance() as SearchComponent;
 
     wrapper.setState({ assetId: 1, query: 'test' });
     instance.debouncedSearch();
@@ -172,8 +173,8 @@ describe('Search', () => {
 
   it('should change onSearchChange state value', () => {
     const props = { assets: assetsList };
-    const wrapper = createWrapper(props);
-    const instance = wrapper.instance() as Search;
+    const wrapper = mount(<Search {...props} />).find(SearchComponent);
+    const instance = wrapper.instance() as SearchComponent;
 
     instance.onSearchChange(SearchValue);
     expect(wrapper.state('advancedSearchQuery')).toMatchObject(SearchValue);
@@ -182,8 +183,8 @@ describe('Search', () => {
   it('should change asset value', () => {
     const { onAssetSelected } = propsCallbacks;
     const props = { assets: assetsList, onAssetSelected };
-    const wrapper = createWrapper(props);
-    const instance = wrapper.instance() as Search;
+    const wrapper = mount(<Search {...props} />).find(SearchComponent);
+    const instance = wrapper.instance() as SearchComponent;
     const assetId = 2;
 
     instance.onAssetSelected(assetId);
@@ -200,7 +201,7 @@ describe('Search', () => {
     };
     const wrapper = createWrapper(props);
 
-    wrapper.setState({ query: 'test' });
+    wrapper.find(SearchComponent).setState({ query: 'test' });
     wrapper.setProps({ liveSearchResults: assetsList });
 
     wrapper.update();
@@ -216,7 +217,9 @@ describe('Search', () => {
       .simulate('mousedown');
 
     expect(onLiveSearchSelect).toHaveBeenCalledTimes(1);
-    expect(wrapper.state('query')).toEqual(assetsList[0].name);
+    expect(wrapper.find(SearchComponent).state('query')).toEqual(
+      assetsList[0].name
+    );
   });
 
   it('should select search result on arrow keys', () => {
@@ -228,7 +231,7 @@ describe('Search', () => {
     };
     const wrapper = createWrapper(props);
 
-    wrapper.setState({ query: 'test' });
+    wrapper.find(SearchComponent).setState({ query: 'test' });
     wrapper.setProps({ liveSearchResults: assetsList });
 
     wrapper.update();

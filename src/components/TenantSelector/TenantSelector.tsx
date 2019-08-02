@@ -1,9 +1,12 @@
-import { Button, Collapse, Form, Input as AntInput, Spin } from 'antd';
-import { NativeButtonProps } from 'antd/lib/button/button';
-import { InputProps } from 'antd/lib/input';
+import Button, { NativeButtonProps } from 'antd/lib/button/button';
+import Collapse from 'antd/lib/collapse';
+import Form from 'antd/lib/form';
+import Input, { InputProps } from 'antd/lib/input';
+import Spin from 'antd/lib/spin';
 import React from 'react';
 import styled from 'styled-components';
-import { PureObject } from '../../interfaces';
+import { withDefaultTheme } from '../../hoc/withDefaultTheme';
+import { AnyIfEmpty, PureObject } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
 import { isEmptyString, sanitizeTenant } from '../../utils/sanitize';
 
@@ -42,6 +45,7 @@ export interface TenantSelectorProps {
   ) => Promise<boolean>;
   advancedOptions?: PureObject;
   styles?: TenantSelectorStyles;
+  theme?: AnyIfEmpty<{}>;
 }
 
 interface TenantSelectorState {
@@ -50,12 +54,13 @@ interface TenantSelectorState {
   advanced: PureObject;
 }
 
-export class TenantSelector extends React.Component<
+class TenantSelector extends React.Component<
   TenantSelectorProps,
   TenantSelectorState
 > {
   static defaultProps = {
     advancedOptions: {},
+    theme: { ...defaultTheme },
   };
 
   constructor(props: TenantSelectorProps) {
@@ -82,7 +87,7 @@ export class TenantSelector extends React.Component<
     const inputs = keys.map(option => {
       return (
         <Form.Item key={option}>
-          <Input
+          <StyledInput
             style={styles && styles.input}
             name={option}
             onChange={e => this.onAdvancedOptionChange(e, option)}
@@ -144,7 +149,7 @@ export class TenantSelector extends React.Component<
         )}
         <Form>
           <Form.Item hasFeedback={true} {...formItemProps}>
-            <Input
+            <StyledInput
               style={styles && styles.input}
               data-id="tenant-input"
               autoFocus={true}
@@ -258,34 +263,16 @@ const LoginWrapper = styled.div`
   overflow: auto;
 `;
 
-LoginWrapper.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
-
 const Title = styled.h1`
   font-weight: bold;
   color: ${({ theme }) => theme.gearbox.textColor};
 `;
 
-Title.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
-
 const SubTitle = styled.h3`
   color: ${({ theme }) => theme.gearbox.textColor};
 `;
 
-SubTitle.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
-
-const Input = styled((props: InputProps) => <AntInput {...props} />)`
+const StyledInput = styled((props: InputProps) => <Input {...props} />)`
   && {
     border: none;
     background-color: ${({ theme }) => theme.gearbox.lightGrey};
@@ -308,12 +295,6 @@ const Input = styled((props: InputProps) => <AntInput {...props} />)`
     }
   }
 `;
-
-Input.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
 
 const LoginButton = styled((props: NativeButtonProps) => <Button {...props} />)`
   font-weight: bold;
@@ -344,12 +325,6 @@ const LoginButton = styled((props: NativeButtonProps) => <Button {...props} />)`
   }
 `;
 
-LoginButton.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
-
 const CollapseWrapper = styled(Collapse)`
   .ant-collapse-item {
     border-bottom: none !important;
@@ -374,8 +349,7 @@ const CollapseWrapper = styled(Collapse)`
   }
 `;
 
-CollapseWrapper.defaultProps = {
-  theme: {
-    gearbox: defaultTheme,
-  },
-};
+const Component = withDefaultTheme(TenantSelector);
+Component.displayName = 'TenantSelector';
+
+export { Component as TenantSelector };

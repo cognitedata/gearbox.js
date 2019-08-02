@@ -1,10 +1,14 @@
 import * as sdk from '@cognite/sdk'; // TODO
 import { Select } from 'antd';
-import { configure, mount, shallow } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { assetsList } from '../../../mocks';
-import { defaultStrings, RootAssetSelect } from './RootAssetSelect';
+import {
+  defaultStrings,
+  RootAssetSelect,
+  RootAssetSelectComponent,
+} from './RootAssetSelect';
 
 configure({ adapter: new Adapter() });
 
@@ -27,25 +31,36 @@ describe('RootAssetSelect', () => {
     expect(wrapper.exists()).toBeTruthy();
   });
 
-  it('onSelectAsset should be triggered', async done => {
-    const wrapper = shallow(
+  it('onSelectAsset should be triggered', async () => {
+    const wrapper = mount(
       <RootAssetSelect onAssetSelected={onAssetSelected} />
     );
-    const instance = wrapper.instance() as RootAssetSelect;
+    const instance: RootAssetSelectComponent = wrapper
+      .find(RootAssetSelectComponent)
+      .instance() as RootAssetSelectComponent;
     const onSelectAsset = jest.spyOn(instance, 'onSelectAsset');
     const assetId = assetsList[0].id;
 
-    setImmediate(() => {
-      instance.forceUpdate();
+    await instance.componentDidMount();
 
-      wrapper.find('Select').simulate('change', assetId);
+    wrapper
+      .find('.ant-select-arrow')
+      .at(0)
+      .simulate('click');
 
-      expect(onSelectAsset).toHaveBeenCalledWith(assetId);
-      expect(onAssetSelected).toHaveBeenCalledWith(assetId);
-      expect(wrapper.state('current')).toEqual(assetId);
+    wrapper
+      .find('Connect(MenuItem)')
+      .at(1)
+      .simulate('click');
 
-      done();
-    });
+    const liElement = wrapper.find('.ant-select-dropdown-menu-item-selected');
+
+    expect(onSelectAsset).toHaveBeenCalled();
+    expect(onAssetSelected).toHaveBeenCalled();
+    expect(liElement.text()).toBe(assetsList[0].description);
+    expect(wrapper.find(RootAssetSelectComponent).state('current')).toEqual(
+      assetId
+    );
   });
 
   // @ts-ignore

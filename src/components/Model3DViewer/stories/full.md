@@ -58,7 +58,7 @@ function ExampleComponent(props) {
       cache={cache}
     />
   
-  );
+    );
 
 }
 ```
@@ -74,20 +74,23 @@ function ExampleComponent(props) {
 
 ##### Optionals:
 
-| Property                   | Description                                                                                       | Type                                                                                | Default |
-| -------------------------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------- |
-| `assetId`                  | id of asset to highlight                                                                          | `number`                                                                            |         |
-| `boundingBox`              | bounding box object, that describes dimension of viewed asset nodes                               | `THREE.Box3`                                                                        |         |
-| `cache`                    | object for caching 3D viewers instances                                                           | `{ [name:string]: any }`                                                            |         |
-| `enableKeyboardNavigation` | enable keyboard navigation in viewer. Viewer must be in focus                                     | `boolean`                                                                           | true    |
-| `useDefaultCameraPosition` | use default camera position                                                                       | `boolean`                                                                           | true    |
-| `onError`                  | on some error occurs during creating 3D Model, fetching 3D revision or available node in 3D model | `(error: any) => void;`                                                             |         |
-| `onReady`                  | on scene prepared to display model callback                                                       | `(viewer: Cognite3DViewer, model: Cognite3DModel, revision: sdk.Revision) => void;` |         |
-| `onProgress`               | on model loading progress callback                                                                | `(progress: OnProgressData) => void;`                                               |         |
-| `onComplete`               | on model complete loading callback                                                                | `() => void;`                                                                       |         |
-| `onClick`                  | on model click handler                                                                            | `(nodeId: number) => void;`                                                         |         |
-| `onCameraChange`           | on scene camera change position callback                                                          | `(position: THREE.Vector3) => void;`                                                |         |
-
+| Property                   | Description                                                                                          | Type                                                                                | Default |
+| -------------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------- |
+| `assetId`                  | id of asset to highlight                                                                             | `number`                                                                            |         |
+| `boundingBox`              | bounding box object, that describes dimension of viewed asset nodes                                  | `THREE.Box3`                                                                        |         |
+| `cache`                    | object for caching 3D viewers instances                                                              | `{ [name:string]: any }`                                                            |         |
+| `enableKeyboardNavigation` | enable keyboard navigation in viewer. Viewer must be in focus                                        | `boolean`                                                                           | true    |
+| `onError`                  | on error occurs callback                                                                             | `(viewer: Cognite3DViewer, model: Cognite3DModel, revision: sdk.Revision) => void;` |         |
+| `onReady`                  | on scene prepared to display model callback (return internal instances of viewer and model)          | `(viewer: Cognite3DViewer, model: Cognite3DModel, revision: sdk.Revision) => void;` |         |
+| `onProgress`               | on model loading progress callback                                                                   | `(progress: OnProgressData) => void;`                                               |         |
+| `onComplete`               | on model complete loading callback (in this callback you can start to call viewer and model methods) | `() => void;`                                                                       |         |
+| `onClick`                  | on model click handler                                                                               | `(nodeId: number) => void;`                                                         |         |
+| `onCameraChange`           | on scene camera change position callback                                                             | `(position: THREE.Vector3) => void;`                                                |         |
+| `useDefaultCameraPosition` | use default camera position                                                                          | `boolean`                                                                           | true    |
+| `slice` | set the slicing property of viewer | `{x?: { coord: number; direction: boolean }; y?: { coord: number; direction: boolean }; z?: { coord: number; direction: boolean };}`|    |
+| `showScreenshotButton`| enable screenshot button in viewer | `boolean` | false|
+| `onScreenshot` | callback after screenshot is taken | `(url: string) => void;`| ||
+| `slider` | enable visual sliders for the viewer | `{x?: { max: number; min: number }; y?: { max: number; min: number }; z?: { max: number; min: number };}`| ||
 ##### Interfaces:
 
 ```typescript jsx
@@ -97,3 +100,7 @@ import {
   OnProgressData,
 } from '@cognite/3d-viewer';
 ```
+
+##### `assetId` prop explanation
+
+This prop is needed to control highlighting of asset node in the model right after init process or by changing `assetId` prop after viewer has been initialized.

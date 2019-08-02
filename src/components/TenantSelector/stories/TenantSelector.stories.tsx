@@ -1,7 +1,7 @@
-// @ts-ignore
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
+import { ThemeProvider } from 'styled-components';
 
 import { TenantSelector } from '../TenantSelector';
 
@@ -17,6 +17,18 @@ import initialTenant from './initialTenant.md';
 import loadsForever from './loadsForever.md';
 import loginText from './loginText.md';
 import placeholderTenant from './placeholderTenant.md';
+import withTheme from './withTheme.md';
+
+const themeExample = {
+  gearbox: {
+    primaryColor: 'orange',
+    textColor: '#999',
+    containerColor: '#F4F4F4',
+    lightGrey: 'white',
+    buttonDisabledColor: '#DDD',
+    lightShadow: 'rgba(0, 0, 0, 0.15) 10px 10px 8px 8px',
+  },
+};
 
 storiesOf('TenantSelector', module).add(
   'Full Description',
@@ -229,6 +241,22 @@ storiesOf('TenantSelector/Examples', module)
     {
       readme: {
         content: customStyles,
+      },
+    }
+  )
+  .add(
+    'With Theme',
+    () => (
+      <ThemeProvider theme={themeExample}>
+        <TenantSelector
+          title="Styled App"
+          onTenantSelected={action('onTenantSelected')}
+        />
+      </ThemeProvider>
+    ),
+    {
+      readme: {
+        content: withTheme,
       },
     }
   );
