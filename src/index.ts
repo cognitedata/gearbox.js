@@ -5,6 +5,7 @@ export * from './components/AssetTree/AssetTree';
 export * from './components/DescriptionList/DescriptionList';
 export { EventPreview } from './components/EventPreview/EventPreview';
 export { Model3DViewer } from './components/Model3DViewer/Model3DViewer';
+export * from './components/ThreeDNodeTree/ThreeDNodeTree';
 export * from './components/SensorOverlay/SensorOverlay';
 export * from './components/SVGViewer/SVGViewer';
 export * from './components/TenantSelector/TenantSelector';
