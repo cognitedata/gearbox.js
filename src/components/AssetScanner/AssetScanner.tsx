@@ -148,6 +148,12 @@ export class AssetScanner extends React.Component<
     });
   }
 
+  componentDidMount() {
+    if (this.props.image) {
+      this.capture();
+    }
+  }
+
   componentDidUpdate(prevProps: AssetScannerProps) {
     if (!this.props.image) {
       return;
