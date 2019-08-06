@@ -378,6 +378,7 @@ storiesOf('TimeseriesChart/Examples', module)
           timeseriesIds={[123]}
           startTime={Date.now() - 60 * 1000}
           endTime={Date.now()}
+          // @ts-ignore
           annotations={[
             {
               data: [Date.now() - 30 * 1000, Date.now() - 20 * 1000],

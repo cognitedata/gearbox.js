@@ -198,7 +198,7 @@ storiesOf('TenantSelector/Examples', module)
     }
   )
   .add(
-    'Custom Styles',
+    'With custom styles',
     () => (
       <TenantSelector
         title="Styled App"
@@ -245,7 +245,7 @@ storiesOf('TenantSelector/Examples', module)
     }
   )
   .add(
-    'With Theme',
+    'With theme',
     () => (
       <ThemeProvider theme={themeExample}>
         <TenantSelector

@@ -14,35 +14,6 @@ import { Webcam } from '../Webcam/Webcam';
 import { WebcamCropPlaceholder } from '../WebcamCropPlaceholder/WebcamCropPlaceholder';
 import { WebcamScreenshot } from '../WebcamScreenshot/WebcamScreenshot';
 
-const CameraButton = styled.button`
-  position: absolute;
-  top: 50%;
-  left: 20px;
-  border-radius: 100%;
-  width: 75px;
-  height: 75px;
-  outline: none;
-  transform: translateY(-50%);
-  border: 1px solid #fff;
-  box-sizing: border-box;
-  cursor: pointer;
-  opacity: .9
-  font-weight: 600;
-  :hover {
-    opacity: 1;
-  }
-`;
-
-const Wrapper = styled.div`
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-`;
-
 export const defaultStrings: PureObject = {
   reset: 'Reset',
 };
@@ -126,3 +97,32 @@ export function WebcamScanner({
     </Wrapper>
   );
 }
+
+const CameraButton = styled.button`
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  border-radius: 100%;
+  width: 75px;
+  height: 75px;
+  outline: none;
+  transform: translateY(-50%);
+  border: 1px solid #fff;
+  box-sizing: border-box;
+  cursor: pointer;
+  opacity: .9
+  font-weight: 600;
+  :hover {
+    opacity: 1;
+  }
+`;
+
+const Wrapper = styled.div`
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+`;

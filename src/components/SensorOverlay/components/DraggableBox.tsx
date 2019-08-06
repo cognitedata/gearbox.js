@@ -24,125 +24,6 @@ import StyledOdometer from './StyledOdometer';
 
 const HELLIP = String.fromCharCode(0x02026);
 
-export const Link = styled.a`
-  color: 'white';
-  display: 'inherit';
-`;
-export const Tag = styled.div`
-  background: ${props => props.color};
-  border-radius: 30px;
-  color: white;
-  display: flex;
-  white-space: nowrap;
-  padding: 6px 4px;
-  transition: 0.3s all;
-  transform-origin: 24px 50%;
-  @media screen and (max-width: 1000px) {
-    transform: scale(0.75);
-  }
-`;
-const TagValue = styled.div`
-  font-size: 1.4rem;
-  display: flex;
-  position: relative;
-  top: -2px;
-`;
-const TagUnit = styled.div`
-  opacity: 0.8;
-  font-size: 0.8rem;
-  margin: 4px;
-`;
-const TagSettings = styled.div`
-  color: white;
-  font-size: 1.1rem;
-  margin: auto 8px;
-  cursor: pointer;
-  padding-right: 4px;
-`;
-export const TagName = styled.div`
-  color: white;
-  position: absolute;
-  bottom: 100%;
-  margin-bottom: 0;
-  font-size: 0.8rem;
-  font-weight: bold;
-  padding: 6px 12px;
-  white-space: nowrap;
-  border-radius: 30px;
-  background: ${props => props.color};
-  transition: 0.3s margin-right, 0.3s opacity, 0.3s margin-bottom;
-  opacity: 0;
-  right: auto;
-  margin-right: 0;
-  pointer-events: none;
-
-  &.hovering {
-    opacity: 1;
-    margin-bottom: 4px;
-  }
-  &.flipped {
-    transform: rotate(180deg);
-    margin-right: -42px;
-  }
-`;
-const TagDescription = styled.div`
-  color: white;
-  position: absolute;
-  bottom: 100%;
-  font-size: 0.7rem;
-  padding: 6px 12px;
-  white-space: nowrap;
-  border-radius: 30px;
-  background: ${props => props.color};
-  transition: 0.3s margin-right, 0.3s opacity, 0.3s margin-bottom;
-  opacity: 0;
-  margin-bottom: 36px;
-  right: auto;
-  margin-right: 0;
-  pointer-events: none;
-
-  &.hovering {
-    opacity: 1;
-    margin-bottom: 40px;
-  }
-  &.flipped {
-    transform: rotate(180deg);
-    margin-right: -42px;
-  }
-`;
-
-const TagError = styled.div<{ alertColor: string }>`
-  color: white;
-  position: absolute;
-  top: 100%;
-  opacity: 1;
-  align-items: center;
-  font-size: 0.7rem;
-  padding: 6px 12px;
-  margin-top: 6px;
-  white-space: nowrap;
-  border-radius: 30px;
-  background-color: ${({ alertColor }) => alertColor};
-  transition: 0.3s margin-right, 0.3s opacity, 0.3s margin-bottom;
-  opacity: 0;
-  right: auto;
-  margin-right: 0;
-  margin-top: 6px;
-
-  & > p {
-    margin: 2px;
-  }
-
-  &.hovering {
-    opacity: 1;
-    margin-top: 10;
-  }
-  &.flipped {
-    transform: rotate(180deg);
-    margin-right: -42px;
-  }
-`;
-
 const handleStyles = {
   width: 25,
   height: 25,
@@ -519,6 +400,125 @@ export class DraggableBox
     );
   }
 }
+
+export const Link = styled.a`
+  color: 'white';
+  display: 'inherit';
+`;
+export const Tag = styled.div`
+  background: ${props => props.color};
+  border-radius: 30px;
+  color: white;
+  display: flex;
+  white-space: nowrap;
+  padding: 6px 4px;
+  transition: 0.3s all;
+  transform-origin: 24px 50%;
+  @media screen and (max-width: 1000px) {
+    transform: scale(0.75);
+  }
+`;
+const TagValue = styled.div`
+  font-size: 1.4rem;
+  display: flex;
+  position: relative;
+  top: -2px;
+`;
+const TagUnit = styled.div`
+  opacity: 0.8;
+  font-size: 0.8rem;
+  margin: 4px;
+`;
+const TagSettings = styled.div`
+  color: white;
+  font-size: 1.1rem;
+  margin: auto 8px;
+  cursor: pointer;
+  padding-right: 4px;
+`;
+export const TagName = styled.div`
+  color: white;
+  position: absolute;
+  bottom: 100%;
+  margin-bottom: 0;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 6px 12px;
+  white-space: nowrap;
+  border-radius: 30px;
+  background: ${props => props.color};
+  transition: 0.3s margin-right, 0.3s opacity, 0.3s margin-bottom;
+  opacity: 0;
+  right: auto;
+  margin-right: 0;
+  pointer-events: none;
+
+  &.hovering {
+    opacity: 1;
+    margin-bottom: 4px;
+  }
+  &.flipped {
+    transform: rotate(180deg);
+    margin-right: -42px;
+  }
+`;
+const TagDescription = styled.div`
+  color: white;
+  position: absolute;
+  bottom: 100%;
+  font-size: 0.7rem;
+  padding: 6px 12px;
+  white-space: nowrap;
+  border-radius: 30px;
+  background: ${props => props.color};
+  transition: 0.3s margin-right, 0.3s opacity, 0.3s margin-bottom;
+  opacity: 0;
+  margin-bottom: 36px;
+  right: auto;
+  margin-right: 0;
+  pointer-events: none;
+
+  &.hovering {
+    opacity: 1;
+    margin-bottom: 40px;
+  }
+  &.flipped {
+    transform: rotate(180deg);
+    margin-right: -42px;
+  }
+`;
+
+const TagError = styled.div<{ alertColor: string }>`
+  color: white;
+  position: absolute;
+  top: 100%;
+  opacity: 1;
+  align-items: center;
+  font-size: 0.7rem;
+  padding: 6px 12px;
+  margin-top: 6px;
+  white-space: nowrap;
+  border-radius: 30px;
+  background-color: ${({ alertColor }) => alertColor};
+  transition: 0.3s margin-right, 0.3s opacity, 0.3s margin-bottom;
+  opacity: 0;
+  right: auto;
+  margin-right: 0;
+  margin-top: 6px;
+
+  & > p {
+    margin: 2px;
+  }
+
+  &.hovering {
+    opacity: 1;
+    margin-top: 10;
+  }
+  &.flipped {
+    transform: rotate(180deg);
+    margin-right: -42px;
+  }
+`;
 
 export default DragSource(
   DragTargets.Point,
