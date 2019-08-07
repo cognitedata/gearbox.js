@@ -13,7 +13,7 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { Annotation } from '../../../@types/griff-react/index';
 import { timeseriesListV2 } from '../../../mocks';
-import { buildMockSdk } from '../../../utils/mockSdk';
+
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DataLoader } from '../dataLoader';
 import { TimeseriesChart } from '../TimeseriesChart';
@@ -103,7 +103,12 @@ export const fakeClient: CogniteClient = {
   },
 };
 
-buildMockSdk(fakeClient);
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

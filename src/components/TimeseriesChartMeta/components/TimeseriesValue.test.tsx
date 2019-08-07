@@ -3,7 +3,6 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { datapoints, timeseriesListV2 } from '../../../mocks';
-// import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesValue } from './TimeseriesValue';
 
@@ -134,7 +133,6 @@ describe('TimeseriesValue', () => {
   it('Should not call setState on unmounted component', done => {
     TimeseriesValue.prototype.setState = jest.fn();
 
-    console.log(sdk.datapoints);
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>
         <TimeseriesValue

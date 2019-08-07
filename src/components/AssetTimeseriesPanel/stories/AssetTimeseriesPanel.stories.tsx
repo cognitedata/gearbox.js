@@ -6,7 +6,7 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { timeseriesListV2 } from '../../../mocks/';
 import { ASSET_META_SERIES_STYLES } from '../../../mocks/events';
-import { buildMockSdk } from '../../../utils/mockSdk';
+
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { fakeClient as timeseriesChartFakeClient } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { AssetTimeseriesPanel } from '../AssetTimeseriesPanel';
@@ -34,7 +34,12 @@ const fakeClient: CogniteClient = {
   },
 };
 
-buildMockSdk(fakeClient);
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

@@ -7,7 +7,7 @@ import {
   ASSET_TREE_STYLES,
   ASSET_ZERO_DEPTH_ARRAY,
 } from '../../mocks/assetsListV2';
-import { buildMockSdk } from '../../utils/mockSdk';
+
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { AssetTree } from './AssetTree';
 
@@ -22,7 +22,12 @@ const fakeClient: CogniteClient = {
   },
 };
 
-buildMockSdk(fakeClient);
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

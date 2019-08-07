@@ -10,7 +10,7 @@ import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { timeseriesListV2 } from '../../../mocks';
 import { assetsList } from '../../../mocks';
-import { buildMockSdk } from '../../../utils/mockSdk';
+
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesSearch } from '../TimeseriesSearch';
 import allowStrings from './allowStrings.md';
@@ -65,7 +65,12 @@ const fakeClient: CogniteClient = {
   },
 };
 
-buildMockSdk(fakeClient);
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

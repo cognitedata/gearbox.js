@@ -23,9 +23,16 @@ const fakeClient: CogniteClient = {
   },
 };
 
-mockCreateViewer(fakeClient);
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
+
+mockCreateViewer(fakeClient);
 
 describe('TimeseriesChartMeta', () => {
   beforeEach(() => {

@@ -6,7 +6,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ZoomCenter } from '../../../interfaces';
 import { SVG } from '../../../mocks/svg-viewer';
-import { buildMockSdk } from '../../../utils/mockSdk';
+
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { SVGViewer } from '../SVGViewer';
 import classesDescription from './classes.md';
@@ -49,7 +49,12 @@ const fakeClient: CogniteClient = {
   },
 };
 
-buildMockSdk(fakeClient);
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

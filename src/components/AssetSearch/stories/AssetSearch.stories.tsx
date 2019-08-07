@@ -9,7 +9,7 @@ import { storiesOf } from '@storybook/react';
 import { pick } from 'lodash';
 import React from 'react';
 import { assetsList } from '../../../mocks';
-import { buildMockSdk } from '../../../utils/mockSdk';
+
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetSearch, AssetSearchStyles } from '../AssetSearch';
 import advancedSearch from './advancedSearch.md';
@@ -80,7 +80,12 @@ export const fakeClient: CogniteClient = {
   },
 };
 
-buildMockSdk(fakeClient);
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

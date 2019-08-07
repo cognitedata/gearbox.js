@@ -5,7 +5,7 @@ import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { SDK_LIST_LIMIT } from '../../constants/sdk';
 import { timeseriesListV2 } from '../../mocks';
-import { buildMockSdk } from '../../utils/mockSdk';
+
 import {
   withAssetTimeseries,
   WithAssetTimeseriesDataProps,
@@ -20,7 +20,12 @@ const fakeClient: CogniteClient = {
   },
 };
 
-buildMockSdk(fakeClient);
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

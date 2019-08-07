@@ -1,9 +1,9 @@
-import {CogniteClient} from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { timeseriesListV2 } from '../../mocks';
-import { buildMockSdk } from '../../utils/mockSdk';
+
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { LoadingBlock } from '../common/LoadingBlock/LoadingBlock';
 import {
@@ -21,7 +21,12 @@ const fakeClient: CogniteClient = {
   },
 };
 
-buildMockSdk(fakeClient);
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

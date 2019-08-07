@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import { CogniteEvent, IdEither } from '@cognite/sdk/dist/src/types/types';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -9,18 +9,27 @@ import { EventPreview } from './EventPreview';
 
 configure({ adapter: new Adapter() });
 
-const mockedClient: API = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   events: {
     retrieve: jest.fn(),
   },
 };
 
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 beforeEach(() => {
   // @ts-ignore
-  mockedClient.events.retrieve.mockClear();
+  fakeClient.events.retrieve.mockClear();
   // @ts-ignore
-  mockedClient.events.retrieve.mockImplementation(
+  fakeClient.events.retrieve.mockImplementation(
     async (ids: IdEither): Promise<CogniteEvent[]> => {
       // @ts-ignore
       return [fakeEvents.find(e => e.id === ids[0].id)];
@@ -31,7 +40,7 @@ beforeEach(() => {
 describe('EventPreview', () => {
   it('Should render without exploding', done => {
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <EventPreview eventId={8825861064387} />
       </ClientSDKProvider>
     );
@@ -44,7 +53,7 @@ describe('EventPreview', () => {
 
   it('Should render loading spinner', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <EventPreview eventId={8825861064387} />
       </ClientSDKProvider>
     );
@@ -53,7 +62,7 @@ describe('EventPreview', () => {
 
   it('Should render nothing if loading spinner is hidden', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <EventPreview eventId={8825861064387} hideLoadingSpinner={true} />
       </ClientSDKProvider>
     );
@@ -62,14 +71,14 @@ describe('EventPreview', () => {
 
   it('Should request an event via SDK if eventId has been changed', done => {
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <EventPreview eventId={8825861064387} />
       </ClientSDKProvider>
     );
-    expect(mockedClient.events.retrieve).toBeCalledTimes(1);
+    expect(fakeClient.events.retrieve).toBeCalledTimes(1);
     wrapper.setProps({ children: <EventPreview eventId={1995162693488} /> });
     setImmediate(() => {
-      expect(mockedClient.events.retrieve).toBeCalledTimes(2);
+      expect(fakeClient.events.retrieve).toBeCalledTimes(2);
       done();
     });
   });
@@ -77,7 +86,7 @@ describe('EventPreview', () => {
   it('Should trigger callback when user clicks on the details button', done => {
     const onDetailsClick = jest.fn();
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <EventPreview eventId={8825861064387} onShowDetails={onDetailsClick} />
       </ClientSDKProvider>
     );

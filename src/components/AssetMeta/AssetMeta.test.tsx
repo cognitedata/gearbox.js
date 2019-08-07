@@ -9,7 +9,7 @@ import {
   fakeFiles,
   timeseriesListV2,
 } from '../../mocks';
-import { buildMockSdk } from '../../utils/mockSdk';
+
 import { AssetMeta } from './AssetMeta';
 
 console.error = jest.fn();
@@ -18,20 +18,31 @@ const mockEventList = jest.fn();
 const mockFileList = jest.fn();
 const mockTSList = jest.fn();
 
-buildMockSdk({
+const fakeClient: CogniteClient = {
+  // @ts-ignore
   assets: {
     retrieve: mockAssetRetrieve,
   },
+  // @ts-ignore
   events: {
     list: mockEventList,
   },
+  // @ts-ignore
   files: {
     list: mockFileList,
   },
+  // @ts-ignore
   timeseries: {
     list: mockTSList,
   },
-});
+};
+
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

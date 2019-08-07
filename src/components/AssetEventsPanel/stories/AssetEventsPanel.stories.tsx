@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { fakeEvents } from '../../../mocks';
-import { buildMockSdk } from '../../../utils/mockSdk';
+
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetEventsPanel } from '../AssetEventsPanel';
 import customColumnNames from './customColumnNames.md';

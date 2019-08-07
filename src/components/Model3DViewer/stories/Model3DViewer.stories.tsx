@@ -10,7 +10,7 @@ import {
   fakeModel3DViewerClient,
   generateNumber,
 } from '../../../mocks';
-import { buildMockSdk } from '../../../utils/mockSdk';
+
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { mockCreateViewer, Model3DViewer } from '../Model3DViewer';
 import full from './full.md';

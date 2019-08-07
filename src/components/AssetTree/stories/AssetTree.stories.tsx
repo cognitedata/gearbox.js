@@ -17,7 +17,7 @@ import customStyles from './customStyles.md';
 import defaultExpanded from './defaultExpanded.md';
 import fullDescription from './full.md';
 import withTheme from './withTheme.md';
-import { buildMockSdk } from '../../../utils/mockSdk';
+
 
 const ExampleTheme = {
   gearbox: {
@@ -53,7 +53,12 @@ export const fakeClient: CogniteClient = {
   },
 };
 
-buildMockSdk(fakeClient);
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

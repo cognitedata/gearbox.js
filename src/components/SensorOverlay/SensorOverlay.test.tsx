@@ -7,7 +7,7 @@ import DNDTestBackend from 'react-dnd-test-backend';
 import sizeMe from 'react-sizeme';
 import sinon from 'sinon';
 import { timeseriesListV2 } from '../../mocks';
-import { buildMockSdk } from '../../utils/mockSdk';
+
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { DraggableBox, Tag } from './components/DraggableBox';
 import { DraggablePoint } from './components/DraggablePoint';
@@ -40,7 +40,12 @@ const propsCallbacks = {
   onSensorPositionChange: jest.fn(),
 };
 
-buildMockSdk(fakeClient);
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

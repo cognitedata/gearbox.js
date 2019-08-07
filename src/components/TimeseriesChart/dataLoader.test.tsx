@@ -5,7 +5,6 @@ import {
   GetStringDatapoint,
 } from '@cognite/sdk/dist/src/types/types';
 import { datapointsList, timeseriesListV2 } from '../../mocks';
-import { buildMockSdk } from '../../utils/mockSdk';
 import { AccessorFunc, DataLoader } from './dataLoader';
 
 const mockTimeseriesRetrieve = jest.fn();
@@ -22,7 +21,12 @@ const fakeClient: CogniteClient = {
   },
 };
 
-buildMockSdk(fakeClient);
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
@@ -230,7 +234,7 @@ describe('dataLoader', () => {
           },
         ];
         // @ts-ignore
-        mockedClient.datapoints.retrieve.mockResolvedValue([
+        fakeClient.datapoints.retrieve.mockResolvedValue([
           {
             name: 'abc',
             datapoints,
