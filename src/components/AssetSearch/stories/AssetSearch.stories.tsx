@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import {
   Asset,
   AssetListScope,
@@ -11,7 +11,6 @@ import React from 'react';
 import { assetsList } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetSearch, AssetSearchStyles } from '../AssetSearch';
-
 import advancedSearch from './advancedSearch.md';
 import basic from './basic.md';
 import customStyles from './customStyles.md';
@@ -22,7 +21,7 @@ import handleSearchResults from './handleSearchResults.md';
 import rootAssetSelect from './rootAssetSelect.md';
 
 // Mock the SDK calls
-export const fakeClient: API = {
+export const fakeClient: CogniteClient = {
   // @ts-ignore
   assets: {
     /* TODO this is used by rootAssetSelect and actually is disabled due to rootAssetSelect changes in SDK 2.0

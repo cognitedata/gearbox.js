@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import CogniteClient from '@cognite/sdk/dist/src/cogniteClient';
 import { Button, Input, Tag } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -22,7 +22,7 @@ jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
   return f;
 });
 
-const mockedClient: API = {
+const mockedClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
     retrieve: jest.fn(),

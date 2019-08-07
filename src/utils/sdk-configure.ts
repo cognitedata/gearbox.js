@@ -5,17 +5,27 @@
  * https://github.com/cognitedata/gearbox.js/issues/320
  */
 
-import * as sdk from '@cognite/sdk';
+// todo what is this doing?
+import {
+  ClientOptions,
+  default as CogniteClient,
+} from '@cognite/sdk/dist/src/cogniteClient';
 
-export function configureSdk(config: sdk.AuthorizeParams) {
-  sdk.configure(config);
+export let sdk: CogniteClient;
+
+export function configureSdk(config: ClientOptions) {
+  sdk = new CogniteClient(config);
 }
 
-export async function authSdk(tenant: string): Promise<sdk.AuthResult> {
-  return await sdk.Login.authorize({
+export async function authSdk(tenant: string) {
+  // what?
+  sdk.loginWithOAuth({
     project: tenant,
-    redirectUrl: window.location.href,
-    errorRedirectUrl: window.location.href,
-    popup: true,
+    onAuthenticate: login => {
+      login.popup({
+        redirectUrl: window.location.href,
+        errorRedirectUrl: window.location.href,
+      });
+    },
   });
 }

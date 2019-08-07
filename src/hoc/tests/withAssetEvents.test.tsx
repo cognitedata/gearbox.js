@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import CogniteClient from '@cognite/sdk/dist/src/cogniteClient';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -9,7 +9,7 @@ import { withAssetEvents, WithAssetEventsDataProps } from '../withAssetEvents';
 
 configure({ adapter: new Adapter() });
 
-const fakeClient: API = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   events: {
     list: jest.fn(),

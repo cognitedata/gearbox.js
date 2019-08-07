@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import CogniteClient from '@cognite/sdk/dist/src/cogniteClient';
 import { Input } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -17,7 +17,7 @@ const propsCallbacks: { [name: string]: Mock } = {
   onLiveSearchSelect: jest.fn(),
 };
 
-const fakeClient: API = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   assets: {
     search: jest.fn(),

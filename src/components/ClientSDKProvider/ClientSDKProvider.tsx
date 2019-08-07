@@ -1,9 +1,9 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import React from 'react';
 import { ClientSDKContext } from '../../context/clientSDKContext';
 
 export interface ClientSDKProviderProps {
-  client: API;
+  client: CogniteClient;
   children: React.ReactNode;
 }
 

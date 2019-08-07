@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import {
   GetTimeSeriesMetadataDTO,
   TimeseriesIdEither,
@@ -12,7 +12,6 @@ import { timeseriesListV2 } from '../../../mocks';
 import { assetsList } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesSearch } from '../TimeseriesSearch';
-
 import allowStrings from './allowStrings.md';
 import basic from './basic.md';
 import customFilter from './customFilter.md';
@@ -29,13 +28,13 @@ import withTheme from './withTheme.md';
 const timeseriesNames = timeseriesListV2.map(ts => ts.name);
 const timeseriesIds = timeseriesListV2.map(ts => ts.id);
 
-const fakeClient: API = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
     retrieve: (
       ids: TimeseriesIdEither[]
     ): Promise<GetTimeSeriesMetadataDTO[]> => {
-      const idsAsString = ids.map(x => x.id.toString());
+      const idsAsString = ids.map(x => x.id.toString()); //todo fix
       return new Promise(resolve => {
         setTimeout(() => {
           const result = timeseriesListV2.filter(
@@ -255,7 +254,7 @@ storiesOf('TimeseriesSearch/Examples', module)
   .add(
     'With Theme',
     () => {
-      setupMocks();
+      setupMocks(); //todo fix
       const ExampleTheme = {
         gearbox: {
           selectColor: 'red',

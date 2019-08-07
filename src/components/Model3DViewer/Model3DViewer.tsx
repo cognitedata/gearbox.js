@@ -1,8 +1,5 @@
 import { Cognite3DModel, Cognite3DViewer, THREE } from '@cognite/3d-viewer';
-import {
-  AssetMapping3D,
-  Revision3D,
-} from '@cognite/sdk/dist/src/types/types';
+import { AssetMapping3D, Revision3D } from '@cognite/sdk/dist/src/types/types';
 import { Button, Slider } from 'antd';
 import { SliderValue } from 'antd/lib/slider';
 import React, { RefObject } from 'react';
@@ -126,6 +123,8 @@ export class Model3DViewer extends React.Component<
       return;
     }
 
+    const sdk = this.context;
+
     const {
       modelId,
       revisionId,
@@ -148,6 +147,7 @@ export class Model3DViewer extends React.Component<
       fromCache,
       domElement,
     } = createViewer({
+      sdk,
       modelId,
       revisionId,
       boundingBox,

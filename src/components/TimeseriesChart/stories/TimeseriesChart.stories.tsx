@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import { AxisDisplayMode } from '@cognite/griff-react';
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import {
   DatapointsGetAggregateDatapoint,
   DatapointsGetDoubleDatapoint,
@@ -15,7 +15,6 @@ import { timeseriesListV2 } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DataLoader } from '../dataLoader';
 import { TimeseriesChart } from '../TimeseriesChart';
-
 import annotations from './annotations.md';
 import collapsedYAxis from './collapsedYAxis.md';
 import containerStyle from './containerStyle.md';
@@ -66,7 +65,7 @@ const randomData = (
   return { datapoints: data, id: 1337 };
 };
 
-export const fakeClient: API = {
+export const fakeClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
     retrieve: (): Promise<GetTimeSeriesMetadataDTO[]> => {
@@ -102,7 +101,7 @@ export const fakeClient: API = {
   },
 };
 
-const fakeZoomableClient: API = {
+const fakeZoomableClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
     // tslint:disable-next-line: no-identical-functions
@@ -447,7 +446,7 @@ storiesOf('TimeseriesChart/Examples', module)
       readme: {
         content: customColors,
       },
-    }
+    } // TODO FIX
   )
   .add(
     'Annotations',

@@ -17,8 +17,7 @@ export const ASSET_TREE_STYLES: AssetTreeStyles = {
 export const ASSET_ZERO_DEPTH_ARRAY: Asset[] = [
   {
     id: 6687602007296940,
-    path: [6687602007296940],
-    depth: 0,
+    rootId: 6687602007296940,
     name: 'Aker BP',
     description: 'Aker BP',
     createdTime: new Date(0),
@@ -26,8 +25,7 @@ export const ASSET_ZERO_DEPTH_ARRAY: Asset[] = [
   },
   {
     id: 2675073401706610,
-    path: [2675073401706610],
-    depth: 0,
+    rootId: 2675073401706610,
     name: 'VAL',
     description: valDescription,
     metadata: {
@@ -57,8 +55,7 @@ export const ASSET_ZERO_DEPTH_ARRAY: Asset[] = [
 export const ASSET_LIST_CHILD: Asset[] = [
   {
     id: 3111454725058294,
-    path: [6687602007296940, 4650652196144007, 3111454725058294],
-    depth: 2,
+    rootId: 6687602007296940,
     name: '23',
     parentId: 4650652196144007,
     description: gasCompressionString,
@@ -77,14 +74,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
   },
   {
     id: 4518112062673878,
-    path: [
-      6687602007296940,
-      4650652196144007,
-      3111454725058294,
-      6895991969886325,
-      4518112062673878,
-    ],
-    depth: 4,
+    rootId: 6687602007296940,
     name: '23-1ST STAGE COMPRESSION-PH',
     parentId: 6895991969886325,
     description: '1ST STAGE COMPRESSION ON PH',
@@ -117,15 +107,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
   },
   {
     id: 7372310232665628,
-    path: [
-      6687602007296940,
-      4650652196144007,
-      3111454725058294,
-      6895991969886325,
-      4518112062673878,
-      7372310232665628,
-    ],
-    depth: 5,
+    rootId: 6687602007296940,
     name: '23-1ST STAGE COMPRESSOR-PH',
     parentId: 4518112062673878,
     description: '1ST STAGE COMPRESSOR ON PH',
@@ -158,14 +140,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
   },
   {
     id: 5786472304680477,
-    path: [
-      6687602007296940,
-      4650652196144007,
-      3111454725058294,
-      6895991969886325,
-      5786472304680477,
-    ],
-    depth: 4,
+    rootId: 6687602007296940,
     name: '23-2ND STAGE COMPRESSION-PH',
     parentId: 6895991969886325,
     description: '2ND STAGE COMPRESSION ON PH',
@@ -198,15 +173,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
   },
   {
     id: 4074033093163622,
-    path: [
-      6687602007296940,
-      4650652196144007,
-      3111454725058294,
-      6895991969886325,
-      5786472304680477,
-      4074033093163622,
-    ],
-    depth: 5,
+    rootId: 6687602007296940,
     name: '23-2ND STAGE COMPRESSOR-PH',
     parentId: 5786472304680477,
     description: '2ND STAGE COMPRESSOR ON PH',
@@ -239,15 +206,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
   },
   {
     id: 8327962938361538,
-    path: [
-      6687602007296940,
-      4650652196144007,
-      3111454725058294,
-      6895991969886325,
-      1150715783816357,
-      8327962938361538,
-    ],
-    depth: 5,
+    rootId: 6687602007296940,
     name: '23-TIC-92604B',
     parentId: 1150715783816357,
     description: 'SOFT TAG VRD - PH 1STSTGDISCCOOL GAS OUT',
@@ -282,14 +241,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
   },
   {
     id: 1150715783816357,
-    path: [
-      6687602007296940,
-      4650652196144007,
-      3111454725058294,
-      6895991969886325,
-      1150715783816357,
-    ],
-    depth: 4,
+    rootId: 6687602007296940,
     name: '23-TT-92604B',
     parentId: 6895991969886325,
     description: 'VRD - PH 1STSTGDISCCOOL COOLMED IN',
@@ -326,15 +278,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
   },
   {
     id: 53231887945301,
-    path: [
-      6687602007296940,
-      4650652196144007,
-      3111454725058294,
-      6895991969886325,
-      4518112062673878,
-      53231887945301,
-    ],
-    depth: 5,
+    rootId: 6687602007296940,
     name: '23-VG-9101',
     parentId: 4518112062673878,
     description: 'VRD - 1ST STAGE SUCTION SCRUBBER',
@@ -371,15 +315,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
   },
   {
     id: 2513266419866445,
-    path: [
-      6687602007296940,
-      4650652196144007,
-      3111454725058294,
-      6895991969886325,
-      4518112062673878,
-      2513266419866445,
-    ],
-    depth: 5,
+    rootId: 6687602007296940,
     name: '23-XX-9105',
     parentId: 4518112062673878,
     description: 'VRD - 1ST STAGE SUCTION/DISCHARGE COOLER SKID',
@@ -415,13 +351,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
   },
   {
     id: 6895991969886325,
-    path: [
-      6687602007296940,
-      4650652196144007,
-      3111454725058294,
-      6895991969886325,
-    ],
-    depth: 3,
+    rootId: 6687602007296940,
     name: '230900',
     parentId: 3111454725058294,
     description: 'GAS COMPRESSION AND RE-INJECTION ON PH',
@@ -453,8 +383,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
   },
   {
     id: 6687602007296940,
-    path: [6687602007296940],
-    depth: 0,
+    rootId: 6687602007296940,
     name: 'Aker BP',
     description: 'Aker BP',
     createdTime: new Date(0),
@@ -462,8 +391,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
   },
   {
     id: 2675073401706610,
-    path: [2675073401706610],
-    depth: 0,
+    rootId: 2675073401706610,
     name: 'VAL',
     description: valDescription,
     metadata: {
@@ -490,8 +418,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
   },
   {
     id: 4650652196144007,
-    path: [6687602007296940, 4650652196144007],
-    depth: 1,
+    rootId: 2675073401706610,
     name: 'VAL',
     parentId: 6687602007296940,
     description: valDescription,

@@ -25,6 +25,7 @@ import fullDescription from './full.md';
 import rightClickItem from './rightClickItem.md';
 import withTheme from './withTheme.md';
 
+// TODO FIX, GENERAL
 const setupMocks = () => {
   sdk.ThreeD.listNodes = async (
     _: number,

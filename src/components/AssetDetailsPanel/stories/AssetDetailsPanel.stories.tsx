@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
@@ -10,7 +10,7 @@ import customStyles from './customStyles.md';
 import fullDescription from './full.md';
 import loadCallback from './loadCallback.md';
 
-const fakeClient: API = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   assets: {
     retrieve: () =>

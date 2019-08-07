@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import CogniteClient from '@cognite/sdk/dist/src/cogniteClient';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
@@ -27,9 +27,11 @@ const ExampleTheme = {
   },
 };
 
-const zeroChild = ASSET_ZERO_DEPTH_ARRAY.findIndex(asset => asset.depth === 0);
+const zeroChild = ASSET_ZERO_DEPTH_ARRAY.findIndex(
+  asset => asset.rootId === asset.id
+);
 
-export const fakeClient: API = {
+export const fakeClient: CogniteClient = {
   // @ts-ignore
   assets: {
     // @ts-ignore
@@ -125,7 +127,6 @@ storiesOf('AssetTree/Examples', module)
   .add(
     'With Theme',
     () => {
-      setupMocks();
       return (
         <ThemeProvider theme={ExampleTheme}>
           <AssetTree />

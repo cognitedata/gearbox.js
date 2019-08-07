@@ -1,8 +1,7 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import {
   fakeAsset,
@@ -13,40 +12,47 @@ import {
 import { AssetMeta } from './AssetMeta';
 
 console.error = jest.fn();
-const fakeClient: API = {
-  // @ts-ignore
-  assets: {
-    retrieve: jest.fn(),
-  },
-  // @ts-ignore
-  events: {
-    list: jest.fn(),
-  },
-  // @ts-ignore
-  files: {
-    list: jest.fn(),
-  },
-  // @ts-ignore
-  timeseries: {
-    list: jest.fn(),
-  },
-};
+const mockAssetRetrieve = jest.fn();
+const mockEventList = jest.fn();
+const mockFileList = jest.fn();
+const mockTSList = jest.fn();
+
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return {
+      assets: {
+        retrieve: mockAssetRetrieve,
+      },
+      // @ts-ignore
+      events: {
+        list: mockEventList,
+      },
+      // @ts-ignore
+      files: {
+        list: mockFileList,
+      },
+      // @ts-ignore
+      timeseries: {
+        list: mockTSList,
+      },
+    };
+  }),
+}));
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 configure({ adapter: new Adapter() });
 
 beforeEach(() => {
-  // @ts-ignore
-  fakeClient.assets.retrieve.mockResolvedValue([fakeAsset]);
-  // @ts-ignore
-  fakeClient.events.list.mockReturnValue({
+  mockAssetRetrieve.mockResolvedValue([fakeAsset]);
+  mockEventList.mockReturnValue({
     autoPagingToArray: () => Promise.resolve(fakeEvents),
   });
-  // @ts-ignore
-  fakeClient.files.list.mockReturnValue({
+  mockFileList.mockReturnValue({
     autoPagingToArray: () => Promise.resolve(fakeFiles),
   });
-  // @ts-ignore
-  fakeClient.timeseries.list.mockReturnValue({
+  mockTSList.mockReturnValue({
     autoPagingToArray: () => Promise.resolve(timeseriesListV2),
   });
 });
@@ -58,7 +64,7 @@ afterEach(() => {
 describe('AssetMeta', () => {
   it('should render without exploding', done => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetMeta assetId={123} />
       </ClientSDKProvider>
     );
@@ -84,7 +90,7 @@ describe('AssetMeta', () => {
   it('should render "no asset" if assetId was not passed', () => {
     // @ts-ignore
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         // @ts-ignore
         <AssetMeta />
       </ClientSDKProvider>
@@ -98,7 +104,7 @@ describe('AssetMeta', () => {
   it('should fetch asset, events and documents if assetId was passed after creation', done => {
     // @ts-ignore
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         // @ts-ignore
         <AssetMeta />
       </ClientSDKProvider>
@@ -121,7 +127,7 @@ describe('AssetMeta', () => {
 
   it('should render spinner while loading asset, events and documents', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetMeta assetId={123} />
       </ClientSDKProvider>
     );
@@ -132,7 +138,7 @@ describe('AssetMeta', () => {
   it('should trigger callback on pane change', done => {
     const onPaneChange = jest.fn();
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetMeta assetId={123} onPaneChange={onPaneChange} />
       </ClientSDKProvider>
     );
@@ -153,20 +159,20 @@ describe('AssetMeta', () => {
 
   it('should load asset even if details are hidden', done => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetMeta assetId={123} hidePanels={['details']} />
       </ClientSDKProvider>
     );
     setImmediate(() => {
       wrapper.update();
-      expect(fakeClient.assets.retrieve).toHaveBeenCalled();
+      expect(sdk.assets.retrieve).toHaveBeenCalled();
       done();
     });
   });
 
   it('should hide panels when specified', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetMeta
           assetId={123}
           hidePanels={['details', 'events', 'documents', 'timeseries']}

@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
@@ -18,7 +18,7 @@ import withMany from './withMany.md';
 import withMinMax from './withMinMax.md';
 import withStickyTooltips from './withStickyTooltips.md';
 
-const fakeClient: API = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
     retrieve: (ids): Promise<GetTimeSeriesMetadataDTO[]> => {

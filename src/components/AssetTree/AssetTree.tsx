@@ -34,22 +34,6 @@ interface AssetTreeState {
   expandedKeys: ExpandedKeysMap;
 }
 
-const cursorApiRequest = async (
-  assetId: number,
-  params: AssetListDescendantsParams,
-  data: Asset[] = []
-): Promise<Asset[]> => {
-  const result = await this.context!.listDescendants(assetId, params);
-  const { nextCursor: cursor } = result;
-  if (result.nextCursor) {
-    return cursorApiRequest(assetId, { ...params, cursor }, [
-      ...data,
-      ...result.items,
-    ]);
-  }
-  return [...data, ...result.items];
-};
-
 class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   static contextType = ClientSDKContext;
   static defaultProps = {

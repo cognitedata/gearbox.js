@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -21,7 +21,7 @@ const SensorOverlay = DragDropContext(DNDTestBackend)(
   OriginalSensorOverlay.DecoratedComponent
 );
 
-const fakeClient: API = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
     retrieve: jest.fn(),

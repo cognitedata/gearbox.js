@@ -1,10 +1,9 @@
 import { CogniteAsyncIterator } from '@cognite/sdk/dist/src/autoPagination';
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import CogniteClient from '@cognite/sdk/dist/src/cogniteClient';
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-
 import { timeseriesListV2 } from '../../../mocks/';
 import { ASSET_META_SERIES_STYLES } from '../../../mocks/events';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
@@ -16,10 +15,11 @@ import customTimeseriesChartMeta from './customTimeseriesChartMeta.md';
 import fullDescription from './full.md';
 import loadCallback from './loadCallback.md';
 
-const fakeClient: API = {
+const fakeClient: CogniteClient = {
   ...timeseriesChartFakeClient,
   timeseries: {
     ...timeseriesChartFakeClient.timeseries,
+    // @ts-ignore
     list: (): CogniteAsyncIterator<GetTimeSeriesMetadataDTO[]> => {
       // @ts-ignore
       return {

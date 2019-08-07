@@ -28,7 +28,7 @@ export interface AssetSearchProps {
   showLiveSearchResults?: boolean;
   onError?: Callback;
   strings?: PureObject;
-  // rootAssetSelect: boolean; // TODO disabled due to rootAssetSelect changes in SDK 2.0
+  rootAssetSelect: boolean; // TODO disabled due to rootAssetSelect changes in SDK 2.0
   advancedSearch: boolean;
   styles?: AssetSearchStyles;
   onSearchResult?: SearchResultCallback;
@@ -71,6 +71,25 @@ export class AssetSearch extends React.Component<
     this.assetsApi = this.context.assets;
   }
 
+  generateSearchQuery = (query: ApiQuery) => ({
+    search: {
+      name: query.query,
+      description:
+        (query.advancedSearch && query.advancedSearch.description) || undefined,
+    },
+    filter: {
+      parentIds: query.assetSubtrees || undefined,
+      metadata:
+        (query.advancedSearch &&
+          query.advancedSearch.metadata &&
+          query.advancedSearch.metadata.reduce(
+            (a, c) => (c.key ? { ...a, [c.key]: c.value } : a),
+            {}
+          )) ||
+        undefined,
+    },
+  });
+
   async onSearch(query: ApiQuery) {
     const { onError, onSearchResult } = this.props;
     if (!query.query && !query.advancedSearch) {
@@ -83,20 +102,7 @@ export class AssetSearch extends React.Component<
     }
 
     this.setState({ loading: true });
-    const assetQuery: sdk.AssetSearchParams = {
-      query: query.query,
-      assetSubtrees: query.assetSubtrees || undefined,
-      description:
-        (query.advancedSearch && query.advancedSearch.description) || undefined,
-      metadata:
-        (query.advancedSearch &&
-          query.advancedSearch.metadata &&
-          query.advancedSearch.metadata.reduce(
-            (a, c) => (c.key ? { ...a, [c.key]: c.value } : a),
-            {}
-          )) ||
-        undefined,
-    };
+    const assetQuery: AssetSearchFilter = this.generateSearchQuery(query);
     try {
       const items = await this.assetsApi.search(assetQuery);
       if (!items || !Array.isArray(items)) {
@@ -137,7 +143,7 @@ export class AssetSearch extends React.Component<
         onLiveSearchSelect={onLiveSearchSelect}
         strings={resultStrings}
         loading={loading}
-        // rootAssetSelect={rootAssetSelect}
+        rootAssetSelect={rootAssetSelect}
         advancedSearch={advancedSearch}
         styles={styles}
       />

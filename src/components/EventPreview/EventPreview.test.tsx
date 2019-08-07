@@ -1,8 +1,5 @@
 import { API } from '@cognite/sdk/dist/src/resources/api';
-import {
-  CogniteEvent,
-  IdEither,
-} from '@cognite/sdk/dist/src/types/types';
+import { CogniteEvent, IdEither } from '@cognite/sdk/dist/src/types/types';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';

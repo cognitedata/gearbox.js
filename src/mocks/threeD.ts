@@ -1,5 +1,5 @@
 import { Cognite3DViewer, OnProgressData, THREE } from '@cognite/3d-viewer';
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import { Revision3D } from '@cognite/sdk/dist/src/types/types';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { CacheObject, Callback, EventHandlers } from '../interfaces';
@@ -12,10 +12,12 @@ import {
 
 export function createFakeViewer({
   project,
+  sdk,
   cache = {},
   domElement,
 }: {
   project: string;
+  sdk: CogniteClient;
   cache: CacheObject;
   domElement: HTMLElement;
 }): ViewerConfigResponse {
@@ -55,7 +57,7 @@ export function createFakeViewer({
     onComplete();
   };
 
-  const viewer = new Cognite3DViewer({ domElement });
+  const viewer = new Cognite3DViewer({ sdk, domElement, enableCache: true });
 
   const loader = new OBJLoader();
   loader.load('./tank/tank.obj', onLoad, onProgress);
@@ -71,7 +73,7 @@ export function createFakeViewer({
   return cache[project];
 }
 
-export const fakeModel3DViewerClient: API = {
+export const fakeModel3DViewerClient: CogniteClient = {
   // @ts-ignore
   revisions3D: {
     retrieve: (): Promise<Revision3D> => Promise.resolve(revision3D),

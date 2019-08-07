@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import { FileLink, IdEither } from '@cognite/sdk/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
@@ -8,7 +8,6 @@ import { ZoomCenter } from '../../../interfaces';
 import { SVG } from '../../../mocks/svg-viewer';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { SVGViewer } from '../SVGViewer';
-
 import classesDescription from './classes.md';
 import clickDescription from './click.md';
 import customDescription from './custom.md';
@@ -32,7 +31,7 @@ const setupMocks = () => {
   };
 };
 
-const fakeClient: API = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   files: {
     getDownloadUrls: (): Promise<(FileLink & IdEither)[]> => {

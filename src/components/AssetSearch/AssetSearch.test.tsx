@@ -1,5 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
-
+import { CogniteClient } from '@cognite/sdk';
 import { Input } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -23,7 +22,7 @@ jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
   return f;
 });
 
-const fakeClient: API = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   assets: {
     search: jest.fn(),

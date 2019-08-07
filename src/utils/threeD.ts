@@ -4,10 +4,12 @@ import {
   OnProgressData,
   THREE,
 } from '@cognite/3d-viewer';
+import { CogniteClient } from '@cognite/sdk';
 import { Revision3D } from '@cognite/sdk/dist/src/types/types';
 import { CacheObject, Callback, EventHandlers } from '../interfaces';
 
 interface ViewerConfig {
+  sdk: CogniteClient;
   modelId: number;
   revisionId: number;
   domElement: HTMLElement;
@@ -78,6 +80,7 @@ export function setCameraPosition(
   }
 }
 export function createViewer({
+  sdk,
   modelId,
   revisionId,
   boundingBox,
@@ -100,7 +103,7 @@ export function createViewer({
     };
   }
 
-  const viewer = new Cognite3DViewer({ domElement });
+  const viewer = new Cognite3DViewer({ sdk, domElement, enableCache: true });
 
   const listeners: EventHandlers = {
     [progress]: [],

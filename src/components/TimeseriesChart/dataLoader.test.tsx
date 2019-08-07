@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import {
   GetAggregateDatapoint,
   GetDoubleDatapoint,
@@ -7,7 +7,7 @@ import {
 import { datapointsList, timeseriesListV2 } from '../../mocks';
 import { AccessorFunc, DataLoader } from './dataLoader';
 
-const mockedClient: API = {
+const mockedClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
     retrieve: jest.fn(),

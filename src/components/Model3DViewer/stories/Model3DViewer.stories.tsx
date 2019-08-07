@@ -70,8 +70,8 @@ storiesOf('Model3DViewer', module)
       readme: {
         content: full,
       },
-  }
-);
+    }
+  );
 
 storiesOf('Model3DViewer/Examples', module)
   .add(

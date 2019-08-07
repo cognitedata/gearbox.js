@@ -1,9 +1,10 @@
-import * as sdk from '@cognite/sdk'; // TODO
+import { CogniteClient } from '@cognite/sdk';
 import { Select } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { assetsList } from '../../../mocks';
+import { ClientSDKProvider } from '../../ClientSDKProvider/ClientSDKProvider';
 import {
   defaultStrings,
   RootAssetSelect,
@@ -14,12 +15,20 @@ configure({ adapter: new Adapter() });
 
 const onAssetSelected = jest.fn();
 
-sdk.Assets.list = jest.fn(); // TODO
+const mockAssetList = jest.fn().mockResolvedValue({ items: assetsList });
 
-beforeEach(() => {
-  // @ts-ignore
-  sdk.Assets.list.mockResolvedValue({ items: assetsList });
-});
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return {
+      assets: {
+        list: mockAssetList,
+      },
+    };
+  }),
+}));
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 afterAll(() => {
   jest.clearAllMocks();
@@ -27,13 +36,19 @@ afterAll(() => {
 
 describe('RootAssetSelect', () => {
   it('renders without exploding', () => {
-    const wrapper = mount(<RootAssetSelect />);
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <RootAssetSelect />
+      </ClientSDKProvider>
+    );
     expect(wrapper.exists()).toBeTruthy();
   });
 
   it('onSelectAsset should be triggered', async () => {
     const wrapper = mount(
-      <RootAssetSelect onAssetSelected={onAssetSelected} />
+      <ClientSDKProvider client={sdk}>
+        <RootAssetSelect onAssetSelected={onAssetSelected} />
+      </ClientSDKProvider>
     );
     const instance: RootAssetSelectComponent = wrapper
       .find(RootAssetSelectComponent)
@@ -63,12 +78,15 @@ describe('RootAssetSelect', () => {
     );
   });
 
-  // @ts-ignore
-  sdk.Assets.list.mockResolvedValue({ items: [] });
+  mockAssetList.mockResolvedValue({ items: [] });
 
   it('should renders loading state', () => {
     const { loading } = defaultStrings;
-    const wrapper = mount(<RootAssetSelect />);
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <RootAssetSelect />
+      </ClientSDKProvider>
+    );
     wrapper.find(Select).simulate('click');
 
     const dropList = wrapper.find('.ant-select-dropdown ul');

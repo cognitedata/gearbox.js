@@ -1,6 +1,6 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import React from 'react';
 
-export type ClientSDKContextType = API | null;
+export type ClientSDKContextType = CogniteClient | null;
 
 export const ClientSDKContext = React.createContext<ClientSDKContextType>(null);

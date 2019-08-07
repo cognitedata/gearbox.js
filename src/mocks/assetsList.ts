@@ -11,6 +11,7 @@ export const wmtag = 'wmate_dba.wmt_tag';
 
 export const SKA: Asset = {
   id: 8129784932439587,
+  rootId: 8129784932439587,
   lastUpdatedTime: randomTimeDateObj2,
   createdTime: randomTimeDateObj1,
   name: 'SKA',
@@ -37,6 +38,7 @@ export const SKA: Asset = {
 
 export const IAA: Asset = {
   id: 7793176078609329,
+  rootId: 7793176078609329,
   lastUpdatedTime: randomTimeDateObj2,
   createdTime: randomTimeDateObj1,
   name: 'IAA',
@@ -57,6 +59,7 @@ export const IAA: Asset = {
 
 export const VAL: Asset = {
   id: 3623339785663936,
+  rootId: 3623339785663936,
   lastUpdatedTime: randomTimeDateObj2,
   createdTime: randomTimeDateObj1,
   name: 'VAL',

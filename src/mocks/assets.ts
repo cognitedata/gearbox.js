@@ -18,6 +18,8 @@ export const ASSET_DATA = {
 
 export const fakeAsset: Asset = {
   name: '23-TE-96148',
+  id: 5156972057719,
+  rootId: 8515799768286580,
   parentId: 8515799768286580,
   description: 'VRD - PH 1STSTG COMP SEAL GAS HTR',
   metadata: {
@@ -48,7 +50,6 @@ export const fakeAsset: Asset = {
     WMT_TAG_UPDATED_BY: '8137',
     WMT_TAG_UPDATED_DATE: '2014-07-11 09:25:15',
   },
-  id: 5156972057719,
   createdTime: new Date(0),
-  lastUpdatedTime: new Date(0)
+  lastUpdatedTime: new Date(0),
 };

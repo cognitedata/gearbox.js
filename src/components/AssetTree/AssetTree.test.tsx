@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import CogniteClient from '@cognite/sdk/dist/src/cogniteClient';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -9,10 +9,12 @@ import {
 } from '../../mocks/assetsListV2';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { AssetTree } from './AssetTree';
-// TODO update to work with SDK 2.0 latest changes in Asset
-const zeroChild = ASSET_ZERO_DEPTH_ARRAY.findIndex(asset => asset.depth === 0);
 
-const mockedClient: API = {
+const zeroChild = ASSET_ZERO_DEPTH_ARRAY.findIndex(
+  asset => asset.rootId === asset.id
+);
+
+const mockedClient: CogniteClient = {
   // @ts-ignore
   assets: {
     list: jest.fn(),

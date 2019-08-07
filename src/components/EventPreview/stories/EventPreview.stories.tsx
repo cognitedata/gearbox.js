@@ -1,15 +1,11 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
-import {
-  CogniteEvent,
-  IdEither,
-} from '@cognite/sdk/dist/src/types/types';
+import { CogniteClient } from '@cognite/sdk';
+import { CogniteEvent, IdEither } from '@cognite/sdk/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
+import { ThemeProvider } from 'styled-components';
 import { fakeEvents } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { ThemeProvider } from 'styled-components';
-import { EVENTS } from '../../../mocks';
 import { EventPreview, EventPreviewStyles } from '../EventPreview';
 import basic from './basic.md';
 import customStyles from './customStyles.md';
@@ -24,7 +20,7 @@ import missingProperties from './missingProperties.md';
 import withCustomText from './withCustomText.md';
 import withTheme from './withTheme.md';
 
-const fakeClient: API = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   events: {
     retrieve: (ids: IdEither[]): Promise<CogniteEvent[]> => {

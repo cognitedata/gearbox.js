@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
@@ -15,7 +15,7 @@ import hideElements from './hideElements.md';
 import predefinedPeriod from './predefinedPeriod.md';
 import withTheme from './withTheme.md';
 
-const fakeClient: API = {
+const fakeClient: CogniteClient = {
   ...timeseriesChartFakeClient,
   // @ts-ignore
   timeseries: {
@@ -177,7 +177,7 @@ storiesOf('TimeseriesChartMeta/Examples', module)
   .add(
     'With Theme',
     () => {
-      setupMocks();
+      setupMocks(); // todo fix
       const exampleTheme = {
         gearbox: {
           textColor: 'Red',

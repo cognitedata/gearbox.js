@@ -1,5 +1,5 @@
 import { DataProviderLoaderParams, Series } from '@cognite/griff-react';
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import {
   DatapointsGetAggregateDatapoint,
   DatapointsGetDatapoint,
@@ -107,7 +107,7 @@ export class DataLoader {
   SERIES_GETTERS: Map<number, GriffSeries> = new Map<number, GriffSeries>();
 
   requestsInFlight: { [id: string]: boolean } = {};
-  constructor(private sdkClient: API) {}
+  constructor(private sdkClient: CogniteClient) {}
 
   getSubdomain = (id: number) =>
     id

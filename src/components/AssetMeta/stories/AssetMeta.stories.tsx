@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import CogniteClient from '@cognite/sdk/dist/src/cogniteClient';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
@@ -26,7 +26,7 @@ import hideTab from './hideTab.md';
 import selectedDocument from './selectedDocument.md';
 import selectedPane from './selectedPane.md';
 
-const fakeClient: API = {
+const fakeClient: CogniteClient = {
   ...timeseriesChartFakeClient,
   timeseries: {
     ...timeseriesChartFakeClient.timeseries,

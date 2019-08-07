@@ -1,4 +1,4 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -10,7 +10,7 @@ configure({ adapter: new Adapter() });
 
 const timeseries = timeseriesListV2[0];
 
-const mockedClient: API = {
+const mockedClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
     retrieve: jest.fn(),
