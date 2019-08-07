@@ -197,7 +197,9 @@ class TenantSelector extends React.Component<
   private checkTenantValidity = async () => {
     const { onInvalidTenant, onTenantSelected, validateTenant } = this.props;
     const { tenant, advanced } = this.state;
-
+    if (!tenant) {
+      return;
+    }
     const advancedOptions = Object.keys(advanced).length
       ? this.getNonEmptyAdvancedFields(advanced)
       : null;
