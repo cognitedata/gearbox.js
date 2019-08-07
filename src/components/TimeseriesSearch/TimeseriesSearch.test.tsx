@@ -1,10 +1,11 @@
-import CogniteClient from '@cognite/sdk/dist/src/cogniteClient';
+import { CogniteClient } from '@cognite/sdk';
 import { Button, Input, Tag } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
 import React from 'react';
 import { assetsList, timeseriesListV2 } from '../../mocks';
+import { buildMockSdk } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
 import { TimeseriesSearch } from './TimeseriesSearch';
@@ -22,7 +23,7 @@ jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
   return f;
 });
 
-const mockedClient: CogniteClient = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
     retrieve: jest.fn(),
@@ -30,11 +31,15 @@ const mockedClient: CogniteClient = {
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 beforeEach(() => {
   // @ts-ignore
-  mockedClient.timeseries.retrieve.mockResolvedValue(timeseriesListV2);
+  fakeClient.timeseries.retrieve.mockResolvedValue(timeseriesListV2);
   // @ts-ignore
-  mockedClient.timeseries.search.mockResolvedValue(timeseriesListV2);
+  fakeClient.timeseries.search.mockResolvedValue(timeseriesListV2);
 });
 
 afterEach(() => {
@@ -49,7 +54,7 @@ describe('TimeseriesSearch', () => {
       onTimeserieSelectionChange,
     };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -62,7 +67,7 @@ describe('TimeseriesSearch', () => {
       onTimeserieSelectionChange,
     };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -81,7 +86,7 @@ describe('TimeseriesSearch', () => {
       onTimeserieSelectionChange,
     };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -91,8 +96,8 @@ describe('TimeseriesSearch', () => {
       .find('input')
       .simulate('change', { target: { value: 'value' } });
 
-    expect(mockedClient.timeseries.search).toHaveBeenCalledTimes(1);
-    expect(mockedClient.timeseries.search).toHaveBeenCalledWith({
+    expect(fakeClient.timeseries.search).toHaveBeenCalledTimes(1);
+    expect(fakeClient.timeseries.search).toHaveBeenCalledWith({
       search: { query: 'value' },
       limit: 100,
       filter: { assetSubtrees: undefined },
@@ -107,7 +112,7 @@ describe('TimeseriesSearch', () => {
       rootAssetSelect: true,
     };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -116,7 +121,7 @@ describe('TimeseriesSearch', () => {
       .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'value' } });
-    expect(mockedClient.timeseries.search).toHaveBeenCalledTimes(1);
+    expect(fakeClient.timeseries.search).toHaveBeenCalledTimes(1);
 
     // need this to wait for promise to complete
     setImmediate(() => {
@@ -127,8 +132,8 @@ describe('TimeseriesSearch', () => {
         .last()
         .simulate('click');
 
-      expect(mockedClient.timeseries.search).toHaveBeenCalledTimes(2);
-      expect(mockedClient.timeseries.search).toHaveBeenNthCalledWith(2, {
+      expect(fakeClient.timeseries.search).toHaveBeenCalledTimes(2);
+      expect(fakeClient.timeseries.search).toHaveBeenNthCalledWith(2, {
         search: { query: 'value' },
         limit: 100,
         filter: { assetSubtrees: [assetsList[assetsList.length - 1].id] },
@@ -141,7 +146,7 @@ describe('TimeseriesSearch', () => {
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = { assets: assetsList, onTimeserieSelectionChange };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -150,7 +155,7 @@ describe('TimeseriesSearch', () => {
       .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
-    expect(mockedClient.timeseries.search).toHaveBeenCalledTimes(1);
+    expect(fakeClient.timeseries.search).toHaveBeenCalledTimes(1);
 
     // need this to wait for promise to complete
     setImmediate(() => {
@@ -167,7 +172,7 @@ describe('TimeseriesSearch', () => {
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = { assets: assetsList, onTimeserieSelectionChange };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -176,7 +181,7 @@ describe('TimeseriesSearch', () => {
       .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
-    expect(mockedClient.timeseries.search).toHaveBeenCalledTimes(1);
+    expect(fakeClient.timeseries.search).toHaveBeenCalledTimes(1);
 
     // need this to wait for promise to complete
     setImmediate(() => {
@@ -194,7 +199,7 @@ describe('TimeseriesSearch', () => {
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = { onTimeserieSelectionChange };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -241,7 +246,7 @@ describe('TimeseriesSearch', () => {
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = { onTimeserieSelectionChange };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -269,7 +274,7 @@ describe('TimeseriesSearch', () => {
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = { onTimeserieSelectionChange };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -325,7 +330,7 @@ describe('TimeseriesSearch', () => {
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = { assets: assetsList, onTimeserieSelectionChange };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -377,7 +382,7 @@ describe('TimeseriesSearch', () => {
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = { assets: assetsList, onTimeserieSelectionChange };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -419,7 +424,7 @@ describe('TimeseriesSearch', () => {
 
   it('should preselect', done => {
     // @ts-ignore
-    mockedClient.timeseries.retrieve.mockResolvedValue([timeseriesListV2[1]]);
+    fakeClient.timeseries.retrieve.mockResolvedValue([timeseriesListV2[1]]);
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = {
       assets: assetsList,
@@ -427,7 +432,7 @@ describe('TimeseriesSearch', () => {
       selectedTimeseries: [timeseriesListV2[1].id],
     };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -450,7 +455,7 @@ describe('TimeseriesSearch', () => {
       ).toBe(true);
       expect(wrapper.find(Tag).text()).toBe(timeseriesListV2[1].name);
       // @ts-ignore
-      mockedClient.timeseries.retrieve.mockClear();
+      fakeClient.timeseries.retrieve.mockClear();
       done();
     });
   });
@@ -464,7 +469,7 @@ describe('TimeseriesSearch', () => {
       filterRule,
     };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -486,10 +491,10 @@ describe('TimeseriesSearch', () => {
   it('should call onError when api call fails', done => {
     const { onTimeserieSelectionChange, onError } = propsCallbacks;
     // @ts-ignore
-    mockedClient.timeseries.search.mockRejectedValue(new Error('Error'));
+    fakeClient.timeseries.search.mockRejectedValue(new Error('Error'));
     const props = { assets: assetsList, onTimeserieSelectionChange, onError };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -516,7 +521,7 @@ describe('TimeseriesSearch', () => {
       single: true,
     };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -542,7 +547,7 @@ describe('TimeseriesSearch', () => {
       single: true,
     };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -586,7 +591,7 @@ describe('TimeseriesSearch', () => {
       onTimeserieSelectionChange,
     };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch {...props} />
       </ClientSDKProvider>
     );
@@ -629,7 +634,7 @@ describe('TimeseriesSearch', () => {
         allowStrings: false,
       };
       const wrapper = mount(
-        <ClientSDKProvider client={mockedClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesSearch {...props} />
         </ClientSDKProvider>
       );
@@ -659,7 +664,7 @@ describe('TimeseriesSearch', () => {
         allowStrings: true,
       };
       const wrapper = mount(
-        <ClientSDKProvider client={mockedClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesSearch {...props} />
         </ClientSDKProvider>
       );
@@ -689,7 +694,7 @@ describe('TimeseriesSearch', () => {
         allowStrings: false,
       };
       const wrapper = mount(
-        <ClientSDKProvider client={mockedClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesSearch {...props} />
         </ClientSDKProvider>
       );
@@ -716,7 +721,7 @@ describe('TimeseriesSearch', () => {
         onTimeserieSelectionChange,
       };
       const wrapper = mount(
-        <ClientSDKProvider client={mockedClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesSearch {...props} />
         </ClientSDKProvider>
       );
@@ -751,7 +756,7 @@ describe('TimeseriesSearch', () => {
         allowStrings: false,
       };
       const wrapper = mount(
-        <ClientSDKProvider client={mockedClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesSearch {...props} />
         </ClientSDKProvider>
       );

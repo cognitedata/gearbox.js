@@ -1,16 +1,17 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { datapointsList, timeseriesListV2 } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
+import { mockCreateViewer } from '../Model3DViewer/Model3DViewer';
 import { TimeseriesChartMetaPure } from './TimeseriesChartMetaPure';
 
 configure({ adapter: new Adapter() });
 
 const timeseries = timeseriesListV2[0];
 
-const fakeClient: API = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
     retrieve: jest.fn(),
@@ -21,6 +22,10 @@ const fakeClient: API = {
     retrieveLatest: jest.fn(),
   },
 };
+
+mockCreateViewer(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('TimeseriesChartMeta', () => {
   beforeEach(() => {
@@ -42,7 +47,7 @@ describe('TimeseriesChartMeta', () => {
 
   it('Should render without exploding', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesChartMetaPure timeseries={timeseries} />
       </ClientSDKProvider>
     );
@@ -54,7 +59,7 @@ describe('TimeseriesChartMeta', () => {
 
   it('Should not render elements if they are hidden', () => {
     const wrapper = shallow(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesChartMetaPure
           showPeriods={false}
           showChart={false}
@@ -72,7 +77,7 @@ describe('TimeseriesChartMeta', () => {
 
   it('Should have default period 1 hour', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesChartMetaPure timeseries={timeseries} />
       </ClientSDKProvider>
     );
@@ -84,7 +89,7 @@ describe('TimeseriesChartMeta', () => {
 
   it('Should not have active period selected if defaultBasePeriod has been provided', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesChartMetaPure
           timeseries={timeseries}
           defaultBasePeriod={{
@@ -100,7 +105,7 @@ describe('TimeseriesChartMeta', () => {
 
   it('Should switch period on click', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesChartMetaPure timeseries={timeseries} />
       </ClientSDKProvider>
     );
@@ -113,7 +118,7 @@ describe('TimeseriesChartMeta', () => {
 
   it('Should render nothing if timeseries is null or undefined', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesChartMetaPure
           // @ts-ignore
           timeseries={null}

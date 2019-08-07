@@ -1,8 +1,9 @@
-import CogniteClient from '@cognite/sdk/dist/src/cogniteClient';
+import {CogniteClient} from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { timeseriesListV2 } from '../../mocks';
+import { buildMockSdk } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { LoadingBlock } from '../common/LoadingBlock/LoadingBlock';
 import {
@@ -13,12 +14,16 @@ import { TimeseriesPanelPure } from './components/TimeseriesPanelPure';
 
 configure({ adapter: new Adapter() });
 
-const mockedClient: CogniteClient = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
     list: jest.fn(),
   },
 };
+
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('AssetTimeseriesPanel', () => {
   beforeEach(() => {
@@ -31,7 +36,7 @@ describe('AssetTimeseriesPanel', () => {
   it('Should render without exploding and load data', done => {
     const props: AssetTimeseriesPanelProps = { assetId: 123 };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetTimeseriesPanel {...props} />
       </ClientSDKProvider>
     );

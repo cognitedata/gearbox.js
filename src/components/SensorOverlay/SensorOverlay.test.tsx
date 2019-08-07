@@ -7,6 +7,7 @@ import DNDTestBackend from 'react-dnd-test-backend';
 import sizeMe from 'react-sizeme';
 import sinon from 'sinon';
 import { timeseriesListV2 } from '../../mocks';
+import { buildMockSdk } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { DraggableBox, Tag } from './components/DraggableBox';
 import { DraggablePoint } from './components/DraggablePoint';
@@ -38,6 +39,10 @@ const propsCallbacks = {
   onSettingClick: jest.fn(),
   onSensorPositionChange: jest.fn(),
 };
+
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 beforeEach(() => {
   // @ts-ignore
@@ -71,7 +76,7 @@ afterEach(() => {
 describe('SensorOverlay', () => {
   it('Renders without exploding', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <SensorOverlay
           timeseriesIds={[timeseriesListV2[0].id]}
           size={{ width: 1000, height: 500 }}
@@ -84,7 +89,7 @@ describe('SensorOverlay', () => {
 
   it('Includes all required components', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <SensorOverlay
           timeseriesIds={[timeseriesListV2[0].id]}
           size={{ width: 1000, height: 500 }}
@@ -106,7 +111,7 @@ describe('SensorOverlay', () => {
 
   it('Calls callbacks on mouse events', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <SensorOverlay
           timeseriesIds={[timeseriesListV2[0].id]}
           linksMap={{ [timeseriesListV2[0].id]: true }}
@@ -155,7 +160,7 @@ describe('SensorOverlay', () => {
 
   it('Tag and pointer should be draggable', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <SensorOverlay
           timeseriesIds={[timeseriesListV2[0].id]}
           linksMap={{ [timeseriesListV2[0].id]: true }}
@@ -215,7 +220,7 @@ describe('SensorOverlay', () => {
 
   it('Should render nothing if there is no space in container', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <SensorOverlay
           timeseriesIds={[timeseriesListV2[0].id]}
           size={{ width: 1000, height: 0 }}
@@ -235,7 +240,7 @@ describe('SensorOverlay', () => {
 
   it('Should render new sensors if they were added in props', done => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <SensorOverlay
           timeseriesIds={[timeseriesListV2[0].id]}
           size={{ width: 1000, height: 500 }}
@@ -269,7 +274,7 @@ describe('SensorOverlay', () => {
 
   it('Newly added sensor should have be shifted position and different color', done => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <SensorOverlay
           timeseriesIds={[timeseriesListV2[0].id]}
           size={{ width: 1000, height: 500 }}
@@ -311,7 +316,7 @@ describe('SensorOverlay', () => {
 
   it('if first sensor has been dragged the next added one should appear in first default slot', done => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <SensorOverlay
           timeseriesIds={[timeseriesListV2[0].id]}
           size={{ width: 1000, height: 500 }}
@@ -376,7 +381,7 @@ describe('SensorOverlay', () => {
 
   it('Sensor should change default color if a new color has been given in colorMap', done => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <SensorOverlay
           timeseriesIds={[timeseriesListV2[0].id]}
           size={{ width: 1000, height: 500 }}

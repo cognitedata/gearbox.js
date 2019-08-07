@@ -5,25 +5,33 @@ import {
   GetStringDatapoint,
 } from '@cognite/sdk/dist/src/types/types';
 import { datapointsList, timeseriesListV2 } from '../../mocks';
+import { buildMockSdk } from '../../utils/mockSdk';
 import { AccessorFunc, DataLoader } from './dataLoader';
 
-const mockedClient: CogniteClient = {
+const mockTimeseriesRetrieve = jest.fn();
+const mockDatapointsRetrieve = jest.fn();
+
+const fakeClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
-    retrieve: jest.fn(),
+    retrieve: mockTimeseriesRetrieve,
   },
   // @ts-ignore
   datapoints: {
-    retrieve: jest.fn(),
+    retrieve: mockDatapointsRetrieve,
   },
 };
+
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 const toPoints = (arr: number[], from: string): GetAggregateDatapoint[] =>
   arr.map((d: number) => ({ timestamp: new Date(d), value: from }));
 
 const xAccessor: AccessorFunc = (d: GetAggregateDatapoint) => +d.timestamp;
 
-const dataLoader = new DataLoader(mockedClient);
+const dataLoader = new DataLoader(sdk);
 
 // tslint:disable:no-big-function
 describe('dataLoader', () => {
@@ -87,9 +95,9 @@ describe('dataLoader', () => {
   describe('cogniteloader', () => {
     beforeEach(() => {
       // @ts-ignore
-      mockedClient.timeseries.retrieve.mockResolvedValue([timeseriesListV2[0]]);
+      mockTimeseriesRetrieve.mockResolvedValue([timeseriesListV2[0]]);
       // @ts-ignore
-      mockedClient.datapoints.retrieve.mockResolvedValue([datapointsList]);
+      mockDatapointsRetrieve.mockResolvedValue([datapointsList]);
     });
 
     afterEach(() => {
@@ -120,8 +128,8 @@ describe('dataLoader', () => {
             oldSeries: {},
             reason: 'MOUNTED',
           });
-          expect(mockedClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
-          expect(mockedClient.datapoints.retrieve).toHaveBeenCalledWith({
+          expect(fakeClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
+          expect(fakeClient.datapoints.retrieve).toHaveBeenCalledWith({
             items: [
               expect.objectContaining({
                 granularity: expectedGranularity,
@@ -145,9 +153,7 @@ describe('dataLoader', () => {
           },
         ];
         // @ts-ignore
-        mockedClient.datapoints.retrieve.mockResolvedValue([
-          { name: 'abc', datapoints },
-        ]);
+        mockDatapointsRetrieve.mockResolvedValue([{ name: 'abc', datapoints }]);
 
         const startTime = Date.now() - 24 * 60 * 60 * 1000;
         const result = await dataLoader.cogniteloader({
@@ -201,8 +207,8 @@ describe('dataLoader', () => {
             oldSeries: {},
             reason: 'INTERVAL',
           });
-          expect(mockedClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
-          expect(mockedClient.datapoints.retrieve).toHaveBeenCalledWith({
+          expect(fakeClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
+          expect(fakeClient.datapoints.retrieve).toHaveBeenCalledWith({
             items: [
               expect.objectContaining({ granularity: expectedGranularity }),
             ],
@@ -275,7 +281,7 @@ describe('dataLoader', () => {
           reason: 'UPDATE_SUBDOMAIN',
         });
 
-        expect(mockedClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
+        expect(fakeClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
         expect(result.drawPoints).toBeFalsy();
         expect(result.data).toEqual(datapointsList.datapoints);
         expect(DataLoader.mergeInsert).toHaveBeenCalledTimes(1);

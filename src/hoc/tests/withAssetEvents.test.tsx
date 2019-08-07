@@ -5,6 +5,7 @@ import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { SDK_LIST_LIMIT } from '../../constants/sdk';
 import { fakeEvents } from '../../mocks';
+import { buildMockSdk } from '../../utils/mockSdk';
 import { withAssetEvents, WithAssetEventsDataProps } from '../withAssetEvents';
 
 configure({ adapter: new Adapter() });
@@ -15,6 +16,10 @@ const fakeClient: CogniteClient = {
     list: jest.fn(),
   },
 };
+
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('withAssetEvents', () => {
   beforeEach(() => {
@@ -33,7 +38,7 @@ describe('withAssetEvents', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withAssetEvents(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -47,7 +52,7 @@ describe('withAssetEvents', () => {
     const WrappedComponent = withAssetEvents(TestComponent);
     const loadHandler = jest.fn();
     mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} onAssetEventsLoaded={loadHandler} />
       </ClientSDKProvider>
     );
@@ -62,7 +67,7 @@ describe('withAssetEvents', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withAssetEvents(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent
           assetId={123}
           customSpinner={<div className="my-custom-spinner" />}
@@ -83,7 +88,7 @@ describe('withAssetEvents', () => {
     );
     const WrappedComponent = withAssetEvents(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -104,7 +109,7 @@ describe('withAssetEvents', () => {
     const TestComponent = () => <div />;
     const WrappedComponent = withAssetEvents(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -122,7 +127,7 @@ describe('withAssetEvents', () => {
     const WrappedComponent = withAssetEvents(TestComponent);
     WrappedComponent.prototype.setState = jest.fn();
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -138,7 +143,7 @@ describe('withAssetEvents', () => {
   it('Should merge query params with assetId', () => {
     const WrappedComponent = withAssetEvents(() => <div />);
     mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent
           assetId={123}
           queryParams={{ limit: 78, filter: { startTime: { min: 1, max: 2 } } }}
@@ -158,7 +163,7 @@ describe('withAssetEvents', () => {
   it('Should call sdkClient.events.list with default limit', () => {
     const WrappedComponent = withAssetEvents(() => <div />);
     mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );

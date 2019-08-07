@@ -4,23 +4,28 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { timeseriesListV2 } from '../../mocks';
+import { buildMockSdk } from '../../utils/mockSdk';
 import { withTimeseries, WithTimeseriesDataProps } from '../withTimeseries';
 
 configure({ adapter: new Adapter() });
 
 const timeseries = timeseriesListV2[0];
 
-const mockedClient: CogniteClient = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
     retrieve: jest.fn(),
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 describe('withTimeresries', () => {
   beforeEach(() => {
     // @ts-ignore
-    mockedClient.timeseries.retrieve.mockResolvedValue([timeseries]);
+    fakeClient.timeseries.retrieve.mockResolvedValue([timeseries]);
   });
 
   afterEach(() => {
@@ -32,7 +37,7 @@ describe('withTimeresries', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withTimeseries(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent timeseriesId={123} />
       </ClientSDKProvider>
     );
@@ -44,7 +49,7 @@ describe('withTimeresries', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withTimeseries(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent
           timeseriesId={123}
           customSpinner={<div className="my-custom-spinner" />}
@@ -63,7 +68,7 @@ describe('withTimeresries', () => {
     );
     const WrappedComponent = withTimeseries(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent timeseriesId={123} />
       </ClientSDKProvider>
     );
@@ -82,7 +87,7 @@ describe('withTimeresries', () => {
     const TestComponent = () => <div />;
     const WrappedComponent = withTimeseries(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent timeseriesId={123} />
       </ClientSDKProvider>
     );
@@ -92,7 +97,7 @@ describe('withTimeresries', () => {
     });
 
     setImmediate(() => {
-      expect(mockedClient.timeseries.retrieve).toBeCalledTimes(2);
+      expect(fakeClient.timeseries.retrieve).toBeCalledTimes(2);
       done();
     });
   });
@@ -102,7 +107,7 @@ describe('withTimeresries', () => {
     const WrappedComponent = withTimeseries(TestComponent);
     WrappedComponent.prototype.setState = jest.fn();
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent timeseriesId={123} />
       </ClientSDKProvider>
     );

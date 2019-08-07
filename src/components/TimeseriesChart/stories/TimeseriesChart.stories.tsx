@@ -11,7 +11,9 @@ import {
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
+import { Annotation } from '../../../@types/griff-react/index';
 import { timeseriesListV2 } from '../../../mocks';
+import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DataLoader } from '../dataLoader';
 import { TimeseriesChart } from '../TimeseriesChart';
@@ -101,6 +103,10 @@ export const fakeClient: CogniteClient = {
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 const fakeZoomableClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
@@ -142,11 +148,15 @@ const fakeZoomableClient: CogniteClient = {
   },
 };
 
+buildMockSdk(fakeZoomableClient);
+
+const zoomableSdk = new CogniteClient({ appId: 'gearbox test' });
+
 storiesOf('TimeseriesChart', module).add(
   'Full description',
   () => {
     return (
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesChart timeseriesIds={[123]} />
       </ClientSDKProvider>
     );
@@ -164,7 +174,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'Empty',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart timeseriesIds={[]} />
         </ClientSDKProvider>
       );
@@ -180,7 +190,7 @@ storiesOf('TimeseriesChart/Examples', module)
     // tslint:disable-next-line: no-identical-functions
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart timeseriesIds={[123]} />
         </ClientSDKProvider>
       );
@@ -195,7 +205,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'Multiple',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart timeseriesIds={[123, 456]} />
         </ClientSDKProvider>
       );
@@ -210,7 +220,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'Hidden',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart
             timeseriesIds={[123, 456]}
             hiddenSeries={{ 123: true }}
@@ -228,7 +238,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'Height and width',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart timeseriesIds={[123]} height={300} width={800} />
         </ClientSDKProvider>
       );
@@ -243,7 +253,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'Custom container styles',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart
             timeseriesIds={[123]}
             styles={{
@@ -263,7 +273,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'Left y-axis',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart timeseriesIds={[123]} yAxisPlacement={'LEFT'} />
         </ClientSDKProvider>
       );
@@ -278,7 +288,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'No y-axis',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart timeseriesIds={[123]} yAxisDisplayMode={'NONE'} />
         </ClientSDKProvider>
       );
@@ -294,7 +304,7 @@ storiesOf('TimeseriesChart/Examples', module)
     // tslint:disable-next-line: no-identical-functions
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart
             timeseriesIds={[123]}
             yAxisDisplayMode={'COLLAPSED'}
@@ -312,7 +322,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'X-axis height',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart timeseriesIds={[123]} xAxisHeight={100} />
         </ClientSDKProvider>
       );
@@ -328,7 +338,7 @@ storiesOf('TimeseriesChart/Examples', module)
     // tslint:disable-next-line: no-identical-functions
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart timeseriesIds={[123]} xAxisHeight={0} />
         </ClientSDKProvider>
       );
@@ -343,7 +353,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'Start and end time',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart
             timeseriesIds={[123]}
             startTime={new Date(2019, 3, 1)}
@@ -362,7 +372,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'Crosshair',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart timeseriesIds={[123]} crosshair={true} />
         </ClientSDKProvider>
       );
@@ -377,7 +387,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'Context chart',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart timeseriesIds={[123]} contextChart={true} />
         </ClientSDKProvider>
       );
@@ -392,7 +402,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'Zoomable',
     () => {
       return (
-        <ClientSDKProvider client={fakeZoomableClient}>
+        <ClientSDKProvider client={zoomableSdk}>
           <TimeseriesChart
             timeseriesIds={[123]}
             startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
@@ -413,7 +423,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'Live update',
     () => {
       return (
-        <ClientSDKProvider client={fakeZoomableClient}>
+        <ClientSDKProvider client={zoomableSdk}>
           <TimeseriesChart
             timeseriesIds={[123]}
             startTime={Date.now() - 60 * 1000}
@@ -434,7 +444,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'Custom colors',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart
             timeseriesIds={[123, 456]}
             timeseriesColors={{ 123: 'red', 456: '#00ff00' }}
@@ -446,24 +456,26 @@ storiesOf('TimeseriesChart/Examples', module)
       readme: {
         content: customColors,
       },
-    } // TODO FIX
+    }
   )
   .add(
     'Annotations',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart
             timeseriesIds={[123]}
             startTime={Date.now() - 60 * 1000}
             endTime={Date.now()}
-            annotations={[
-              {
-                data: [Date.now() - 30 * 1000, Date.now() - 20 * 1000],
-                height: 30,
-                id: 888,
-              },
-            ]}
+            annotations={
+              [
+                {
+                  data: [Date.now() - 30 * 1000, Date.now() - 20 * 1000],
+                  height: 30,
+                  id: 888,
+                },
+              ] as Annotation[]
+            }
           />
         </ClientSDKProvider>
       );
@@ -478,7 +490,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'Ruler',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart
             timeseriesIds={[123]}
             startTime={Date.now() - 60 * 1000}
@@ -503,7 +515,7 @@ storiesOf('TimeseriesChart/Examples', module)
     'Mouse events',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart
             timeseriesIds={[123]}
             startTime={Date.now() - 60 * 1000}
@@ -543,7 +555,7 @@ storiesOf('TimeseriesChart/Examples', module)
         },
       ];
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesChart series={series} yAxisDisplayMode={'NONE'} />
         </ClientSDKProvider>
       );

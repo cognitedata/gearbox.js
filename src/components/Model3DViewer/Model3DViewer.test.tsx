@@ -1,9 +1,15 @@
+import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { fakeModel3DViewerClient } from '../../mocks';
+import { buildMockSdk } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { mockCreateViewer, Model3DViewer } from './Model3DViewer';
+
+buildMockSdk(fakeModel3DViewerClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 configure({ adapter: new Adapter() });
 
@@ -44,7 +50,7 @@ describe('Model3DViewer', () => {
     };
 
     const wrapper = mount(
-      <ClientSDKProvider client={fakeModel3DViewerClient}>
+      <ClientSDKProvider client={sdk}>
         <Model3DViewer {...props} />
       </ClientSDKProvider>
     );
@@ -63,7 +69,7 @@ describe('Model3DViewer', () => {
     };
 
     const wrapper = mount(
-      <ClientSDKProvider client={fakeModel3DViewerClient}>
+      <ClientSDKProvider client={sdk}>
         <Model3DViewer {...props} />
       </ClientSDKProvider>
     );

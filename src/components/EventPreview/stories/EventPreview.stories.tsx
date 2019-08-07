@@ -5,6 +5,7 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { fakeEvents } from '../../../mocks';
+import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { EventPreview, EventPreviewStyles } from '../EventPreview';
 import basic from './basic.md';
@@ -36,12 +37,16 @@ const fakeClient: CogniteClient = {
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 const onShowDetails = (e: CogniteEvent) => {
   action('onShowDetails')(e);
 };
 
 const clientSDKDecorator = (storyFn: any) => (
-  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
 storiesOf('EventPreview', module)

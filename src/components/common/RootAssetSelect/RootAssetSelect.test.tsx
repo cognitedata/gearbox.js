@@ -4,6 +4,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { assetsList } from '../../../mocks';
+import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider/ClientSDKProvider';
 import {
   defaultStrings,
@@ -17,16 +18,11 @@ const onAssetSelected = jest.fn();
 
 const mockAssetList = jest.fn().mockResolvedValue({ items: assetsList });
 
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return {
-      assets: {
-        list: mockAssetList,
-      },
-    };
-  }),
-}));
+buildMockSdk({
+  assets: {
+    list: mockAssetList,
+  },
+});
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

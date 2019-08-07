@@ -1,4 +1,4 @@
-import CogniteClient from '@cognite/sdk/dist/src/cogniteClient';
+import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -7,6 +7,7 @@ import {
   ASSET_TREE_STYLES,
   ASSET_ZERO_DEPTH_ARRAY,
 } from '../../mocks/assetsListV2';
+import { buildMockSdk } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { AssetTree } from './AssetTree';
 
@@ -14,18 +15,22 @@ const zeroChild = ASSET_ZERO_DEPTH_ARRAY.findIndex(
   asset => asset.rootId === asset.id
 );
 
-const mockedClient: CogniteClient = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   assets: {
     list: jest.fn(),
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 configure({ adapter: new Adapter() });
 
 beforeEach(() => {
   // @ts-ignore
-  mockedClient.assets.list.mockReturnValue({
+  fakeClient.assets.list.mockReturnValue({
     autoPagingToArray: async () => ASSET_ZERO_DEPTH_ARRAY,
   });
 });
@@ -37,7 +42,7 @@ afterEach(() => {
 describe('AssetTree', () => {
   it('renders correctly', done => {
     const tree = renderer.create(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetTree
           defaultExpandedKeys={[ASSET_ZERO_DEPTH_ARRAY[zeroChild].id]}
         />
@@ -52,7 +57,7 @@ describe('AssetTree', () => {
   it('Checks if onSelect returns node', done => {
     const jestTest = jest.fn();
     const AssetTreeModal = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetTree onSelect={jestTest} />
       </ClientSDKProvider>
     );
@@ -69,7 +74,7 @@ describe('AssetTree', () => {
   });
   it('rednders correctly with passed styles prop', done => {
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetTree styles={ASSET_TREE_STYLES} />
       </ClientSDKProvider>
     );

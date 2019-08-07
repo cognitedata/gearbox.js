@@ -5,6 +5,7 @@ import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { SDK_LIST_LIMIT } from '../../constants/sdk';
 import { timeseriesListV2 } from '../../mocks';
+import { buildMockSdk } from '../../utils/mockSdk';
 import {
   withAssetTimeseries,
   WithAssetTimeseriesDataProps,
@@ -12,17 +13,21 @@ import {
 
 configure({ adapter: new Adapter() });
 
-const mockedClient: CogniteClient = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
     list: jest.fn(),
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 describe('withAssetTimeseries', () => {
   beforeEach(() => {
     // @ts-ignore
-    mockedClient.timeseries.list.mockReturnValue({
+    fakeClient.timeseries.list.mockReturnValue({
       autoPagingToArray: async () => timeseriesListV2,
     });
   });
@@ -35,7 +40,7 @@ describe('withAssetTimeseries', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withAssetTimeseries(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -48,7 +53,7 @@ describe('withAssetTimeseries', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withAssetTimeseries(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent
           assetId={123}
           customSpinner={<div className="my-custom-spinner" />}
@@ -63,7 +68,7 @@ describe('withAssetTimeseries', () => {
     const WrappedComponent = withAssetTimeseries(TestComponent);
     const loadHandler = jest.fn();
     mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} onAssetTimeseriesLoaded={loadHandler} />
       </ClientSDKProvider>
     );
@@ -85,7 +90,7 @@ describe('withAssetTimeseries', () => {
     );
     const WrappedComponent = withAssetTimeseries(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -106,7 +111,7 @@ describe('withAssetTimeseries', () => {
     const TestComponent = () => <div />;
     const WrappedComponent = withAssetTimeseries(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -114,7 +119,7 @@ describe('withAssetTimeseries', () => {
     wrapper.setProps({ children: <WrappedComponent assetId={1234} /> });
 
     setImmediate(() => {
-      expect(mockedClient.timeseries.list).toBeCalledTimes(2);
+      expect(fakeClient.timeseries.list).toBeCalledTimes(2);
       done();
     });
   });
@@ -124,7 +129,7 @@ describe('withAssetTimeseries', () => {
     const WrappedComponent = withAssetTimeseries(TestComponent);
     WrappedComponent.prototype.setState = jest.fn();
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -140,7 +145,7 @@ describe('withAssetTimeseries', () => {
   it('Should merge query params with assetId', () => {
     const WrappedComponent = withAssetTimeseries(() => <div />);
     mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent
           assetId={123}
           queryParams={{ assetIds: [34234], limit: 78 }}
@@ -148,7 +153,7 @@ describe('withAssetTimeseries', () => {
       </ClientSDKProvider>
     );
 
-    expect(mockedClient.timeseries.list).toBeCalledWith({
+    expect(fakeClient.timeseries.list).toBeCalledWith({
       assetIds: [123],
       limit: 78,
     });
@@ -157,12 +162,12 @@ describe('withAssetTimeseries', () => {
   it('Should call sdk.TimeSeries.list with default limit', () => {
     const WrappedComponent = withAssetTimeseries(() => <div />);
     mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
 
-    expect(mockedClient.timeseries.list).toBeCalledWith({
+    expect(fakeClient.timeseries.list).toBeCalledWith({
       assetIds: [123],
       limit: SDK_LIST_LIMIT,
     });

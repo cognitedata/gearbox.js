@@ -6,6 +6,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ZoomCenter } from '../../../interfaces';
 import { SVG } from '../../../mocks/svg-viewer';
+import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { SVGViewer } from '../SVGViewer';
 import classesDescription from './classes.md';
@@ -48,11 +49,15 @@ const fakeClient: CogniteClient = {
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 const getTextFromMetadataNode = (node: Element) =>
   (node.textContent || '').replace(/\s/g, '');
 
 const clientSdkDecorator = (storyFn: any) => (
-  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
 storiesOf('SVGViewer', module)

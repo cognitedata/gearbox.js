@@ -9,6 +9,7 @@ import { storiesOf } from '@storybook/react';
 import { pick } from 'lodash';
 import React from 'react';
 import { assetsList } from '../../../mocks';
+import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetSearch, AssetSearchStyles } from '../AssetSearch';
 import advancedSearch from './advancedSearch.md';
@@ -79,6 +80,10 @@ export const fakeClient: CogniteClient = {
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 const onLiveSearchSelect = (asset: Asset) =>
   action('onLiveSearchSelect')(asset);
 const onError = (e: any) => action('onError')(e);
@@ -97,7 +102,7 @@ const errorStrings = {
 storiesOf('AssetSearch', module).add(
   'Full description',
   () => (
-    <ClientSDKProvider client={fakeClient}>
+    <ClientSDKProvider client={sdk}>
       <AssetSearch onLiveSearchSelect={onLiveSearchSelect} />
     </ClientSDKProvider>
   ),
@@ -112,7 +117,7 @@ storiesOf('AssetSearch/Examples', module)
   .add(
     'Basic',
     () => (
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetSearch
           onLiveSearchSelect={onLiveSearchSelect}
           strings={basicStrings}
@@ -128,7 +133,7 @@ storiesOf('AssetSearch/Examples', module)
   .add(
     'Empty results',
     () => (
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetSearch
           onLiveSearchSelect={onLiveSearchSelect}
           strings={emptyStrings}
@@ -144,7 +149,7 @@ storiesOf('AssetSearch/Examples', module)
   .add(
     'Error handling',
     () => (
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetSearch
           onError={onError}
           onLiveSearchSelect={onLiveSearchSelect}
@@ -162,7 +167,7 @@ storiesOf('AssetSearch/Examples', module)
   .add(
     'Root asset select',
     () => (
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetSearch
           onLiveSearchSelect={onLiveSearchSelect}
         rootAssetSelect={true} />
@@ -177,7 +182,7 @@ storiesOf('AssetSearch/Examples', module)
   .add(
     'Advanced search',
     () => (
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetSearch
           onLiveSearchSelect={onLiveSearchSelect}
           advancedSearch={true}
@@ -214,7 +219,7 @@ storiesOf('AssetSearch/Examples', module)
         },
       };
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <AssetSearch
             onLiveSearchSelect={onLiveSearchSelect}
             styles={styles}
@@ -246,7 +251,7 @@ storiesOf('AssetSearch/Examples', module)
           const { items } = this.state;
           return (
             <React.Fragment>
-              <ClientSDKProvider client={fakeClient}>
+              <ClientSDKProvider client={sdk}>
                 <AssetSearch
                   showLiveSearchResults={false}
                   onSearchResult={this.onSearchResult}

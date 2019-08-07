@@ -1,4 +1,5 @@
 import { OnProgressData } from '@cognite/3d-viewer';
+import { CogniteClient } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
@@ -9,12 +10,17 @@ import {
   fakeModel3DViewerClient,
   generateNumber,
 } from '../../../mocks';
+import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { mockCreateViewer, Model3DViewer } from '../Model3DViewer';
 import full from './full.md';
 import screenshot from './screenshot.md';
 import slice from './slice.md';
 import slider from './slider.md';
+
+buildMockSdk(fakeModel3DViewerClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 const modelID = 0;
 const revisionID = 0;
@@ -25,9 +31,7 @@ const Wrapper = styled.div`
 `;
 
 const clientSDKDecorator = (storyFn: any) => (
-  <ClientSDKProvider client={fakeModel3DViewerClient}>
-    {storyFn()}
-  </ClientSDKProvider>
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
 const onClick = (modelId: number, point: THREE.Vector3) =>

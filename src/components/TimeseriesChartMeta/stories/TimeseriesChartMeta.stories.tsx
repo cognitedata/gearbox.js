@@ -4,6 +4,7 @@ import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
+import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { fakeClient as timeseriesChartFakeClient } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { TimeseriesChartMeta } from '../TimeseriesChartMeta';
@@ -70,8 +71,12 @@ const fakeClient: CogniteClient = {
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 const clientSdkDecorator = (storyFn: any) => (
-  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
 storiesOf('TimeseriesChartMeta', module)
@@ -91,7 +96,7 @@ storiesOf('TimeseriesChartMeta', module)
 storiesOf('TimeseriesChartMeta/Examples', module)
   .addDecorator(story => (
     <div style={{ width: '100%' }}>
-      <ClientSDKProvider client={fakeClient}>{story()}</ClientSDKProvider>
+      <ClientSDKProvider client={sdk}>{story()}</ClientSDKProvider>
     </div>
   ))
   .add(
@@ -177,7 +182,6 @@ storiesOf('TimeseriesChartMeta/Examples', module)
   .add(
     'With Theme',
     () => {
-      setupMocks(); // todo fix
       const exampleTheme = {
         gearbox: {
           textColor: 'Red',

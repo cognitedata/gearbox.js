@@ -3,6 +3,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { timeseriesListV2 } from '../../../mocks';
+import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DraggableBox, Link, Tag } from './DraggableBox';
 
@@ -18,6 +19,10 @@ const fakeClient: CogniteClient = {
     retrieveLatest: jest.fn(),
   },
 };
+
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 const propsCallbacks = {
   onClick: jest.fn(),
@@ -60,7 +65,7 @@ afterEach(() => {
 describe('SensorOverlay - DraggableBox', () => {
   it('Renders without exploding', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <div
           style={{
             position: 'relative',
@@ -92,7 +97,7 @@ describe('SensorOverlay - DraggableBox', () => {
 
   it('Should call callbacks on mouse events', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <div
           style={{
             position: 'relative',
@@ -144,7 +149,7 @@ describe('SensorOverlay - DraggableBox', () => {
 
   it('Should show/hide tooltips on mouse over/leave', done => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <div
           style={{
             position: 'relative',
@@ -188,7 +193,7 @@ describe('SensorOverlay - DraggableBox', () => {
 
   it('Should render nothing while dragging', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <div
           style={{
             position: 'relative',
@@ -220,7 +225,7 @@ describe('SensorOverlay - DraggableBox', () => {
 
   it('Should render min-max alert', done => {
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <div
           style={{
             position: 'relative',

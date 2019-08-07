@@ -4,6 +4,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { fakeAsset } from '../../mocks';
+import { buildMockSdk } from '../../utils/mockSdk';
 import { withAsset, WithAssetDataProps } from '../withAsset';
 
 configure({ adapter: new Adapter() });
@@ -14,6 +15,10 @@ const fakeClient: CogniteClient = {
     retrieve: jest.fn(),
   },
 };
+
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('withAsset', () => {
   beforeEach(() => {
@@ -30,7 +35,7 @@ describe('withAsset', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withAsset(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -42,7 +47,7 @@ describe('withAsset', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withAsset(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent
           assetId={123}
           customSpinner={<div className="my-custom-spinner" />}
@@ -61,7 +66,7 @@ describe('withAsset', () => {
     );
     const WrappedComponent = withAsset(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -80,7 +85,7 @@ describe('withAsset', () => {
     const TestComponent = () => <div />;
     const WrappedComponent = withAsset(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -100,7 +105,7 @@ describe('withAsset', () => {
     const WrappedComponent = withAsset(TestComponent);
     WrappedComponent.prototype.setState = jest.fn();
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );

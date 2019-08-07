@@ -10,28 +10,31 @@ import { AssetDetailsPanelPure } from './AssetDetailsPanelPure';
 
 configure({ adapter: new Adapter() });
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
+const mockAssetList = jest.fn();
+
+mockAssetList({
   assets: {
-    retrieve: jest.fn(),
+    retrieve: mockAssetList,
   },
-};
+});
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('AssetDetailsPanel', () => {
   beforeEach(() => {
     // @ts-ignore
-    fakeClient.assets.retrieve.mockResolvedValue([fakeAsset]);
+    mockAssetList.mockResolvedValue([fakeAsset]);
   });
 
   afterEach(() => {
     // @ts-ignore
-    fakeClient.assets.retrieve.mockClear();
+    mockAssetList.mockClear();
   });
 
   it('Should render without exploding and load data', done => {
     const props: AssetDetailsPanelProps = { assetId: 123 };
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <AssetDetailsPanel {...props} />
       </ClientSDKProvider>
     );

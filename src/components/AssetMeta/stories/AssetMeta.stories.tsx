@@ -10,6 +10,7 @@ import {
   fakeEvents,
   timeseriesListV2,
 } from '../../../mocks';
+import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { fakeClient as timeseriesChartFakeClient } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { AssetMeta } from '../AssetMeta';
@@ -26,77 +27,82 @@ import hideTab from './hideTab.md';
 import selectedDocument from './selectedDocument.md';
 import selectedPane from './selectedPane.md';
 
-const fakeClient: CogniteClient = {
+const mockTimeseriesList = jest.fn().mockReturnValue({
+  autoPagingToArray: async () => {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    return timeseriesListV2;
+  },
+});
+
+const mockAssetsRetrieve = jest.fn().mockReturnValue(
+  new Promise(resolve => {
+    setTimeout(() => {
+      resolve([fakeAsset]);
+    }, 1000);
+  })
+);
+const mockEventsList = jest.fn().mockReturnValue({
+  autoPagingToArray: () => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(fakeEvents);
+      }, 1000);
+    });
+  },
+});
+const mockFilesList = jest.fn().mockReturnValue({
+  autoPagingToArray: () => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(DOCUMENTS);
+      }, 1000);
+    });
+  },
+});
+const mockDatapointsRetrieveLatest = jest.fn().mockReturnValue(
+  new Promise(resolve => {
+    setTimeout(() => {
+      resolve([
+        {
+          isString: false,
+          id: 123,
+          datapoints: [
+            {
+              timestamp: new Date(),
+              value: 15 + Math.random() * 5.0,
+            },
+          ],
+        },
+      ]);
+    }, 1000);
+  })
+);
+
+buildMockSdk({
   ...timeseriesChartFakeClient,
   timeseries: {
     ...timeseriesChartFakeClient.timeseries,
-    // @ts-ignore
-    list: () => {
-      return {
-        autoPagingToArray: async () => {
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          return timeseriesListV2;
-        },
-      };
-    },
-  },
-  // @ts-ignore
-  assets: {
-    retrieve: () =>
-      new Promise(resolve => {
-        setTimeout(() => {
-          resolve([fakeAsset]);
-        }, 1000);
-      }),
-  },
-  events: {
-    // @ts-ignore
-    list: () => ({
-      autoPagingToArray: () => {
-        return new Promise(resolve => {
-          setTimeout(() => {
-            resolve(fakeEvents);
-          }, 1000);
-        });
-      },
-    }),
-  },
-  files: {
-    // @ts-ignore
-    list: () => ({
-      autoPagingToArray: () => {
-        return new Promise(resolve => {
-          setTimeout(() => {
-            resolve(DOCUMENTS);
-          }, 1000);
-        });
-      },
-    }),
+    list: mockTimeseriesList,
   },
   datapoints: {
     ...timeseriesChartFakeClient.datapoints,
-    retrieveLatest: () =>
-      new Promise(resolve => {
-        setTimeout(() => {
-          resolve([
-            {
-              isString: false,
-              id: 123,
-              datapoints: [
-                {
-                  timestamp: new Date(),
-                  value: 15 + Math.random() * 5.0,
-                },
-              ],
-            },
-          ]);
-        }, 1000);
-      }),
+    retrieveLatest: mockDatapointsRetrieveLatest,
   },
-};
+  assets: {
+    retrieve: mockAssetsRetrieve,
+  },
+  events: {
+    list: mockEventsList,
+  },
+  files: {
+    list: mockFilesList,
+  },
+});
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 const clientSDKDecorator = (storyFn: any) => (
-  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
 const onPaneChange = (key: string) => action('onPaneChange')(key);

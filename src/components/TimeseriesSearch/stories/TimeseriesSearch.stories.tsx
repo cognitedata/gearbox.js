@@ -10,6 +10,7 @@ import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { timeseriesListV2 } from '../../../mocks';
 import { assetsList } from '../../../mocks';
+import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesSearch } from '../TimeseriesSearch';
 import allowStrings from './allowStrings.md';
@@ -34,7 +35,7 @@ const fakeClient: CogniteClient = {
     retrieve: (
       ids: TimeseriesIdEither[]
     ): Promise<GetTimeSeriesMetadataDTO[]> => {
-      const idsAsString = ids.map(x => x.id.toString()); //todo fix
+      const idsAsString = ids.map(x => x.id.toString()); // todo fix
       return new Promise(resolve => {
         setTimeout(() => {
           const result = timeseriesListV2.filter(
@@ -64,6 +65,10 @@ const fakeClient: CogniteClient = {
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 const injectTimeseriesNames = (content: string) => {
   return content.replace('${names}', timeseriesNames.join(', '));
 };
@@ -82,7 +87,7 @@ storiesOf('TimeseriesSearch', module).add(
   'Full Description',
   () => {
     return (
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesSearch
           onTimeserieSelectionChange={onTimeserieSelectionChange}
         />
@@ -102,7 +107,7 @@ storiesOf('TimeseriesSearch/Examples', module)
     // tslint:disable-next-line: no-identical-functions
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesSearch
             onTimeserieSelectionChange={onTimeserieSelectionChange}
           />
@@ -139,7 +144,7 @@ storiesOf('TimeseriesSearch/Examples', module)
     'Hide selected row',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesSearch
             onTimeserieSelectionChange={onTimeserieSelectionChange}
             hideSelected={true}
@@ -157,7 +162,7 @@ storiesOf('TimeseriesSearch/Examples', module)
     'Single selection',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesSearch
             onTimeserieSelectionChange={onTimeserieSelectionChange}
             single={true}
@@ -175,7 +180,7 @@ storiesOf('TimeseriesSearch/Examples', module)
     'Allow strings',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesSearch
             onTimeserieSelectionChange={onTimeserieSelectionChange}
             allowStrings={true}
@@ -193,7 +198,7 @@ storiesOf('TimeseriesSearch/Examples', module)
     'Preselected',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesSearch
             onTimeserieSelectionChange={onTimeserieSelectionChange}
             selectedTimeseries={[timeseriesIds[1], timeseriesIds[3]]}
@@ -211,7 +216,7 @@ storiesOf('TimeseriesSearch/Examples', module)
     'Custom filter rule',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesSearch
             onTimeserieSelectionChange={onTimeserieSelectionChange}
             filterRule={filterRule}
@@ -229,7 +234,7 @@ storiesOf('TimeseriesSearch/Examples', module)
     'Custom styles',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesSearch
             onTimeserieSelectionChange={onTimeserieSelectionChange}
             styles={{
@@ -254,7 +259,6 @@ storiesOf('TimeseriesSearch/Examples', module)
   .add(
     'With Theme',
     () => {
-      setupMocks(); //todo fix
       const ExampleTheme = {
         gearbox: {
           selectColor: 'red',
@@ -263,9 +267,11 @@ storiesOf('TimeseriesSearch/Examples', module)
       };
       return (
         <ThemeProvider theme={ExampleTheme}>
-          <TimeseriesSearch
-            onTimeserieSelectionChange={onTimeserieSelectionChange}
-          />
+          <ClientSDKProvider client={sdk}>
+            <TimeseriesSearch
+              onTimeserieSelectionChange={onTimeserieSelectionChange}
+            />
+          </ClientSDKProvider>
         </ThemeProvider>
       );
     },
@@ -279,10 +285,10 @@ storiesOf('TimeseriesSearch/Examples', module)
     'Custom strings',
     () => {
       return (
-        <ClientSDKProvider client={fakeClient}>
+        <ClientSDKProvider client={sdk}>
           <TimeseriesSearch
             onTimeserieSelectionChange={onTimeserieSelectionChange}
-            rootAssetSelect={true}
+            // rootAssetSelect={true}
             strings={{
               rootAssetSelectAll: 'No filter',
               searchPlaceholder: 'search for stuff!',

@@ -4,12 +4,13 @@ import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
 import React from 'react';
 import { datapointsList, sleep, timeseriesListV2 } from '../../mocks';
+import { buildMockSdk } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { TimeseriesChart } from './TimeseriesChart';
 
 configure({ adapter: new Adapter() });
 
-const mockedClient: CogniteClient = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   timeseries: {
     retrieve: jest.fn(),
@@ -20,6 +21,10 @@ const mockedClient: CogniteClient = {
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 // ignore debounce
 jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
   return f;
@@ -27,9 +32,9 @@ jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
 
 beforeEach(() => {
   // @ts-ignore
-  mockedClient.timeseries.retrieve.mockResolvedValue([timeseriesListV2[0]]);
+  fakeClient.timeseries.retrieve.mockResolvedValue([timeseriesListV2[0]]);
   // @ts-ignore
-  mockedClient.datapoints.retrieve.mockResolvedValue([datapointsList]);
+  fakeClient.datapoints.retrieve.mockResolvedValue([datapointsList]);
 });
 
 afterEach(() => {
@@ -44,16 +49,16 @@ describe('TimeseriesChart', () => {
       timeseriesIds: [id],
     };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesChart {...props} />
       </ClientSDKProvider>
     );
     await sleep(300);
     wrapper.update();
-    expect(mockedClient.timeseries.retrieve).toHaveBeenCalledTimes(1);
-    expect(mockedClient.timeseries.retrieve).toHaveBeenCalledWith([{ id }]);
-    expect(mockedClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
-    expect(mockedClient.datapoints.retrieve).toHaveBeenCalledWith({
+    expect(fakeClient.timeseries.retrieve).toHaveBeenCalledTimes(1);
+    expect(fakeClient.timeseries.retrieve).toHaveBeenCalledWith([{ id }]);
+    expect(fakeClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
+    expect(fakeClient.datapoints.retrieve).toHaveBeenCalledWith({
       items: [expect.objectContaining({ id })],
     });
   });
@@ -63,7 +68,7 @@ describe('TimeseriesChart', () => {
       timeseriesIds: [timeseriesListV2[0].id],
     };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesChart {...props} />
       </ClientSDKProvider>
     );
@@ -82,7 +87,7 @@ describe('TimeseriesChart', () => {
       ],
     };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesChart {...props} />
       </ClientSDKProvider>
     );
@@ -97,7 +102,7 @@ describe('TimeseriesChart', () => {
       contextChart: true,
     };
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesChart {...props} />
       </ClientSDKProvider>
     );

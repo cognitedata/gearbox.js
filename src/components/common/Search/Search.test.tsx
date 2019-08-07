@@ -4,6 +4,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { assetsList, SearchValue } from '../../../mocks';
+import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { defaultStrings, Search, SearchComponent } from './Search';
 import Mock = jest.Mock;
@@ -25,6 +26,10 @@ const fakeClient: CogniteClient = {
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 beforeEach(() => {
   // @ts-ignore
   fakeClient.assets.list.mockResolvedValue(assetsList);
@@ -38,7 +43,7 @@ afterEach(() => {
 
 const createWrapper = (props: any) => {
   return mount(
-    <ClientSDKProvider client={fakeClient}>
+    <ClientSDKProvider client={sdk}>
       <Search {...props} />
     </ClientSDKProvider>
   );

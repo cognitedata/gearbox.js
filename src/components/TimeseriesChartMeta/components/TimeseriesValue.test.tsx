@@ -3,6 +3,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { datapoints, timeseriesListV2 } from '../../../mocks';
+// import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesValue } from './TimeseriesValue';
 
@@ -11,16 +12,25 @@ configure({ adapter: new Adapter() });
 const timeseries = timeseriesListV2[0];
 const datapoint = datapoints[0];
 
-const mockedClient: CogniteClient = {
+const fakeClient: CogniteClient = {
   // @ts-ignore
   datapoints: {
     retrieveLatest: jest.fn(),
   },
 };
 
+jest.mock('@cognite/sdk', () => ({
+  __esModule: true,
+  CogniteClient: jest.fn().mockImplementation(() => {
+    return fakeClient;
+  }),
+}));
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 beforeEach(() => {
   // @ts-ignore
-  mockedClient.datapoints.retrieveLatest.mockResolvedValue([
+  fakeClient.datapoints.retrieveLatest.mockResolvedValue([
     { datapoints: [datapoint] },
   ]);
 });
@@ -32,7 +42,7 @@ afterEach(() => {
 describe('TimeseriesValue', () => {
   it('Should render without exploding', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesValue
           timeseriesId={timeseries.id}
           timeseriesDescription={timeseries.description}
@@ -47,7 +57,7 @@ describe('TimeseriesValue', () => {
 
   it('Should  request latest datapoint', () => {
     mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesValue
           timeseriesId={timeseries.id}
           timeseriesDescription={timeseries.description}
@@ -56,12 +66,12 @@ describe('TimeseriesValue', () => {
       </ClientSDKProvider>
     );
 
-    expect(mockedClient.datapoints.retrieveLatest).toBeCalled();
+    expect(fakeClient.datapoints.retrieveLatest).toBeCalled();
   });
 
   it('Should retrieve latest datapoint twice if timeseriesId has been changed ', () => {
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesValue
           timeseriesId={timeseries.id}
           timeseriesDescription={timeseries.description}
@@ -80,13 +90,13 @@ describe('TimeseriesValue', () => {
       ),
     });
 
-    expect(mockedClient.datapoints.retrieveLatest).toBeCalledTimes(2);
+    expect(fakeClient.datapoints.retrieveLatest).toBeCalledTimes(2);
   });
 
   it('Should clear interval after unmounting ', () => {
     jest.useFakeTimers();
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesValue
           timeseriesId={timeseries.id}
           timeseriesDescription={timeseries.description}
@@ -102,7 +112,7 @@ describe('TimeseriesValue', () => {
   it('Should clear interval after changing timeseriesId ', () => {
     jest.useFakeTimers();
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesValue
           timeseriesId={timeseries.id}
           timeseriesDescription={timeseries.description}
@@ -124,8 +134,9 @@ describe('TimeseriesValue', () => {
   it('Should not call setState on unmounted component', done => {
     TimeseriesValue.prototype.setState = jest.fn();
 
+    console.log(sdk.datapoints);
     const wrapper = mount(
-      <ClientSDKProvider client={mockedClient}>
+      <ClientSDKProvider client={sdk}>
         <TimeseriesValue
           timeseriesId={timeseries.id}
           timeseriesDescription={timeseries.description}

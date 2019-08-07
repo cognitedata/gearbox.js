@@ -16,6 +16,10 @@ const fakeClient: CogniteClient = {
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 describe('withAssetFiles', () => {
   beforeEach(() => {
     // @ts-ignore
@@ -33,7 +37,7 @@ describe('withAssetFiles', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withAssetFiles(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -46,7 +50,7 @@ describe('withAssetFiles', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withAssetFiles(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent
           assetId={123}
           customSpinner={<div className="my-custom-spinner" />}
@@ -61,7 +65,7 @@ describe('withAssetFiles', () => {
     const WrappedComponent = withAssetFiles(TestComponent);
     const loadHandler = jest.fn();
     mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} onAssetFilesLoaded={loadHandler} />
       </ClientSDKProvider>
     );
@@ -81,7 +85,7 @@ describe('withAssetFiles', () => {
     );
     const WrappedComponent = withAssetFiles(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -102,7 +106,7 @@ describe('withAssetFiles', () => {
     const TestComponent = () => <div />;
     const WrappedComponent = withAssetFiles(TestComponent);
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -122,7 +126,7 @@ describe('withAssetFiles', () => {
     const WrappedComponent = withAssetFiles(TestComponent);
     WrappedComponent.prototype.setState = jest.fn();
     const wrapper = mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />
       </ClientSDKProvider>
     );
@@ -138,7 +142,7 @@ describe('withAssetFiles', () => {
   it('Should merge query params with assetId', () => {
     const WrappedComponent = withAssetFiles(() => <div />);
     mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent
           assetId={123}
           queryParams={{
@@ -158,7 +162,7 @@ describe('withAssetFiles', () => {
   it('Should call sdkClient.files.list with default limit', () => {
     const WrappedComponent = withAssetFiles(() => <div />);
     mount(
-      <ClientSDKProvider client={fakeClient}>
+      <ClientSDKProvider client={sdk}>
         <WrappedComponent assetId={123} />\
       </ClientSDKProvider>
     );

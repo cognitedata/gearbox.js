@@ -3,6 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { fakeAsset } from '../../../mocks';
+import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
 import customSpinner from './customSpinner.md';
@@ -10,20 +11,24 @@ import customStyles from './customStyles.md';
 import fullDescription from './full.md';
 import loadCallback from './loadCallback.md';
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
+const mockAssetList = jest.fn().mockReturnValue(
+  new Promise(resolve => {
+    setTimeout(() => {
+      resolve([fakeAsset]);
+    }, 1000);
+  })
+);
+
+buildMockSdk({
   assets: {
-    retrieve: () =>
-      new Promise(resolve => {
-        setTimeout(() => {
-          resolve([fakeAsset]);
-        }, 1000);
-      }),
+    retrieve: mockAssetList,
   },
-};
+});
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 const ClientSDKDecorator = (storyFn: any) => (
-  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
 storiesOf('AssetDetailsPanel', module)

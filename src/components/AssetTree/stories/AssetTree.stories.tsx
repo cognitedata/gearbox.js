@@ -1,4 +1,4 @@
-import CogniteClient from '@cognite/sdk/dist/src/cogniteClient';
+import { CogniteClient } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
@@ -17,6 +17,7 @@ import customStyles from './customStyles.md';
 import defaultExpanded from './defaultExpanded.md';
 import fullDescription from './full.md';
 import withTheme from './withTheme.md';
+import { buildMockSdk } from '../../../utils/mockSdk';
 
 const ExampleTheme = {
   gearbox: {
@@ -52,8 +53,12 @@ export const fakeClient: CogniteClient = {
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 const clientSDKDecorator = (storyFn: any) => (
-  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
 storiesOf('AssetTree', module)

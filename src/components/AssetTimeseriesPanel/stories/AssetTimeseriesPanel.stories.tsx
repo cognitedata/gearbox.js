@@ -1,11 +1,12 @@
+import {CogniteClient} from '@cognite/sdk';
 import { CogniteAsyncIterator } from '@cognite/sdk/dist/src/autoPagination';
-import CogniteClient from '@cognite/sdk/dist/src/cogniteClient';
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { timeseriesListV2 } from '../../../mocks/';
 import { ASSET_META_SERIES_STYLES } from '../../../mocks/events';
+import { buildMockSdk } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { fakeClient as timeseriesChartFakeClient } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { AssetTimeseriesPanel } from '../AssetTimeseriesPanel';
@@ -33,8 +34,12 @@ const fakeClient: CogniteClient = {
   },
 };
 
+buildMockSdk(fakeClient);
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 const clientSdkDecorator = (storyFn: any) => (
-  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
 storiesOf('AssetTimeseriesPanel', module)
