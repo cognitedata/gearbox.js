@@ -53,7 +53,7 @@ interface TenantSelectorState {
 export class TenantSelector extends React.Component<
   TenantSelectorProps,
   TenantSelectorState
-  > {
+> {
   static defaultProps = {
     advancedOptions: {},
   };
@@ -138,10 +138,10 @@ export class TenantSelector extends React.Component<
         {header && typeof header !== 'string' ? (
           header
         ) : (
-            <SubTitle style={styles && styles.subTitle}>
-              {header || 'Enter your company name'}
-            </SubTitle>
-          )}
+          <SubTitle style={styles && styles.subTitle}>
+            {header || 'Enter your company name'}
+          </SubTitle>
+        )}
         <Form>
           <Form.Item hasFeedback={true} {...formItemProps}>
             <Input
@@ -341,7 +341,7 @@ const LoginButton = styled((props: NativeButtonProps) => <Button {...props} />)`
   &:disabled:hover {
     border-color: ${({ theme }) => theme.gearbox.buttonBorderColor} !important;
     background-color: ${({ theme }) =>
-    theme.gearbox.buttonDisabledColor} !important;
+      theme.gearbox.buttonDisabledColor} !important;
     color: ${({ theme }) => theme.gearbox.textColorDisabled};
   }
 `;
