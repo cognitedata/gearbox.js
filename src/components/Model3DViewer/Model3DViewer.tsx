@@ -295,6 +295,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     }
   };
 
+  // Return a slicing plane for a specified axis
   sliceByAxis = (sliceDetail: SlicingDetail, axisNumber: number) => {
     const vector = [0, 0, 0];
     vector[axisNumber] = sliceDetail.direction ? 1 : -1;
@@ -304,6 +305,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     );
   };
 
+  // Slice the model based on the slicing properties passed in
   slice = (sliceProps: SlicingProps) => {
     if (this.viewer) {
       const planes = this.planes;
@@ -324,6 +326,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     }
   };
 
+  // Update the slicing planes as user drag the sliders
   onChange = (val: number, axisNumber: number) => {
     this.planes[axisNumber].set(
       this.planes[axisNumber].normal,
@@ -334,6 +337,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     }
   };
 
+  // Reverse the direction of the slicing axis
   flipSlider = (axisNumber: number) => {
     this.planes[axisNumber].negate();
     this.flipped[axisNumber] = !this.flipped[axisNumber];
@@ -342,6 +346,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     }
   };
 
+  // Render a single slider
   renderSlider = (range: SliderRange | undefined, axisNumber: number) => {
     if (!range) {
       return null;
@@ -373,6 +378,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     );
   };
 
+  // Render all sliders
   renderSliders = () => {
     if (!this.props.slider) {
       return null;
