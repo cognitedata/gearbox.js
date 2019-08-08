@@ -43,6 +43,7 @@ export class RootAssetSelectComponent extends React.Component<
     strings: {},
     theme: { ...defaultTheme },
   };
+  context!: React.ContextType<typeof ClientSDKContext>;
 
   constructor(props: RootAssetSelectProps) {
     super(props);
@@ -57,7 +58,6 @@ export class RootAssetSelectComponent extends React.Component<
 
   async componentDidMount() {
     const assets = await this.getRootAssetList();
-
     this.setState({ assets });
   }
 
@@ -72,7 +72,7 @@ export class RootAssetSelectComponent extends React.Component<
   };
 
   getRootAssetList = async (): Promise<Asset[]> => {
-    const apiAssets = await this.context.assets.list({
+    const apiAssets = await this.context!.assets.list({
       filter: { root: true },
     });
 

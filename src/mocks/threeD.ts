@@ -3,6 +3,7 @@ import { CogniteClient } from '@cognite/sdk';
 import { Revision3D } from '@cognite/sdk/dist/src/types/types';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { CacheObject, Callback, EventHandlers } from '../interfaces';
+import { MockCogniteClient } from '../utils/mockSdk';
 import {
   addEvent,
   removeEvent,
@@ -73,12 +74,11 @@ export function createFakeViewer({
   return cache[project];
 }
 
-export const fakeModel3DViewerClient: CogniteClient = {
-  // @ts-ignore
-  revisions3D: {
+export class Mock3DCogniteClient extends MockCogniteClient {
+  revisions3D: any = {
     retrieve: (): Promise<Revision3D> => Promise.resolve(revision3D),
-  },
-};
+  };
+}
 
 const revision3D: Revision3D = {
   id: 1000,

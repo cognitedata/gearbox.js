@@ -1,21 +1,11 @@
-import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { fakeModel3DViewerClient } from '../../mocks';
-
+import { Mock3DCogniteClient } from '../../mocks/threeD';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { mockCreateViewer, Model3DViewer } from './Model3DViewer';
 
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeModel3DViewerClient;
-  }),
-}));
-
-const sdk = new CogniteClient({ appId: 'gearbox test' });
+const sdk = new Mock3DCogniteClient({ appId: 'gearbox test' });
 
 configure({ adapter: new Adapter() });
 

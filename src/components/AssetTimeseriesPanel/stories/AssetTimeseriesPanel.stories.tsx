@@ -1,4 +1,3 @@
-import {CogniteClient} from '@cognite/sdk';
 import { CogniteAsyncIterator } from '@cognite/sdk/dist/src/autoPagination';
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
@@ -6,9 +5,12 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { timeseriesListV2 } from '../../../mocks/';
 import { ASSET_META_SERIES_STYLES } from '../../../mocks/events';
-
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { fakeClient as timeseriesChartFakeClient } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
+import { MockDatapointsClientObject } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
+import {
+  MockTimeseriesClientObject,
+  TimeseriesMockClient,
+} from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { AssetTimeseriesPanel } from '../AssetTimeseriesPanel';
 import customSpinner from './customSpinner.md';
 import customStyles from './customStyles.md';
@@ -16,13 +18,10 @@ import customTimeseriesChartMeta from './customTimeseriesChartMeta.md';
 import fullDescription from './full.md';
 import loadCallback from './loadCallback.md';
 
-const fakeClient: CogniteClient = {
-  ...timeseriesChartFakeClient,
-  timeseries: {
-    ...timeseriesChartFakeClient.timeseries,
-    // @ts-ignore
+class CogniteClient extends TimeseriesMockClient {
+  timeseries: any = {
+    ...MockTimeseriesClientObject,
     list: (): CogniteAsyncIterator<GetTimeSeriesMetadataDTO[]> => {
-      // @ts-ignore
       return {
         // @ts-ignore TODO - remove this ts-ignore after fixing SDK
         autoPagingToArray: async () => {
@@ -31,15 +30,28 @@ const fakeClient: CogniteClient = {
         },
       };
     },
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+  datapoints: any = {
+    ...MockDatapointsClientObject,
+    retrieveLatest: () =>
+      new Promise(resolve => {
+        setTimeout(() => {
+          resolve([
+            {
+              isString: false,
+              id: 123,
+              datapoints: [
+                {
+                  timestamp: new Date(Date.now()),
+                  value: 15 + Math.random() * 5.0,
+                },
+              ],
+            },
+          ]);
+        }, 1000);
+      }),
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

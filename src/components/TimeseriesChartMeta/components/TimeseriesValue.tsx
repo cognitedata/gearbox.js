@@ -84,8 +84,7 @@ class TimeseriesValue
     try {
       const datapoints = await connectPromiseToUnmountState(
         this,
-        // @ts-ignore
-        this.context.datapoints.retrieveLatest([
+        this.context!.datapoints.retrieveLatest([
           { id: this.props.timeseriesId, before: 'now' },
         ])
       );

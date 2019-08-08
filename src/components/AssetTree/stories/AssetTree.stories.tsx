@@ -1,4 +1,3 @@
-import { CogniteClient } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
@@ -9,6 +8,7 @@ import {
   ASSET_TREE_STYLES,
   ASSET_ZERO_DEPTH_ARRAY,
 } from '../../../mocks/assetsListV2';
+import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetTree } from '../AssetTree';
 import basic from './basic.md';
@@ -17,7 +17,6 @@ import customStyles from './customStyles.md';
 import defaultExpanded from './defaultExpanded.md';
 import fullDescription from './full.md';
 import withTheme from './withTheme.md';
-
 
 const ExampleTheme = {
   gearbox: {
@@ -32,9 +31,8 @@ const zeroChild = ASSET_ZERO_DEPTH_ARRAY.findIndex(
   asset => asset.rootId === asset.id
 );
 
-export const fakeClient: CogniteClient = {
-  // @ts-ignore
-  assets: {
+class CogniteClient extends MockCogniteClient {
+  assets: any = {
     // @ts-ignore
     list: scope => ({
       autoPagingToArray: () => {
@@ -50,15 +48,8 @@ export const fakeClient: CogniteClient = {
         });
       },
     }),
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

@@ -1,4 +1,3 @@
-import CogniteClient from '@cognite/sdk/dist/src/cogniteClient';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
@@ -10,9 +9,12 @@ import {
   fakeEvents,
   timeseriesListV2,
 } from '../../../mocks';
-
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { fakeClient as timeseriesChartFakeClient } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
+import {
+  MockDatapointsClientObject,
+  MockTimeseriesClientObject,
+  TimeseriesMockClient,
+} from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { AssetMeta } from '../AssetMeta';
 import alternatePane from './alternatePane.md';
 import basic from './basic.md';
@@ -27,77 +29,67 @@ import hideTab from './hideTab.md';
 import selectedDocument from './selectedDocument.md';
 import selectedPane from './selectedPane.md';
 
-const mockTimeseriesList = jest.fn().mockReturnValue({
-  autoPagingToArray: async () => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    return timeseriesListV2;
-  },
-});
-
-const mockAssetsRetrieve = jest.fn().mockReturnValue(
-  new Promise(resolve => {
-    setTimeout(() => {
-      resolve([fakeAsset]);
-    }, 1000);
-  })
-);
-const mockEventsList = jest.fn().mockReturnValue({
-  autoPagingToArray: () => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(fakeEvents);
-      }, 1000);
-    });
-  },
-});
-const mockFilesList = jest.fn().mockReturnValue({
-  autoPagingToArray: () => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(DOCUMENTS);
-      }, 1000);
-    });
-  },
-});
-const mockDatapointsRetrieveLatest = jest.fn().mockReturnValue(
-  new Promise(resolve => {
-    setTimeout(() => {
-      resolve([
-        {
-          isString: false,
-          id: 123,
-          datapoints: [
+class CogniteClient extends TimeseriesMockClient {
+  timeseries: any = {
+    ...MockTimeseriesClientObject,
+    list: () => ({
+      autoPagingToArray: async () => {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return timeseriesListV2;
+      },
+    }),
+  };
+  datapoint = {
+    ...MockDatapointsClientObject,
+    retrieveLatest: () =>
+      new Promise(resolve => {
+        setTimeout(() => {
+          resolve([
             {
-              timestamp: new Date(),
-              value: 15 + Math.random() * 5.0,
+              isString: false,
+              id: 123,
+              datapoints: [
+                {
+                  timestamp: new Date(),
+                  value: 15 + Math.random() * 5.0,
+                },
+              ],
             },
-          ],
-        },
-      ]);
-    }, 1000);
-  })
-);
-
-buildMockSdk({
-  ...timeseriesChartFakeClient,
-  timeseries: {
-    ...timeseriesChartFakeClient.timeseries,
-    list: mockTimeseriesList,
-  },
-  datapoints: {
-    ...timeseriesChartFakeClient.datapoints,
-    retrieveLatest: mockDatapointsRetrieveLatest,
-  },
-  assets: {
-    retrieve: mockAssetsRetrieve,
-  },
-  events: {
-    list: mockEventsList,
-  },
-  files: {
-    list: mockFilesList,
-  },
-});
+          ]);
+        }, 1000);
+      }),
+  };
+  assets: any = {
+    retrieve: () =>
+      new Promise(resolve => {
+        setTimeout(() => {
+          resolve([fakeAsset]);
+        }, 1000);
+      }),
+  };
+  events: any = {
+    list: () => ({
+      autoPagingToArray: () => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(fakeEvents);
+          }, 1000);
+        });
+      },
+    }),
+  };
+  files: any = {
+    list: () => ({
+      autoPagingToArray: () => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(DOCUMENTS);
+          }, 1000);
+        });
+      },
+    }),
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

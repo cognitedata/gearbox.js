@@ -1,12 +1,14 @@
 /* eslint-disable react/no-multi-comp */
-import { CogniteClient } from '@cognite/sdk';
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { fakeClient as timeseriesChartFakeClient } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
+import {
+  MockDatapointsClientObject,
+  TimeseriesMockClient,
+} from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { TimeseriesChartMeta } from '../TimeseriesChartMeta';
 import customBasePeriod from './customBasePeriod.md';
 import customInterval from './customInterval.md';
@@ -16,10 +18,8 @@ import hideElements from './hideElements.md';
 import predefinedPeriod from './predefinedPeriod.md';
 import withTheme from './withTheme.md';
 
-const fakeClient: CogniteClient = {
-  ...timeseriesChartFakeClient,
-  // @ts-ignore
-  timeseries: {
+class CogniteClient extends TimeseriesMockClient {
+  timeseries: any = {
     retrieve: (): Promise<GetTimeSeriesMetadataDTO[]> => {
       return new Promise(resolve => {
         setTimeout(
@@ -48,9 +48,9 @@ const fakeClient: CogniteClient = {
         );
       });
     },
-  },
-  datapoints: {
-    ...timeseriesChartFakeClient.datapoints,
+  };
+  datapoints: any = {
+    ...MockDatapointsClientObject,
     retrieveLatest: () =>
       new Promise(resolve => {
         setTimeout(() => {
@@ -68,15 +68,8 @@ const fakeClient: CogniteClient = {
           ]);
         }, 1000);
       }),
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

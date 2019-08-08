@@ -4,7 +4,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { datapointsList, timeseriesListV2 } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
-import { mockCreateViewer } from '../Model3DViewer/Model3DViewer';
 import { TimeseriesChartMetaPure } from './TimeseriesChartMetaPure';
 
 configure({ adapter: new Adapter() });
@@ -32,7 +31,6 @@ jest.mock('@cognite/sdk', () => ({
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
-mockCreateViewer(fakeClient);
 
 describe('TimeseriesChartMeta', () => {
   beforeEach(() => {
@@ -60,7 +58,7 @@ describe('TimeseriesChartMeta', () => {
     );
     expect(wrapper.find('RadioGroup')).toHaveLength(1);
     expect(wrapper.find('TimeseriesChart')).toHaveLength(1);
-    expect(wrapper.find('TimeseriesValue')).toHaveLength(1);
+    expect(wrapper.find('TimeseriesValue')).toHaveLength(2);
     expect(wrapper.find('[metaInfo]')).toHaveLength(1);
   });
 

@@ -1,11 +1,10 @@
-import { CogniteClient } from '@cognite/sdk';
 import { CogniteEvent, IdEither } from '@cognite/sdk/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { fakeEvents } from '../../../mocks';
-
+import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { EventPreview, EventPreviewStyles } from '../EventPreview';
 import basic from './basic.md';
@@ -21,9 +20,8 @@ import missingProperties from './missingProperties.md';
 import withCustomText from './withCustomText.md';
 import withTheme from './withTheme.md';
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  events: {
+class CogniteClient extends MockCogniteClient {
+  events:any = {
     retrieve: (ids: IdEither[]): Promise<CogniteEvent[]> => {
       return new Promise(resolve => {
         setTimeout(() => {
@@ -34,15 +32,8 @@ const fakeClient: CogniteClient = {
         }, 1000); // simulate load delay
       });
     },
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

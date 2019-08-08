@@ -1,5 +1,4 @@
 import { OnProgressData } from '@cognite/3d-viewer';
-import { CogniteClient } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
@@ -7,10 +6,9 @@ import styled from 'styled-components';
 import * as THREE from 'three';
 import {
   createFakeViewer,
-  fakeModel3DViewerClient,
   generateNumber,
+  Mock3DCogniteClient,
 } from '../../../mocks';
-
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { mockCreateViewer, Model3DViewer } from '../Model3DViewer';
 import full from './full.md';
@@ -18,9 +16,7 @@ import screenshot from './screenshot.md';
 import slice from './slice.md';
 import slider from './slider.md';
 
-buildMockSdk(fakeModel3DViewerClient);
-
-const sdk = new CogniteClient({ appId: 'gearbox test' });
+const sdk = new Mock3DCogniteClient({ appId: 'gearbox test' });
 
 const modelID = 0;
 const revisionID = 0;
@@ -78,6 +74,7 @@ storiesOf('Model3DViewer', module)
   );
 
 storiesOf('Model3DViewer/Examples', module)
+  .addDecorator(clientSDKDecorator)
   .add(
     'Take Screenshots',
     () => {

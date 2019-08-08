@@ -1,6 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import { AxisDisplayMode } from '@cognite/griff-react';
-import { CogniteClient } from '@cognite/sdk';
+import { Annotation, AxisDisplayMode } from '@cognite/griff-react';
 import {
   DatapointsGetAggregateDatapoint,
   DatapointsGetDoubleDatapoint,
@@ -11,9 +10,8 @@ import {
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { Annotation } from '../../../@types/griff-react/index';
 import { timeseriesListV2 } from '../../../mocks';
-
+import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DataLoader } from '../dataLoader';
 import { TimeseriesChart } from '../TimeseriesChart';
@@ -67,54 +65,48 @@ const randomData = (
   return { datapoints: data, id: 1337 };
 };
 
-export const fakeClient: CogniteClient = {
-  // @ts-ignore
-  timeseries: {
-    retrieve: (): Promise<GetTimeSeriesMetadataDTO[]> => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve([timeseriesListV2[0]]);
-        }, 1000); // simulate load delay
-      });
-    },
+export const MockTimeseriesClientObject = {
+  retrieve: (): Promise<GetTimeSeriesMetadataDTO[]> => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve([timeseriesListV2[0]]);
+      }, 1000); // simulate load delay
+    });
   },
-  // @ts-ignore
-  datapoints: {
-    retrieve: (
-      query: DatapointsMultiQuery
-    ): Promise<
-      (
-        | DatapointsGetAggregateDatapoint
-        | DatapointsGetStringDatapoint
-        | DatapointsGetDoubleDatapoint)[]
-    > => {
-      action('client.datapoints.retrieve')(query);
-      return new Promise(resolve => {
-        setTimeout(() => {
-          const result = randomData(
-            (query.items[0].start && +query.items[0].start) || 0,
-            (query.items[0].end && +query.items[0].end) || 0,
-            100
-          );
-          resolve([result]);
-        });
+};
+export const MockDatapointsClientObject = {
+  retrieve: (
+    query: DatapointsMultiQuery
+  ): Promise<
+    (
+      | DatapointsGetAggregateDatapoint
+      | DatapointsGetStringDatapoint
+      | DatapointsGetDoubleDatapoint)[]
+  > => {
+    action('client.datapoints.retrieve')(query);
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const result = randomData(
+          (query.items[0].start && +query.items[0].start) || 0,
+          (query.items[0].end && +query.items[0].end) || 0,
+          100
+        );
+        resolve([result]);
       });
-    },
+    });
   },
 };
 
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+export class TimeseriesMockClient extends MockCogniteClient {
+  timeseries: any = MockTimeseriesClientObject;
+  datapoints: any = MockDatapointsClientObject;
+}
 
-const sdk = new CogniteClient({ appId: 'gearbox test' });
+const sdk = new TimeseriesMockClient({ appId: 'gearbox test' });
 
-const fakeZoomableClient: CogniteClient = {
-  // @ts-ignore
-  timeseries: {
+// tslint:disable-next-line: max-classes-per-file
+class FakeZoomableClient extends MockCogniteClient {
+  timeseries: any = {
     // tslint:disable-next-line: no-identical-functions
     retrieve: (): Promise<GetTimeSeriesMetadataDTO[]> => {
       // tslint:disable-next-line: no-identical-functions
@@ -124,9 +116,8 @@ const fakeZoomableClient: CogniteClient = {
         }, 1000); // simulate load delay
       });
     },
-  },
-  // @ts-ignore
-  datapoints: {
+  };
+  datapoints: any = {
     retrieve: (
       query: DatapointsMultiQuery
     ): Promise<
@@ -150,12 +141,10 @@ const fakeZoomableClient: CogniteClient = {
         });
       });
     },
-  },
-};
+  };
+}
 
-buildMockSdk(fakeZoomableClient);
-
-const zoomableSdk = new CogniteClient({ appId: 'gearbox test' });
+const zoomableSdk = new FakeZoomableClient({ appId: 'gearbox test' });
 
 storiesOf('TimeseriesChart', module).add(
   'Full description',

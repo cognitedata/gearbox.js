@@ -1,4 +1,3 @@
-import { CogniteClient } from '@cognite/sdk';
 import { FileLink, IdEither } from '@cognite/sdk/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
@@ -7,6 +6,7 @@ import styled from 'styled-components';
 import { ZoomCenter } from '../../../interfaces';
 import { SVG } from '../../../mocks/svg-viewer';
 
+import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { SVGViewer } from '../SVGViewer';
 import classesDescription from './classes.md';
@@ -32,9 +32,8 @@ const setupMocks = () => {
   };
 };
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  files: {
+class CogniteClient extends MockCogniteClient {
+  files: any = {
     getDownloadUrls: (): Promise<(FileLink & IdEither)[]> => {
       return new Promise(resolve => {
         setTimeout(() => {
@@ -46,15 +45,8 @@ const fakeClient: CogniteClient = {
         }, 1000);
       });
     },
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

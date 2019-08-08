@@ -1,9 +1,9 @@
-import { CogniteClient } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { fakeAsset } from '../../../mocks';
 
+import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
 import customSpinner from './customSpinner.md';
@@ -11,19 +11,16 @@ import customStyles from './customStyles.md';
 import fullDescription from './full.md';
 import loadCallback from './loadCallback.md';
 
-const mockAssetList = jest.fn().mockReturnValue(
-  new Promise(resolve => {
-    setTimeout(() => {
-      resolve([fakeAsset]);
-    }, 1000);
-  })
-);
-
-buildMockSdk({
-  assets: {
-    retrieve: mockAssetList,
-  },
-});
+class CogniteClient extends MockCogniteClient {
+  assets: any = {
+    retrieve: () =>
+      new Promise(resolve => {
+        setTimeout(() => {
+          resolve([fakeAsset]);
+        }, 1000);
+      }),
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

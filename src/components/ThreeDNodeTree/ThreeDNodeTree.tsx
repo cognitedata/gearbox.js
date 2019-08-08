@@ -1,5 +1,5 @@
-import { Node, ThreeDListNodesParams } from '@cognite/sdk';
-import * as sdk from '@cognite/sdk';
+import { List3DNodesQuery, RevealNode3D } from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 import { Tree } from 'antd';
 import {
   AntTreeNode,
@@ -8,6 +8,7 @@ import {
 } from 'antd/lib/tree';
 import React from 'react';
 import styled from 'styled-components';
+import { ClientSDKContext } from '../../context/clientSDKContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import {
   NodeTreeProps,
@@ -30,7 +31,7 @@ interface ExpandedKeysMap {
 }
 
 interface NodeTreeState {
-  threeDNodes: Node[];
+  threeDNodes: RevealNode3D[];
   treeData: TreeNodeData[];
   expandedKeys: ExpandedKeysMap;
   modelId: number;
@@ -39,15 +40,20 @@ interface NodeTreeState {
 }
 
 const cursorApiRequest = async (
+  sdk: CogniteClient,
   modelId: number,
   revisionId: number,
-  params: ThreeDListNodesParams,
-  data: Node[] = []
-): Promise<Node[]> => {
-  const result = await sdk.ThreeD.listNodes(modelId, revisionId, params);
+  params: List3DNodesQuery,
+  data: RevealNode3D[] = []
+): Promise<RevealNode3D[]> => {
+  const result = await sdk.viewer3D.listRevealNodes3D(
+    modelId,
+    revisionId,
+    params
+  );
   const { nextCursor: cursor } = result;
   if (result.nextCursor) {
-    return cursorApiRequest(modelId, revisionId, { ...params, cursor }, [
+    return cursorApiRequest(sdk, modelId, revisionId, { ...params, cursor }, [
       ...data,
       ...result.items,
     ]);
@@ -56,6 +62,7 @@ const cursorApiRequest = async (
 };
 
 class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
+  static contextType = ClientSDKContext;
   static defaultProps = {
     modelId: 0,
     revisionId: 0,
@@ -65,18 +72,20 @@ class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
     theme: { ...defaultTheme },
   };
 
-  static returnPretty(threeDNode: Node) {
+  static returnPretty(threeDNode: RevealNode3D) {
     return {
       title: `${threeDNode.name}`,
       key: threeDNode.id,
       node: threeDNode,
-      isLeaf: true,
+      isLeaf: threeDNode.subtreeSize === 1,
     };
   }
 
   static toKeys(path: number[], initial = {}): ExpandedKeysMap {
     return path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
   }
+
+  context!: React.ContextType<typeof ClientSDKContext>;
 
   constructor(props: NodeTreeProps) {
     super(props);
@@ -94,7 +103,7 @@ class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
   }
 
   async componentDidMount() {
-    const threeDNodes = await sdk.ThreeD.listNodes(
+    const threeDNodes = await this.context!.viewer3D.listRevealNodes3D(
       this.state.modelId,
       this.state.revisionId,
       { depth: 1 }
@@ -108,7 +117,7 @@ class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
     });
   }
 
-  mapDataNodes(threeDNodes: Node[]): TreeNodeData[] {
+  mapDataNodes(threeDNodes: RevealNode3D[]): TreeNodeData[] {
     const nodes: { [name: string]: TreeNodeData } = {};
 
     threeDNodes.forEach(threeDNode => {
@@ -119,11 +128,11 @@ class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
 
     threeDNodes.forEach(threeDNode => {
       const { parentId } = threeDNode;
+      // tslint:disable-next-line: no-useless-cast
       const node = nodes[parentId as number]; // casting is not a problem. It will return undefined if not found
       if (!node) {
         return;
       }
-      node.isLeaf = false;
     });
     return Object.keys(nodes).map(id => {
       if (nodes[id].isLeaf) {
@@ -150,6 +159,7 @@ class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
       };
 
       const loadedData = await cursorApiRequest(
+        this.context!,
         this.state.modelId,
         this.state.revisionId,
         query

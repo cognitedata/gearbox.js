@@ -1,4 +1,3 @@
-import { CogniteClient } from '@cognite/sdk';
 import {
   GetTimeSeriesMetadataDTO,
   TimeseriesIdEither,
@@ -11,6 +10,7 @@ import { ThemeProvider } from 'styled-components';
 import { timeseriesListV2 } from '../../../mocks';
 import { assetsList } from '../../../mocks';
 
+import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesSearch } from '../TimeseriesSearch';
 import allowStrings from './allowStrings.md';
@@ -29,13 +29,12 @@ import withTheme from './withTheme.md';
 const timeseriesNames = timeseriesListV2.map(ts => ts.name);
 const timeseriesIds = timeseriesListV2.map(ts => ts.id);
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  timeseries: {
+class CogniteClient extends MockCogniteClient {
+  timeseries: any = {
     retrieve: (
       ids: TimeseriesIdEither[]
     ): Promise<GetTimeSeriesMetadataDTO[]> => {
-      const idsAsString = ids.map(x => x.id.toString()); // todo fix
+      const idsAsString = ids.map(x => x.toString());
       return new Promise(resolve => {
         setTimeout(() => {
           const result = timeseriesListV2.filter(
@@ -62,15 +61,8 @@ const fakeClient: CogniteClient = {
         }, 1000);
       });
     },
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

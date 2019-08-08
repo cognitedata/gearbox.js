@@ -1,9 +1,9 @@
-import { CogniteClient } from '@cognite/sdk';
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { timeseriesListV2 as fakeTimeseries } from '../../../mocks';
+import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { SensorOverlay } from '../SensorOverlay';
 import addDynamically from './addDynamically.md';
@@ -18,10 +18,9 @@ import withMany from './withMany.md';
 import withMinMax from './withMinMax.md';
 import withStickyTooltips from './withStickyTooltips.md';
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  timeseries: {
-    retrieve: (ids): Promise<GetTimeSeriesMetadataDTO[]> => {
+class CogniteClient extends MockCogniteClient {
+  timeseries: any = {
+    retrieve: (ids: any): Promise<GetTimeSeriesMetadataDTO[]> => {
       return new Promise(resolve => {
         setTimeout(() => {
           // @ts-ignore
@@ -33,10 +32,9 @@ const fakeClient: CogniteClient = {
         }, Math.random() * 2000); // simulate load delay
       });
     },
-  },
-  // @ts-ignore
-  datapoints: {
-    retrieveLatest: _ => {
+  };
+  datapoints: any = {
+    retrieveLatest: (_: any) => {
       return Promise.resolve([
         {
           id: 1,
@@ -50,11 +48,13 @@ const fakeClient: CogniteClient = {
         },
       ]);
     },
-  },
-};
+  };
+}
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 const ClientSDKDecorator = (storyFn: any) => (
-  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
 storiesOf('SensorOverlay', module)
@@ -285,6 +285,7 @@ storiesOf('SensorOverlay/Examples', module)
   .add(
     'Add sensors dynamically',
     () => {
+      // tslint:disable-next-line: max-classes-per-file
       class WrapperComponent extends React.Component {
         state = {
           counter: 0,

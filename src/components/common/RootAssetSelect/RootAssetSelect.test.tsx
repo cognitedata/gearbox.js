@@ -1,9 +1,9 @@
-import { CogniteClient } from '@cognite/sdk';
 import { Select } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { assetsList } from '../../../mocks';
+import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider/ClientSDKProvider';
 import {
   defaultStrings,
@@ -15,21 +15,13 @@ configure({ adapter: new Adapter() });
 
 const onAssetSelected = jest.fn();
 
-const mockAssetList = jest.fn().mockResolvedValue({ items: assetsList });
+const mockAssetList = jest.fn().mockReturnValue({ items: assetsList });
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  assets: {
+class CogniteClient extends MockCogniteClient {
+  assets: any = {
     list: mockAssetList,
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
@@ -81,9 +73,8 @@ describe('RootAssetSelect', () => {
     );
   });
 
-  mockAssetList.mockResolvedValue({ items: [] });
-
   it('should renders loading state', () => {
+    mockAssetList.mockResolvedValue({ items: [] });
     const { loading } = defaultStrings;
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>

@@ -1,6 +1,9 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
+import { CogniteClient } from '@cognite/sdk';
 
-export const getDocumentDownloadLink = async (client: API, id: number) => {
+export const getDocumentDownloadLink = async (
+  client: CogniteClient,
+  id: number
+) => {
   const urls = await client.files.getDownloadUrls([{ id }]);
   const url = urls[0].downloadUrl;
   const response = await fetch(url);

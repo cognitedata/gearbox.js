@@ -1,9 +1,8 @@
-import { CogniteClient } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { fakeEvents } from '../../../mocks';
-
+import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetEventsPanel } from '../AssetEventsPanel';
 import customColumnNames from './customColumnNames.md';
@@ -12,21 +11,19 @@ import customStyles from './customStyles.md';
 import fullDescription from './full.md';
 import loadCallback from './loadCallback.md';
 
-const mockEventsList = jest.fn().mockReturnValue({
-  autoPagingToArray: () => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(fakeEvents);
-      }, 1000);
-    });
-  },
-});
-
-buildMockSdk({
-  events: {
-    list: mockEventsList,
-  },
-});
+class CogniteClient extends MockCogniteClient {
+  events: any = {
+    list: () => ({
+      autoPagingToArray: () => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(fakeEvents);
+          }, 1000);
+        });
+      },
+    }),
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

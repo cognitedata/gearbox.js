@@ -1,4 +1,3 @@
-import { CogniteClient } from '@cognite/sdk';
 import {
   Asset,
   AssetListScope,
@@ -9,7 +8,7 @@ import { storiesOf } from '@storybook/react';
 import { pick } from 'lodash';
 import React from 'react';
 import { assetsList } from '../../../mocks';
-
+import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetSearch, AssetSearchStyles } from '../AssetSearch';
 import advancedSearch from './advancedSearch.md';
@@ -22,10 +21,8 @@ import handleSearchResults from './handleSearchResults.md';
 import rootAssetSelect from './rootAssetSelect.md';
 
 // Mock the SDK calls
-export const fakeClient: CogniteClient = {
-  // @ts-ignore
-  assets: {
-    /* TODO this is used by rootAssetSelect and actually is disabled due to rootAssetSelect changes in SDK 2.0
+class CogniteClient extends MockCogniteClient {
+  assets: any = {
     // @ts-ignore
     list: (scope: AssetListScope) => {
       action('assets.list')(scope);
@@ -42,10 +39,11 @@ export const fakeClient: CogniteClient = {
       );
       return new Promise(resolve => {
         setTimeout(() => {
-          resolve(items);
+          resolve({ items });
         });
       });
-    }, */
+    },
+    // @ts-ignore
     search: (query: AssetSearchFilter) => {
       action('Assets.search')(query);
       if (query.search && query.search.name === 'empty') {
@@ -77,15 +75,8 @@ export const fakeClient: CogniteClient = {
         });
       });
     },
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
@@ -168,14 +159,14 @@ storiesOf('AssetSearch/Examples', module)
       },
     }
   )
-  /* TODO disabled due to rootAssetSelect changes in SDK 2.0
   .add(
     'Root asset select',
     () => (
       <ClientSDKProvider client={sdk}>
         <AssetSearch
           onLiveSearchSelect={onLiveSearchSelect}
-        rootAssetSelect={true} />
+          rootAssetSelect={true}
+        />
       </ClientSDKProvider>
     ),
     {
@@ -183,7 +174,7 @@ storiesOf('AssetSearch/Examples', module)
         content: rootAssetSelect,
       },
     }
-  ) */
+  )
   .add(
     'Advanced search',
     () => (
@@ -243,6 +234,7 @@ storiesOf('AssetSearch/Examples', module)
   .add(
     'Handle search results',
     () => {
+      // tslint:disable-next-line: max-classes-per-file
       class WrapperComponent extends React.Component {
         state = {
           items: [],
