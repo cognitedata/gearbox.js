@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import { Annotation, AxisDisplayMode } from '@cognite/griff-react';
+import { AxisDisplayMode } from '@cognite/griff-react';
 import {
   DatapointsGetAggregateDatapoint,
   DatapointsGetDoubleDatapoint,
@@ -461,15 +461,14 @@ storiesOf('TimeseriesChart/Examples', module)
             timeseriesIds={[123]}
             startTime={Date.now() - 60 * 1000}
             endTime={Date.now()}
-            annotations={
-              [
-                {
-                  data: [Date.now() - 30 * 1000, Date.now() - 20 * 1000],
-                  height: 30,
-                  id: 888,
-                },
-              ] as Annotation[]
-            }
+            // @ts-ignore
+            annotations={[
+              {
+                data: [Date.now() - 30 * 1000, Date.now() - 20 * 1000],
+                height: 30,
+                id: 888,
+              },
+            ]}
           />
         </ClientSDKProvider>
       );

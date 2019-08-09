@@ -12,41 +12,6 @@ import { defaultStrings as rootAssetSelectStrings } from '../common/RootAssetSel
 import { Search } from '../common/Search/Search';
 import { Item, SelectedItems } from './SelectedItems';
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const TagList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 8px;
-  width: 100%;
-  height: auto;
-  overflow: auto;
-`;
-
-const CenteredSpin = styled(Spin)`
-  &.ant-spin-spinning {
-    min-height: 25px;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;
-
-const ButtonRow = styled.div`
-  margin-top: 5px;
-`;
-
-const SelectNoneButton = styled((props: NativeButtonProps) => (
-  <Button {...props} />
-))`
-  margin-left: 10px;
-`;
-
 export interface TimeseriesSearchStyles {
   buttonRow?: React.CSSProperties;
   list?: React.CSSProperties;
@@ -421,3 +386,38 @@ export class TimeseriesSearch extends React.Component<
     );
   }
 }
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const TagList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  width: 100%;
+  height: auto;
+  overflow: auto;
+`;
+
+const CenteredSpin = styled(Spin)`
+  &.ant-spin-spinning {
+    min-height: 25px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const ButtonRow = styled.div`
+  margin-top: 5px;
+`;
+
+const SelectNoneButton = styled((props: NativeButtonProps) => (
+  <Button {...props} />
+))`
+  margin-left: 10px;
+`;

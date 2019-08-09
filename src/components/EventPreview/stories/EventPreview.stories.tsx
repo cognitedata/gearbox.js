@@ -213,7 +213,7 @@ storiesOf('EventPreview/Examples', module)
     }
   )
   .add(
-    'With Theme',
+    'With theme',
     () => {
       const exampleTheme = {
         gearbox: {

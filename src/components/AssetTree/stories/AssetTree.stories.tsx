@@ -115,7 +115,7 @@ storiesOf('AssetTree/Examples', module)
     }
   )
   .add(
-    'Custom Styles',
+    'With custom styles',
     () => {
       return <AssetTree styles={ASSET_TREE_STYLES} />;
     },
@@ -126,7 +126,7 @@ storiesOf('AssetTree/Examples', module)
     }
   )
   .add(
-    'With Theme',
+    'With theme',
     () => {
       return (
         <ThemeProvider theme={ExampleTheme}>

@@ -15,13 +15,6 @@ import {
 
 export type EventPreviewStyles = EventPreviewStyles;
 
-const SpinContainer = styled.div`
-  display: flex;
-  width: 300px;
-  align-items: center;
-  justify-content: center;
-`;
-
 const LoadingSpinner: React.SFC = () => (
   <SpinContainer>
     <Spin />
@@ -114,3 +107,10 @@ export class EventPreview extends React.Component<
     );
   }
 }
+
+const SpinContainer = styled.div`
+  display: flex;
+  width: 300px;
+  align-items: center;
+  justify-content: center;
+`;

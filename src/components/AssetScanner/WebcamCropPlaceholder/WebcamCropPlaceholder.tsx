@@ -8,6 +8,30 @@ export interface WebcamCropPlaceholderProps {
   Component?: React.ComponentType;
 }
 
+export const WebcamCropPlaceholder = (props: WebcamCropPlaceholderProps) => {
+  const { Component } = props;
+  return (
+    <>
+      <Container {...props}>
+        <Item {...props} />
+        <Item {...props} />
+        <Item {...props} />
+        <Item {...props} />
+        <CropperPlaceholder data-test-id="cropper-placeholder" />
+        <Item {...props} />
+        <Item {...props} />
+        <Item {...props} />
+        <Item {...props} />
+      </Container>
+      {Component && (
+        <CustomClientOverlayWrapper>
+          <Component />
+        </CustomClientOverlayWrapper>
+      )}
+    </>
+  );
+};
+
 const Container = styled.div`
   position: absolute;
   height: 100%;
@@ -37,27 +61,3 @@ const CustomClientOverlayWrapper = styled.div`
   width: 100%;
   height: 100%;
 `;
-
-export const WebcamCropPlaceholder = (props: WebcamCropPlaceholderProps) => {
-  const { Component } = props;
-  return (
-    <>
-      <Container {...props}>
-        <Item {...props} />
-        <Item {...props} />
-        <Item {...props} />
-        <Item {...props} />
-        <CropperPlaceholder data-test-id="cropper-placeholder" />
-        <Item {...props} />
-        <Item {...props} />
-        <Item {...props} />
-        <Item {...props} />
-      </Container>
-      {Component && (
-        <CustomClientOverlayWrapper>
-          <Component />
-        </CustomClientOverlayWrapper>
-      )}
-    </>
-  );
-};

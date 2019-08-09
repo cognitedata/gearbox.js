@@ -202,7 +202,7 @@ storiesOf('ThreeDNodeTree/Examples', module)
     }
   )
   .add(
-    'Custom Styles',
+    'With custom styles',
     () => {
       return (
         <ClientSDKProvider client={sdk}>
@@ -221,7 +221,7 @@ storiesOf('ThreeDNodeTree/Examples', module)
     }
   )
   .add(
-    'With Theme',
+    'With theme',
     () => {
       const exampleTheme = {
         gearbox: {

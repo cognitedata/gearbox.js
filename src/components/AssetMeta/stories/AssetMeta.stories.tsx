@@ -277,7 +277,7 @@ storiesOf('AssetMeta/Examples', module)
     }
   )
   .add(
-    'Custom Styles',
+    'With custom styles',
     () => {
       return <AssetMeta assetId={123456} styles={ASSET_META_STYLES} />;
     },

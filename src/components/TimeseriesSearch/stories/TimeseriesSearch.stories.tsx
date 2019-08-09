@@ -117,26 +117,24 @@ storiesOf('TimeseriesSearch/Examples', module)
       },
     }
   )
-  // assetSubtree query is not supported yet. Check with f1
-  // .add(
-  //   'Show root asset select',
-  //   () => {
-  //     setupMocks();
-  //     return (
-  //       <ClientSDKProvider client={fakeClient}>
-  //         <TimeseriesSearch
-  //           onTimeserieSelectionChange={onTimeserieSelectionChange}
-  //           rootAssetSelect={true}
-  //         />
-  //       </ClientSDKProvider>
-  //     );
-  //   },
-  //   {
-  //     readme: {
-  //       content: injectTimeseriesNames(rootAssetSelect.toString()),
-  //     },
-  //   }
-  // )
+  .add(
+    'Show root asset select',
+    () => {
+      return (
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesSearch
+            onTimeserieSelectionChange={onTimeserieSelectionChange}
+            rootAssetSelect={true}
+          />
+        </ClientSDKProvider>
+      );
+    },
+    {
+      readme: {
+        content: injectTimeseriesNames(rootAssetSelect.toString()),
+      },
+    }
+  )
   .add(
     'Hide selected row',
     () => {
@@ -228,7 +226,31 @@ storiesOf('TimeseriesSearch/Examples', module)
     }
   )
   .add(
-    'Custom styles',
+    'Custom strings',
+    () => {
+      return (
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesSearch
+            onTimeserieSelectionChange={onTimeserieSelectionChange}
+            rootAssetSelect={true}
+            strings={{
+              rootAssetSelectAll: 'No filter',
+              searchPlaceholder: 'search for stuff!',
+              selectAll: 'Everything!',
+              selectNone: 'Nothing!',
+            }}
+          />
+        </ClientSDKProvider>
+      );
+    },
+    {
+      readme: {
+        content: injectTimeseriesNames(customStrings.toString()),
+      },
+    }
+  )
+  .add(
+    'With custom styles',
     () => {
       return (
         <ClientSDKProvider client={sdk}>
@@ -254,7 +276,7 @@ storiesOf('TimeseriesSearch/Examples', module)
     }
   )
   .add(
-    'With Theme',
+    'With theme',
     () => {
       const ExampleTheme = {
         gearbox: {
@@ -275,30 +297,6 @@ storiesOf('TimeseriesSearch/Examples', module)
     {
       readme: {
         content: injectTimeseriesNames(withTheme.toString()),
-      },
-    }
-  )
-  .add(
-    'Custom strings',
-    () => {
-      return (
-        <ClientSDKProvider client={sdk}>
-          <TimeseriesSearch
-            onTimeserieSelectionChange={onTimeserieSelectionChange}
-            // rootAssetSelect={true}
-            strings={{
-              rootAssetSelectAll: 'No filter',
-              searchPlaceholder: 'search for stuff!',
-              selectAll: 'Everything!',
-              selectNone: 'Nothing!',
-            }}
-          />
-        </ClientSDKProvider>
-      );
-    },
-    {
-      readme: {
-        content: injectTimeseriesNames(customStrings.toString()),
       },
     }
   );

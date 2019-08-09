@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Callback, PureObject, SetVideoRefCallback } from '../../../interfaces';
 
-const StyledVideo = styled.video`
-  background: rgba(0, 0, 0, 0.5);
-  width: 100%;
-  height: 100%;
-`;
-
 function hasGetUserMedia() {
   return !!(
     navigator.getUserMedia ||
@@ -236,3 +230,9 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
     }
   }
 }
+
+const StyledVideo = styled.video`
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+`;

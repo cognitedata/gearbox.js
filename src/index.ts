@@ -1,6 +1,9 @@
 export * from './components/AssetMeta/AssetMeta';
 export { AssetScanner } from './components/AssetScanner/AssetScanner';
 export { AssetSearch } from './components/AssetSearch/AssetSearch';
+export {
+  DocumentTable,
+} from './components/AssetDocumentsPanel/components/DocumentTable';
 export * from './components/AssetTree/AssetTree';
 export * from './components/ClientSDKProvider/ClientSDKProvider';
 export * from './components/DescriptionList/DescriptionList';
@@ -13,7 +16,13 @@ export * from './components/TenantSelector/TenantSelector';
 export * from './components/TimeseriesChart/TimeseriesChart';
 export * from './components/TimeseriesChartMeta/TimeseriesChartMeta';
 export * from './components/TimeseriesSearch/TimeseriesSearch';
+export * from './components/AssetDetailsPanel/AssetDetailsPanel';
+export * from './components/AssetDocumentsPanel/AssetDocumentsPanel';
+export * from './components/AssetEventsPanel/AssetEventsPanel';
+export * from './components/AssetTimeseriesPanel/AssetTimeseriesPanel';
 
 export * from './utils/sdk-configure';
+
+export * from './utils/documents';
 
 export * from './interfaces';

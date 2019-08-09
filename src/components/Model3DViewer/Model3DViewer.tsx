@@ -58,26 +58,19 @@ export interface Model3DViewerProps {
   onScreenshot?: (url: string) => void;
 }
 
-interface Model3DViewerState {
-  planes: THREE.Plane[];
-  flipped: [boolean, boolean, boolean];
-}
-
 export function mockCreateViewer(mockFunction: any) {
   createViewer = mockFunction || originalCreateViewer;
 }
 
 const containerStyles = {
-  paddingTop: '2vh',
+  width: '100%',
+  paddingTop: '2%',
   display: 'flex',
   flexWrap: 'nowrap',
   justifyContent: 'spaceAround',
 } as React.CSSProperties;
 
-export class Model3DViewer extends React.Component<
-  Model3DViewerProps,
-  Model3DViewerState
-> {
+export class Model3DViewer extends React.Component<Model3DViewerProps> {
   [x: string]: any;
   static defaultProps = {
     enableKeyboardNavigation: true,
@@ -97,21 +90,18 @@ export class Model3DViewer extends React.Component<
   revision: Revision3D | null = null;
   viewer: Cognite3DViewer | null = null;
   nodes: AssetMapping3D[] = [];
+  planes: THREE.Plane[] = [
+    new THREE.Plane(new THREE.Vector3(1, 0, 0), Infinity),
+    new THREE.Plane(new THREE.Vector3(0, 1, 0), Infinity),
+    new THREE.Plane(new THREE.Vector3(0, 0, 1), Infinity),
+  ];
+  flipped: boolean[] = [true, true, true];
 
   constructor(props: Model3DViewerProps) {
     super(props);
 
     this.onClickHandlerBounded = this.onClickHandler.bind(this);
     this.onCompleteBounded = this.onComplete.bind(this);
-
-    this.state = {
-      planes: [
-        new THREE.Plane(new THREE.Vector3(1, 0, 0), Infinity),
-        new THREE.Plane(new THREE.Vector3(0, 1, 0), Infinity),
-        new THREE.Plane(new THREE.Vector3(0, 0, 1), Infinity),
-      ],
-      flipped: [true, true, true],
-    };
   }
 
   async componentDidMount() {
@@ -316,11 +306,12 @@ export class Model3DViewer extends React.Component<
 
   slice = (sliceProps: SlicingProps) => {
     if (this.viewer) {
-      const planes = this.state.planes;
+      const planes = this.planes;
       planes[0] = sliceProps.x ? this.sliceByAxis(sliceProps.x, 0) : planes[0];
       planes[1] = sliceProps.y ? this.sliceByAxis(sliceProps.y, 1) : planes[1];
       planes[2] = sliceProps.z ? this.sliceByAxis(sliceProps.z, 2) : planes[2];
-      this.setState({ planes });
+      this.planes = planes;
+      this.viewer.setSlicingPlanes(planes);
     }
   };
 
@@ -334,39 +325,39 @@ export class Model3DViewer extends React.Component<
   };
 
   onChange = (val: number, axisNumber: number) => {
-    const planes = this.state.planes;
-    const flipped = this.state.flipped;
-    planes[axisNumber].set(
-      planes[axisNumber].normal,
-      flipped[axisNumber] ? val : -val - val
+    this.planes[axisNumber].set(
+      this.planes[axisNumber].normal,
+      this.flipped[axisNumber] ? val : -val
     );
-    this.setState({ planes });
+    if (this.viewer) {
+      this.viewer.setSlicingPlanes(this.planes);
+    }
   };
 
   flipSlider = (axisNumber: number) => {
-    const planes = this.state.planes;
-    const flipped = this.state.flipped;
-    planes[axisNumber].negate();
-    flipped[axisNumber] = !flipped[axisNumber];
-    this.setState({ planes });
-    this.setState({ flipped });
+    this.planes[axisNumber].negate();
+    this.flipped[axisNumber] = !this.flipped[axisNumber];
+    if (this.viewer) {
+      this.viewer.setSlicingPlanes(this.planes);
+    }
   };
 
   renderSlider = (range: SliderRange | undefined, axisNumber: number) => {
     if (!range) {
       return null;
     }
+    const number2Axis = ['x', 'y', 'z'];
     return (
       <div style={containerStyles}>
-        <span style={{ marginTop: '0.5vh' }}>
-          <h4>x</h4>
+        <span style={{ marginTop: '1%' }}>
+          <h4>{number2Axis[axisNumber]}</h4>
         </span>
         <Slider
           step={(range.max - range.min) / 100}
           min={range.min}
           max={range.max}
           defaultValue={range.max}
-          style={{ width: '18vw' }}
+          style={{ width: '80%' }}
           onChange={(val: SliderValue) =>
             this.onChange(val as number, axisNumber)
           }
@@ -394,9 +385,9 @@ export class Model3DViewer extends React.Component<
         style={{
           background: 'white',
           position: 'absolute',
-          width: '25vw',
-          marginTop: '2vh',
-          marginLeft: '66vw',
+          width: '20%',
+          marginTop: '2%',
+          marginLeft: '78%',
           padding: '1%',
           display: 'flex',
           flexWrap: 'wrap',
@@ -410,46 +401,42 @@ export class Model3DViewer extends React.Component<
   };
 
   render() {
-    if (this.viewer) {
-      this.viewer.setSlicingPlanes(this.state.planes);
-    }
     return (
       // Need this div since caching uses replaceChild on divWrapper ref, so need a surrounding div
-      <div style={{ width: '100vw' }}>
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'relative',
+        }}
+      >
         {this.props.showScreenshotButton ? (
           <div
             style={{
               position: 'absolute',
-              marginTop: '2vh',
-              marginLeft: '2vw',
+              marginTop: '2%',
+              marginLeft: '2%',
             }}
           >
             <Button onClick={this.takeScreenshot}>Take ScreenShot</Button>
           </div>
         ) : null}
         {this.renderSliders()}
-        <div
+        <input
+          type="text"
+          onBlur={this.onBlur}
+          onFocus={this.onFocus}
+          ref={this.inputWrapper}
           style={{
-            width: '95vw',
-            height: '100%',
+            opacity: 0,
+            pointerEvents: 'none',
+            position: 'absolute',
           }}
-        >
-          <input
-            type="text"
-            onBlur={this.onBlur}
-            onFocus={this.onFocus}
-            ref={this.inputWrapper}
-            style={{
-              opacity: 0,
-              pointerEvents: 'none',
-              position: 'absolute',
-            }}
-          />
-          <div
-            style={{ width: '100%', height: '100%', fontSize: 0 }}
-            ref={this.divWrapper}
-          />
-        </div>
+        />
+        <div
+          style={{ width: '100%', height: '100%', fontSize: 0 }}
+          ref={this.divWrapper}
+        />
       </div>
     );
   }
