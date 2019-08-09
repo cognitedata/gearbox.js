@@ -21,7 +21,7 @@ class CogniteClient extends MockCogniteClient {
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('AssetEventsPanel', () => {
-  beforeEach(() => { 
+  beforeEach(() => {
     mockEventsList.mockReturnValue({
       autoPagingToArray: () => Promise.resolve(fakeEvents),
     });

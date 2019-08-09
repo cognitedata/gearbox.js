@@ -21,7 +21,7 @@ import withCustomText from './withCustomText.md';
 import withTheme from './withTheme.md';
 
 class CogniteClient extends MockCogniteClient {
-  events:any = {
+  events: any = {
     retrieve: (ids: IdEither[]): Promise<CogniteEvent[]> => {
       return new Promise(resolve => {
         setTimeout(() => {

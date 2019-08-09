@@ -31,7 +31,6 @@ jest.mock('@cognite/sdk', () => ({
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
-
 describe('TimeseriesChartMeta', () => {
   beforeEach(() => {
     // @ts-ignore
