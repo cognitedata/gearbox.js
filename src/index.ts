@@ -20,9 +20,5 @@ export * from './components/AssetDetailsPanel/AssetDetailsPanel';
 export * from './components/AssetDocumentsPanel/AssetDocumentsPanel';
 export * from './components/AssetEventsPanel/AssetEventsPanel';
 export * from './components/AssetTimeseriesPanel/AssetTimeseriesPanel';
-
-export * from './utils/sdk-configure';
-
 export * from './utils/documents';
-
 export * from './interfaces';
