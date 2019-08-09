@@ -143,7 +143,7 @@ storiesOf('TimeseriesChartMeta/Examples', module)
     }
   )
   .add(
-    'With Theme',
+    'With theme',
     () => {
       setupMocks();
       const exampleTheme = {

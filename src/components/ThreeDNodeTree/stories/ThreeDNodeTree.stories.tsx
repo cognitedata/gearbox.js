@@ -185,7 +185,7 @@ storiesOf('ThreeDNodeTree/Examples', module)
     }
   )
   .add(
-    'Custom Styles',
+    'With custom styles',
     () => {
       setupMocks();
       return (
@@ -199,7 +199,7 @@ storiesOf('ThreeDNodeTree/Examples', module)
     }
   )
   .add(
-    'With Theme',
+    'With theme',
     () => {
       setupMocks();
       const exampleTheme = {

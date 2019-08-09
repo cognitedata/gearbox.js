@@ -217,7 +217,30 @@ storiesOf('TimeseriesSearch/Examples', module)
     }
   )
   .add(
-    'Custom styles',
+    'Custom strings',
+    () => {
+      setupMocks();
+      return (
+        <TimeseriesSearch
+          onTimeserieSelectionChange={onTimeserieSelectionChange}
+          rootAssetSelect={true}
+          strings={{
+            rootAssetSelectAll: 'No filter',
+            searchPlaceholder: 'search for stuff!',
+            selectAll: 'Everything!',
+            selectNone: 'Nothing!',
+          }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: injectTimeseriesNames(customStrings.toString()),
+      },
+    }
+  )
+  .add(
+    'With custom styles',
     () => {
       setupMocks();
       return (
@@ -242,7 +265,7 @@ storiesOf('TimeseriesSearch/Examples', module)
     }
   )
   .add(
-    'With Theme',
+    'With theme',
     () => {
       setupMocks();
       const ExampleTheme = {
@@ -262,29 +285,6 @@ storiesOf('TimeseriesSearch/Examples', module)
     {
       readme: {
         content: injectTimeseriesNames(withTheme.toString()),
-      },
-    }
-  )
-  .add(
-    'Custom strings',
-    () => {
-      setupMocks();
-      return (
-        <TimeseriesSearch
-          onTimeserieSelectionChange={onTimeserieSelectionChange}
-          rootAssetSelect={true}
-          strings={{
-            rootAssetSelectAll: 'No filter',
-            searchPlaceholder: 'search for stuff!',
-            selectAll: 'Everything!',
-            selectNone: 'Nothing!',
-          }}
-        />
-      );
-    },
-    {
-      readme: {
-        content: injectTimeseriesNames(customStrings.toString()),
       },
     }
   );

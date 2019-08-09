@@ -99,7 +99,7 @@ storiesOf('AssetTree/Examples', module)
     }
   )
   .add(
-    'Custom Styles',
+    'With custom styles',
     () => {
       setupMocks();
       return <AssetTree styles={ASSET_TREE_STYLES} />;
@@ -111,7 +111,7 @@ storiesOf('AssetTree/Examples', module)
     }
   )
   .add(
-    'With Theme',
+    'With theme',
     () => {
       setupMocks();
       return (

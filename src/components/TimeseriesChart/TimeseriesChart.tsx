@@ -19,11 +19,6 @@ import { Spin } from 'antd';
 import { decimalTickFormatter } from '../../utils/axisSigFix';
 import { getColorByString } from '../../utils/colors';
 
-const Wrapper = styled.div`
-  height: 500px;
-  width: 100%;
-`;
-
 export interface TimeseriesChartStyles {
   container?: React.CSSProperties;
 }
@@ -209,3 +204,8 @@ export class TimeseriesChart extends React.Component<
     );
   }
 }
+
+const Wrapper = styled.div`
+  height: 500px;
+  width: 100%;
+`;
