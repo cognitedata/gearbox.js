@@ -1,8 +1,8 @@
-import { CogniteClient } from '@cognite/sdk';
 import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { datapointsList, timeseriesListV2 } from '../../mocks';
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { TimeseriesChartMetaPure } from './TimeseriesChartMetaPure';
 
@@ -10,35 +10,23 @@ configure({ adapter: new Adapter() });
 
 const timeseries = timeseriesListV2[0];
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  timeseries: {
+class CogniteClient extends MockCogniteClient {
+  timeseries: any = {
     retrieve: jest.fn(),
-  },
-  // @ts-ignore
-  datapoints: {
+  };
+  datapoints: any = {
     retrieve: jest.fn(),
     retrieveLatest: jest.fn(),
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('TimeseriesChartMeta', () => {
   beforeEach(() => {
-    // @ts-ignore
-    fakeClient.timeseries.retrieve.mockResolvedValue([timeseriesListV2[0]]);
-    // @ts-ignore
-    fakeClient.datapoints.retrieve.mockResolvedValue(datapointsList);
-    // @ts-ignore
-    fakeClient.datapoints.retrieveLatest.mockResolvedValue([
+    sdk.timeseries.retrieve.mockResolvedValue([timeseriesListV2[0]]);
+    sdk.datapoints.retrieve.mockResolvedValue(datapointsList);
+    sdk.datapoints.retrieveLatest.mockResolvedValue([
       { isString: false, datapoints: [{ value: 25.0 }] },
     ]);
   });

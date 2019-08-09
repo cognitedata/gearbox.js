@@ -1,11 +1,10 @@
-import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { SDK_LIST_LIMIT } from '../../constants/sdk';
 import { timeseriesListV2 } from '../../mocks';
-
+import { MockCogniteClient } from '../../utils/mockSdk';
 import {
   withAssetTimeseries,
   WithAssetTimeseriesDataProps,
@@ -13,26 +12,17 @@ import {
 
 configure({ adapter: new Adapter() });
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  timeseries: {
+class CogniteClient extends MockCogniteClient {
+  timeseries: any = {
     list: jest.fn(),
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('withAssetTimeseries', () => {
   beforeEach(() => {
-    // @ts-ignore
-    fakeClient.timeseries.list.mockReturnValue({
+    sdk.timeseries.list.mockReturnValue({
       autoPagingToArray: async () => timeseriesListV2,
     });
   });
@@ -124,7 +114,7 @@ describe('withAssetTimeseries', () => {
     wrapper.setProps({ children: <WrappedComponent assetId={1234} /> });
 
     setImmediate(() => {
-      expect(fakeClient.timeseries.list).toBeCalledTimes(2);
+      expect(sdk.timeseries.list).toBeCalledTimes(2);
       done();
     });
   });
@@ -158,7 +148,7 @@ describe('withAssetTimeseries', () => {
       </ClientSDKProvider>
     );
 
-    expect(fakeClient.timeseries.list).toBeCalledWith({
+    expect(sdk.timeseries.list).toBeCalledWith({
       assetIds: [123],
       limit: 78,
     });
@@ -172,7 +162,7 @@ describe('withAssetTimeseries', () => {
       </ClientSDKProvider>
     );
 
-    expect(fakeClient.timeseries.list).toBeCalledWith({
+    expect(sdk.timeseries.list).toBeCalledWith({
       assetIds: [123],
       limit: SDK_LIST_LIMIT,
     });

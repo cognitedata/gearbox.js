@@ -1,32 +1,22 @@
-import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
 import React from 'react';
 import { datapointsList, sleep, timeseriesListV2 } from '../../mocks';
-
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { TimeseriesChart } from './TimeseriesChart';
 
 configure({ adapter: new Adapter() });
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  timeseries: {
+class CogniteClient extends MockCogniteClient {
+  timeseries: any = {
     retrieve: jest.fn(),
-  },
-  // @ts-ignore
-  datapoints: {
+  };
+  datapoints: any = {
     retrieve: jest.fn(),
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
@@ -36,10 +26,8 @@ jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
 });
 
 beforeEach(() => {
-  // @ts-ignore
-  fakeClient.timeseries.retrieve.mockResolvedValue([timeseriesListV2[0]]);
-  // @ts-ignore
-  fakeClient.datapoints.retrieve.mockResolvedValue([datapointsList]);
+  sdk.timeseries.retrieve.mockResolvedValue([timeseriesListV2[0]]);
+  sdk.datapoints.retrieve.mockResolvedValue([datapointsList]);
 });
 
 afterEach(() => {
@@ -60,10 +48,10 @@ describe('TimeseriesChart', () => {
     );
     await sleep(300);
     wrapper.update();
-    expect(fakeClient.timeseries.retrieve).toHaveBeenCalledTimes(1);
-    expect(fakeClient.timeseries.retrieve).toHaveBeenCalledWith([{ id }]);
-    expect(fakeClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
-    expect(fakeClient.datapoints.retrieve).toHaveBeenCalledWith({
+    expect(sdk.timeseries.retrieve).toHaveBeenCalledTimes(1);
+    expect(sdk.timeseries.retrieve).toHaveBeenCalledWith([{ id }]);
+    expect(sdk.datapoints.retrieve).toHaveBeenCalledTimes(1);
+    expect(sdk.datapoints.retrieve).toHaveBeenCalledWith({
       items: [expect.objectContaining({ id })],
     });
   });

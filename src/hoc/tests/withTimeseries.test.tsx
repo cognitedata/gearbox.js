@@ -1,40 +1,29 @@
-import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { timeseriesListV2 } from '../../mocks';
-
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { withTimeseries, WithTimeseriesDataProps } from '../withTimeseries';
 
 configure({ adapter: new Adapter() });
 
 const timeseries = timeseriesListV2[0];
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  timeseries: {
+class CogniteClient extends MockCogniteClient {
+  timeseries: any = {
     retrieve: jest.fn(),
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('withTimeresries', () => {
   beforeEach(() => {
-    // @ts-ignore
-    fakeClient.timeseries.retrieve.mockResolvedValue([timeseries]);
+    sdk.timeseries.retrieve.mockResolvedValue([timeseries]);
   });
 
   afterEach(() => {
-    // @ts-ignore
     jest.clearAllMocks();
   });
 
@@ -102,7 +91,7 @@ describe('withTimeresries', () => {
     });
 
     setImmediate(() => {
-      expect(fakeClient.timeseries.retrieve).toBeCalledTimes(2);
+      expect(sdk.timeseries.retrieve).toBeCalledTimes(2);
       done();
     });
   });

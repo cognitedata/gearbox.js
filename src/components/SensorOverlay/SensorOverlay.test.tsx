@@ -1,4 +1,3 @@
-import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -7,7 +6,7 @@ import DNDTestBackend from 'react-dnd-test-backend';
 import sizeMe from 'react-sizeme';
 import sinon from 'sinon';
 import { timeseriesListV2 } from '../../mocks';
-
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { DraggableBox, Tag } from './components/DraggableBox';
 import { DraggablePoint } from './components/DraggablePoint';
@@ -22,16 +21,14 @@ const SensorOverlay = DragDropContext(DNDTestBackend)(
   OriginalSensorOverlay.DecoratedComponent
 );
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  timeseries: {
+class CogniteClient extends MockCogniteClient {
+  timeseries: any = {
     retrieve: jest.fn(),
-  },
-  // @ts-ignore
-  datapoints: {
+  };
+  datapoints: any = {
     retrieveLatest: jest.fn(),
-  },
-};
+  };
+}
 
 const propsCallbacks = {
   onClick: jest.fn(),
@@ -40,20 +37,11 @@ const propsCallbacks = {
   onSensorPositionChange: jest.fn(),
 };
 
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
-
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 beforeEach(() => {
-  // @ts-ignore
-  fakeClient.timeseries.retrieve.mockResolvedValue([timeseriesListV2[0]]);
-  // @ts-ignore
-  fakeClient.datapoints.retrieveLatest.mockResolvedValue([
+  sdk.timeseries.retrieve.mockResolvedValue([timeseriesListV2[0]]);
+  sdk.datapoints.retrieveLatest.mockResolvedValue([
     {
       id: 1,
       isString: false,
@@ -72,10 +60,8 @@ afterEach(() => {
   propsCallbacks.onLinkClick.mockClear();
   propsCallbacks.onSettingClick.mockClear();
   propsCallbacks.onSensorPositionChange.mockClear();
-  // @ts-ignore
-  fakeClient.timeseries.retrieve.mockClear();
-  // @ts-ignore
-  fakeClient.datapoints.retrieveLatest.mockClear();
+  sdk.timeseries.retrieve.mockClear();
+  sdk.datapoints.retrieveLatest.mockClear();
 });
 // tslint:disable:no-big-function
 describe('SensorOverlay', () => {

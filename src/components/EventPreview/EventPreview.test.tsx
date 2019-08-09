@@ -1,40 +1,26 @@
-import { CogniteClient } from '@cognite/sdk';
-import { CogniteEvent, IdEither } from '@cognite/sdk/dist/src/types/types';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { fakeEvents } from '../../mocks';
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { EventPreview } from './EventPreview';
 
 configure({ adapter: new Adapter() });
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  events: {
+class CogniteClient extends MockCogniteClient {
+  events: any = {
     retrieve: jest.fn(),
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 beforeEach(() => {
-  // @ts-ignore
-  fakeClient.events.retrieve.mockClear();
-  // @ts-ignore
-  fakeClient.events.retrieve.mockImplementation(
-    async (ids: IdEither): Promise<CogniteEvent[]> => {
-      // @ts-ignore
-      return [fakeEvents.find(e => e.id === ids[0].id)];
-    }
-  );
+  sdk.events.retrieve.mockClear();
+  sdk.events.retrieve.mockImplementation(async (ids: { id: number }[]) => {
+    return [fakeEvents.find(e => e.id === ids[0].id)];
+  });
 });
 
 describe('EventPreview', () => {
@@ -75,10 +61,10 @@ describe('EventPreview', () => {
         <EventPreview eventId={8825861064387} />
       </ClientSDKProvider>
     );
-    expect(fakeClient.events.retrieve).toBeCalledTimes(1);
+    expect(sdk.events.retrieve).toBeCalledTimes(1);
     wrapper.setProps({ children: <EventPreview eventId={1995162693488} /> });
     setImmediate(() => {
-      expect(fakeClient.events.retrieve).toBeCalledTimes(2);
+      expect(sdk.events.retrieve).toBeCalledTimes(2);
       done();
     });
   });

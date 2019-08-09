@@ -1,9 +1,9 @@
-import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { fakeAsset } from '../../mocks';
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { LoadingBlock } from '../common/LoadingBlock/LoadingBlock';
 import { AssetDetailsPanel, AssetDetailsPanelProps } from './AssetDetailsPanel';
 import { AssetDetailsPanelPure } from './AssetDetailsPanelPure';
@@ -12,19 +12,11 @@ configure({ adapter: new Adapter() });
 
 const mockAssetList = jest.fn();
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  assets: {
+class CogniteClient extends MockCogniteClient {
+  assets: any = {
     retrieve: mockAssetList,
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

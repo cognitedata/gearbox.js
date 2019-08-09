@@ -1,31 +1,21 @@
-import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { timeseriesListV2 } from '../../../mocks';
-
+import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DraggableBox, Link, Tag } from './DraggableBox';
 
 configure({ adapter: new Adapter() });
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  timeseries: {
+class CogniteClient extends MockCogniteClient {
+  timeseries: any = {
     retrieve: jest.fn(),
-  },
-  // @ts-ignore
-  datapoints: {
+  };
+  datapoints: any = {
     retrieveLatest: jest.fn(),
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
@@ -43,10 +33,8 @@ const containerSize = {
 };
 
 beforeEach(() => {
-  // @ts-ignore
-  fakeClient.timeseries.retrieve.mockResolvedValue([testTimeserie]);
-  // @ts-ignore
-  fakeClient.datapoints.retrieveLatest.mockResolvedValue([
+  sdk.timeseries.retrieve.mockResolvedValue([testTimeserie]);
+  sdk.datapoints.retrieveLatest.mockResolvedValue([
     {
       id: 1,
       isString: false,
@@ -61,10 +49,8 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  // @ts-ignore
-  fakeClient.timeseries.retrieve.mockClear();
-  // @ts-ignore
-  fakeClient.datapoints.retrieveLatest.mockClear();
+  sdk.timeseries.retrieve.mockClear();
+  sdk.datapoints.retrieveLatest.mockClear();
 });
 
 describe('SensorOverlay - DraggableBox', () => {

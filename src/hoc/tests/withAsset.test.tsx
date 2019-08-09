@@ -1,39 +1,28 @@
-import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { fakeAsset } from '../../mocks';
-
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { withAsset, WithAssetDataProps } from '../withAsset';
 
 configure({ adapter: new Adapter() });
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  assets: {
+class CogniteClient extends MockCogniteClient {
+  assets: any = {
     retrieve: jest.fn(),
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('withAsset', () => {
   beforeEach(() => {
-    // @ts-ignore
-    fakeClient.assets.retrieve.mockResolvedValue([fakeAsset]);
+    sdk.assets.retrieve.mockResolvedValue([fakeAsset]);
   });
 
   afterEach(() => {
-    // @ts-ignore
-    fakeClient.assets.retrieve.mockClear();
+    sdk.assets.retrieve.mockClear();
   });
 
   it('Should render spinner', () => {
@@ -100,7 +89,7 @@ describe('withAsset', () => {
     });
 
     setImmediate(() => {
-      expect(fakeClient.assets.retrieve).toBeCalledTimes(2);
+      expect(sdk.assets.retrieve).toBeCalledTimes(2);
       done();
     });
   });

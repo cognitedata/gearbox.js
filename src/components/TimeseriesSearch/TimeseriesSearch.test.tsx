@@ -1,11 +1,10 @@
-import { CogniteClient } from '@cognite/sdk';
 import { Button, Input, Tag } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
 import React from 'react';
 import { assetsList, timeseriesListV2 } from '../../mocks';
-
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
 import { TimeseriesSearch } from './TimeseriesSearch';
@@ -23,28 +22,18 @@ jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
   return f;
 });
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  timeseries: {
+class CogniteClient extends MockCogniteClient {
+  timeseries: any = {
     retrieve: jest.fn(),
     search: jest.fn(),
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 beforeEach(() => {
-  // @ts-ignore
-  fakeClient.timeseries.retrieve.mockResolvedValue(timeseriesListV2);
-  // @ts-ignore
-  fakeClient.timeseries.search.mockResolvedValue(timeseriesListV2);
+  sdk.timeseries.retrieve.mockResolvedValue(timeseriesListV2);
+  sdk.timeseries.search.mockResolvedValue(timeseriesListV2);
 });
 
 afterEach(() => {
@@ -101,8 +90,8 @@ describe('TimeseriesSearch', () => {
       .find('input')
       .simulate('change', { target: { value: 'value' } });
 
-    expect(fakeClient.timeseries.search).toHaveBeenCalledTimes(1);
-    expect(fakeClient.timeseries.search).toHaveBeenCalledWith({
+    expect(sdk.timeseries.search).toHaveBeenCalledTimes(1);
+    expect(sdk.timeseries.search).toHaveBeenCalledWith({
       search: { query: 'value' },
       limit: 100,
       filter: { assetSubtrees: undefined },
@@ -126,7 +115,7 @@ describe('TimeseriesSearch', () => {
       .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'value' } });
-    expect(fakeClient.timeseries.search).toHaveBeenCalledTimes(1);
+    expect(sdk.timeseries.search).toHaveBeenCalledTimes(1);
 
     // need this to wait for promise to complete
     setImmediate(() => {
@@ -137,8 +126,8 @@ describe('TimeseriesSearch', () => {
         .last()
         .simulate('click');
 
-      expect(fakeClient.timeseries.search).toHaveBeenCalledTimes(2);
-      expect(fakeClient.timeseries.search).toHaveBeenNthCalledWith(2, {
+      expect(sdk.timeseries.search).toHaveBeenCalledTimes(2);
+      expect(sdk.timeseries.search).toHaveBeenNthCalledWith(2, {
         search: { query: 'value' },
         limit: 100,
         filter: { assetSubtrees: [assetsList[assetsList.length - 1].id] },
@@ -160,7 +149,7 @@ describe('TimeseriesSearch', () => {
       .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
-    expect(fakeClient.timeseries.search).toHaveBeenCalledTimes(1);
+    expect(sdk.timeseries.search).toHaveBeenCalledTimes(1);
 
     // need this to wait for promise to complete
     setImmediate(() => {
@@ -186,7 +175,7 @@ describe('TimeseriesSearch', () => {
       .find(Input)
       .find('input')
       .simulate('change', { target: { value: 'a' } });
-    expect(fakeClient.timeseries.search).toHaveBeenCalledTimes(1);
+    expect(sdk.timeseries.search).toHaveBeenCalledTimes(1);
 
     // need this to wait for promise to complete
     setImmediate(() => {
@@ -429,7 +418,7 @@ describe('TimeseriesSearch', () => {
 
   it('should preselect', done => {
     // @ts-ignore
-    fakeClient.timeseries.retrieve.mockResolvedValue([timeseriesListV2[1]]);
+    sdk.timeseries.retrieve.mockResolvedValue([timeseriesListV2[1]]);
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = {
       assets: assetsList,
@@ -460,7 +449,7 @@ describe('TimeseriesSearch', () => {
       ).toBe(true);
       expect(wrapper.find(Tag).text()).toBe(timeseriesListV2[1].name);
       // @ts-ignore
-      fakeClient.timeseries.retrieve.mockClear();
+      sdk.timeseries.retrieve.mockClear();
       done();
     });
   });
@@ -496,7 +485,7 @@ describe('TimeseriesSearch', () => {
   it('should call onError when api call fails', done => {
     const { onTimeserieSelectionChange, onError } = propsCallbacks;
     // @ts-ignore
-    fakeClient.timeseries.search.mockRejectedValue(new Error('Error'));
+    sdk.timeseries.search.mockRejectedValue(new Error('Error'));
     const props = { assets: assetsList, onTimeserieSelectionChange, onError };
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>

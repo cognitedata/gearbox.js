@@ -1,11 +1,10 @@
-import { CogniteClient } from '@cognite/sdk';
 import { Input } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
 import React from 'react';
 import { assetsList } from '../../mocks';
-
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { AssetSearch } from './AssetSearch';
 import Mock = jest.Mock;
@@ -23,28 +22,18 @@ jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
   return f;
 });
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  assets: {
+class CogniteClient extends MockCogniteClient {
+  assets: any = {
     search: jest.fn(),
     list: jest.fn(),
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 beforeEach(() => {
-  // @ts-ignore
-  fakeClient.assets.list.mockResolvedValue(assetsList);
-  // @ts-ignore
-  fakeClient.assets.search.mockResolvedValue(assetsList);
+  sdk.assets.list.mockResolvedValue(assetsList);
+  sdk.assets.search.mockResolvedValue(assetsList);
 });
 
 const createWrapper = (props: any) => {
@@ -126,8 +115,7 @@ describe('AssetSearch', () => {
   });
 
   it('should call onError when error', done => {
-    // @ts-ignore
-    fakeClient.assets.search.mockRejectedValue(new Error('error'));
+    sdk.assets.search.mockRejectedValue(new Error('error'));
 
     const { onLiveSearchSelect, onError } = propsCallbacks;
     const props = { onLiveSearchSelect, onError };
@@ -152,7 +140,7 @@ describe('AssetSearch', () => {
 
     setImmediate(() => {
       wrapper.update();
-      expect(fakeClient.assets.list).toHaveBeenCalled();
+      expect(sdk.assets.list).toHaveBeenCalled();
       done();
     });
   });
@@ -164,7 +152,7 @@ describe('AssetSearch', () => {
 
     setImmediate(() => {
       wrapper.update();
-      expect(fakeClient.assets.list).not.toHaveBeenCalled();
+      expect(sdk.assets.list).not.toHaveBeenCalled();
       done();
     });
   });
@@ -180,7 +168,7 @@ describe('AssetSearch', () => {
       // tslint:disable-next-line: no-identical-functions
       setImmediate(() => {
         wrapper.update();
-        expect(fakeClient.assets.list).toHaveBeenCalled();
+        expect(sdk.assets.list).toHaveBeenCalled();
         done();
       });
     });

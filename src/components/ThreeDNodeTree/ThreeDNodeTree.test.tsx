@@ -1,27 +1,19 @@
-import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import sinon from 'sinon';
 import { NODE_LIST } from '../../mocks/threeDNodesList';
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider/ClientSDKProvider';
 import { ThreeDNodeTree } from './ThreeDNodeTree';
 
 configure({ adapter: new Adapter() });
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  viewer3D: {
+class CogniteClient extends MockCogniteClient {
+  viewer3D: any = {
     listRevealNodes3D: jest.fn().mockReturnValue({ items: NODE_LIST }),
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 

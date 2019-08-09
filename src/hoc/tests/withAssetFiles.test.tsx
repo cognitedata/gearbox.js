@@ -1,41 +1,31 @@
-import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { SDK_LIST_LIMIT } from '../../constants/sdk';
 import { fakeFiles } from '../../mocks';
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { withAssetFiles, WithAssetFilesDataProps } from '../withAssetFiles';
 
 configure({ adapter: new Adapter() });
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  files: {
+class CogniteClient extends MockCogniteClient {
+  files: any = {
     list: jest.fn(),
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('withAssetFiles', () => {
   beforeEach(() => {
-    // @ts-ignore
-    fakeClient.files.list.mockReturnValue({
+    sdk.files.list.mockReturnValue({
       autoPagingToArray: () => Promise.resolve(fakeFiles),
     });
   });
 
   afterEach(() => {
-    // @ts-ignore
-    fakeClient.files.list.mockClear();
+    sdk.files.list.mockClear();
   });
 
   it('Should render spinner', () => {
@@ -121,7 +111,7 @@ describe('withAssetFiles', () => {
     });
 
     setImmediate(() => {
-      expect(fakeClient.files.list).toBeCalledTimes(2);
+      expect(sdk.files.list).toBeCalledTimes(2);
       done();
     });
   });
@@ -158,7 +148,7 @@ describe('withAssetFiles', () => {
       </ClientSDKProvider>
     );
 
-    expect(fakeClient.files.list).toBeCalledWith({
+    expect(sdk.files.list).toBeCalledWith({
       limit: 78,
       filter: { assetIds: [123], name: 'test name' },
     });
@@ -172,7 +162,7 @@ describe('withAssetFiles', () => {
       </ClientSDKProvider>
     );
 
-    expect(fakeClient.files.list).toBeCalledWith({
+    expect(sdk.files.list).toBeCalledWith({
       limit: SDK_LIST_LIMIT,
       filter: { assetIds: [123] },
     });

@@ -1,32 +1,23 @@
-import { CogniteClient } from '@cognite/sdk';
 import {
   GetAggregateDatapoint,
   GetDoubleDatapoint,
   GetStringDatapoint,
 } from '@cognite/sdk/dist/src/types/types';
 import { datapointsList, timeseriesListV2 } from '../../mocks';
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { AccessorFunc, DataLoader } from './dataLoader';
 
 const mockTimeseriesRetrieve = jest.fn();
 const mockDatapointsRetrieve = jest.fn();
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  timeseries: {
+class CogniteClient extends MockCogniteClient {
+  timeseries: any = {
     retrieve: mockTimeseriesRetrieve,
-  },
-  // @ts-ignore
-  datapoints: {
+  };
+  datapoints: any = {
     retrieve: mockDatapointsRetrieve,
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
@@ -132,8 +123,8 @@ describe('dataLoader', () => {
             oldSeries: {},
             reason: 'MOUNTED',
           });
-          expect(fakeClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
-          expect(fakeClient.datapoints.retrieve).toHaveBeenCalledWith({
+          expect(sdk.datapoints.retrieve).toHaveBeenCalledTimes(1);
+          expect(sdk.datapoints.retrieve).toHaveBeenCalledWith({
             items: [
               expect.objectContaining({
                 granularity: expectedGranularity,
@@ -211,8 +202,8 @@ describe('dataLoader', () => {
             oldSeries: {},
             reason: 'INTERVAL',
           });
-          expect(fakeClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
-          expect(fakeClient.datapoints.retrieve).toHaveBeenCalledWith({
+          expect(sdk.datapoints.retrieve).toHaveBeenCalledTimes(1);
+          expect(sdk.datapoints.retrieve).toHaveBeenCalledWith({
             items: [
               expect.objectContaining({ granularity: expectedGranularity }),
             ],
@@ -233,8 +224,7 @@ describe('dataLoader', () => {
             value: 36.2421327365039,
           },
         ];
-        // @ts-ignore
-        fakeClient.datapoints.retrieve.mockResolvedValue([
+        sdk.datapoints.retrieve.mockResolvedValue([
           {
             name: 'abc',
             datapoints,
@@ -285,7 +275,7 @@ describe('dataLoader', () => {
           reason: 'UPDATE_SUBDOMAIN',
         });
 
-        expect(fakeClient.datapoints.retrieve).toHaveBeenCalledTimes(1);
+        expect(sdk.datapoints.retrieve).toHaveBeenCalledTimes(1);
         expect(result.drawPoints).toBeFalsy();
         expect(result.data).toEqual(datapointsList.datapoints);
         expect(DataLoader.mergeInsert).toHaveBeenCalledTimes(1);

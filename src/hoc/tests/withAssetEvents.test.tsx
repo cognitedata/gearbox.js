@@ -1,42 +1,31 @@
-import { CogniteClient } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { SDK_LIST_LIMIT } from '../../constants/sdk';
 import { fakeEvents } from '../../mocks';
-
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { withAssetEvents, WithAssetEventsDataProps } from '../withAssetEvents';
 
 configure({ adapter: new Adapter() });
 
-const fakeClient: CogniteClient = {
-  // @ts-ignore
-  events: {
+class CogniteClient extends MockCogniteClient {
+  events: any = {
     list: jest.fn(),
-  },
-};
-
-jest.mock('@cognite/sdk', () => ({
-  __esModule: true,
-  CogniteClient: jest.fn().mockImplementation(() => {
-    return fakeClient;
-  }),
-}));
+  };
+}
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('withAssetEvents', () => {
   beforeEach(() => {
-    // @ts-ignore
-    fakeClient.events.list.mockReturnValue({
+    sdk.events.list.mockReturnValue({
       autoPagingToArray: () => Promise.resolve(fakeEvents),
     });
   });
 
   afterEach(() => {
-    // @ts-ignore
-    fakeClient.events.list.mockClear();
+    sdk.events.list.mockClear();
   });
 
   it('Should render spinner', () => {
@@ -122,7 +111,7 @@ describe('withAssetEvents', () => {
     wrapper.setProps({ children: <WrappedComponent assetId={1234} /> });
 
     setImmediate(() => {
-      expect(fakeClient.events.list).toBeCalledTimes(2);
+      expect(sdk.events.list).toBeCalledTimes(2);
       done();
     });
   });
@@ -156,7 +145,7 @@ describe('withAssetEvents', () => {
       </ClientSDKProvider>
     );
 
-    expect(fakeClient.events.list).toBeCalledWith({
+    expect(sdk.events.list).toBeCalledWith({
       limit: 78,
       filter: {
         assetIds: [123],
@@ -173,7 +162,7 @@ describe('withAssetEvents', () => {
       </ClientSDKProvider>
     );
 
-    expect(fakeClient.events.list).toBeCalledWith({
+    expect(sdk.events.list).toBeCalledWith({
       limit: SDK_LIST_LIMIT,
       filter: {
         assetIds: [123],
