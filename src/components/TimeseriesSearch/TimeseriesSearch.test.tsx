@@ -27,6 +27,9 @@ class CogniteClient extends MockCogniteClient {
     retrieve: jest.fn(),
     search: jest.fn(),
   };
+  assets: any = {
+    list: jest.fn(),
+  };
 }
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
@@ -34,6 +37,7 @@ const sdk = new CogniteClient({ appId: 'gearbox test' });
 beforeEach(() => {
   sdk.timeseries.retrieve.mockResolvedValue(timeseriesListV2);
   sdk.timeseries.search.mockResolvedValue(timeseriesListV2);
+  sdk.assets.list.mockResolvedValue({ items: assetsList });
 });
 
 afterEach(() => {
@@ -98,8 +102,7 @@ describe('TimeseriesSearch', () => {
     });
   });
 
-  // assetSubtree query is not supported yet. Check with f1
-  xit('should update assetId with user-selected root asset id', done => {
+  it('should update assetId with user-selected root asset id', done => {
     const { onTimeserieSelectionChange } = propsCallbacks;
     const props = {
       onTimeserieSelectionChange,
@@ -130,7 +133,7 @@ describe('TimeseriesSearch', () => {
       expect(sdk.timeseries.search).toHaveBeenNthCalledWith(2, {
         search: { query: 'value' },
         limit: 100,
-        filter: { assetSubtrees: [assetsList[assetsList.length - 1].id] },
+        filter: { assetIds: [assetsList[assetsList.length - 1].id] },
       });
       done();
     });
