@@ -8,6 +8,5 @@ import {
 export type AssetDocumentsPanelProps = WithAssetFilesProps &
   MetaDocProps &
   DocumentsPanelStylesProps;
-export type MetaDocProps = MetaDocProps;
 
 export const AssetDocumentsPanel = withAssetFiles(DocumentTable);
