@@ -19,10 +19,27 @@ Install additional dependencies:
 1.  Using Yarn `yarn add @cognite/sdk @cognite/griff-react antd styled-components`
 2.  Using NPM `npm i @cognite/sdk @cognite/griff-react antd styled-components --save`
 
-## Examples
+## Usage
+1. Install `@cognite/sdk` and setup the SDK context
 
-### TODO ADD ACTUAL DESCRIPTION
+The first thing to setup is the Cognite SDK and add in `ClientSDKProvider`. This should be mounted near the top level and ALL usages of Gearbox needs to be within this Provider.
 
+For SDK docs: 
+- [Authentication](https://github.com/cognitedata/cognitesdk-js/blob/HEAD/guides/authentication.md)
+- [SDK Documentation](https://cognitedata.github.io/cognitesdk-js/)
+```js
+import { CogniteClient } from "@cognite/sdk";
+...
+const sdk = new CogniteClient({ appId: 'new-app' })
+...
+sdk.loginWithOAuth({ project: tenant }); // or other authentication methods
+...
+<ClientSDKProvider client={sdk}>
+  ...Part of your app that uses of Gearbox)..
+</ClientSDKProvider>
+...
+```
+2. Load in components and start using Gearbox
 ```js
 import { %Component_name% } from "@cognite/gearbox";
 import 'antd/dist/antd.css';
@@ -38,6 +55,7 @@ import {
   TenantSelector
 } from "@cognite/gearbox/dist/components/TenantSelector";
 ```
+It is crucial that these Gearbox components are being used inside the `ClientSDKProvider`. To learn more about how this works, we are using [React Context](https://reactjs.org/docs/context.html).
 
 ## Storybook
 
