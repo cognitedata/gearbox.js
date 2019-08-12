@@ -1026,10 +1026,10 @@
     react-select "^1.2.1"
     react-sizeme "^2.5.2"
 
-"@cognite/sdk@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@cognite/sdk/-/sdk-2.0.3.tgz#3b2af851f0268636810d91bb042a45a861da5b3e"
-  integrity sha512-YSuLpUuN6aJMhQa0z7pzchlfagDlKI4eCmr/dA/QpftnS9iisd568y2raD7A2NMGKf8PMohIBsq1IFgYdzghrw==
+"@cognite/sdk@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@cognite/sdk/-/sdk-2.2.1.tgz#8725a7c4554755cac9a49119102a1c5cfee1abbd"
+  integrity sha512-jKQ3mpDQJcd/grGcepk5pR2Y8hpbMlb7GWkK8I/9Pm3KHTNNEIdZYG7Lq6ddnsIbLTyeaHZ8dEsDe7/tK6aKKw==
   dependencies:
     axios "0.18.1"
     lodash "^4.17.11"

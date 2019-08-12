@@ -26,9 +26,10 @@ The first thing to setup is the Cognite SDK and add in `ClientSDKProvider`. This
 
 For SDK docs: 
 - [Authentication](https://github.com/cognitedata/cognitesdk-js/blob/HEAD/guides/authentication.md)
-- [SDK Documentation](https://cognitedata.github.io/cognitesdk-js/)
+- [SDK Documentation](https://www.npmjs.com/package/@cognite/sdk/)
 ```js
 import { CogniteClient } from "@cognite/sdk";
+import { ClientSDKProvider } from "@cognite/gearbox";
 ...
 const sdk = new CogniteClient({ appId: 'new-app' })
 ...

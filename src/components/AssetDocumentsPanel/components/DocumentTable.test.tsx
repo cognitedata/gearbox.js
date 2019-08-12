@@ -7,7 +7,6 @@ import {
   DOCUMENT_WITHOUT_METADATA,
   DOCUMENT_WITHOUT_TYPE,
   DOCUMENTS,
-  // fakeFiles,
   generateDocumentWithDocType,
 } from '../../../mocks';
 import { DocumentTable } from './DocumentTable';

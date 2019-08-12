@@ -1,8 +1,8 @@
-import { API } from '@cognite/sdk/dist/src/resources/api';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { DOCUMENTS } from '../../../mocks';
+import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetDocumentsPanel } from '../AssetDocumentsPanel';
 import categoryNames from './categoryNames.md';
@@ -11,9 +11,8 @@ import customStyles from './customStyles.md';
 import fullDescription from './full.md';
 import loadCallback from './loadCallback.md';
 
-const fakeClient: API = {
-  files: {
-    // @ts-ignore
+class CogniteClient extends MockCogniteClient {
+  files: any = {
     list: () => ({
       autoPagingToArray: () => {
         return new Promise(resolve => {
@@ -23,11 +22,13 @@ const fakeClient: API = {
         });
       },
     }),
-  },
-};
+  };
+}
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 const clientSDKDecorator = (storyFn: any) => (
-  <ClientSDKProvider client={fakeClient}>{storyFn()}</ClientSDKProvider>
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
 storiesOf('AssetDocumentsPanel', module)

@@ -22,12 +22,10 @@ const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('AssetDetailsPanel', () => {
   beforeEach(() => {
-    // @ts-ignore
     mockAssetList.mockResolvedValue([fakeAsset]);
   });
 
   afterEach(() => {
-    // @ts-ignore
     mockAssetList.mockClear();
   });
 

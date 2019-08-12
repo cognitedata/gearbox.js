@@ -132,8 +132,7 @@ describe('AssetSearch', () => {
     });
   });
 
-  // TODO disabled due to rootAssetSelect changes in SDK 2.0
-  xit('should fetch root assets when rootAssetSelect is true', done => {
+  it('should fetch root assets when rootAssetSelect is true', done => {
     const { onLiveSearchSelect } = propsCallbacks;
     const props = { onLiveSearchSelect, rootAssetSelect: true };
     const wrapper = createWrapper(props);
@@ -145,7 +144,7 @@ describe('AssetSearch', () => {
     });
   });
 
-  xit('should not fetch root assets when rootAssetSelect is false', done => {
+  it('should not fetch root assets when rootAssetSelect is false', done => {
     const { onLiveSearchSelect } = propsCallbacks;
     const props = { onLiveSearchSelect, rootAssetSelect: false };
     const wrapper = createWrapper(props);
@@ -157,14 +156,16 @@ describe('AssetSearch', () => {
     });
   });
 
-  xit('should fetch root assets when rootAssetSelect changes from false to true', done => {
+  it('should fetch root assets when rootAssetSelect changes from false to true', done => {
     const { onLiveSearchSelect } = propsCallbacks;
     const props = { onLiveSearchSelect, rootAssetSelect: false };
     const wrapper = createWrapper(props);
 
     setImmediate(() => {
       wrapper.update();
-      wrapper.setProps({ rootAssetSelect: true });
+      wrapper.setProps({
+        children: <AssetSearch {...props} rootAssetSelect={true} />,
+      });
       // tslint:disable-next-line: no-identical-functions
       setImmediate(() => {
         wrapper.update();
