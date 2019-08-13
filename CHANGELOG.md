@@ -1,4 +1,4 @@
-# Migrating from Gearbox v5.x.x and below to v6.0.0
+# Migrating from Gearbox v0.0.x and below to v0.1.0
 
 There's been an architectural change since v5.x.x. This is because the `@cognite/sdk` Gearbox uses is now v2.0.0+. Read more about the change [here](https://www.npmjs.com/package/@cognite/sdk)
 
