@@ -9,7 +9,7 @@ import 'antd/dist/antd.css';
 
 import React from 'react';
 import { AssetSearch, AssetSearchStyles } from '@cognite/gearbox';
-import { Asset } from '@cognite/sdk/dist/src/types/types';
+import { Asset } from '@cognite/sdk';
 
 function ExampleComponent(props) {
   const onLiveSearchSelect = (item: Asset): void => {};

@@ -1,6 +1,6 @@
 import { Cognite3DViewer, OnProgressData, THREE } from '@cognite/3d-viewer';
 import { CogniteClient } from '@cognite/sdk';
-import { Revision3D } from '@cognite/sdk/dist/src/types/types';
+import { Revision3D } from '@cognite/sdk';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { CacheObject, Callback, EventHandlers } from '../interfaces';
 import { MockCogniteClient } from '../utils/mockSdk';

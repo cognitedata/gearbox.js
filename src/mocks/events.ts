@@ -1,5 +1,5 @@
 /* tslint:disable:no-duplicate-string */
-import { CogniteEvent } from '@cognite/sdk/dist/src/types/types';
+import { CogniteEvent } from '@cognite/sdk';
 import moment from 'moment-timezone';
 import { AssetMetaStyles } from '../components/AssetMeta';
 import { AssetTimeseriesPanelStyles } from '../components/AssetTimeseriesPanel/components/TimeseriesPanelPure';

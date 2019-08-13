@@ -7,6 +7,8 @@
 This component searches for timeseries by name. Search results will be shown in a list. Each result have a checkbox for selection, and all selected timeseries are shown above the search bar. Selected timeseries can be removed by clicking the cross on the selected row.
 The component requires only `onTimeserieSelectionChange`prop which is called when the selection changes. It is called with two parameters: the current list of selected ids, and the last added/removed timeseries.
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage
 
 ```typescript jsx

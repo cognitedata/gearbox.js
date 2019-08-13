@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';

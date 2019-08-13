@@ -7,6 +7,8 @@
 Component to select a tenant.
 The component requires two props, `title` and `onTenantSelected`. 
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx

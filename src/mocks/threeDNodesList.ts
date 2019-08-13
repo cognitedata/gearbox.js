@@ -1,4 +1,4 @@
-import { RevealNode3D } from '@cognite/sdk/dist/src/types/types';
+import { RevealNode3D } from '@cognite/sdk';
 
 const container = 'container_20_feet_01';
 

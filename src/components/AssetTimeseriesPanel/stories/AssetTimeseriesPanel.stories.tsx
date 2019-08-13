@@ -1,5 +1,5 @@
 import { CogniteAsyncIterator } from '@cognite/sdk/dist/src/autoPagination';
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk/dist/src/types/types';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';

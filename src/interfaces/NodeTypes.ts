@@ -1,4 +1,4 @@
-import { RevealNode3D } from '@cognite/sdk/dist/src/types/types';
+import { RevealNode3D } from '@cognite/sdk';
 import { AntTreeNodeProps } from 'antd/lib/tree';
 import { AnyIfEmpty } from './CommonTypes';
 

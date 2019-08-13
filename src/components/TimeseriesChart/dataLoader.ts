@@ -7,7 +7,7 @@ import {
   GetDoubleDatapoint,
   GetStringDatapoint,
   GetTimeSeriesMetadataDTO,
-} from '@cognite/sdk/dist/src/types/types';
+} from '@cognite/sdk';
 
 interface GriffSeries {
   firstSeries: GetAggregateDatapoint[];

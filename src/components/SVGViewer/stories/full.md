@@ -12,6 +12,8 @@ SVG-viewer provides the following functionality:
 - Locate and zoom onto equipment in the document
 - Search by equipment with locating and zooming results
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx

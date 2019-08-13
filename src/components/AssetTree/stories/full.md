@@ -6,6 +6,8 @@
 
 Visualize parent-child relationship of assets in a tree structure. It will initially fetch all available root assets from the SDK. When a node is expanded, the children will be fetched dynamically
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx

@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk/dist/src/types/types';
+import { Asset } from '@cognite/sdk';
 import { Tree } from 'antd';
 import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';
 import React from 'react';

@@ -9,13 +9,15 @@ event description, event start datetime and end datetime, number of elements in 
 additional event details. The component requires only `eventId` that is numerical ID of an event. While loading an event the component 
 shows loading spinner.
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { CogniteEvent } from '@cognite/sdk/dist/src/types/types';
+import { CogniteEvent } from '@cognite/sdk';
 import { EventPreview } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
@@ -69,7 +71,7 @@ function ExampleComponent(props) {
 `CogniteEvent` type can be imported from `@cognite/sdk`:
 
 ```typescript
-import { CogniteEvent } from '@cognite/sdk/dist/src/types/types';
+import { CogniteEvent } from '@cognite/sdk';
 ```
 
 #### EventPreviewStyles

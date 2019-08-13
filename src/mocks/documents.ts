@@ -1,4 +1,4 @@
-import { FilesMetadata } from '@cognite/sdk/dist/src/types/types';
+import { FilesMetadata } from '@cognite/sdk';
 
 function generateDocumentBase(id: number): FilesMetadata {
   return {

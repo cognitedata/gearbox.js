@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk/dist/src/types/types';
+import { Asset } from '@cognite/sdk';
 import { SyntheticEvent } from 'react';
 import { AdvancedSearch } from './index';
 

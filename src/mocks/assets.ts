@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk/dist/src/types/types';
+import { Asset } from '@cognite/sdk';
 
 export const ASSET_DATA = {
   id: 4650652196144007,

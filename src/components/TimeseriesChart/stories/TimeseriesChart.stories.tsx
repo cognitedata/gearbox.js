@@ -6,7 +6,7 @@ import {
   DatapointsGetStringDatapoint,
   DatapointsMultiQuery,
   GetTimeSeriesMetadataDTO,
-} from '@cognite/sdk/dist/src/types/types';
+} from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';

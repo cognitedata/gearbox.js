@@ -56,7 +56,7 @@ function ExampleComponent(props) {
 This type can be imported from `@cognite/sdk`:
 
 ```typescript
-import { FileRequestFilter } from `@cognite/sdk/dist/src/types/types`;
+import { FileRequestFilter } from `@cognite/sdk`;
 ```
 
 #### OnDocumentClick
@@ -83,7 +83,7 @@ import { CollapseProps } from 'antd/lib/collapse';
 Definition:
 
 ```typescript
-import { FilesMetadata } from `@cognite/sdk/dist/src/types/types`;
+import { FilesMetadata } from `@cognite/sdk`;
 
 type DocumentRenderer = (
   document: FilesMetadata,

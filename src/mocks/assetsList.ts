@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk/dist/src/types/types';
+import { Asset } from '@cognite/sdk';
 import { AdvancedSearch } from '../interfaces';
 
 export const vmateDba = 'wmate_dba.wmt_location';

@@ -1,5 +1,5 @@
 import { Cognite3DModel, Cognite3DViewer, THREE } from '@cognite/3d-viewer';
-import { AssetMapping3D, Revision3D } from '@cognite/sdk/dist/src/types/types';
+import { AssetMapping3D, Revision3D } from '@cognite/sdk';
 import { Button, Slider } from 'antd';
 import { SliderValue } from 'antd/lib/slider';
 import React, { RefObject } from 'react';

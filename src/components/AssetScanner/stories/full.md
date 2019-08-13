@@ -22,6 +22,9 @@ You might provide your custom `extractOcrStrings` function to retrieve an array 
 You also can use your own implementation of OCR call if you use your own OCR service.
 Just provide `ocrRequest` function to retrieve strings recognized from an image with your own implementation of OCR request.
 
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx

@@ -10,6 +10,8 @@ To retrieve a tree you need to provide:
 - `modelId` – you can find it using `sdk.ThreeD.listModels()` call
 - `revisionId` – you can find it via `sdk.ThreeD.listRevisions(modelID)` call
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx

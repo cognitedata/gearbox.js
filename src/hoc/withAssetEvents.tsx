@@ -1,7 +1,7 @@
 import {
   CogniteEvent,
   EventFilterRequest,
-} from '@cognite/sdk/dist/src/types/types';
+} from '@cognite/sdk';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';

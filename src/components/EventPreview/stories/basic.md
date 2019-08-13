@@ -8,7 +8,7 @@
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { CogniteEvent } from '@cognite/sdk/dist/src/types/types';
+import { CogniteEvent } from '@cognite/sdk';
 import { EventPreview } from '@cognite/gearbox';
 
 function ExampleComponent(props) {

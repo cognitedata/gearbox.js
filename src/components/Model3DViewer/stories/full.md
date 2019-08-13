@@ -20,6 +20,8 @@ To retrieve a 3D model you need to provide:
 - `modelId` – you can get it via SDK call – `Models3DAPI.list()`. You receive an iterator as a result, which could be used to get list of model ids associated to your tenant. 
 - `revisionId` – you can get it via SDK call `Revisions3DAPI.list(modelId)`. You receive an iterator as a result, which could be used to get list of revision ids available for provided modelId
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx
@@ -31,7 +33,7 @@ import {
   Cognite3DModel,
   OnProgressData,
 } from '@cognite/3d-viewer';
-import { Revision3D } from '@cognite/sdk/dist/src/types/types';
+import { Revision3D } from '@cognite/sdk';
 import { Model3DViewer } from '@cognite/gearbox';
 
 function ExampleComponent(props) {

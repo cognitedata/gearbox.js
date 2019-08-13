@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk/dist/src/types/types';
+import { Asset } from '@cognite/sdk';
 import { AnyIfEmpty } from '../interfaces';
 import { MetadataId } from './index';
 

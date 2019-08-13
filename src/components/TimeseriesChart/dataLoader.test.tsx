@@ -2,7 +2,7 @@ import {
   GetAggregateDatapoint,
   GetDoubleDatapoint,
   GetStringDatapoint,
-} from '@cognite/sdk/dist/src/types/types';
+} from '@cognite/sdk';
 import { datapointsList, timeseriesListV2 } from '../../mocks';
 import { MockCogniteClient } from '../../utils/mockSdk';
 import { AccessorFunc, DataLoader } from './dataLoader';
