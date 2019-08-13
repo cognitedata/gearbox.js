@@ -1,9 +1,13 @@
-import { Asset, AssetListDescendantsParams } from '@cognite/sdk';
-import * as sdk from '@cognite/sdk';
+import { Asset } from '@cognite/sdk';
 import { Tree } from 'antd';
 import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';
 import React from 'react';
 import styled from 'styled-components';
+import {
+  ERROR_API_UNEXPECTED_RESULTS,
+  ERROR_NO_SDK_CLIENT,
+} from '../../constants/errorMessages';
+import { ClientSDKContext } from '../../context/clientSDKContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import {
   AssetTreeProps,
@@ -30,23 +34,8 @@ interface AssetTreeState {
   expandedKeys: ExpandedKeysMap;
 }
 
-const cursorApiRequest = async (
-  assetId: number,
-  params: AssetListDescendantsParams,
-  data: Asset[] = []
-): Promise<Asset[]> => {
-  const result = await sdk.Assets.listDescendants(assetId, params);
-  const { nextCursor: cursor } = result;
-  if (result.nextCursor) {
-    return cursorApiRequest(assetId, { ...params, cursor }, [
-      ...data,
-      ...result.items,
-    ]);
-  }
-  return [...data, ...result.items];
-};
-
 class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
+  static contextType = ClientSDKContext;
   static defaultProps = {
     theme: { ...defaultTheme },
   };
@@ -91,10 +80,11 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
       isLeaf: true,
     };
   }
-
+  // TODO path?
   static toKeys(path: number[], initial = {}): ExpandedKeysMap {
     return path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
   }
+  context!: React.ContextType<typeof ClientSDKContext>;
 
   constructor(props: AssetTreeProps) {
     super(props);
@@ -109,15 +99,27 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   }
 
   async componentDidMount() {
-    const assets = await sdk.Assets.list({ depth: 1 });
+    if (!this.context) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
+    const assets = await this.context.assets.list().autoPagingToArray();
     this.setState({
-      assets: assets.items,
+      assets,
       treeData:
-        assets && assets.items.length > 0
-          ? AssetTree.mapDataAssets(assets.items)
-          : [],
+        assets && assets.length > 0 ? AssetTree.mapDataAssets(assets) : [],
     });
   }
+
+  cursorApiRequest = async (assetId: number): Promise<Asset[]> => {
+    const result = await this.context!.assets.list({
+      filter: { parentIds: [assetId] },
+    }).autoPagingToArray();
+    if (!result || !Array.isArray(result)) {
+      console.error(ERROR_API_UNEXPECTED_RESULTS);
+    }
+    return result;
+  };
 
   onLoadData = async (treeNode: AntTreeNode) => {
     if (treeNode.props.children) {
@@ -127,12 +129,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     const assetId = eventKey ? Number.parseInt(eventKey, 10) : undefined;
 
     if (assetId && !Number.isNaN(assetId)) {
-      const query = {
-        depth: 2,
-        limit: 1000,
-      };
-
-      const loadedData = await cursorApiRequest(assetId, query);
+      const loadedData = await this.cursorApiRequest(assetId);
       if (loadedData.length > 1) {
         treeNode.props.dataRef.children = loadedData
           .slice(1)

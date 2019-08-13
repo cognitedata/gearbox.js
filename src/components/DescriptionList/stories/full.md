@@ -6,6 +6,8 @@
 
 This component displays an object in a table layout.
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx

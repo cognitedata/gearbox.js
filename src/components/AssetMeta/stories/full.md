@@ -15,6 +15,8 @@ In case if some of the panes are not necessary it can be disabled by `hidePanels
 
 If you need to use one of these four panes separately without tabs please see following components: `AssetDetailsPanel`, `AssetTimeseriesPanel`, `AssetDocumentsPanel` and `AssetEventsPanel`.
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx
@@ -104,7 +106,7 @@ Definition:
 
 ```typescript
 import { CollapseProps } from 'antd/lib/collapse';
-import { File as Document } from '@cognite/sdk';
+import { FilesMetadata as Document } from '@cognite/sdk';
 
 interface MetaDocProps {
   handleDocumentClick?: OnDocumentClick;

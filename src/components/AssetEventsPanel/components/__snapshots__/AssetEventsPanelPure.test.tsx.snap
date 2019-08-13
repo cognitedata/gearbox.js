@@ -171,7 +171,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        failure
+                        Workorder
                       </strong>
                       <span
                         style={
@@ -181,7 +181,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        Valhall
+                        VAL
                       </span>
                     </span>
                   </td>
@@ -224,7 +224,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        alert
+                        Workitem
                       </strong>
                       <span
                         style={
@@ -234,7 +234,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        Val
+                        VAL
                       </span>
                     </span>
                   </td>
@@ -277,7 +277,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        workorder
+                        Workorder
                       </strong>
                       <span
                         style={
@@ -287,7 +287,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        Val
+                        VAL
                       </span>
                     </span>
                   </td>
@@ -330,7 +330,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        failure
+                        Workitem
                       </strong>
                       <span
                         style={
@@ -340,7 +340,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        Val
+                        VAL
                       </span>
                     </span>
                   </td>
@@ -383,7 +383,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        alert
+                        Workpackage
                       </strong>
                       <span
                         style={
@@ -393,7 +393,7 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                           }
                         }
                       >
-                        Val
+                        VAL
                       </span>
                     </span>
                   </td>

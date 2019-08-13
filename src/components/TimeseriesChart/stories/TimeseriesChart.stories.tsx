@@ -1,12 +1,20 @@
 /* eslint-disable react/no-multi-comp */
 import { AxisDisplayMode } from '@cognite/griff-react';
-import * as sdk from '@cognite/sdk';
+import {
+  DatapointsGetAggregateDatapoint,
+  DatapointsGetDoubleDatapoint,
+  DatapointsGetStringDatapoint,
+  DatapointsMultiQuery,
+  GetTimeSeriesMetadataDTO,
+} from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { y0Accessor, y1Accessor, yAccessor } from '../dataLoader';
+import { timeseriesListV2 } from '../../../mocks';
+import { MockCogniteClient } from '../../../utils/mockSdk';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
+import { DataLoader } from '../dataLoader';
 import { TimeseriesChart } from '../TimeseriesChart';
-
 import annotations from './annotations.md';
 import collapsedYAxis from './collapsedYAxis.md';
 import containerStyle from './containerStyle.md';
@@ -30,7 +38,11 @@ import startEnd from './startEnd.md';
 import xAxisHeight from './xAxisHeight.md';
 import zoomable from './zoomable.md';
 
-const randomData = (start: number, end: number, n: number): sdk.Datapoint[] => {
+const randomData = (
+  start: number,
+  end: number,
+  n: number
+): DatapointsGetAggregateDatapoint => {
   const data = [];
   const dt = (end - start) / n;
   for (let i = start; i <= end; i += dt) {
@@ -43,74 +55,105 @@ const randomData = (start: number, end: number, n: number): sdk.Datapoint[] => {
       )
       .sort((a: number, b: number) => a - b);
     data.push({
-      timestamp: i,
+      timestamp: new Date(i),
       average: values[1],
       min: values[0],
       max: values[2],
       count: 7000,
     });
   }
-  return data;
+  return { datapoints: data, id: 1337 };
 };
 
-export const setupMocks = (n = 100) => {
-  sdk.TimeSeries.retrieve = async (id: number, _): Promise<sdk.Timeseries> => {
-    action('sdk.TimeSeries.retrieve')(id);
-    return { id, name: 'name' };
-  };
-
-  sdk.Datapoints.retrieve = async (
-    id: number,
-    params?: sdk.DatapointsRetrieveParams | undefined
-  ): Promise<sdk.DataDatapoints> => {
-    action('sdk.Datapoints.retrieve')(id, params);
-    return {
-      name: 'name',
-      datapoints: randomData(
-        params ? params.start || 0 : 0,
-        params ? params.end || 100 : 100,
-        n
-      ),
-    };
-  };
+export const MockTimeseriesClientObject = {
+  retrieve: (): Promise<GetTimeSeriesMetadataDTO[]> => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve([timeseriesListV2[0]]);
+      }, 1000); // simulate load delay
+    });
+  },
+};
+export const MockDatapointsClientObject = {
+  retrieve: (
+    query: DatapointsMultiQuery
+  ): Promise<
+    (
+      | DatapointsGetAggregateDatapoint
+      | DatapointsGetStringDatapoint
+      | DatapointsGetDoubleDatapoint)[]
+  > => {
+    action('client.datapoints.retrieve')(query);
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const result = randomData(
+          (query.items[0].start && +query.items[0].start) || 0,
+          (query.items[0].end && +query.items[0].end) || 0,
+          100
+        );
+        resolve([result]);
+      });
+    });
+  },
 };
 
-const setupZoomableMocks = () => {
-  sdk.TimeSeries.retrieve = async (id: number, _): Promise<sdk.Timeseries> => {
-    action('sdk.TimeSeries.retrieve')(id);
-    return { id, name: 'name' };
-  };
+export class TimeseriesMockClient extends MockCogniteClient {
+  timeseries: any = MockTimeseriesClientObject;
+  datapoints: any = MockDatapointsClientObject;
+}
 
-  sdk.Datapoints.retrieve = async (
-    id: number,
-    params?: sdk.DatapointsRetrieveParams | undefined
-  ): Promise<sdk.DataDatapoints> => {
-    action('sdk.Datapoints.retrieve')(id, params);
-    if (params === undefined) {
-      return {
-        name: 'name',
-        datapoints: randomData(0, 100, 250),
-      };
-    }
-    const granularity = params.granularity || '10s';
-    const n = granularity === 's' ? 2 : granularity.includes('s') ? 10 : 250;
-    return {
-      name: 'name',
-      // datapoints,
-      datapoints: randomData(
-        params ? params.start || 0 : 0,
-        params ? params.end || 100 : 100,
-        n
-      ),
-    };
+const sdk = new TimeseriesMockClient({ appId: 'gearbox test' });
+
+// tslint:disable-next-line: max-classes-per-file
+class FakeZoomableClient extends MockCogniteClient {
+  timeseries: any = {
+    // tslint:disable-next-line: no-identical-functions
+    retrieve: (): Promise<GetTimeSeriesMetadataDTO[]> => {
+      // tslint:disable-next-line: no-identical-functions
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve([timeseriesListV2[0]]);
+        }, 1000); // simulate load delay
+      });
+    },
   };
-};
+  datapoints: any = {
+    retrieve: (
+      query: DatapointsMultiQuery
+    ): Promise<
+      (
+        | DatapointsGetAggregateDatapoint
+        | DatapointsGetStringDatapoint
+        | DatapointsGetDoubleDatapoint)[]
+    > => {
+      action('client.datapoints.retrieve')(query);
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const granularity = query.items[0].granularity || '10s';
+          const n =
+            granularity === 's' ? 2 : granularity.includes('s') ? 10 : 250;
+          const result = randomData(
+            (query.items[0].start && +query.items[0].start) || 0,
+            (query.items[0].end && +query.items[0].end) || 100,
+            n
+          );
+          resolve([result]);
+        });
+      });
+    },
+  };
+}
+
+const zoomableSdk = new FakeZoomableClient({ appId: 'gearbox test' });
 
 storiesOf('TimeseriesChart', module).add(
   'Full description',
   () => {
-    setupMocks();
-    return <TimeseriesChart timeseriesIds={[123]} />;
+    return (
+      <ClientSDKProvider client={sdk}>
+        <TimeseriesChart timeseriesIds={[123]} />
+      </ClientSDKProvider>
+    );
   },
   {
     readme: {
@@ -124,8 +167,11 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Empty',
     () => {
-      setupMocks();
-      return <TimeseriesChart timeseriesIds={[]} />;
+      return (
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart timeseriesIds={[]} />
+        </ClientSDKProvider>
+      );
     },
     {
       readme: {
@@ -135,9 +181,13 @@ storiesOf('TimeseriesChart/Examples', module)
   )
   .add(
     'Single',
+    // tslint:disable-next-line: no-identical-functions
     () => {
-      setupMocks();
-      return <TimeseriesChart timeseriesIds={[123]} />;
+      return (
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart timeseriesIds={[123]} />
+        </ClientSDKProvider>
+      );
     },
     {
       readme: {
@@ -148,8 +198,11 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Multiple',
     () => {
-      setupMocks();
-      return <TimeseriesChart timeseriesIds={[123, 456]} />;
+      return (
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart timeseriesIds={[123, 456]} />
+        </ClientSDKProvider>
+      );
     },
     {
       readme: {
@@ -160,12 +213,13 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Hidden',
     () => {
-      setupMocks();
       return (
-        <TimeseriesChart
-          timeseriesIds={[123, 456]}
-          hiddenSeries={{ 123: true }}
-        />
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart
+            timeseriesIds={[123, 456]}
+            hiddenSeries={{ 123: true }}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -177,8 +231,11 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Height and width',
     () => {
-      setupMocks();
-      return <TimeseriesChart timeseriesIds={[123]} height={300} width={800} />;
+      return (
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart timeseriesIds={[123]} height={300} width={800} />
+        </ClientSDKProvider>
+      );
     },
     {
       readme: {
@@ -189,14 +246,15 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Custom container styles',
     () => {
-      setupMocks();
       return (
-        <TimeseriesChart
-          timeseriesIds={[123]}
-          styles={{
-            container: { height: '300px', backgroundColor: 'lightblue' },
-          }}
-        />
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart
+            timeseriesIds={[123]}
+            styles={{
+              container: { height: '300px', backgroundColor: 'lightblue' },
+            }}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -208,8 +266,11 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Left y-axis',
     () => {
-      setupMocks();
-      return <TimeseriesChart timeseriesIds={[123]} yAxisPlacement={'LEFT'} />;
+      return (
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart timeseriesIds={[123]} yAxisPlacement={'LEFT'} />
+        </ClientSDKProvider>
+      );
     },
     {
       readme: {
@@ -220,9 +281,10 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'No y-axis',
     () => {
-      setupMocks();
       return (
-        <TimeseriesChart timeseriesIds={[123]} yAxisDisplayMode={'NONE'} />
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart timeseriesIds={[123]} yAxisDisplayMode={'NONE'} />
+        </ClientSDKProvider>
       );
     },
     {
@@ -235,9 +297,13 @@ storiesOf('TimeseriesChart/Examples', module)
     'Collapsed y-axis',
     // tslint:disable-next-line: no-identical-functions
     () => {
-      setupMocks();
       return (
-        <TimeseriesChart timeseriesIds={[123]} yAxisDisplayMode={'COLLAPSED'} />
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart
+            timeseriesIds={[123]}
+            yAxisDisplayMode={'COLLAPSED'}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -249,8 +315,11 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'X-axis height',
     () => {
-      setupMocks();
-      return <TimeseriesChart timeseriesIds={[123]} xAxisHeight={100} />;
+      return (
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart timeseriesIds={[123]} xAxisHeight={100} />
+        </ClientSDKProvider>
+      );
     },
     {
       readme: {
@@ -260,9 +329,13 @@ storiesOf('TimeseriesChart/Examples', module)
   )
   .add(
     'No x-axis',
+    // tslint:disable-next-line: no-identical-functions
     () => {
-      setupMocks();
-      return <TimeseriesChart timeseriesIds={[123]} xAxisHeight={0} />;
+      return (
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart timeseriesIds={[123]} xAxisHeight={0} />
+        </ClientSDKProvider>
+      );
     },
     {
       readme: {
@@ -273,13 +346,14 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Start and end time',
     () => {
-      setupMocks();
       return (
-        <TimeseriesChart
-          timeseriesIds={[123]}
-          startTime={new Date(2019, 3, 1)}
-          endTime={new Date(2019, 4, 1)}
-        />
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart
+            timeseriesIds={[123]}
+            startTime={new Date(2019, 3, 1)}
+            endTime={new Date(2019, 4, 1)}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -291,8 +365,11 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Crosshair',
     () => {
-      setupMocks();
-      return <TimeseriesChart timeseriesIds={[123]} crosshair={true} />;
+      return (
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart timeseriesIds={[123]} crosshair={true} />
+        </ClientSDKProvider>
+      );
     },
     {
       readme: {
@@ -303,8 +380,11 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Context chart',
     () => {
-      setupMocks();
-      return <TimeseriesChart timeseriesIds={[123]} contextChart={true} />;
+      return (
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart timeseriesIds={[123]} contextChart={true} />
+        </ClientSDKProvider>
+      );
     },
     {
       readme: {
@@ -315,15 +395,16 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Zoomable',
     () => {
-      setupZoomableMocks();
       return (
-        <TimeseriesChart
-          timeseriesIds={[123]}
-          startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
-          endTime={Date.now()}
-          zoomable={true}
-          contextChart={true}
-        />
+        <ClientSDKProvider client={zoomableSdk}>
+          <TimeseriesChart
+            timeseriesIds={[123]}
+            startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
+            endTime={Date.now()}
+            zoomable={true}
+            contextChart={true}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -335,15 +416,16 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Live update',
     () => {
-      setupMocks(1);
       return (
-        <TimeseriesChart
-          timeseriesIds={[123]}
-          startTime={Date.now() - 60 * 1000}
-          endTime={Date.now()}
-          liveUpdate={true}
-          updateIntervalMillis={2000}
-        />
+        <ClientSDKProvider client={zoomableSdk}>
+          <TimeseriesChart
+            timeseriesIds={[123]}
+            startTime={Date.now() - 60 * 1000}
+            endTime={Date.now()}
+            liveUpdate={true}
+            updateIntervalMillis={2000}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -355,12 +437,13 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Custom colors',
     () => {
-      setupMocks();
       return (
-        <TimeseriesChart
-          timeseriesIds={[123, 456]}
-          timeseriesColors={{ 123: 'red', 456: '#00ff00' }}
-        />
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart
+            timeseriesIds={[123, 456]}
+            timeseriesColors={{ 123: 'red', 456: '#00ff00' }}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -372,21 +455,22 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Annotations',
     () => {
-      setupMocks();
       return (
-        <TimeseriesChart
-          timeseriesIds={[123]}
-          startTime={Date.now() - 60 * 1000}
-          endTime={Date.now()}
-          // @ts-ignore
-          annotations={[
-            {
-              data: [Date.now() - 30 * 1000, Date.now() - 20 * 1000],
-              height: 30,
-              id: 888,
-            },
-          ]}
-        />
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart
+            timeseriesIds={[123]}
+            startTime={Date.now() - 60 * 1000}
+            endTime={Date.now()}
+            // @ts-ignore
+            annotations={[
+              {
+                data: [Date.now() - 30 * 1000, Date.now() - 20 * 1000],
+                height: 30,
+                id: 888,
+              },
+            ]}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -398,19 +482,20 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Ruler',
     () => {
-      setupMocks();
       return (
-        <TimeseriesChart
-          timeseriesIds={[123]}
-          startTime={Date.now() - 60 * 1000}
-          endTime={Date.now()}
-          ruler={{
-            visible: true,
-            yLabel: (point: any) =>
-              `${Number.parseFloat(point.value).toFixed(3)}`,
-            timeLabel: (point: any) => point.timestamp,
-          }}
-        />
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart
+            timeseriesIds={[123]}
+            startTime={Date.now() - 60 * 1000}
+            endTime={Date.now()}
+            ruler={{
+              visible: true,
+              yLabel: (point: any) =>
+                `${Number.parseFloat(point.value).toFixed(3)}`,
+              timeLabel: (point: any) => point.timestamp.toString(),
+            }}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -422,16 +507,17 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Mouse events',
     () => {
-      setupMocks();
       return (
-        <TimeseriesChart
-          timeseriesIds={[123]}
-          startTime={Date.now() - 60 * 1000}
-          endTime={Date.now()}
-          onMouseMove={(e: any) => action('onMouseMove')(e)}
-          onMouseOut={(e: any) => action('onMouseOut')(e)}
-          onBlur={(e: any) => action('onBlur')(e)}
-        />
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart
+            timeseriesIds={[123]}
+            startTime={Date.now() - 60 * 1000}
+            endTime={Date.now()}
+            onMouseMove={(e: any) => action('onMouseMove')(e)}
+            onMouseOut={(e: any) => action('onMouseOut')(e)}
+            onBlur={(e: any) => action('onBlur')(e)}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -443,26 +529,29 @@ storiesOf('TimeseriesChart/Examples', module)
   .add(
     'Custom series',
     () => {
-      setupMocks();
       const series = [
         {
           id: 123,
           color: 'green',
           yAxisDisplayMode: AxisDisplayMode.ALL,
           hidden: false,
-          y0Accessor,
-          y1Accessor,
-          yAccessor,
+          y0Accessor: DataLoader.y0Accessor,
+          y1Accessor: DataLoader.y1Accessor,
+          yAccessor: DataLoader.yAccessor,
         },
         {
           id: 456,
           color: 'red',
-          y0Accessor,
-          y1Accessor,
-          yAccessor,
+          y0Accessor: DataLoader.y0Accessor,
+          y1Accessor: DataLoader.y1Accessor,
+          yAccessor: DataLoader.yAccessor,
         },
       ];
-      return <TimeseriesChart series={series} yAxisDisplayMode={'NONE'} />;
+      return (
+        <ClientSDKProvider client={sdk}>
+          <TimeseriesChart series={series} yAxisDisplayMode={'NONE'} />
+        </ClientSDKProvider>
+      );
     },
     {
       readme: {

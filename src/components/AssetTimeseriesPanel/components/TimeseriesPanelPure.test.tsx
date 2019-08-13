@@ -2,7 +2,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { timeseriesList } from '../../../mocks';
+import { timeseriesListV2 } from '../../../mocks';
 import {
   TimeseriesPanelPure,
   TimeseriesPanelPureComponent,
@@ -10,7 +10,7 @@ import {
 
 configure({ adapter: new Adapter() });
 
-const timeseries = timeseriesList.slice(0, 3);
+const timeseries = timeseriesListV2.slice(0, 3);
 
 describe('TimeseriesPanelPure', () => {
   it('Renders without exploding', () => {

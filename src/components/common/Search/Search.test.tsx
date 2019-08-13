@@ -1,9 +1,10 @@
-import * as sdk from '@cognite/sdk';
 import { Input } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { assetsList, SearchValue } from '../../../mocks';
+import { MockCogniteClient } from '../../../utils/mockSdk';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { defaultStrings, Search, SearchComponent } from './Search';
 import Mock = jest.Mock;
 
@@ -16,11 +17,18 @@ const propsCallbacks: { [name: string]: Mock } = {
   onLiveSearchSelect: jest.fn(),
 };
 
-sdk.Assets.list = jest.fn();
+class CogniteClient extends MockCogniteClient {
+  assets: any = {
+    search: jest.fn(),
+    list: jest.fn(),
+  };
+}
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 beforeEach(() => {
-  // @ts-ignore
-  sdk.Assets.list.mockResolvedValue({ items: assetsList });
+  sdk.assets.list.mockResolvedValue({ items: assetsList });
+  sdk.assets.search.mockResolvedValue(assetsList);
 });
 
 afterEach(() => {
@@ -28,6 +36,14 @@ afterEach(() => {
     propsCallbacks[key].mockClear()
   );
 });
+
+const createWrapper = (props: any) => {
+  return mount(
+    <ClientSDKProvider client={sdk}>
+      <Search {...props} />
+    </ClientSDKProvider>
+  );
+};
 
 // tslint:disable:no-big-function
 describe('Search', () => {
@@ -71,7 +87,7 @@ describe('Search', () => {
       rootAssetSelect: true,
       onAssetSelected,
     };
-    const wrapper = mount(<Search {...props} />);
+    const wrapper = createWrapper(props);
 
     setImmediate(() => {
       wrapper.find('.ant-select').simulate('click');

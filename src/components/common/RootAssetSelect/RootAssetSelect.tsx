@@ -1,32 +1,11 @@
-import * as sdk from '@cognite/sdk';
+import { Asset } from '@cognite/sdk';
 import { Select } from 'antd';
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
+import { ClientSDKContext } from '../../../context/clientSDKContext';
 import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
 import { AnyIfEmpty, IdCallback, PureObject } from '../../../interfaces';
 import { defaultTheme } from '../../../theme/defaultTheme';
-
-async function getRootAssetList(): Promise<sdk.Asset[]> {
-  const apiAssets = await sdk.Assets.list({ depth: 0 });
-
-  return apiAssets.items
-    ? apiAssets.items.map(
-        (apiAsset: sdk.Asset): sdk.Asset => {
-          return {
-            id: apiAsset.id,
-            name: apiAsset.name || '',
-            description: apiAsset.description,
-            path: apiAsset.path,
-            depth: apiAsset.depth,
-            metadata: apiAsset.metadata,
-            parentId: apiAsset.parentId,
-            createdTime: apiAsset.createdTime,
-            lastUpdatedTime: apiAsset.lastUpdatedTime,
-          };
-        }
-      )
-    : [];
-}
 
 export const defaultStrings: PureObject = {
   loading: 'Loading',
@@ -49,13 +28,14 @@ export interface RootAssetSelectProps {
 
 interface RootAssetSelectState {
   current: number;
-  assets: sdk.Asset[] | null;
+  assets: Asset[] | null;
 }
 
 export class RootAssetSelectComponent extends React.Component<
   RootAssetSelectProps,
   RootAssetSelectState
 > {
+  static contextType = ClientSDKContext;
   static defaultProps = {
     allowAll: true,
     assetId: 0,
@@ -63,6 +43,7 @@ export class RootAssetSelectComponent extends React.Component<
     strings: {},
     theme: { ...defaultTheme },
   };
+  context!: React.ContextType<typeof ClientSDKContext>;
 
   constructor(props: RootAssetSelectProps) {
     super(props);
@@ -76,8 +57,7 @@ export class RootAssetSelectComponent extends React.Component<
   }
 
   async componentDidMount() {
-    const assets = await getRootAssetList();
-
+    const assets = await this.getRootAssetList();
     this.setState({ assets });
   }
 
@@ -89,6 +69,29 @@ export class RootAssetSelectComponent extends React.Component<
     if (onAssetSelected) {
       onAssetSelected(selectedAssetId);
     }
+  };
+
+  getRootAssetList = async (): Promise<Asset[]> => {
+    const apiAssets = await this.context!.assets.list({
+      filter: { root: true },
+    });
+
+    return apiAssets.items
+      ? apiAssets.items.map(
+          (apiAsset: Asset): Asset => {
+            return {
+              id: apiAsset.id,
+              rootId: apiAsset.rootId,
+              name: apiAsset.name || '',
+              description: apiAsset.description,
+              metadata: apiAsset.metadata,
+              parentId: apiAsset.parentId,
+              createdTime: apiAsset.createdTime,
+              lastUpdatedTime: apiAsset.lastUpdatedTime,
+            };
+          }
+        )
+      : [];
   };
 
   render() {

@@ -19,7 +19,28 @@ Install additional dependencies:
 1.  Using Yarn `yarn add @cognite/sdk @cognite/griff-react antd styled-components`
 2.  Using NPM `npm i @cognite/sdk @cognite/griff-react antd styled-components --save`
 
-## Examples
+## Usage
+1. Install `@cognite/sdk` and setup the SDK context
+
+The first thing to setup is the Cognite SDK and add in `ClientSDKProvider`. This should be mounted near the top level and ALL usages of Gearbox needs to be within this Provider.
+
+For SDK docs: 
+- [Authentication](https://github.com/cognitedata/cognitesdk-js/blob/HEAD/guides/authentication.md)
+- [SDK Documentation](https://www.npmjs.com/package/@cognite/sdk/)
+```js
+import { CogniteClient } from "@cognite/sdk";
+import { ClientSDKProvider } from "@cognite/gearbox";
+...
+const sdk = new CogniteClient({ appId: 'new-app' })
+...
+sdk.loginWithOAuth({ project: tenant }); // or other authentication methods
+...
+<ClientSDKProvider client={sdk}>
+  ...Part of your app that uses of Gearbox)..
+</ClientSDKProvider>
+...
+```
+2. Load in components and start using Gearbox
 ```js
 import { %Component_name% } from "@cognite/gearbox";
 import 'antd/dist/antd.css';
@@ -35,6 +56,7 @@ import {
   TenantSelector
 } from "@cognite/gearbox/dist/components/TenantSelector";
 ```
+It is crucial that these Gearbox components are being used inside the `ClientSDKProvider`. To learn more about how this works, we are using [React Context](https://reactjs.org/docs/context.html).
 
 ## Storybook
 
@@ -45,30 +67,6 @@ See the up-to-date storybook [here](https://cognitedata.github.io/gearbox.js).
 #### Requirements
 
 To build the library locally it's required to have version of `node` installed not lower than `10.10`
-
-#### Usage of `yarn link`
-
-If you want to link your local version of gearbox package via `yarn link` command, you need manually configure imported sdk instance, which uses in gearbox, inside your application. You can do this via providing configuration object:
-```typescript
-import { configureSdk } from '@cognite/gearbox'
-
-configureSdk({
-  apiKey: 'your_api_key',
-  project: 'project_name',
-  ...
-})
-```
-
-or you can run through the login process passing tenant name like below:
-```typescript
-import { authSdk } from '@cognite/gearbox'
-
-async function loginIn(tenant: string) {
-
-  // main login process, and if success do next
-  const authResult = await authSdk(tenant);
-}
-```
 
 ## Tests
 

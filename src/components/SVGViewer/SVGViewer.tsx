@@ -2,6 +2,8 @@ import Icon from 'antd/lib/icon';
 import PinchZoom from 'pinch-zoom-js';
 import React, { KeyboardEvent, RefObject } from 'react';
 import styled from 'styled-components';
+import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
+import { ClientSDKContext } from '../../context/clientSDKContext';
 import {
   Conditions,
   CustomClassNames,
@@ -57,6 +59,8 @@ interface SvgViewerState {
 }
 
 export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
+  static contextType = ClientSDKContext;
+  context!: React.ContextType<typeof ClientSDKContext>;
   prevMoveDistanceX: number = 0;
   prevMoveDistanceY: number = 0;
   dragging: boolean = false;
@@ -83,6 +87,10 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
   }
 
   componentDidMount() {
+    if (!this.context) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
     this.presetSVG();
     window.addEventListener('resize', this.initiateScale);
     window.addEventListener('resize', this.updateWindowDimensions);
@@ -219,7 +227,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
     const { documentId, customClassNames } = this.props;
     let svgString;
     try {
-      svgString = await getDocumentDownloadLink(documentId);
+      svgString = await getDocumentDownloadLink(this.context!, documentId);
     } catch (e) {
       if (this.props.handleDocumentLoadError) {
         this.props.handleDocumentLoadError(e);

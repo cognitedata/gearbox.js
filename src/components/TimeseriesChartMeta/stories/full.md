@@ -7,6 +7,8 @@
 This component loads timeseries data by `timeseriesId` and shows an instance of `TimeseriesChart` component along with additional information about the timeseries such as current data point (sensor value),
 meta data of the timeserie, description. It also shows group of radio buttons to control a time period for `TimeseriesChart`.
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx

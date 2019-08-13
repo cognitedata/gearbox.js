@@ -12,9 +12,9 @@ import 'antd/dist/antd.css';
 
 import React from 'react';
 import { TimeseriesSearch } from '@cognite/gearbox';
-import { Timeseries} from '@cognite/sdk';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 
-const onTimeserieSelectionChange = (newTimeseriesIds: number[], selectedTimeseries: Timeseries) => {}
+const onTimeserieSelectionChange = (newTimeseriesIds: number[], selectedTimeseries: GetTimeSeriesMetadataDTO) => {}
 const filterRule = (timeseries: Timeseries) =>  !timeseries.isString;
 function ExampleComponent(props) {
   return (

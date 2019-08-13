@@ -2,7 +2,8 @@ import { Asset } from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
 
-import { getAssetList, ocrRecognize } from '../../api';
+import { ocrRecognize } from '../../api';
+import { ClientSDKContext } from '../../context/clientSDKContext';
 import {
   Callback,
   CropSize,
@@ -96,6 +97,10 @@ export class AssetScanner extends React.Component<
     ocrRequest: ocrRecognize,
     enableNotification: false,
   };
+
+  static contextType = ClientSDKContext;
+
+  context!: React.ContextType<typeof ClientSDKContext>;
 
   notification: ASNotification = this.prepareNotifications();
 
@@ -319,11 +324,17 @@ export class AssetScanner extends React.Component<
   }
 
   private async getAssets(strings: string[]): Promise<Asset[]> {
-    return (await Promise.all(
-      strings.map((s: string) => getAssetList({ query: s }))
-    ))
+    return (await Promise.all(strings.map((s: string) => this.getAssetList(s))))
       .filter(asset => asset.length)
       .reduce((res, current) => res.concat(current));
+  }
+
+  private getAssetList(query: string): Promise<Asset[]> {
+    return this.context!.assets.list({
+      filter: {
+        name: query,
+      },
+    }).autoPagingToArray();
   }
 
   private getImage(): Promise<string> {

@@ -1,14 +1,32 @@
-import { Datapoint, Datapoints, TimeSeries } from '@cognite/sdk';
-import { datapointsList, timeseriesList } from '../../mocks';
-import { AccessorFunc, cogniteloader, mergeInsert } from './dataLoader';
+import {
+  GetAggregateDatapoint,
+  GetDoubleDatapoint,
+  GetStringDatapoint,
+} from '@cognite/sdk';
+import { datapointsList, timeseriesListV2 } from '../../mocks';
+import { MockCogniteClient } from '../../utils/mockSdk';
+import { AccessorFunc, DataLoader } from './dataLoader';
 
-TimeSeries.retrieve = jest.fn();
-Datapoints.retrieve = jest.fn();
+const mockTimeseriesRetrieve = jest.fn();
+const mockDatapointsRetrieve = jest.fn();
 
-const toPoints = (arr: number[], from: string): Datapoint[] =>
-  arr.map((d: number) => ({ timestamp: d, value: from }));
+class CogniteClient extends MockCogniteClient {
+  timeseries: any = {
+    retrieve: mockTimeseriesRetrieve,
+  };
+  datapoints: any = {
+    retrieve: mockDatapointsRetrieve,
+  };
+}
 
-const xAccessor: AccessorFunc = (d: Datapoint) => d.timestamp;
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
+const toPoints = (arr: number[], from: string): GetAggregateDatapoint[] =>
+  arr.map((d: number) => ({ timestamp: new Date(d), value: from }));
+
+const xAccessor: AccessorFunc = (d: GetAggregateDatapoint) => +d.timestamp;
+
+const dataLoader = new DataLoader(sdk);
 
 // tslint:disable:no-big-function
 describe('dataLoader', () => {
@@ -16,55 +34,55 @@ describe('dataLoader', () => {
     it('[base[0] <= toInsert[0] <= toInsert[1] <= base[1]]', () => {
       const base = toPoints([1, 5, 10, 15], 'base');
       const toInsert = toPoints([6, 7, 8], 'insert');
-      const expectedOutput: Datapoint[] = [
+      const expectedOutput: GetStringDatapoint[] = [
         {
-          timestamp: 1,
+          timestamp: new Date(1),
           value: 'base',
         },
         {
-          timestamp: 6,
+          timestamp: new Date(6),
           value: 'insert',
         },
         {
-          timestamp: 7,
+          timestamp: new Date(7),
           value: 'insert',
         },
         {
-          timestamp: 8,
+          timestamp: new Date(8),
           value: 'insert',
         },
         {
-          timestamp: 10,
+          timestamp: new Date(10),
           value: 'base',
         },
         {
-          timestamp: 15,
+          timestamp: new Date(15),
           value: 'base',
         },
       ];
-      const merged = mergeInsert(base, toInsert, xAccessor, [5, 8]);
+      const merged = DataLoader.mergeInsert(base, toInsert, xAccessor, [5, 8]);
       expect(merged).toEqual(expectedOutput);
     });
 
     it('Merge insert [empty base]', () => {
       const base = toPoints([], 'base');
       const toInsert = toPoints([1, 5], 'insert');
-      const expectedOutput: Datapoint[] = [
-        { timestamp: 1, value: 'insert' },
-        { timestamp: 5, value: 'insert' },
+      const expectedOutput: GetStringDatapoint[] = [
+        { timestamp: new Date(1), value: 'insert' },
+        { timestamp: new Date(5), value: 'insert' },
       ];
-      const merged = mergeInsert(base, toInsert, xAccessor, [0, 5]);
+      const merged = DataLoader.mergeInsert(base, toInsert, xAccessor, [0, 5]);
       expect(merged).toEqual(expectedOutput);
     });
 
     it('Merge insert [One insert point]', () => {
       const base = toPoints([1, 5], 'base');
       const toInsert = toPoints([5], 'insert');
-      const expectedOutput: Datapoint[] = [
-        { timestamp: 1, value: 'base' },
-        { timestamp: 5, value: 'insert' },
+      const expectedOutput: GetStringDatapoint[] = [
+        { timestamp: new Date(1), value: 'base' },
+        { timestamp: new Date(5), value: 'insert' },
       ];
-      const merged = mergeInsert(base, toInsert, xAccessor, [3, 5]);
+      const merged = DataLoader.mergeInsert(base, toInsert, xAccessor, [3, 5]);
       expect(merged).toEqual(expectedOutput);
     });
   });
@@ -72,9 +90,9 @@ describe('dataLoader', () => {
   describe('cogniteloader', () => {
     beforeEach(() => {
       // @ts-ignore
-      TimeSeries.retrieve.mockResolvedValue(timeseriesList[0]);
+      mockTimeseriesRetrieve.mockResolvedValue([timeseriesListV2[0]]);
       // @ts-ignore
-      Datapoints.retrieve.mockResolvedValue(datapointsList);
+      mockDatapointsRetrieve.mockResolvedValue([datapointsList]);
     });
 
     afterEach(() => {
@@ -97,7 +115,7 @@ describe('dataLoader', () => {
           pps: number;
           expectedGranularity: string;
         }) => {
-          const result = await cogniteloader({
+          const result = await dataLoader.cogniteloader({
             id: 123,
             timeDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
             timeSubDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
@@ -105,32 +123,35 @@ describe('dataLoader', () => {
             oldSeries: {},
             reason: 'MOUNTED',
           });
-          expect(Datapoints.retrieve).toHaveBeenCalledTimes(1);
-          expect(Datapoints.retrieve).toHaveBeenCalledWith(
-            123,
-            expect.objectContaining({ granularity: expectedGranularity })
-          );
+          expect(sdk.datapoints.retrieve).toHaveBeenCalledTimes(1);
+          expect(sdk.datapoints.retrieve).toHaveBeenCalledWith({
+            items: [
+              expect.objectContaining({
+                granularity: expectedGranularity,
+              }),
+            ],
+          });
           expect(result.drawPoints).toBeFalsy();
           expect(result.data).toEqual(datapointsList.datapoints);
         }
       );
 
       it('should draw raw data points if total number of points is less than half of pointsPerSeries', async () => {
-        const datapoints: Datapoint[] = [
+        const datapoints: GetDoubleDatapoint[] = [
           {
-            timestamp: 1552726800000,
+            timestamp: new Date(1552726800000),
             value: 36.26105251209135,
           },
           {
-            timestamp: 1552734000000,
+            timestamp: new Date(1552734000000),
             value: 36.2421327365039,
           },
         ];
         // @ts-ignore
-        Datapoints.retrieve.mockResolvedValue({ name: 'abc', datapoints });
+        mockDatapointsRetrieve.mockResolvedValue([{ name: 'abc', datapoints }]);
 
         const startTime = Date.now() - 24 * 60 * 60 * 1000;
-        const result = await cogniteloader({
+        const result = await dataLoader.cogniteloader({
           id: 123,
           timeDomain: [startTime, Date.now()],
           timeSubDomain: [startTime, Date.now()],
@@ -139,13 +160,13 @@ describe('dataLoader', () => {
           reason: 'MOUNTED',
         });
 
-        const expectedDatapoints: Datapoint[] = [
+        const expectedDatapoints: GetAggregateDatapoint[] = [
           {
-            timestamp: 1552726800000,
+            timestamp: new Date(1552726800000),
             average: 36.26105251209135,
           },
           {
-            timestamp: 1552734000000,
+            timestamp: new Date(1552734000000),
             average: 36.2421327365039,
           },
         ];
@@ -173,7 +194,7 @@ describe('dataLoader', () => {
           expectedGranularity: string;
           // tslint:disable-next-line: no-identical-functions
         }) => {
-          const result = await cogniteloader({
+          const result = await dataLoader.cogniteloader({
             id: 123,
             timeDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
             timeSubDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
@@ -181,31 +202,36 @@ describe('dataLoader', () => {
             oldSeries: {},
             reason: 'INTERVAL',
           });
-          expect(Datapoints.retrieve).toHaveBeenCalledTimes(1);
-          expect(Datapoints.retrieve).toHaveBeenCalledWith(
-            123,
-            expect.objectContaining({ granularity: expectedGranularity })
-          );
+          expect(sdk.datapoints.retrieve).toHaveBeenCalledTimes(1);
+          expect(sdk.datapoints.retrieve).toHaveBeenCalledWith({
+            items: [
+              expect.objectContaining({ granularity: expectedGranularity }),
+            ],
+          });
           expect(result.drawPoints).toBeFalsy();
           expect(result.data).toEqual(datapointsList.datapoints);
         }
       );
 
       it('should fetch raw data when old series fetched raw data', async () => {
-        const datapoints: Datapoint[] = [
+        const datapoints: GetDoubleDatapoint[] = [
           {
-            timestamp: 1552726800000,
+            timestamp: new Date(1552726800000),
             value: 36.26105251209135,
           },
           {
-            timestamp: 1552734000000,
+            timestamp: new Date(1552734000000),
             value: 36.2421327365039,
           },
         ];
-        // @ts-ignore
-        Datapoints.retrieve.mockResolvedValue({ name: 'abc', datapoints });
+        sdk.datapoints.retrieve.mockResolvedValue([
+          {
+            name: 'abc',
+            datapoints,
+          },
+        ]);
 
-        const result = await cogniteloader({
+        const result = await dataLoader.cogniteloader({
           id: 123,
           timeDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
           timeSubDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
@@ -216,7 +242,7 @@ describe('dataLoader', () => {
           reason: 'INTERVAL',
         });
 
-        const expectedDatapoints: Datapoint[] = [
+        const expectedDatapoints = [
           {
             timestamp: 1552726800000,
             average: 36.26105251209135,
@@ -234,13 +260,13 @@ describe('dataLoader', () => {
 
     describe('reason UPDATE_SUBDOMAIN', () => {
       it('should merge subdomain points', async () => {
-        const mergeInsertImpl = mergeInsert;
+        const mergeInsertImpl = DataLoader.mergeInsert;
         // @ts-ignore
-        mergeInsert = jest.fn();
+        DataLoader.mergeInsert = jest.fn();
         // @ts-ignore
-        mergeInsert.mockReturnValue(datapointsList.datapoints);
+        DataLoader.mergeInsert.mockReturnValue(datapointsList.datapoints);
 
-        const result = await cogniteloader({
+        const result = await dataLoader.cogniteloader({
           id: 123,
           timeDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
           timeSubDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
@@ -249,13 +275,13 @@ describe('dataLoader', () => {
           reason: 'UPDATE_SUBDOMAIN',
         });
 
-        expect(Datapoints.retrieve).toHaveBeenCalledTimes(1);
+        expect(sdk.datapoints.retrieve).toHaveBeenCalledTimes(1);
         expect(result.drawPoints).toBeFalsy();
         expect(result.data).toEqual(datapointsList.datapoints);
-        expect(mergeInsert).toHaveBeenCalledTimes(1);
+        expect(DataLoader.mergeInsert).toHaveBeenCalledTimes(1);
 
         // @ts-ignore
-        mergeInsert = mergeInsertImpl;
+        DataLoader.mergeInsert = mergeInsertImpl;
       });
     });
   });

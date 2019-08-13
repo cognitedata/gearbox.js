@@ -1,15 +1,12 @@
-import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { timeseriesList } from '../../../mocks';
+import { timeseriesListV2 } from '../../../mocks';
 import { TimeseriesMetaInfo } from './TimeseriesMetaInfo';
 
 configure({ adapter: new Adapter() });
 
-sdk.Datapoints.retrieveLatest = jest.fn();
-
-const timeseries = timeseriesList[0];
+const timeseries = timeseriesListV2[0];
 
 describe('TimeseriesMetaInfo', () => {
   it('Should render without exploding', () => {

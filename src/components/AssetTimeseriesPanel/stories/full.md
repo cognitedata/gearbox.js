@@ -8,6 +8,8 @@ This component loads meta information about all timeseries related to the asset 
 Each item in the list can be expanded showing description, timeseries chart, current data point and metadata.
 The component is used as one of the panes in `AssetMeta` component.
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx

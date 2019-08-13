@@ -9,17 +9,19 @@ event description, event start datetime and end datetime, number of elements in 
 additional event details. The component requires only `eventId` that is numerical ID of an event. While loading an event the component 
 shows loading spinner.
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { Event } from '@cognite/sdk';
+import { CogniteEvent } from '@cognite/sdk';
 import { EventPreview } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
-  const onShowDetails = (event: Event) = {};
+  const onShowDetails = (event: CogniteEvent) = {};
 
   return (
     <EventPreview 
@@ -45,7 +47,7 @@ function ExampleComponent(props) {
 | ------------------- | -------------------------------------------------------------------------- | --------------------------------------------- | ----------- |
 | `hideProperties`    | List of event properties to be hidden. Possible values: `type`, `subtype`, `description`, `startTime`, `endTime`, `metadata`| `Array<keyof Event>`                          | []          |
 | `hideLoadingSpinner`| Defines whether to hide the loading spinner                                | `boolean`                       |             | false       |
-| `onShowDetails`     | Function triggered when user clicks on the 'Explore event details' button. If the function is not provided the button will not be rendered. | `(event: Event) => void`     |             |             |
+| `onShowDetails`     | Function triggered when user clicks on the 'Explore event details' button. If the function is not provided the button will not be rendered. | `(event: CogniteEvent) => void`     |             |             |
 | `strings`           | Object map with strings to customize/localize text in the component        | `{[key: string]: string}`       |             |             |
 | `styles`            | Object that defines inline CSS styles for inner elements of the component. | `EventPreviewStyles`            |             |             |
 
@@ -65,11 +67,11 @@ function ExampleComponent(props) {
 
 ### Types
 
-#### Event
-`Event` type can be imported from @cognite/sdk:
+#### CogniteEvent
+`CogniteEvent` type can be imported from `@cognite/sdk`:
 
 ```typescript
-import { Event } from '@cognite/sdk';
+import { CogniteEvent } from '@cognite/sdk';
 ```
 
 #### EventPreviewStyles

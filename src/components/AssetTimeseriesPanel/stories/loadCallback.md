@@ -8,11 +8,11 @@
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { File } from '@cognite/sdk';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import { AssetTimeseriesPanel } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
-  const handleAssetTimeseriesLoaded = (files: File[]) => {};
+  const handleAssetTimeseriesLoaded = (files: GetTimeSeriesMetadataDTO[]) => {};
   return (
     <AssetTimeseriesPanel
       assetId={4650652196144007}

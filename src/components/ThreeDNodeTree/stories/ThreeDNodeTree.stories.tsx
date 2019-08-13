@@ -1,4 +1,4 @@
-import * as sdk from '@cognite/sdk';
+import { List3DNodesQuery } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import { Menu } from 'antd';
@@ -10,13 +10,15 @@ import {
   OnSelectNodeTreeParams,
 } from '../../../interfaces';
 import {
-  ASSET_TREE_STYLES,
   KEY_LIST,
   NODE_LEAF,
   NODE_LIST,
   NODE_MAINLIST,
   NODE_SUBLIST,
 } from '../../../mocks';
+import { ASSET_TREE_STYLES } from '../../../mocks/assetsListV2';
+import { MockCogniteClient } from '../../../utils/mockSdk';
+import { ClientSDKProvider } from '../../ClientSDKProvider/ClientSDKProvider';
 import { ThreeDNodeTree } from '../ThreeDNodeTree';
 import clickItem from './clickItem.md';
 import customStyles from './customStyles.md';
@@ -25,31 +27,37 @@ import fullDescription from './full.md';
 import rightClickItem from './rightClickItem.md';
 import withTheme from './withTheme.md';
 
-const setupMocks = () => {
-  sdk.ThreeD.listNodes = async (
-    _: number,
-    __: number,
-    params: sdk.ThreeDListNodesParams
-  ) => {
-    if (params.nodeId) {
-      switch (params.nodeId) {
-        case 7587176698924415: {
-          return { items: NODE_MAINLIST };
-        }
-        case 256009974666491: {
-          return { items: NODE_SUBLIST };
-        }
-        case 8901019261985265: {
-          return { items: NODE_LEAF };
-        }
-        default: {
-          return { items: NODE_LIST.filter(node => node.id === params.nodeId) };
+class CogniteClient extends MockCogniteClient {
+  viewer3D: any = {
+    listRevealNodes3D: async (
+      _: number,
+      __: number,
+      params: List3DNodesQuery
+    ) => {
+      if (params.nodeId) {
+        switch (params.nodeId) {
+          case 7587176698924415: {
+            return { items: NODE_MAINLIST };
+          }
+          case 256009974666491: {
+            return { items: NODE_SUBLIST };
+          }
+          case 8901019261985265: {
+            return { items: NODE_LEAF };
+          }
+          default: {
+            return {
+              items: NODE_LIST.filter(node => node.id === params.nodeId),
+            };
+          }
         }
       }
-    }
-    return { items: NODE_LIST };
+      return { items: NODE_LIST };
+    },
   };
-};
+}
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 interface RightClickState {
   visible: boolean;
@@ -59,6 +67,7 @@ interface RightClickState {
   };
 }
 
+// tslint:disable-next-line: max-classes-per-file
 class RightClickExample extends React.Component<{}, RightClickState> {
   menu: HTMLDivElement | null = null;
   constructor(props: {}) {
@@ -100,7 +109,7 @@ class RightClickExample extends React.Component<{}, RightClickState> {
   }
   render() {
     return (
-      <>
+      <ClientSDKProvider client={sdk}>
         <ThreeDNodeTree
           modelId={6265454237631097}
           revisionId={3496204575166890}
@@ -117,7 +126,7 @@ class RightClickExample extends React.Component<{}, RightClickState> {
           }}
         />
         <div ref={node => (this.menu = node)}>{this.renderSubMenu()}</div>
-      </>
+      </ClientSDKProvider>
     );
   }
 }
@@ -125,8 +134,11 @@ class RightClickExample extends React.Component<{}, RightClickState> {
 storiesOf('ThreeDNodeTree', module).add(
   'Full description',
   () => {
-    setupMocks();
-    return <ThreeDNodeTree modelId={0} revisionId={0} />;
+    return (
+      <ClientSDKProvider client={sdk}>
+        <ThreeDNodeTree modelId={0} revisionId={0} />
+      </ClientSDKProvider>
+    );
   },
   {
     readme: {
@@ -139,13 +151,14 @@ storiesOf('ThreeDNodeTree/Examples', module)
   .add(
     'Click item in tree',
     () => {
-      setupMocks();
       return (
-        <ThreeDNodeTree
-          modelId={0}
-          revisionId={0}
-          onSelect={(e: OnSelectNodeTreeParams) => action('onSelect')(e)}
-        />
+        <ClientSDKProvider client={sdk}>
+          <ThreeDNodeTree
+            modelId={0}
+            revisionId={0}
+            onSelect={(e: OnSelectNodeTreeParams) => action('onSelect')(e)}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -157,8 +170,11 @@ storiesOf('ThreeDNodeTree/Examples', module)
   .add(
     'Right Click Item in Tree',
     () => {
-      setupMocks();
-      return <RightClickExample />;
+      return (
+        <ClientSDKProvider client={sdk}>
+          <RightClickExample />
+        </ClientSDKProvider>
+      );
     },
     {
       readme: {
@@ -169,13 +185,14 @@ storiesOf('ThreeDNodeTree/Examples', module)
   .add(
     'Default expanded node',
     () => {
-      setupMocks();
       return (
-        <ThreeDNodeTree
-          modelId={0}
-          revisionId={0}
-          defaultExpandedKeys={KEY_LIST}
-        />
+        <ClientSDKProvider client={sdk}>
+          <ThreeDNodeTree
+            modelId={0}
+            revisionId={0}
+            defaultExpandedKeys={KEY_LIST}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -187,9 +204,14 @@ storiesOf('ThreeDNodeTree/Examples', module)
   .add(
     'With custom styles',
     () => {
-      setupMocks();
       return (
-        <ThreeDNodeTree modelId={0} revisionId={0} styles={ASSET_TREE_STYLES} />
+        <ClientSDKProvider client={sdk}>
+          <ThreeDNodeTree
+            modelId={0}
+            revisionId={0}
+            styles={ASSET_TREE_STYLES}
+          />
+        </ClientSDKProvider>
       );
     },
     {
@@ -201,7 +223,6 @@ storiesOf('ThreeDNodeTree/Examples', module)
   .add(
     'With theme',
     () => {
-      setupMocks();
       const exampleTheme = {
         gearbox: {
           textColor: 'Chocolate',
@@ -211,7 +232,9 @@ storiesOf('ThreeDNodeTree/Examples', module)
       };
       return (
         <ThemeProvider theme={exampleTheme}>
-          <ThreeDNodeTree modelId={0} revisionId={0} />
+          <ClientSDKProvider client={sdk}>
+            <ThreeDNodeTree modelId={0} revisionId={0} />
+          </ClientSDKProvider>
         </ThemeProvider>
       );
     },

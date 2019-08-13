@@ -1,9 +1,13 @@
-import { Event, EventListParams } from '@cognite/sdk';
-import * as sdk from '@cognite/sdk';
+import { CogniteEvent, EventFilterRequest } from '@cognite/sdk';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
+import {
+  ERROR_API_UNEXPECTED_RESULTS,
+  ERROR_NO_SDK_CLIENT,
+} from '../constants/errorMessages';
 import { SDK_LIST_LIMIT } from '../constants/sdk';
+import { ClientSDKContext } from '../context/clientSDKContext';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
@@ -11,19 +15,19 @@ import {
 } from '../utils/promise';
 
 export interface WithAssetEventsDataProps {
-  assetEvents: Event[];
+  assetEvents: CogniteEvent[];
 }
 
 export interface WithAssetEventsProps {
   assetId: number;
-  queryParams?: EventListParams;
+  queryParams?: EventFilterRequest;
   customSpinner?: React.ReactNode;
-  onAssetEventsLoaded?: (assetEvents: Event[]) => void;
+  onAssetEventsLoaded?: (assetEvents: CogniteEvent[]) => void;
 }
 
 export interface WithAssetEventsState {
   isLoading: boolean;
-  assetEvents: Event[] | null;
+  assetEvents: CogniteEvent[] | null;
   assetId: number;
 }
 
@@ -36,6 +40,8 @@ export const withAssetEvents = <P extends WithAssetEventsDataProps>(
       WithAssetEventsState
     >
     implements ComponentWithUnmountState {
+    static contextType = ClientSDKContext;
+
     static getDerivedStateFromProps(
       props: P & WithAssetEventsProps,
       state: WithAssetEventsState
@@ -51,6 +57,8 @@ export const withAssetEvents = <P extends WithAssetEventsDataProps>(
       return null;
     }
 
+    context!: React.ContextType<typeof ClientSDKContext>;
+
     isComponentUnmounted = false;
 
     constructor(props: P & WithAssetEventsProps) {
@@ -64,6 +72,10 @@ export const withAssetEvents = <P extends WithAssetEventsDataProps>(
     }
 
     componentDidMount() {
+      if (!this.context) {
+        console.error(ERROR_NO_SDK_CLIENT);
+        return;
+      }
       this.loadAssetEvents();
     }
 
@@ -80,22 +92,30 @@ export const withAssetEvents = <P extends WithAssetEventsDataProps>(
     async loadAssetEvents() {
       try {
         const { assetId, queryParams } = this.props;
-        const res = await connectPromiseToUnmountState(
+        const events = await connectPromiseToUnmountState(
           this,
-          sdk.Events.list({
+          this.context!.events.list({
             limit: SDK_LIST_LIMIT,
             ...queryParams,
-            assetId,
-          })
+            filter: {
+              ...(queryParams && queryParams.filter ? queryParams.filter : {}),
+              assetIds: [assetId],
+            },
+          }).autoPagingToArray()
         );
+
+        if (!events || !Array.isArray(events)) {
+          console.error(ERROR_API_UNEXPECTED_RESULTS);
+          return;
+        }
 
         this.setState({
           isLoading: false,
-          assetEvents: res.items,
+          assetEvents: events,
         });
 
         if (this.props.onAssetEventsLoaded) {
-          this.props.onAssetEventsLoaded(res.items);
+          this.props.onAssetEventsLoaded(events);
         }
       } catch (error) {
         if (error instanceof CanceledPromiseException !== true) {

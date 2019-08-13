@@ -7,6 +7,8 @@
 This component searches for timeseries by name. Search results will be shown in a list. Each result have a checkbox for selection, and all selected timeseries are shown above the search bar. Selected timeseries can be removed by clicking the cross on the selected row.
 The component requires only `onTimeserieSelectionChange`prop which is called when the selection changes. It is called with two parameters: the current list of selected ids, and the last added/removed timeseries.
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage
 
 ```typescript jsx
@@ -14,9 +16,9 @@ import 'antd/dist/antd.css';
 
 import React from 'react';
 import { TimeseriesSearch } from '@cognite/gearbox';
-import { Timeseries} from '@cognite/sdk';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 
-const onTimeserieSelectionChange = (newTimeseriesIds: number[], selectedTimeseries: Timeseries) => {}
+const onTimeserieSelectionChange = (newTimeseriesIds: number[], selectedTimeseries: GetTimeSeriesMetadataDTO) => {}
 function ExampleComponent(props) {
   return (
     <TimeseriesSearch
@@ -47,13 +49,13 @@ You can search for `${names}`
 | `single`             | Removes the checkboxes from search result and will only callback with one id | `boolean`                                 | `false`     |
 | `hideSelected`       | Hides the row with selected timeseries above the search bar                  | `boolean`                                 | `false`     |
 | `allowStrings`       | Allows the user to select search results that are strings                    | `boolean`                                 | `false`     |
-| `filterRule`         | Custom rule to filter search results                                         | `(timeseries: Timeseries) => boolean`     |             |
+| `filterRule`         | Custom rule to filter search results                                         | `(timeseries: GetTimeSeriesMetadataDTO) => boolean`     |             |
 | `onError`            | Function called on fetch timeseries error                                    | `(error: Error) => void`                  |             |
 | `styles`             | Custom styles for the component                                              | `TimeseriesSearchStyles`                  |             |
 
 ### Types
 
-### Timeseries
+### GetTimeSeriesMetadataDTO
 
 This type describes what the cognite API returns when fetching timeseries.
 It can be imported from `@cognite/sdk`.

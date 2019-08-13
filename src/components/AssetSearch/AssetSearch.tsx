@@ -1,5 +1,13 @@
-import * as sdk from '@cognite/sdk';
 import React from 'react';
+
+import { Asset, AssetSearchFilter } from '@cognite/sdk';
+import { AssetsAPI } from '@cognite/sdk/dist/src/resources/assets/assetsApi';
+import {
+  ERROR_API_UNEXPECTED_RESULTS,
+  ERROR_NO_SDK_CLIENT,
+} from '../../constants/errorMessages';
+import { ClientSDKContext } from '../../context/clientSDKContext';
+
 import { ApiQuery, Callback, PureObject } from '../../interfaces';
 import {
   Search,
@@ -7,8 +15,8 @@ import {
 } from '../common/Search/Search';
 export type AssetSearchStyles = AssetSearchStyles;
 
-type LiveSearchSelect = (asset: sdk.Asset) => void;
-type SearchResultCallback = (assets: sdk.Asset[]) => void;
+type LiveSearchSelect = (asset: Asset) => void;
+type SearchResultCallback = (assets: Asset[]) => void;
 
 export const defaultStrings: PureObject = {
   searchPlaceholder: 'Search for an asset',
@@ -27,7 +35,7 @@ export interface AssetSearchProps {
 }
 
 interface AssetSearchState {
-  items: sdk.Asset[];
+  items: Asset[];
   loading: boolean;
 }
 
@@ -40,6 +48,11 @@ export class AssetSearch extends React.Component<
     advancedSearch: false,
     showLiveSearchResults: true,
   };
+
+  static contextType = ClientSDKContext;
+  context!: React.ContextType<typeof ClientSDKContext>;
+  assetsApi!: AssetsAPI;
+
   constructor(props: AssetSearchProps) {
     super(props);
     this.state = {
@@ -50,23 +63,22 @@ export class AssetSearch extends React.Component<
     this.onSearch = this.onSearch.bind(this);
   }
 
-  async onSearch(query: ApiQuery) {
-    const { onError, onSearchResult } = this.props;
-    if (!query.query && !query.advancedSearch) {
-      const items: sdk.Asset[] = [];
-      this.setState({ items });
-      if (onSearchResult) {
-        onSearchResult(items);
-      }
+  componentDidMount() {
+    if (!this.context) {
+      console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
+    this.assetsApi = this.context.assets;
+  }
 
-    this.setState({ loading: true });
-    const assetQuery: sdk.AssetSearchParams = {
-      query: query.query,
-      assetSubtrees: query.assetSubtrees || undefined,
+  generateSearchQuery = (query: ApiQuery) => ({
+    search: {
+      name: query.query,
       description:
         (query.advancedSearch && query.advancedSearch.description) || undefined,
+    },
+    filter: {
+      parentIds: query.assetSubtrees || undefined,
       metadata:
         (query.advancedSearch &&
           query.advancedSearch.metadata &&
@@ -75,9 +87,28 @@ export class AssetSearch extends React.Component<
             {}
           )) ||
         undefined,
-    };
+    },
+  });
+
+  async onSearch(query: ApiQuery) {
+    const { onError, onSearchResult } = this.props;
+    if (!query.query && !query.advancedSearch) {
+      const items: Asset[] = [];
+      this.setState({ items });
+      if (onSearchResult) {
+        onSearchResult(items);
+      }
+      return;
+    }
+
+    this.setState({ loading: true });
+    const assetQuery: AssetSearchFilter = this.generateSearchQuery(query);
     try {
-      const { items } = await sdk.Assets.search(assetQuery);
+      const items = await this.assetsApi.search(assetQuery);
+      if (!items || !Array.isArray(items)) {
+        console.error(ERROR_API_UNEXPECTED_RESULTS, items);
+        return;
+      }
       this.setState({ items, loading: false });
       if (onSearchResult) {
         onSearchResult(items);
@@ -86,7 +117,6 @@ export class AssetSearch extends React.Component<
       if (onError) {
         onError(e);
       }
-
       this.setState({ items: [], loading: false });
     }
   }

@@ -1,10 +1,11 @@
-import { Event, Events } from '@cognite/sdk';
-import { Event as ApiEvent } from '@cognite/sdk';
+import { CogniteEvent, IdEither } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
-import { EVENTS } from '../../../mocks';
+import { fakeEvents } from '../../../mocks';
+import { MockCogniteClient } from '../../../utils/mockSdk';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { EventPreview, EventPreviewStyles } from '../EventPreview';
 import basic from './basic.md';
 import customStyles from './customStyles.md';
@@ -19,30 +20,47 @@ import missingProperties from './missingProperties.md';
 import withCustomText from './withCustomText.md';
 import withTheme from './withTheme.md';
 
-Events.retrieve = (eventId: number): Promise<Event> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const event = EVENTS.find(e => e.id === eventId);
-      resolve(event);
-    }, 1000); // simulate load delay
-  });
-};
+class CogniteClient extends MockCogniteClient {
+  events: any = {
+    retrieve: (ids: IdEither[]): Promise<CogniteEvent[]> => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          // @ts-ignore
+          const event = fakeEvents.find(e => e.id === ids[0].id);
+          // @ts-ignore
+          resolve([event]);
+        }, 1000); // simulate load delay
+      });
+    },
+  };
+}
 
-const onShowDetails = (e: ApiEvent) => {
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
+const onShowDetails = (e: CogniteEvent) => {
   action('onShowDetails')(e);
 };
 
-storiesOf('EventPreview', module).add(
-  'Full Description',
-  () => <EventPreview eventId={25496029326330} onShowDetails={onShowDetails} />,
-  {
-    readme: {
-      content: fullDescription,
-    },
-  }
+const clientSDKDecorator = (storyFn: any) => (
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
+storiesOf('EventPreview', module)
+  .addDecorator(clientSDKDecorator)
+  .add(
+    'Full Description',
+    () => (
+      <EventPreview eventId={25496029326330} onShowDetails={onShowDetails} />
+    ),
+    {
+      readme: {
+        content: fullDescription,
+      },
+    }
+  );
+
 storiesOf('EventPreview/Examples', module)
+  .addDecorator(clientSDKDecorator)
   .add(
     'Basic',
     () => (

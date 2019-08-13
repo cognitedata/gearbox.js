@@ -1,7 +1,7 @@
 /* tslint:disable:no-duplicate-string */
-import { Timeseries } from '@cognite/sdk';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 
-export const IAA_21PT1019: Timeseries[] = [
+const IAA_21PT1019: GetTimeSeriesMetadataDTO[] = [
   {
     id: 8681821313339919,
     name: 'IA_21PT1019.AlarmByte',
@@ -58,6 +58,8 @@ export const IAA_21PT1019: Timeseries[] = [
     assetId: 4965555138606429,
     isStep: false,
     description: '21PT1019.AlarmByte',
+    createdTime: new Date(0),
+    lastUpdatedTime: new Date(0),
   },
   {
     id: 4536015939766876,
@@ -114,6 +116,8 @@ export const IAA_21PT1019: Timeseries[] = [
     assetId: 4965555138606429,
     isStep: false,
     description: '21PT1019.CommandWord',
+    createdTime: new Date(0),
+    lastUpdatedTime: new Date(0),
   },
   {
     id: 1762612637163055,
@@ -170,6 +174,8 @@ export const IAA_21PT1019: Timeseries[] = [
     assetId: 4965555138606429,
     isStep: false,
     description: '21PT1019.PTAB',
+    createdTime: new Date(0),
+    lastUpdatedTime: new Date(0),
   },
   {
     id: 7108578362782757,
@@ -226,6 +232,8 @@ export const IAA_21PT1019: Timeseries[] = [
     assetId: 4965555138606429,
     isStep: false,
     description: '21PT1019.ProcessValue',
+    createdTime: new Date(0),
+    lastUpdatedTime: new Date(0),
   },
   {
     id: 122849459525049,
@@ -282,6 +290,8 @@ export const IAA_21PT1019: Timeseries[] = [
     assetId: 4965555138606429,
     isStep: false,
     description: '21PT1019.StatusWord',
+    createdTime: new Date(0),
+    lastUpdatedTime: new Date(0),
   },
   {
     id: 285034733763395,
@@ -338,7 +348,9 @@ export const IAA_21PT1019: Timeseries[] = [
     assetId: 4965555138606429,
     isStep: false,
     description: '21PT1019.UnAcknowledgByte',
+    createdTime: new Date(0),
+    lastUpdatedTime: new Date(0),
   },
 ];
 
-export const timeseriesList = IAA_21PT1019.concat([]);
+export const timeseriesListV2 = IAA_21PT1019.concat([]);

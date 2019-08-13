@@ -1,9 +1,10 @@
-import { Datapoint, Timeseries } from '@cognite/sdk';
-import * as sdk from '@cognite/sdk';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { timeseriesList } from '../../../mocks';
+import { timeseriesListV2 as fakeTimeseries } from '../../../mocks';
+import { MockCogniteClient } from '../../../utils/mockSdk';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { SensorOverlay } from '../SensorOverlay';
 import addDynamically from './addDynamically.md';
 import basic from './basic.md';
@@ -17,44 +18,67 @@ import withMany from './withMany.md';
 import withMinMax from './withMinMax.md';
 import withStickyTooltips from './withStickyTooltips.md';
 
-sdk.TimeSeries.retrieve = (id: number, _): Promise<Timeseries> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const timeserie = timeseriesList.find(ts => ts.id === id);
-      if (!timeserie) {
-        throw new Error('Cannot find mocked timeseries');
-      }
-      resolve(timeserie);
-    }, Math.random() * 2000); // simulate load delay
-  });
-};
-
-sdk.Datapoints.retrieveLatest = async (name: string): Promise<Datapoint> => {
-  return {
-    timestamp: Date.now(),
-    value: name.length + Math.random() * 5.0, // just random number
-  };
-};
-
-storiesOf('SensorOverlay', module).add(
-  'Full description',
-  () => (
-    <SensorOverlay timeseriesIds={[timeseriesList[0].id]}>
-      <div style={{ width: '100%', height: '160px', background: '#EEE' }} />
-    </SensorOverlay>
-  ),
-  {
-    readme: {
-      content: fullDescription,
+class CogniteClient extends MockCogniteClient {
+  timeseries: any = {
+    retrieve: (ids: any): Promise<GetTimeSeriesMetadataDTO[]> => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          // @ts-ignore
+          const timeserie = fakeTimeseries.find(ts => ts.id === ids[0].id);
+          if (!timeserie) {
+            throw new Error('Cannot find mocked timeseries');
+          }
+          resolve([timeserie]);
+        }, Math.random() * 2000); // simulate load delay
+      });
     },
-  }
+  };
+  datapoints: any = {
+    retrieveLatest: (_: any) => {
+      return Promise.resolve([
+        {
+          id: 1,
+          isString: false,
+          datapoints: [
+            {
+              timestamp: new Date(),
+              value: Math.random() * 5.0,
+            },
+          ],
+        },
+      ]);
+    },
+  };
+}
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
+const ClientSDKDecorator = (storyFn: any) => (
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
+storiesOf('SensorOverlay', module)
+  .addDecorator(ClientSDKDecorator)
+  .add(
+    'Full description',
+    () => (
+      <SensorOverlay timeseriesIds={[fakeTimeseries[0].id]}>
+        <div style={{ width: '100%', height: '160px', background: '#EEE' }} />
+      </SensorOverlay>
+    ),
+    {
+      readme: {
+        content: fullDescription,
+      },
+    }
+  );
+
 storiesOf('SensorOverlay/Examples', module)
+  .addDecorator(ClientSDKDecorator)
   .add(
     'Basic',
     () => (
-      <SensorOverlay timeseriesIds={[timeseriesList[0].id]}>
+      <SensorOverlay timeseriesIds={[fakeTimeseries[0].id]}>
         <div style={{ width: '100%', height: '200px', background: '#EEE' }} />
       </SensorOverlay>
     ),
@@ -69,10 +93,10 @@ storiesOf('SensorOverlay/Examples', module)
     () => (
       <SensorOverlay
         timeseriesIds={[
-          timeseriesList[0].id,
-          timeseriesList[1].id,
-          timeseriesList[2].id,
-          timeseriesList[3].id,
+          fakeTimeseries[0].id,
+          fakeTimeseries[1].id,
+          fakeTimeseries[2].id,
+          fakeTimeseries[3].id,
         ]}
       >
         <div style={{ width: '100%', height: '220px', background: '#EEE' }} />
@@ -88,10 +112,10 @@ storiesOf('SensorOverlay/Examples', module)
     'Default position and color',
     () => (
       <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
-        colorMap={{ [timeseriesList[0].id]: '#33AA33' }}
+        timeseriesIds={[fakeTimeseries[0].id]}
+        colorMap={{ [fakeTimeseries[0].id]: '#33AA33' }}
         defaultPositionMap={{
-          [timeseriesList[0].id]: {
+          [fakeTimeseries[0].id]: {
             left: 0.5,
             top: 0.2,
             pointer: {
@@ -117,7 +141,7 @@ storiesOf('SensorOverlay/Examples', module)
     'Disabled Dragging',
     () => (
       <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
+        timeseriesIds={[fakeTimeseries[0].id]}
         isTagDraggable={false}
         isPointerDraggable={false}
       >
@@ -134,8 +158,8 @@ storiesOf('SensorOverlay/Examples', module)
     'With link',
     () => (
       <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
-        linksMap={{ [timeseriesList[0].id]: true }}
+        timeseriesIds={[fakeTimeseries[0].id]}
+        linksMap={{ [fakeTimeseries[0].id]: true }}
         onClick={action('onClick')}
         onLinkClick={action('onLinkClick')}
       >
@@ -154,7 +178,7 @@ storiesOf('SensorOverlay/Examples', module)
     'With sticky tooltips',
     () => (
       <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
+        timeseriesIds={[fakeTimeseries[0].id]}
         stickyMap={{ [8681821313339919]: true }}
         defaultPositionMap={{
           [8681821313339919]: {
@@ -180,7 +204,7 @@ storiesOf('SensorOverlay/Examples', module)
     'With min-max limit',
     () => (
       <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
+        timeseriesIds={[fakeTimeseries[0].id]}
         stickyMap={{ [8681821313339919]: true }}
         alertColor={'magenta'}
         minMaxMap={{
@@ -203,10 +227,10 @@ storiesOf('SensorOverlay/Examples', module)
     'With Image',
     () => (
       <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
-        colorMap={{ [timeseriesList[0].id]: 'orange' }}
+        timeseriesIds={[fakeTimeseries[0].id]}
+        colorMap={{ [fakeTimeseries[0].id]: 'orange' }}
         defaultPositionMap={{
-          [timeseriesList[0].id]: {
+          [fakeTimeseries[0].id]: {
             left: 0.2,
             top: 0.2,
             pointer: {
@@ -232,10 +256,10 @@ storiesOf('SensorOverlay/Examples', module)
     'With Fixed Width',
     () => (
       <SensorOverlay
-        timeseriesIds={[timeseriesList[0].id]}
-        colorMap={{ [timeseriesList[0].id]: 'orange' }}
+        timeseriesIds={[fakeTimeseries[0].id]}
+        colorMap={{ [fakeTimeseries[0].id]: 'orange' }}
         defaultPositionMap={{
-          [timeseriesList[0].id]: {
+          [fakeTimeseries[0].id]: {
             left: 0.2,
             top: 0.2,
             pointer: {
@@ -261,6 +285,7 @@ storiesOf('SensorOverlay/Examples', module)
   .add(
     'Add sensors dynamically',
     () => {
+      // tslint:disable-next-line: max-classes-per-file
       class WrapperComponent extends React.Component {
         state = {
           counter: 0,
@@ -275,7 +300,7 @@ storiesOf('SensorOverlay/Examples', module)
                   this.setState({
                     timeseriesIds: [
                       ...this.state.timeseriesIds,
-                      timeseriesList[this.state.counter].id,
+                      fakeTimeseries[this.state.counter].id,
                     ],
                     counter: this.state.counter + 1,
                   })

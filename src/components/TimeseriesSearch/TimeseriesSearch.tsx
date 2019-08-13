@@ -1,9 +1,11 @@
-import * as sdk from '@cognite/sdk';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import { Button, Spin } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
 import { debounce } from 'lodash';
 import React, { KeyboardEvent } from 'react';
 import styled from 'styled-components';
+import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
+import { ClientSDKContext } from '../../context/clientSDKContext';
 import { ApiQuery, PureObject } from '../../interfaces';
 import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
 import { defaultStrings as rootAssetSelectStrings } from '../common/RootAssetSelect/RootAssetSelect';
@@ -25,12 +27,13 @@ export interface TimeseriesSearchProps {
   allowStrings: boolean;
   onTimeserieSelectionChange: (
     newTimeseriesIds: number[],
-    selectedTimeseries: sdk.Timeseries | null
+    selectedTimeseries: GetTimeSeriesMetadataDTO | null
   ) => void;
   rootAsset?: number;
-  filterRule?: (timeseries: sdk.Timeseries) => boolean;
+  filterRule?: (timeseries: GetTimeSeriesMetadataDTO) => boolean;
   onError?: (error: Error) => void;
   styles?: TimeseriesSearchStyles;
+
   rootAssetSelect: boolean;
   strings: PureObject;
 }
@@ -45,8 +48,8 @@ export const defaultStrings: PureObject = {
 interface TimeseriesSearchState {
   assetId?: number;
   fetching: boolean;
-  searchResults: sdk.Timeseries[];
-  selectedTimeseries: sdk.Timeseries[];
+  searchResults: GetTimeSeriesMetadataDTO[];
+  selectedTimeseries: GetTimeSeriesMetadataDTO[];
   lastFetchId: number;
   cursor?: number;
 }
@@ -55,6 +58,7 @@ export class TimeseriesSearch extends React.Component<
   TimeseriesSearchProps,
   TimeseriesSearchState
 > {
+  static contextType = ClientSDKContext;
   static defaultProps = {
     selectedTimeseries: [],
     strings: {},
@@ -76,6 +80,7 @@ export class TimeseriesSearch extends React.Component<
     }
     return null;
   }
+  context!: React.ContextType<typeof ClientSDKContext>;
 
   constructor(props: TimeseriesSearchProps) {
     super(props);
@@ -93,10 +98,15 @@ export class TimeseriesSearch extends React.Component<
   }
 
   async componentDidMount() {
+    if (!this.context) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
+
     const { selectedTimeseries } = this.props;
     if (selectedTimeseries && selectedTimeseries.length > 0) {
-      const timeseries = await sdk.TimeSeries.retrieveMultiple(
-        selectedTimeseries
+      const timeseries = await this.context.timeseries.retrieve(
+        selectedTimeseries.map(x => ({ id: x }))
       );
       this.setState({ selectedTimeseries: timeseries });
     }
@@ -106,13 +116,13 @@ export class TimeseriesSearch extends React.Component<
     this.setState({ assetId, searchResults: [] });
   };
 
-  onTimeSerieClicked = (timeseries: sdk.Timeseries): void => {
+  onTimeSerieClicked = (timeseries: GetTimeSeriesMetadataDTO): void => {
     const { allowStrings, single, onTimeserieSelectionChange } = this.props;
     if (!allowStrings && timeseries.isString) {
       return;
     }
 
-    let newTimeseries: sdk.Timeseries[] = [];
+    let newTimeseries: GetTimeSeriesMetadataDTO[] = [];
     if (single) {
       newTimeseries = [timeseries];
     } else if (!this.isChecked(timeseries.id)) {
@@ -141,28 +151,34 @@ export class TimeseriesSearch extends React.Component<
       });
       return;
     }
-
-    sdk.TimeSeries.search({
-      assetSubtrees: assetSubtrees == null ? undefined : assetSubtrees,
-      query,
-      limit: 100,
-    })
-      .then((data: sdk.TimeseriesWithCursor): void => {
+    if (!this.context) {
+      return;
+    }
+    this.context.timeseries
+      .search({
+        limit: 100,
+        filter: {
+          assetIds: assetSubtrees == null ? undefined : assetSubtrees,
+        },
+        search: {
+          query,
+        },
+      })
+      .then((data: GetTimeSeriesMetadataDTO[]): void => {
         if (fetchId !== this.state.lastFetchId) {
           // for fetch callback order
           return;
         }
 
-        const { items } = data;
         if (this.props.filterRule) {
-          const resultsFiltered = items.filter(this.props.filterRule);
+          const resultsFiltered = data.filter(this.props.filterRule);
           this.setState({
             searchResults: resultsFiltered,
             fetching: false,
           });
         } else {
           this.setState({
-            searchResults: items,
+            searchResults: data,
             fetching: false,
           });
         }
@@ -246,7 +262,7 @@ export class TimeseriesSearch extends React.Component<
     const { allowStrings, onTimeserieSelectionChange } = this.props;
     const { searchResults, selectedTimeseries } = this.state;
     const newTimeseries = searchResults.filter(
-      (result: sdk.Timeseries) =>
+      (result: GetTimeSeriesMetadataDTO) =>
         !result.isString || (allowStrings && result.isString)
     );
     this.setState({
@@ -301,7 +317,7 @@ export class TimeseriesSearch extends React.Component<
           <SelectedItems
             selectedItems={selectedTimeseries.map(t => ({
               id: t.id,
-              name: t.name,
+              name: t.name || t.id.toString(),
             }))}
             onItemClose={this.onItemClose}
           />
@@ -340,23 +356,25 @@ export class TimeseriesSearch extends React.Component<
         ) : null}
         <TagList style={styles && styles.list}>
           {fetching ? <CenteredSpin /> : null}
-          {searchResults.map((timeseries: sdk.Timeseries, index: number) => (
-            <DetailCheckbox
-              className={`tag-search-result result-${timeseries.id} ${
-                index === cursor ? 'active' : ''
-              }`}
-              key={`detail-checkbox--${timeseries.id}`}
-              title={timeseries.name || timeseries.id.toString()}
-              description={
-                timeseries.description || timeseries.name || 'No description'
-              }
-              checkable={!single}
-              checked={this.isChecked(timeseries.id)}
-              onContainerClick={() => this.onTimeSerieClicked(timeseries)}
-              disabled={!allowStrings && !!timeseries.isString}
-              onContainerMouseOver={() => this.onTimeseriesMouseOver(index)}
-            />
-          ))}
+          {searchResults.map(
+            (timeseries: GetTimeSeriesMetadataDTO, index: number) => (
+              <DetailCheckbox
+                className={`tag-search-result result-${timeseries.id} ${
+                  index === cursor ? 'active' : ''
+                }`}
+                key={`detail-checkbox--${timeseries.id}`}
+                title={timeseries.name || timeseries.id.toString()}
+                description={
+                  timeseries.description || timeseries.name || 'No description'
+                }
+                checkable={!single}
+                checked={this.isChecked(timeseries.id)}
+                onContainerClick={() => this.onTimeSerieClicked(timeseries)}
+                disabled={!allowStrings && !!timeseries.isString}
+                onContainerMouseOver={() => this.onTimeseriesMouseOver(index)}
+              />
+            )
+          )}
         </TagList>
       </Wrapper>
     );

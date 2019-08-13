@@ -1,29 +1,38 @@
-import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { ASSET_DATA } from '../../mocks';
+import { ClientSDKProvider } from '../../components/ClientSDKProvider';
+import { fakeAsset } from '../../mocks';
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { withAsset, WithAssetDataProps } from '../withAsset';
 
 configure({ adapter: new Adapter() });
 
-sdk.Assets.retrieve = jest.fn();
+class CogniteClient extends MockCogniteClient {
+  assets: any = {
+    retrieve: jest.fn(),
+  };
+}
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('withAsset', () => {
   beforeEach(() => {
-    // @ts-ignore
-    sdk.Assets.retrieve.mockResolvedValue(ASSET_DATA);
+    sdk.assets.retrieve.mockResolvedValue([fakeAsset]);
   });
 
   afterEach(() => {
-    // @ts-ignore
-    sdk.Assets.retrieve.mockClear();
+    sdk.assets.retrieve.mockClear();
   });
 
   it('Should render spinner', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withAsset(TestComponent);
-    const wrapper = mount(<WrappedComponent assetId={123} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <WrappedComponent assetId={123} />
+      </ClientSDKProvider>
+    );
 
     expect(wrapper.find('span.ant-spin-dot.ant-spin-dot-spin')).toHaveLength(1);
   });
@@ -32,10 +41,12 @@ describe('withAsset', () => {
     const TestComponent = () => <div>Test Content</div>;
     const WrappedComponent = withAsset(TestComponent);
     const wrapper = mount(
-      <WrappedComponent
-        assetId={123}
-        customSpinner={<div className="my-custom-spinner" />}
-      />
+      <ClientSDKProvider client={sdk}>
+        <WrappedComponent
+          assetId={123}
+          customSpinner={<div className="my-custom-spinner" />}
+        />
+      </ClientSDKProvider>
     );
     expect(wrapper.find('div.my-custom-spinner')).toHaveLength(1);
   });
@@ -48,13 +59,17 @@ describe('withAsset', () => {
       </div>
     );
     const WrappedComponent = withAsset(TestComponent);
-    const wrapper = mount(<WrappedComponent assetId={123} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <WrappedComponent assetId={123} />
+      </ClientSDKProvider>
+    );
 
     setImmediate(() => {
       wrapper.update();
-      expect(wrapper.find('p.name').text()).toEqual(ASSET_DATA.name);
+      expect(wrapper.find('p.name').text()).toEqual(fakeAsset.name);
       expect(wrapper.find('p.description').text()).toEqual(
-        ASSET_DATA.description
+        fakeAsset.description
       );
       done();
     });
@@ -63,12 +78,18 @@ describe('withAsset', () => {
   it('Should request for an asset if assetId has been changed', done => {
     const TestComponent = () => <div />;
     const WrappedComponent = withAsset(TestComponent);
-    const wrapper = mount(<WrappedComponent assetId={123} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <WrappedComponent assetId={123} />
+      </ClientSDKProvider>
+    );
 
-    wrapper.setProps({ assetId: 1234 });
+    wrapper.setProps({
+      children: <WrappedComponent assetId={1234} />,
+    });
 
     setImmediate(() => {
-      expect(sdk.Assets.retrieve).toBeCalledTimes(2);
+      expect(sdk.assets.retrieve).toBeCalledTimes(2);
       done();
     });
   });
@@ -77,7 +98,11 @@ describe('withAsset', () => {
     const TestComponent = () => <div />;
     const WrappedComponent = withAsset(TestComponent);
     WrappedComponent.prototype.setState = jest.fn();
-    const wrapper = mount(<WrappedComponent assetId={123} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <WrappedComponent assetId={123} />
+      </ClientSDKProvider>
+    );
 
     wrapper.unmount();
 

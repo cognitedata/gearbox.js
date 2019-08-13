@@ -1,5 +1,4 @@
-import * as sdk from '@cognite/sdk';
-import { Datapoint, Timeseries } from '@cognite/sdk';
+import { DatapointsGetDatapoint, GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import { Icon } from 'antd';
 import numeral from 'numeral';
 import React, { Component } from 'react';
@@ -12,6 +11,11 @@ import {
 } from 'react-dnd';
 import Odometer from 'react-odometerjs';
 import styled from 'styled-components';
+import {
+  ERROR_API_UNEXPECTED_RESULTS,
+  ERROR_NO_SDK_CLIENT,
+} from '../../../constants/errorMessages';
+import { ClientSDKContext } from '../../../context/clientSDKContext';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
@@ -70,8 +74,14 @@ interface DraggableBoxProps extends DragSourceProps {
   alertColor: string;
 }
 
+export interface Datapoint {
+  isString: boolean;
+  value: number | string;
+  timestamp: Date;
+}
+
 interface DraggableBoxState {
-  tag: Timeseries | null;
+  tag: GetTimeSeriesMetadataDTO | null;
   dataPoint: Datapoint | null;
   hovering: boolean;
 }
@@ -95,12 +105,16 @@ export class DraggableBox
     alertColor: '#e74c3c',
   };
 
+  static contextType = ClientSDKContext;
+  context!: React.ContextType<typeof ClientSDKContext>;
+
   isComponentUnmounted = false;
 
   private interval: number | null = null;
 
   constructor(props: DraggableBoxProps) {
     super(props);
+
     this.state = {
       hovering: false,
       tag: null,
@@ -109,7 +123,13 @@ export class DraggableBox
   }
 
   componentDidMount() {
+    if (!this.context) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
     this.fetchTimeSeries(this.props.id);
+    this.updateValue();
+    this.interval = setInterval(this.updateValue, this.props.refreshInterval);
   }
 
   componentWillUnmount() {
@@ -121,7 +141,13 @@ export class DraggableBox
 
   componentDidUpdate(nextProps: DraggableBoxProps) {
     if (this.props.id !== nextProps.id) {
+      if (this.interval) {
+        clearInterval(this.interval);
+        this.interval = null;
+      }
       this.fetchTimeSeries(nextProps.id);
+      this.updateValue();
+      this.interval = setInterval(this.updateValue, this.props.refreshInterval);
     }
   }
 
@@ -148,19 +174,17 @@ export class DraggableBox
 
   fetchTimeSeries = async (id: number) => {
     try {
-      const timeserie = await connectPromiseToUnmountState(
+      const timeseries = await connectPromiseToUnmountState(
         this,
-        sdk.TimeSeries.retrieve(id, true)
+        this.context!.timeseries.retrieve([{ id }])
       );
-      this.setState({
-        tag: timeserie,
-      });
-      if (this.interval) {
-        clearInterval(this.interval);
-        this.interval = null;
+      if (timeseries.length !== 1) {
+        console.error(ERROR_API_UNEXPECTED_RESULTS);
+        return;
       }
-      this.updateValue();
-      this.interval = setInterval(this.updateValue, this.props.refreshInterval);
+      this.setState({
+        tag: timeseries[0],
+      });
     } catch (error) {
       if (error instanceof CanceledPromiseException !== true) {
         throw error;
@@ -170,24 +194,38 @@ export class DraggableBox
 
   updateValue = async () => {
     try {
-      const data = await connectPromiseToUnmountState(
+      const datapoints: DatapointsGetDatapoint[] = await connectPromiseToUnmountState(
         this,
-        sdk.Datapoints.retrieveLatest(this.state.tag!.name)
+        this.context!.datapoints.retrieveLatest([
+          { id: this.props.id, before: 'now' },
+        ])
       );
-      if (!data) {
+      if (!datapoints || datapoints.length !== 1) {
         this.setState({
           dataPoint: null,
         });
         return;
       }
+      const datapoint = datapoints[0];
+      if (!datapoint.datapoints || datapoint.datapoints.length === 0) {
+        this.setState({
+          dataPoint: null,
+        });
+        console.error(ERROR_API_UNEXPECTED_RESULTS);
+        return;
+      }
       if (
         this.state.dataPoint &&
-        data.timestamp < this.state.dataPoint.timestamp
+        datapoint.datapoints[0].timestamp < this.state.dataPoint.timestamp
       ) {
         return; // got old data point - skip it
       }
       this.setState({
-        dataPoint: data,
+        dataPoint: {
+          isString: datapoint.isString,
+          value: datapoint.datapoints[0].value,
+          timestamp: datapoint.datapoints[0].timestamp,
+        },
       });
     } catch (error) {
       if (error instanceof CanceledPromiseException !== true) {

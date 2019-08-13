@@ -4,6 +4,6 @@ export * from './common';
 export * from './documents';
 export * from './events';
 export * from './threeD';
-export * from './timeseriesList';
+export * from './timeseriesListV2';
 export * from './timeseriesDataPointsList';
 export * from './threeDNodesList';

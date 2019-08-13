@@ -1,8 +1,10 @@
-import * as sdk from '@cognite/sdk';
-import { configure, shallow } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { timeseriesList } from '../../mocks';
+import { timeseriesListV2 } from '../../mocks';
+
+import { MockCogniteClient } from '../../utils/mockSdk';
+import { ClientSDKProvider } from '../ClientSDKProvider';
 import { LoadingBlock } from '../common/LoadingBlock/LoadingBlock';
 import {
   AssetTimeseriesPanel,
@@ -12,24 +14,35 @@ import { TimeseriesPanelPure } from './components/TimeseriesPanelPure';
 
 configure({ adapter: new Adapter() });
 
-sdk.TimeSeries.list = jest.fn();
+const mockTimeseriesList = jest.fn();
+
+class CogniteClient extends MockCogniteClient {
+  timeseries: any = {
+    list: mockTimeseriesList,
+  };
+}
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('AssetTimeseriesPanel', () => {
   beforeEach(() => {
-    // @ts-ignore
-    sdk.TimeSeries.list.mockResolvedValue({ items: timeseriesList });
+    mockTimeseriesList.mockReturnValue({
+      autoPagingToArray: async () => timeseriesListV2,
+    });
   });
 
   it('Should render without exploding and load data', done => {
     const props: AssetTimeseriesPanelProps = { assetId: 123 };
-    const wrapper = shallow(<AssetTimeseriesPanel {...props} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <AssetTimeseriesPanel {...props} />
+      </ClientSDKProvider>
+    );
     expect(wrapper.find(LoadingBlock)).toHaveLength(1);
-
     setImmediate(() => {
       wrapper.update();
       const pureComponent = wrapper.find(TimeseriesPanelPure);
       expect(pureComponent).toHaveLength(1);
-      expect(pureComponent.props().assetTimeseries).toEqual(timeseriesList);
+      expect(pureComponent.props().assetTimeseries).toEqual(timeseriesListV2);
       done();
     });
   });

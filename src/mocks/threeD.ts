@@ -1,6 +1,9 @@
 import { Cognite3DViewer, OnProgressData, THREE } from '@cognite/3d-viewer';
+import { CogniteClient } from '@cognite/sdk';
+import { Revision3D } from '@cognite/sdk';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { CacheObject, Callback, EventHandlers } from '../interfaces';
+import { MockCogniteClient } from '../utils/mockSdk';
 import {
   addEvent,
   removeEvent,
@@ -10,10 +13,12 @@ import {
 
 export function createFakeViewer({
   project,
+  sdk,
   cache = {},
   domElement,
 }: {
   project: string;
+  sdk: CogniteClient;
   cache: CacheObject;
   domElement: HTMLElement;
 }): ViewerConfigResponse {
@@ -53,7 +58,7 @@ export function createFakeViewer({
     onComplete();
   };
 
-  const viewer = new Cognite3DViewer({ domElement });
+  const viewer = new Cognite3DViewer({ sdk, domElement, enableCache: true });
 
   const loader = new OBJLoader();
   loader.load('./tank/tank.obj', onLoad, onProgress);
@@ -61,7 +66,6 @@ export function createFakeViewer({
   cache[project] = {
     viewer,
     modelPromise: Promise.resolve(null),
-    revisionPromise: Promise.resolve(null),
     addEvent: addEvent.bind(null, listeners),
     removeEvent: removeEvent.bind(null, listeners),
     domElement,
@@ -69,3 +73,26 @@ export function createFakeViewer({
 
   return cache[project];
 }
+
+export class Mock3DCogniteClient extends MockCogniteClient {
+  revisions3D: any = {
+    retrieve: (): Promise<Revision3D> => Promise.resolve(revision3D),
+  };
+}
+
+const revision3D: Revision3D = {
+  id: 1000,
+  fileId: 1000,
+  published: false,
+  rotation: [0, 0, 0],
+  camera: {
+    target: [0, 0, 0],
+    position: [0, 0, 0],
+  },
+  status: 'Done',
+  thumbnailThreedFileId: 1000,
+  thumbnailURL:
+    'https://api.cognitedata.com/api/v1/project/myproject/3d/files/1000',
+  assetMappingCount: 0,
+  createdTime: new Date(),
+};

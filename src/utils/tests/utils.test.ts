@@ -1,3 +1,4 @@
+import { Asset } from '@cognite/sdk';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import {
@@ -62,7 +63,9 @@ describe('utils', () => {
     `(
       'Filters responce strings length from 5 to 20 chars and with custom from $minLen to $maxLen',
       ({ minLen, maxLen, expected }) => {
-        expect(extractValidStrings(arr, maxLen, minLen)).toEqual(expected);
+        expect(
+          extractValidStrings((arr as any) as Asset[], maxLen, minLen)
+        ).toEqual(expected);
       }
     );
   });

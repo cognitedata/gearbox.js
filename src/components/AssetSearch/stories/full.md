@@ -6,6 +6,8 @@
 
 Using for assets search via name property.
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx
@@ -64,7 +66,6 @@ Definition:
 
 ```typescript
 interface AssetSearchStyles {
-  rootAssetSelect?: React.CSSProperties;
   advancedSearchButton?: React.CSSProperties;
   searchResultList?: {
     container?: React.CSSProperties;

@@ -7,6 +7,8 @@
 This component loads the datapoints given a timeseries id and renders a line chart of those points.
 The component requires only `timeseriesIds`
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx

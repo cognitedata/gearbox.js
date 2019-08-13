@@ -1,9 +1,14 @@
 /* eslint-disable react/no-multi-comp */
-import * as sdk from '@cognite/sdk';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
-import { setupMocks as setupTimeseriesChartMocks } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
+
+import { ClientSDKProvider } from '../../ClientSDKProvider';
+import {
+  MockDatapointsClientObject,
+  TimeseriesMockClient,
+} from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { TimeseriesChartMeta } from '../TimeseriesChartMeta';
 import customBasePeriod from './customBasePeriod.md';
 import customInterval from './customInterval.md';
@@ -13,54 +18,88 @@ import hideElements from './hideElements.md';
 import predefinedPeriod from './predefinedPeriod.md';
 import withTheme from './withTheme.md';
 
-const setupMocks = () => {
-  setupTimeseriesChartMocks();
-  // @ts-ignore
-  sdk.TimeSeries.retrieve = () => {
-    return new Promise(resolve => {
-      setTimeout(
-        () =>
-          resolve({
-            id: 8681821313339919,
-            name: 'IA_21PT1019.AlarmByte',
-            isString: false,
-            unit: 'bar',
-            metadata: {
-              tag: 'IA_21PT1019.AlarmByte',
-              scan: '1',
-              span: '100',
-              step: '1',
-              zero: '0',
-            },
-            assetId: 4965555138606429,
-            isStep: false,
-            description: '21PT1019.AlarmByte',
-          }),
-        1000
-      );
-    });
-  };
-};
-
-storiesOf('TimeseriesChartMeta', module).add(
-  'Full description',
-  () => {
-    setupMocks();
-    return <TimeseriesChartMeta timeseriesId={123} />;
-  },
-  {
-    readme: {
-      content: full,
+class CogniteClient extends TimeseriesMockClient {
+  timeseries: any = {
+    retrieve: (): Promise<GetTimeSeriesMetadataDTO[]> => {
+      return new Promise(resolve => {
+        setTimeout(
+          () =>
+            resolve([
+              {
+                id: 8681821313339919,
+                name: 'IA_21PT1019.AlarmByte',
+                isString: false,
+                unit: 'bar',
+                metadata: {
+                  tag: 'IA_21PT1019.AlarmByte',
+                  scan: '1',
+                  span: '100',
+                  step: '1',
+                  zero: '0',
+                },
+                assetId: 4965555138606429,
+                isStep: false,
+                description: '21PT1019.AlarmByte',
+                createdTime: new Date(0),
+                lastUpdatedTime: new Date(0),
+              },
+            ]),
+          1000
+        );
+      });
     },
-  }
+  };
+  datapoints: any = {
+    ...MockDatapointsClientObject,
+    retrieveLatest: () =>
+      new Promise(resolve => {
+        setTimeout(() => {
+          resolve([
+            {
+              isString: false,
+              id: 123,
+              datapoints: [
+                {
+                  timestamp: new Date(Date.now()),
+                  value: 15 + Math.random() * 5.0,
+                },
+              ],
+            },
+          ]);
+        }, 1000);
+      }),
+  };
+}
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
+const clientSdkDecorator = (storyFn: any) => (
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
+storiesOf('TimeseriesChartMeta', module)
+  .addDecorator(clientSdkDecorator)
+  .add(
+    'Full description',
+    () => {
+      return <TimeseriesChartMeta timeseriesId={123} />;
+    },
+    {
+      readme: {
+        content: full,
+      },
+    }
+  );
+
 storiesOf('TimeseriesChartMeta/Examples', module)
-  .addDecorator(story => <div style={{ width: '100%' }}>{story()}</div>)
+  .addDecorator(story => (
+    <div style={{ width: '100%' }}>
+      <ClientSDKProvider client={sdk}>{story()}</ClientSDKProvider>
+    </div>
+  ))
   .add(
     'Predefined Period',
     () => {
-      setupMocks();
       return (
         <TimeseriesChartMeta timeseriesId={123} defaultTimePeriod="lastMonth" />
       );
@@ -74,7 +113,6 @@ storiesOf('TimeseriesChartMeta/Examples', module)
   .add(
     'Hide elements',
     () => {
-      setupMocks();
       return (
         <TimeseriesChartMeta
           timeseriesId={123}
@@ -95,7 +133,6 @@ storiesOf('TimeseriesChartMeta/Examples', module)
   .add(
     'Disable live updates',
     () => {
-      setupMocks();
       return <TimeseriesChartMeta timeseriesId={123} liveUpdate={false} />;
     },
     {
@@ -107,7 +144,6 @@ storiesOf('TimeseriesChartMeta/Examples', module)
   .add(
     'Custom update interval',
     () => {
-      setupMocks();
       return (
         <TimeseriesChartMeta
           timeseriesId={123}
@@ -125,7 +161,6 @@ storiesOf('TimeseriesChartMeta/Examples', module)
   .add(
     'Custom base period',
     () => {
-      setupMocks();
       return (
         <TimeseriesChartMeta
           timeseriesId={123}
@@ -145,7 +180,6 @@ storiesOf('TimeseriesChartMeta/Examples', module)
   .add(
     'With theme',
     () => {
-      setupMocks();
       const exampleTheme = {
         gearbox: {
           textColor: 'Red',

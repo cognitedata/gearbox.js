@@ -9,6 +9,8 @@ This component can be used as a container of an infographic image for displaying
 The height of SensorOverlay component is defined by content in `children` and the width takes `100%` unless `fixedWidth` is provided. This component requires a list of timeserie IDs and once they are passed via
 `timeseriesIds` prop SensorOverlay fetches meta information (name, description, etc) for all timeseries in the list and then constantly fetches latest data (Datapoint) for each timeserie with interval provided in `refreshInterval` (5 seconds by default).
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx
@@ -52,7 +54,7 @@ function ExampleComponent(props) {
 | `isTagDraggable`      | Defines whether it's possible to drag sensor boxes (tags)        | boolean  | true      |
 | `isPointerDraggable`  | Defines whether it's possible to drag sensor pointers            | boolean  | true      |
 | `onClick`             | Function triggered when user clicks on a sensor box or pointer |`(timeserieId: number) => void`    |         |
-| `onLinkClick`         | Function triggered when user clicks on a sensor value link. The link should be enabled with  `linksMap` | `(timeserieId: number, datapoint?: Datapoint) => void`    |         |
+| `onLinkClick`         | Function triggered when user clicks on a sensor value link. The link should be enabled with  `linksMap` | `(timeserieId: number, datapoint?: SensorDatapoint) => void`    |         |
 | `onSettingsClick`     | Function triggered when user clicks on the settings icon. The icon is shown if this prop is defined. | `(timeserieId: number) => void`    |         |
 | `onSensorPositionChange`| Function triggered when either a tag or a pointer has been dragged. | `(timeserieId: number, position: SensorPosition) => void`    |         |
 | `strings`              | Object map with strings to customize/localize text in the component    | `{[key: string]: string}`       |             | 
@@ -98,9 +100,18 @@ interface SensorMinMaxRange {
 }
 ```
 
-#### Datapoint
-This interface is provided by [@cognite/sdk](https://github.com/cognitedata/cognitesdk-js):
+#### SensorDatapoint
+This type can be imported from `@cognite/gearbox`:
 ```typescript
-import { Datapoint } from '@cognite/sdk';
+import { SensorDatapoint } from '@cognite/gearbox';
+```
+
+Definition:
+```typescript
+export interface SensorDatapoint {
+  isString: boolean;
+  value: number | string;
+  timestamp: Date;
+}
 ```
 

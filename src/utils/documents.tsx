@@ -109,7 +109,7 @@ export const getDocumentsByCategory = (
     const keyList = [
       getDocumentType(doc.metadata, documentTypeField),
       // if not found try to find category in file name
-      ...doc.fileName.split('-'),
+      ...doc.name.split('-'),
     ];
     const { key, description } = getCategoryName(
       keyList,

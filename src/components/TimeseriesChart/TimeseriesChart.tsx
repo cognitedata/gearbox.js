@@ -1,11 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {
-  cogniteloader as griffloader,
-  y0Accessor,
-  y1Accessor,
-  yAccessor,
-} from './dataLoader';
+import { DataLoader } from './dataLoader';
 
 import {
   Annotation,
@@ -16,6 +11,8 @@ import {
   Ruler,
 } from '@cognite/griff-react';
 import { Spin } from 'antd';
+import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
+import { ClientSDKContext } from '../../context/clientSDKContext';
 import { decimalTickFormatter } from '../../utils/axisSigFix';
 import { getColorByString } from '../../utils/colors';
 
@@ -60,6 +57,7 @@ export class TimeseriesChart extends React.Component<
   TimeseriesChartProps,
   TimeseriesChartState
 > {
+  static contextType = ClientSDKContext;
   static defaultProps = {
     startTime: Date.now() - 60 * 60 * 1000,
     endTime: Date.now(),
@@ -83,9 +81,25 @@ export class TimeseriesChart extends React.Component<
       throw e;
     },
   };
-  state = {
-    loaded: false,
-  };
+
+  context!: React.ContextType<typeof ClientSDKContext>;
+
+  dataLoader!: DataLoader;
+
+  constructor(
+    props: TimeseriesChartProps,
+    context: React.ContextType<typeof ClientSDKContext>
+  ) {
+    super(props);
+    this.state = {
+      loaded: false,
+    };
+    if (!context) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
+    this.dataLoader = new DataLoader(context);
+  }
 
   onFetchData = () => {
     if (!this.state.loaded) {
@@ -137,18 +151,18 @@ export class TimeseriesChart extends React.Component<
           yAxisDisplayMode:
             s.yAxisDisplayMode || AxisDisplayMode[yAxisDisplayMode],
           hidden: s.hidden || hiddenSeries[s.id],
-          yAccessor: s.yAccessor || yAccessor,
-          y0Accessor: s.y0Accessor || y0Accessor,
-          y1Accessor: s.y1Accessor || y1Accessor,
+          yAccessor: s.yAccessor || DataLoader.yAccessor,
+          y0Accessor: s.y0Accessor || DataLoader.y0Accessor,
+          y1Accessor: s.y1Accessor || DataLoader.y1Accessor,
         }))
       : timeseriesIds.map((id: number) => ({
           id,
           color: timeseriesColors[id] || getColorByString(id.toString()),
           yAxisDisplayMode: AxisDisplayMode[yAxisDisplayMode],
           hidden: hiddenSeries[id],
-          yAccessor,
-          y0Accessor,
-          y1Accessor,
+          yAccessor: DataLoader.yAccessor,
+          y0Accessor: DataLoader.y0Accessor,
+          y1Accessor: DataLoader.y1Accessor,
         }));
 
     return (
@@ -156,7 +170,7 @@ export class TimeseriesChart extends React.Component<
         <Spin spinning={!loaded}>
           <Wrapper style={styles && styles.container}>
             <DataProvider
-              defaultLoader={griffloader}
+              defaultLoader={this.dataLoader.cogniteloader}
               onFetchData={this.onFetchData}
               pointsPerSeries={pointsPerSeries}
               series={griffSeries}

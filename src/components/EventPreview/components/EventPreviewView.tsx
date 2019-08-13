@@ -1,4 +1,4 @@
-import { Event as ApiEvent } from '@cognite/sdk';
+import { CogniteEvent } from '@cognite/sdk';
 import { Button } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
@@ -28,10 +28,10 @@ export interface EventPreviewStyles {
 }
 
 export interface EventPreviewProps {
-  event: ApiEvent;
-  onShowDetails?: (event: ApiEvent) => void;
+  event: CogniteEvent;
+  onShowDetails?: (event: CogniteEvent) => void;
   strings?: PureObject;
-  hideProperties?: (keyof ApiEvent)[];
+  hideProperties?: (keyof CogniteEvent)[];
   styles?: EventPreviewStyles;
   theme?: AnyIfEmpty<{}>;
 }
@@ -44,7 +44,7 @@ const EventPreviewView = ({
   styles = {},
 }: EventPreviewProps) => {
   const lang = { ...defaultStrings, ...strings };
-  const { startTime, endTime, type, subtype, description, metadata } = event;
+  const { startTime, endTime, description, metadata, type, subtype } = event;
   const {
     noDescription,
     start,

@@ -1,8 +1,11 @@
-import { Files } from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 
-export const getDocumentDownloadLink = async (id: number) => {
-  const url = await Files.download(id);
-
+export const getDocumentDownloadLink = async (
+  client: CogniteClient,
+  id: number
+) => {
+  const urls = await client.files.getDownloadUrls([{ id }]);
+  const url = urls[0].downloadUrl;
   const response = await fetch(url);
 
   if (response.status !== 200) {

@@ -1,28 +1,20 @@
-import {
-  Asset,
-  Assets,
-  Datapoint,
-  Datapoints,
-  EventDataWithCursor,
-  Events,
-  FileListParams,
-  FileMetadataWithCursor,
-  Files,
-  TimeSeries,
-  TimeseriesWithCursor,
-} from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { Document } from '../../../interfaces';
 import {
-  ASSET_DATA,
   ASSET_META_STYLES,
   DOCUMENTS,
-  EVENTS,
-  timeseriesList,
+  fakeAsset,
+  fakeEvents,
+  timeseriesListV2,
 } from '../../../mocks';
-import { setupMocks as setupTimeseriesChartMocks } from '../../TimeseriesChart/stories/TimeseriesChart.stories';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
+import {
+  MockDatapointsClientObject,
+  MockTimeseriesClientObject,
+  TimeseriesMockClient,
+} from '../../TimeseriesChart/stories/TimeseriesChart.stories';
 import { AssetMeta } from '../AssetMeta';
 import alternatePane from './alternatePane.md';
 import basic from './basic.md';
@@ -37,50 +29,73 @@ import hideTab from './hideTab.md';
 import selectedDocument from './selectedDocument.md';
 import selectedPane from './selectedPane.md';
 
-Assets.retrieve = (): Promise<Asset> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(ASSET_DATA);
-    }, 1000); // simulate load delay
-  });
-};
-
-Events.list = async (): Promise<EventDataWithCursor> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({ items: EVENTS });
-    }, 1000);
-  });
-};
-
-Files.list = async ({
-  assetId,
-}: FileListParams): Promise<FileMetadataWithCursor> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      if (assetId === 12345) {
-        resolve({ items: [] }); // simulate asset without documents
-      } else {
-        resolve({ items: DOCUMENTS });
-      }
-    }, 1000);
-  });
-};
-
-TimeSeries.list = async (): Promise<TimeseriesWithCursor> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({ items: timeseriesList });
-    }, 1000);
-  });
-};
-
-Datapoints.retrieveLatest = async (name: string): Promise<Datapoint> => {
-  return {
-    timestamp: Date.now(),
-    value: name.length + Math.random() * 5.0, // just random number
+class CogniteClient extends TimeseriesMockClient {
+  timeseries: any = {
+    ...MockTimeseriesClientObject,
+    list: () => ({
+      autoPagingToArray: async () => {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return timeseriesListV2;
+      },
+    }),
   };
-};
+  datapoint = {
+    ...MockDatapointsClientObject,
+    retrieveLatest: () =>
+      new Promise(resolve => {
+        setTimeout(() => {
+          resolve([
+            {
+              isString: false,
+              id: 123,
+              datapoints: [
+                {
+                  timestamp: new Date(),
+                  value: 15 + Math.random() * 5.0,
+                },
+              ],
+            },
+          ]);
+        }, 1000);
+      }),
+  };
+  assets: any = {
+    retrieve: () =>
+      new Promise(resolve => {
+        setTimeout(() => {
+          resolve([fakeAsset]);
+        }, 1000);
+      }),
+  };
+  events: any = {
+    list: () => ({
+      autoPagingToArray: () => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(fakeEvents);
+          }, 1000);
+        });
+      },
+    }),
+  };
+  files: any = {
+    list: () => ({
+      autoPagingToArray: () => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(DOCUMENTS);
+          }, 1000);
+        });
+      },
+    }),
+  };
+}
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
+const clientSDKDecorator = (storyFn: any) => (
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
+);
 
 const onPaneChange = (key: string) => action('onPaneChange')(key);
 const handleDocumentClick = (
@@ -91,24 +106,25 @@ const handleDocumentClick = (
   action('handleDocumentClick')(document, category, description);
 };
 
-storiesOf('AssetMeta', module).add(
-  'Full Description',
-  () => {
-    setupTimeseriesChartMocks();
-    return <AssetMeta assetId={4650652196144007} />;
-  },
-  {
-    readme: {
-      content: fullDescription,
+storiesOf('AssetMeta', module)
+  .addDecorator(clientSDKDecorator)
+  .add(
+    'Full Description',
+    () => {
+      return <AssetMeta assetId={4650652196144007} />;
     },
-  }
-);
+    {
+      readme: {
+        content: fullDescription,
+      },
+    }
+  );
 
 storiesOf('AssetMeta/Examples', module)
+  .addDecorator(clientSDKDecorator)
   .add(
     'Basic',
     () => {
-      setupTimeseriesChartMocks();
       return <AssetMeta assetId={4650652196144007} />;
     },
     {
@@ -120,7 +136,6 @@ storiesOf('AssetMeta/Examples', module)
   .add(
     'Returns selected pane',
     () => {
-      setupTimeseriesChartMocks();
       return (
         <AssetMeta assetId={4650652196144007} onPaneChange={onPaneChange} />
       );
@@ -134,7 +149,6 @@ storiesOf('AssetMeta/Examples', module)
   .add(
     'Alternate default tab',
     () => {
-      setupTimeseriesChartMocks();
       return <AssetMeta assetId={4650652196144007} tab="documents" />;
     },
     {
@@ -146,7 +160,6 @@ storiesOf('AssetMeta/Examples', module)
   .add(
     'Hide a tab',
     () => {
-      setupTimeseriesChartMocks();
       return (
         <AssetMeta
           assetId={4650652196144007}
@@ -164,7 +177,6 @@ storiesOf('AssetMeta/Examples', module)
   .add(
     'Returns selected document',
     () => {
-      setupTimeseriesChartMocks();
       return <AssetMeta assetId={123} docsProps={{ handleDocumentClick }} />;
     },
     {
@@ -176,7 +188,6 @@ storiesOf('AssetMeta/Examples', module)
   .add(
     'Custom priority categories',
     () => {
-      setupTimeseriesChartMocks();
       return (
         <AssetMeta
           assetId={123}
@@ -193,7 +204,6 @@ storiesOf('AssetMeta/Examples', module)
   .add(
     'Custom categories sort',
     () => {
-      setupTimeseriesChartMocks();
       const customSort = (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0);
       return (
         <AssetMeta
@@ -214,7 +224,6 @@ storiesOf('AssetMeta/Examples', module)
   .add(
     'Custom category priority and sort',
     () => {
-      setupTimeseriesChartMocks();
       const customSort = (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0);
       return (
         <AssetMeta
@@ -235,7 +244,6 @@ storiesOf('AssetMeta/Examples', module)
   .add(
     'Custom TimeseriesChartMeta',
     () => {
-      setupTimeseriesChartMocks();
       return (
         <AssetMeta
           assetId={123}

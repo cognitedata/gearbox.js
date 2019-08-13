@@ -8,11 +8,11 @@
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { Event } from '@cognite/sdk';
+import { CogniteEvent } from '@cognite/sdk';
 import { EventPreview } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
-  const onShowDetails = (event: Event) = {};
+  const onShowDetails = (event: CogniteEvent) = {};
 
   return (
     <EventPreview 

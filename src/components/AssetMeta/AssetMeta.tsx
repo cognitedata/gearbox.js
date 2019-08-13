@@ -1,8 +1,12 @@
 import { Asset } from '@cognite/sdk';
-import * as sdk from '@cognite/sdk';
 import { Tabs } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
+import {
+  ERROR_API_UNEXPECTED_RESULTS,
+  ERROR_NO_SDK_CLIENT,
+} from '../../constants/errorMessages';
+import { ClientSDKContext } from '../../context/clientSDKContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import {
   AnyIfEmpty,
@@ -58,6 +62,7 @@ interface AssetMetaState {
 
 class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
   implements ComponentWithUnmountState {
+  static contextType = ClientSDKContext;
   static defaultProps = {
     theme: { ...defaultTheme },
   };
@@ -75,6 +80,7 @@ class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
       return null;
     }
   }
+  context!: React.ContextType<typeof ClientSDKContext>;
 
   isComponentUnmounted = false;
 
@@ -88,7 +94,12 @@ class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
   }
 
   componentDidMount() {
+    // @ts-ignore
     if (!this.includesPanel('details') && this.props.assetId) {
+      if (!this.context) {
+        console.error(ERROR_NO_SDK_CLIENT);
+        return;
+      }
       this.loadAsset(this.props.assetId);
     }
   }
@@ -108,11 +119,14 @@ class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
 
   async loadAsset(assetId: number) {
     try {
-      const asset = await connectPromiseToUnmountState(
+      const assets = await connectPromiseToUnmountState(
         this,
-        sdk.Assets.retrieve(assetId)
+        this.context!.assets.retrieve([{ id: assetId }])
       );
-      this.handleAssetLoaded(asset);
+      if (!assets || assets.length !== 1) {
+        console.error(ERROR_API_UNEXPECTED_RESULTS);
+      }
+      this.handleAssetLoaded(assets[0]);
     } catch (error) {
       if (error instanceof CanceledPromiseException !== true) {
         throw error;

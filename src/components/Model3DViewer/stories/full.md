@@ -17,8 +17,10 @@ The component will visualize the full 3D model by default, but by providing an o
 
 To retrieve a 3D model you need to provide:
 
-- `modelId` – you can find it using `sdk.ThreeD.listModels()` call
-- `revisionId` – you can find it via `sdk.ThreeD.listRevisions(modelID)` call
+- `modelId` – you can get it via SDK call – `Models3DAPI.list()`. You receive an iterator as a result, which could be used to get list of model ids associated to your tenant. 
+- `revisionId` – you can get it via SDK call `Revisions3DAPI.list(modelId)`. You receive an iterator as a result, which could be used to get list of revision ids available for provided modelId
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
 
 #### Usage:
 
@@ -31,7 +33,7 @@ import {
   Cognite3DModel,
   OnProgressData,
 } from '@cognite/3d-viewer';
-import * as sdk from '@cognite/sdk';
+import { Revision3D } from '@cognite/sdk';
 import { Model3DViewer } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
@@ -44,7 +46,7 @@ function ExampleComponent(props) {
   const onReady = (
     viewer: Cognite3DViewer,
     model: Cognite3DModel,
-    revision: sdk.Revision
+    revision: Revision3D
   ) => {};
 
   return (

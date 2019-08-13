@@ -4,12 +4,19 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import styled from 'styled-components';
 import * as THREE from 'three';
-import { createFakeViewer, generateNumber } from '../../../mocks';
+import {
+  createFakeViewer,
+  generateNumber,
+  Mock3DCogniteClient,
+} from '../../../mocks';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { mockCreateViewer, Model3DViewer } from '../Model3DViewer';
 import full from './full.md';
 import screenshot from './screenshot.md';
 import slice from './slice.md';
 import slider from './slider.md';
+
+const sdk = new Mock3DCogniteClient({ appId: 'gearbox test' });
 
 const modelID = 0;
 const revisionID = 0;
@@ -18,6 +25,10 @@ const cache = {};
 const Wrapper = styled.div`
   padding: 20px;
 `;
+
+const clientSDKDecorator = (storyFn: any) => (
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
+);
 
 const onClick = (modelId: number, point: THREE.Vector3) =>
   action('onClick')(
@@ -34,33 +45,36 @@ const onReady = () =>
     { name: 'revision' }
   );
 
-storiesOf('Model3DViewer', module).add(
-  'Full description',
-  () => {
-    mockCreateViewer(createFakeViewer);
+storiesOf('Model3DViewer', module)
+  .addDecorator(clientSDKDecorator)
+  .add(
+    'Full description',
+    () => {
+      mockCreateViewer(createFakeViewer);
 
-    return (
-      <Wrapper>
-        <Model3DViewer
-          modelId={modelID}
-          revisionId={revisionID}
-          onClick={onClick}
-          onProgress={onProgress}
-          onComplete={onComplete}
-          onReady={onReady}
-          cache={cache}
-        />
-      </Wrapper>
-    );
-  },
-  {
-    readme: {
-      content: full,
+      return (
+        <Wrapper>
+          <Model3DViewer
+            modelId={modelID}
+            revisionId={revisionID}
+            onClick={onClick}
+            onProgress={onProgress}
+            onComplete={onComplete}
+            onReady={onReady}
+            cache={cache}
+          />
+        </Wrapper>
+      );
     },
-  }
-);
+    {
+      readme: {
+        content: full,
+      },
+    }
+  );
 
 storiesOf('Model3DViewer/Examples', module)
+  .addDecorator(clientSDKDecorator)
   .add(
     'Take Screenshots',
     () => {

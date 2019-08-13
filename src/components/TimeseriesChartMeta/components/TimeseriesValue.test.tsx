@@ -1,35 +1,44 @@
-import * as sdk from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { datapoints, timeseriesList } from '../../../mocks';
+import { datapoints, timeseriesListV2 } from '../../../mocks';
+import { MockCogniteClient } from '../../../utils/mockSdk';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesValue } from './TimeseriesValue';
 
 configure({ adapter: new Adapter() });
 
-sdk.Datapoints.retrieveLatest = jest.fn();
+const timeseries = timeseriesListV2[0];
+const datapoint = datapoints[0];
 
-const timeseries = timeseriesList[0];
-const datapopint = datapoints[0];
+class CogniteClient extends MockCogniteClient {
+  datapoints: any = {
+    retrieveLatest: jest.fn(),
+  };
+}
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 beforeEach(() => {
-  // @ts-ignore
-  sdk.Datapoints.retrieveLatest.mockResolvedValue(datapopint);
+  sdk.datapoints.retrieveLatest.mockResolvedValue([
+    { datapoints: [datapoint] },
+  ]);
 });
 
 afterEach(() => {
-  // @ts-ignore
-  sdk.Datapoints.retrieveLatest.mockClear();
+  jest.clearAllMocks();
 });
 
 describe('TimeseriesValue', () => {
   it('Should render without exploding', () => {
     const wrapper = mount(
-      <TimeseriesValue
-        timeseriesName={timeseries.name}
-        timeseriesDescription={timeseries.description}
-        liveUpdate={false}
-      />
+      <ClientSDKProvider client={sdk}>
+        <TimeseriesValue
+          timeseriesId={timeseries.id}
+          timeseriesDescription={timeseries.description}
+          liveUpdate={false}
+        />
+      </ClientSDKProvider>
     );
 
     expect(wrapper.find(TimeseriesValue)).toHaveLength(1);
@@ -38,37 +47,51 @@ describe('TimeseriesValue', () => {
 
   it('Should  request latest datapoint', () => {
     mount(
-      <TimeseriesValue
-        timeseriesName={timeseries.name}
-        timeseriesDescription={timeseries.description}
-        liveUpdate={false}
-      />
+      <ClientSDKProvider client={sdk}>
+        <TimeseriesValue
+          timeseriesId={timeseries.id}
+          timeseriesDescription={timeseries.description}
+          liveUpdate={false}
+        />
+      </ClientSDKProvider>
     );
 
-    expect(sdk.Datapoints.retrieveLatest).toBeCalled();
+    expect(sdk.datapoints.retrieveLatest).toBeCalled();
   });
 
-  it('Should retrieve latest datapoint twice if timeseriesName has been changed ', () => {
+  it('Should retrieve latest datapoint twice if timeseriesId has been changed ', () => {
     const wrapper = mount(
-      <TimeseriesValue
-        timeseriesName={timeseries.name}
-        timeseriesDescription={timeseries.description}
-        liveUpdate={false}
-      />
+      <ClientSDKProvider client={sdk}>
+        <TimeseriesValue
+          timeseriesId={timeseries.id}
+          timeseriesDescription={timeseries.description}
+          liveUpdate={false}
+        />
+      </ClientSDKProvider>
     );
 
-    wrapper.setProps({ timeseriesName: 'some other timeseries' });
+    wrapper.setProps({
+      children: (
+        <TimeseriesValue
+          timeseriesDescription={timeseries.description}
+          liveUpdate={false}
+          timeseriesId={1234}
+        />
+      ),
+    });
 
-    expect(sdk.Datapoints.retrieveLatest).toBeCalledTimes(2);
+    expect(sdk.datapoints.retrieveLatest).toBeCalledTimes(2);
   });
 
   it('Should clear interval after unmounting ', () => {
     jest.useFakeTimers();
     const wrapper = mount(
-      <TimeseriesValue
-        timeseriesName={timeseries.name}
-        timeseriesDescription={timeseries.description}
-      />
+      <ClientSDKProvider client={sdk}>
+        <TimeseriesValue
+          timeseriesId={timeseries.id}
+          timeseriesDescription={timeseries.description}
+        />
+      </ClientSDKProvider>
     );
 
     expect(setInterval).toHaveBeenCalledTimes(1);
@@ -76,16 +99,25 @@ describe('TimeseriesValue', () => {
     expect(clearInterval).toHaveBeenCalledTimes(1);
   });
 
-  it('Should clear interval after changing timeseriesName ', () => {
+  it('Should clear interval after changing timeseriesId ', () => {
     jest.useFakeTimers();
     const wrapper = mount(
-      <TimeseriesValue
-        timeseriesName={timeseries.name}
-        timeseriesDescription={timeseries.description}
-      />
+      <ClientSDKProvider client={sdk}>
+        <TimeseriesValue
+          timeseriesId={timeseries.id}
+          timeseriesDescription={timeseries.description}
+        />
+      </ClientSDKProvider>
     );
     expect(setInterval).toHaveBeenCalledTimes(1);
-    wrapper.setProps({ timeseriesName: 'some name' });
+    wrapper.setProps({
+      children: (
+        <TimeseriesValue
+          timeseriesDescription={timeseries.description}
+          timeseriesId={1234}
+        />
+      ),
+    });
     expect(clearInterval).toHaveBeenCalledTimes(1);
   });
 
@@ -93,11 +125,13 @@ describe('TimeseriesValue', () => {
     TimeseriesValue.prototype.setState = jest.fn();
 
     const wrapper = mount(
-      <TimeseriesValue
-        timeseriesName={timeseries.name}
-        timeseriesDescription={timeseries.description}
-        liveUpdate={false}
-      />
+      <ClientSDKProvider client={sdk}>
+        <TimeseriesValue
+          timeseriesId={timeseries.id}
+          timeseriesDescription={timeseries.description}
+          liveUpdate={false}
+        />
+      </ClientSDKProvider>
     );
 
     wrapper.unmount();

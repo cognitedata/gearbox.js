@@ -1,12 +1,14 @@
-import { Files } from '@cognite/sdk';
+import { FileLink, IdEither } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import styled from 'styled-components';
 import { ZoomCenter } from '../../../interfaces';
 import { SVG } from '../../../mocks/svg-viewer';
-import { SVGViewer } from '../SVGViewer';
 
+import { MockCogniteClient } from '../../../utils/mockSdk';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
+import { SVGViewer } from '../SVGViewer';
 import classesDescription from './classes.md';
 import clickDescription from './click.md';
 import customDescription from './custom.md';
@@ -17,8 +19,6 @@ import zoomDescription from './zoom.md';
 const API_REQUEST = 'https://example.com';
 
 const setupMocks = () => {
-  Files.download = async (): Promise<string> => API_REQUEST;
-
   const nativeFetch = fetch;
   // @ts-ignore
   fetch = () => {
@@ -32,31 +32,56 @@ const setupMocks = () => {
   };
 };
 
+class CogniteClient extends MockCogniteClient {
+  files: any = {
+    getDownloadUrls: (): Promise<(FileLink & IdEither)[]> => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const response: FileLink & IdEither = {
+            id: 123,
+            downloadUrl: API_REQUEST,
+          };
+          resolve([response]);
+        }, 1000);
+      });
+    },
+  };
+}
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
 const getTextFromMetadataNode = (node: Element) =>
   (node.textContent || '').replace(/\s/g, '');
 
-storiesOf('SVGViewer', module).add(
-  'Full description',
-  () => {
-    setupMocks();
-    return (
-      <div style={{ height: '100vh' }}>
-        <SVGViewer
-          documentId={5185355395511590}
-          title="Title"
-          description="Description"
-        />
-      </div>
-    );
-  },
-  {
-    readme: {
-      content: fullDescription,
-    },
-  }
+const clientSdkDecorator = (storyFn: any) => (
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
+storiesOf('SVGViewer', module)
+  .addDecorator(clientSdkDecorator)
+  .add(
+    'Full description',
+    () => {
+      setupMocks();
+      return (
+        <div style={{ height: '100vh' }}>
+          <SVGViewer
+            documentId={5185355395511590}
+            title="Title"
+            description="Description"
+          />
+        </div>
+      );
+    },
+    {
+      readme: {
+        content: fullDescription,
+      },
+    }
+  );
+
 storiesOf('SVGViewer/Examples', module)
+  .addDecorator(clientSdkDecorator)
   .add(
     'Locate asset',
     () => {

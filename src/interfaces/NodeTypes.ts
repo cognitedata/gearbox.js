@@ -1,4 +1,4 @@
-import { Node } from '@cognite/sdk';
+import { RevealNode3D } from '@cognite/sdk';
 import { AntTreeNodeProps } from 'antd/lib/tree';
 import { AnyIfEmpty } from './CommonTypes';
 
@@ -8,7 +8,7 @@ export interface OnSelectNodeTreeParams {
   key: number | string;
   title: string;
   isLeaf?: boolean;
-  node?: Node;
+  node?: RevealNode3D;
 }
 
 export interface OnRightClickNodeTreeParams {

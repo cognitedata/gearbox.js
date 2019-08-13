@@ -1,4 +1,4 @@
-import { Event } from '@cognite/sdk';
+import { CogniteEvent } from '@cognite/sdk';
 import { Icon, Modal, Table } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
@@ -13,7 +13,7 @@ import {
 import { defaultTheme } from '../../../theme/defaultTheme';
 import { momentFromTimestamp } from '../../../utils/formatters';
 
-interface EventAddonsProp extends Event {
+interface EventAddonsProp extends CogniteEvent {
   typeAndSubtype: React.ReactNode;
   start: string;
   end: string;
@@ -110,7 +110,7 @@ export class AssetEventsPanelPureComponent extends React.Component<
     </EventMetadataList>
   );
 
-  mapEvent = (event: Event): EventAddonsProp => ({
+  mapEvent = (event: CogniteEvent): EventAddonsProp => ({
     ...event,
     typeAndSubtype: (
       <span>

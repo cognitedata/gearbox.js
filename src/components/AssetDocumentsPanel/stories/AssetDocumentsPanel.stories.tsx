@@ -1,8 +1,9 @@
-import * as sdk from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { DOCUMENTS } from '../../../mocks';
+import { MockCogniteClient } from '../../../utils/mockSdk';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetDocumentsPanel } from '../AssetDocumentsPanel';
 import categoryNames from './categoryNames.md';
 import customSpinner from './customSpinner.md';
@@ -10,27 +11,42 @@ import customStyles from './customStyles.md';
 import fullDescription from './full.md';
 import loadCallback from './loadCallback.md';
 
-sdk.Files.list = () => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({ items: DOCUMENTS });
-    }, 1000);
-  });
-};
+class CogniteClient extends MockCogniteClient {
+  files: any = {
+    list: () => ({
+      autoPagingToArray: () => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(DOCUMENTS);
+          }, 1000);
+        });
+      },
+    }),
+  };
+}
 
-storiesOf('AssetDocumentsPanel', module).add(
-  'Full Description',
-  () => {
-    return <AssetDocumentsPanel assetId={4650652196144007} />;
-  },
-  {
-    readme: {
-      content: fullDescription,
-    },
-  }
+const sdk = new CogniteClient({ appId: 'gearbox test' });
+
+const clientSDKDecorator = (storyFn: any) => (
+  <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>
 );
 
+storiesOf('AssetDocumentsPanel', module)
+  .addDecorator(clientSDKDecorator)
+  .add(
+    'Full Description',
+    () => {
+      return <AssetDocumentsPanel assetId={4650652196144007} />;
+    },
+    {
+      readme: {
+        content: fullDescription,
+      },
+    }
+  );
+
 storiesOf('AssetDocumentsPanel/Examples', module)
+  .addDecorator(clientSDKDecorator)
   .add(
     'With load callback',
     () => {

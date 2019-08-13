@@ -1,32 +1,48 @@
-import * as sdk from '@cognite/sdk';
-import { configure, shallow } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { ASSET_DATA } from '../../mocks';
+import { ClientSDKProvider } from '../../components/ClientSDKProvider';
+import { fakeAsset } from '../../mocks';
+import { MockCogniteClient } from '../../utils/mockSdk';
 import { LoadingBlock } from '../common/LoadingBlock/LoadingBlock';
 import { AssetDetailsPanel, AssetDetailsPanelProps } from './AssetDetailsPanel';
 import { AssetDetailsPanelPure } from './AssetDetailsPanelPure';
 
 configure({ adapter: new Adapter() });
 
-sdk.Assets.retrieve = jest.fn();
+const mockAssetList = jest.fn();
+
+class CogniteClient extends MockCogniteClient {
+  assets: any = {
+    retrieve: mockAssetList,
+  };
+}
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 describe('AssetDetailsPanel', () => {
   beforeEach(() => {
-    // @ts-ignore
-    sdk.Assets.retrieve.mockResolvedValue(ASSET_DATA);
+    mockAssetList.mockResolvedValue([fakeAsset]);
+  });
+
+  afterEach(() => {
+    mockAssetList.mockClear();
   });
 
   it('Should render without exploding and load data', done => {
     const props: AssetDetailsPanelProps = { assetId: 123 };
-    const wrapper = shallow(<AssetDetailsPanel {...props} />);
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <AssetDetailsPanel {...props} />
+      </ClientSDKProvider>
+    );
     expect(wrapper.find(LoadingBlock)).toHaveLength(1);
 
     setImmediate(() => {
       wrapper.update();
       const pureComponent = wrapper.find(AssetDetailsPanelPure);
       expect(pureComponent).toHaveLength(1);
-      expect(pureComponent.props().asset).toEqual(ASSET_DATA);
+      expect(pureComponent.props().asset).toEqual(fakeAsset);
       done();
     });
   });

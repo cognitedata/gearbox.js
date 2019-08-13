@@ -1,10 +1,11 @@
-import * as sdk from '@cognite/sdk';
 import { Input } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
 import React from 'react';
 import { assetsList } from '../../mocks';
+import { MockCogniteClient } from '../../utils/mockSdk';
+import { ClientSDKProvider } from '../ClientSDKProvider';
 import { AssetSearch } from './AssetSearch';
 import Mock = jest.Mock;
 
@@ -21,15 +22,27 @@ jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
   return f;
 });
 
-sdk.Assets.search = jest.fn();
-sdk.Assets.list = jest.fn();
+class CogniteClient extends MockCogniteClient {
+  assets: any = {
+    search: jest.fn(),
+    list: jest.fn(),
+  };
+}
+
+const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 beforeEach(() => {
-  // @ts-ignore
-  sdk.Assets.list.mockResolvedValue({ items: assetsList });
-  // @ts-ignore
-  sdk.Assets.search.mockResolvedValue({ items: assetsList });
+  sdk.assets.list.mockResolvedValue(assetsList);
+  sdk.assets.search.mockResolvedValue(assetsList);
 });
+
+const createWrapper = (props: any) => {
+  return mount(
+    <ClientSDKProvider client={sdk}>
+      <AssetSearch {...props} />
+    </ClientSDKProvider>
+  );
+};
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -39,7 +52,7 @@ describe('AssetSearch', () => {
   it('should renders without exploding', () => {
     const { onLiveSearchSelect } = propsCallbacks;
     const props = { onLiveSearchSelect };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -47,7 +60,7 @@ describe('AssetSearch', () => {
     const { onLiveSearchSelect } = propsCallbacks;
     const showLiveSearchResults = true;
     const props = { onLiveSearchSelect, showLiveSearchResults };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
 
     wrapper
       .find(Input)
@@ -70,7 +83,7 @@ describe('AssetSearch', () => {
     const { onSearchResult } = propsCallbacks;
     const showLiveSearchResults = false;
     const props = { onSearchResult, showLiveSearchResults };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
 
     wrapper
       .find(Input)
@@ -87,7 +100,7 @@ describe('AssetSearch', () => {
     const { onSearchResult } = propsCallbacks;
     const showLiveSearchResults = false;
     const props = { onSearchResult, showLiveSearchResults };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
 
     wrapper
       .find(Input)
@@ -102,12 +115,11 @@ describe('AssetSearch', () => {
   });
 
   it('should call onError when error', done => {
-    // @ts-ignore
-    sdk.Assets.search.mockRejectedValue(new Error('error'));
+    sdk.assets.search.mockRejectedValue(new Error('error'));
 
     const { onLiveSearchSelect, onError } = propsCallbacks;
     const props = { onLiveSearchSelect, onError };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
 
     wrapper
       .find(Input)
@@ -123,11 +135,11 @@ describe('AssetSearch', () => {
   it('should fetch root assets when rootAssetSelect is true', done => {
     const { onLiveSearchSelect } = propsCallbacks;
     const props = { onLiveSearchSelect, rootAssetSelect: true };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
 
     setImmediate(() => {
       wrapper.update();
-      expect(sdk.Assets.list).toHaveBeenCalled();
+      expect(sdk.assets.list).toHaveBeenCalled();
       done();
     });
   });
@@ -135,11 +147,11 @@ describe('AssetSearch', () => {
   it('should not fetch root assets when rootAssetSelect is false', done => {
     const { onLiveSearchSelect } = propsCallbacks;
     const props = { onLiveSearchSelect, rootAssetSelect: false };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
 
     setImmediate(() => {
       wrapper.update();
-      expect(sdk.Assets.list).not.toHaveBeenCalled();
+      expect(sdk.assets.list).not.toHaveBeenCalled();
       done();
     });
   });
@@ -147,15 +159,17 @@ describe('AssetSearch', () => {
   it('should fetch root assets when rootAssetSelect changes from false to true', done => {
     const { onLiveSearchSelect } = propsCallbacks;
     const props = { onLiveSearchSelect, rootAssetSelect: false };
-    const wrapper = mount(<AssetSearch {...props} />);
+    const wrapper = createWrapper(props);
 
     setImmediate(() => {
       wrapper.update();
-      wrapper.setProps({ rootAssetSelect: true });
+      wrapper.setProps({
+        children: <AssetSearch {...props} rootAssetSelect={true} />,
+      });
       // tslint:disable-next-line: no-identical-functions
       setImmediate(() => {
         wrapper.update();
-        expect(sdk.Assets.list).toHaveBeenCalled();
+        expect(sdk.assets.list).toHaveBeenCalled();
         done();
       });
     });

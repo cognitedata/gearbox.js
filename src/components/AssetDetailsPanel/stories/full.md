@@ -7,6 +7,8 @@
 This component loads meta information for an asset and presents it as a key/value list in a table with two columns.
 The component is used as one of the panes in `AssetMeta` component.
 
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
 #### Usage:
 
 ```typescript jsx

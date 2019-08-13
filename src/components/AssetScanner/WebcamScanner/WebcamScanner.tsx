@@ -110,7 +110,7 @@ const CameraButton = styled.button`
   border: 1px solid #fff;
   box-sizing: border-box;
   cursor: pointer;
-  opacity: .9
+  opacity: 0.9;
   font-weight: 600;
   :hover {
     opacity: 1;
