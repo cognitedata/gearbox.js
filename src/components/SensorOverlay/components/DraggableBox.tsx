@@ -1,7 +1,4 @@
-import {
-  DatapointsGetDatapoint,
-  GetTimeSeriesMetadataDTO,
-} from '@cognite/sdk';
+import { DatapointsGetDatapoint, GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import { Icon } from 'antd';
 import numeral from 'numeral';
 import React, { Component } from 'react';

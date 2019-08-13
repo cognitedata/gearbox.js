@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { AssetsAPI } from '@cognite/sdk/dist/src/resources/assets/assetsApi';
 import { Asset, AssetSearchFilter } from '@cognite/sdk';
+import { AssetsAPI } from '@cognite/sdk/dist/src/resources/assets/assetsApi';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,

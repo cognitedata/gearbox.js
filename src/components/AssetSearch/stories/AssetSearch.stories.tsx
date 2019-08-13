@@ -1,8 +1,4 @@
-import {
-  Asset,
-  AssetListScope,
-  AssetSearchFilter,
-} from '@cognite/sdk';
+import { Asset, AssetListScope, AssetSearchFilter } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import { pick } from 'lodash';
