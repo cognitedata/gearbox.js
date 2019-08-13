@@ -1,10 +1,10 @@
-# Migrating from Gearbox v0.0.x and below to v0.1.0
+# Migrating from Gearbox v0.x.x and below to v1.0.0
 
-There's been an architectural change since v5.x.x. This is because the `@cognite/sdk` Gearbox uses is now v2.0.0+. Read more about the change [here](https://www.npmjs.com/package/@cognite/sdk)
+There's been an architectural change since v0.x.x. This is because the `@cognite/sdk` Gearbox uses is now v2.0.0+. Read more about the change [here](https://www.npmjs.com/package/@cognite/sdk)
 
-While all components still take and accept the same parameters as v5.1.3, the new version requires a global `<ClientSDKProvider>` to be top level (above in DOM hierarchy) to the components you use. The ClientSDKProvider now will have to also take in a `client` parameter, that has to be an instance of `CogniteClient`.
+While all components still take and accept the same parameters as v0.x.x, the new version requires a global `<ClientSDKProvider>` to be top level (above in DOM hierarchy) to the components you use. The ClientSDKProvider now will have to also take in a `client` parameter, that has to be an instance of `CogniteClient`.
 
-For example, in pre-v6.0.0, you have to load in a component like:
+For example, in pre-v1.0.0, you have to load in a component like:
 
 ```js
 import { Component } from 'react';
