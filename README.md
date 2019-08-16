@@ -5,8 +5,6 @@ Gearbox.js
 [![Build Status](https://travis-ci.org/cognitedata/gearbox.js.svg?branch=master)](https://travis-ci.org/cognitedata/gearbox.js)
 [![codecov](https://codecov.io/gh/cognitedata/gearbox.js/branch/master/graph/badge.svg)](https://codecov.io/gh/cognitedata/gearbox.js)
 
-## Description
-
 [Gearbox](https://github.com/cognitedata/gearbox.js) is a set of open-source front-end components natively integrated with Cognite Data Fusion [(CDF)](https://cognite.com/cognite/cognite-data-fusion/). 
 The Gearbox components are written in the [React](https://reactjs.org) front-end framework and make it easier to build web applications on top of CDF.
 
