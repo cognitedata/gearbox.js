@@ -29,15 +29,22 @@ The Gearbox components are written in the [React](https://reactjs.org) front-end
     ```js
     import { CogniteClient } from "@cognite/sdk";
     import { ClientSDKProvider } from "@cognite/gearbox";
+    
     // ...
+    
     const sdk = new CogniteClient({ appId: 'new-app' })
+    
     // ...
+    
     sdk.loginWithOAuth({ project: tenant }); // or other authentication methods
+    
     // ...
+    
     <ClientSDKProvider client={sdk}>
+    
     // The part of your app that uses Gearbox
+    
     </ClientSDKProvider>
-    // ...
     ```
 
     For more information, see the SDK documentation:
@@ -74,6 +81,8 @@ You MUST use the Gearbox components inside the `ClientSDKProvider`. To learn mor
 
 You can find example Gearbox applications in our [public repository](https://github.com/cognitedata/javascript-getting-started). Also, see our [YouTube channel](https://www.youtube.com/playlist?list=PLrRAbrQ_glsXGzl5OIen3eSS8bz-YFjTV) for Gearbox video tutorials.
 
+## Storybook
+See the up-to-date storybook [here](https://cognitedata.github.io/gearbox.js).
 
 ## Contribution
 
