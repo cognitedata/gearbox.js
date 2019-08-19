@@ -1,11 +1,8 @@
-<a href="https://cognite.com/"><img src="https://github.com/cognitedata/gearbox.js/raw/master/cognite_logo.png" alt="Cognite logo" title="Cognite" align="right" height="80" /></a>
-
-Gearbox.js
-==========================
+# Gearbox.js
 [![Build Status](https://travis-ci.org/cognitedata/gearbox.js.svg?branch=master)](https://travis-ci.org/cognitedata/gearbox.js)
 [![codecov](https://codecov.io/gh/cognitedata/gearbox.js/branch/master/graph/badge.svg)](https://codecov.io/gh/cognitedata/gearbox.js)
 
-[Gearbox](https://github.com/cognitedata/gearbox.js) is a set of open-source front-end components natively integrated with Cognite Data Fusion [(CDF)](https://cognite.com/cognite/cognite-data-fusion/). 
+[Gearbox](https://github.com/cognitedata/gearbox.js) is a set of open-source front-end components natively integrated with Cognite Data Fusion [(CDF)](https://docs.cognite.com/dev/). 
 The Gearbox components are written in the [React](https://reactjs.org) front-end framework and make it easier to build web applications on top of CDF.
 
 ## Install the Gearbox library and dependencies
@@ -73,9 +70,7 @@ The Gearbox components are written in the [React](https://reactjs.org) front-end
       TenantSelector
     } from "@cognite/gearbox/dist/components/TenantSelector";
     ```
-::: warning IMPORTANT  
-You MUST use the Gearbox components inside the `ClientSDKProvider`. To learn more about context and why this is important, see [React Context](https://reactjs.org/docs/context.html).  
-:::
+**NOTE:** You MUST use the Gearbox components inside the `ClientSDKProvider`. To learn more about context and why this is important, see [React Context](https://reactjs.org/docs/context.html).  
 
 ## Examples and tutorials
 
