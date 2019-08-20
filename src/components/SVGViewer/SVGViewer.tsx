@@ -17,6 +17,7 @@ import { getDocumentDownloadLink } from './utils';
 const zoomLevel = 0.7;
 const wheelZoomLevel = 0.15;
 const currentAssetClassName = 'current-asset';
+const minDesktopWidth = 992;
 
 export interface SvgViewerProps {
   // CDF fileId to fetch svg-document
@@ -113,7 +114,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
 
   render() {
     const { title, description, customClassNames = {} } = this.props;
-    const isDesktop = this.state.width > 992;
+    const isDesktop = this.state.width > minDesktopWidth;
 
     return (
       <SVGViewerContainer
@@ -141,6 +142,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
           customClassNames={customClassNames}
           data-test-id="svg-viewer"
         >
+          {/* show header if it's desktop or search is hidden for mobiles */}
           {(isDesktop || !this.state.isSearchVisible) && (
             <StyledHeaderContainer>
               <MobileModalClose
@@ -201,6 +203,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
             searchClassName={customClassNames.searchResults}
             currentSearchClassName={customClassNames.currentSearchResult}
           />
+          {/* move pinchZoomContainer if search is visible on mobile */}
           <div
             ref={this.pinchZoomContainer}
             style={
@@ -490,7 +493,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
   };
 
   zoomOnCurrentAsset = (currentAsset: Element | null) => {
-    const isDesktop = this.state.width > 992;
+    const isDesktop = this.state.width > minDesktopWidth;
     if (!currentAsset || !this.pinchZoomInstance.container) {
       return;
     }
@@ -563,7 +566,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
   };
 
   onContainerClick = () => {
-    const isDesktop = this.state.width > 992;
+    const isDesktop = this.state.width > minDesktopWidth;
     if (isDesktop && this.inputWrapper.current) {
       this.inputWrapper.current.focus();
     }
