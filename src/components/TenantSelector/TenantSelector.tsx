@@ -184,6 +184,7 @@ class TenantSelector extends React.Component<
 
     this.setState({
       advanced,
+      validity: TenantValidity.UNKNOWN,
     });
   }
 
