@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk';
+import { Asset, AutoPagingToArrayOptions } from '@cognite/sdk';
 import { AnyIfEmpty } from '../interfaces';
 import { MetadataId } from './index';
 
@@ -67,6 +67,7 @@ export interface AssetTreeProps {
   defaultExpandedKeys?: number[];
   styles?: AssetTreeStyles;
   theme?: AnyIfEmpty<{}>;
+  autoPagingToArrayOptions?: AutoPagingToArrayOptions;
 }
 
 export interface AdvancedSearch {
