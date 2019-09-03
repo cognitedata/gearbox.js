@@ -14,6 +14,7 @@ import clickDescription from './click.md';
 import customDescription from './custom.md';
 import fullDescription from './full.md';
 import locateDescription from './locate.md';
+import search from './search.md';
 import zoomDescription from './zoom.md';
 
 const API_REQUEST = 'https://example.com';
@@ -247,6 +248,28 @@ storiesOf('SVGViewer/Examples', module)
     {
       readme: {
         content: zoomDescription,
+      },
+    }
+  )
+  .add(
+    'Subscribe to search changes',
+    () => {
+      setupMocks();
+      const handleSearchChange = (value?: string): void => {
+        action('handleSearchChange')(value);
+      };
+      return (
+        <div style={{ height: '100vh' }}>
+          <SVGViewer
+            documentId={5185355395511590}
+            handleSearchChange={handleSearchChange}
+          />
+        </div>
+      );
+    },
+    {
+      readme: {
+        content: search,
       },
     }
   );

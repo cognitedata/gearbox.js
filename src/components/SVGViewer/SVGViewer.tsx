@@ -49,6 +49,8 @@ export interface SvgViewerProps {
   handleItemClick?: (metadataNode: HTMLElement) => void;
   // Error document load callback
   handleDocumentLoadError?: (error: Error) => void;
+  // Subscribe to SVGVieweSearch changes
+  handleSearchChange?: () => void;
 }
 
 interface SvgViewerState {
@@ -112,7 +114,12 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
   }
 
   render() {
-    const { title, description, customClassNames = {} } = this.props;
+    const {
+      title,
+      description,
+      customClassNames = {},
+      handleSearchChange,
+    } = this.props;
     const isDesktop = this.state.width > 992;
 
     return (
@@ -194,6 +201,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
             isDesktop={isDesktop}
             searchClassName={customClassNames.searchResults}
             currentSearchClassName={customClassNames.currentSearchResult}
+            handleSearchChange={handleSearchChange}
           />
           <div ref={this.pinchZoomContainer}>
             <div
