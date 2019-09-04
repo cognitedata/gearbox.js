@@ -34,6 +34,10 @@ interface AssetTreeState {
   expandedKeys: ExpandedKeysMap;
 }
 
+interface AutoPagingToArrayOptions {
+  limit?: number;
+}
+
 class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   static contextType = ClientSDKContext;
   static defaultProps = {
@@ -86,6 +90,11 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   }
   context!: React.ContextType<typeof ClientSDKContext>;
 
+  autoPagingToArrayOptions: AutoPagingToArrayOptions = this.props
+    .autoPagingToArrayOptions
+    ? this.props.autoPagingToArrayOptions
+    : { limit: 25 };
+
   constructor(props: AssetTreeProps) {
     super(props);
     const { defaultExpandedKeys } = props;
@@ -103,7 +112,9 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
-    const assets = await this.context.assets.list().autoPagingToArray();
+    const assets = await this.context.assets
+      .list({ filter: { root: true } })
+      .autoPagingToArray(this.autoPagingToArrayOptions);
     this.setState({
       assets,
       treeData:
@@ -114,7 +125,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   cursorApiRequest = async (assetId: number): Promise<Asset[]> => {
     const result = await this.context!.assets.list({
       filter: { parentIds: [assetId] },
-    }).autoPagingToArray();
+    }).autoPagingToArray(this.autoPagingToArrayOptions);
     if (!result || !Array.isArray(result)) {
       console.error(ERROR_API_UNEXPECTED_RESULTS);
     }

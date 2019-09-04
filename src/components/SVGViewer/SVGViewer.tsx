@@ -17,6 +17,7 @@ import { getDocumentDownloadLink } from './utils';
 const zoomLevel = 0.7;
 const wheelZoomLevel = 0.15;
 const currentAssetClassName = 'current-asset';
+const minDesktopWidth = 992;
 
 export interface SvgViewerProps {
   // CDF fileId to fetch svg-document
@@ -120,20 +121,22 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
       customClassNames = {},
       handleSearchChange,
     } = this.props;
-    const isDesktop = this.state.width > 992;
+    const isDesktop = this.state.width > minDesktopWidth;
 
     return (
       <SVGViewerContainer
         onClick={this.onContainerClick}
         onKeyDown={this.handleKeyDown}
       >
-        <input
-          type="text"
-          onBlur={this.onContainerBlur}
-          onFocus={this.onContainerFocus}
-          ref={this.inputWrapper}
-          style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
-        />
+        {isDesktop && (
+          <input
+            type="text"
+            onBlur={this.onContainerBlur}
+            onFocus={this.onContainerFocus}
+            ref={this.inputWrapper}
+            style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
+          />
+        )}
         <SvgNode
           ref={this.svgParentNode}
           onMouseDown={this.onMouseDown}
@@ -146,46 +149,51 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
           customClassNames={customClassNames}
           data-test-id="svg-viewer"
         >
-          <StyledHeaderContainer>
-            <MobileModalClose
-              data-test-id="close-svgviewer-btn"
-              onClick={this.handleCloseModal}
-            >
-              <Icon type="arrow-left" />
-            </MobileModalClose>
-            <StyledHeaderTitle>
-              {title && <StyledFileName>{title}</StyledFileName>}
-              {description && (
-                <StyledHeaderDescription>{description}</StyledHeaderDescription>
-              )}
-            </StyledHeaderTitle>
-            <StyledHeaderButtonsContainer>
-              <ModalButton
-                onClick={this.zoomIn}
-                data-test-id="zoom-in-svgviewer"
-              >
-                <CustomIcon.ZoomIn />
-              </ModalButton>
-              <ModalButton
-                onClick={this.zoomOut}
-                data-test-id="zoom-out-svgviewer"
-              >
-                <CustomIcon.ZoomOut />
-              </ModalButton>
-              <ModalButton
-                onClick={this.openSearch}
-                data-test-id="search-button-svgviewer"
-              >
-                <CustomIcon.FindInPage />
-              </ModalButton>
-              <CloseModalButton
-                onClick={this.handleCloseModal}
+          {/* show header if it's desktop or search is hidden for mobiles */}
+          {(isDesktop || !this.state.isSearchVisible) && (
+            <StyledHeaderContainer>
+              <MobileModalClose
                 data-test-id="close-svgviewer-btn"
+                onClick={this.handleCloseModal}
               >
-                <CustomIcon.Close />
-              </CloseModalButton>
-            </StyledHeaderButtonsContainer>
-          </StyledHeaderContainer>
+                <Icon type="arrow-left" />
+              </MobileModalClose>
+              <StyledHeaderTitle>
+                {title && <StyledFileName>{title}</StyledFileName>}
+                {description && (
+                  <StyledHeaderDescription>
+                    {description}
+                  </StyledHeaderDescription>
+                )}
+              </StyledHeaderTitle>
+              <StyledHeaderButtonsContainer>
+                <ModalButton
+                  onClick={this.zoomIn}
+                  data-test-id="zoom-in-svgviewer"
+                >
+                  <CustomIcon.ZoomIn />
+                </ModalButton>
+                <ModalButton
+                  onClick={this.zoomOut}
+                  data-test-id="zoom-out-svgviewer"
+                >
+                  <CustomIcon.ZoomOut />
+                </ModalButton>
+                <ModalButton
+                  onClick={this.openSearch}
+                  data-test-id="search-button-svgviewer"
+                >
+                  <CustomIcon.FindInPage />
+                </ModalButton>
+                <CloseModalButton
+                  onClick={this.handleCloseModal}
+                  data-test-id="close-svgviewer-btn"
+                >
+                  <CustomIcon.Close />
+                </CloseModalButton>
+              </StyledHeaderButtonsContainer>
+            </StyledHeaderContainer>
+          )}
           <SVGViewerSearch
             visible={this.state.isSearchVisible}
             svg={this.svg}
@@ -203,7 +211,15 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
             currentSearchClassName={customClassNames.currentSearchResult}
             handleSearchChange={handleSearchChange}
           />
-          <div ref={this.pinchZoomContainer}>
+          {/* move pinchZoomContainer if search is visible on mobile */}
+          <div
+            ref={this.pinchZoomContainer}
+            style={
+              !isDesktop && this.state.isSearchVisible
+                ? { top: '65px', position: 'relative' }
+                : {}
+            }
+          >
             <div
               ref={this.pinchZoom}
               onTouchStart={this.onTouchStart}
@@ -485,7 +501,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
   };
 
   zoomOnCurrentAsset = (currentAsset: Element | null) => {
-    const isDesktop = this.state.width > 992;
+    const isDesktop = this.state.width > minDesktopWidth;
     if (!currentAsset || !this.pinchZoomInstance.container) {
       return;
     }
@@ -558,7 +574,8 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
   };
 
   onContainerClick = () => {
-    if (this.inputWrapper.current) {
+    const isDesktop = this.state.width > minDesktopWidth;
+    if (isDesktop && this.inputWrapper.current) {
       this.inputWrapper.current.focus();
     }
   };
@@ -773,6 +790,9 @@ const MobileModalClose = styled(ModalButton)`
 `;
 
 const ModalMobileFooter = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
   width: 100%;
   height: 65px;
   display: flex;
