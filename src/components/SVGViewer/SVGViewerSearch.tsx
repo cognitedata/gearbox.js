@@ -34,6 +34,8 @@ export interface ComponentProps {
   }) => void;
   onFocus: () => void;
   onBlur: () => void;
+  // Subscribe to search input changes
+  handleSearchChange?: (value?: string) => void;
 }
 
 interface ComponentState {
@@ -226,6 +228,7 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
       zoomOnCurrentAsset,
       searchClassName,
       currentSearchClassName,
+      handleSearchChange,
     } = this.props;
     this.resetSearchResults();
     if (!value) {
@@ -262,6 +265,9 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
         amountOfResults,
         currentResult,
       });
+    }
+    if (handleSearchChange) {
+      handleSearchChange(value);
     }
   };
 }
