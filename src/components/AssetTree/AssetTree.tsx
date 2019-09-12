@@ -141,10 +141,8 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
 
     if (assetId && !Number.isNaN(assetId)) {
       const loadedData = await this.cursorApiRequest(assetId);
-      if (loadedData.length > 1) {
-        treeNode.props.dataRef.children = loadedData
-          .slice(1)
-          // @ts-ignore
+      if (loadedData.length > 0) {
+        treeNode.props.dataRef.children = [...loadedData]
           .sort((a, b) => a.name.localeCompare(b.name))
           .filter(x => x.parentId && x.parentId === treeNode.props.dataRef.key)
           .map(x => ({
