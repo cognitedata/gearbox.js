@@ -38,7 +38,7 @@ class CogniteClient extends MockCogniteClient {
       autoPagingToArray: () => {
         return new Promise(resolve => {
           setTimeout(() => {
-            if (scope && scope.filter) {
+            if (scope && scope.filter && scope.filter.parentIds) {
               const { parentIds } = scope.filter;
               ASSET_LIST_CHILD.sort(a => (a.id === parentIds[0] ? -1 : 1));
               resolve(ASSET_LIST_CHILD);
