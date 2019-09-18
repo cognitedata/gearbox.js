@@ -105,7 +105,7 @@ describe('TimeseriesChartMeta', () => {
     radioInputs.first().simulate('change', { target: { checked: true } });
     const checkedLabel = wrapper.find(activeLabelSelector);
     expect(checkedLabel).toHaveLength(1);
-    expect(checkedLabel.text()).toEqual('1 year');
+    expect(checkedLabel.text()).toEqual('10 years');
   });
 
   it('Should render nothing if timeseries is null or undefined', () => {
