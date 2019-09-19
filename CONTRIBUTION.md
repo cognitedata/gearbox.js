@@ -30,15 +30,15 @@ Utilising Jest and Enzyme you can and should test your component
 
 Run `yarn test`
 
-### Deploy
+### Release to NPM
 
-We use [Semantic Versioning 2.0.0](https://semver.org/) for the package version.
+Our releases are fully [automated](https://github.com/semantic-release/semantic-release).
+Only basic steps are needed:
 
-To deploy a new version to NPM follow these steps:
 1. Create a new branch from the `master` branch.
-2. Do any neccessary changes (if any).
-3. Bump version -> run `$ npm version patch|minor|major`. Example: `$ npm version minor`.
-4. Push branch to GitHub
-5. Create pull request and prefix the PR-name with `v{YOUR_VERSION} - {NAME}` (example: `v1.5.2 - My PR`)
-6. Ask for review and merge when approved
-7. Travis will automatically deploy the new version to https://www.npmjs.com/package/@cognite/gearbox
+2. Commit changes and remember about [proper commit messages](Commit-naming-conventions)
+3. Push branch to GitHub
+4. Open a new pull request, ask for review, get feedback, apply fixes if needed
+5. When PR is approved you can merge the branch and remove it afterwards
+5. A new version will be published shortly to https://www.npmjs.com/package/@cognite/gearbox 
+
