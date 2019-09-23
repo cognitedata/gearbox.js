@@ -13,9 +13,9 @@ import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetTree } from '../AssetTree';
 import basic from './basic.md';
 import clickItem from './clickItem.md';
-import displayName from './displayName.md';
 import customStyles from './customStyles.md';
 import defaultExpanded from './defaultExpanded.md';
+import displayName from './displayName.md';
 import fullDescription from './full.md';
 import withTheme from './withTheme.md';
 
@@ -118,11 +118,7 @@ storiesOf('AssetTree/Examples', module)
   .add(
     'Custom display name',
     () => {
-      return (
-        <AssetTree
-          displayName={(asset) => `Id: ${asset.id}`}
-        />
-      );
+      return <AssetTree displayName={asset => `Id: ${asset.id}`} />;
     },
     {
       readme: {

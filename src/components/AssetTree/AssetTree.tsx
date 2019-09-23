@@ -43,7 +43,10 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   static defaultProps = {
     theme: { ...defaultTheme },
   };
-  static mapDataAssets(assets: Asset[], displayNameFunc?: (asset: Asset) => string): TreeNodeData[] {
+  static mapDataAssets(
+    assets: Asset[],
+    displayNameFunc?: (asset: Asset) => string
+  ): TreeNodeData[] {
     const nodes: { [name: string]: TreeNodeData } = {};
 
     assets.forEach(asset => {
@@ -76,14 +79,21 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     });
   }
 
-  static getDisplayName(asset: Asset, displayNameFunc?: (asset: Asset) => string) {
+  static getDisplayName(
+    asset: Asset,
+    displayNameFunc?: (asset: Asset) => string
+  ) {
     if (displayNameFunc) {
       return displayNameFunc(asset);
     }
-    return `${asset.name} ${asset.description ? ':' : ''} ${asset.description || ''}`;
+    return `${asset.name} ${asset.description ? ':' : ''} ${asset.description ||
+      ''}`;
   }
 
-  static returnPretty(asset: Asset, displayNameFunc?: (asset: Asset) => string) {
+  static returnPretty(
+    asset: Asset,
+    displayNameFunc?: (asset: Asset) => string
+  ) {
     return {
       title: AssetTree.getDisplayName(asset, displayNameFunc),
       key: asset.id,
@@ -125,7 +135,9 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     this.setState({
       assets,
       treeData:
-        assets && assets.length > 0 ? AssetTree.mapDataAssets(assets, this.props.displayName) : [],
+        assets && assets.length > 0
+          ? AssetTree.mapDataAssets(assets, this.props.displayName)
+          : [],
     });
   }
 
