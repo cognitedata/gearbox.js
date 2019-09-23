@@ -122,6 +122,10 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     });
   }
 
+  componentDidUpdate() {
+    // my fix
+  }
+
   cursorApiRequest = async (assetId: number): Promise<Asset[]> => {
     const result = await this.context!.assets.list({
       filter: { parentIds: [assetId] },
