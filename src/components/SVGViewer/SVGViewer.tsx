@@ -122,6 +122,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
       handleSearchChange,
     } = this.props;
     const isDesktop = this.state.width > minDesktopWidth;
+    const hasCloseButton = !!this.props.handleCancel;
 
     return (
       <SVGViewerContainer
@@ -153,7 +154,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
           {(isDesktop || !this.state.isSearchVisible) && (
             <StyledHeaderContainer>
               <MobileModalClose
-                data-test-id="close-svgviewer-btn"
+                data-test-id="close-svgviewer-btn-mobile"
                 onClick={this.handleCloseModal}
               >
                 <Icon type="arrow-left" />
@@ -185,12 +186,14 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
                 >
                   <CustomIcon.FindInPage />
                 </ModalButton>
-                <CloseModalButton
-                  onClick={this.handleCloseModal}
-                  data-test-id="close-svgviewer-btn"
-                >
-                  <CustomIcon.Close />
-                </CloseModalButton>
+                {hasCloseButton && (
+                  <CloseModalButton
+                    onClick={this.handleCloseModal}
+                    data-test-id="close-svgviewer-btn"
+                  >
+                    <CustomIcon.Close />
+                  </CloseModalButton>
+                )}
               </StyledHeaderButtonsContainer>
             </StyledHeaderContainer>
           )}
