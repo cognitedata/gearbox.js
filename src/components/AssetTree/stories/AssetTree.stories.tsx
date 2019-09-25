@@ -51,7 +51,7 @@ class CogniteClient extends MockCogniteClient {
   };
 }
 
-const sdk = new CogniteClient({ appId: 'gearbox test' });
+const sdk = new CogniteClient({ appId: ' gearbox test ' });
 
 const clientSDKDecorator = (storyFn: any) => (
   <ClientSDKProvider client={sdk}>{storyFn()}</ClientSDKProvider>

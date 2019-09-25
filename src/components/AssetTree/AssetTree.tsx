@@ -43,7 +43,8 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   static defaultProps = {
     theme: { ...defaultTheme },
   };
-  static mapDataAssets(assets: Asset[]): TreeNodeData[] {
+  static mapDataAssets(assets: Asset[])
+  : TreeNodeData[] {
     const nodes: { [name: string]: TreeNodeData } = {};
 
     assets.forEach(asset => {

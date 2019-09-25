@@ -32,10 +32,10 @@ No required props
 
 #### Optional:
 
-| Property              | Description                                 | Type                        | Default |
-| --------------------- | ------------------------------------------- | --------------------------- | ------- |
+| Property              | Description                                 | Type                        | Default           |
+| --------------------- | ------------------------------------------- | --------------------------- | -------           |
 | `onSelect`            | Triggers when a node is selected            | `(onSelect: OnSelectAssetTreeParams) => void` | |
-| `defaultExpandedKeys` | List of node ids to be expanded by default  | `number[]`                  | [ ] |
+| `defaultExpandedKeys` | List of node ids to be expanded by default  | `number[]`                  | [ ]               |
 | `styles`              | Object that defines inline CSS styles for inner elements of the component.| `AssetTreeStyles` |  |
 
 
