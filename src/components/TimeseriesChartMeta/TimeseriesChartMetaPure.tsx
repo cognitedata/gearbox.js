@@ -8,6 +8,10 @@ import { TimeseriesMetaInfo } from './components/TimeseriesMetaInfo';
 import { TimeseriesValue } from './components/TimeseriesValue';
 
 const timeScales: { [key: string]: { unit: string; number: number } } = {
+  last10Years: {
+    unit: 'years',
+    number: 10,
+  },
   lastYear: {
     unit: 'year',
     number: 1,
