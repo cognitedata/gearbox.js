@@ -15,6 +15,7 @@ import basic from './basic.md';
 import clickItem from './clickItem.md';
 import customStyles from './customStyles.md';
 import defaultExpanded from './defaultExpanded.md';
+import displayName from './displayName.md';
 import fullDescription from './full.md';
 import withTheme from './withTheme.md';
 
@@ -111,6 +112,17 @@ storiesOf('AssetTree/Examples', module)
     {
       readme: {
         content: clickItem,
+      },
+    }
+  )
+  .add(
+    'Custom display name',
+    () => {
+      return <AssetTree displayName={({ id }) => `Id: ${id}`} />;
+    },
+    {
+      readme: {
+        content: displayName,
       },
     }
   )

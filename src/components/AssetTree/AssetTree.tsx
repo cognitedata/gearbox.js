@@ -43,11 +43,14 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   static defaultProps = {
     theme: { ...defaultTheme },
   };
-  static mapDataAssets(assets: Asset[]): TreeNodeData[] {
+  static mapDataAssets(
+    assets: Asset[],
+    displayNameFunc?: (asset: Asset) => string
+  ): TreeNodeData[] {
     const nodes: { [name: string]: TreeNodeData } = {};
 
     assets.forEach(asset => {
-      nodes[asset.id] = AssetTree.returnPretty(asset);
+      nodes[asset.id] = AssetTree.returnPretty(asset, displayNameFunc);
     });
 
     const addedAsChildren: (number | string)[] = [];
@@ -76,9 +79,22 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     });
   }
 
-  static returnPretty(asset: Asset) {
+  static getDisplayName(
+    asset: Asset,
+    displayNameFunc?: (asset: Asset) => string
+  ) {
+    if (displayNameFunc) {
+      return displayNameFunc(asset);
+    }
+    return `${asset.name}${asset.description ? ': ' + asset.description : ''}`;
+  }
+
+  static returnPretty(
+    asset: Asset,
+    displayNameFunc?: (asset: Asset) => string
+  ) {
     return {
-      title: `${asset.name}: ${asset.description}`,
+      title: AssetTree.getDisplayName(asset, displayNameFunc),
       key: asset.id,
       node: asset,
       isLeaf: true,
@@ -118,7 +134,9 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     this.setState({
       assets,
       treeData:
-        assets && assets.length > 0 ? AssetTree.mapDataAssets(assets) : [],
+        assets && assets.length > 0
+          ? AssetTree.mapDataAssets(assets, this.props.displayName)
+          : [],
     });
   }
 
@@ -146,8 +164,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
           .sort((a, b) => a.name.localeCompare(b.name))
           .filter(x => x.parentId && x.parentId === treeNode.props.dataRef.key)
           .map(x => ({
-            title: `${x.name} ${x.description ? ':' : ''} ${x.description ||
-              ''}`,
+            title: AssetTree.getDisplayName(x, this.props.displayName),
             key: x.id,
             node: x,
             isLeaf: loadedData.filter(y => y.parentId === x.id).length <= 0,
