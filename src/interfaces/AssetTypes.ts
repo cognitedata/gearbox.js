@@ -71,6 +71,12 @@ export interface AssetTreeProps {
   autoPagingToArrayOptions?: AutoPagingToArrayOptions;
 }
 
+export interface AssetBreadcrumbProps {
+  assetId: number;
+  renderItem?: (asset: Asset, depth: number) => JSX.Element;
+  onBreadcrumbClick?: (asset: Asset, depth: number) => void;
+}
+
 export interface AdvancedSearch {
   name?: string;
   description?: string;
