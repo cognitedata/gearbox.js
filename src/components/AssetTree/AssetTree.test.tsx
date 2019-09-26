@@ -67,7 +67,8 @@ describe('AssetTree', () => {
       done();
     });
   });
-  it('rednders correctly with passed styles prop', done => {
+
+  it('renders correctly with passed styles prop', done => {
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>
         <AssetTree styles={ASSET_TREE_STYLES} />
@@ -82,6 +83,37 @@ describe('AssetTree', () => {
 
       expect(containerStyle === ASSET_TREE_STYLES.list).toBeTruthy();
       done();
+    });
+  });
+
+  it('renders correctly with after changed the displayName prop', done => {
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>null</ClientSDKProvider>
+    );
+    wrapper.setProps({
+      children: <AssetTree displayName={asset => `${asset.id}`} />,
+    });
+
+    const testItemToMatchText = (text: string) => {
+      const str = wrapper
+        .find('.ant-tree-title')
+        .first()
+        .text();
+      expect(str).toBe(text);
+    };
+
+    setImmediate(() => {
+      wrapper.update();
+      testItemToMatchText('6687602007296940');
+
+      wrapper.setProps({
+        children: <AssetTree displayName={asset => `${asset.name}`} />,
+      });
+      setImmediate(() => {
+        wrapper.update();
+        testItemToMatchText('Aker BP');
+        done();
+      });
     });
   });
 });

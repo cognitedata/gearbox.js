@@ -9,12 +9,7 @@ import {
 } from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import {
-  AssetTreeProps,
-  OnSelectAssetTreeParams,
-  TreeNodeData,
-  TreeNodeType,
-} from '../../interfaces';
+import { AssetTreeProps, OnSelectAssetTreeParams } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
 import {
   applyThemeFontFamily,
@@ -30,7 +25,7 @@ interface ExpandedKeysMap {
 
 interface AssetTreeState {
   assets: Asset[];
-  treeData: TreeNodeData[];
+  treeData: AssetTreeNode[];
   expandedKeys: ExpandedKeysMap;
 }
 
@@ -38,19 +33,23 @@ interface AutoPagingToArrayOptions {
   limit?: number;
 }
 
+interface AssetTreeNode {
+  asset: Asset;
+  children?: AssetTreeNode[];
+  isLeaf: boolean;
+}
+
 class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   static contextType = ClientSDKContext;
   static defaultProps = {
     theme: { ...defaultTheme },
   };
-  static mapDataAssets(
-    assets: Asset[],
-    displayNameFunc?: (asset: Asset) => string
-  ): TreeNodeData[] {
-    const nodes: { [name: string]: TreeNodeData } = {};
+
+  static mapDataAssets(assets: Asset[]): AssetTreeNode[] {
+    const nodes: { [id: string]: AssetTreeNode } = {};
 
     assets.forEach(asset => {
-      nodes[asset.id] = AssetTree.returnPretty(asset, displayNameFunc);
+      nodes[asset.id] = AssetTree.convertToNode(asset);
     });
 
     const addedAsChildren: (number | string)[] = [];
@@ -79,24 +78,9 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     });
   }
 
-  static getDisplayName(
-    asset: Asset,
-    displayNameFunc?: (asset: Asset) => string
-  ) {
-    if (displayNameFunc) {
-      return displayNameFunc(asset);
-    }
-    return `${asset.name}${asset.description ? ': ' + asset.description : ''}`;
-  }
-
-  static returnPretty(
-    asset: Asset,
-    displayNameFunc?: (asset: Asset) => string
-  ) {
+  static convertToNode(asset: Asset): AssetTreeNode {
     return {
-      title: AssetTree.getDisplayName(asset, displayNameFunc),
-      key: asset.id,
-      node: asset,
+      asset,
       isLeaf: true,
     };
   }
@@ -134,9 +118,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     this.setState({
       assets,
       treeData:
-        assets && assets.length > 0
-          ? AssetTree.mapDataAssets(assets, this.props.displayName)
-          : [],
+        assets && assets.length > 0 ? AssetTree.mapDataAssets(assets) : [],
     });
   }
 
@@ -156,26 +138,24 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     }
     const eventKey = treeNode.props.eventKey;
     const assetId = eventKey ? Number.parseInt(eventKey, 10) : undefined;
+    if (!(assetId && !Number.isNaN(assetId))) {
+      return;
+    }
 
-    if (assetId && !Number.isNaN(assetId)) {
-      const loadedData = await this.cursorApiRequest(assetId);
-      if (loadedData.length > 0) {
-        treeNode.props.dataRef.children = [...loadedData]
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .filter(x => x.parentId && x.parentId === treeNode.props.dataRef.key)
-          .map(x => ({
-            title: AssetTree.getDisplayName(x, this.props.displayName),
-            key: x.id,
-            node: x,
-            isLeaf: loadedData.filter(y => y.parentId === x.id).length <= 0,
-          }));
-
-        this.setState({
-          treeData: [...this.state.treeData],
-        });
-      } else {
-        treeNode.props.dataRef.isLeaf = true;
-      }
+    const cdfAssetChildren = await this.cursorApiRequest(assetId);
+    if (cdfAssetChildren.length > 0) {
+      treeNode.props.dataRef.children = [...cdfAssetChildren]
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .filter(
+          asset =>
+            asset.parentId && asset.parentId === treeNode.props.dataRef.asset.id
+        )
+        .map(asset => AssetTree.convertToNode(asset));
+      this.setState({
+        treeData: [...this.state.treeData],
+      });
+    } else {
+      treeNode.props.dataRef.isLeaf = true;
     }
   };
 
@@ -194,14 +174,14 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     });
   };
 
-  renderTreeNode = (nodes: TreeNodeType[]) => {
+  renderTreeNode = (nodes: AssetTreeNode[]) => {
     const { styles } = this.props;
     return nodes.map(item => {
       if (item.children) {
         return (
           <TreeNodeWrapper
-            title={item.title}
-            key={item.key}
+            title={this.getDisplayName(item.asset)}
+            key={item.asset.id}
             dataRef={item}
             style={styles && styles.list}
           >
@@ -211,8 +191,8 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
       }
       return (
         <TreeNodeWrapper
-          title={item.title}
-          key={item.key}
+          title={this.getDisplayName(item.asset)}
+          key={item.asset.id}
           dataRef={item}
           style={styles && styles.list}
         />
@@ -233,6 +213,14 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
       </Tree>
     );
   }
+
+  private getDisplayName = (asset: Asset) => {
+    const { displayName } = this.props;
+    if (displayName) {
+      return displayName(asset);
+    }
+    return `${asset.name}${asset.description ? ': ' + asset.description : ''}`;
+  };
 }
 
 const TreeNodeWrapper = styled(TreeNode)<AntTreeNodeProps>`
