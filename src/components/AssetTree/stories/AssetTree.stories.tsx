@@ -118,7 +118,7 @@ storiesOf('AssetTree/Examples', module)
   .add(
     'Custom display name',
     () => {
-      return <AssetTree displayName={({id})=> `Id: ${id}`} />;
+      return <AssetTree displayName={({ id }) => `Id: ${id}`} />;
     },
     {
       readme: {

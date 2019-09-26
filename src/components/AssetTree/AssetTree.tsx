@@ -86,7 +86,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     if (displayNameFunc) {
       return displayNameFunc(asset);
     }
-    return `${asset.name}${asset.description ? ': ' + asset.description : ''}`
+    return `${asset.name}${asset.description ? ': ' + asset.description : ''}`;
   }
 
   static returnPretty(
