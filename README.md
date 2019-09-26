@@ -79,30 +79,9 @@ You can find example Gearbox applications in our [public repository](https://git
 ## Storybook
 See the up-to-date storybook [here](https://cognitedata.github.io/gearbox.js).
 
-## Contribution
+## Contribution guidelines
 
-### Development
-
-To build the library locally it's required to have version of `node` installed not lower than `10.10`
-
-### Tests
-
-Utilising Jest and Enzyme you can test your component
-
-Run `yarn test`
-
-### Deploy
-
-We use [Semantic Versioning 2.0.0](https://semver.org/) for the package version.
-
-To deploy a new version to NPM follow these steps:
-1. Create a new branch from the `master` branch.
-2. Do any neccessary changes (if any).
-3. Bump version -> run `$ npm version patch|minor|major`. Example: `$ npm version minor`.
-4. Push branch to GitHub
-5. Create pull request and prefix the PR-name with `v{YOUR_VERSION} - {NAME}` (example: `v1.5.2 - My PR`)
-6. Ask for review and merge when approved
-7. Travis will automatically deploy the new version to https://www.npmjs.com/package/@cognite/gearbox
+Feel free to contribute to the project, but first have a look at our [guidelines](./CONTRIBUTION.md)
 
 ## License
 
