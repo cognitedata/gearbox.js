@@ -34,7 +34,7 @@ No required props
 
 | Property              | Description                                 | Type                        | Default |
 | --------------------- | ------------------------------------------- | --------------------------- | ------- |
-| `displayName`         | Modify the display name of an asset         | `(asset: Asset) => string` | `Name: Description` |
+| `displayName`         | Modify the display name of an asset         | `(asset: Asset) => string` | `(...) => 'assetName: assetDescription' |
 | `onSelect`            | Triggers when a node is selected            | `(onSelect: OnSelectAssetTreeParams) => void` | |
 | `defaultExpandedKeys` | List of node ids to be expanded by default  | `number[]`                  | [ ] |
 | `styles`              | Object that defines inline CSS styles for inner elements of the component.| `AssetTreeStyles` |  |
