@@ -14,7 +14,7 @@ function ExampleComponent(props) {
 
   return (
     <AssetTree
-      displayName={(asset) => \`Id: ${asset.id}\`}
+      displayName={({id}) => \`Id: ${id}\`}
     />
   );
 
