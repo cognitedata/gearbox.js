@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/cognitedata/gearbox.js/compare/v1.3.0...v1.3.1) (2019-09-27)
+
+
+### Bug Fixes
+
+* assetTree will re-render when displayName prop is changed ([e893a2e](https://github.com/cognitedata/gearbox.js/commit/e893a2e))
+
 # [1.3.0](https://github.com/cognitedata/gearbox.js/compare/v1.2.0...v1.3.0) (2019-09-26)
 
 
