@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/cognitedata/gearbox.js/compare/v1.3.1...v1.3.2) (2019-09-30)
+
+
+### Bug Fixes
+
+* removed close button when handleCancel is not set ([#446](https://github.com/cognitedata/gearbox.js/issues/446)) ([547820a](https://github.com/cognitedata/gearbox.js/commit/547820a))
+
 ## [1.3.1](https://github.com/cognitedata/gearbox.js/compare/v1.3.0...v1.3.1) (2019-09-27)
 
 
