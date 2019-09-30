@@ -122,6 +122,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
       handleSearchChange,
     } = this.props;
     const isDesktop = this.state.width > minDesktopWidth;
+    const hasCloseButton = !!this.props.handleCancel;
 
     return (
       <SVGViewerContainer
@@ -152,12 +153,14 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
           {/* show header if it's desktop or search is hidden for mobiles */}
           {(isDesktop || !this.state.isSearchVisible) && (
             <StyledHeaderContainer>
-              <MobileModalClose
-                data-test-id="close-svgviewer-btn"
-                onClick={this.handleCloseModal}
-              >
-                <Icon type="arrow-left" />
-              </MobileModalClose>
+              {hasCloseButton && (
+                <MobileModalClose
+                  data-test-id="close-svgviewer-btn"
+                  onClick={this.handleCloseModal}
+                >
+                  <Icon type="arrow-left" />
+                </MobileModalClose>
+              )}
               <StyledHeaderTitle>
                 {title && <StyledFileName>{title}</StyledFileName>}
                 {description && (
@@ -185,12 +188,14 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
                 >
                   <CustomIcon.FindInPage />
                 </ModalButton>
-                <CloseModalButton
-                  onClick={this.handleCloseModal}
-                  data-test-id="close-svgviewer-btn"
-                >
-                  <CustomIcon.Close />
-                </CloseModalButton>
+                {hasCloseButton && (
+                  <CloseModalButton
+                    onClick={this.handleCloseModal}
+                    data-test-id="close-svgviewer-btn"
+                  >
+                    <CustomIcon.Close />
+                  </CloseModalButton>
+                )}
               </StyledHeaderButtonsContainer>
             </StyledHeaderContainer>
           )}

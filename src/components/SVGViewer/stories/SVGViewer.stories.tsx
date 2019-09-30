@@ -11,6 +11,7 @@ import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { SVGViewer } from '../SVGViewer';
 import classesDescription from './classes.md';
 import clickDescription from './click.md';
+import closableDescription from './closeable.md';
 import customDescription from './custom.md';
 import fullDescription from './full.md';
 import locateDescription from './locate.md';
@@ -127,6 +128,25 @@ storiesOf('SVGViewer/Examples', module)
     {
       readme: {
         content: clickDescription,
+      },
+    }
+  )
+  .add(
+    'Include close button',
+    () => {
+      setupMocks();
+      return (
+        <div style={{ height: '100vh' }}>
+          <SVGViewer
+            documentId={5185355395511590}
+            handleCancel={action('handleCancel')}
+          />
+        </div>
+      );
+    },
+    {
+      readme: {
+        content: closableDescription,
       },
     }
   )
