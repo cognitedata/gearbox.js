@@ -1,3 +1,17 @@
+## [1.3.1](https://github.com/cognitedata/gearbox.js/compare/v1.3.0...v1.3.1) (2019-09-27)
+
+
+### Bug Fixes
+
+* assetTree will re-render when displayName prop is changed ([e893a2e](https://github.com/cognitedata/gearbox.js/commit/e893a2e))
+
+# [1.3.0](https://github.com/cognitedata/gearbox.js/compare/v1.2.0...v1.3.0) (2019-09-26)
+
+
+### Features
+
+* Added new displayName prop to AssetTree ([c4c7f7c](https://github.com/cognitedata/gearbox.js/commit/c4c7f7c))
+
 # Migrating from Gearbox v0.x.x and below to v1.0.0
 
 There's been an architectural change since v0.x.x. This is because the `@cognite/sdk` Gearbox uses is now v2.0.0+. Read more about the change [here](https://www.npmjs.com/package/@cognite/sdk)
