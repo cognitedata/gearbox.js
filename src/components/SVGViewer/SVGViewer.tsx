@@ -153,12 +153,14 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
           {/* show header if it's desktop or search is hidden for mobiles */}
           {(isDesktop || !this.state.isSearchVisible) && (
             <StyledHeaderContainer>
-              <MobileModalClose
-                data-test-id="close-svgviewer-btn-mobile"
-                onClick={this.handleCloseModal}
-              >
-                <Icon type="arrow-left" />
-              </MobileModalClose>
+              {hasCloseButton && (
+                <MobileModalClose
+                  data-test-id="close-svgviewer-btn"
+                  onClick={this.handleCloseModal}
+                >
+                  <Icon type="arrow-left" />
+                </MobileModalClose>
+              )}
               <StyledHeaderTitle>
                 {title && <StyledFileName>{title}</StyledFileName>}
                 {description && (
