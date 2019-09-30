@@ -380,7 +380,8 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
   };
 
   onMouseUp = () => {
-    if (this.inputWrapper.current) {
+    const isDesktop = this.state.width > minDesktopWidth;
+    if (isDesktop && this.inputWrapper.current) {
       this.inputWrapper.current.focus();
     }
     this.dragging = false;
