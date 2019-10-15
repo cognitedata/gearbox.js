@@ -9,7 +9,7 @@ import {
 } from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import { AssetTreeProps, OnSelectAssetTreeParams } from '../../interfaces';
+import { AssetTreeProps } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
 import {
   applyThemeFontFamily,
@@ -34,6 +34,7 @@ interface AutoPagingToArrayOptions {
 }
 
 interface AssetTreeNode {
+  key: string | number;
   asset: Asset;
   children?: AssetTreeNode[];
   isLeaf: boolean;
@@ -81,6 +82,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   static convertToNode(asset: Asset): AssetTreeNode {
     return {
       asset,
+      key: asset.id,
       isLeaf: true,
     };
   }
@@ -159,10 +161,11 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     }
   };
 
-  onSelectNode = (returnAsset: OnSelectAssetTreeParams) => {
+  onSelectNode = (selectedNode: AssetTreeNode) => {
     const { onSelect } = this.props;
+    const { asset, key, isLeaf } = selectedNode;
     if (onSelect) {
-      onSelect(returnAsset);
+      onSelect({ node: asset, key, isLeaf, title: this.getDisplayName(asset) });
     }
   };
 
@@ -181,7 +184,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
         return (
           <TreeNodeWrapper
             title={this.getDisplayName(item.asset)}
-            key={item.asset.id}
+            key={item.key}
             dataRef={item}
             style={styles && styles.list}
           >
@@ -192,7 +195,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
       return (
         <TreeNodeWrapper
           title={this.getDisplayName(item.asset)}
-          key={item.asset.id}
+          key={item.key}
           dataRef={item}
           style={styles && styles.list}
         />
