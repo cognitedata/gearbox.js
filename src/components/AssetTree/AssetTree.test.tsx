@@ -49,7 +49,7 @@ describe('AssetTree', () => {
     });
   });
 
-  it('Checks if onSelect returns node', done => {
+  it('Checks if onSelect is being called', done => {
     const jestTest = jest.fn();
     const AssetTreeModal = mount(
       <ClientSDKProvider client={sdk}>
@@ -63,7 +63,10 @@ describe('AssetTree', () => {
         .simulate('click');
 
       expect(jestTest).toBeCalled();
-      expect(typeof jestTest.mock.results).toBe('object');
+      expect(jestTest.mock.results[0].value).toBe(undefined);
+      expect(Object.keys(jestTest.mock.calls[0][0]).sort()).toEqual(
+        ['node', 'key', 'isLeaf', 'title'].sort()
+      );
       done();
     });
   });
