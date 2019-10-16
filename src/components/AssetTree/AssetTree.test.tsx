@@ -64,12 +64,9 @@ describe('AssetTree', () => {
 
       expect(jestTest).toBeCalled();
       expect(jestTest.mock.results[0].value).toBe(undefined);
-      expect(Object.keys(jestTest.mock.calls[0][0])).toEqual([
-        'node',
-        'key',
-        'isLeaf',
-        'title',
-      ]);
+      expect(Object.keys(jestTest.mock.calls[0][0]).sort()).toEqual(
+        ['node', 'key', 'isLeaf', 'title'].sort()
+      );
       done();
     });
   });
