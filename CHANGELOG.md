@@ -1,3 +1,10 @@
+## [1.3.3](https://github.com/cognitedata/gearbox.js/compare/v1.3.2...v1.3.3) (2019-10-16)
+
+
+### Bug Fixes
+
+* **AsseTree:** onSelect was being called with wrong parameters ([768fda1](https://github.com/cognitedata/gearbox.js/commit/768fda157e8228fef2d58f3011a45e149e5c89a7))
+
 ## [1.3.2](https://github.com/cognitedata/gearbox.js/compare/v1.3.1...v1.3.2) (2019-09-30)
 
 
