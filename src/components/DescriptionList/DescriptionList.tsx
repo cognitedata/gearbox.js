@@ -1,24 +1,27 @@
 import { Collapse } from 'antd';
 import { Dictionary, groupBy } from 'lodash';
-import React from 'react';
+import React, { CSSProperties, Fragment } from 'react';
 import styled from 'styled-components';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { AnyIfEmpty, ValueListType } from '../../interfaces';
 import { mapMetaData } from '../../utils/formatters';
 const { Panel } = Collapse;
 
-export interface DescriptionListProps {
+export interface MetaDescriptionListProps {
+  toCategory?: (name: string) => string | undefined;
+  categoryPriorityList?: string[];
+  unknownCategoryName?: string;
+  expandedCategories?: string[];
+}
+
+export interface DescriptionListProps extends MetaDescriptionListProps {
   description?: {
     descriptionId: string;
     descriptionText: string;
   };
   valueSet: { [name: string]: any };
-  styles?: React.CSSProperties;
+  styles?: CSSProperties;
   theme?: AnyIfEmpty<{}>;
-  toCategory?: (item: ValueListType) => string | undefined;
-  categoryPriorityList?: string[];
-  unknownCategoryName?: string;
-  expandedCategories?: string[];
 }
 
 const DescriptionList = ({
@@ -39,7 +42,7 @@ const DescriptionList = ({
 
   function getPrioritizedCategoryName() {
     const rest = categories.filter(
-      category => categoryPriorityList.indexOf(category) === -1
+      category => !categoryPriorityList.includes(category)
     );
     return [...categoryPriorityList, ...rest];
   }
@@ -48,10 +51,10 @@ const DescriptionList = ({
     return expandedCategories || [getPrioritizedCategoryName()[0]];
   }
 
-  function toCategoryWithDefault(object: ValueListType) {
+  function toCategoryWithDefault({ name }: ValueListType) {
     let category;
     if (toCategory) {
-      category = toCategory(object);
+      category = toCategory(name);
     }
     return category || unknownCategoryName;
   }
@@ -59,10 +62,10 @@ const DescriptionList = ({
   const hasMultipleCategories = () => categories.length > 1;
 
   const renderProperty = (prop: ValueListType) => (
-    <React.Fragment key={prop.key}>
+    <Fragment key={prop.key}>
       <dt>{prop.name}</dt>
       <dl>{prop.value}</dl>
-    </React.Fragment>
+    </Fragment>
   );
 
   const renderValues = (list: ValueListType[]) => {

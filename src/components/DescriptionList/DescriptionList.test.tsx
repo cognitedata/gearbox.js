@@ -2,14 +2,14 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { ValueListType } from '../../interfaces/AssetTypes';
 import { ASSET_DATA } from '../../mocks';
 import { DescriptionList } from './DescriptionList';
 
 const ANT_COLLAPSE_HEADER = '.ant-collapse-header';
 const ANT_COLLAPSE_CONTENT = '.ant-collapse-content';
 const SAMPLE_PROPS = { 1: '1', 2: '1', 3: '2' };
-const toCategoryByValue = (object: ValueListType) => object.value;
+const toCategoryByName = (name: string) =>
+  Number.parseInt(name, 10) < 3 ? '1' : '2';
 
 configure({ adapter: new Adapter() });
 
@@ -46,7 +46,7 @@ describe('AssetDetailsPanel', () => {
 
   it('should render collapse for 2 categories', () => {
     const wrapper = mount(
-      <DescriptionList valueSet={SAMPLE_PROPS} toCategory={toCategoryByValue} />
+      <DescriptionList valueSet={SAMPLE_PROPS} toCategory={toCategoryByName} />
     );
     wrapper
       .find(ANT_COLLAPSE_HEADER)
@@ -71,16 +71,11 @@ describe('AssetDetailsPanel', () => {
     expect(wrapper.exists(ANT_COLLAPSE_HEADER)).toBeFalsy();
   });
 
-  it("shouldn't render collapse for 0 categories", () => {
-    const wrapper = mount(<DescriptionList valueSet={ASSET_DATA.metadata} />);
-    expect(wrapper.exists(ANT_COLLAPSE_HEADER)).toBeFalsy();
-  });
-
   it('expands default categories', () => {
     const wrapper = mount(
       <DescriptionList
         valueSet={SAMPLE_PROPS}
-        toCategory={toCategoryByValue}
+        toCategory={toCategoryByName}
         expandedCategories={['2']}
       />
     );
@@ -96,8 +91,8 @@ describe('AssetDetailsPanel', () => {
     const uncategorisedProp = 'latestUpdateTimeSource';
     const unknownCategory = 'extra';
     const all = 'all';
-    const toCategory = (object: ValueListType) =>
-      object.name !== uncategorisedProp ? all : undefined;
+    const toCategory = (name: string) =>
+      name !== uncategorisedProp ? all : undefined;
     const wrapper = mount(
       <DescriptionList
         valueSet={ASSET_DATA.metadata}

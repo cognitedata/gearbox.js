@@ -1,6 +1,5 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { ValueListType } from '../../../interfaces/AssetTypes';
 import { ASSET_DATA } from '../../../mocks';
 import { DescriptionList } from '../DescriptionList';
 
@@ -53,11 +52,8 @@ storiesOf('DescriptionList/Examples', module)
     () => {
       const sourceCategory = 'Source data';
       const otherCategory = 'Other';
-      function toCategory(property: ValueListType) {
-        if (property.name.indexOf('SOURCE') > -1) {
-          return sourceCategory;
-        }
-      }
+      const toCategory = (name: string) =>
+        name.includes('SOURCE') ? sourceCategory : undefined;
       return (
         <DescriptionList
           valueSet={ASSET_DATA.metadata}

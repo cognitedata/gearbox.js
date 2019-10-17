@@ -21,7 +21,7 @@ import {
   ComponentWithUnmountState,
   connectPromiseToUnmountState,
 } from '../../utils/promise';
-import { AssetDetailsPanel } from '../AssetDetailsPanel';
+import { AssetDetailsPanel, MetaAssetDetailsProps } from '../AssetDetailsPanel';
 import { AssetDocumentsPanel } from '../AssetDocumentsPanel';
 import { AssetEventsPanel, MetaEventsProps } from '../AssetEventsPanel';
 import {
@@ -47,6 +47,7 @@ interface AssetMetaProps {
   docsProps?: MetaDocProps;
   eventProps?: MetaEventsProps;
   timeseriesProps?: MetaTimeseriesProps;
+  detailsProps?: MetaAssetDetailsProps;
   hidePanels?: AssetPanelType[];
   onPaneChange?: (key: string) => void;
   styles?: AssetMetaStyles;
@@ -148,7 +149,7 @@ class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
     if (!this.includesPanel('details')) {
       return null;
     }
-    const { assetId, styles, customSpinner } = this.props;
+    const { assetId, styles, customSpinner, detailsProps } = this.props;
     return (
       <TabPane tab="Details" key="details" forceRender={true}>
         <AssetDetailsPanel
@@ -156,6 +157,7 @@ class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
           onAssetLoaded={this.handleAssetLoaded}
           styles={styles && styles.details}
           customSpinner={customSpinner}
+          {...detailsProps}
         />
       </TabPane>
     );

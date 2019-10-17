@@ -46,4 +46,21 @@ describe('AssetDetailsPanel', () => {
       done();
     });
   });
+
+  it('Should render categories', done => {
+    const props: AssetDetailsPanelProps = {
+      assetId: 123,
+      toCategory: name => (name.charCodeAt(0) % 3).toString(),
+    };
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <AssetDetailsPanel {...props} />
+      </ClientSDKProvider>
+    );
+    setImmediate(() => {
+      wrapper.update();
+      expect(wrapper.find('.ant-collapse-header').length).toBe(3);
+      done();
+    });
+  });
 });

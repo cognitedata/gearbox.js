@@ -6,6 +6,7 @@ import { fakeAsset } from '../../../mocks';
 import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
+import customCategories from './customCategories.md';
 import customSpinner from './customSpinner.md';
 import customStyles from './customStyles.md';
 import fullDescription from './full.md';
@@ -89,6 +90,23 @@ storiesOf('AssetDetailsPanel/Examples', module)
     {
       readme: {
         content: customStyles,
+      },
+    }
+  )
+  .add(
+    'With custom categories',
+    () => {
+      return (
+        <AssetDetailsPanel
+          assetId={4650652196144007}
+          toCategory={name => name.split('_')[0]}
+          categoryPriorityList={['SOURCE']}
+        />
+      );
+    },
+    {
+      readme: {
+        content: customCategories,
       },
     }
   );

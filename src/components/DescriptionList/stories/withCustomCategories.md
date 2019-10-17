@@ -1,4 +1,4 @@
-## With description text 
+## With custom categories 
 
 <!-- STORY -->
 
@@ -17,22 +17,20 @@ const metadata = {
   WMT_LOCATION_WORKSTART: '1999-09-01 07:00:00',
   latestUpdateTimeSource: '1552471210000',
 }
-const sourceCategory = 'Source data'
+const sourceCategory = 'Source data';
 const otherCategory = 'Other';
+const toCategory = (key: string) => key.includes('SOURCE') ? sourceCategory : undefined;
 
-function toCategory(property: ValueListType) {
-  if(property.name.indexOf('SOURCE') > -1) {
-    return sourceCategory;
-  }
+function ExampleComponent(props) {
+  return (
+    <DescriptionList
+      valueSet={metadata}
+      toCategory={toCategory}
+      unknownCategoryName={otherCategory}
+      expandedCategories={[otherCategory]}
+      categoryPriorityList={[sourceCategory]}
+    />
+  );
+
 }
-
-function ExampleComponent(props) => (
-  <DescriptionList 
-    valueSet={metadata}
-    toCategory={toCategory}
-    unknownCategoryName={otherCategory}
-    expandedCategories={[otherCategory]}
-    categoryPriorityList={[sourceCategory]}
-  />
-)
 ```

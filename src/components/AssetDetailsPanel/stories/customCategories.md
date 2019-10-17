@@ -1,4 +1,4 @@
-## Custom Priority Categories
+## Custom categories 
 
 <!-- STORY -->
 
@@ -8,16 +8,16 @@
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { AssetMeta } from '@cognite/gearbox';
+import { AssetDetailsPanel } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
-
   return (
-    <AssetMeta 
+    <AssetDetailsPanel
       assetId={4650652196144007}
-      docsProps={{ categoryPriorityList: ['AB', 'ZE'] }}
+      toCategory={name => name.split('_')[0]}
+      categoryPriorityList={['SOURCE']}
     />
   );
-  
+
 }
 ```
