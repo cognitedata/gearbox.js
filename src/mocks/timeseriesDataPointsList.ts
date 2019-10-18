@@ -1,3 +1,36 @@
+import { DatapointsGetAggregateDatapoint } from '@cognite/sdk';
+
+export function randomData(
+  start: number,
+  end: number,
+  n: number,
+  granularity?: number
+): DatapointsGetAggregateDatapoint {
+  const data = [];
+
+  const dt = granularity ? granularity : (end - start) / n;
+
+  for (let i = start; i <= end; i += dt) {
+    const values = [0, 0, 0]
+      .map(
+        () =>
+          Math.sin(i / 20) * 50 +
+          Math.cos(Math.PI - i / 40) * 50 +
+          Math.random() * 40
+      )
+      .sort((a: number, b: number) => a - b);
+    data.push({
+      timestamp: new Date(i),
+      average: values[1],
+      min: values[0],
+      max: values[2],
+      count: 7000,
+    });
+  }
+
+  return { datapoints: data, id: 1337 };
+}
+
 export const datapoints = [
   {
     timestamp: 1552726800000,

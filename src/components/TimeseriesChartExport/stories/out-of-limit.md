@@ -1,0 +1,30 @@
+# Timeseries Chart Download
+
+<!-- STORY -->
+
+#### Usage:
+
+```typescript jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { TimeseriesChartExport } from '@cognite/gearbox';
+
+function ExampleComponent(props) {
+  return (
+    <TimeseriesChartExport
+      visible={true}
+      timeseriesIds={[{ id: 41852231325889 }]}
+      granularity={'2s'}
+      cellLimit={5000}
+      defaultRange={[1567321800000, 1567408200000]}
+      strings={{
+        cellLimitErr:
+          'Ooops, you rich cell limit for CSV document – {{ cellLimit }} cells, some data may be omitted',
+      }}
+    />
+  );
+
+}
+```
+

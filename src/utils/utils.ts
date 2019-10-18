@@ -1,4 +1,5 @@
 import { Asset } from '@cognite/sdk';
+import ms from 'ms';
 import { CropSize } from '..';
 
 export function clampNumber(v: number, minValue: number, maxValue: number) {
@@ -147,4 +148,8 @@ export function removeImageBase(imageString: string = ''): string {
   const [base, src] = imageString.split(',');
 
   return src || base;
+}
+
+export function getGranularityInMS(granularity: string): number {
+  return ms(granularity);
 }

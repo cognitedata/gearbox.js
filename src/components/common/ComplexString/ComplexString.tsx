@@ -25,5 +25,5 @@ export const ComplexString = (props: ComplexStringProps) => {
     );
   });
 
-  return <p>{resultString}</p>;
+  return <>{resultString}</>;
 };
