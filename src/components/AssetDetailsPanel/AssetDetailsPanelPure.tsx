@@ -3,14 +3,12 @@ import { WithAssetDataProps } from '../../hoc/withAsset';
 import { DescriptionList } from '../DescriptionList';
 import { MetaDescriptionListProps } from '../DescriptionList';
 
-export type MetaAssetDetailsProps = MetaDescriptionListProps;
-
 export interface AssetDetailsPanelStylesProps {
   styles?: React.CSSProperties;
 }
 
 export type AssetDetailsPanelPureProps = WithAssetDataProps &
-  MetaAssetDetailsProps &
+  MetaDescriptionListProps &
   AssetDetailsPanelStylesProps;
 
 export const AssetDetailsPanelPure: React.SFC<AssetDetailsPanelPureProps> = ({

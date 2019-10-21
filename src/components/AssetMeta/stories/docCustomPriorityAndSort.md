@@ -1,4 +1,4 @@
-## Custom Documents Priority Categories
+## Custom Document Category Priority and Sort
 
 <!-- STORY -->
 
@@ -12,10 +12,15 @@ import { AssetMeta } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
 
+  const customCategorySort = (a: string, b: string) => a > b ? -1 : a < b ? 1 : 0;
+
   return (
     <AssetMeta 
       assetId={4650652196144007}
-      docsProps={{ categoryPriorityList: ['AB', 'ZE'] }}
+      docsProps={{
+            customCategorySort,
+            categoryPriorityList: ['ZE'],
+          }}
     />
   );
   

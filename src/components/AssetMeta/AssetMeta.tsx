@@ -21,7 +21,7 @@ import {
   ComponentWithUnmountState,
   connectPromiseToUnmountState,
 } from '../../utils/promise';
-import { AssetDetailsPanel, MetaAssetDetailsProps } from '../AssetDetailsPanel';
+import { AssetDetailsPanel } from '../AssetDetailsPanel';
 import { AssetDocumentsPanel } from '../AssetDocumentsPanel';
 import { AssetEventsPanel, MetaEventsProps } from '../AssetEventsPanel';
 import {
@@ -29,6 +29,7 @@ import {
   AssetTimeseriesPanelStyles,
   MetaTimeseriesProps,
 } from '../AssetTimeseriesPanel';
+import { MetaDescriptionListProps } from '../DescriptionList';
 
 const { TabPane } = Tabs;
 
@@ -47,7 +48,7 @@ interface AssetMetaProps {
   docsProps?: MetaDocProps;
   eventProps?: MetaEventsProps;
   timeseriesProps?: MetaTimeseriesProps;
-  detailsProps?: MetaAssetDetailsProps;
+  detailsProps?: MetaDescriptionListProps;
   hidePanels?: AssetPanelType[];
   onPaneChange?: (key: string) => void;
   styles?: AssetMetaStyles;

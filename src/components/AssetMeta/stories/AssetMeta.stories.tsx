@@ -22,9 +22,9 @@ import customSpinner from './customSpinner.md';
 import customStyles from './customStyles.md';
 import customTimeseriesChartMeta from './customTimeseriesChartMeta.md';
 import detailsCustomCategories from './detailsCustomCategories.md';
-import docsCustomCategorySort from './docsCustomCategorySort.md';
-import docsCustomPriorityAndSort from './docsCustomPriorityAndSort.md';
-import docsCustomPriorityCategory from './docsCustomPriorityCategory.md';
+import docCustomCategorySort from './docCustomCategorySort.md';
+import docCustomPriorityAndSort from './docCustomPriorityAndSort.md';
+import docCustomPriorityCategory from './docCustomPriorityCategory.md';
 import fullDescription from './full.md';
 import hideTab from './hideTab.md';
 import selectedDocument from './selectedDocument.md';
@@ -176,7 +176,7 @@ storiesOf('AssetMeta/Examples', module)
     }
   )
   .add(
-    'Details custom categories',
+    'Custom details category',
     () => {
       return (
         <AssetMeta
@@ -206,7 +206,7 @@ storiesOf('AssetMeta/Examples', module)
     }
   )
   .add(
-    'Docs custom priority categories',
+    'Custom document priority categories',
     () => {
       return (
         <AssetMeta
@@ -217,12 +217,12 @@ storiesOf('AssetMeta/Examples', module)
     },
     {
       readme: {
-        content: docsCustomPriorityCategory,
+        content: docCustomPriorityCategory,
       },
     }
   )
   .add(
-    'Docs custom categories sort',
+    'Custom document categories sort',
     () => {
       const customSort = (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0);
       return (
@@ -237,12 +237,12 @@ storiesOf('AssetMeta/Examples', module)
     },
     {
       readme: {
-        content: docsCustomCategorySort,
+        content: docCustomCategorySort,
       },
     }
   )
   .add(
-    'Docs custom category priority and sort',
+    'Custom document category priority and sort',
     () => {
       const customSort = (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0);
       return (
@@ -257,7 +257,7 @@ storiesOf('AssetMeta/Examples', module)
     },
     {
       readme: {
-        content: docsCustomPriorityAndSort,
+        content: docCustomPriorityAndSort,
       },
     }
   )

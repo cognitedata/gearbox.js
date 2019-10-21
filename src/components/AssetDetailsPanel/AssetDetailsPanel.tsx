@@ -1,14 +1,12 @@
 import { withAsset, WithAssetProps } from '../../hoc/withAsset';
+import { MetaDescriptionListProps } from '../DescriptionList';
 import {
   AssetDetailsPanelPure,
   AssetDetailsPanelStylesProps,
-  MetaAssetDetailsProps,
 } from './AssetDetailsPanelPure';
 
-export { MetaAssetDetailsProps };
-
 export type AssetDetailsPanelProps = WithAssetProps &
-  MetaAssetDetailsProps &
+  MetaDescriptionListProps &
   AssetDetailsPanelStylesProps;
 
 export const AssetDetailsPanel = withAsset(AssetDetailsPanelPure);
