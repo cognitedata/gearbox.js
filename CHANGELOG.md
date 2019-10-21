@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/cognitedata/gearbox.js/compare/v1.4.0...v1.5.0) (2019-10-21)
+
+
+### Features
+
+* **description list:** add categorization options ([e2df3e7](https://github.com/cognitedata/gearbox.js/commit/e2df3e7faef2df503b1db31385c3b95b79526845))
+
 # [1.4.0](https://github.com/cognitedata/gearbox.js/compare/v1.3.3...v1.4.0) (2019-10-21)
 
 
