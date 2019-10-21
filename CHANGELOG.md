@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/cognitedata/gearbox.js/compare/v1.5.0...v1.5.1) (2019-10-21)
+
+
+### Bug Fixes
+
+* **timeseries data export:** change export definition ([#459](https://github.com/cognitedata/gearbox.js/issues/459)) ([84ee514](https://github.com/cognitedata/gearbox.js/commit/84ee514b7102841d78611eed095e1838332db4f6))
+
 # [1.5.0](https://github.com/cognitedata/gearbox.js/compare/v1.4.0...v1.5.0) (2019-10-21)
 
 
