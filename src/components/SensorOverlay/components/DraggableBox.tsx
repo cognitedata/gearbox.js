@@ -379,6 +379,7 @@ export class DraggableBox
         className={`${hovering || sticky ? 'hovering' : ''} ${
           flipped ? 'flipped' : ''
         }`}
+        data-test-id={'tag-error'}
       >
         {this.getPercentDiff()}
       </TagError>

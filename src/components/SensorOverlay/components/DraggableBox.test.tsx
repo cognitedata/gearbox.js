@@ -243,7 +243,7 @@ describe('SensorOverlay - DraggableBox', () => {
 
     setImmediate(() => {
       wrapper.update();
-      const alertParagraph = wrapper.find('p');
+      const alertParagraph = wrapper.find('div[data-test-id="tag-error"]');
       expect(alertParagraph).toHaveLength(1);
       expect(alertParagraph.text()).toEqual('400.00% over the set limit of 10');
       done();
