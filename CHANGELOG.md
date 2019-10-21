@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/cognitedata/gearbox.js/compare/v1.3.3...v1.4.0) (2019-10-21)
+
+
+### Features
+
+* **timeseries data export:** added a component to export timeseries datapoints in CSV format ([1f16607](https://github.com/cognitedata/gearbox.js/commit/1f166075199900b0ee685bd0ecb941a8733a0174))
+
 ## [1.3.3](https://github.com/cognitedata/gearbox.js/compare/v1.3.2...v1.3.3) (2019-10-16)
 
 
