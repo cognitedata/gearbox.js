@@ -10,7 +10,7 @@ import {
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { timeseriesListV2 } from '../../../mocks';
+import { randomData, timeseriesListV2 } from '../../../mocks';
 import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DataLoader } from '../dataLoader';
@@ -37,33 +37,6 @@ import single from './single.md';
 import startEnd from './startEnd.md';
 import xAxisHeight from './xAxisHeight.md';
 import zoomable from './zoomable.md';
-
-const randomData = (
-  start: number,
-  end: number,
-  n: number
-): DatapointsGetAggregateDatapoint => {
-  const data = [];
-  const dt = (end - start) / n;
-  for (let i = start; i <= end; i += dt) {
-    const values = [0, 0, 0]
-      .map(
-        () =>
-          Math.sin(i / 20) * 50 +
-          Math.cos(Math.PI - i / 40) * 50 +
-          Math.random() * 40
-      )
-      .sort((a: number, b: number) => a - b);
-    data.push({
-      timestamp: new Date(i),
-      average: values[1],
-      min: values[0],
-      max: values[2],
-      count: 7000,
-    });
-  }
-  return { datapoints: data, id: 1337 };
-};
 
 export const MockTimeseriesClientObject = {
   retrieve: (): Promise<GetTimeSeriesMetadataDTO[]> => {
