@@ -41,8 +41,9 @@ class CogniteClient extends MockCogniteClient {
           setTimeout(() => {
             if (scope && scope.filter && scope.filter.parentIds) {
               const { parentIds } = scope.filter;
-              ASSET_LIST_CHILD.sort(a => (a.id === parentIds[0] ? -1 : 1));
-              resolve(ASSET_LIST_CHILD);
+              resolve(
+                ASSET_LIST_CHILD.filter(a => a.parentId === parentIds[0])
+              );
             }
             resolve(ASSET_ZERO_DEPTH_ARRAY);
           }, 300);
