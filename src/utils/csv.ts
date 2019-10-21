@@ -43,26 +43,31 @@ export function downloadCSV(src: string, filename: string = 'data.csv') {
   saveAs(blob, filename);
 }
 
-function getStartTimestampAndIterationsTotal(
+function getStartEndAndIterationsTotal(
   data: DatapointsGetAggregateDatapoint[]
-): [number, number] {
+): [number, number, number] {
   let startTimestamp = Infinity;
+  let endTimestamp = 0;
   const iterationsTotal = data.reduce((acc, { datapoints }) => {
     if (datapoints.length) {
-      const timestamp = datapoints[0].timestamp.getTime();
+      const start = datapoints[0].timestamp.getTime();
+      const end = datapoints[datapoints.length - 1].timestamp.getTime();
 
-      if (startTimestamp > timestamp) {
-        startTimestamp = timestamp;
+      if (startTimestamp > start) {
+        startTimestamp = start;
+      }
+      if (endTimestamp < end) {
+        endTimestamp = end;
       }
     }
 
     return datapoints.length + acc;
   }, 0);
 
-  return [startTimestamp, iterationsTotal];
+  return [startTimestamp, endTimestamp, iterationsTotal];
 }
 
-function arrangeDatapointsByTimestamp({
+export function arrangeDatapointsByTimestamp({
   data,
   aggregate,
   granularity: granularityString,
@@ -75,15 +80,16 @@ function arrangeDatapointsByTimestamp({
   const granularity = getGranularityInMS(granularityString);
 
   const pointers = Array(data.length).fill(0);
-  const [startTimestamp, iterationsTotal] = getStartTimestampAndIterationsTotal(
-    data
-  );
+  const [
+    startTimestamp,
+    endTimestamp,
+    iterationsTotal,
+  ] = getStartEndAndIterationsTotal(data);
 
   let iterationLeft = iterationsTotal;
   let currentTimestamp = startTimestamp;
 
-  for (let iteration = 0; iteration <= iterationsTotal; iteration++) {
-    let valuesGet = 0;
+  while (iterationLeft > 0) {
     const values: string[] = [];
 
     data.forEach(({ datapoints }, index) => {
@@ -95,29 +101,21 @@ function arrangeDatapointsByTimestamp({
 
         if (timestamp === currentTimestamp) {
           const value = datapoints[dpPointer][aggregate!];
+          values[index] = value!.toString();
 
-          values.push(value!.toString());
-          valuesGet++;
           pointers[index]++;
           iterationLeft--;
-
-          return;
         }
       }
-
-      values.push('');
     });
 
-    iteration++;
-
-    if (valuesGet) {
+    if (values.length) {
       arrangedData.push([currentTimestamp, ...values]);
     }
 
     currentTimestamp += granularity;
-    iterationLeft -= valuesGet;
 
-    if (iterationLeft <= 0) {
+    if (currentTimestamp > endTimestamp) {
       break;
     }
   }

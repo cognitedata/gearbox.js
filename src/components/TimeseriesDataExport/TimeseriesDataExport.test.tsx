@@ -5,11 +5,11 @@ import { act } from 'react-dom/test-utils';
 import * as csv from '../../utils/csv';
 import { MockCogniteClient } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
-import TimeseriesChartExport, {
+import TimeseriesDataExport, {
   FetchCSVCall,
   FetchTimeseriesCall,
   TimeseriesChartExportProps,
-} from './TimeseriesChartExport';
+} from './TimeseriesDataExport';
 
 configure({ adapter: new Adapter() });
 
@@ -24,9 +24,9 @@ class CogniteClient extends MockCogniteClient {
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 const defaultProps = {
-  timeseriesIds: [{ id: 0 }],
+  timeserieIds: [0],
   granularity: '2m',
-  defaultRange: [1567321800000, 1567408200000],
+  defaultTimeRange: [1567321800000, 1567408200000],
   visible: true,
 };
 const fetchCSV = jest
@@ -43,7 +43,7 @@ const onSuccess = jest.fn() as () => void;
 const mountComponent = (props: TimeseriesChartExportProps) =>
   mount(
     <ClientSDKProvider client={sdk}>
-      <TimeseriesChartExport {...props} />
+      <TimeseriesDataExport {...props} />
     </ClientSDKProvider>
   );
 

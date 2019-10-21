@@ -9,9 +9,9 @@ import { randomData, timeseriesListV2 } from '../../../mocks';
 import { MockCogniteClient } from '../../../utils/mockSdk';
 import { getGranularityInMS } from '../../../utils/utils';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import TimeseriesChartExport, {
+import TimeseriesDataExport, {
   TimeseriesChartExportProps,
-} from '../TimeseriesChartExport';
+} from '../TimeseriesDataExport';
 import fullDescription from './full.md';
 import outOfLimit from './out-of-limit.md';
 
@@ -59,18 +59,18 @@ const TimeseriesChartExportWrapper: React.FC<
   return (
     <ClientSDKProvider client={client}>
       <button onClick={onOpen}>Export Chart Data</button>
-      <TimeseriesChartExport visible={open} hideModal={onClose} {...props} />
+      <TimeseriesDataExport visible={open} hideModal={onClose} {...props} />
     </ClientSDKProvider>
   );
 };
 
-storiesOf('TimeseriesChartExport', module).add(
+storiesOf('TimeseriesDataExport', module).add(
   'Full Description',
   () => (
     <TimeseriesChartExportWrapper
-      timeseriesIds={[{ id: 41852231325889 }, { id: 7433885982156917 }]}
+      timeserieIds={[41852231325889, 7433885982156917]}
       granularity={'2m'}
-      defaultRange={[1567321800000, 1567408200000]}
+      defaultTimeRange={[1567321800000, 1567408200000]}
     />
   ),
   {
@@ -80,13 +80,13 @@ storiesOf('TimeseriesChartExport', module).add(
   }
 );
 
-storiesOf('TimeseriesChartExport/Examples', module).add(
+storiesOf('TimeseriesDataExport/Examples', module).add(
   'Hit Limit',
   () => (
     <TimeseriesChartExportWrapper
-      timeseriesIds={[{ id: 41852231325889 }, { id: 7433885982156917 }]}
+      timeserieIds={[41852231325889, 7433885982156917]}
       granularity={'2s'}
-      defaultRange={[1567321800000, 1567408200000]}
+      defaultTimeRange={[1567321800000, 1567408200000]}
       cellLimit={5000}
       strings={{
         cellLimitErr:

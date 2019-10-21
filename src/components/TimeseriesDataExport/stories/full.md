@@ -1,4 +1,4 @@
-# Timeseries Chart Export
+# Timeseries Data Export
 
 <!-- STORY -->
 
@@ -18,15 +18,15 @@ also can be redefined via `retrieveTimeseries` and `fetchCSV` props.
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { TimeseriesChartExport } from '@cognite/gearbox';
+import { TimeseriesDataExport } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
   return (
-    <TimeseriesChartExport
+    <TimeseriesDataExport
       visible={true}
-      timeseriesIds={{ id: 41852231325889 }}
+      timeserieIds={[41852231325889]}
       granularity={'2m'}
-      defaultRange={[1567321800000, 1567408200000]}
+      defaultTimeRange={[1567321800000, 1567408200000]}
     />
   );
 
@@ -37,12 +37,12 @@ function ExampleComponent(props) {
 
 ##### Required:
 
-| Property        | Description                                                                           | Type           | Default |
-| --------------- | ------------------------------------------------------------------------------------- | -------------- | ------- |
-| `timeseriesIds` | Array of timeseries ids                                                               | `InternalId[]` |         |
-| `granularity`   | String, that represents initial granularity (ex. 2m, 15s, 1h) to be displayed in form | `string`       |         |
-| `defaultRange`  | Array with start - end values for initial time range                                  | `number[]`     |         |
-| `visible`       | Flag that shows/hides modal with form                                                 | `boolean`      |         |
+| Property       | Description                                                                           | Type       | Default |
+| -------------- | ------------------------------------------------------------------------------------- | ---------- | ------- |
+| `timeserieIds` | Array of timeserie ids                                                                | `number[]` |         |
+| `granularity`  | String, that represents initial granularity (ex. 2m, 15s, 1h) to be displayed in form | `string`   |         |
+| `defaultTimeRange` | Array with start - end timestamp values for initial time range                                  | `number[]` |         |
+| `visible`      | Flag that shows/hides modal with form                                                 | `boolean`  |         |
 
 ##### Optionals:
 
@@ -76,7 +76,7 @@ import { DatapointsMultiQuery, Aggregate } from '@cognite/sdk';
 
 interface CsvParseOptions {
   aggregate: Aggregate;
-  delimiter: ',' | '|' | 'tab';
+  delimiter: ',' | '|' | '\t';
   readableDate: boolean;
   granularity: string;
 }
@@ -98,11 +98,11 @@ import { FetchTimeseriesCall } from '@cognite/gearbox';
 Definition:
 
 ```typescript
-import { TimeseriesIdEither, TimeSeriesList } from '@cognite/sdk';
+import { InternalId, TimeSeries } from '@cognite/sdk';
 
 type FetchTimeseriesCall = (
-  ids: TimeseriesIdEither[]
-) => Promise<TimeSeriesList>;
+  ids: InternalId[]
+) => Promise<TimeSeries[]>;
 ```
 
 #### Default strings

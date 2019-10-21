@@ -1,6 +1,5 @@
 import { Aggregate, DatapointsMultiQuery, InternalId } from '@cognite/sdk';
 import { TimeSeries } from '@cognite/sdk/dist/src/resources/classes/timeSeries';
-import { TimeSeriesList } from '@cognite/sdk/dist/src/resources/classes/timeSeriesList';
 import {
   Alert,
   Button,
@@ -29,9 +28,7 @@ export type FetchCSVCall = (
   opts: CsvParseOptions
 ) => Promise<string>;
 
-export type FetchTimeseriesCall = (
-  ids: InternalId[]
-) => Promise<TimeSeriesList>;
+export type FetchTimeseriesCall = (ids: InternalId[]) => Promise<TimeSeries[]>;
 
 export interface CsvParseOptions {
   aggregate: Aggregate;
@@ -53,9 +50,9 @@ export interface ChartExportFormFields {
 }
 
 export interface TimeseriesChartExportProps extends FormComponentProps {
-  timeseriesIds: InternalId[];
+  timeserieIds: number[];
   granularity: string;
-  defaultRange: number[];
+  defaultTimeRange: number[];
   visible: boolean;
   modalWidth?: number;
   cellLimit?: number;
@@ -88,7 +85,7 @@ const defaultStrings: PureObject = {
     'You hit the limit of {{ cellLimit }} datapoints - some data may be omitted',
 };
 
-// TODO: Check tree shacking for TimeseriesChartExport component
+// TODO: Check tree shacking for TimeseriesDataExport component
 const { RangePicker } = DatePicker;
 const CELL_LIMIT = 10000;
 const formatData = 'YYYY-MM-DD HH:mm:ss';
@@ -114,14 +111,14 @@ const isGreaterThenLimit = (
 };
 
 // tslint:disable-next-line:no-big-function
-const TimeseriesChartExport = (props: TimeseriesChartExportProps) => {
+const TimeseriesDataExport = (props: TimeseriesChartExportProps) => {
   const {
     form,
     form: { getFieldDecorator },
     formItemLayout = formItemLayoutDefault,
-    timeseriesIds,
+    timeserieIds,
     visible,
-    defaultRange,
+    defaultTimeRange: [startTimestamp, endTimestamp],
     granularity,
     modalWidth = 600,
     cellLimit = 10000,
@@ -176,7 +173,7 @@ const TimeseriesChartExport = (props: TimeseriesChartExportProps) => {
     event: SyntheticEvent<HTMLInputElement>
   ) => {
     const [start, end] = form.getFieldValue('range');
-    const seriesNumber = timeseriesIds.length;
+    const seriesNumber = timeserieIds.length;
     const granularityString = event.currentTarget.value;
     const granularityValue = getGranularityInMS(granularityString);
 
@@ -187,7 +184,7 @@ const TimeseriesChartExport = (props: TimeseriesChartExportProps) => {
 
   const checkLimitOnRangeChange = (range: RangePickerValue) => {
     const granularityString = form.getFieldValue('granularity');
-    const seriesNumber = timeseriesIds.length;
+    const seriesNumber = timeserieIds.length;
     let start = 0;
     let end = 0;
     const granularityValue = getGranularityInMS(granularityString);
@@ -205,11 +202,12 @@ const TimeseriesChartExport = (props: TimeseriesChartExportProps) => {
   const fetchTimeseries = async () => {
     const fetchTimeseriesCall =
       retrieveTimeseries || context!.timeseries.retrieve;
+    const timeserieIdsObj = timeserieIds.map(id => ({ id }));
 
     setLoading(true);
 
     try {
-      const timeseriesList = await fetchTimeseriesCall(timeseriesIds);
+      const timeseriesList = await fetchTimeseriesCall(timeserieIdsObj);
 
       setSeries(timeseriesList);
       setLoading(false);
@@ -287,7 +285,7 @@ const TimeseriesChartExport = (props: TimeseriesChartExportProps) => {
     const start = range[0] ? +range[0] : 0;
     const end = range[1] ? +range[1] : 0;
     const granularityValue = getGranularityInMS(granularityString);
-    const seriesNumber = timeseriesIds.length;
+    const seriesNumber = timeserieIds.length;
 
     setLimitHit(
       isGreaterThenLimit(limit, start, end, granularityValue, seriesNumber)
@@ -295,7 +293,7 @@ const TimeseriesChartExport = (props: TimeseriesChartExportProps) => {
   }, []);
 
   useEffect(() => {
-    if (!visible || !timeseriesIds.length) {
+    if (!visible || !timeserieIds.length) {
       return;
     }
 
@@ -313,7 +311,7 @@ const TimeseriesChartExport = (props: TimeseriesChartExportProps) => {
       <Form data-test-id="form" onSubmit={onSubmit}>
         <Form.Item {...formItemLayout} label={labelRange}>
           {getFieldDecorator('range', {
-            initialValue: [moment(defaultRange[0]), moment(defaultRange[1])],
+            initialValue: [moment(startTimestamp), moment(endTimestamp)],
             rules: [{ required: true }],
           })(
             <RangePicker
@@ -407,8 +405,8 @@ const TimeseriesChartExport = (props: TimeseriesChartExportProps) => {
 };
 
 const Wrapper = Form.create<TimeseriesChartExportProps>({
-  name: 'TimeseriesChartExport',
-})(TimeseriesChartExport);
+  name: 'TimeseriesDataExport',
+})(TimeseriesDataExport);
 
 Wrapper.defaultProps = {
   theme: defaultTheme,

@@ -8,16 +8,16 @@
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { TimeseriesChartExport } from '@cognite/gearbox';
+import { TimeseriesDataExport } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
   return (
-    <TimeseriesChartExport
+    <TimeseriesDataExport
       visible={true}
-      timeseriesIds={[{ id: 41852231325889 }]}
+      timeserieIds={[41852231325889]}
       granularity={'2s'}
       cellLimit={5000}
-      defaultRange={[1567321800000, 1567408200000]}
+      defaultTimeRange={[1567321800000, 1567408200000]}
       strings={{
         cellLimitErr:
           'Ooops, you rich cell limit for CSV document – {{ cellLimit }} cells, some data may be omitted',
