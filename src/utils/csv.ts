@@ -89,7 +89,7 @@ export function arrangeDatapointsByTimestamp({
   let iterationLeft = iterationsTotal;
   let currentTimestamp = startTimestamp;
 
-  while (iterationLeft > 0) {
+  while (iterationLeft > 0 && currentTimestamp <= endTimestamp) {
     const values: string[] = [];
 
     data.forEach(({ datapoints }, index) => {
@@ -114,10 +114,6 @@ export function arrangeDatapointsByTimestamp({
     }
 
     currentTimestamp += granularity;
-
-    if (currentTimestamp > endTimestamp) {
-      break;
-    }
   }
 
   return arrangedData;

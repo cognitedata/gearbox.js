@@ -14,7 +14,7 @@ function ExampleComponent(props) {
   return (
     <TimeseriesDataExport
       visible={true}
-      timeserieIds={[41852231325889]}
+      timeseriesIds={[41852231325889]}
       granularity={'2s'}
       cellLimit={5000}
       defaultTimeRange={[1567321800000, 1567408200000]}

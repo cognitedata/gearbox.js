@@ -68,7 +68,7 @@ storiesOf('TimeseriesDataExport', module).add(
   'Full Description',
   () => (
     <TimeseriesChartExportWrapper
-      timeserieIds={[41852231325889, 7433885982156917]}
+      timeseriesIds={[41852231325889, 7433885982156917]}
       granularity={'2m'}
       defaultTimeRange={[1567321800000, 1567408200000]}
     />
@@ -84,7 +84,7 @@ storiesOf('TimeseriesDataExport/Examples', module).add(
   'Hit Limit',
   () => (
     <TimeseriesChartExportWrapper
-      timeserieIds={[41852231325889, 7433885982156917]}
+      timeseriesIds={[41852231325889, 7433885982156917]}
       granularity={'2s'}
       defaultTimeRange={[1567321800000, 1567408200000]}
       cellLimit={5000}

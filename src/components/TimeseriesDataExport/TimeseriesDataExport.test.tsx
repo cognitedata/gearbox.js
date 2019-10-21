@@ -24,7 +24,7 @@ class CogniteClient extends MockCogniteClient {
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 const defaultProps = {
-  timeserieIds: [0],
+  timeseriesIds: [0],
   granularity: '2m',
   defaultTimeRange: [1567321800000, 1567408200000],
   visible: true,

@@ -50,7 +50,7 @@ export interface ChartExportFormFields {
 }
 
 export interface TimeseriesChartExportProps extends FormComponentProps {
-  timeserieIds: number[];
+  timeseriesIds: number[];
   granularity: string;
   defaultTimeRange: number[];
   visible: boolean;
@@ -116,7 +116,7 @@ const TimeseriesDataExport = (props: TimeseriesChartExportProps) => {
     form,
     form: { getFieldDecorator },
     formItemLayout = formItemLayoutDefault,
-    timeserieIds,
+    timeseriesIds,
     visible,
     defaultTimeRange: [startTimestamp, endTimestamp],
     granularity,
@@ -173,7 +173,7 @@ const TimeseriesDataExport = (props: TimeseriesChartExportProps) => {
     event: SyntheticEvent<HTMLInputElement>
   ) => {
     const [start, end] = form.getFieldValue('range');
-    const seriesNumber = timeserieIds.length;
+    const seriesNumber = timeseriesIds.length;
     const granularityString = event.currentTarget.value;
     const granularityValue = getGranularityInMS(granularityString);
 
@@ -184,7 +184,7 @@ const TimeseriesDataExport = (props: TimeseriesChartExportProps) => {
 
   const checkLimitOnRangeChange = (range: RangePickerValue) => {
     const granularityString = form.getFieldValue('granularity');
-    const seriesNumber = timeserieIds.length;
+    const seriesNumber = timeseriesIds.length;
     let start = 0;
     let end = 0;
     const granularityValue = getGranularityInMS(granularityString);
@@ -202,7 +202,7 @@ const TimeseriesDataExport = (props: TimeseriesChartExportProps) => {
   const fetchTimeseries = async () => {
     const fetchTimeseriesCall =
       retrieveTimeseries || context!.timeseries.retrieve;
-    const timeserieIdsObj = timeserieIds.map(id => ({ id }));
+    const timeserieIdsObj = timeseriesIds.map(id => ({ id }));
 
     setLoading(true);
 
@@ -285,7 +285,7 @@ const TimeseriesDataExport = (props: TimeseriesChartExportProps) => {
     const start = range[0] ? +range[0] : 0;
     const end = range[1] ? +range[1] : 0;
     const granularityValue = getGranularityInMS(granularityString);
-    const seriesNumber = timeserieIds.length;
+    const seriesNumber = timeseriesIds.length;
 
     setLimitHit(
       isGreaterThenLimit(limit, start, end, granularityValue, seriesNumber)
@@ -293,7 +293,7 @@ const TimeseriesDataExport = (props: TimeseriesChartExportProps) => {
   }, []);
 
   useEffect(() => {
-    if (!visible || !timeserieIds.length) {
+    if (!visible || !timeseriesIds.length) {
       return;
     }
 

@@ -24,7 +24,7 @@ function ExampleComponent(props) {
   return (
     <TimeseriesDataExport
       visible={true}
-      timeserieIds={[41852231325889]}
+      timeseriesIds={[41852231325889]}
       granularity={'2m'}
       defaultTimeRange={[1567321800000, 1567408200000]}
     />
@@ -39,7 +39,7 @@ function ExampleComponent(props) {
 
 | Property       | Description                                                                           | Type       | Default |
 | -------------- | ------------------------------------------------------------------------------------- | ---------- | ------- |
-| `timeserieIds` | Array of timeserie ids                                                                | `number[]` |         |
+| `timeseriesIds` | Array of timeserie ids                                                                | `number[]` |         |
 | `granularity`  | String, that represents initial granularity (ex. 2m, 15s, 1h) to be displayed in form | `string`   |         |
 | `defaultTimeRange` | Array with start - end timestamp values for initial time range                                  | `number[]` |         |
 | `visible`      | Flag that shows/hides modal with form                                                 | `boolean`  |         |
