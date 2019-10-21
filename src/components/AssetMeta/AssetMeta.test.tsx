@@ -175,4 +175,17 @@ describe('AssetMeta', () => {
     const tabs = wrapper.find('div.ant-tabs-tab');
     expect(tabs).toHaveLength(0);
   });
+
+  it('should render details categories', done => {
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <AssetMeta assetId={123} detailsProps={{ toCategory: name => name }} />
+      </ClientSDKProvider>
+    );
+    setImmediate(() => {
+      wrapper.update();
+      expect(wrapper.exists('.ant-collapse-header')).toBeTruthy();
+      done();
+    });
+  });
 });

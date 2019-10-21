@@ -1,4 +1,4 @@
-## Custom Category Priority and Sort
+## Custom Document Category Priority and Sort
 
 <!-- STORY -->
 
