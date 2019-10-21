@@ -42,14 +42,14 @@ export interface FormItemLayout {
   wrapperCol: ColProps;
 }
 
-export interface ChartExportFormFields {
+export interface TimeseriesDataExportFormFields {
   range: Moment[];
   granularity: string;
   delimiter: Delimiters;
   readableDate: boolean;
 }
 
-export interface TimeseriesChartExportProps extends FormComponentProps {
+export interface TimeseriesDataExportProps extends FormComponentProps {
   timeseriesIds: number[];
   granularity: string;
   defaultTimeRange: number[];
@@ -111,7 +111,7 @@ const isGreaterThenLimit = (
 };
 
 // tslint:disable-next-line:no-big-function
-const TimeseriesDataExport = (props: TimeseriesChartExportProps) => {
+const TimeseriesDataExportFC = (props: TimeseriesDataExportProps) => {
   const {
     form,
     form: { getFieldDecorator },
@@ -231,7 +231,7 @@ const TimeseriesDataExport = (props: TimeseriesChartExportProps) => {
         granularity: granularityVal,
         delimiter,
         readableDate,
-      }: ChartExportFormFields = values;
+      }: TimeseriesDataExportFormFields = values;
       const aggregate = 'average';
       const body: DatapointsMultiQuery = {
         items: series.map(({ id }) => ({
@@ -404,12 +404,12 @@ const TimeseriesDataExport = (props: TimeseriesChartExportProps) => {
   );
 };
 
-const Wrapper = Form.create<TimeseriesChartExportProps>({
+const Wrapper = Form.create<TimeseriesDataExportProps>({
   name: 'TimeseriesDataExport',
-})(TimeseriesDataExport);
+})(TimeseriesDataExportFC);
 
 Wrapper.defaultProps = {
   theme: defaultTheme,
 };
 
-export default withDefaultTheme(Wrapper);
+export const TimeseriesDataExport = withDefaultTheme(Wrapper);
