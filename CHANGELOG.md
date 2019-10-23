@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/cognitedata/gearbox.js/compare/v1.6.1...v1.6.2) (2019-10-23)
+
+
+### Bug Fixes
+
+* **tenant selector:** add submitting on enter for all fields ([#467](https://github.com/cognitedata/gearbox.js/issues/467)) ([22d1efe](https://github.com/cognitedata/gearbox.js/commit/22d1efe8dec82fd971f1e2bd063ce083959f55f9)), closes [#460](https://github.com/cognitedata/gearbox.js/issues/460)
+
 ## [1.6.1](https://github.com/cognitedata/gearbox.js/compare/v1.6.0...v1.6.1) (2019-10-23)
 
 
