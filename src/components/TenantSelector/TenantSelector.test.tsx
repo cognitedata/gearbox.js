@@ -33,14 +33,15 @@ describe('TenantSelector', () => {
     );
 
     expect(wrapper).toHaveLength(1);
-    const button = wrapper.find('button');
-    button.simulate('click');
+
+    const form = wrapper.find('form');
+    form.simulate('submit');
     const input = wrapper.find(tenantInputDataId);
 
     // Without any text entered, clicking the button doesn't do anything.
     expect(validateTenant.callCount).toEqual(0);
     input.simulate('change', { target: { value: tenantName } });
-    button.simulate('click');
+    form.simulate('submit');
     expect(validateTenant.callCount).toEqual(1);
     expect(validateTenant.lastCall.args[0]).toEqual(tenantName);
 
@@ -60,14 +61,15 @@ describe('TenantSelector', () => {
     );
 
     expect(wrapper).toHaveLength(1);
-    const button = wrapper.find('button');
-    button.simulate('click');
+
+    const form = wrapper.find('form');
+    form.simulate('submit');
     const input = wrapper.find(tenantInputDataId);
 
     // Without any text entered, clicking the button doesn't do anything.
     expect(validateTenant.callCount).toEqual(0);
     input.simulate('change', { target: { value: tenantName } });
-    button.simulate('click');
+    form.simulate('submit');
     expect(validateTenant.callCount).toEqual(1);
     expect(validateTenant.lastCall.args[0]).toEqual(tenantName);
     process.nextTick(() => {
@@ -94,8 +96,8 @@ describe('TenantSelector', () => {
     );
 
     expect(wrapper).toHaveLength(1);
-    const button = wrapper.find('button');
-    button.simulate('click');
+    const form = wrapper.find('form');
+    form.simulate('submit');
     const input = wrapper.find(tenantInputDataId);
 
     // Without any text entered, clicking the button doesn't do anything.
@@ -116,14 +118,14 @@ describe('TenantSelector', () => {
     );
 
     expect(wrapper).toHaveLength(1);
-    const button = wrapper.find('button');
-    button.simulate('click');
+    const form = wrapper.find('form');
+    form.simulate('submit');
     const input = wrapper.find(tenantInputDataId);
 
     // Without any text entered, clicking the button doesn't do anything.
     expect(validateTenant.callCount).toEqual(0);
     input.simulate('change', { target: { value: tenantName } });
-    button.simulate('click');
+    form.simulate('submit');
     expect(validateTenant.callCount).toEqual(1);
     expect(validateTenant.lastCall.args[0]).toEqual(tenantName);
     process.nextTick(() => {
@@ -158,13 +160,13 @@ describe('TenantSelector', () => {
 
     expect(wrapper.find('input')).toHaveLength(3);
 
-    const button = wrapper.find('button');
+    const form = wrapper.find('form');
     const input = wrapper.find(tenantInputDataId);
     const optionApiInput = wrapper.find('input[name="apiUrl"]');
 
     optionApiInput.simulate('change', { target: { value: apiUrlString } });
     input.simulate('change', { target: { value: tenantName } });
-    button.simulate('click');
+    form.simulate('submit');
 
     expect(validateTenant.lastCall.args[1]).toMatchObject({
       apiUrl: apiUrlString,
