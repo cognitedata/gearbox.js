@@ -1,3 +1,4 @@
+import { Tree } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -67,6 +68,30 @@ describe('AssetTree', () => {
       expect(Object.keys(jestTest.mock.calls[0][0]).sort()).toEqual(
         ['node', 'key', 'isLeaf', 'title'].sort()
       );
+      done();
+    });
+  });
+
+  it("Don't show expand arrows if child count > 0", done => {
+    const AssetTreeModal = mount(
+      <ClientSDKProvider client={sdk}>
+        <AssetTree />
+      </ClientSDKProvider>
+    );
+    setImmediate(() => {
+      AssetTreeModal.update();
+
+      expect(
+        AssetTreeModal.find(Tree.TreeNode)
+          .map(node => node.props())
+          .map(({ eventKey, isLeaf }) => ({ id: Number(eventKey), isLeaf }))
+      ).toEqual(
+        ASSET_ZERO_DEPTH_ARRAY.map(({ id, aggregates }) => ({
+          id,
+          isLeaf: aggregates ? !aggregates.childCount : false,
+        }))
+      );
+
       done();
     });
   });
