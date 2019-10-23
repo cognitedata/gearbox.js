@@ -473,6 +473,7 @@ const LiveSearchWrapper = styled.div`
   background-color: ${({ theme }) => theme.gearbox.white};
   box-shadow: 0 1px 5px -2px rgba(0, 0, 0, 0.5);
   border-radius: 0;
+  z-index: 100;
 
   > ul {
     margin: 0;
