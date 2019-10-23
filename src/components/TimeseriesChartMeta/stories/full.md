@@ -15,7 +15,7 @@ meta data of the timeserie, description. It also shows group of radio buttons to
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { TimeseriesChart } from '@cognite/gearbox';
+import { TimeseriesChartMeta } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
   return (
