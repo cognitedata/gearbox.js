@@ -359,7 +359,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
   };
 
   onMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (this.dragging) {
+    if (this.dragging && this.pinchZoomInstance) {
       event.preventDefault();
 
       const currentMoveDistanceX = event.pageX - this.startMouse.x;
@@ -463,7 +463,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
     if (e.ctrlKey) {
       e.preventDefault();
       e.stopPropagation();
-      if (!this.pinchZoomInstance.container) {
+      if (!this.pinchZoomInstance) {
         return;
       }
       this.animateZoom(
@@ -508,7 +508,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
 
   zoomOnCurrentAsset = (currentAsset: Element | null) => {
     const isDesktop = this.state.width > minDesktopWidth;
-    if (!currentAsset || !this.pinchZoomInstance.container) {
+    if (!currentAsset || !this.pinchZoomInstance) {
       return;
     }
     this.pinchZoomInstance.zoomFactor = isDesktop
