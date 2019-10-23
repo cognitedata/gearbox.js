@@ -147,29 +147,28 @@ class TenantSelector extends React.Component<
             {header || 'Enter your company name'}
           </SubTitle>
         )}
-        <Form>
+        <Form onSubmit={this.checkTenantValidity}>
           <Form.Item hasFeedback={true} {...formItemProps}>
             <StyledInput
               style={styles && styles.input}
               data-id="tenant-input"
               autoFocus={true}
               onChange={this.onTenantChange}
-              onPressEnter={this.checkTenantValidity}
               value={tenant}
               defaultValue={tenant}
               placeholder={placeholder || 'cognite'}
             />
           </Form.Item>
           {this.renderAdvancedOptions()}
+          <LoginButton
+            block={true}
+            style={styles && styles.button}
+            htmlType="submit"
+            disabled={checkingValidity || invalidTenant || tenant === ''}
+          >
+            {checkingValidity ? <Spin size="small" /> : loginText || 'Login'}
+          </LoginButton>
         </Form>
-        <LoginButton
-          style={styles && styles.button}
-          htmlType="button"
-          disabled={checkingValidity || invalidTenant || tenant === ''}
-          onClick={this.checkTenantValidity}
-        >
-          {checkingValidity ? <Spin size="small" /> : loginText || 'Login'}
-        </LoginButton>
       </LoginWrapper>
     );
   }
@@ -195,7 +194,9 @@ class TenantSelector extends React.Component<
     });
   };
 
-  private checkTenantValidity = async () => {
+  private checkTenantValidity = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
     const { onInvalidTenant, onTenantSelected, validateTenant } = this.props;
     const { tenant, advanced } = this.state;
     if (!tenant) {
