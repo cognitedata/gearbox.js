@@ -23,9 +23,13 @@ interface ExpandedKeysMap {
   [key: number]: true;
 }
 
+interface AssetTreeNodeMap {
+  [id: string]: AssetTreeNode;
+}
+
 interface AssetTreeState {
   rootAssetNodes: number[];
-  assetNodesMap: { [id: string]: AssetTreeNode };
+  assetNodesMap: AssetTreeNodeMap;
   expandedKeys: ExpandedKeysMap;
 }
 
@@ -45,8 +49,8 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     theme: { ...defaultTheme },
   };
 
-  static convertAssetsToNodeMap(assets: Asset[]) {
-    const nodes: { [id: string]: AssetTreeNode } = {};
+  static convertAssetsToNodeMap(assets: Asset[]): AssetTreeNodeMap {
+    const nodes: AssetTreeNodeMap = {};
     assets.map(AssetTree.convertToNode).forEach(node => {
       nodes[node.asset.id] = node;
     });
@@ -113,12 +117,11 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     if (!treeNode.props.children && assetId) {
       const updatedAssetNode = { ...this.state.assetNodesMap[assetId] };
       const assetChildren = await this.cursorApiRequest(assetId);
-      let mapUpdate: { [s: number]: AssetTreeNode };
+      const mapUpdate = AssetTree.convertAssetsToNodeMap(assetChildren);
 
       if (assetChildren.length) {
         assetChildren.sort((a, b) => a.name.localeCompare(b.name));
         updatedAssetNode.children = assetChildren.map(({ id }) => id);
-        mapUpdate = AssetTree.convertAssetsToNodeMap(assetChildren);
       } else {
         updatedAssetNode.isLeaf = true;
       }
