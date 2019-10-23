@@ -1,6 +1,6 @@
 {
   "name": "@cognite/gearbox",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "GearBox will be a place for application developers to contribute useful, reusable components across applications",
   "contributors": [],
   "main": "dist/index.js",
@@ -50,7 +50,7 @@
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
     "@cognite/griff-react": "~0.4.2",
-    "@cognite/sdk": "^2.2.1",
+    "@cognite/sdk": "^2.7.0",
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
     "@semantic-release/changelog": "^3.0.4",
