@@ -1,3 +1,11 @@
+## [1.6.1](https://github.com/cognitedata/gearbox.js/compare/v1.6.0...v1.6.1) (2019-10-23)
+
+
+### Bug Fixes
+
+* **asset search:** add z-index for live search dropdown list ([8ac05b8](https://github.com/cognitedata/gearbox.js/commit/8ac05b81d877148232e1bb2229b48d362c18dec4)), closes [#443](https://github.com/cognitedata/gearbox.js/issues/443)
+* **svg viewer:** cannot read prop 'container' of undefined ([e58c7ea](https://github.com/cognitedata/gearbox.js/commit/e58c7ea7390bd97791a6f978240a0724a22c236f)), closes [#377](https://github.com/cognitedata/gearbox.js/issues/377)
+
 # [1.6.0](https://github.com/cognitedata/gearbox.js/compare/v1.5.1...v1.6.0) (2019-10-23)
 
 
