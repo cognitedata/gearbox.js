@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/cognitedata/gearbox.js/compare/v1.5.1...v1.6.0) (2019-10-23)
+
+
+### Features
+
+* **asset tree:** don't show "expand" arrow on childless asset nodes ([84eae73](https://github.com/cognitedata/gearbox.js/commit/84eae735a7ebcce657289361da67a040fd4ea263))
+
 ## [1.5.1](https://github.com/cognitedata/gearbox.js/compare/v1.5.0...v1.5.1) (2019-10-21)
 
 
