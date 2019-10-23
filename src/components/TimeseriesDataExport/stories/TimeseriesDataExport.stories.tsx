@@ -9,8 +9,9 @@ import { randomData, timeseriesListV2 } from '../../../mocks';
 import { MockCogniteClient } from '../../../utils/mockSdk';
 import { getGranularityInMS } from '../../../utils/utils';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import TimeseriesDataExport, {
-  TimeseriesChartExportProps,
+import {
+  TimeseriesDataExport,
+  TimeseriesDataExportProps,
 } from '../TimeseriesDataExport';
 import fullDescription from './full.md';
 import outOfLimit from './out-of-limit.md';
@@ -50,7 +51,7 @@ export class MockClient extends MockCogniteClient {
 const client = new MockClient({ appId: 'storybook' });
 
 const TimeseriesChartExportWrapper: React.FC<
-  Omit<TimeseriesChartExportProps, 'visible' | 'form'>
+  Omit<TimeseriesDataExportProps, 'visible' | 'form'>
 > = props => {
   const [open, setOpen] = useState(false);
   const onClose = () => setOpen(false);

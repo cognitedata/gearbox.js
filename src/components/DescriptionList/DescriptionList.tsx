@@ -1,44 +1,106 @@
-import React from 'react';
+import { Collapse } from 'antd';
+import { Dictionary, groupBy } from 'lodash';
+import React, { CSSProperties, Fragment } from 'react';
 import styled from 'styled-components';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { AnyIfEmpty, ValueListType } from '../../interfaces';
 import { mapMetaData } from '../../utils/formatters';
+const { Panel } = Collapse;
 
-export interface DescriptionListProps {
+export interface MetaDescriptionListProps {
+  toCategory?: (name: string) => string | undefined;
+  categoryPriorityList?: string[];
+  unknownCategoryName?: string;
+  expandedCategories?: string[];
+}
+
+export interface DescriptionListProps extends MetaDescriptionListProps {
   description?: {
     descriptionId: string;
     descriptionText: string;
   };
   valueSet: { [name: string]: any };
-  styles?: React.CSSProperties;
+  styles?: CSSProperties;
   theme?: AnyIfEmpty<{}>;
 }
 
-const DescriptionList = (props: DescriptionListProps) => {
-  const { description, valueSet } = props;
-
+const DescriptionList = ({
+  styles,
+  valueSet,
+  toCategory,
+  description,
+  expandedCategories,
+  categoryPriorityList = [],
+  unknownCategoryName = 'Uncategorised',
+}: DescriptionListProps) => {
   const arrayValues = mapMetaData(valueSet);
+  const categoriesMap: Dictionary<ValueListType[]> = groupBy<ValueListType>(
+    arrayValues,
+    toCategoryWithDefault
+  );
+  const categories = Object.keys(categoriesMap);
+
+  function getPrioritizedCategoryName() {
+    const rest = categories.filter(
+      category => !categoryPriorityList.includes(category)
+    );
+    return [...categoryPriorityList, ...rest];
+  }
+
+  function getDefaultActiveKey() {
+    return expandedCategories || [getPrioritizedCategoryName()[0]];
+  }
+
+  function toCategoryWithDefault({ name }: ValueListType) {
+    let category;
+    if (toCategory) {
+      category = toCategory(name);
+    }
+    return category || unknownCategoryName;
+  }
+
+  const hasMultipleCategories = () => categories.length > 1;
+
+  const renderProperty = (prop: ValueListType) => (
+    <Fragment key={prop.key}>
+      <dt>{prop.name}</dt>
+      <dl>{prop.value}</dl>
+    </Fragment>
+  );
+
+  const renderValues = (list: ValueListType[]) => {
+    return (
+      <DL
+        style={styles}
+        aria-describedby={description ? description.descriptionId : ''}
+      >
+        {list.map(renderProperty)}
+      </DL>
+    );
+  };
+
+  const renderList = () => {
+    return hasMultipleCategories() ? (
+      <Collapse defaultActiveKey={getDefaultActiveKey()}>
+        {getPrioritizedCategoryName()
+          .filter(categoryName => categoriesMap[categoryName])
+          .map(categoryName => (
+            <Panel key={categoryName} header={categoryName}>
+              {renderValues(categoriesMap[categoryName])}
+            </Panel>
+          ))}
+      </Collapse>
+    ) : (
+      renderValues(arrayValues)
+    );
+  };
 
   return (
     <>
       {description && (
         <p id={description.descriptionId}>{description.descriptionText}</p>
       )}
-      {arrayValues.length >= 1 ? (
-        <DL
-          style={props.styles}
-          aria-describedby={description ? description.descriptionId : ''}
-        >
-          {arrayValues.map((valSet: ValueListType) => (
-            <React.Fragment key={valSet.key}>
-              <dt>{valSet.name}</dt>
-              <dl>{valSet.value}</dl>
-            </React.Fragment>
-          ))}
-        </DL>
-      ) : (
-        <NoData>No data</NoData>
-      )}
+      {arrayValues.length ? renderList() : <NoData>No data</NoData>}
     </>
   );
 };
