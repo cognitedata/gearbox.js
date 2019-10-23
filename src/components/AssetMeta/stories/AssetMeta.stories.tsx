@@ -18,12 +18,13 @@ import {
 import { AssetMeta } from '../AssetMeta';
 import alternatePane from './alternatePane.md';
 import basic from './basic.md';
-import customCategorySort from './customCategorySort.md';
-import customPriorityAndSort from './customPriorityAndSort.md';
-import customPriorityCategory from './customPriorityCategory.md';
 import customSpinner from './customSpinner.md';
 import customStyles from './customStyles.md';
 import customTimeseriesChartMeta from './customTimeseriesChartMeta.md';
+import detailsCustomCategories from './detailsCustomCategories.md';
+import docCustomCategorySort from './docCustomCategorySort.md';
+import docCustomPriorityAndSort from './docCustomPriorityAndSort.md';
+import docCustomPriorityCategory from './docCustomPriorityCategory.md';
 import fullDescription from './full.md';
 import hideTab from './hideTab.md';
 import selectedDocument from './selectedDocument.md';
@@ -175,6 +176,25 @@ storiesOf('AssetMeta/Examples', module)
     }
   )
   .add(
+    'Custom details category',
+    () => {
+      return (
+        <AssetMeta
+          assetId={4650652196144007}
+          detailsProps={{
+            toCategory: name => name.split('_')[0],
+            expandedCategories: ['SOURCE'],
+          }}
+        />
+      );
+    },
+    {
+      readme: {
+        content: detailsCustomCategories,
+      },
+    }
+  )
+  .add(
     'Returns selected document',
     () => {
       return <AssetMeta assetId={123} docsProps={{ handleDocumentClick }} />;
@@ -186,7 +206,7 @@ storiesOf('AssetMeta/Examples', module)
     }
   )
   .add(
-    'Custom priority categories',
+    'Custom document priority categories',
     () => {
       return (
         <AssetMeta
@@ -197,12 +217,12 @@ storiesOf('AssetMeta/Examples', module)
     },
     {
       readme: {
-        content: customPriorityCategory,
+        content: docCustomPriorityCategory,
       },
     }
   )
   .add(
-    'Custom categories sort',
+    'Custom document categories sort',
     () => {
       const customSort = (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0);
       return (
@@ -217,12 +237,12 @@ storiesOf('AssetMeta/Examples', module)
     },
     {
       readme: {
-        content: customCategorySort,
+        content: docCustomCategorySort,
       },
     }
   )
   .add(
-    'Custom category priority and sort',
+    'Custom document category priority and sort',
     () => {
       const customSort = (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0);
       return (
@@ -237,7 +257,7 @@ storiesOf('AssetMeta/Examples', module)
     },
     {
       readme: {
-        content: customPriorityAndSort,
+        content: docCustomPriorityAndSort,
       },
     }
   )

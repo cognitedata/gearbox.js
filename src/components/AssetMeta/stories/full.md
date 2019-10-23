@@ -46,6 +46,7 @@ function ExampleComponent(props) {
 | `hidePanels`   | List of panes to be hidden                                             | `Array<'details' \| 'documents' \| 'events'>` |             |
 | `tab`          | Defines pane that will be activated once the data has been loaded      | `'details' \| 'documents' \| 'events'`        | `'details'` |
 | `onPaneChange` | Function triggered when a user changes panes                           | `(tab: string) => void`                       |             |
+| `detailsProps` | Object passed as props to inner component that presents details pane   | `MetaAssetDetailsProps`                       |             |
 | `timeseriesProps`| Object passed as props to inner component that presents timeseries pane | `MetaTimeseriesProps`                      |             |
 | `docsProps`    | Object passed as props to inner component that presents documents pane | `MetaDocProps`                                |             |
 | `eventProps`   | Object passed as props to inner component that presents events pane    | `MetaEventsProps`                             |             |
@@ -53,6 +54,26 @@ function ExampleComponent(props) {
 | `styles`       | Object that defines inline CSS styles for inner elements of the component.| `AssetMetaStyles`, `AssetTimeseriesPanelStyles`, `AssetDocumentsPanelStyles`, `AssetEventsPanelStyles`|             |
 
 ### Types
+
+### MetaAssetDetailsProps
+The object that customizes the appearance of "Details" pane. All metadata properties will be hidden inside "collapse" component when optional property function  `toCategory` is passed. All uncategorized properties will appear under "Uncategorised" label, or the name specified with `unknownCategoryName`. See `DescriptionList` component for more details.
+`MetaAssetDetailsProps` type can be imported from @cognite/gearbox:
+
+```typescript
+import { MetaAssetDetailsProps } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+export interface MetaAssetDetailsProps {
+  toCategory?: (name: string) => string | undefined;
+  categoryPriorityList?: string[];
+  unknownCategoryName?: string;
+  expandedCategories?: string[];
+}
+
+```
 
 ### MetaTimeseriesProps
 The object that customizes the appearance of "Timeseries" pane. Property `strings` defines text literals for the inner component that represents a list of timeseries and in particular `noTimeseriesSign` property defines a custom message to be shown if no timeseries were found for the asset.

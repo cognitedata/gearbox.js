@@ -5,10 +5,11 @@ import { act } from 'react-dom/test-utils';
 import * as csv from '../../utils/csv';
 import { MockCogniteClient } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
-import TimeseriesDataExport, {
+import {
   FetchCSVCall,
   FetchTimeseriesCall,
-  TimeseriesChartExportProps,
+  TimeseriesDataExport,
+  TimeseriesDataExportProps,
 } from './TimeseriesDataExport';
 
 configure({ adapter: new Adapter() });
@@ -40,7 +41,7 @@ const retrieveTimeseries = jest
     Promise.resolve([{ id: 1 }, { id: 2 }])
   ) as FetchTimeseriesCall;
 const onSuccess = jest.fn() as () => void;
-const mountComponent = (props: TimeseriesChartExportProps) =>
+const mountComponent = (props: TimeseriesDataExportProps) =>
   mount(
     <ClientSDKProvider client={sdk}>
       <TimeseriesDataExport {...props} />
@@ -64,7 +65,7 @@ afterEach(() => {
 describe('TimeseriesChart', () => {
   it('renders correctly when ids are specified', async () => {
     await act(async () => {
-      wrapper = mountComponent(defaultProps as TimeseriesChartExportProps);
+      wrapper = mountComponent(defaultProps as TimeseriesDataExportProps);
     });
 
     expect(wrapper.exists()).toBeTruthy();
@@ -75,7 +76,7 @@ describe('TimeseriesChart', () => {
       wrapper = mountComponent({
         ...defaultProps,
         granularity: '2s',
-      } as TimeseriesChartExportProps);
+      } as TimeseriesDataExportProps);
     });
 
     wrapper.update();
@@ -88,7 +89,7 @@ describe('TimeseriesChart', () => {
       wrapper = mountComponent({
         ...defaultProps,
         onSuccess,
-      } as TimeseriesChartExportProps);
+      } as TimeseriesDataExportProps);
     });
 
     wrapper.update();
@@ -111,7 +112,7 @@ describe('TimeseriesChart', () => {
         ...defaultProps,
         fetchCSV,
         retrieveTimeseries,
-      } as TimeseriesChartExportProps);
+      } as TimeseriesDataExportProps);
     });
 
     wrapper.update();

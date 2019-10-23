@@ -29,6 +29,7 @@ import {
   AssetTimeseriesPanelStyles,
   MetaTimeseriesProps,
 } from '../AssetTimeseriesPanel';
+import { MetaDescriptionListProps } from '../DescriptionList';
 
 const { TabPane } = Tabs;
 
@@ -47,6 +48,7 @@ interface AssetMetaProps {
   docsProps?: MetaDocProps;
   eventProps?: MetaEventsProps;
   timeseriesProps?: MetaTimeseriesProps;
+  detailsProps?: MetaDescriptionListProps;
   hidePanels?: AssetPanelType[];
   onPaneChange?: (key: string) => void;
   styles?: AssetMetaStyles;
@@ -148,7 +150,7 @@ class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
     if (!this.includesPanel('details')) {
       return null;
     }
-    const { assetId, styles, customSpinner } = this.props;
+    const { assetId, styles, customSpinner, detailsProps } = this.props;
     return (
       <TabPane tab="Details" key="details" forceRender={true}>
         <AssetDetailsPanel
@@ -156,6 +158,7 @@ class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
           onAssetLoaded={this.handleAssetLoaded}
           styles={styles && styles.details}
           customSpinner={customSpinner}
+          {...detailsProps}
         />
       </TabPane>
     );

@@ -1,3 +1,24 @@
+## [1.5.1](https://github.com/cognitedata/gearbox.js/compare/v1.5.0...v1.5.1) (2019-10-21)
+
+
+### Bug Fixes
+
+* **timeseries data export:** change export definition ([#459](https://github.com/cognitedata/gearbox.js/issues/459)) ([84ee514](https://github.com/cognitedata/gearbox.js/commit/84ee514b7102841d78611eed095e1838332db4f6))
+
+# [1.5.0](https://github.com/cognitedata/gearbox.js/compare/v1.4.0...v1.5.0) (2019-10-21)
+
+
+### Features
+
+* **description list:** add categorization options ([e2df3e7](https://github.com/cognitedata/gearbox.js/commit/e2df3e7faef2df503b1db31385c3b95b79526845))
+
+# [1.4.0](https://github.com/cognitedata/gearbox.js/compare/v1.3.3...v1.4.0) (2019-10-21)
+
+
+### Features
+
+* **timeseries data export:** added a component to export timeseries datapoints in CSV format ([1f16607](https://github.com/cognitedata/gearbox.js/commit/1f166075199900b0ee685bd0ecb941a8733a0174))
+
 ## [1.3.3](https://github.com/cognitedata/gearbox.js/compare/v1.3.2...v1.3.3) (2019-10-16)
 
 

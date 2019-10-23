@@ -33,8 +33,11 @@ function ExampleComponent(props) {
 
 ##### Optionals:
 
-| Property       | Description                                                            | Type                                          | Default     |
-| -------------- | ---------------------------------------------------------------------- | --------------------------------------------- | ----------- |
-| `customSpinner`| A custom spinner to be shown in tabs while data is being loaded        | `React.ReactNode`                             |             |
-| `styles`       | Object that defines inline CSS style for container of the table.       | `React.CSSProperties`                         |             |
-
+| Property              | Description                                                            | Type                                          | Default     |
+| --------------------- | ---------------------------------------------------------------------- | --------------------------------------------- | ----------- |
+| `customSpinner`       | A custom spinner to be shown in tabs while data is being loaded        | `React.ReactNode`                             |             |
+| `toCategory`          | A custom categorization function (e.g. to collapse specific props).    | `(name: string) => string \| undefined`       |             |
+| `categoryPriorityList`| Categories to display on top. Can be used for sorting as well          | `string[]`                                    |      []     |
+| `unknownCategoryName` | A category name for uncategorised items.                               | `string`                                      | "Uncategorised"|
+| `expandedCategories`  | Category names to be expanded by default.                              | `string[]`                                    | Top category in the list |
+| `styles`              | Object that defines inline CSS style for container of the table.       | `React.CSSProperties`                         |             |
