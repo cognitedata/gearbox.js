@@ -14,8 +14,8 @@ The Gearbox components are written in the [React](https://reactjs.org) front-end
 
 2. Install additional dependencies:
 
-- **yarn**: `yarn add @cognite/sdk @cognite/griff-react antd styled-components`
-- **npm**: `npm install @cognite/sdk @cognite/griff-react antd styled-components --save`
+- **yarn**: `yarn add @cognite/sdk @cognite/griff-react@~0.4.2 antd styled-components`
+- **npm**: `npm install @cognite/sdk @cognite/griff-react@~0.4.2 antd styled-components --save`
 
 
 ## Getting started

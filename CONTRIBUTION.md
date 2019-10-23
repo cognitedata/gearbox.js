@@ -36,7 +36,7 @@ Our releases are fully [automated](https://github.com/semantic-release/semantic-
 Only basic steps are needed:
 
 1. Create a new branch from the `master` branch.
-2. Commit changes and remember about [proper commit messages](Commit-naming-conventions)
+2. Commit changes and remember about [proper commit messages](#commit-naming-conventions)
 3. Push branch to GitHub
 4. Open a new pull request, ask for review, get feedback, apply fixes if needed
 5. When PR is approved you can merge the branch and remove it afterwards

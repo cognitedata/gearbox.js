@@ -6,6 +6,7 @@ import { DescriptionList } from '../DescriptionList';
 import basic from './basic.md';
 import fullDescription from './full.md';
 import noData from './noData.md';
+import withCustomCategories from './withCustomCategories.md';
 import withDescriptionText from './withDescriptionText.md';
 
 storiesOf('DescriptionList', module).add(
@@ -43,6 +44,29 @@ storiesOf('DescriptionList/Examples', module)
     {
       readme: {
         content: withDescriptionText,
+      },
+    }
+  )
+  .add(
+    'With custom categories',
+    () => {
+      const sourceCategory = 'Source data';
+      const otherCategory = 'Other';
+      const toCategory = (name: string) =>
+        name.includes('SOURCE') ? sourceCategory : undefined;
+      return (
+        <DescriptionList
+          valueSet={ASSET_DATA.metadata}
+          toCategory={toCategory}
+          unknownCategoryName={otherCategory}
+          expandedCategories={[otherCategory]}
+          categoryPriorityList={[sourceCategory]}
+        />
+      );
+    },
+    {
+      readme: {
+        content: withCustomCategories,
       },
     }
   );
