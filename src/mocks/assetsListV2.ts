@@ -22,6 +22,7 @@ export const ASSET_ZERO_DEPTH_ARRAY: Asset[] = [
     description: 'Aker BP',
     createdTime: new Date(0),
     lastUpdatedTime: new Date(0),
+    aggregates: { childCount: 1 },
   },
   {
     id: 2675073401706610,
@@ -49,6 +50,7 @@ export const ASSET_ZERO_DEPTH_ARRAY: Asset[] = [
     },
     createdTime: new Date(1534854951557),
     lastUpdatedTime: new Date(1534854951557),
+    aggregates: { childCount: 0 },
   },
 ];
 
@@ -137,6 +139,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
     },
     createdTime: new Date(0),
     lastUpdatedTime: new Date(0),
+    aggregates: { childCount: 0 },
   },
   {
     id: 5786472304680477,
@@ -310,6 +313,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
       WMT_TAG_UPDATED_BY: '1001',
       WMT_TAG_UPDATED_DATE: '2015-10-08 15:05:08',
     },
+    aggregates: { childCount: 0 },
     createdTime: new Date(0),
     lastUpdatedTime: new Date(0),
   },
@@ -346,6 +350,7 @@ export const ASSET_LIST_CHILD: Asset[] = [
       WMT_TAG_UPDATED_BY: '1001',
       WMT_TAG_UPDATED_DATE: '2015-10-08 15:05:08',
     },
+    aggregates: { childCount: 0 },
     createdTime: new Date(0),
     lastUpdatedTime: new Date(0),
   },

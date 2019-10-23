@@ -11,30 +11,7 @@ exports[`AssetTree renders correctly 1`] = `
     role="treeitem"
   >
     <span
-      className="ant-tree-switcher ant-tree-switcher-noop"
-    />
-    <span
-      className="ant-tree-node-content-wrapper ant-tree-node-content-wrapper-normal"
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDoubleClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      title="Aker BP: Aker BP"
-    >
-      <span
-        className="ant-tree-title"
-      >
-        Aker BP: Aker BP
-      </span>
-    </span>
-  </li>
-  <li
-    className="sc-bdVaJa fYHvCl ant-tree-treenode-switcher-close"
-    role="treeitem"
-  >
-    <span
-      className="ant-tree-switcher ant-tree-switcher_close"
+      className="ant-tree-switcher ant-tree-switcher_open"
       onClick={[Function]}
     >
       <i
@@ -58,7 +35,30 @@ exports[`AssetTree renders correctly 1`] = `
       </i>
     </span>
     <span
-      className="ant-tree-node-content-wrapper ant-tree-node-content-wrapper-close"
+      className="ant-tree-node-content-wrapper ant-tree-node-content-wrapper-open"
+      onClick={[Function]}
+      onContextMenu={[Function]}
+      onDoubleClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      title="Aker BP: Aker BP"
+    >
+      <span
+        className="ant-tree-title"
+      >
+        Aker BP: Aker BP
+      </span>
+    </span>
+  </li>
+  <li
+    className="sc-bdVaJa fYHvCl"
+    role="treeitem"
+  >
+    <span
+      className="ant-tree-switcher ant-tree-switcher-noop"
+    />
+    <span
+      className="ant-tree-node-content-wrapper ant-tree-node-content-wrapper-normal"
       onClick={[Function]}
       onContextMenu={[Function]}
       onDoubleClick={[Function]}
