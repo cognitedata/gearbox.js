@@ -12,6 +12,7 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { randomData, timeseriesListV2 } from '../../../mocks';
 import { MockCogniteClient } from '../../../utils/mockSdk';
+import { getGranularityInMS } from '../../../utils/utils';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DataLoader } from '../dataLoader';
 import { TimeseriesChart } from '../TimeseriesChart';
@@ -48,27 +49,27 @@ export const MockTimeseriesClientObject = {
   },
 };
 export const MockDatapointsClientObject = {
-  retrieve: (
-    query: DatapointsMultiQuery
-  ): Promise<
-    (
-      | DatapointsGetAggregateDatapoint
-      | DatapointsGetStringDatapoint
-      | DatapointsGetDoubleDatapoint)[]
-  > => {
+  retrieve: (query: DatapointsMultiQuery): Promise<DatapointsArray> => {
     action('client.datapoints.retrieve')(query);
+    const { granularity, start, end } = query.items[0];
     return new Promise(resolve => {
       setTimeout(() => {
         const result = randomData(
-          (query.items[0].start && +query.items[0].start) || 0,
-          (query.items[0].end && +query.items[0].end) || 0,
-          100
+          (start && +start) || 0,
+          (end && +end) || 0,
+          100,
+          granularity ? getGranularityInMS(granularity) : undefined
         );
         resolve([result]);
       });
     });
   },
 };
+
+type DatapointsArray = (
+  | DatapointsGetAggregateDatapoint
+  | DatapointsGetStringDatapoint
+  | DatapointsGetDoubleDatapoint)[];
 
 export class TimeseriesMockClient extends MockCogniteClient {
   timeseries: any = MockTimeseriesClientObject;
@@ -91,23 +92,16 @@ class FakeZoomableClient extends MockCogniteClient {
     },
   };
   datapoints: any = {
-    retrieve: (
-      query: DatapointsMultiQuery
-    ): Promise<
-      (
-        | DatapointsGetAggregateDatapoint
-        | DatapointsGetStringDatapoint
-        | DatapointsGetDoubleDatapoint)[]
-    > => {
+    retrieve: (query: DatapointsMultiQuery): Promise<DatapointsArray> => {
       action('client.datapoints.retrieve')(query);
+      const { granularity = '10s', start, end } = query.items[0];
       return new Promise(resolve => {
         setTimeout(() => {
-          const granularity = query.items[0].granularity || '10s';
           const n =
             granularity === 's' ? 2 : granularity.includes('s') ? 10 : 250;
           const result = randomData(
-            (query.items[0].start && +query.items[0].start) || 0,
-            (query.items[0].end && +query.items[0].end) || 100,
+            (start && +start) || 0,
+            (end && +end) || 100,
             n
           );
           resolve([result]);
