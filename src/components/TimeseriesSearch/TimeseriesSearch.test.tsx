@@ -70,7 +70,6 @@ describe('TimeseriesSearch', () => {
       </ClientSDKProvider>
     );
     const timeseriesSearchComponent = wrapper.find(TimeseriesSearch);
-    console.log(wrapper.debug());
     expect(timeseriesSearchComponent.prop('selectedTimeseries')).toEqual([]);
     expect(timeseriesSearchComponent.state('assetId')).toEqual(undefined);
     expect(timeseriesSearchComponent.state('fetching')).toEqual(false);

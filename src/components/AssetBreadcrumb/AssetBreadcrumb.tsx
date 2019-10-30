@@ -91,6 +91,7 @@ const AssetBreadcrumb: React.FC<AssetBreadcrumbProps> = ({
 
     const generateAssetChain = async (id: number): Promise<void> => {
       const assetChain: Asset[] = [];
+      console.log('Called with ', id);
 
       setIsLoading(true);
 
@@ -108,18 +109,14 @@ const AssetBreadcrumb: React.FC<AssetBreadcrumbProps> = ({
       }
 
       assetChain.reverse();
-
-      // check if requested asset chain still relevant
-      if (id === assetId) {
-        setAssets(assetChain);
-      }
-
+      setAssets(assetChain);
       setIsLoading(false);
     };
 
     generateAssetChain(assetId);
 
     return () => {
+      console.log('Canceled');
       canceled = true;
     };
   }, [assetId]);

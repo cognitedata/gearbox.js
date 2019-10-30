@@ -40,7 +40,7 @@ export class CacheAssets implements ClientSDKCacheAssets {
   }
 
   private handleFirstCallToCache(key: string) {
-    if (this.requests[key] && this.responses[key]) {
+    if (this.requests[key] || this.responses[key]) {
       return;
     }
 

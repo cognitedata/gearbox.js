@@ -21,13 +21,10 @@ class CogniteClient extends MockCogniteClient {
         setTimeout(() => {
           const allAssets = [...ASSET_ZERO_DEPTH_ARRAY, ...ASSET_LIST_CHILD];
           const id = ids[0].id;
-          for (const asset of allAssets) {
-            if (asset.id === id) {
-              resolve([asset]);
-              return;
-            }
-          }
-        }, 1000);
+          const result = allAssets.find(asset => asset.id === id);
+
+          resolve(result ? [result] : []);
+        }, 200);
       }),
   };
 }

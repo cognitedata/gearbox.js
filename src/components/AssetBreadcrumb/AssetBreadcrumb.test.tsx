@@ -91,7 +91,7 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe('TimeseriesChart', () => {
+describe('AssetBreadCrumb', () => {
   it('renders correctly when ids are specified', async () => {
     await act(async () => {
       wrapper = mountComponent(defaultProps as AssetBreadcrumbProps);
