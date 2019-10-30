@@ -321,6 +321,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
         tapZoomFactor: 8,
         maxZoom: 30,
         minZoom: 1,
+        setOffsetsOnce: true,
       });
     }
   };
