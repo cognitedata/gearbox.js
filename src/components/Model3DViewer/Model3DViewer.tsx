@@ -98,7 +98,10 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   flipped: boolean[] = [true, true, true];
 
   constructor(props: Model3DViewerProps) {
-    super(props);
+    super({
+      ...props,
+      boundingBox: props.boundingBox && props.boundingBox.clone(),
+    });
 
     this.onClickHandlerBounded = this.onClickHandler.bind(this);
     this.onCompleteBounded = this.onComplete.bind(this);
