@@ -984,7 +984,7 @@
   dependencies:
     protobufjs "^6.8.8"
 
-"@cognite/griff-react@^0.4.2":
+"@cognite/griff-react@~0.4.2":
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/@cognite/griff-react/-/griff-react-0.4.2.tgz#a8d4b5b4a0eedd10cc263c23be307f904aec40e5"
   integrity sha512-t23J2wTzQXwE/7V/KybVxF+qICEcSn06lI5BSVol+MzMtJV6HfBFzEx2Ai53+fQVmvVBfpVPtwXqCZRdlnqe7A==

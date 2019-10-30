@@ -1,4 +1,5 @@
-import { Asset, AutoPagingToArrayOptions } from '@cognite/sdk';
+import { Asset } from '@cognite/sdk';
+import { AutoPagingToArrayOptions } from '@cognite/sdk/dist/src/autoPagination';
 import { AnyIfEmpty } from '../interfaces';
 import { MetadataId } from './index';
 
@@ -69,12 +70,6 @@ export interface AssetTreeProps {
   styles?: AssetTreeStyles;
   theme?: AnyIfEmpty<{}>;
   autoPagingToArrayOptions?: AutoPagingToArrayOptions;
-}
-
-export interface AssetBreadcrumbProps {
-  assetId: number;
-  renderItem?: (asset: Asset, depth: number) => JSX.Element;
-  onBreadcrumbClick?: (asset: Asset, depth: number) => void;
 }
 
 export interface AdvancedSearch {
