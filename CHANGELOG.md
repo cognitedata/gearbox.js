@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/cognitedata/gearbox.js/compare/v1.6.2...v1.6.3) (2019-10-30)
+
+
+### Bug Fixes
+
+* **svg viewer:** fixes bug related to resizing ([#474](https://github.com/cognitedata/gearbox.js/issues/474)) ([a70b479](https://github.com/cognitedata/gearbox.js/commit/a70b479f8d85ea2a663c06e7dc219cf63efc2de3)), closes [#433](https://github.com/cognitedata/gearbox.js/issues/433)
+
 ## [1.6.2](https://github.com/cognitedata/gearbox.js/compare/v1.6.1...v1.6.2) (2019-10-23)
 
 
