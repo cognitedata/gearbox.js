@@ -16,14 +16,15 @@ import maxLength from './max-length.md';
 
 class CogniteClient extends MockCogniteClient {
   assets: any = {
-    retrieve: (ids: any) =>
+    retrieve: (ids: { id: number }[]) =>
       new Promise(resolve => {
         setTimeout(() => {
           const allAssets = [...ASSET_ZERO_DEPTH_ARRAY, ...ASSET_LIST_CHILD];
-          const id = ids[0].id;
-          const result = allAssets.find(asset => asset.id === id);
+          const result = ids.map(({ id }) => {
+            return allAssets.find(asset => asset.id === id);
+          });
 
-          resolve(result ? [result] : []);
+          resolve(result || []);
         }, 200);
       }),
   };

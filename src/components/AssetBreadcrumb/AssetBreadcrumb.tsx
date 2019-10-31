@@ -91,21 +91,36 @@ const AssetBreadcrumb: React.FC<AssetBreadcrumbProps> = ({
 
     const generateAssetChain = async (id: number): Promise<void> => {
       const assetChain: Asset[] = [];
-      console.log('Called with ', id);
 
       setIsLoading(true);
 
       let asset: Asset = await fetchAsset(id);
+      let rootAsset: Asset | null = null;
+      const { rootId } = asset;
 
       assetChain.push(asset);
 
       while (asset.parentId && !canceled) {
-        asset = await fetchAsset(asset.parentId);
+        if (asset.id !== id && asset.parentId === rootId) {
+          break;
+        } else if (asset.id === id && asset.parentId !== rootId) {
+          [rootAsset, asset] = await Promise.all([
+            fetchAsset(rootId),
+            fetchAsset(asset.parentId),
+          ]);
+        } else {
+          asset = await fetchAsset(asset.parentId);
+        }
+
         assetChain.push(asset);
       }
 
       if (canceled) {
         return;
+      }
+
+      if (rootAsset) {
+        assetChain.push(rootAsset);
       }
 
       assetChain.reverse();
@@ -116,7 +131,6 @@ const AssetBreadcrumb: React.FC<AssetBreadcrumbProps> = ({
     generateAssetChain(assetId);
 
     return () => {
-      console.log('Canceled');
       canceled = true;
     };
   }, [assetId]);
