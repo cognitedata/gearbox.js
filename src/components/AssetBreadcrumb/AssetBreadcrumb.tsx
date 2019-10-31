@@ -21,7 +21,7 @@ const ENTER_KEY_CODE = 13;
 const renderBreadcrumbs = (
   assets: Asset[],
   renderAsset: (asset: Asset, depth: number) => JSX.Element,
-  maxLength: number = 3
+  maxLength: number = 7
 ): JSX.Element[] => {
   const gapBreadcrumb = (
     <Breadcrumb.Item key={'...'}>

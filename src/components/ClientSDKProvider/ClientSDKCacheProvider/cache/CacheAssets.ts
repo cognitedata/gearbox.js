@@ -1,4 +1,10 @@
-import { AssetList, CogniteClient, IdEither } from '@cognite/sdk';
+import {
+  AssetList,
+  CogniteClient,
+  ExternalId,
+  IdEither,
+  InternalId,
+} from '@cognite/sdk';
 import { ClientSDKCacheAssets } from '../../../../context/clientSDKCacheContext';
 
 export class CacheAssets implements ClientSDKCacheAssets {
@@ -16,12 +22,10 @@ export class CacheAssets implements ClientSDKCacheAssets {
 
     const key = ids
       .map(idObj => {
-        // @ts-ignore
-        return idObj.id || idObj.externalId;
+        return (idObj as InternalId).id || (idObj as ExternalId).externalId;
       })
       .sort()
       .join(',');
-
     const cached = this.checkCachedValue(apiCall, key);
 
     if (cached) {
@@ -29,11 +33,9 @@ export class CacheAssets implements ClientSDKCacheAssets {
     }
 
     const request = this.client.assets.retrieve(ids);
-
     this.cacheRequest(apiCall, key, request);
 
     const response = await request;
-
     this.cacheResponse(apiCall, key, response);
 
     return response;
