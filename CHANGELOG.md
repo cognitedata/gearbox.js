@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/cognitedata/gearbox.js/compare/v1.6.3...v1.7.0) (2019-11-01)
+
+
+### Features
+
+* **asset breadcrumbs:** add AssetBreadcrumbs component ([#473](https://github.com/cognitedata/gearbox.js/issues/473)) ([8401182](https://github.com/cognitedata/gearbox.js/commit/8401182c12f87823c72107a744ce0483e475c9d9))
+
 ## [1.6.3](https://github.com/cognitedata/gearbox.js/compare/v1.6.2...v1.6.3) (2019-10-30)
 
 
