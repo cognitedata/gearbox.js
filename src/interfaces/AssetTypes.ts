@@ -1,4 +1,5 @@
-import { Asset, AutoPagingToArrayOptions } from '@cognite/sdk';
+import { Asset } from '@cognite/sdk';
+import { AutoPagingToArrayOptions } from '@cognite/sdk/dist/src/autoPagination';
 import { AnyIfEmpty } from '../interfaces';
 import { MetadataId } from './index';
 
