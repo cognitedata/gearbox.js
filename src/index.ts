@@ -22,5 +22,6 @@ export * from './components/AssetDocumentsPanel/AssetDocumentsPanel';
 export * from './components/AssetEventsPanel/AssetEventsPanel';
 export * from './components/AssetTimeseriesPanel/AssetTimeseriesPanel';
 export * from './components/TimeseriesDataExport/TimeseriesDataExport';
+export * from './components/TimeseriesPreview/TimeseriesPreview';
 export * from './utils/documents';
 export * from './interfaces';
