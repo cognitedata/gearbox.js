@@ -17,7 +17,7 @@ import {
   NODE_SUBLIST,
 } from '../../../mocks';
 import { ASSET_TREE_STYLES } from '../../../mocks/assetsListV2';
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider/ClientSDKProvider';
 import { ThreeDNodeTree } from '../ThreeDNodeTree';
 import clickItem from './clickItem.md';

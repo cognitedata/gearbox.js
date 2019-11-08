@@ -10,7 +10,7 @@ import { ThemeProvider } from 'styled-components';
 import { timeseriesListV2 } from '../../../mocks';
 import { assetsList } from '../../../mocks';
 
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesSearch } from '../TimeseriesSearch';
 import allowStrings from './allowStrings.md';

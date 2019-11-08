@@ -1,6 +1,5 @@
 import {
   DatapointsGetDatapoint,
-  DatapointsGetDoubleDatapoint,
   GetDoubleDatapoint,
   GetTimeSeriesMetadataDTO,
   InternalId,
@@ -8,7 +7,8 @@ import {
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { randomLatestDatapoint, singleTimeseries } from '../../../mocks';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesPreview } from '../TimeseriesPreview';
 import callbacks from './callbacks.md';
@@ -25,19 +25,7 @@ const retrieveTimeseries = async (
 
   return new Promise(resolve => {
     setTimeout(() => {
-      resolve([
-        {
-          id: 41852231325889,
-          createdTime: new Date(),
-          lastUpdatedTime: new Date(),
-          name: 'VAL_45-FT-92139B:X.Value',
-          isString: false,
-          metadata: {},
-          assetId: 4293345866058133,
-          isStep: false,
-          description: 'PH 1stStg LO Cooler CW',
-        },
-      ]);
+      resolve(singleTimeseries);
     }, 1000);
   });
 };
@@ -50,18 +38,7 @@ const retrieveLatestDatapoint = async (
   return new Promise(resolve => {
     setTimeout(() => {
       resolve([
-        {
-          isString: false,
-          isStep: false,
-          id: 41852231325889,
-          externalId: 'VAL_45-FT-92139B:X.Value',
-          datapoints: [
-            {
-              timestamp: new Date(),
-              value: Math.random() * 100,
-            },
-          ],
-        } as DatapointsGetDoubleDatapoint,
+        randomLatestDatapoint(41852231325889, 'VAL_45-FT-92139B:X.Value'),
       ]);
     }, 100);
   });

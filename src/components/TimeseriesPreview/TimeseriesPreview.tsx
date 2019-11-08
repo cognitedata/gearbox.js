@@ -243,13 +243,17 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
         {timeseries && (
           <CardBody>
             <LeftSide style={{ backgroundColor: color, ...leftSideStyle }}>
-              <ActionIcon type="eye" onClick={onVisibilityClick} />
+              <ActionIcon
+                data-test-id={'visibility'}
+                type="eye"
+                onClick={onVisibilityClick}
+              />
               {dropdownMenu}
             </LeftSide>
             <RightSide style={rightSideStyle}>
               <TagName style={tagNameStyle}>{timeseries.name}</TagName>
               <p style={descriptionStyle}>{timeseries.description}</p>
-              <ValueContainer>
+              <ValueContainer data-test-id={'value'}>
                 <Value style={valueStyle}>
                   <span>{displayValue() || lang.noData}</span>
                 </Value>
