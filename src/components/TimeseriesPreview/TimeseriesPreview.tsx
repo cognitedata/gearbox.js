@@ -2,9 +2,9 @@ import {
   DatapointsGetDatapoint,
   GetDoubleDatapoint,
   GetStringDatapoint,
+  GetTimeSeriesMetadataDTO,
   InternalId,
 } from '@cognite/sdk';
-import { TimeSeries } from '@cognite/sdk/dist/src/resources/classes/timeSeries';
 import { Card, Dropdown, Icon, Menu } from 'antd';
 import moment from 'moment-timezone';
 import React, { useContext, useEffect, useState } from 'react';
@@ -20,19 +20,21 @@ export type FetchLatestDatapointCall = (
 
 export type FetchTimeserieCall = (
   timeseriesId: InternalId
-) => Promise<TimeSeries[]>;
+) => Promise<GetTimeSeriesMetadataDTO[]>;
 
 export interface TimeseriesPreviewProps {
   timeseriesId: number;
-  toggleVisibility?: (timeseries: TimeSeries) => void;
-  dropdown?: TimeseriesPreviewMenuConfig;
   color?: string;
+  dateFormat?: string;
+  updateInterval?: number;
   valueToDisplay?: GetDoubleDatapoint | GetStringDatapoint;
+  dropdown?: TimeseriesPreviewMenuConfig;
   retrieveTimeseries?: FetchTimeserieCall;
   retrieveLatestDatapoint?: FetchLatestDatapointCall;
-  updateInterval?: number;
-  dateFormat?: string;
+  formatDisplayValue?: (value: string | number | undefined) => string | number;
+  toggleVisibility?: (timeseries: GetTimeSeriesMetadataDTO) => void;
   styles?: TimeseriesPreviewStyles;
+  strings?: PureObject;
 }
 
 export interface TimeseriesPreviewStyles {
@@ -48,8 +50,8 @@ export interface TimeseriesPreviewStyles {
 }
 
 export interface TimeseriesPreviewMenuConfig {
-  config: PureObject;
-  onClick: (key: string, timeseries: TimeSeries) => void;
+  options: PureObject;
+  onClick: (key: string, timeseries: GetTimeSeriesMetadataDTO) => void;
 }
 
 export interface DropdownMenuStyles {
@@ -58,30 +60,34 @@ export interface DropdownMenuStyles {
 }
 
 interface GenarateDropdownMenuProps extends TimeseriesPreviewMenuConfig {
-  timeseries: TimeSeries;
+  timeseries: GetTimeSeriesMetadataDTO;
   styles?: DropdownMenuStyles;
 }
 
 const defaultProps = {
   color: '#6c65ee',
+  dateFormat: 'DD MMM YYYY - HH:mm:ss',
+  updateInterval: 5000,
+};
+
+const defaultStrings = {
+  noData: 'No Data',
 };
 
 const generateDropdownMenu = ({
-  config,
+  options,
   onClick,
   timeseries,
   styles = {},
 }: GenarateDropdownMenuProps): JSX.Element => {
   const { menu = {}, item = {} } = styles;
-  const options = Object.keys(config).map(key => (
+  const items = Object.keys(options).map(key => (
     <Menu.Item key={key} onClick={() => onClick(key, timeseries)} style={item}>
-      <span>{config[key]}</span>
+      <span>{options[key]}</span>
     </Menu.Item>
   ));
 
-  return (
-    <Menu style={{ padding: 0, borderRadius: 0, ...menu }}>{options}</Menu>
-  );
+  return <Menu style={{ padding: 0, borderRadius: 0, ...menu }}>{items}</Menu>;
 };
 
 const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
@@ -92,9 +98,11 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
   valueToDisplay,
   retrieveTimeseries,
   retrieveLatestDatapoint,
-  updateInterval = 5000,
-  dateFormat = 'DD MMM YYYY - hh:mm:ss',
+  updateInterval = defaultProps.updateInterval,
+  dateFormat = defaultProps.dateFormat,
+  formatDisplayValue,
   styles = {},
+  strings = {},
 }: TimeseriesPreviewProps) => {
   const {
     wrapper: wrapperStyle = {},
@@ -107,12 +115,13 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
     date: dateStyle = {},
     dropdown: dropdownStyle = {},
   } = styles;
+  const lang = { ...defaultStrings, ...strings };
 
   const cachedContext = useContext(ClientSDKCacheContext);
   const context = useContext(ClientSDKContext);
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [timeseries, setTimeseries] = useState<TimeSeries>();
+  const [timeseries, setTimeseries] = useState<GetTimeSeriesMetadataDTO>();
   const [intervalPointer, setIntervalPointer] = useState<number | undefined>();
   const [latestDatapoint, setLatestDatapoint] = useState<
     GetDoubleDatapoint | GetStringDatapoint
@@ -138,12 +147,15 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
       </Dropdown>
     ) : null;
 
-  const displayValue = () =>
-    valueToDisplay
+  const displayValue = () => {
+    const value = valueToDisplay
       ? valueToDisplay.value
       : latestDatapoint
       ? latestDatapoint.value
       : undefined;
+
+    return formatDisplayValue ? formatDisplayValue(value) : value;
+  };
 
   const displayDate = () => {
     const date = valueToDisplay
@@ -152,7 +164,7 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
       ? latestDatapoint.timestamp
       : undefined;
 
-    return moment(date).format(dateFormat);
+    return date ? moment(date).format(dateFormat) : undefined;
   };
 
   useEffect(() => {
@@ -211,6 +223,8 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
         fetchLatestDatapoint(timeseriesId);
       }, updateInterval);
 
+      fetchLatestDatapoint(timeseriesId);
+
       setIntervalPointer(pointer);
     }
 
@@ -236,8 +250,12 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
               <TagName style={tagNameStyle}>{timeseries.name}</TagName>
               <p style={descriptionStyle}>{timeseries.description}</p>
               <ValueContainer>
-                <Value style={valueStyle}>{displayValue()}</Value>
-                <DateValue style={dateStyle}>{displayDate()}</DateValue>
+                <Value style={valueStyle}>
+                  <span>{displayValue() || lang.noData}</span>
+                </Value>
+                <DateValue style={dateStyle}>
+                  <span>{displayDate()}</span>
+                </DateValue>
               </ValueContainer>
             </RightSide>
           </CardBody>
@@ -292,11 +310,16 @@ const ValueContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: baseline;
 `;
-const Value = styled.span`
+const Value = styled.div`
   font-weight: 600;
+  padding-right: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
-const DateValue = styled.span`
+const DateValue = styled.div`
   font-size: 0.8em;
+  text-align: right;
 `;
