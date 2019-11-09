@@ -51,9 +51,12 @@ describe('AssetTree', () => {
   });
 
   it('renders correctly with parentAssetId', done => {
+    sdk.assets.list.mockReturnValue({
+      autoPagingToArray: async () => [ASSET_ZERO_DEPTH_ARRAY[0]],
+    });
     const tree = renderer.create(
       <ClientSDKProvider client={sdk}>
-        <AssetTree parentAssetId={123} />
+        <AssetTree parentAssetId={ASSET_ZERO_DEPTH_ARRAY[zeroChild].id} />
       </ClientSDKProvider>
     );
     setImmediate(() => {
