@@ -1,5 +1,5 @@
 import { Asset } from '@cognite/sdk';
-import { Tree } from 'antd';
+import { Spin, Tree } from 'antd';
 import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';
 import React from 'react';
 import styled from 'styled-components';
@@ -28,6 +28,7 @@ interface AssetTreeNodeMap {
 }
 
 interface AssetTreeState {
+  loading: boolean;
   rootAssetNodes: number[];
   assetNodesMap: AssetTreeNodeMap;
   expandedKeys: ExpandedKeysMap;
@@ -76,6 +77,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     super(props);
     const { defaultExpandedKeys } = props;
     this.state = {
+      loading: true,
       rootAssetNodes: [],
       assetNodesMap: {},
       expandedKeys: AssetTree.toKeys(defaultExpandedKeys || []),
@@ -83,22 +85,42 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   }
 
   async componentDidMount() {
-    if (!this.context) {
-      console.error(ERROR_NO_SDK_CLIENT);
-      return;
-    }
-    const assets = await this.context.assets
-      .list({ filter: { root: true } })
-      .autoPagingToArray(this.autoPagingToArrayOptions);
-
-    const assetNodesMap = AssetTree.convertAssetsToNodeMap(assets);
-    const rootAssetNodes = Object.keys(assetNodesMap).map(Number);
-
-    this.setState({
-      rootAssetNodes,
-      assetNodesMap,
-    });
+    this.loadAssetInfo();
   }
+
+  componentDidUpdate(prevProps: AssetTreeProps) {
+    if (prevProps.parentAssetId !== this.props.parentAssetId) {
+      this.loadAssetInfo();
+    }
+  }
+
+  loadAssetInfo = async () => {
+    this.setState({ loading: true }, async () => {
+      if (!this.context) {
+        console.error(ERROR_NO_SDK_CLIENT);
+        return;
+      }
+      const { parentAssetId } = this.props;
+      const assets = await this.context.assets
+        .list({
+          filter: parentAssetId
+            ? { parentIds: [parentAssetId] }
+            : { root: true },
+          aggregatedProperties: ['childCount'],
+        })
+        .autoPagingToArray(this.autoPagingToArrayOptions);
+
+      const assetNodesMap = AssetTree.convertAssetsToNodeMap(assets);
+      console.log(assetNodesMap);
+      const rootAssetNodes = Object.keys(assetNodesMap).map(Number);
+
+      this.setState({
+        rootAssetNodes,
+        assetNodesMap,
+        loading: false,
+      });
+    });
+  };
 
   cursorApiRequest = async (assetId: number): Promise<Asset[]> => {
     const result = await this.context!.assets.list({
@@ -173,18 +195,24 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   };
 
   render() {
-    const { rootAssetNodes, expandedKeys } = this.state;
+    const { showLoading } = this.props;
+    const { rootAssetNodes, expandedKeys, loading } = this.state;
     const { onLoadData, onSelectNode, renderTreeNode, onExpand } = this;
+    if (showLoading && loading) {
+      return <Spin />;
+    }
     return (
-      <Tree
-        loadData={onLoadData}
-        onSelect={(_, e) =>
-          onSelectNode(e.node.props.title as string, e.node.props.eventKey)
-        }
-        expandedKeys={Object.keys(expandedKeys)}
-        onExpand={onExpand}
-        children={renderTreeNode(rootAssetNodes)}
-      />
+      <>
+        <Tree
+          loadData={onLoadData}
+          onSelect={(_, e) =>
+            onSelectNode(e.node.props.title as string, e.node.props.eventKey)
+          }
+          expandedKeys={Object.keys(expandedKeys)}
+          onExpand={onExpand}
+          children={renderTreeNode(rootAssetNodes)}
+        />
+      </>
     );
   }
 

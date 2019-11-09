@@ -50,6 +50,18 @@ describe('AssetTree', () => {
     });
   });
 
+  it('renders correctly with parentAssetId', done => {
+    const tree = renderer.create(
+      <ClientSDKProvider client={sdk}>
+        <AssetTree parentAssetId={123} />
+      </ClientSDKProvider>
+    );
+    setImmediate(() => {
+      expect(tree).toMatchSnapshot();
+      done();
+    });
+  });
+
   it('Checks if onSelect is being called', done => {
     const jestTest = jest.fn();
     const AssetTreeModal = mount(

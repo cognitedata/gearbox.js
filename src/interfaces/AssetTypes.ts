@@ -66,6 +66,8 @@ export interface AssetTreeStyles {
 export interface AssetTreeProps {
   displayName?: (asset: Asset) => string;
   onSelect?: (onSelect: OnSelectAssetTreeParams) => void;
+  parentAssetId?: number;
+  showLoading?: boolean;
   defaultExpandedKeys?: number[];
   styles?: AssetTreeStyles;
   theme?: AnyIfEmpty<{}>;

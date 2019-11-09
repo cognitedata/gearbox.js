@@ -17,6 +17,7 @@ import customStyles from './customStyles.md';
 import defaultExpanded from './defaultExpanded.md';
 import displayName from './displayName.md';
 import fullDescription from './full.md';
+import parentAssetId from './parentAssetId.md';
 import withTheme from './withTheme.md';
 
 const ExampleTheme = {
@@ -124,6 +125,17 @@ storiesOf('AssetTree/Examples', module)
     {
       readme: {
         content: displayName,
+      },
+    }
+  )
+  .add(
+    'Parent Asset ID',
+    () => {
+      return <AssetTree parentAssetId={ASSET_ZERO_DEPTH_ARRAY[zeroChild].id} />;
+    },
+    {
+      readme: {
+        content: parentAssetId,
       },
     }
   )
