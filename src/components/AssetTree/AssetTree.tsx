@@ -70,7 +70,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   autoPagingToArrayOptions: AutoPagingToArrayOptions = this.props
     .autoPagingToArrayOptions
     ? this.props.autoPagingToArrayOptions
-    : { limit: 25 };
+    : { limit: Infinity };
 
   constructor(props: AssetTreeProps) {
     super(props);
