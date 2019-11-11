@@ -11,13 +11,13 @@ import {
 import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetTree } from '../AssetTree';
+import assetIds from './assetIds.md';
 import basic from './basic.md';
 import clickItem from './clickItem.md';
 import customStyles from './customStyles.md';
 import defaultExpanded from './defaultExpanded.md';
 import displayName from './displayName.md';
 import fullDescription from './full.md';
-import parentAssetId from './parentAssetId.md';
 import withTheme from './withTheme.md';
 
 const ExampleTheme = {
@@ -129,13 +129,13 @@ storiesOf('AssetTree/Examples', module)
     }
   )
   .add(
-    'Parent Asset ID',
+    'Asset IDs',
     () => {
-      return <AssetTree parentAssetId={ASSET_ZERO_DEPTH_ARRAY[zeroChild].id} />;
+      return <AssetTree assetIds={[ASSET_ZERO_DEPTH_ARRAY[zeroChild].id]} />;
     },
     {
       readme: {
-        content: parentAssetId,
+        content: assetIds,
       },
     }
   )

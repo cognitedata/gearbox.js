@@ -76,7 +76,7 @@ exports[`AssetTree renders correctly 1`] = `
 </ul>
 `;
 
-exports[`AssetTree renders correctly with parentAssetId 1`] = `
+exports[`AssetTree renders correctly with assetIds 1`] = `
 <ul
   className="ant-tree ant-tree-icon-hide"
   role="tree"
