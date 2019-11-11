@@ -50,7 +50,7 @@ describe('AssetTree', () => {
     });
   });
 
-  it('renders correctly with parentAssetId', done => {
+  it('renders correctly with assetIds', done => {
     sdk.assets.list.mockReturnValue({
       autoPagingToArray: async () => [ASSET_ZERO_DEPTH_ARRAY[0]],
     });
