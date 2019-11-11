@@ -1,10 +1,5 @@
-import {
-  CogniteClient,
-  ExternalId,
-  IdEither,
-  InternalId,
-  TimeSeriesList,
-} from '@cognite/sdk';
+import { CogniteClient, ExternalId, IdEither, InternalId } from '@cognite/sdk';
+import { TimeSeries } from '@cognite/sdk/dist/src/resources/classes/timeSeries';
 import { ClientSDKCacheTimeseries } from '../../../../context/clientSDKCacheContext';
 import { CacheBase } from './CacheBase';
 
@@ -17,7 +12,7 @@ export class CacheTimeseries extends CacheBase
     this.client = client;
   }
 
-  async retrieve(ids: IdEither[]): Promise<TimeSeriesList> {
+  async retrieve(ids: IdEither[]): Promise<TimeSeries[]> {
     const apiCall = 'retrieve';
     this.handleFirstCallToCache(apiCall);
 

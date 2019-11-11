@@ -46,7 +46,7 @@ export const randomLatestDatapoint = (
     datapoints: [
       {
         timestamp: new Date(),
-        value: Math.random() * 100,
+        value: Math.floor(Math.random() * 10000) / 100,
       },
     ],
   } as DatapointsGetDoubleDatapoint;

@@ -31,7 +31,7 @@ export interface TimeseriesPreviewProps {
   dropdown?: TimeseriesPreviewMenuConfig;
   retrieveTimeseries?: FetchTimeserieCall;
   retrieveLatestDatapoint?: FetchLatestDatapointCall;
-  formatDisplayValue?: (value: string | number | undefined) => string | number;
+  formatDisplayValue?: (value?: string | number) => string | number;
   toggleVisibility?: (timeseries: GetTimeSeriesMetadataDTO) => void;
   styles?: TimeseriesPreviewStyles;
   strings?: PureObject;
@@ -212,7 +212,7 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
 
     clearInterval(intervalPointer);
 
-    if (typeof valueToDisplay === 'undefined') {
+    if (valueToDisplay === undefined) {
       const pointer = setInterval(() => {
         if (canceled) {
           clearInterval(intervalPointer);
@@ -243,11 +243,13 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
         {timeseries && (
           <CardBody>
             <LeftSide style={{ backgroundColor: color, ...leftSideStyle }}>
-              <ActionIcon
-                data-test-id={'visibility'}
-                type="eye"
-                onClick={onVisibilityClick}
-              />
+              {toggleVisibility && (
+                <ActionIcon
+                  data-test-id={'visibility'}
+                  type="eye"
+                  onClick={onVisibilityClick}
+                />
+              )}
               {dropdownMenu}
             </LeftSide>
             <RightSide style={rightSideStyle}>

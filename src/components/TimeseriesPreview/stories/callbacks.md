@@ -12,7 +12,7 @@ import { TimeseriesPreview } from '@cognite/gearbox';
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 
 function ExampleComponent(props) {
-  const toggleVisibility = (timeseries: GetTimeSeriesMetadataDTO) => { ... };
+  const toggleVisibility = (timeseries: GetTimeSeriesMetadataDTO) => { /* ... */ };
 
   return (
     <TimeseriesPreview

@@ -12,7 +12,7 @@ import { TimeseriesPreview } from '@cognite/gearbox';
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 
 function ExampleComponent(props) {
-  const onMenuClick = (key: string, timeseries: GetTimeSeriesMetadataDTO) => { ... };
+  const onMenuClick = (key: string, timeseries: GetTimeSeriesMetadataDTO) => { /* ... */ };
   
   const options = {
     edit: 'Edit item',

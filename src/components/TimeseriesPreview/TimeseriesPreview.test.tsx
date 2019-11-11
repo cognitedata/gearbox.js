@@ -76,8 +76,8 @@ describe('TimeseriesChart', () => {
 
     expect(toggleVisibility).toHaveBeenCalled();
   });
-  it('should display prided value', async () => {
-    const formatValue = (prop: number | string | undefined): string | number =>
+  it('should display provided value', async () => {
+    const formatValue = (prop?: number | string): string | number =>
       `${Number(prop)} psi`;
     const timestamp = new Date();
     const value = 32;

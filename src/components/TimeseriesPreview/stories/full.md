@@ -4,7 +4,7 @@
 
 #### Description:
 
-Component displays data related to provided `timeseriesId` with latest datapoint available. Latest datapoint is refreshing constantly with interval provided via `updateInterval` prop.
+Component displays data related to provided `timeseriesId` with latest datapoint available. Latest datapoint value is updated with interval provided via `updateInterval` prop.
 
 Component has embedded logic for fetching timeseries data and latest datapoint available for it. To make it work properly, component
 has to be wrapped into `ClientSDKProvider` component with defined client SDK instance. Fetching logic
@@ -39,10 +39,10 @@ function ExampleComponent(props) {
 | `color`                   | Rendered as a background color for the left side of the component                                          | `string`                                                     | `#6c65ee`                |
 | `dateFormat`              | Defines [date format](https://momentjs.com/docs/#/displaying/format/) to be applied on datapoint timestamp | `string`                                                     | `DD MMM YYYY - HH:mm:ss` |
 | `updateInterval`          | Refresh latest datapoint interval in ms                                                                    | `number`                                                     | `5000`                   |
-| `valueToDisplay`          | Datapoint that renders instead of latest datapoint. Pause fetching latest datapoint if provided            | `GetDoubleDatapoint \| GetStringDatapoint`                   |                          |
+| `valueToDisplay`          | Datapoint to be rendered instead of latest datapoint. Pause fetching latest datapoint if provided            | `GetDoubleDatapoint \| GetStringDatapoint`                   |                          |
 | `dropdown`                | Configuration, that describes dropdown menu to be rendered                                                 | `TimeseriesPreviewMenuConfig`                                |                          |
-| `retrieveTimeseries`      | Function that can be used for replacing embedded timeseries fetching logic                                 | `FetchTimeserieCall`                                         |                          |
-| `retrieveLatestDatapoint` | Function that can be used for replacing embedded latest datapoint fetching                                 | `FetchLatestDatapointCall`                                   |                          |
+| `retrieveTimeseries`      | Function that can be used to replace embedded timeseries fetching logic                                 | `FetchTimeserieCall`                                         |                          |
+| `retrieveLatestDatapoint` | Function that can be used to replace embedded latest datapoint fetching                                 | `FetchLatestDatapointCall`                                   |                          |
 | `formatDisplayValue`      | Function that gives ability to format rendered value of latest or provided datapoint                       | `(value: string \| number \| undefined) => string \| number` |                          |
 | `toggleVisibility`        | Callback that triggers in case of click on visibility icon                                                 | `(timeseries: GetTimeSeriesMetadataDTO) => void`             |                          |
 | `styles`                  | Styles, that can be provided to customize component view                                                   | `TimeseriesPreviewStyles`                                    |                          |
