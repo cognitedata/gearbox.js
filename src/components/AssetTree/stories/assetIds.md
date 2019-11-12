@@ -14,7 +14,7 @@ function ExampleComponent(props) {
 
   return (
     <AssetTree
-      assetIds={1234}
+      assetIds=[1234]
     />
   );
 

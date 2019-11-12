@@ -1,6 +1,7 @@
 import { Asset } from '@cognite/sdk';
 import { Spin, Tree } from 'antd';
 import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';
+import isEqual from 'lodash/isEqual';
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -89,9 +90,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   }
 
   componentDidUpdate(prevProps: AssetTreeProps) {
-    if (
-      JSON.stringify(prevProps.assetIds) !== JSON.stringify(this.props.assetIds)
-    ) {
+    if (!isEqual(prevProps.assetIds, this.props.assetIds)) {
       this.loadAssetInfo();
     }
   }
