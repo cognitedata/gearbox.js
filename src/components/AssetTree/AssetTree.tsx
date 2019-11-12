@@ -198,17 +198,15 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
       return <Spin />;
     }
     return (
-      <>
-        <Tree
-          loadData={onLoadData}
-          onSelect={(_, e) =>
-            onSelectNode(e.node.props.title as string, e.node.props.eventKey)
-          }
-          expandedKeys={Object.keys(expandedKeys)}
-          onExpand={onExpand}
-          children={renderTreeNode(rootAssetNodes)}
-        />
-      </>
+      <Tree
+        loadData={onLoadData}
+        onSelect={(_, e) =>
+          onSelectNode(e.node.props.title as string, e.node.props.eventKey)
+        }
+        expandedKeys={Object.keys(expandedKeys)}
+        onExpand={onExpand}
+        children={renderTreeNode(rootAssetNodes)}
+      />
     );
   }
 
