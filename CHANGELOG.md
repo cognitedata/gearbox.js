@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/cognitedata/gearbox.js/compare/v1.7.0...v1.7.1) (2019-11-12)
+
+
+### Bug Fixes
+
+* removed asset count limit for AssetTree ([#491](https://github.com/cognitedata/gearbox.js/issues/491)) ([5d2a299](https://github.com/cognitedata/gearbox.js/commit/5d2a299036fee7adc02d4d0c526d13ae21ac453c))
+
 # [1.7.0](https://github.com/cognitedata/gearbox.js/compare/v1.6.3...v1.7.0) (2019-11-01)
 
 
