@@ -17,7 +17,9 @@ export default [
     external: [
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {}),
+      ...Object.keys(pkg.optionalDependencies || {}),
     ],
+    context: 'window',
     input: 'src/index.ts',
     output: [
       {
@@ -41,7 +43,9 @@ export default [
     external: [
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {}),
+      ...Object.keys(pkg.optionalDependencies || {}),
     ],
+    context: 'window',
     input: exportedComponents.reduce((acc, component) => {
       acc[
         `components/${component}/index`
