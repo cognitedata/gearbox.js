@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/cognitedata/gearbox.js/compare/v1.7.1...v1.7.2) (2019-11-13)
+
+
+### Bug Fixes
+
+* **model 3d viewer:** don't mutate boundingBox parameter ([#475](https://github.com/cognitedata/gearbox.js/issues/475)) ([c6caf1e](https://github.com/cognitedata/gearbox.js/commit/c6caf1e1bad14a455555991597195e80ee040dda)), closes [#436](https://github.com/cognitedata/gearbox.js/issues/436)
+
 ## [1.7.1](https://github.com/cognitedata/gearbox.js/compare/v1.7.0...v1.7.1) (2019-11-12)
 
 
