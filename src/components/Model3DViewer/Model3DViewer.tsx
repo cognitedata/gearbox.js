@@ -2,6 +2,7 @@ import { Cognite3DModel, Cognite3DViewer, THREE } from '@cognite/3d-viewer';
 import { AssetMapping3D, Revision3D } from '@cognite/sdk';
 import { Button, Slider } from 'antd';
 import { SliderValue } from 'antd/lib/slider';
+import { isEqual } from 'lodash';
 import React, { RefObject } from 'react';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';
@@ -57,6 +58,9 @@ export interface Model3DViewerProps {
   showScreenshotButton?: boolean;
   onScreenshot?: (url: string) => void;
 }
+interface Model3DViewerState {
+  boundingBox?: THREE.Box3;
+}
 
 export function mockCreateViewer(mockFunction: any) {
   createViewer = mockFunction || originalCreateViewer;
@@ -78,6 +82,24 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     showScreenshotButton: false,
   };
   static contextType = ClientSDKContext;
+
+  static getDerivedStateFromProps(
+    props: Model3DViewerProps,
+    state: Model3DViewerState
+  ) {
+    const { boundingBox: stateBoundingBox } = state;
+    const { boundingBox: propsBoundingBox } = props;
+
+    if (!isEqual(stateBoundingBox, propsBoundingBox)) {
+      return {
+        boundingBox: propsBoundingBox ? propsBoundingBox.clone() : undefined,
+      };
+    }
+
+    return null;
+  }
+
+  state: Model3DViewerState = {};
 
   context!: React.ContextType<typeof ClientSDKContext>;
 
@@ -119,7 +141,6 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       modelId,
       revisionId,
       cache,
-      boundingBox,
       enableKeyboardNavigation,
       useDefaultCameraPosition,
       onProgress,
@@ -128,6 +149,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       onError,
       slice,
     } = this.props;
+    const { boundingBox } = this.state;
     const { progress, complete } = ViewerEventTypes;
     const {
       viewer,
@@ -252,7 +274,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       viewer,
       model,
       revision,
-      props: { boundingBox },
+      state: { boundingBox },
     } = this;
 
     if (!viewer || !model || !revision) {

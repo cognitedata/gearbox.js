@@ -60,8 +60,6 @@ export function setCameraPosition(
   }
 
   if (boundingBox && !boundingBox.isEmpty()) {
-    // todo: matrix property doesn't present in Cognite3DModel
-    // @ts-ignore
     boundingBox.applyMatrix4(model.matrix);
     viewer.fitCameraToBoundingBox(boundingBox, 0);
   } else if (Array.isArray(camera.target) && Array.isArray(camera.position)) {
@@ -69,9 +67,7 @@ export function setCameraPosition(
     const cameraPosition = new Vector3(...camera.position);
     const cameraTarget = new Vector3(...camera.target);
     // Camera position and target are defined in model space, transform to world space
-    // @ts-ignore
     cameraPosition.applyMatrix4(model.matrix);
-    // @ts-ignore
     cameraTarget.applyMatrix4(model.matrix);
     viewer.setCameraPosition(cameraPosition);
     viewer.setCameraTarget(cameraTarget);
@@ -92,8 +88,8 @@ export function createViewer({
 
   if (cache && cache[hash]) {
     cache[hash].fromCache = true;
-    // @ts-ignore
-    domElement.parentNode.replaceChild(
+    // TODO: update to TS 3.7.0 when it's out
+    domElement.parentNode!.replaceChild(
       cache[hash].viewer.domElement,
       domElement
     );
