@@ -116,8 +116,6 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
         }).autoPagingToArray(this.autoPagingToArrayOptions);
       }
 
-      console.log(assets);
-
       const assetNodesMap = AssetTree.convertAssetsToNodeMap(assets);
       const rootAssetNodes = Object.keys(assetNodesMap).map(Number);
 
