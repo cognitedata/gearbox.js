@@ -8,7 +8,6 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { timeseriesListV2 } from '../../../mocks';
-import { assetsList } from '../../../mocks';
 
 import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
