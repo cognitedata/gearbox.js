@@ -36,7 +36,7 @@ No required props
 | --------------------- | ------------------------------------------- | --------------------------- | ------- |
 | `displayName`         | Modify the display name of an asset         | `(asset: Asset) => string` | `(...) => 'assetName: assetDescription'` |
 | `showLoading`         | Show loading animation when fetching original list         | `boolean ` | `false` |
-| `assetIds`       | Show only assets that are children of the specified ids         | `number (InternalID)[]` |  |
+| `assetIds`       | Show only assets that are children of the specified ids (max 1000)         | `number (InternalID)[]` |  |
 | `onSelect`            | Triggers when a node is selected            | `(onSelect: OnSelectAssetTreeParams) => void` | |
 | `defaultExpandedKeys` | List of node ids to be expanded by default  | `number[]`                  | [ ] |
 | `styles`              | Object that defines inline CSS styles for inner elements of the component.| `AssetTreeStyles` |  |

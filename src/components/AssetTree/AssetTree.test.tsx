@@ -18,6 +18,7 @@ const zeroChild = ASSET_ZERO_DEPTH_ARRAY.findIndex(
 class CogniteClient extends MockCogniteClient {
   assets: any = {
     list: jest.fn(),
+    retrieve: jest.fn(),
   };
 }
 
@@ -29,6 +30,7 @@ beforeEach(() => {
   sdk.assets.list.mockReturnValue({
     autoPagingToArray: async () => ASSET_ZERO_DEPTH_ARRAY,
   });
+  sdk.assets.retrieve.mockReturnValue([ASSET_ZERO_DEPTH_ARRAY[0]]);
 });
 
 afterEach(() => {
@@ -51,9 +53,6 @@ describe('AssetTree', () => {
   });
 
   it('renders correctly with assetIds', done => {
-    sdk.assets.list.mockReturnValue({
-      autoPagingToArray: async () => [ASSET_ZERO_DEPTH_ARRAY[0]],
-    });
     const tree = renderer.create(
       <ClientSDKProvider client={sdk}>
         <AssetTree assetIds={[ASSET_ZERO_DEPTH_ARRAY[zeroChild].id]} />
