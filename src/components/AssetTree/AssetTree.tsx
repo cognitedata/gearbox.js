@@ -102,11 +102,13 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     }
     this.setState({ loading: true }, async () => {
       const { assetIds } = this.props;
-      let assets;
+      let assets: Asset[] = [];
       if (assetIds) {
-        assets = await this.context!.assets.retrieve(
-          assetIds.map(el => ({ id: el }))
-        );
+        if (assetIds.length > 0) {
+          assets = await this.context!.assets.retrieve(
+            assetIds.map(el => ({ id: el }))
+          );
+        }
       } else {
         assets = await this.context!.assets.list({
           filter: assetIds ? { parentIds: assetIds } : { root: true },
