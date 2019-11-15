@@ -71,8 +71,8 @@ const formatValue = (value: number | string | undefined) => {
   return `${Math.floor(Number(value))} psi`;
 };
 
-const toggleVisibility = (timeseries: GetTimeSeriesMetadataDTO) => {
-  action('toggleVisibility')(timeseries);
+const onToggleVisibility = (timeseries: GetTimeSeriesMetadataDTO) => {
+  action('onToggleVisibility')(timeseries);
 };
 
 const onMenuClick = (key: string, timeseries: GetTimeSeriesMetadataDTO) => {
@@ -163,7 +163,7 @@ storiesOf('TimeseriesPreview/Examples', module)
     () => (
       <TimeseriesPreview
         timeseriesId={41852231325889}
-        toggleVisibility={toggleVisibility}
+        onToggleVisibility={onToggleVisibility}
       />
     ),
     {

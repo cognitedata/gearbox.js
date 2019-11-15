@@ -44,7 +44,7 @@ function ExampleComponent(props) {
 | `retrieveTimeseries`      | Function that can be used to replace embedded timeseries fetching logic                                 | `FetchTimeserieCall`                                         |                          |
 | `retrieveLatestDatapoint` | Function that can be used to replace embedded latest datapoint fetching                                 | `FetchLatestDatapointCall`                                   |                          |
 | `formatDisplayValue`      | Function that gives ability to format rendered value of latest or provided datapoint                       | `(value: string \| number \| undefined) => string \| number` |                          |
-| `toggleVisibility`        | Callback that triggers in case of click on visibility icon                                                 | `(timeseries: GetTimeSeriesMetadataDTO) => void`             |                          |
+| `onToggleVisibility`        | Callback that triggers in case of click on visibility icon                                                 | `(timeseries: GetTimeSeriesMetadataDTO) => void`             |                          |
 | `styles`                  | Styles, that can be provided to customize component view                                                   | `TimeseriesPreviewStyles`                                    |                          |
 | `strings`                 | Strings, that can be customized                                                                            | `PureObject`                                                 |                          |
 

@@ -32,7 +32,7 @@ export interface TimeseriesPreviewProps {
   retrieveTimeseries?: FetchTimeserieCall;
   retrieveLatestDatapoint?: FetchLatestDatapointCall;
   formatDisplayValue?: (value?: string | number) => string | number;
-  toggleVisibility?: (timeseries: GetTimeSeriesMetadataDTO) => void;
+  onToggleVisibility?: (timeseries: GetTimeSeriesMetadataDTO) => void;
   styles?: TimeseriesPreviewStyles;
   strings?: PureObject;
 }
@@ -93,7 +93,7 @@ const generateDropdownMenu = ({
 const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
   timeseriesId,
   dropdown,
-  toggleVisibility,
+  onToggleVisibility,
   color = defaultProps.color,
   valueToDisplay,
   retrieveTimeseries,
@@ -128,8 +128,8 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
   >();
 
   const onVisibilityClick = () => {
-    if (toggleVisibility && timeseries) {
-      toggleVisibility(timeseries);
+    if (onToggleVisibility && timeseries) {
+      onToggleVisibility(timeseries);
     }
   };
 
@@ -243,7 +243,7 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
         {timeseries && (
           <CardBody>
             <LeftSide style={{ backgroundColor: color, ...leftSideStyle }}>
-              {toggleVisibility && (
+              {onToggleVisibility && (
                 <ActionIcon
                   data-test-id={'visibility'}
                   type="eye"

@@ -60,11 +60,11 @@ describe('TimeseriesChart', () => {
     expect(wrapper.exists()).toBeTruthy();
   });
   it('should trigger callback if provided', async () => {
-    const toggleVisibility = jest.fn();
+    const onToggleVisibility = jest.fn();
 
     await act(async () => {
       wrapper = mount(
-        <ComponentWrapper {...{ ...defaultProps, toggleVisibility }} />
+        <ComponentWrapper {...{ ...defaultProps, onToggleVisibility }} />
       );
     });
 
@@ -74,7 +74,7 @@ describe('TimeseriesChart', () => {
 
     btn.simulate('click');
 
-    expect(toggleVisibility).toHaveBeenCalled();
+    expect(onToggleVisibility).toHaveBeenCalled();
   });
   it('should display provided value', async () => {
     const formatValue = (prop?: number | string): string | number =>
