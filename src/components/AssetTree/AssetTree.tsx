@@ -106,12 +106,12 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
       if (assetIds) {
         if (assetIds.length > 0) {
           assets = await this.context!.assets.retrieve(
-            assetIds.map(el => ({ id: el }))
+            assetIds.map(id => ({ id }))
           );
         }
       } else {
         assets = await this.context!.assets.list({
-          filter: assetIds ? { parentIds: assetIds } : { root: true },
+          filter: { root: true },
           aggregatedProperties: ['childCount'],
         }).autoPagingToArray(this.autoPagingToArrayOptions);
       }

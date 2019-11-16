@@ -51,6 +51,13 @@ class CogniteClient extends MockCogniteClient {
         });
       },
     }),
+    retrieve: () => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve([ASSET_ZERO_DEPTH_ARRAY[0]]);
+        }, 300);
+      });
+    },
   };
 }
 
@@ -129,7 +136,7 @@ storiesOf('AssetTree/Examples', module)
     }
   )
   .add(
-    'Asset IDs',
+    'With asset IDs',
     () => {
       return <AssetTree assetIds={[ASSET_ZERO_DEPTH_ARRAY[zeroChild].id]} />;
     },
