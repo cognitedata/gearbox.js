@@ -8,7 +8,7 @@ import {
   ASSET_TREE_STYLES,
   ASSET_ZERO_DEPTH_ARRAY,
 } from '../../../mocks/assetsListV2';
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetTree } from '../AssetTree';
 import basic from './basic.md';

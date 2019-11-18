@@ -6,7 +6,7 @@ import {
   ASSET_LIST_CHILD,
   ASSET_ZERO_DEPTH_ARRAY,
 } from '../../../mocks/assetsListV2';
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetBreadcrumb } from '../AssetBreadcrumb';
 import customRendering from './custom-element-rendering.md';

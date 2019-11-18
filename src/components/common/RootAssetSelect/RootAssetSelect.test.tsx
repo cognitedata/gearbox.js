@@ -3,7 +3,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { assetsList } from '../../../mocks';
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider/ClientSDKProvider';
 import {
   defaultStrings,

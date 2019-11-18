@@ -4,7 +4,7 @@ import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { SDK_LIST_LIMIT } from '../../constants/sdk';
 import { fakeEvents } from '../../mocks';
-import { MockCogniteClient } from '../../utils/mockSdk';
+import { MockCogniteClient } from '../../mocks/mockSdk';
 import { withAssetEvents, WithAssetEventsDataProps } from '../withAssetEvents';
 
 configure({ adapter: new Adapter() });

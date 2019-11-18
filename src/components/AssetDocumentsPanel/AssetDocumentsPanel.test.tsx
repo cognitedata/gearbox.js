@@ -3,7 +3,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { fakeFiles } from '../../mocks';
-import { MockCogniteClient } from '../../utils/mockSdk';
+import { MockCogniteClient } from '../../mocks/mockSdk';
 import { LoadingBlock } from '../common/LoadingBlock/LoadingBlock';
 import {
   AssetDocumentsPanel,

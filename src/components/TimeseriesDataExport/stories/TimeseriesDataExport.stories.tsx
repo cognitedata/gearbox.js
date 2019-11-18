@@ -6,7 +6,7 @@ import {
 import { storiesOf } from '@storybook/react';
 import React, { useState } from 'react';
 import { randomData, timeseriesListV2 } from '../../../mocks';
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { getGranularityInMS } from '../../../utils/utils';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import {

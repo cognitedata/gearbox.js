@@ -1,4 +1,7 @@
-import { DatapointsGetAggregateDatapoint } from '@cognite/sdk';
+import {
+  DatapointsGetAggregateDatapoint,
+  DatapointsGetDoubleDatapoint,
+} from '@cognite/sdk';
 
 export function randomData(
   start: number,
@@ -30,6 +33,24 @@ export function randomData(
 
   return { datapoints: data, id: 1337 };
 }
+
+export const randomLatestDatapoint = (
+  id = 0,
+  name = 'Timeseries 0'
+): DatapointsGetDoubleDatapoint => {
+  return {
+    isString: false,
+    isStep: false,
+    id,
+    externalId: name,
+    datapoints: [
+      {
+        timestamp: new Date(),
+        value: Math.floor(Math.random() * 10000) / 100,
+      },
+    ],
+  } as DatapointsGetDoubleDatapoint;
+};
 
 export const datapoints = [
   {

@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { fakeEvents } from '../../../mocks';
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { EventPreview, EventPreviewStyles } from '../EventPreview';
 import basic from './basic.md';

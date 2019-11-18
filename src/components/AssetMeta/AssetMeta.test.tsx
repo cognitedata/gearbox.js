@@ -8,7 +8,7 @@ import {
   fakeFiles,
   timeseriesListV2,
 } from '../../mocks';
-import { MockCogniteClient } from '../../utils/mockSdk';
+import { MockCogniteClient } from '../../mocks/mockSdk';
 import { AssetMeta } from './AssetMeta';
 
 console.error = jest.fn();

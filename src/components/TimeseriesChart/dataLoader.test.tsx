@@ -4,7 +4,7 @@ import {
   GetStringDatapoint,
 } from '@cognite/sdk';
 import { datapointsList, timeseriesListV2 } from '../../mocks';
-import { MockCogniteClient } from '../../utils/mockSdk';
+import { MockCogniteClient } from '../../mocks/mockSdk';
 import { AccessorFunc, DataLoader } from './dataLoader';
 
 const mockTimeseriesRetrieve = jest.fn();

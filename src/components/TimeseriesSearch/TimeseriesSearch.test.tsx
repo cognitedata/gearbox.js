@@ -4,7 +4,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
 import React from 'react';
 import { assetsList, timeseriesListV2 } from '../../mocks';
-import { MockCogniteClient } from '../../utils/mockSdk';
+import { MockCogniteClient } from '../../mocks/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
 import { TimeseriesSearch } from './TimeseriesSearch';

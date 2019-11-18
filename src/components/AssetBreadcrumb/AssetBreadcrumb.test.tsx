@@ -3,7 +3,7 @@ import { configure, mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { MockCogniteClient } from '../../utils/mockSdk';
+import { MockCogniteClient } from '../../mocks/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { AssetBreadcrumb, AssetBreadcrumbProps } from './AssetBreadcrumb';
 

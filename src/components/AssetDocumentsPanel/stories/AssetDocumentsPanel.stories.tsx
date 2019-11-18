@@ -2,7 +2,7 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { DOCUMENTS } from '../../../mocks';
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetDocumentsPanel } from '../AssetDocumentsPanel';
 import categoryNames from './categoryNames.md';
