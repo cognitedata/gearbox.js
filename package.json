@@ -53,6 +53,7 @@
     "@cognite/sdk": "^2.7.0",
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
+    "@commitlint/travis-cli": "^8.2.0",
     "@semantic-release/changelog": "^3.0.4",
     "@semantic-release/git": "^7.0.16",
     "@storybook/addon-actions": "^5.2.6",
