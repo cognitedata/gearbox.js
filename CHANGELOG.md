@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/cognitedata/gearbox.js/compare/v1.7.2...v1.8.0) (2019-11-18)
+
+
+### Features
+
+* **timeseries-preview:** add component for timeseries preview ([#489](https://github.com/cognitedata/gearbox.js/issues/489)) ([859da13](https://github.com/cognitedata/gearbox.js/commit/859da1364bf354b6e11f4e410edfb8ad39afe2c0)), closes [#481](https://github.com/cognitedata/gearbox.js/issues/481)
+
 ## [1.7.2](https://github.com/cognitedata/gearbox.js/compare/v1.7.1...v1.7.2) (2019-11-13)
 
 

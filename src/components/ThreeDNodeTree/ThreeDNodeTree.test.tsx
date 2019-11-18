@@ -2,8 +2,8 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import sinon from 'sinon';
+import { MockCogniteClient } from '../../mocks/mockSdk';
 import { NODE_LIST } from '../../mocks/threeDNodesList';
-import { MockCogniteClient } from '../../utils/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider/ClientSDKProvider';
 import { ThreeDNodeTree } from './ThreeDNodeTree';
 

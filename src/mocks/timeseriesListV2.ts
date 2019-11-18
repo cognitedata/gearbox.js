@@ -354,3 +354,16 @@ const IAA_21PT1019: GetTimeSeriesMetadataDTO[] = [
 ];
 
 export const timeseriesListV2 = IAA_21PT1019.concat([]);
+export const singleTimeseries: GetTimeSeriesMetadataDTO[] = [
+  {
+    id: 41852231325889,
+    createdTime: new Date(),
+    lastUpdatedTime: new Date(),
+    name: 'VAL_45-FT-92139B:X.Value',
+    isString: false,
+    metadata: {},
+    assetId: 4293345866058133,
+    isStep: false,
+    description: 'PH 1stStg LO Cooler CW',
+  },
+];

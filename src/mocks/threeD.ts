@@ -3,13 +3,13 @@ import { CogniteClient } from '@cognite/sdk';
 import { Revision3D } from '@cognite/sdk';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { CacheObject, Callback, EventHandlers } from '../interfaces';
-import { MockCogniteClient } from '../utils/mockSdk';
 import {
   addEvent,
   removeEvent,
   ViewerConfigResponse,
   ViewerEventTypes,
 } from '../utils/threeD';
+import { MockCogniteClient } from './mockSdk';
 
 export function createFakeViewer({
   project,

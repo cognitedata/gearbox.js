@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 import { pick } from 'lodash';
 import React from 'react';
 import { assetsList } from '../../../mocks';
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetSearch, AssetSearchStyles } from '../AssetSearch';
 import advancedSearch from './advancedSearch.md';

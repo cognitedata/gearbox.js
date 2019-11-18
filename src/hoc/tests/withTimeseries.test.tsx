@@ -3,7 +3,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { timeseriesListV2 } from '../../mocks';
-import { MockCogniteClient } from '../../utils/mockSdk';
+import { MockCogniteClient } from '../../mocks/mockSdk';
 import { withTimeseries, WithTimeseriesDataProps } from '../withTimeseries';
 
 configure({ adapter: new Adapter() });

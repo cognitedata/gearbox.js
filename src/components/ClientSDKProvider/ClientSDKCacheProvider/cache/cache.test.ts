@@ -1,13 +1,19 @@
 import { Asset } from '@cognite/sdk';
-import { MockCogniteClient } from '../../../../utils/mockSdk';
+import { singleTimeseries } from '../../../../mocks';
+import { MockCogniteClient } from '../../../../mocks/mockSdk';
 import { CacheAssets } from './CacheAssets';
+import { CacheTimeseries } from './CacheTimeseries';
 
 class CogniteClient extends MockCogniteClient {
   assets: any = {
     retrieve: jest.fn(),
   };
+  timeseries: any = {
+    retrieve: jest.fn(),
+  };
 }
 let cacheAssets: CacheAssets;
+let cacheTimeseries: CacheTimeseries;
 const client = new CogniteClient({ appId: 'cache-test' });
 
 const asset: Asset = {
@@ -19,7 +25,11 @@ const asset: Asset = {
 };
 beforeEach(() => {
   cacheAssets = new CacheAssets(client);
+  cacheTimeseries = new CacheTimeseries(client);
   client.assets.retrieve.mockReturnValue(Promise.resolve([asset]));
+  client.timeseries.retrieve.mockReturnValue(
+    Promise.resolve([singleTimeseries])
+  );
 });
 afterEach(() => {
   jest.clearAllMocks();
@@ -36,19 +46,32 @@ describe('CacheAssets', () => {
     expect(client.assets.retrieve).toHaveBeenCalledTimes(2);
   });
 
-  it('should return promise pointer from requests', () => {
+  it('should return promise pointer from assets requests', () => {
     cacheAssets.retrieve([{ id: 0 }]);
     cacheAssets.retrieve([{ id: 0 }]);
 
     expect(client.assets.retrieve).toHaveBeenCalledTimes(1);
   });
+  it('should return promise pointer from timeseries requests', () => {
+    cacheTimeseries.retrieve([{ id: 0 }]);
+    cacheTimeseries.retrieve([{ id: 0 }]);
 
-  it('should return response from cached responses', async () => {
+    expect(client.timeseries.retrieve).toHaveBeenCalledTimes(1);
+  });
+  it('should return response from cached assets responses', async () => {
     const asset1 = await cacheAssets.retrieve([{ id: 0 }]);
 
     await cacheAssets.retrieve([{ id: 0 }]);
 
     expect(client.assets.retrieve).toHaveBeenCalledTimes(1);
     expect(asset1[0]).toMatchObject(asset);
+  });
+  it('should return response from cached timeseries responses', async () => {
+    const timeserie1 = await cacheTimeseries.retrieve([{ id: 0 }]);
+
+    await cacheTimeseries.retrieve([{ id: 0 }]);
+
+    expect(client.timeseries.retrieve).toHaveBeenCalledTimes(1);
+    expect(timeserie1[0]).toMatchObject(singleTimeseries);
   });
 });
