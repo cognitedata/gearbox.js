@@ -11,6 +11,7 @@ install:
   - npm install -g codecov
   - yarn global add @cognite/preview-cli@0.0.6
 script:
+  - yarn commitlint-travis
   - yarn lint
   - yarn build
   - yarn test && codecov
