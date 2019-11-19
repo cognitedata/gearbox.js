@@ -15,7 +15,7 @@ import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { getGranularityInMS } from '../../../utils/utils';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DataLoader } from '../dataLoader';
-import { TimeseriesChart } from '../TimeseriesChart';
+import { ChartRulerPoint, TimeseriesChart } from '../TimeseriesChart';
 import annotations from './annotations.md';
 import collapsedYAxis from './collapsedYAxis.md';
 import containerStyle from './containerStyle.md';
@@ -452,14 +452,15 @@ storiesOf('TimeseriesChart/Examples', module)
       return (
         <ClientSDKProvider client={sdk}>
           <TimeseriesChart
-            timeseriesIds={[123]}
+            timeseriesIds={[123, 456]}
             startTime={Date.now() - 60 * 1000}
             endTime={Date.now()}
             ruler={{
               visible: true,
-              yLabel: (point: any) =>
-                `${Number.parseFloat(point.value).toFixed(3)}`,
-              timeLabel: (point: any) => point.timestamp.toString(),
+              yLabel: (point: ChartRulerPoint) =>
+                `${Number(point.value).toFixed(3)}`,
+              timeLabel: (point: ChartRulerPoint) =>
+                new Date(point.timestamp).toISOString(),
             }}
           />
         </ClientSDKProvider>

@@ -2,14 +2,14 @@
 
 exports[`TimeseriesPanelPure Should match the snapshot 1`] = `
 <div
-  className="sc-jTzLTM jgohNR"
+  className="sc-kAzzGY iCBsrI"
 >
   <div
-    className="ant-collapse ant-collapse-icon-position-left sc-fjdhpX fAFgBy"
+    className="ant-collapse ant-collapse-icon-position-left sc-chPdSV cypMfY"
     role={null}
   >
     <div
-      className="ant-collapse-item sc-VigVT jQzTgw"
+      className="ant-collapse-item sc-cSHVUG hnYkoy"
     >
       <div
         aria-expanded="false"
@@ -42,7 +42,7 @@ exports[`TimeseriesPanelPure Should match the snapshot 1`] = `
       </div>
     </div>
     <div
-      className="ant-collapse-item sc-VigVT jQzTgw"
+      className="ant-collapse-item sc-cSHVUG hnYkoy"
     >
       <div
         aria-expanded="false"
@@ -75,7 +75,7 @@ exports[`TimeseriesPanelPure Should match the snapshot 1`] = `
       </div>
     </div>
     <div
-      className="ant-collapse-item sc-VigVT jQzTgw"
+      className="ant-collapse-item sc-cSHVUG hnYkoy"
     >
       <div
         aria-expanded="false"
