@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/cognitedata/gearbox.js/compare/v1.8.0...v1.9.0) (2019-11-18)
+
+
+### Features
+
+* **asset tree:** custom root assetIds and initial loading status ([828a71c](https://github.com/cognitedata/gearbox.js/commit/828a71cceecbc5fb855c8275182a4321b755ff12))
+
 # [1.8.0](https://github.com/cognitedata/gearbox.js/compare/v1.7.2...v1.8.0) (2019-11-18)
 
 

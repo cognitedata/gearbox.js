@@ -11,6 +11,7 @@ import {
 import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetTree } from '../AssetTree';
+import assetIds from './assetIds.md';
 import basic from './basic.md';
 import clickItem from './clickItem.md';
 import customStyles from './customStyles.md';
@@ -50,6 +51,13 @@ class CogniteClient extends MockCogniteClient {
         });
       },
     }),
+    retrieve: () => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve([ASSET_ZERO_DEPTH_ARRAY[0]]);
+        }, 300);
+      });
+    },
   };
 }
 
@@ -124,6 +132,17 @@ storiesOf('AssetTree/Examples', module)
     {
       readme: {
         content: displayName,
+      },
+    }
+  )
+  .add(
+    'With asset IDs',
+    () => {
+      return <AssetTree assetIds={[ASSET_ZERO_DEPTH_ARRAY[zeroChild].id]} />;
+    },
+    {
+      readme: {
+        content: assetIds,
       },
     }
   )
