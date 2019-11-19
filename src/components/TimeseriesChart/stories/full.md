@@ -53,6 +53,7 @@ function ExampleComponent(props) {
 | `height`               | Height of the chart                                                         | `number`                         |                                                 |
 | `width`                | Width of the chart                                                          | `number`                         |                                                 |
 | `hiddenSeries`         | Object desribing if timeseries id should be hidden                          | `{[id: string]: boolean}`        | `{}`                                            |
+| `ruler`                | Display the ruler and configure custom label formatters                     | `ChartRulerConfig`                    | `{}`                                            |
 
 
 #### Types:
@@ -77,3 +78,39 @@ interface TimeseriesChartStyles {
 ```
 
 See more details in `Custom container styles` example.
+
+### ChartRulerConfig
+
+Defines the callbacks to configure the formatting of ruler label values.
+
+```typescript
+interface ChartRulerConfig {
+  visible?: boolean;
+  timeLabel?: (point: ChartRulerPoint) => string;
+  yLabel?: (point: ChartRulerPoint) => string;
+  getTimeLabelPosition?: (
+    defaultPosition: number,
+    measurements: {
+      height: number;
+      labelHeight: number;
+      timeLabelMargin: number;
+    }
+  ) => number;
+}
+```
+
+### ChartRulerPoint
+
+Defines a point under the ruler.
+
+```typescript
+interface ChartRulerPoint {
+  id: number | string;
+  name: string;
+  value: number | string;
+  color: string;
+  timestamp: number;
+  x: number;
+  y: number;
+}
+```
