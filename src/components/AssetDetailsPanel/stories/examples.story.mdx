@@ -1,26 +1,11 @@
 import { action } from '@storybook/addon-actions';
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
-import { decorators, customElementRendering, handleAssetLoaded } from './helper';
+import { decorators, customElementRendering, handleAssetLoaded,onAssetLoaded } from './helper';
 
 <Meta title="Assets|AssetDetailsPanel/Example" decorators={decorators} />
 
 ## Custom categories
-
-```jsx
-import 'antd/dist/antd.css';
-import React from 'react';
-import { AssetDetailsPanel } from '@cognite/gearbox';
-function ExampleComponent(props) {
-  return (
-    <AssetDetailsPanel
-      assetId={4650652196144007}
-      toCategory={name => name.split('_')[0]}
-      categoryPriorityList={['SOURCE']}
-    />
-  );
-}
-```
 
 <Preview>
   <Story name="Custom categories">
@@ -34,22 +19,6 @@ function ExampleComponent(props) {
 
 ## Custom Loading Spinner
 
-
-
-```jsx
-import 'antd/dist/antd.css';
-import React from 'react';
-import { AssetDetailsPanel } from '@cognite/gearbox';
-function ExampleComponent(props) {
-  return (
-    <AssetDetailsPanel
-      assetId={4650652196144007}
-      customSpinner={<div>Loading...</div>}
-    />
-  );
-}
-```
-
 <Preview>
   <Story name="Custom Loading Spinner ">
     <AssetDetailsPanel
@@ -61,23 +30,6 @@ function ExampleComponent(props) {
 
 ## Custom Styles
 
-
-
-```jsx
-import 'antd/dist/antd.css';
-import React from 'react';
-import { AssetDetailsPanel } from '@cognite/gearbox';
-function ExampleComponent(props) {
-  return (
-    <AssetDetailsPanel
-      assetId={4650652196144007}
-      styles={{ border: '1px solid red' }}
-    />
-  );
-}
-  
-```
-
 <Preview>
   <Story name="Custom Styles">  
   <AssetDetailsPanel
@@ -87,31 +39,23 @@ function ExampleComponent(props) {
   </Story>
 </Preview>
 
-## With Load Callback
+## Handle callbacks
 
-Function that provides as callback:
+A callback function can be provided to fire when the asset is loaded:
 
 ```jsx
-import 'antd/dist/antd.css';
-import React from 'react';
 import { Asset } from '@cognite/sdk';
-import { AssetDetailsPanel } from '@cognite/gearbox';
-function ExampleComponent(props) {
-  const handleAssetLoaded = (asset: Asset) => { };
-  return (
-    <AssetDetailsPanel
-      assetId={4650652196144007}
-      onAssetLoaded={handleAssetLoaded}
-    />
-  );
-}
+
+// ...
+
+const onAssetLoaded = (asset: Asset) => console.log(asset);
 ```
 
 <Preview>
   <Story name="Load Callback">  
   <AssetDetailsPanel
       assetId={4650652196144007}
-       onAssetLoaded={action('handleAssetLoaded')}
+       onAssetLoaded={onAssetLoaded}
     />
   </Story>
 </Preview>

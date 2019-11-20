@@ -1,4 +1,5 @@
 import { Asset } from '@cognite/sdk';
+import { action } from '@storybook/addon-actions';
 import React from 'react';
 import {
   ASSET_LIST_CHILD,
@@ -23,12 +24,6 @@ class CogniteClient extends MockCogniteClient {
   };
 }
 
-export const Sdk = (obj: any) => {
-  const { children } = obj;
-  console.log(obj);
-  return <ClientSDKProvider client={client}>{children}</ClientSDKProvider>;
-};
-
 const client = new CogniteClient({ appId: 'gearbox test' });
 
 export const decorators = [
@@ -37,14 +32,7 @@ export const decorators = [
   ),
 ];
 
-export const customElementRendering = (
-  asset: Asset,
-  depth: number
-): JSX.Element => (
-  <span style={{ backgroundColor: 'red' }}>{`${depth}. ${asset.name ||
-    'undefined'}`}</span>
-);
-
-export const handleAssetLoaded = (asset: Asset) => {
-  console.log(asset);
-};
+export const onAssetLoaded = (asset: Asset) =>{
+  console.log(asset)
+action('handleAssetLoaded')(asset)
+}

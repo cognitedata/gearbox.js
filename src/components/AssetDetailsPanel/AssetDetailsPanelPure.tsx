@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{FC} from 'react';
 import { WithAssetDataProps } from '../../hoc/withAsset';
 import { DescriptionList } from '../DescriptionList';
 import { MetaDescriptionListProps } from '../DescriptionList';
@@ -11,7 +11,7 @@ export type AssetDetailsPanelPureProps = WithAssetDataProps &
   MetaDescriptionListProps &
   AssetDetailsPanelStylesProps;
 
-export const AssetDetailsPanelPure: React.SFC<AssetDetailsPanelPureProps> = ({
+export const AssetDetailsPanelPure: FC<AssetDetailsPanelPureProps> = ({
   asset,
   children,
   ...restProps
