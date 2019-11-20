@@ -1,0 +1,96 @@
+import { action } from '@storybook/addon-actions';
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { AssetDetailsPanel } from '../AssetDetailsPanel';
+import { decorators, customElementRendering, handleAssetLoaded } from './helper';
+
+<Meta title="Assets|AssetDetailsPanel/Example" decorators={decorators} />
+
+## Custom categories
+
+```jsx
+  return (
+    <AssetDetailsPanel
+      assetId={4650652196144007}
+      toCategory={name => name.split('_')[0]}
+      categoryPriorityList={['SOURCE']}
+    />
+  );
+```
+
+<Preview>
+  <Story name="Custom categories">
+        <AssetDetailsPanel
+      assetId={4650652196144007}
+      toCategory={name => name.split('_')[0]}
+      categoryPriorityList={['SOURCE']}
+    />
+  </Story>
+</Preview>
+
+## Custom Loading Spinner
+
+
+
+```jsx
+  return (
+    <AssetDetailsPanel
+      assetId={4650652196144007}
+      customSpinner={<div>Loading...</div>}
+    />
+  );
+```
+
+<Preview>
+  <Story name="Custom Loading Spinner ">
+    <AssetDetailsPanel
+      assetId={4650652196144007}
+      customSpinner={<div>Loading...</div>}
+    />
+  </Story>
+</Preview>
+
+## Custom Styles
+
+
+
+```jsx
+  return (
+    <AssetDetailsPanel
+      assetId={4650652196144007}
+      styles={{ border: '1px solid red' }}
+    />
+  );
+  
+```
+
+<Preview>
+  <Story name="Custom Styles">  
+  <AssetDetailsPanel
+      assetId={4650652196144007}
+      styles={{ border: '1px solid red' }}
+    />
+  </Story>
+</Preview>
+
+## With Load Callback
+
+Function that provides as callback:
+
+```jsx
+ return (
+    <AssetDetailsPanel
+      assetId={4650652196144007}
+      onAssetLoaded={handleAssetLoaded}
+    />
+  );
+```
+
+<Preview>
+  <Story name="Load Callback">  
+  <AssetDetailsPanel
+      assetId={4650652196144007}
+       onAssetLoaded={action('handleAssetLoaded')}
+    />
+  </Story>
+</Preview>
+

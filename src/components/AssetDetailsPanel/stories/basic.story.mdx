@@ -1,0 +1,47 @@
+import { Meta, Story, Preview, Props, Source } from '@storybook/addon-docs/blocks';
+import { AssetDetailsPanel } from '../AssetDetailsPanel';
+import {AssetDetailsPanelPure} from '../AssetDetailsPanelPure';
+import { decorators ,Sdk} from './helper';
+
+<Meta title="Assets|AssetDetailsPanel"  />
+
+# AssetBreadcrumb
+
+This component loads meta information for an asset and presents it as a key/value list in a table with two columns. The component is used as one of the panes in AssetMeta component.
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+## Basic usage:
+
+Don't forget to import:
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { AssetBreadcrumb } from '@cognite/gearbox';
+function ExampleComponent(props) {
+  return <AssetDetailsPanel assetId={4650652196144007} />;
+}
+```
+
+<Preview withSource={'none'}>
+  <Story name="Basic Usage">
+    <Sdk>
+    <AssetDetailsPanel assetId={4518112062673878} />
+    </Sdk>
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={AssetDetailsPanelPure} />
+
+### Types
+
+`Asset` type can be imported from `@cognite/sdk`:
+
+```js
+import { Asset } from '@cognite/sdk';
+```
+
