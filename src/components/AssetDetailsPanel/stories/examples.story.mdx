@@ -8,6 +8,10 @@ import { decorators, customElementRendering, handleAssetLoaded } from './helper'
 ## Custom categories
 
 ```jsx
+import 'antd/dist/antd.css';
+import React from 'react';
+import { AssetDetailsPanel } from '@cognite/gearbox';
+function ExampleComponent(props) {
   return (
     <AssetDetailsPanel
       assetId={4650652196144007}
@@ -15,6 +19,7 @@ import { decorators, customElementRendering, handleAssetLoaded } from './helper'
       categoryPriorityList={['SOURCE']}
     />
   );
+}
 ```
 
 <Preview>
@@ -32,12 +37,17 @@ import { decorators, customElementRendering, handleAssetLoaded } from './helper'
 
 
 ```jsx
+import 'antd/dist/antd.css';
+import React from 'react';
+import { AssetDetailsPanel } from '@cognite/gearbox';
+function ExampleComponent(props) {
   return (
     <AssetDetailsPanel
       assetId={4650652196144007}
       customSpinner={<div>Loading...</div>}
     />
   );
+}
 ```
 
 <Preview>
@@ -54,12 +64,17 @@ import { decorators, customElementRendering, handleAssetLoaded } from './helper'
 
 
 ```jsx
+import 'antd/dist/antd.css';
+import React from 'react';
+import { AssetDetailsPanel } from '@cognite/gearbox';
+function ExampleComponent(props) {
   return (
     <AssetDetailsPanel
       assetId={4650652196144007}
       styles={{ border: '1px solid red' }}
     />
   );
+}
   
 ```
 
@@ -77,12 +92,19 @@ import { decorators, customElementRendering, handleAssetLoaded } from './helper'
 Function that provides as callback:
 
 ```jsx
- return (
+import 'antd/dist/antd.css';
+import React from 'react';
+import { Asset } from '@cognite/sdk';
+import { AssetDetailsPanel } from '@cognite/gearbox';
+function ExampleComponent(props) {
+  const handleAssetLoaded = (asset: Asset) => { };
+  return (
     <AssetDetailsPanel
       assetId={4650652196144007}
       onAssetLoaded={handleAssetLoaded}
     />
   );
+}
 ```
 
 <Preview>

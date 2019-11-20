@@ -23,11 +23,11 @@ class CogniteClient extends MockCogniteClient {
   };
 }
 
-export const Sdk = ( obj:any ) =>{
-  const {children} = obj
+export const Sdk = (obj: any) => {
+  const { children } = obj;
   console.log(obj);
-  return <ClientSDKProvider client={client}>{children}</ClientSDKProvider> 
-}
+  return <ClientSDKProvider client={client}>{children}</ClientSDKProvider>;
+};
 
 const client = new CogniteClient({ appId: 'gearbox test' });
 
@@ -45,4 +45,6 @@ export const customElementRendering = (
     'undefined'}`}</span>
 );
 
-export const handleAssetLoaded = (asset: Asset) => { console.log(asset)};
+export const handleAssetLoaded = (asset: Asset) => {
+  console.log(asset);
+};
