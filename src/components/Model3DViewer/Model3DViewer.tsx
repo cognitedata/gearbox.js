@@ -476,7 +476,9 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
         <div
           style={{ width: '100%', height: '100%', fontSize: 0 }}
           ref={this.divWrapper}
-        />
+        >
+          {this.props.children}
+        </div>
       </div>
     );
   }
