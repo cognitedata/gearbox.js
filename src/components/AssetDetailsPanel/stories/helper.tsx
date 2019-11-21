@@ -1,25 +1,18 @@
 import { Asset } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
+import CSS from 'csstype';
 import React from 'react';
-import {
-  ASSET_LIST_CHILD,
-  ASSET_ZERO_DEPTH_ARRAY,
-} from '../../../mocks/assetsListV2';
+import { fakeAsset } from '../../../mocks';
 import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 
 class CogniteClient extends MockCogniteClient {
   assets: any = {
-    retrieve: (ids: { id: number }[]) =>
+    retrieve: () =>
       new Promise(resolve => {
         setTimeout(() => {
-          const allAssets = [...ASSET_ZERO_DEPTH_ARRAY, ...ASSET_LIST_CHILD];
-          const result = ids.map(({ id }) => {
-            return allAssets.find(asset => asset.id === id);
-          });
-
-          resolve(result || []);
-        }, 200);
+          resolve([fakeAsset]);
+        }, 1000);
       }),
   };
 }
@@ -32,7 +25,13 @@ export const decorators = [
   ),
 ];
 
-export const onAssetLoaded = (asset: Asset) =>{
-  console.log(asset)
-action('handleAssetLoaded')(asset)
-}
+export const customStyle: CSS.Properties = {
+  border: '1px solid red',
+};
+
+export const toCategory = (name: string): string => name.split('_')[0];
+
+export const onAssetLoaded = (asset: Asset) => {
+  console.log(asset);
+  action('handleAssetLoaded')(asset);
+};

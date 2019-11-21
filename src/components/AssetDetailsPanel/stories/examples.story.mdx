@@ -1,17 +1,22 @@
 import { action } from '@storybook/addon-actions';
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
-import { decorators, customElementRendering, handleAssetLoaded,onAssetLoaded } from './helper';
+import { decorators,  customElementRendering, handleAssetLoaded, onAssetLoaded, toCategory, customStyle} from './helper';
 
 <Meta title="Assets|AssetDetailsPanel/Example" decorators={decorators} />
 
 ## Custom categories
 
+
+```jsx
+const toCategory = (name: string): string => name.split('_')[0];
+```
+
 <Preview>
   <Story name="Custom categories">
         <AssetDetailsPanel
       assetId={4650652196144007}
-      toCategory={name => name.split('_')[0]}
+      toCategory={toCategory}
       categoryPriorityList={['SOURCE']}
     />
   </Story>
@@ -30,11 +35,21 @@ import { decorators, customElementRendering, handleAssetLoaded,onAssetLoaded } f
 
 ## Custom Styles
 
+```jsx
+import CSS from 'csstype';
+
+//...
+
+const customStyle: CSS.Properties = {
+  border: '1px solid red',
+};
+```
+
 <Preview>
   <Story name="Custom Styles">  
   <AssetDetailsPanel
       assetId={4650652196144007}
-      styles={{ border: '1px solid red' }}
+      styles={customStyle}
     />
   </Story>
 </Preview>

@@ -1,4 +1,4 @@
-import { Meta, Story, Preview, Props, Source } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview, Props} from '@storybook/addon-docs/blocks';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
 import {AssetDetailsPanelPure} from '../AssetDetailsPanelPure';
 import { AssetBreadcrumb } from '../../AssetBreadcrumb/AssetBreadcrumb';
@@ -15,7 +15,7 @@ The component is used as one of the panes in AssetMeta component.
 
 ## Basic usage:
 
-Don't forget to import:
+Don't forget to imports:
 
 ```jsx
 import 'antd/dist/antd.css'
@@ -24,7 +24,7 @@ import React from 'react';
 import { AssetDetailsPanel } from '@cognite/gearbox';
 ```
 
-<Preview withSource={'none'}>
+<Preview>
   <Story name="Basic Usage">
     <AssetDetailsPanel assetId={4518112062673878} />
   </Story>
