@@ -1,10 +1,9 @@
-import { Meta, Story, Preview, Props} from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
-import {AssetDetailsPanelPure} from '../AssetDetailsPanelPure';
-import { AssetBreadcrumb } from '../../AssetBreadcrumb/AssetBreadcrumb';
+import { AssetDetailsPanelPure } from '../AssetDetailsPanelPure';
 import { decorators } from './helper';
 
-<Meta title="Assets|AssetDetailsPanel"  decorators={decorators}/>
+<Meta title="Assets|AssetDetailsPanel" decorators={decorators} />
 
 # Asset Details Panel
 
@@ -15,10 +14,10 @@ The component is used as one of the panes in AssetMeta component.
 
 ## Basic usage:
 
-Don't forget to imports:
+Imports:
 
 ```jsx
-import 'antd/dist/antd.css'
+import 'antd/dist/antd.css';
 
 import React from 'react';
 import { AssetDetailsPanel } from '@cognite/gearbox';
@@ -41,4 +40,3 @@ import { AssetDetailsPanel } from '@cognite/gearbox';
 ```js
 import { Asset } from '@cognite/sdk';
 ```
-

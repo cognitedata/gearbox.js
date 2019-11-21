@@ -1,6 +1,4 @@
 import { Asset } from '@cognite/sdk';
-import { action } from '@storybook/addon-actions';
-import CSS from 'csstype';
 import React from 'react';
 import { fakeAsset } from '../../../mocks';
 import { MockCogniteClient } from '../../../utils/mockSdk';
@@ -25,7 +23,7 @@ export const decorators = [
   ),
 ];
 
-export const customStyle: CSS.Properties = {
+export const customStyle: React.CSSProperties = {
   border: '1px solid red',
 };
 
@@ -33,5 +31,4 @@ export const toCategory = (name: string): string => name.split('_')[0];
 
 export const onAssetLoaded = (asset: Asset) => {
   console.log(asset);
-  action('handleAssetLoaded')(asset);
 };

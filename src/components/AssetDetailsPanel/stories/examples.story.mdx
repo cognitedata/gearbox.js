@@ -1,12 +1,10 @@
-import { action } from '@storybook/addon-actions';
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
-import { decorators,  customElementRendering, handleAssetLoaded, onAssetLoaded, toCategory, customStyle} from './helper';
+import { decorators, onAssetLoaded, toCategory, customStyle } from './helper';
 
 <Meta title="Assets|AssetDetailsPanel/Example" decorators={decorators} />
 
 ## Custom categories
-
 
 ```jsx
 const toCategory = (name: string): string => name.split('_')[0];
@@ -14,7 +12,7 @@ const toCategory = (name: string): string => name.split('_')[0];
 
 <Preview>
   <Story name="Custom categories">
-        <AssetDetailsPanel
+    <AssetDetailsPanel
       assetId={4650652196144007}
       toCategory={toCategory}
       categoryPriorityList={['SOURCE']}
@@ -36,18 +34,13 @@ const toCategory = (name: string): string => name.split('_')[0];
 ## Custom Styles
 
 ```jsx
-import CSS from 'csstype';
-
-//...
-
-const customStyle: CSS.Properties = {
+const customStyle: React.CSSProperties = {
   border: '1px solid red',
 };
 ```
-
 <Preview>
   <Story name="Custom Styles">  
-  <AssetDetailsPanel
+    <AssetDetailsPanel
       assetId={4650652196144007}
       styles={customStyle}
     />
@@ -61,16 +54,14 @@ A callback function can be provided to fire when the asset is loaded:
 ```jsx
 import { Asset } from '@cognite/sdk';
 
-// ...
-
 const onAssetLoaded = (asset: Asset) => console.log(asset);
 ```
 
 <Preview>
   <Story name="Load Callback">  
-  <AssetDetailsPanel
+    <AssetDetailsPanel
       assetId={4650652196144007}
-       onAssetLoaded={onAssetLoaded}
+      onAssetLoaded={onAssetLoaded}
     />
   </Story>
 </Preview>
