@@ -1,4 +1,4 @@
-import React,{FC} from 'react';
+import React, { FC } from 'react';
 import { WithAssetDataProps } from '../../hoc/withAsset';
 import { DescriptionList } from '../DescriptionList';
 import { MetaDescriptionListProps } from '../DescriptionList';
