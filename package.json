@@ -50,7 +50,7 @@
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
     "@cognite/griff-react": "~0.4.2",
-    "@cognite/sdk": "^2.7.0",
+    "@cognite/sdk": "^2.11.0",
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
     "@commitlint/travis-cli": "^8.2.0",

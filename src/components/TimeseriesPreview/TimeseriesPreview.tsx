@@ -10,7 +10,7 @@ import moment from 'moment-timezone';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ClientSDKCacheContext } from '../../context/clientSDKCacheContext';
-import { ClientSDKContext } from '../../context/clientSDKContext';
+import { useCogniteContext } from '../../context/clientSDKProxiedContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { PureObject } from '../../interfaces';
 
@@ -118,7 +118,7 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
   const lang = { ...defaultStrings, ...strings };
 
   const cachedContext = useContext(ClientSDKCacheContext);
-  const context = useContext(ClientSDKContext);
+  const context = useCogniteContext(Component);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [timeseries, setTimeseries] = useState<GetTimeSeriesMetadataDTO>();
