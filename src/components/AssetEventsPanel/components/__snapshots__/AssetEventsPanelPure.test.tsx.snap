@@ -155,14 +155,6 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                   <td
                     className="sc-htpNat irDPrN"
                   >
-                    <span
-                      className="ant-table-row-indent indent-level-0"
-                      style={
-                        Object {
-                          "paddingLeft": "0px",
-                        }
-                      }
-                    />
                     <span>
                       <strong
                         style={
@@ -208,14 +200,6 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                   <td
                     className="sc-htpNat irDPrN"
                   >
-                    <span
-                      className="ant-table-row-indent indent-level-0"
-                      style={
-                        Object {
-                          "paddingLeft": "0px",
-                        }
-                      }
-                    />
                     <span>
                       <strong
                         style={
@@ -261,14 +245,6 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                   <td
                     className="sc-htpNat irDPrN"
                   >
-                    <span
-                      className="ant-table-row-indent indent-level-0"
-                      style={
-                        Object {
-                          "paddingLeft": "0px",
-                        }
-                      }
-                    />
                     <span>
                       <strong
                         style={
@@ -314,14 +290,6 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                   <td
                     className="sc-htpNat irDPrN"
                   >
-                    <span
-                      className="ant-table-row-indent indent-level-0"
-                      style={
-                        Object {
-                          "paddingLeft": "0px",
-                        }
-                      }
-                    />
                     <span>
                       <strong
                         style={
@@ -367,14 +335,6 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                   <td
                     className="sc-htpNat irDPrN"
                   >
-                    <span
-                      className="ant-table-row-indent indent-level-0"
-                      style={
-                        Object {
-                          "paddingLeft": "0px",
-                        }
-                      }
-                    />
                     <span>
                       <strong
                         style={
@@ -420,14 +380,6 @@ exports[`AssetEventsPanel renders correctly 1`] = `
                   <td
                     className="sc-htpNat irDPrN"
                   >
-                    <span
-                      className="ant-table-row-indent indent-level-0"
-                      style={
-                        Object {
-                          "paddingLeft": "0px",
-                        }
-                      }
-                    />
                     <span>
                       <strong
                         style={
