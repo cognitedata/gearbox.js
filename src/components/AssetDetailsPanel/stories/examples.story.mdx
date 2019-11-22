@@ -1,0 +1,68 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { AssetDetailsPanel } from '../AssetDetailsPanel';
+import { decorators, onAssetLoaded, toCategory, customStyle } from './helper';
+
+<Meta title="Assets|AssetDetailsPanel/Example" decorators={decorators} />
+
+## Custom categories
+
+```jsx
+const toCategory = (name: string): string => name.split('_')[0];
+```
+
+<Preview>
+  <Story name="Custom categories">
+    <AssetDetailsPanel
+      assetId={4650652196144007}
+      toCategory={toCategory}
+      categoryPriorityList={['SOURCE']}
+    />
+  </Story>
+</Preview>
+
+## Custom Loading Spinner
+
+<Preview>
+  <Story name="Custom Loading Spinner ">
+    <AssetDetailsPanel
+      assetId={4650652196144007}
+      customSpinner={<div>Loading...</div>}
+    />
+  </Story>
+</Preview>
+
+## Custom Styles
+
+```jsx
+const customStyle: React.CSSProperties = {
+  border: '1px solid red',
+};
+```
+<Preview>
+  <Story name="Custom Styles">  
+    <AssetDetailsPanel
+      assetId={4650652196144007}
+      styles={customStyle}
+    />
+  </Story>
+</Preview>
+
+## Handle callbacks
+
+A callback function can be provided to fire when the asset is loaded:
+
+```jsx
+import { Asset } from '@cognite/sdk';
+
+const onAssetLoaded = (asset: Asset) => console.log(asset);
+```
+
+<Preview>
+  <Story name="Load Callback">  
+    <AssetDetailsPanel
+      assetId={4650652196144007}
+      onAssetLoaded={onAssetLoaded}
+    />
+  </Story>
+</Preview>
+
