@@ -1,5 +1,6 @@
-import Radio, { RadioChangeEvent } from 'antd/lib/radio';
-import moment from 'moment-timezone';
+import { Radio } from 'antd';
+import { RadioChangeEvent } from 'antd/lib/radio';
+import moment from 'moment';
 import React from 'react';
 import styled from 'styled-components';
 import { WithTimeseriesDataProps } from '../../hoc/withTimeseries';

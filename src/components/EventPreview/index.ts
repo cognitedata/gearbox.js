@@ -1,1 +1,5 @@
-export * from './EventPreview';
+export {
+  EventPreview,
+  EventPreviewProps,
+  EventPreviewStyles,
+} from './EventPreview';

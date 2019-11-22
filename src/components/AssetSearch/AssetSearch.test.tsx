@@ -73,8 +73,7 @@ describe('AssetSearch', () => {
       wrapper
         .find('li')
         .first()
-        .props()
-        .onMouseDown();
+        .simulate('mousedown');
       expect(onLiveSearchSelect).toHaveBeenCalled();
       done();
     });

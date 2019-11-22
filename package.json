@@ -34,8 +34,7 @@
   "dependencies": {
     "d3": "^5.9.2",
     "file-saver": "^2.0.2",
-    "lodash": "^4.17.11",
-    "moment-timezone": "^0.5.23",
+    "lodash": "^4.17.15",
     "ms": "^2.1.2",
     "numeral": "^2.0.6",
     "pinch-zoom-js": "^2.3.4",
@@ -66,7 +65,6 @@
     "@types/file-saver": "^2.0.1",
     "@types/jest": "^24.0.6",
     "@types/lodash": "^4.14.123",
-    "@types/moment-timezone": "^0.5.12",
     "@types/ms": "^0.7.31",
     "@types/react": "^16.8.4",
     "@types/react-dom": "^16.9.2",
@@ -106,12 +104,13 @@
     "tslint-plugin-prettier": "^2.0.1",
     "tslint-react": "^3.6.0",
     "tslint-sonarts": "^1.9.0",
-    "typescript": "^3.3.3333",
+    "typescript": "^3.7.2",
     "utility-types": "^3.7.0"
   },
   "peerDependencies": {
     "@cognite/griff-react": "~0.4.2",
     "antd": "^3.14.1",
+    "moment": "^2.24.0",
     "react": "~16.8",
     "styled-components": "^4.1.3"
   },

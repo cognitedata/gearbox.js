@@ -9,7 +9,7 @@ import {
   select as d3Select,
   zoom as d3Zoom,
 } from 'd3';
-import moment from 'moment-timezone';
+import moment from 'moment';
 import React, { createRef, RefObject } from 'react';
 import { EventTimelineType, IdCallback } from '../../../interfaces';
 
