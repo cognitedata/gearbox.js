@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk';
+import { Asset, CogniteClient } from '@cognite/sdk';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
@@ -6,7 +6,7 @@ import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
 } from '../constants/errorMessages';
-import { ClientSDKContext } from '../context/clientSDKContext';
+import { ClientSDKProxyContext } from '../context/clientSDKProxyContext';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
@@ -38,7 +38,7 @@ export const withAsset = <P extends WithAssetDataProps>(
       WithAssetState
     >
     implements ComponentWithUnmountState {
-    static contextType = ClientSDKContext;
+    static contextType = ClientSDKProxyContext;
 
     static getDerivedStateFromProps(
       props: P & WithAssetProps,
@@ -54,7 +54,8 @@ export const withAsset = <P extends WithAssetDataProps>(
 
       return null;
     }
-    context!: React.ContextType<typeof ClientSDKContext>;
+    context!: React.ContextType<typeof ClientSDKProxyContext>;
+    client!: CogniteClient;
 
     isComponentUnmounted = false;
 
@@ -69,7 +70,8 @@ export const withAsset = <P extends WithAssetDataProps>(
     }
 
     componentDidMount() {
-      if (!this.context) {
+      this.client = this.context(WrapperComponent.displayName || '')!;
+      if (!this.client) {
         console.error(ERROR_NO_SDK_CLIENT);
         return;
       }
@@ -90,7 +92,7 @@ export const withAsset = <P extends WithAssetDataProps>(
       try {
         const assets = await connectPromiseToUnmountState(
           this,
-          this.context!.assets.retrieve([{ id: this.props.assetId }])
+          this.client!.assets.retrieve([{ id: this.props.assetId }])
         );
 
         if (!assets || assets.length !== 1) {

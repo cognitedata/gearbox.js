@@ -1,9 +1,8 @@
 import { CogniteClient } from '@cognite/sdk';
 import React from 'react';
 import { ClientSDKContext } from '../../context/clientSDKContext';
-import { ClientSDKProxiedContext } from '../../context/clientSDKProxiedContext';
-import { wrapInProxy } from '../../context/proxiedCogniteClient';
 import { ClientSDKCacheProvider } from './ClientSDKCacheProvider/ClientSDKCacheProvider';
+import { ClientSDKProxyProvider } from './ClientSDKProxyProvider';
 
 export interface ClientSDKProviderProps {
   client: CogniteClient;
@@ -16,9 +15,9 @@ export const ClientSDKProvider: React.FC<ClientSDKProviderProps> = ({
 }) => (
   <ClientSDKContext.Provider value={client}>
     <ClientSDKCacheProvider client={client}>
-      <ClientSDKProxiedContext.Provider value={wrapInProxy(client)}>
+      <ClientSDKProxyProvider client={client}>
         {children}
-      </ClientSDKProxiedContext.Provider>
+      </ClientSDKProxyProvider>
     </ClientSDKCacheProvider>
   </ClientSDKContext.Provider>
 );

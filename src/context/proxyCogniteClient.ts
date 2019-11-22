@@ -1,5 +1,7 @@
 import { CogniteClient } from '@cognite/sdk';
 import { version } from '../../package.json';
+import { ClientSDKProxyContextType } from './clientSDKProxyContext';
+import { ClientSDKContextType } from './clientSDKContext';
 
 const apiNames = [
   'assets',
@@ -32,7 +34,7 @@ function getComponentHeader(component: string) {
   return `${GearboxHeader}/${component}`;
 }
 
-export function wrapInProxy(client: CogniteClient | null) {
+export function wrapInProxy(client: ClientSDKContextType): ClientSDKProxyContextType {
   let componentName: string;
 
   const clientHandler: ProxyHandler<CogniteClient> = {
@@ -45,23 +47,23 @@ export function wrapInProxy(client: CogniteClient | null) {
     },
   };
 
-  function createApiHandler<T extends ClientApi>(): ProxyHandler<T> {
-    return {
-      get(target: T, propKey: keyof T) {
-        const originalProperty = target[propKey];
-        if (typeof originalProperty === 'function') {
-          return <Args>(...args: Args[]) => {
+  const createApiHandler = <T extends ClientApi>(): ProxyHandler<T> => ({
+    get(target: T, propKey: keyof T) {
+      const originalProperty = target[propKey];
+      if (typeof originalProperty === 'function') {
+        return <Args>(...args: Args[]) => {
+          if (client!.setOneTimeSdkHeader) {
             client!.setOneTimeSdkHeader(getComponentHeader(componentName));
-            return originalProperty(...args);
-          };
-        } else {
-          return originalProperty;
-        }
-      },
-    };
-  }
+          }
+          return originalProperty(...args);
+        };
+      } else {
+        return originalProperty;
+      }
+    }
+  })
 
-  return function forComponent(component: string) {
+  return (component: string) => {
     componentName = component;
     return client ? new Proxy(client, clientHandler) : client;
   };

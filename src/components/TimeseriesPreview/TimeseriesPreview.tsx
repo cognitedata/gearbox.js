@@ -10,7 +10,7 @@ import moment from 'moment-timezone';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ClientSDKCacheContext } from '../../context/clientSDKCacheContext';
-import { useCogniteContext } from '../../context/clientSDKProxiedContext';
+import { useCogniteContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { PureObject } from '../../interfaces';
 

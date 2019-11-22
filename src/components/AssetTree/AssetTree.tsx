@@ -8,7 +8,7 @@ import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
-import { ClientSDKProxiedContext } from '../../context/clientSDKProxiedContext';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { AssetTreeProps } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
@@ -46,7 +46,7 @@ interface AssetTreeNode {
 }
 
 class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
-  static contextType = ClientSDKProxiedContext;
+  static contextType = ClientSDKProxyContext;
   static defaultProps = {
     theme: { ...defaultTheme },
   };
@@ -67,7 +67,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   static toKeys(path: number[], initial = {}): ExpandedKeysMap {
     return path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
   }
-  context!: React.ContextType<typeof ClientSDKProxiedContext>;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
   client!: CogniteClient;
 
   autoPagingToArrayOptions: AutoPagingToArrayOptions = this.props
@@ -97,11 +97,11 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   }
 
   loadAssetInfo = async () => {
-    if (!this.context) {
+    this.client = this.context(Component.displayName || '')!;
+    if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
-    this.client = this.context(Component.displayName || '')!;
     this.setState({ loading: true }, async () => {
       const { assetIds } = this.props;
       let assets: Asset[] = [];

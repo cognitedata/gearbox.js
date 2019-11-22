@@ -1,13 +1,10 @@
 import { version } from '../../package.json';
 import { MockCogniteClient } from '../mocks/mockSdk';
-import { wrapInProxy } from './proxiedCogniteClient';
+import { wrapInProxy } from './proxyCogniteClient';
 
 class CogniteClient extends MockCogniteClient {
   assets: any = {
-    retrieve: (ids: number[]) =>
-      new Promise(resolve => {
-        return resolve(ids);
-      }),
+    retrieve: async (ids: number[]) => ids
   };
 }
 

@@ -6,8 +6,6 @@ import { version } from '../../package.json';
 import { AssetTree } from '../components/AssetTree';
 import { ClientSDKProvider } from '../components/ClientSDKProvider';
 import { TimeseriesPreview } from '../components/TimeseriesPreview';
-import { randomLatestDatapoint, singleTimeseries } from '../mocks';
-import { ASSET_ZERO_DEPTH_ARRAY } from '../mocks/assetsListV2';
 import { MockCogniteClient } from '../mocks/mockSdk';
 
 configure({ adapter: new Adapter() });
@@ -25,18 +23,16 @@ class CogniteClient extends MockCogniteClient {
 }
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
-sdk.timeseries.retrieve.mockResolvedValue([singleTimeseries]);
-sdk.datapoints.retrieveLatest.mockResolvedValue([randomLatestDatapoint()]);
-sdk.assets.list.mockReturnValue({
-  autoPagingToArray: async () => ASSET_ZERO_DEPTH_ARRAY,
-});
+sdk.timeseries.retrieve.mockResolvedValue([]);
+sdk.datapoints.retrieveLatest.mockResolvedValue([]);
+sdk.assets.list.mockReturnValue({ autoPagingToArray: async () => [] });
 
 afterEach(() => {
   jest.clearAllMocks();
   jest.clearAllTimers();
 });
 
-describe('clientSDKProxiedProvider', () => {
+describe('clientSDKProxyProvider', () => {
   it('it calls setOneTimeHeader with component name', async () => {
     let wrapper: ReactWrapper = new ReactWrapper(<></>);
     sdk.setOneTimeSdkHeader = jest.fn();
