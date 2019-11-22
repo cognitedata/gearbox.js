@@ -1,7 +1,6 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import renderer from 'react-test-renderer';
 import { ASSET_META_EVENTS_STYLES, fakeEvents } from '../../../mocks';
 import {
   AssetEventsPanelPure,
@@ -11,12 +10,6 @@ import {
 configure({ adapter: new Adapter() });
 
 describe('AssetEventsPanel', () => {
-  it('renders correctly', () => {
-    const tree = renderer
-      .create(<AssetEventsPanelPure assetEvents={fakeEvents} />)
-      .toJSON();
-    expect(tree).toMatchSnapshot();
-  });
   it('checks if the modal is opened', done => {
     const eventPanelModal = mount(
       <AssetEventsPanelPure assetEvents={fakeEvents} />
