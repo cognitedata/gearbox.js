@@ -1,7 +1,7 @@
 import { CogniteClient } from '@cognite/sdk';
 import { version } from '../../package.json';
-import { ClientSDKProxyContextType } from './clientSDKProxyContext';
 import { ClientSDKContextType } from './clientSDKContext';
+import { ClientSDKProxyContextType } from './clientSDKProxyContext';
 
 const apiNames = [
   'assets',
@@ -34,7 +34,9 @@ function getComponentHeader(component: string) {
   return `${GearboxHeader}/${component}`;
 }
 
-export function wrapInProxy(client: ClientSDKContextType): ClientSDKProxyContextType {
+export function wrapInProxy(
+  client: ClientSDKContextType
+): ClientSDKProxyContextType {
   let componentName: string;
 
   const clientHandler: ProxyHandler<CogniteClient> = {
@@ -60,8 +62,8 @@ export function wrapInProxy(client: ClientSDKContextType): ClientSDKProxyContext
       } else {
         return originalProperty;
       }
-    }
-  })
+    },
+  });
 
   return (component: string) => {
     componentName = component;

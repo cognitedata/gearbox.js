@@ -4,7 +4,7 @@ import { wrapInProxy } from './proxyCogniteClient';
 
 class CogniteClient extends MockCogniteClient {
   assets: any = {
-    retrieve: async (ids: number[]) => ids
+    retrieve: async (ids: number[]) => ids,
   };
 }
 
