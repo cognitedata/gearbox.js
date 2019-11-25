@@ -92,7 +92,7 @@ export const withAsset = <P extends WithAssetDataProps>(
       try {
         const assets = await connectPromiseToUnmountState(
           this,
-          this.client!.assets.retrieve([{ id: this.props.assetId }])
+          this.client.assets.retrieve([{ id: this.props.assetId }])
         );
 
         if (!assets || assets.length !== 1) {
