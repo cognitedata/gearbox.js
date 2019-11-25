@@ -9,11 +9,9 @@ import {
 import { ClientSDKContext } from '../../context/clientSDKContext';
 
 import { ApiQuery, Callback, PureObject } from '../../interfaces';
-import {
-  Search,
-  SearchStyles as AssetSearchStyles,
-} from '../common/Search/Search';
-export type AssetSearchStyles = AssetSearchStyles;
+import { Search, SearchStyles as Styles } from '../common/Search/Search';
+
+export type AssetSearchStyles = Styles;
 
 type LiveSearchSelect = (asset: Asset) => void;
 type SearchResultCallback = (assets: Asset[]) => void;

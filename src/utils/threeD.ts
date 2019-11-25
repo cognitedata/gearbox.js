@@ -164,11 +164,9 @@ export function removeEvent(
     return;
   }
 
-  for (const key in ViewerEventTypes) {
-    if (ViewerEventTypes[key]) {
-      listeners[ViewerEventTypes[key]] = [];
-    }
-  }
+  Object.values(ViewerEventTypes).forEach(key => {
+    listeners[key] = [];
+  });
 }
 
 export function hashGenerator(

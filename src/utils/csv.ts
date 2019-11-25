@@ -1,6 +1,6 @@
 import { Aggregate, DatapointsGetAggregateDatapoint } from '@cognite/sdk';
 import { saveAs } from 'file-saver';
-import moment from 'moment-timezone';
+import moment from 'moment';
 import { getGranularityInMS } from './utils';
 
 export interface DatapointsToCSVProps {

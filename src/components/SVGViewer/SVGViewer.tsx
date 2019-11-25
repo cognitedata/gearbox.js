@@ -1,4 +1,4 @@
-import Icon from 'antd/lib/icon';
+import { Icon } from 'antd';
 import PinchZoom from 'pinch-zoom-js';
 import React, { KeyboardEvent, RefObject } from 'react';
 import styled from 'styled-components';
