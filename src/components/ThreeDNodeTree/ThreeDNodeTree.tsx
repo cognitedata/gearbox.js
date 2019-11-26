@@ -1,5 +1,4 @@
 import { List3DNodesQuery, RevealNode3D } from '@cognite/sdk';
-import { CogniteClient } from '@cognite/sdk';
 import { Tree } from 'antd';
 import {
   AntTreeNode,
@@ -38,28 +37,6 @@ interface NodeTreeState {
   revisionId: number;
   loadedKeys: string[];
 }
-
-const cursorApiRequest = async (
-  sdk: CogniteClient,
-  modelId: number,
-  revisionId: number,
-  params: List3DNodesQuery,
-  data: RevealNode3D[] = []
-): Promise<RevealNode3D[]> => {
-  const result = await sdk.viewer3D.listRevealNodes3D(
-    modelId,
-    revisionId,
-    params
-  );
-  const { nextCursor: cursor } = result;
-  if (result.nextCursor) {
-    return cursorApiRequest(sdk, modelId, revisionId, { ...params, cursor }, [
-      ...data,
-      ...result.items,
-    ]);
-  }
-  return [...data, ...result.items];
-};
 
 class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
   static contextType = ClientSDKContext;
@@ -158,8 +135,7 @@ class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
         nodeId: threeDnodeId,
       };
 
-      const loadedData = await cursorApiRequest(
-        this.context!,
+      const loadedData = await this.cursorApiRequest(
         this.state.modelId,
         this.state.revisionId,
         query
@@ -261,6 +237,27 @@ class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
       </Tree>
     );
   }
+
+  private cursorApiRequest = async (
+    modelId: number,
+    revisionId: number,
+    params: List3DNodesQuery,
+    data: RevealNode3D[] = []
+  ): Promise<RevealNode3D[]> => {
+    const result = await this.context!.viewer3D.listRevealNodes3D(
+      modelId,
+      revisionId,
+      params
+    );
+    const { nextCursor: cursor } = result;
+    if (result.nextCursor) {
+      return this.cursorApiRequest(modelId, revisionId, { ...params, cursor }, [
+        ...data,
+        ...result.items,
+      ]);
+    }
+    return [...data, ...result.items];
+  };
 }
 
 const TreeNodeWrapper = styled(TreeNode)<AntTreeNodeProps>`

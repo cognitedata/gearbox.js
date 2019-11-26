@@ -1,4 +1,4 @@
-import Icon from 'antd/lib/icon';
+import { Icon } from 'antd';
 import React, { KeyboardEvent, MouseEvent } from 'react';
 import styled from 'styled-components';
 import * as CustomIcon from './Icons';

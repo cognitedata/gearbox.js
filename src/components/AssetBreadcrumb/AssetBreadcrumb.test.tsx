@@ -1,4 +1,4 @@
-import BreadcrumbItem from 'antd/lib/breadcrumb/BreadcrumbItem';
+import { Breadcrumb } from 'antd';
 import { configure, mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -110,7 +110,7 @@ describe('AssetBreadCrumb', () => {
 
     wrapper.update();
 
-    const breadcrumbItems = wrapper.find(BreadcrumbItem);
+    const breadcrumbItems = wrapper.find(Breadcrumb.Item);
     const shrunkElement = breadcrumbItems.findWhere(el => el.text() === '...');
 
     expect(breadcrumbItems.length).toEqual(maxLength + 1);

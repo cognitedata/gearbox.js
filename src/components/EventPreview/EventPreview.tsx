@@ -9,13 +9,13 @@ import {
 import { ClientSDKContext } from '../../context/clientSDKContext';
 import { PureObject } from '../../interfaces';
 import {
-  EventPreviewStyles,
+  EventPreviewStyles as Styles,
   EventPreviewView,
 } from './components/EventPreviewView';
 
-export type EventPreviewStyles = EventPreviewStyles;
+export type EventPreviewStyles = Styles;
 
-const LoadingSpinner: React.SFC = () => (
+const LoadingSpinner: React.FC = () => (
   <SpinContainer>
     <Spin />
   </SpinContainer>

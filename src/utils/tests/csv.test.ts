@@ -1,7 +1,7 @@
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import fileSaver from 'file-saver';
-import moment from 'moment-timezone';
+import moment from 'moment';
 import { csvExportData } from '../../mocks';
 import {
   arrangeDatapointsByTimestamp,

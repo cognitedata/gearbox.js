@@ -6,7 +6,7 @@ import {
   InternalId,
 } from '@cognite/sdk';
 import { Card, Dropdown, Icon, Menu } from 'antd';
-import moment from 'moment-timezone';
+import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ClientSDKCacheContext } from '../../context/clientSDKCacheContext';

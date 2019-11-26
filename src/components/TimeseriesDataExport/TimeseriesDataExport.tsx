@@ -13,7 +13,7 @@ import {
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import { FormComponentProps } from 'antd/lib/form';
 import { ColProps } from 'antd/lib/grid';
-import moment, { Moment } from 'moment-timezone';
+import moment, { Moment } from 'moment';
 import React, { SyntheticEvent, useContext, useEffect, useState } from 'react';
 import { ClientSDKContext } from '../../context/clientSDKContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';

@@ -1,4 +1,4 @@
-import Collapse from 'antd/lib/collapse';
+import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 

@@ -6,7 +6,7 @@ import {
   Priority,
   PureObject,
 } from '../interfaces';
-import docTypes from './resources/docTypes.json';
+import { docTypes } from './resources/docTypes';
 import { sortStringsAlphabetically } from './utils';
 
 const maxDocumentTitleLength = 56;

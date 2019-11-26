@@ -1,4 +1,4 @@
-import moment from 'moment-timezone';
+import moment from 'moment';
 import { PureObject } from '../interfaces';
 
 type TimeType = number | string | Date;
@@ -6,18 +6,13 @@ type TimeType = number | string | Date;
 export function formatDatetime(
   time: TimeType | undefined,
   defaultValue: string = '',
-  timezone: string = '',
   format: string = 'MMM D, YYYY HH:mm:ss'
 ): string {
-  return time
-    ? moment(time)
-        .tz(timezone || moment.tz.guess())
-        .format(format)
-    : defaultValue;
+  return time ? moment(time).format(format) : defaultValue;
 }
 
 export function momentFromTimestamp(timestamp: number) {
-  return moment(timestamp).tz('utc');
+  return moment(timestamp);
 }
 
 export const mapMetaData = (metaObject: PureObject) =>

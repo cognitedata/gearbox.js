@@ -3,7 +3,7 @@ import { MetaDocProps } from '../../interfaces';
 import {
   DocumentsPanelStylesProps,
   DocumentTable,
-} from './components/DocumentTable';
+} from './DocumentTable/DocumentTable';
 
 export type AssetDocumentsPanelProps = WithAssetFilesProps &
   MetaDocProps &

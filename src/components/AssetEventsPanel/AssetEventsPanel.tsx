@@ -3,15 +3,14 @@ import {
   WithAssetEventsProps,
 } from '../../hoc/withAssetEvents';
 import {
-  AssetEventsPanelProps,
   AssetEventsPanelPure,
   AssetEventsPanelStylesProps,
-  MetaEventsProps,
+  MetaEventsProps as Props,
 } from './components/AssetEventsPanelPure';
 
 export type AssetEventsPanelProps = WithAssetEventsProps &
-  MetaEventsProps &
+  Props &
   AssetEventsPanelStylesProps;
-export type MetaEventsProps = MetaEventsProps;
+export type MetaEventsProps = Props;
 
 export const AssetEventsPanel = withAssetEvents(AssetEventsPanelPure);

@@ -1,8 +1,6 @@
-import Button, { NativeButtonProps } from 'antd/lib/button/button';
-import Collapse from 'antd/lib/collapse';
-import Form from 'antd/lib/form';
-import Input, { InputProps } from 'antd/lib/input';
-import Spin from 'antd/lib/spin';
+import { Button, Collapse, Form, Input, Spin } from 'antd';
+import { NativeButtonProps } from 'antd/lib/button/button';
+import { InputProps } from 'antd/lib/input';
 import React from 'react';
 import styled from 'styled-components';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';

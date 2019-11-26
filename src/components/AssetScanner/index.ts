@@ -1,1 +1,6 @@
-export * from './AssetScanner';
+export {
+  AssetScanner,
+  AssetScannerProps,
+  AssetScannerStyles,
+  ASNotifyTypes,
+} from './AssetScanner';
