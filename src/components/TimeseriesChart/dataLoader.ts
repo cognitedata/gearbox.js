@@ -40,7 +40,6 @@ export class DataLoader {
     // We can get here if we ask for a stepInterpolation
     // and there's no points in the range [0, t1]
     // where the domain asked for is [t0, t1]
-    console.warn('No obvious y accessor for', d);
     return 0;
   };
 
@@ -314,14 +313,13 @@ export class DataLoader {
                 );
                 if (numberOfPoints < pointsPerSeries / 2) {
                   // If there are less than x points, show raw values
-                  const result = await this.getRawDataPoints({
+                  let data = await this.getRawDataPoints({
                     id,
                     step,
                     start: fetchDomain[0],
                     end: fetchDomain[1],
                     limit: pointsPerSeries,
                   });
-                  let data = result;
                   if (step && points.length) {
                     // Use the last-known value from step-interpolation to create a fake point at the left-boundary
                     if (
@@ -336,7 +334,7 @@ export class DataLoader {
                   return {
                     data,
                     drawPoints: true,
-                    step: !!step,
+                    step,
                   };
                 }
                 return {
@@ -345,7 +343,7 @@ export class DataLoader {
                     ...x,
                     timestamp: +x.timestamp,
                   })),
-                  step: !!step,
+                  step,
                 };
               }
             )
