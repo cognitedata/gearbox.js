@@ -1009,10 +1009,10 @@
     react-select "^1.2.1"
     react-sizeme "^2.5.2"
 
-"@cognite/sdk@^2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@cognite/sdk/-/sdk-2.7.0.tgz#f464d23a56743f629d2bf6337129674e2d4cf829"
-  integrity sha512-5HL2L6KHE4MZUYiCPho2vXPAvCya/yRieLaMgTofLlRAde0cC9rE1zw3jRHMkH+9/rwoWrQyT5RqRwUvRrKeKg==
+"@cognite/sdk@^2.11.0":
+  version "2.12.0"
+  resolved "https://registry.npmjs.org/@cognite/sdk/-/sdk-2.12.0.tgz#463aee83972628848048bf27bdfa9921cfd2ac7a"
+  integrity sha512-r6ycJyekVWBNDPq7d2YAEC3zwKtHzgEAaMX8eLLMaV1Egu1r9IUHlqbEGE8kAv7Y/ekhNMpfcuQRyqN+UDWKQw==
   dependencies:
     cross-fetch "^3.0.4"
     lodash "^4.17.11"

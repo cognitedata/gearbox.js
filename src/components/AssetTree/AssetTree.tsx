@@ -1,14 +1,14 @@
-import { Asset } from '@cognite/sdk';
+import { Asset, CogniteClient } from '@cognite/sdk';
 import { Spin, Tree } from 'antd';
 import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash';
 import React from 'react';
 import styled from 'styled-components';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
-import { ClientSDKContext } from '../../context/clientSDKContext';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { AssetTreeProps } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
@@ -46,7 +46,7 @@ interface AssetTreeNode {
 }
 
 class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
-  static contextType = ClientSDKContext;
+  static contextType = ClientSDKProxyContext;
   static defaultProps = {
     theme: { ...defaultTheme },
   };
@@ -67,7 +67,8 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   static toKeys(path: number[], initial = {}): ExpandedKeysMap {
     return path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
   }
-  context!: React.ContextType<typeof ClientSDKContext>;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   autoPagingToArrayOptions: AutoPagingToArrayOptions = this.props
     .autoPagingToArrayOptions
@@ -96,7 +97,8 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   }
 
   loadAssetInfo = async () => {
-    if (!this.context) {
+    this.client = this.context(Component.displayName || '')!;
+    if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
@@ -105,15 +107,17 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
       let assets: Asset[] = [];
       if (assetIds) {
         if (assetIds.length > 0) {
-          assets = await this.context!.assets.retrieve(
+          assets = await this.client.assets.retrieve(
             assetIds.map(id => ({ id }))
           );
         }
       } else {
-        assets = await this.context!.assets.list({
-          filter: { root: true },
-          aggregatedProperties: ['childCount'],
-        }).autoPagingToArray(this.autoPagingToArrayOptions);
+        assets = await this.client.assets
+          .list({
+            filter: { root: true },
+            aggregatedProperties: ['childCount'],
+          })
+          .autoPagingToArray(this.autoPagingToArrayOptions);
       }
 
       const assetNodesMap = AssetTree.convertAssetsToNodeMap(assets);
@@ -128,10 +132,12 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   };
 
   cursorApiRequest = async (assetId: number): Promise<Asset[]> => {
-    const result = await this.context!.assets.list({
-      filter: { parentIds: [assetId] },
-      aggregatedProperties: ['childCount'],
-    }).autoPagingToArray(this.autoPagingToArrayOptions);
+    const result = await this.client.assets
+      .list({
+        filter: { parentIds: [assetId] },
+        aggregatedProperties: ['childCount'],
+      })
+      .autoPagingToArray(this.autoPagingToArrayOptions);
     if (!result || !Array.isArray(result)) {
       console.error(ERROR_API_UNEXPECTED_RESULTS);
     }
