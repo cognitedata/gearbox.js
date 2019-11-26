@@ -1,7 +1,7 @@
 import { Asset, CogniteClient } from '@cognite/sdk';
 import { Spin, Tree } from 'antd';
 import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash';
 import React from 'react';
 import styled from 'styled-components';
 import {
