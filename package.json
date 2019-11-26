@@ -19,7 +19,7 @@
     "build:watch": "yarn clean && rollup -c --watch && yarn esCheck",
     "build-storybook": "build-storybook -s ./public",
     "clean": "rimraf dist",
-    "esCheck": "es-check es5 './dist/index.js'",
+    "esCheck": "es-check es5 ./dist/index.js",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c tslint.json -p tsconfig.json --fix",
     "prepublishOnly": "yarn build",
