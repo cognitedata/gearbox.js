@@ -1,47 +1,26 @@
 import { CogniteClient } from '@cognite/sdk';
 import { version } from '../../package.json';
-import { ClientSDKContextType } from './clientSDKContext';
-import { ClientSDKProxyContextType } from './clientSDKProxyContext';
+import { ClientSDKContextType } from '../context/clientSDKContext';
 
-const apiNames = [
-  'assets',
-  'timeseries',
-  'datapoints',
-  'sequences',
-  'events',
-  'files',
-  'raw',
-  'projects',
-  'groups',
-  'securityCategories',
-  'serviceAccounts',
-  'models3D',
-  'revisions3D',
-  'files3D',
-  'assetMappings3D',
-  'viewer3D',
-  'apiKeys',
-  'login',
-  'logout',
-] as const;
-
-type ClientApiName = typeof apiNames[number];
+// Exclude 'project' cause it returns string from SDK instance and doesn't make
+// any request to API
+type ClientApiName = Exclude<keyof CogniteClient, 'project'>;
 type ClientApi = CogniteClient[ClientApiName];
 
 const GearboxHeader = `CogniteGearbox:${version}`;
+const excludeMethods = ['setOneTimeSdkHeader', 'project'];
 
 function getComponentHeader(component: string) {
   return `${GearboxHeader}/${component}`;
 }
 
-export function wrapInProxy(
-  client: ClientSDKContextType
-): ClientSDKProxyContextType {
-  let componentName: string;
-
+export function wrapInLogProxy(
+  client: ClientSDKContextType,
+  componentName: string
+): ClientSDKContextType {
   const clientHandler: ProxyHandler<CogniteClient> = {
     get(target, name: ClientApiName) {
-      if (apiNames.includes(name)) {
+      if (target[name] && !excludeMethods.includes(name)) {
         return new Proxy(target[name], createApiHandler());
       } else {
         return target[name];
@@ -65,8 +44,5 @@ export function wrapInProxy(
     },
   });
 
-  return (component: string) => {
-    componentName = component;
-    return client ? new Proxy(client, clientHandler) : client;
-  };
+  return client ? new Proxy(client, clientHandler) : client;
 }

@@ -2,7 +2,8 @@ import React, { useContext } from 'react';
 import { ClientSDKContextType } from './clientSDKContext';
 
 export type ClientSDKProxyContextType = (
-  component: string
+  component: string,
+  cache?: boolean
 ) => ClientSDKContextType;
 
 export const ClientSDKProxyContext = React.createContext<
@@ -11,6 +12,6 @@ export const ClientSDKProxyContext = React.createContext<
 
 export function useCogniteContext<
   C extends React.ComponentType<React.ComponentProps<C>>
->(component: C) {
-  return useContext(ClientSDKProxyContext)(component.displayName || '');
+>(component: C, cache: boolean = false) {
+  return useContext(ClientSDKProxyContext)(component.displayName || '', cache);
 }

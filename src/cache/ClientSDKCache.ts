@@ -3,9 +3,9 @@ import {
   ClientSDKCacheAssets,
   ClientSDKCacheContextType,
   ClientSDKCacheTimeseries,
-} from '../../../context/clientSDKCacheContext';
-import { CacheAssets } from './cache/CacheAssets';
-import { CacheTimeseries } from './cache/CacheTimeseries';
+} from '../context/clientSDKCacheContext';
+import { CacheAssets } from './resources/CacheAssets';
+import { CacheTimeseries } from './resources/CacheTimeseries';
 
 export class ClientSDKCache implements ClientSDKCacheContextType {
   assets: ClientSDKCacheAssets;

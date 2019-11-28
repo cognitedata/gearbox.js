@@ -1,6 +1,6 @@
 import { version } from '../../package.json';
 import { MockCogniteClient } from '../mocks/mockSdk';
-import { wrapInProxy } from './proxyCogniteClient';
+import { wrapInProxies } from './clientSDKProxies';
 
 class CogniteClient extends MockCogniteClient {
   assets: any = {
@@ -13,7 +13,7 @@ describe('proxied cognite client', () => {
   let retrieve: typeof client.assets.retrieve;
 
   beforeAll(() => {
-    client = wrapInProxy(new CogniteClient({ appId: 'test' }))('test')!;
+    client = wrapInProxies(new CogniteClient({ appId: 'test' }))('test')!;
     retrieve = client.assets.retrieve;
   });
 
