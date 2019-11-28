@@ -148,20 +148,20 @@ describe('AssetBreadCrumb', () => {
     span.simulate('keydown', { keyCode: 13 });
     expect(onBreadcrumbClick).toHaveBeenCalledTimes(2);
   });
-  it('should use provide function to fetch assets', async () => {
-    const retrieveAssets = jest
+  it('should use fetchAssets function if provided', async () => {
+    const retrieveAsset = jest
       .fn()
-      .mockImplementation((id: number) => [assetMocks[Number(id)]]);
+      .mockImplementation((id: number) => assetMocks[id]);
 
     await act(async () => {
       wrapper = mountComponent({
         ...defaultProps,
-        retrieveAssets,
+        retrieveAsset,
       } as AssetBreadcrumbProps);
     });
 
     wrapper.update();
-    expect(retrieveAssets).toHaveBeenCalled();
+    expect(retrieveAsset).toHaveBeenCalled();
     expect(sdk.assets.retrieve).toHaveBeenCalledTimes(0);
   });
 });

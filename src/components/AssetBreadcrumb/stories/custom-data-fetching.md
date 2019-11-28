@@ -12,11 +12,11 @@ import { AssetBreadcrumb } from '@cognite/gearbox';
 import { Asset, CogniteInternalId } from '@cognite/sdk';
 
 function ExampleComponent(props) {
-  const retrieveAssets = async (assetId:CogniteInternalId): Promise<Asset[]> => {/* ... \*/}
+  const retrieveAsset = async (assetId:CogniteInternalId): Promise<Asset> => {/* ... \*/}
   return (
     <AssetBreadcrumb 
       assetId={4518112062673878} 
-      retrieveAssets={retrieveAssets} 
+      retrieveAsset={retrieveAsset} 
     />
   );
 

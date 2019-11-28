@@ -8,13 +8,13 @@ import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { AnyIfEmpty } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
 
-export type FetchAssetsCall = (assetId: CogniteInternalId) => Promise<Asset[]>;
+export type FetchAssetCall = (assetId: CogniteInternalId) => Promise<Asset>;
 
 export interface AssetBreadcrumbProps {
   assetId: number;
   maxLength?: number;
   renderItem?: (asset: Asset, depth: number) => JSX.Element;
-  retrieveAssets?: FetchAssetsCall;
+  retrieveAsset?: FetchAssetCall;
   onBreadcrumbClick?: (asset: Asset, depth: number) => void;
   theme?: AnyIfEmpty<{}>;
 }
@@ -54,15 +54,15 @@ const AssetBreadcrumb: React.FC<AssetBreadcrumbProps> = ({
   assetId,
   maxLength = 3,
   renderItem,
-  retrieveAssets,
+  retrieveAsset,
   onBreadcrumbClick = () => undefined,
 }: AssetBreadcrumbProps) => {
   const context = useContext(ClientSDKCacheContext);
   const [assets, setAssets] = useState<Asset[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const fetchAsset = async (id: number): Promise<Asset> => {
-    const [asset] = retrieveAssets
-      ? await retrieveAssets(id)
+    const [asset] = retrieveAsset
+      ? [await retrieveAsset(id)]
       : await context!.assets.retrieve([{ id }]);
     return asset;
   };

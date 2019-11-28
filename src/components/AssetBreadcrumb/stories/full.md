@@ -36,7 +36,7 @@ function ExampleComponent(props) {
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------- |
 | `maxLength`         | Maximal number of assets to be displayed. If length of the asset chain bigger than `maxLength` value, asset chain will be shrunk to root element plus `maxLength` - 1 number of last elements in a chain | `number`                                       | 7       |
 | `renderItem`        | Function, that can be used for custom rendering of asset in a breadcrumb                                                                                                                                 | `(asset: Asset, depth: number) => JSX.Element` |         |
-| `retrieveAssets` | Function that can be used to replace embedded assets fetching                                 | `(assetId: CogniteInternalId) => Promise<Asset[]>`                                   |                          |
+| `retrieveAsset` | Function that can be used to replace embedded asset fetching                                 | `(assetId: CogniteInternalId) => Promise<Asset>`                                   |                          |
 | `onBreadcrumbClick` | Callback which is executed on a click action on asset in a breadcrumb. It's only available in case of default asset rendering in a breadcrumb                                                               | `(asset: Asset, depth: number) => void`        |         |
 
 ### Types

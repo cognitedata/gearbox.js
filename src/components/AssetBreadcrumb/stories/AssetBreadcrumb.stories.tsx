@@ -31,11 +31,11 @@ class CogniteClient extends MockCogniteClient {
   };
 }
 
-const retrieveAssets = async (assetId: CogniteInternalId): Promise<Asset[]> => {
+const retrieveAsset = async (assetId: CogniteInternalId): Promise<Asset> => {
   return new Promise(resolve => {
     setTimeout(() => {
       const result = ASSET_LIST_CHILD.find(asset => asset.id === assetId);
-      resolve(result ? [result] : []);
+      resolve(result);
     }, 100);
   });
 };
@@ -86,7 +86,7 @@ storiesOf('AssetBreadcrumb/Examples', module)
       return (
         <AssetBreadcrumb
           assetId={4518112062673878}
-          retrieveAssets={retrieveAssets}
+          retrieveAsset={retrieveAsset}
         />
       );
     },
