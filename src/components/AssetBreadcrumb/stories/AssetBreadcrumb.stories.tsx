@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk';
+import { Asset, CogniteInternalId } from '@cognite/sdk';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
@@ -9,6 +9,7 @@ import {
 import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { AssetBreadcrumb } from '../AssetBreadcrumb';
+import customDataFetching from './custom-data-fetching.md';
 import customRendering from './custom-element-rendering.md';
 import fullDescription from './full.md';
 import handleCallbacks from './handle-callbacks.md';
@@ -29,6 +30,15 @@ class CogniteClient extends MockCogniteClient {
       }),
   };
 }
+
+const retrieveAsset = async (assetId: CogniteInternalId): Promise<Asset> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const result = ASSET_LIST_CHILD.find(asset => asset.id === assetId);
+      resolve(result);
+    }, 100);
+  });
+};
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 const customElementRendering = (asset: Asset, depth: number) => (
@@ -67,6 +77,22 @@ storiesOf('AssetBreadcrumb/Examples', module)
     {
       readme: {
         content: maxLength,
+      },
+    }
+  )
+  .add(
+    'Custom assets fetching',
+    () => {
+      return (
+        <AssetBreadcrumb
+          assetId={4518112062673878}
+          retrieveAsset={retrieveAsset}
+        />
+      );
+    },
+    {
+      readme: {
+        content: customDataFetching,
       },
     }
   )
