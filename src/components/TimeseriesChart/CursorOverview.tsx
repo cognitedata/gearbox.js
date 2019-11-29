@@ -150,11 +150,11 @@ export class CursorOverview extends React.Component<
           return numeral(point.value).format('0[.]0[00] a');
         };
 
-    const renderTag = (s: any) =>
-      rulerPoints[s.id] &&
-      !hiddenSeries[s.id] && (
-        <Tag color={s.color} key={s.id}>
-          {yLabelFn(rulerPoints[s.id])}
+    const renderTag = ({ id, color }: { id: number; color: string }) =>
+      rulerPoints[id] &&
+      !hiddenSeries[id] && (
+        <Tag color={color} key={id}>
+          {yLabelFn(rulerPoints[id])}
         </Tag>
       );
 
@@ -165,7 +165,7 @@ export class CursorOverview extends React.Component<
             this.overviewContainer = ref;
           }}
         >
-          {series && [series.map(renderTag)]}
+          {series && series.map(renderTag)}
         </Overview>
         <DateContainer
           ref={ref => {
