@@ -17,7 +17,7 @@ export const wrapInCacheProxy = (
           apiHandler<CachedTypes, ClientApiTypes>(name as CachedKeys)
         );
       } else {
-        return target[name];
+        return target[name as ClientApiKeys];
       }
     },
   };
