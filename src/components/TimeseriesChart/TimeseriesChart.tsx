@@ -134,7 +134,7 @@ export class TimeseriesChart extends React.Component<
     });
     this.setState({ rulerPoints });
 
-    if (typeof onMouseMove === 'function') {
+    if (onMouseMove) {
       onMouseMove(data);
     }
   };
