@@ -11,8 +11,19 @@ export class ClientSDKCache implements ClientSDKCacheContextType {
   assets: ClientSDKCacheAssets;
   timeseries: ClientSDKCacheTimeseries;
 
+  private client: CogniteClient;
+
   constructor(client: CogniteClient) {
-    this.assets = new CacheAssets(client);
-    this.timeseries = new CacheTimeseries(client);
+    this.client = client;
+    this.assets = new CacheAssets(this.provideClient);
+    this.timeseries = new CacheTimeseries(this.provideClient);
   }
+
+  swapClient = (client: CogniteClient) => {
+    this.client = client;
+  };
+
+  private provideClient = (): CogniteClient => {
+    return this.client;
+  };
 }

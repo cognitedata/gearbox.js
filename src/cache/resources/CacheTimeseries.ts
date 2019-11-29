@@ -10,9 +10,9 @@ import { CacheBase } from './CacheBase';
 
 export class CacheTimeseries extends CacheBase
   implements ClientSDKCacheTimeseries {
-  private client: CogniteClient;
+  private client: () => CogniteClient;
 
-  constructor(client: CogniteClient) {
+  constructor(client: () => CogniteClient) {
     super();
     this.client = client;
   }
@@ -32,8 +32,8 @@ export class CacheTimeseries extends CacheBase
     if (cached) {
       return cached.value;
     }
-
-    const request = this.client.timeseries.retrieve(ids);
+    console.log(this.client());
+    const request = this.client().timeseries.retrieve(ids);
     this.cacheRequest(apiCall, key, request);
 
     const response = await request;

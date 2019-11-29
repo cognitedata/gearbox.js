@@ -1,4 +1,3 @@
-import { CogniteClient } from '@cognite/sdk';
 import { ClientSDKCache } from '../cache/ClientSDKCache';
 import { ClientSDKContextType } from '../context/ClientSDKContext';
 import { ClientSDKProxyContextType } from '../context/clientSDKProxyContext';
@@ -10,13 +9,15 @@ export function wrapInProxies(
 ): ClientSDKProxyContextType {
   const sdkCache = client ? new ClientSDKCache(client) : client;
 
-  const cachedClient = sdkCache
-    ? wrapInCacheProxy(client as CogniteClient, sdkCache)
-    : client;
-
   return (component: string, cache = false) => {
-    const sdkClient = cache && cachedClient ? cachedClient : client;
+    const sdkClient = client ? wrapInLogProxy(client, component) : client;
 
-    return sdkClient ? wrapInLogProxy(sdkClient, component) : sdkClient;
+    if (cache && sdkCache && sdkClient) {
+      sdkCache.swapClient(sdkClient);
+
+      return wrapInCacheProxy(sdkClient, sdkCache);
+    }
+
+    return sdkClient;
   };
 }

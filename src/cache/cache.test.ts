@@ -24,8 +24,8 @@ const asset: Asset = {
   createdTime: new Date(),
 };
 beforeEach(() => {
-  cacheAssets = new CacheAssets(client);
-  cacheTimeseries = new CacheTimeseries(client);
+  cacheAssets = new CacheAssets(() => client);
+  cacheTimeseries = new CacheTimeseries(() => client);
   client.assets.retrieve.mockReturnValue(Promise.resolve([asset]));
   client.timeseries.retrieve.mockReturnValue(
     Promise.resolve([singleTimeseries])
