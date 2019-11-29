@@ -1,6 +1,6 @@
 import { CogniteClient } from '@cognite/sdk';
 import { ClientSDKCache } from '../cache/ClientSDKCache';
-import { ClientSDKContextType } from '../context/clientSDKContext';
+import { ClientSDKContextType } from '../context/ClientSDKContext';
 import { ClientSDKProxyContextType } from '../context/clientSDKProxyContext';
 import { wrapInCacheProxy } from './clientSDKCacheProxy';
 import { wrapInLogProxy } from './clientSDKLogProxy';

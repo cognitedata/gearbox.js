@@ -1,48 +1,58 @@
-import { version } from '../../package.json';
+import { IdEither } from '@cognite/sdk';
 import { MockCogniteClient } from '../mocks/mockSdk';
 import { wrapInProxies } from './clientSDKProxies';
 
 class CogniteClient extends MockCogniteClient {
   assets: any = {
-    retrieve: async (ids: number[]) => ids,
+    retrieve: jest
+      .fn()
+      .mockImplementation(async (ids: IdEither[]) => Promise.resolve(ids)),
+    list: jest.fn(),
   };
+  datapoints: any = {
+    retrieve: jest.fn(),
+  };
+  loginWithOAuth: any = jest.fn();
+  setOneTimeSdkHeader: any = jest.fn();
 }
 
 describe('proxied cognite client', () => {
   let client: CogniteClient;
-  let retrieve: typeof client.assets.retrieve;
+  let proxiedClient: CogniteClient;
 
   beforeAll(() => {
-    client = wrapInProxies(new CogniteClient({ appId: 'test' }))('test')!;
-    retrieve = client.assets.retrieve;
+    client = new CogniteClient({ appId: 'test' });
+    proxiedClient = wrapInProxies(client)('test')!;
   });
 
   beforeEach(() => {
-    client.setOneTimeSdkHeader = jest.fn();
+    jest.clearAllMocks();
   });
+  it('should not cache calls', async () => {
+    await proxiedClient.assets.retrieve([{ id: 1 }]);
+    await proxiedClient.assets.retrieve([{ id: 1 }]);
 
-  test('calls', async () => {
-    expect(await retrieve([1])).toEqual([1]);
+    expect(client.assets.retrieve).toHaveBeenCalledTimes(2);
+    expect(client.setOneTimeSdkHeader).toHaveBeenCalledTimes(2);
   });
+  it('should not track excluded function', () => {
+    proxiedClient.loginWithOAuth();
 
-  test("don't mess up with non-api members", () => {
-    expect(() => client.project).not.toThrowError();
+    expect(client.loginWithOAuth).toHaveBeenCalledTimes(1);
+    expect(client.setOneTimeSdkHeader).toHaveBeenCalledTimes(0);
   });
+  it('should cache supported calls', async () => {
+    proxiedClient = wrapInProxies(client)('test', true)!;
 
-  test("don't set sdk header on accessor", () => {
-    client.assets.retrieve; // tslint:disable-line
-    expect(client.setOneTimeSdkHeader).toBeCalledTimes(0);
-  });
+    await proxiedClient.assets.retrieve([{ id: 1 }]);
+    await proxiedClient.datapoints.retrieve();
+    await proxiedClient.assets.list();
+    await proxiedClient.assets.retrieve([{ id: 1 }]);
+    await proxiedClient.loginWithOAuth();
 
-  test('set sdk header twice', async () => {
-    await retrieve();
-    await retrieve();
-    expect(client.setOneTimeSdkHeader).toBeCalledTimes(2);
-  });
-
-  test('set correct sdk header', () => {
-    retrieve();
-    const header = `CogniteGearbox:${version}/test`;
-    expect(client.setOneTimeSdkHeader).toHaveBeenLastCalledWith(header);
+    expect(client.assets.retrieve).toHaveBeenCalledTimes(1);
+    expect(client.assets.list).toHaveBeenCalledTimes(1);
+    expect(client.loginWithOAuth).toHaveBeenCalledTimes(1);
+    expect(client.setOneTimeSdkHeader).toHaveBeenCalledTimes(3);
   });
 });
