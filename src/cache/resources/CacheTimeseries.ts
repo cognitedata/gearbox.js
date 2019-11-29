@@ -32,7 +32,6 @@ export class CacheTimeseries extends CacheBase
     if (cached) {
       return cached.value;
     }
-    console.log(this.client());
     const request = this.client().timeseries.retrieve(ids);
     this.cacheRequest(apiCall, key, request);
 

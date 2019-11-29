@@ -1,5 +1,5 @@
 import { ClientSDKCache } from '../cache/ClientSDKCache';
-import { ClientSDKContextType } from '../context/ClientSDKContext';
+import { ClientSDKContextType } from '../context/clientSDKContext';
 import { ClientSDKProxyContextType } from '../context/clientSDKProxyContext';
 import { wrapInCacheProxy } from './clientSDKCacheProxy';
 import { wrapInLogProxy } from './clientSDKLogProxy';
