@@ -22,6 +22,7 @@ function ExampleComponent(props) {
       startTime={Date.now() - 60 * 1000}
       endTime={Date.now()}
       ruler={{
+        visible: true,
         yLabel: (point: ChartRulerPoint) =>
             `${Number(point.value).toFixed(3)}`,
         timeLabel: (point: ChartRulerPoint) =>

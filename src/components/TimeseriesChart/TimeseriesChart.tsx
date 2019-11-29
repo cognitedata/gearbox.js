@@ -30,14 +30,6 @@ export interface ChartRulerConfig {
   visible?: boolean;
   timeLabel?: (point: ChartRulerPoint) => string;
   yLabel?: (point: ChartRulerPoint) => string;
-  getTimeLabelPosition?: (
-    defaultPosition: number,
-    measurements: {
-      height: number;
-      labelHeight: number;
-      timeLabelMargin: number;
-    }
-  ) => number;
 }
 
 export interface TimeseriesChartStyles {

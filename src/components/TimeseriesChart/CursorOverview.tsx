@@ -132,25 +132,31 @@ export class CursorOverview extends React.Component<
       return Math.max(rulerPoint.timestamp, acc);
     }, 0);
 
-    const timeLabel =
-      typeof ruler.timeLabel === 'function'
-        ? ruler.timeLabel({
-            id: 0,
-            name: '',
-            value: 0,
-            color: '#ccddff',
-            timestamp: newestTimestamp,
-            x: 0,
-            y: 0,
-          })
-        : formattedDate(newestTimestamp);
+    const timeLabel = ruler.timeLabel
+      ? ruler.timeLabel({
+          id: 0,
+          name: '',
+          value: 0,
+          color: '#ccddff',
+          timestamp: newestTimestamp,
+          x: 0,
+          y: 0,
+        })
+      : formattedDate(newestTimestamp);
 
-    const yLabelFn: (point: ChartRulerPoint) => string =
-      typeof ruler.yLabel === 'function'
-        ? ruler.yLabel
-        : (point: ChartRulerPoint) => {
-            return numeral(point.value).format('0[.]0[00] a');
-          };
+    const yLabelFn: (point: ChartRulerPoint) => string = ruler.yLabel
+      ? ruler.yLabel
+      : (point: ChartRulerPoint) => {
+          return numeral(point.value).format('0[.]0[00] a');
+        };
+
+    const renderTag = (s: any) =>
+      rulerPoints[s.id] &&
+      !hiddenSeries[s.id] && (
+        <Tag color={s.color} key={s.id}>
+          {yLabelFn(rulerPoints[s.id])}
+        </Tag>
+      );
 
     return (
       <Container>
@@ -159,17 +165,7 @@ export class CursorOverview extends React.Component<
             this.overviewContainer = ref;
           }}
         >
-          {series && [
-            series.map(
-              (s: any) =>
-                rulerPoints[s.id] &&
-                !hiddenSeries[s.id] && (
-                  <Tag color={s.color} key={s.id}>
-                    {yLabelFn(rulerPoints[s.id])}
-                  </Tag>
-                )
-            ),
-          ]}
+          {series && [series.map(renderTag)]}
         </Overview>
         <DateContainer
           ref={ref => {
