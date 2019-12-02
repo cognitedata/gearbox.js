@@ -24,7 +24,8 @@
     ],
     "no-var-requires": false,
     "no-bitwise": false,
-    "member-access": [true, "no-public"]
+    "member-access": [true, "no-public"],
+    "bool-param-default": false
   },
   "rulesDirectory": [
     "tslint-plugin-prettier"

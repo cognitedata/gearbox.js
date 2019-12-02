@@ -1,9 +1,9 @@
 import { Asset, CogniteInternalId } from '@cognite/sdk';
 import { Breadcrumb, Icon } from 'antd';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
-import { ClientSDKCacheContext } from '../../context/clientSDKCacheContext';
+import { useCogniteContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { AnyIfEmpty } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
@@ -57,7 +57,7 @@ const AssetBreadcrumb: React.FC<AssetBreadcrumbProps> = ({
   retrieveAsset,
   onBreadcrumbClick = () => undefined,
 }: AssetBreadcrumbProps) => {
-  const context = useContext(ClientSDKCacheContext);
+  const context = useCogniteContext(Component);
   const [assets, setAssets] = useState<Asset[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const fetchAsset = async (id: number): Promise<Asset> => {
