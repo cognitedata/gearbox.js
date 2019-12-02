@@ -1,5 +1,9 @@
-import { Aggregate, DatapointsMultiQuery, InternalId } from '@cognite/sdk';
-import { TimeSeries } from '@cognite/sdk/dist/src/resources/classes/timeSeries';
+import {
+  Aggregate,
+  DatapointsMultiQuery,
+  GetTimeSeriesMetadataDTO,
+  InternalId,
+} from '@cognite/sdk';
 import {
   Alert,
   Button,
@@ -19,7 +23,12 @@ import { ClientSDKContext } from '../../context/clientSDKContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { AnyIfEmpty, PureObject } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
-import { datapointsToCSV, Delimiters, downloadCSV } from '../../utils/csv';
+import {
+  datapointsToCSV,
+  Delimiters,
+  downloadCSV,
+  LabelFormatter,
+} from '../../utils/csv';
 import { getGranularityInMS } from '../../utils/utils';
 import { ComplexString } from '../common/ComplexString/ComplexString';
 
@@ -28,7 +37,10 @@ export type FetchCSVCall = (
   opts: CsvParseOptions
 ) => Promise<string>;
 
-export type FetchTimeseriesCall = (ids: InternalId[]) => Promise<TimeSeries[]>;
+export type FetchTimeseriesCall = (
+  ids: InternalId[]
+) => Promise<GetTimeSeriesMetadataDTO[]>;
+export type LabelFormatterForCSV = LabelFormatter;
 
 export interface CsvParseOptions {
   aggregate: Aggregate;
@@ -63,6 +75,7 @@ export interface TimeseriesDataExportProps extends FormComponentProps {
   onError?: (err: any) => void;
   onSuccess?: () => void;
   formItemLayout?: FormItemLayout;
+  labelFormatter?: LabelFormatterForCSV;
   theme?: AnyIfEmpty<{}>;
   strings?: PureObject;
 }
@@ -129,12 +142,13 @@ const TimeseriesDataExportFC = (props: TimeseriesDataExportProps) => {
     onError,
     onSuccess,
     strings = {},
+    labelFormatter,
   } = props;
   const context = useContext(ClientSDKContext);
   const [limit, setLimit] = useState(cellLimit);
   const [limitHit, setLimitHit] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [series, setSeries]: [TimeSeries[], any] = useState([]);
+  const [series, setSeries] = useState<GetTimeSeriesMetadataDTO[]>([]);
   const lang = { ...defaultStrings, ...strings };
   const {
     title,
@@ -159,12 +173,19 @@ const TimeseriesDataExportFC = (props: TimeseriesDataExportProps) => {
   ) => {
     const data = await context!.datapoints.retrieve(request);
     const format = readableDate ? formatData : '';
+    const formatLabels = labelFormatter
+      ? {
+          labelFormatter,
+          timeseries: series,
+        }
+      : undefined;
 
     return datapointsToCSV({
       data,
       aggregate,
       delimiter,
       format,
+      formatLabels,
       granularity: granularityString,
     });
   };

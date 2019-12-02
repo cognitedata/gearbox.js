@@ -10,9 +10,11 @@ import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { getGranularityInMS } from '../../../utils/utils';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import {
+  LabelFormatterForCSV,
   TimeseriesDataExport,
   TimeseriesDataExportProps,
 } from '../TimeseriesDataExport';
+import formatLabel from './format-label.md';
 import fullDescription from './full.md';
 import outOfLimit from './out-of-limit.md';
 
@@ -64,6 +66,8 @@ const TimeseriesChartExportWrapper: React.FC<
     </ClientSDKProvider>
   );
 };
+const labelFormatter: LabelFormatterForCSV = (ts: GetTimeSeriesMetadataDTO) =>
+  ts.name || `timeserie-${ts.id}`;
 
 storiesOf('TimeseriesDataExport', module).add(
   'Full Description',
@@ -81,23 +85,40 @@ storiesOf('TimeseriesDataExport', module).add(
   }
 );
 
-storiesOf('TimeseriesDataExport/Examples', module).add(
-  'Hit Limit',
-  () => (
-    <TimeseriesChartExportWrapper
-      timeseriesIds={[41852231325889, 7433885982156917]}
-      granularity={'2s'}
-      defaultTimeRange={[1567321800000, 1567408200000]}
-      cellLimit={5000}
-      strings={{
-        cellLimitErr:
-          'Oops, you rich cell limit for CSV document – {{ cellLimit }} cells, some data may be omitted',
-      }}
-    />
-  ),
-  {
-    readme: {
-      content: outOfLimit,
-    },
-  }
-);
+storiesOf('TimeseriesDataExport/Examples', module)
+  .add(
+    'Hit Limit',
+    () => (
+      <TimeseriesChartExportWrapper
+        timeseriesIds={[41852231325889, 7433885982156917]}
+        granularity={'2s'}
+        defaultTimeRange={[1567321800000, 1567408200000]}
+        cellLimit={5000}
+        strings={{
+          cellLimitErr:
+            'Oops, you rich cell limit for CSV document – {{ cellLimit }} cells, some data may be omitted',
+        }}
+      />
+    ),
+    {
+      readme: {
+        content: outOfLimit,
+      },
+    }
+  )
+  .add(
+    'Format label',
+    () => (
+      <TimeseriesChartExportWrapper
+        timeseriesIds={[41852231325889, 7433885982156917]}
+        granularity={'2m'}
+        defaultTimeRange={[1567321800000, 1567408200000]}
+        labelFormatter={labelFormatter}
+      />
+    ),
+    {
+      readme: {
+        content: formatLabel,
+      },
+    }
+  );
