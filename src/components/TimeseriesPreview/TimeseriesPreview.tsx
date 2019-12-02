@@ -7,9 +7,8 @@ import {
 } from '@cognite/sdk';
 import { Card, Dropdown, Icon, Menu } from 'antd';
 import moment from 'moment';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ClientSDKCacheContext } from '../../context/clientSDKCacheContext';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { PureObject } from '../../interfaces';
@@ -117,8 +116,7 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
   } = styles;
   const lang = { ...defaultStrings, ...strings };
 
-  const cachedContext = useContext(ClientSDKCacheContext);
-  const context = useCogniteContext(Component);
+  const context = useCogniteContext(Component, true);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [timeseries, setTimeseries] = useState<GetTimeSeriesMetadataDTO>();
@@ -174,7 +172,7 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
       try {
         const timeseriesById = retrieveTimeseries
           ? await retrieveTimeseries({ id })
-          : await cachedContext!.timeseries.retrieve([{ id }]);
+          : await context!.timeseries.retrieve([{ id }]);
 
         if (timeseriesById.length && !canceled) {
           setTimeseries(timeseriesById[0]);
