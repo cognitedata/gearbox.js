@@ -5,18 +5,18 @@ import {
   IdEither,
   InternalId,
 } from '@cognite/sdk';
-import { ClientSDKCacheAssets } from '../../../../context/clientSDKCacheContext';
+import { ClientSDKCacheAssets } from '../../context/clientSDKCacheContext';
 import { CacheBase } from './CacheBase';
 
 export class CacheAssets extends CacheBase implements ClientSDKCacheAssets {
-  private client: CogniteClient;
+  private client: () => CogniteClient;
 
-  constructor(client: CogniteClient) {
+  constructor(client: () => CogniteClient) {
     super();
     this.client = client;
   }
 
-  async retrieve(ids: IdEither[]): Promise<AssetList> {
+  retrieve = async (ids: IdEither[]): Promise<AssetList> => {
     const apiCall = 'retrieve';
     this.handleFirstCallToCache(apiCall);
 
@@ -31,13 +31,12 @@ export class CacheAssets extends CacheBase implements ClientSDKCacheAssets {
     if (cached) {
       return cached.value;
     }
-
-    const request = this.client.assets.retrieve(ids);
+    const request = this.client().assets.retrieve(ids);
     this.cacheRequest(apiCall, key, request);
 
     const response = await request;
     this.cacheResponse(apiCall, key, response);
 
     return response;
-  }
+  };
 }

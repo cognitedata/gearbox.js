@@ -48,7 +48,7 @@ describe('clientSDKProxyProvider', () => {
     expect(sdk.setOneTimeSdkHeader).toHaveBeenCalledWith(
       `CogniteGearbox:${version}/TimeseriesPreview`
     );
-    expect(sdk.setOneTimeSdkHeader).toHaveBeenCalledTimes(1);
+    expect(sdk.setOneTimeSdkHeader).toHaveBeenCalledTimes(2);
     expect(wrapper.exists()).toBeTruthy();
   });
 
