@@ -10,7 +10,7 @@ import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { getGranularityInMS } from '../../../utils/utils';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import {
-  LabelFormatterForCSV,
+  CSVLabelFormatter,
   TimeseriesDataExport,
   TimeseriesDataExportProps,
 } from '../TimeseriesDataExport';
@@ -66,7 +66,7 @@ const TimeseriesChartExportWrapper: React.FC<
     </ClientSDKProvider>
   );
 };
-const labelFormatter: LabelFormatterForCSV = (ts: GetTimeSeriesMetadataDTO) =>
+const labelFormatter: CSVLabelFormatter = (ts: GetTimeSeriesMetadataDTO) =>
   ts.name || `timeserie-${ts.id}`;
 
 storiesOf('TimeseriesDataExport', module).add(
