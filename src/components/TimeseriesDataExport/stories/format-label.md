@@ -9,10 +9,10 @@ import 'antd/dist/antd.css';
 
 import React from 'react';
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk'; 
-import { TimeseriesDataExport, LabelFormatterForCSV } from '@cognite/gearbox';
+import { TimeseriesDataExport, CSVLabelFormatter } from '@cognite/gearbox';
 
 function ExampleComponent(props) {
-  const labelFormatter: LabelFormatterForCSV = 
+  const labelFormatter: CSVLabelFormatter = 
     (ts: GetTimeSeriesMetadataDTO) => ts.name || \`timeserie-${ts.id}\`; 
 
   return (

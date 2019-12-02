@@ -15,10 +15,10 @@ export interface DatapointsToCSVProps {
   aggregate?: Aggregate;
   delimiter?: Delimiters;
   format?: string;
-  formatLabels?: CSVLabelFormatter;
+  formatLabels?: LabelFormatterConfig;
 }
 
-export interface CSVLabelFormatter {
+export interface LabelFormatterConfig {
   timeseries: GetTimeSeriesMetadataDTO[];
   labelFormatter: LabelFormatter;
 }

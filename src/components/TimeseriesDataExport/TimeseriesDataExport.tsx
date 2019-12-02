@@ -40,7 +40,7 @@ export type FetchCSVCall = (
 export type FetchTimeseriesCall = (
   ids: InternalId[]
 ) => Promise<GetTimeSeriesMetadataDTO[]>;
-export type LabelFormatterForCSV = LabelFormatter;
+export type CSVLabelFormatter = LabelFormatter;
 
 export interface CsvParseOptions {
   aggregate: Aggregate;
@@ -75,7 +75,7 @@ export interface TimeseriesDataExportProps extends FormComponentProps {
   onError?: (err: any) => void;
   onSuccess?: () => void;
   formItemLayout?: FormItemLayout;
-  labelFormatter?: LabelFormatterForCSV;
+  labelFormatter?: CSVLabelFormatter;
   theme?: AnyIfEmpty<{}>;
   strings?: PureObject;
 }
