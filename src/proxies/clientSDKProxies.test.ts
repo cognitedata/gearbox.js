@@ -55,4 +55,19 @@ describe('proxied cognite client', () => {
     expect(client.loginWithOAuth).toHaveBeenCalledTimes(1);
     expect(client.setOneTimeSdkHeader).toHaveBeenCalledTimes(3);
   });
+  it('should use different cache instance', async () => {
+    const clientA = new CogniteClient({ appId: 'client-a' });
+    const clientB = new CogniteClient({ appId: 'client-b' });
+
+    const cachedA = wrapInProxies(clientA)('test', true)!;
+    const cachedB = wrapInProxies(clientB)('test', true)!;
+
+    await cachedA.assets.retrieve([{ id: 1 }]);
+    await cachedA.assets.retrieve([{ id: 1 }]);
+    await cachedB.assets.retrieve([{ id: 1 }]);
+    await cachedB.assets.retrieve([{ id: 1 }]);
+
+    expect(clientA.assets.retrieve).toHaveBeenCalledTimes(1);
+    expect(clientB.assets.retrieve).toHaveBeenCalledTimes(1);
+  });
 });
