@@ -463,6 +463,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
         ) : null}
         {this.renderSliders()}
         <input
+          readOnly={true}
           type="text"
           onBlur={this.onBlur}
           onFocus={this.onFocus}
