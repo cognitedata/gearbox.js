@@ -1,3 +1,4 @@
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import fileSaver from 'file-saver';
@@ -12,12 +13,27 @@ import {
 
 configure({ adapter: new Adapter() });
 
+const timeseriesId = 123;
 const formatDate = 'YYYY-MM-DD HH:mm:ss';
 const currentDate = new Date();
 const formatedDate = moment(currentDate.getTime()).format(formatDate);
+const timeseries: GetTimeSeriesMetadataDTO[] = [
+  {
+    id: timeseriesId,
+    name: `Timeseries${timeseriesId}`,
+    isString: false,
+    isStep: false,
+    description: 'Test Timeseries',
+    createdTime: new Date(),
+    lastUpdatedTime: new Date(),
+  },
+];
+const labelFormatter = (ts: GetTimeSeriesMetadataDTO) => {
+  return ts.name!;
+};
 const data = [
   {
-    id: 123,
+    id: timeseriesId,
     datapoints: [
       {
         timestamp: currentDate,
@@ -27,10 +43,11 @@ const data = [
     ],
   },
 ];
-const csvString = `timestamp,123\n${currentDate.getTime()},1`;
-const csvStringFormated = `timestamp${Delimiters.Semicolon}123\n${formatedDate}${Delimiters.Semicolon}1`;
-const csvStringMax = `timestamp,123\n${currentDate.getTime()},2`;
-const emptyCsvString = `timestamp,123`;
+const csvString = `timestamp,${timeseriesId}\n${currentDate.getTime()},1`;
+const csvStringFormated = `timestamp${Delimiters.Semicolon}${timeseriesId}\n${formatedDate}${Delimiters.Semicolon}1`;
+const csvStringFormattedLabel = `timestamp${Delimiters.Semicolon}Timeseries${timeseriesId}\n${formatedDate}${Delimiters.Semicolon}1`;
+const csvStringMax = `timestamp,${timeseriesId}\n${currentDate.getTime()},2`;
+const emptyCsvString = `timestamp,${timeseriesId}`;
 const saveAs = jest.spyOn(fileSaver, 'saveAs').mockImplementation(() => null);
 
 afterEach(() => {
@@ -65,6 +82,19 @@ describe('csv', () => {
       });
 
       expect(result).toEqual(csvStringFormated);
+    });
+    it('should return string with formatted column label', () => {
+      const result = datapointsToCSV({
+        data,
+        granularity: '2s',
+        delimiter: Delimiters.Semicolon,
+        format: formatDate,
+        formatLabels: {
+          timeseries,
+          labelFormatter,
+        },
+      });
+      expect(result).toEqual(csvStringFormattedLabel);
     });
     it('should use default props', () => {
       const result = datapointsToCSV({

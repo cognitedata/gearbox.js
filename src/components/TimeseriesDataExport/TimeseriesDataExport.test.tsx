@@ -3,6 +3,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { MockCogniteClient } from '../../mocks/mockSdk';
+import { LabelFormatter } from '../../utils/csv';
 import * as csv from '../../utils/csv';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import {
@@ -16,13 +17,14 @@ configure({ adapter: new Adapter() });
 
 class CogniteClient extends MockCogniteClient {
   timeseries: any = {
-    retrieve: jest.fn(),
+    retrieve: jest.fn().mockReturnValue([{ id: 0 }]),
   };
   datapoints: any = {
     retrieve: jest.fn(),
   };
 }
 
+const formIdentificator = 'Form[data-test-id="form"]';
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 const defaultProps = {
   timeseriesIds: [0],
@@ -30,6 +32,7 @@ const defaultProps = {
   defaultTimeRange: [1567321800000, 1567408200000],
   visible: true,
 };
+const labelFormatter = jest.fn().mockReturnValue('name') as LabelFormatter;
 const fetchCSV = jest
   .fn()
   .mockReturnValue(
@@ -96,7 +99,7 @@ describe('TimeseriesChart', () => {
 
     expect(sdk.timeseries.retrieve).toHaveBeenCalled();
 
-    const form = wrapper.find('Form[data-test-id="form"]');
+    const form = wrapper.find(formIdentificator);
 
     await act(async () => {
       form.simulate('submit');
@@ -119,12 +122,31 @@ describe('TimeseriesChart', () => {
 
     expect(retrieveTimeseries).toHaveBeenCalled();
 
-    const form = wrapper.find('Form[data-test-id="form"]');
+    const form = wrapper.find(formIdentificator);
 
     await act(async () => {
       form.simulate('submit');
     });
 
     expect(fetchCSV).toHaveBeenCalled();
+  });
+
+  it('should format column name with provided formatter', async () => {
+    await act(async () => {
+      wrapper = mountComponent({
+        ...defaultProps,
+        labelFormatter,
+      } as TimeseriesDataExportProps);
+    });
+
+    wrapper.update();
+
+    const form = wrapper.find(formIdentificator);
+
+    await act(async () => {
+      form.simulate('submit');
+    });
+
+    expect(labelFormatter).toHaveBeenCalledTimes(1);
   });
 });
