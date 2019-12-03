@@ -51,20 +51,19 @@ afterEach(() => {
 });
 
 describe('AssetTree', () => {
-  // fix this afterwards
-  // it('renders correctly', done => {
-  //   const tree = renderer.create(
-  //     <ClientSDKProvider client={sdk}>
-  //       <AssetTree
-  //         defaultExpandedKeys={[ASSET_ZERO_DEPTH_ARRAY[zeroChild].id]}
-  //       />
-  //     </ClientSDKProvider>
-  //   );
-  //   setImmediate(() => {
-  //     expect(tree).toMatchSnapshot();
-  //     done();
-  //   });
-  // });
+  it('renders correctly', done => {
+    const tree = renderer.create(
+      <ClientSDKProvider client={sdk}>
+        <AssetTree
+          defaultExpandedKeys={[ASSET_ZERO_DEPTH_ARRAY[zeroChild].id]}
+        />
+      </ClientSDKProvider>
+    );
+    setImmediate(() => {
+      expect(tree).toMatchSnapshot();
+      done();
+    });
+  });
 
   it('renders correctly with assetIds', done => {
     const tree = renderer.create(
@@ -119,7 +118,7 @@ describe('AssetTree', () => {
 
     await sleep(0);
     AssetTreeModal.update();
-    expect(sdk.assets.list).toBeCalledTimes(2);
+    expect(sdk.assets.list).toBeCalledTimes(3);
     expect(
       AssetTreeModal.find(Tree.TreeNode)
         .map(node => node.props())
