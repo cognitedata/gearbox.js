@@ -16,6 +16,8 @@ SVG-viewer provides the following functionality:
 
 #### Usage:
 
+Using `documentId`
+
 ```typescript jsx
 import 'antd/dist/antd.css';
 
@@ -35,12 +37,36 @@ function ExampleComponent(props) {
 }
 ```
 
+Using `file`
+
+```typescript jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+function ExampleComponent(props) {
+
+  const file = `...`
+
+  return (
+    <div style={{ height: '100vh' }}>
+      <SVGViewer
+        file={file}
+      />
+    </div>
+  );
+
+}
+```
+
 #### Available props:
 ##### Required:
 
 | Property              | Description                                 | Type                        | Default |
 | --------------------- | ------------------------------------------- | --------------------------- | ------- |
-| `documentId`            | `fileId` provided by `@cognite/sdk` to fetch svg-document            | `number` |         |
+| `documentId`            | `fileId` or `file` must be present as Props to `SvgViewer`. `fileId` is provided by `@cognite/sdk` to fetch svg-document            | `number` |         |
+| `file`                  | `file` or `fileId` must be present as Props to `SvgViewer`. `file` is the contents of the svg   | `string` |         |
 
 #### Optional:
 

@@ -19,9 +19,7 @@ const wheelZoomLevel = 0.15;
 const currentAssetClassName = 'current-asset';
 const minDesktopWidth = 992;
 
-export interface SvgViewerProps {
-  // CDF fileId to fetch svg-document
-  documentId: number;
+interface SvgViewerBasicProps {
   // List of classes and conditions on when they should be applied for equipment
   metadataClassesConditions?: Conditions[];
   // Document title
@@ -53,6 +51,28 @@ export interface SvgViewerProps {
   // Subscribe to SVGVieweSearch changes
   handleSearchChange?: () => void;
 }
+
+interface SvgViewerDocumentIdProps extends SvgViewerBasicProps {
+  // CDF fileId to fetch svg-document
+  documentId: number;
+}
+
+const instanceOfDocumentIdProps = (
+  object: any
+): object is SvgViewerDocumentIdProps => {
+  return !!object.documentId;
+};
+
+interface SvgViewerFileProps extends SvgViewerBasicProps {
+  // svg-document file content in string format
+  file: string;
+}
+
+const instanceOfFileProps = (object: any): object is SvgViewerFileProps => {
+  return !!object.file;
+};
+
+export type SvgViewerProps = SvgViewerDocumentIdProps | SvgViewerFileProps;
 
 interface SvgViewerState {
   isSearchVisible: boolean;
@@ -104,7 +124,25 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
       this.setCustomClasses();
     }
 
-    if (prevProps.documentId !== this.props.documentId) {
+    if (
+      instanceOfDocumentIdProps(prevProps) &&
+      !instanceOfDocumentIdProps(this.props)
+    ) {
+      this.presetSVG();
+    }
+
+    if (
+      instanceOfDocumentIdProps(prevProps) &&
+      instanceOfDocumentIdProps(this.props) &&
+      prevProps.documentId !== this.props.documentId
+    ) {
+      this.presetSVG();
+    }
+    if (
+      instanceOfFileProps(prevProps) &&
+      instanceOfFileProps(this.props) &&
+      prevProps.file !== this.props.file
+    ) {
       this.presetSVG();
     }
   }
@@ -253,10 +291,16 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
   };
 
   presetSVG = async () => {
-    const { documentId, customClassNames } = this.props;
+    const { customClassNames } = this.props;
     let svgString;
     try {
-      svgString = await getDocumentDownloadLink(this.context!, documentId);
+      if (instanceOfDocumentIdProps(this.props)) {
+        const { documentId } = this.props;
+        svgString = await getDocumentDownloadLink(this.context!, documentId);
+      } else if (instanceOfFileProps(this.props)) {
+        const { file } = this.props;
+        svgString = file;
+      }
     } catch (e) {
       if (this.props.handleDocumentLoadError) {
         this.props.handleDocumentLoadError(e);
