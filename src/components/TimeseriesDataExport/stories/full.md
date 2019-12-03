@@ -53,6 +53,7 @@ function ExampleComponent(props) {
 | `downloadAsSvg`      | Function, that triggers on Download SVG button click. Button appears if this function is defined                              | `() => void`          |         |
 | `fetchCSV`           | Async function that return CSV-kind string that will be a source for CSV file                                                 | `FetchCSVCall`        |         |
 | `retrieveTimeseries` | Async function that fetches data about timeseries                                                                             | `FetchTimeseriesCall` |         |
+| `labelFormatter`     | Function that format columns labels for csv data file                                                                         | `CSVLabelFormatter`   |         |
 | `hideModal`          | Callback that handles modal close action                                                                                      | `() => void`          |         |
 | `formItemLayout`     | Object that configures form layout based on [antd rules](https://ant.design/components/form/#Form.Item) for label and wrapper | `FormItemLayout`      |         |
 | `onSuccess`          | Callback that triggers after success CSV file generation                                                                      | `() => void`          |         |
@@ -98,11 +99,27 @@ import { FetchTimeseriesCall } from '@cognite/gearbox';
 Definition:
 
 ```typescript
-import { InternalId, TimeSeries } from '@cognite/sdk';
+import { InternalId, GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 
 type FetchTimeseriesCall = (
   ids: InternalId[]
-) => Promise<TimeSeries[]>;
+) => Promise<GetTimeSeriesMetadataDTO[]>;
+```
+
+#### `CSVLabelFormatter`
+
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { CSVLabelFormatter } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+
+type CSVLabelFormatter = (timeseries: GetTimeSeriesMetadataDTO) => string;
 ```
 
 #### Default strings
