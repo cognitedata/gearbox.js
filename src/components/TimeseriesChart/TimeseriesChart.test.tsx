@@ -5,7 +5,8 @@ import React from 'react';
 import { datapointsList, sleep, timeseriesListV2 } from '../../mocks';
 import { MockCogniteClient } from '../../mocks/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
-import { TimeseriesChart } from './TimeseriesChart';
+import { CursorOverview } from './CursorOverview';
+import { ChartRulerPoint, TimeseriesChart } from './TimeseriesChart';
 
 configure({ adapter: new Adapter() });
 
@@ -103,4 +104,38 @@ describe('TimeseriesChart', () => {
     wrapper.update();
     expect(wrapper.find('.context-container').exists()).toBeTruthy();
   });
+});
+
+it('cursor overview renders with ruler specified', async () => {
+  const props = {
+    timeseriesIds: [timeseriesListV2[0].id],
+    ruler: {
+      visible: true,
+      yLabel: (point: ChartRulerPoint) => `${Number(point.value).toFixed(3)}`,
+      timeLabel: (point: ChartRulerPoint) =>
+        new Date(point.timestamp).toISOString(),
+    },
+  };
+  const wrapper = mount(
+    <ClientSDKProvider client={sdk}>
+      <TimeseriesChart {...props} />
+    </ClientSDKProvider>
+  );
+  await sleep(300);
+  wrapper.update();
+  expect(wrapper.find(CursorOverview).exists()).toBeTruthy();
+});
+
+it('cursor overview does not render when ruler is not specified', async () => {
+  const props = {
+    timeseriesIds: [timeseriesListV2[0].id],
+  };
+  const wrapper = mount(
+    <ClientSDKProvider client={sdk}>
+      <TimeseriesChart {...props} />
+    </ClientSDKProvider>
+  );
+  await sleep(300);
+  wrapper.update();
+  expect(wrapper.find(CursorOverview).exists()).toBeFalsy();
 });
