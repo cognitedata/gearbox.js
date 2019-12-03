@@ -1,7 +1,13 @@
-import { Aggregate, DatapointsGetAggregateDatapoint } from '@cognite/sdk';
+import {
+  Aggregate,
+  DatapointsGetAggregateDatapoint,
+  GetTimeSeriesMetadataDTO,
+} from '@cognite/sdk';
 import { saveAs } from 'file-saver';
 import moment from 'moment';
 import { getGranularityInMS } from './utils';
+
+export type LabelFormatter = (timeseries: GetTimeSeriesMetadataDTO) => string;
 
 export interface DatapointsToCSVProps {
   data: DatapointsGetAggregateDatapoint[];
@@ -9,6 +15,12 @@ export interface DatapointsToCSVProps {
   aggregate?: Aggregate;
   delimiter?: Delimiters;
   format?: string;
+  formatLabels?: LabelFormatterConfig;
+}
+
+export interface LabelFormatterConfig {
+  timeseries: GetTimeSeriesMetadataDTO[];
+  labelFormatter: LabelFormatter;
 }
 
 export enum Delimiters {
@@ -23,8 +35,24 @@ export function datapointsToCSV({
   aggregate = 'average',
   delimiter = Delimiters.Comma,
   format,
+  formatLabels,
 }: DatapointsToCSVProps): string {
-  const ids = data.map(({ id, externalId }) => externalId || id.toString());
+  const labels = data.map(({ id, externalId }) => {
+    const idString = externalId || id.toString();
+
+    if (!formatLabels) {
+      return idString;
+    }
+
+    const { timeseries, labelFormatter } = formatLabels;
+
+    const timeseriesById = timeseries.find(
+      ({ id: tid, externalId: tExternalId }) =>
+        tid === id || tExternalId === externalId
+    );
+
+    return timeseriesById ? labelFormatter(timeseriesById) : idString;
+  });
 
   const arrangedData = arrangeDatapointsByTimestamp({
     data,
@@ -34,7 +62,7 @@ export function datapointsToCSV({
 
   const csvStrings = generateCSVStringsArray(arrangedData, delimiter, format);
 
-  return [['timestamp', ...ids].join(delimiter), ...csvStrings].join('\r\n');
+  return [['timestamp', ...labels].join(delimiter), ...csvStrings].join('\n');
 }
 
 export function downloadCSV(src: string, filename: string = 'data.csv') {
@@ -71,7 +99,9 @@ export function arrangeDatapointsByTimestamp({
   data,
   aggregate,
   granularity: granularityString,
-}: Omit<DatapointsToCSVProps, 'delimiter'>): (number | string)[][] {
+}: Omit<DatapointsToCSVProps, 'delimiter' | 'timeseries'>): (
+  | number
+  | string)[][] {
   if (!granularityString) {
     return [];
   }
