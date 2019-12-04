@@ -2,10 +2,10 @@ import { configure, mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { version } from '../../package.json';
 import { AssetTree } from '../components/AssetTree';
 import { ClientSDKProvider } from '../components/ClientSDKProvider';
 import { TimeseriesPreview } from '../components/TimeseriesPreview';
+import { version } from '../constants/replacedStrings';
 import { MockCogniteClient } from '../mocks/mockSdk';
 
 configure({ adapter: new Adapter() });
