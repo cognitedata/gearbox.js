@@ -3,7 +3,9 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import renderer from 'react-test-renderer';
+import { sleep } from '../../mocks';
 import {
+  ASSET_LIST_CHILD,
   ASSET_TREE_STYLES,
   ASSET_ZERO_DEPTH_ARRAY,
 } from '../../mocks/assetsListV2';
@@ -27,10 +29,21 @@ const sdk = new CogniteClient({ appId: 'gearbox test' });
 configure({ adapter: new Adapter() });
 
 beforeEach(() => {
-  sdk.assets.list.mockReturnValue({
-    autoPagingToArray: async () => ASSET_ZERO_DEPTH_ARRAY,
+  sdk.assets.list.mockImplementation(({ filter: { parentIds } }: any) => ({
+    autoPagingToArray: async () => {
+      if (parentIds) {
+        return ASSET_LIST_CHILD.filter(({ parentId }) =>
+          parentIds.includes(parentId)
+        );
+      } else {
+        return ASSET_ZERO_DEPTH_ARRAY;
+      }
+    },
+  }));
+  sdk.assets.retrieve.mockImplementation((ids: { id: number }[]) => {
+    const idsToFind = ids.map(({ id }) => id);
+    return ASSET_LIST_CHILD.filter(({ id }) => idsToFind.includes(id));
   });
-  sdk.assets.retrieve.mockReturnValue([ASSET_ZERO_DEPTH_ARRAY[0]]);
 });
 
 afterEach(() => {
@@ -62,6 +75,56 @@ describe('AssetTree', () => {
       expect(tree).toMatchSnapshot();
       done();
     });
+  });
+
+  it('renders correctly when assetIds property reset', async () => {
+    const AssetTreeModal = mount(
+      <ClientSDKProvider client={sdk}>
+        <AssetTree assetIds={[ASSET_ZERO_DEPTH_ARRAY[zeroChild].id]} />
+      </ClientSDKProvider>
+    );
+
+    await sleep(0);
+    AssetTreeModal.update();
+    AssetTreeModal.find('.ant-tree-switcher')
+      .first()
+      .simulate('click');
+
+    await sleep(0);
+    AssetTreeModal.update();
+    const treeNodesFirstExpanded = AssetTreeModal.find(Tree.TreeNode)
+      .map(node => node.props())
+      .map(({ eventKey }) => Number(eventKey));
+    expect(treeNodesFirstExpanded).toEqual([
+      6687602007296940,
+      4650652196144007,
+    ]);
+    expect(sdk.assets.retrieve).toBeCalledWith([{ id: 6687602007296940 }]);
+    AssetTreeModal.setProps({
+      children: <AssetTree assetIds={undefined} />,
+    });
+
+    await sleep(0);
+    AssetTreeModal.update();
+    AssetTreeModal.setProps({
+      children: <AssetTree assetIds={[ASSET_ZERO_DEPTH_ARRAY[zeroChild].id]} />,
+    });
+
+    await sleep(0);
+    AssetTreeModal.update();
+    AssetTreeModal.find('.ant-tree-switcher')
+      .first()
+      .simulate('click');
+
+    await sleep(0);
+    AssetTreeModal.update();
+    expect(sdk.assets.list).toBeCalledTimes(3);
+    expect(
+      AssetTreeModal.find(Tree.TreeNode)
+        .map(node => node.props())
+        .map(({ eventKey }) => Number(eventKey))
+    ).toEqual(treeNodesFirstExpanded);
+    expect(sdk.assets.retrieve).toBeCalledTimes(2);
   });
 
   it('Checks if onSelect is being called', done => {
