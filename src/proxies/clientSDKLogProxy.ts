@@ -1,5 +1,5 @@
 import { CogniteClient } from '@cognite/sdk';
-import { version } from '../../package.json';
+import { version } from '../constants/replacedStrings';
 import { SDK_EXCLUDE_FROM_TRACKING_METHODS } from '../constants/sdk';
 import { ClientSDKContextType } from '../context/clientSDKContext';
 import { ClientApiKeys, ClientApiTypes, ExcludeMethods } from './types';

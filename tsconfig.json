@@ -19,7 +19,8 @@
       "dom"
     ],
     "typeRoots": ["node_modules/@types","src/@types"],
-    "jsx": "react"
+    "jsx": "react",
+    "rootDir": "src"
   },
   "include": [
     "src/**/*"

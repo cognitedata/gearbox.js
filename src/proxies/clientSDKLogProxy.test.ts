@@ -1,4 +1,4 @@
-import { version } from '../../package.json';
+import { version } from '../constants/replacedStrings';
 import { MockCogniteClient } from '../mocks/mockSdk';
 import { wrapInLogProxy } from './clientSDKLogProxy';
 

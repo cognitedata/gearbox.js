@@ -1,5 +1,6 @@
 import fs from 'fs';
 import typescript from 'rollup-plugin-typescript2';
+import replace from '@rollup/plugin-replace';
 import json from 'rollup-plugin-json';
 import pkg from './package.json';
 
@@ -16,7 +17,7 @@ const external = [
   ...Object.keys(pkg.peerDependencies || {}),
   ...Object.keys(pkg.optionalDependencies || {}),
 ];
-const typescriptOpts = {
+const typescriptOpts = (compilerOptions = {}) => ({
   tsconfigOverride: {
     exclude: [
       "dist",
@@ -24,11 +25,13 @@ const typescriptOpts = {
       "**/*.stories.*",
       "**/mocks"
     ],
+    compilerOptions
   }
-};
+});
 
 export default [
   {
+    cache: false,
     external,
     context: 'window',
     input: {
@@ -51,12 +54,13 @@ export default [
     ],
     plugins: [
       typescript({
-        ...typescriptOpts
+        ...typescriptOpts()
       }),
       json()
     ],
   },
   {
+    cache: false,
     external,
     input: 'src/index.ts',
     context: 'window',
@@ -67,11 +71,11 @@ export default [
       },
     ],
     plugins: [
+      replace({__REPLACE_package_version__: pkg.version }),
       typescript({
-        ...typescriptOpts,
-        compilerOptions: {
-          declaration: false,
-        },
+        ...typescriptOpts({
+          declaration: false
+        }),
       }),
       json()
     ],
