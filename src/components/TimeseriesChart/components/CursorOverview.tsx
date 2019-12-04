@@ -2,7 +2,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import React from 'react';
 import styled from 'styled-components';
-import { ChartRulerConfig, ChartRulerPoint } from './TimeseriesChart';
+import { ChartRulerConfig, ChartRulerPoint } from '../TimeseriesChart';
 
 const Container = styled.div`
   position: fixed;
@@ -117,7 +117,12 @@ export class CursorOverview extends React.Component<
   };
 
   render() {
-    const { series, hiddenSeries, rulerPoints, ruler } = this.props;
+    const {
+      series,
+      hiddenSeries,
+      rulerPoints,
+      ruler: { timeLabel, yLabel },
+    } = this.props;
     if (
       !series ||
       !series.length ||
@@ -132,8 +137,8 @@ export class CursorOverview extends React.Component<
       return Math.max(rulerPoint.timestamp, acc);
     }, 0);
 
-    const timeLabel = ruler.timeLabel
-      ? ruler.timeLabel({
+    const timeLabelFormatted = timeLabel
+      ? timeLabel({
           id: 0,
           name: '',
           value: 0,
@@ -144,8 +149,8 @@ export class CursorOverview extends React.Component<
         })
       : formattedDate(newestTimestamp);
 
-    const yLabelFn: (point: ChartRulerPoint) => string = ruler.yLabel
-      ? ruler.yLabel
+    const yLabelFormatter: (point: ChartRulerPoint) => string = yLabel
+      ? yLabel
       : (point: ChartRulerPoint) => {
           return numeral(point.value).format('0[.]0[00] a');
         };
@@ -154,7 +159,7 @@ export class CursorOverview extends React.Component<
       rulerPoints[id] &&
       !hiddenSeries[id] && (
         <Tag color={color} key={id}>
-          {yLabelFn(rulerPoints[id])}
+          {yLabelFormatter(rulerPoints[id])}
         </Tag>
       );
 
@@ -172,7 +177,7 @@ export class CursorOverview extends React.Component<
             this.dateContainer = ref;
           }}
         >
-          {timeLabel}
+          {timeLabelFormatted}
         </DateContainer>
       </Container>
     );
