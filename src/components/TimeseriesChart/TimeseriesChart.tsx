@@ -14,7 +14,7 @@ import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';
 import { decimalTickFormatter } from '../../utils/axisSigFix';
 import { getColorByString } from '../../utils/colors';
-import { CursorOverview } from './CursorOverview';
+import { CursorOverview } from './components/CursorOverview';
 
 export interface ChartRulerPoint {
   id: number | string;
