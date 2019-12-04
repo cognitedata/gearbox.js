@@ -39,6 +39,11 @@ export interface SliderProps {
   z?: SliderRange;
 }
 
+export interface Model3DViewerStyles {
+  wrapper: React.CSSProperties;
+  viewer: React.CSSProperties;
+}
+
 export interface Model3DViewerProps {
   modelId: number;
   revisionId: number;
@@ -57,6 +62,7 @@ export interface Model3DViewerProps {
   slider?: SliderProps;
   showScreenshotButton?: boolean;
   onScreenshot?: (url: string) => void;
+  styles?: Model3DViewerStyles;
 }
 interface Model3DViewerState {
   boundingBox?: THREE.Box3;
@@ -441,6 +447,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   };
 
   render() {
+    const { styles } = this.props;
     return (
       // Need this div since caching uses replaceChild on divWrapper ref, so need a surrounding div
       <div
@@ -448,6 +455,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
           width: '100%',
           height: '100%',
           position: 'relative',
+          ...(styles && styles.wrapper),
         }}
       >
         {this.props.showScreenshotButton ? (
@@ -474,9 +482,16 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
           }}
         />
         <div
-          style={{ width: '100%', height: '100%', fontSize: 0 }}
+          style={{
+            width: '100%',
+            height: '100%',
+            fontSize: 0,
+            ...(styles && styles.viewer),
+          }}
           ref={this.divWrapper}
-        />
+        >
+          {this.props.children}
+        </div>
       </div>
     );
   }

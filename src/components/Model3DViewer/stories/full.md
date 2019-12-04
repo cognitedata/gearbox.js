@@ -93,14 +93,27 @@ function ExampleComponent(props) {
 | `showScreenshotButton`| enable screenshot button in viewer | `boolean` | false|
 | `onScreenshot` | callback after screenshot is taken | `(url: string) => void;`| ||
 | `slider` | enable visual sliders for the viewer | `{x?: { max: number; min: number }; y?: { max: number; min: number }; z?: { max: number; min: number };}`| ||
+| `styles` | allow wrapper and viewer styling  | `Model3DViewerStyles`| ||
+
 ##### Interfaces:
 
 ```typescript jsx
+import { Model3DViewerStyles } from '@cognite/gearbox'
+
 import {
   Cognite3DViewer,
   Cognite3DModel,
   OnProgressData,
 } from '@cognite/3d-viewer';
+```
+
+##### Styles prop interface description:
+
+```typescript jsx
+export interface Model3DViewerStyles {
+  wrapper: React.CSSProperties;
+  viewer: React.CSSProperties;
+}
 ```
 
 ##### `assetId` prop explanation
