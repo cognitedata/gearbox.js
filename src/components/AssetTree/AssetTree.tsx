@@ -30,6 +30,7 @@ interface AssetTreeNodeMap {
 
 interface AssetTreeState {
   loading: boolean;
+  loadedKeys: string[];
   rootAssetNodes: number[];
   assetNodesMap: AssetTreeNodeMap;
   expandedKeys: ExpandedKeysMap;
@@ -79,6 +80,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     super(props);
     const { defaultExpandedKeys } = props;
     this.state = {
+      loadedKeys: [],
       loading: true,
       rootAssetNodes: [],
       assetNodesMap: {},
@@ -92,6 +94,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
 
   componentDidUpdate(prevProps: AssetTreeProps) {
     if (!isEqual(prevProps.assetIds, this.props.assetIds)) {
+      this.resetExpandedKeys();
       this.loadAssetInfo();
     }
   }
@@ -147,6 +150,12 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   onLoadData = async (treeNode: AntTreeNode) => {
     const eventKey = treeNode.props.eventKey;
     const assetId = eventKey ? Number.parseInt(eventKey, 10) : undefined;
+    const { loadedKeys } = this.state;
+    const updatedLoadedKeys =
+      eventKey && !loadedKeys.includes(eventKey)
+        ? [...loadedKeys, eventKey]
+        : loadedKeys;
+
     if (!treeNode.props.children && assetId) {
       const updatedAssetNode = { ...this.state.assetNodesMap[assetId] };
       const assetChildren = await this.cursorApiRequest(assetId);
@@ -165,6 +174,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
           [assetId]: updatedAssetNode,
           ...mapUpdate,
         },
+        loadedKeys: [...updatedLoadedKeys],
       }));
     }
   };
@@ -205,15 +215,20 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
     });
   };
 
+  resetExpandedKeys = () => {
+    this.setState({ expandedKeys: {}, loadedKeys: [] });
+  };
+
   render() {
     const { showLoading } = this.props;
-    const { rootAssetNodes, expandedKeys, loading } = this.state;
+    const { rootAssetNodes, expandedKeys, loading, loadedKeys } = this.state;
     const { onLoadData, onSelectNode, renderTreeNode, onExpand } = this;
     if (showLoading && loading) {
       return <Spin />;
     }
     return (
       <Tree
+        loadedKeys={loadedKeys}
         loadData={onLoadData}
         onSelect={(_, e) =>
           onSelectNode(e.node.props.title as string, e.node.props.eventKey)
