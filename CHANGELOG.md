@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/cognitedata/gearbox.js/compare/v1.9.0...v1.9.1) (2019-12-04)
+
+
+### Bug Fixes
+
+* **asset-tree:** unreachable nodes appears after changing assetIds prop few times ([#517](https://github.com/cognitedata/gearbox.js/issues/517)) ([d398662](https://github.com/cognitedata/gearbox.js/commit/d398662dda4eb1196f58b80d7f819334fabc4e58))
+
 # [1.9.0](https://github.com/cognitedata/gearbox.js/compare/v1.8.0...v1.9.0) (2019-11-18)
 
 
