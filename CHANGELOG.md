@@ -1,3 +1,11 @@
+# [1.10.0](https://github.com/cognitedata/gearbox.js/compare/v1.9.1...v1.10.0) (2019-12-04)
+
+
+### Features
+
+* **model 3d viewer:** add possibility to add children to Model3DViewer ([5d91474](https://github.com/cognitedata/gearbox.js/commit/5d91474c1cf305d29cef85f9effa66db581a62a9))
+* add styles prop for Model3DViewer component ([e7bd289](https://github.com/cognitedata/gearbox.js/commit/e7bd289243dd7b3477f1d9f1c745c546f108ebbc))
+
 ## [1.9.1](https://github.com/cognitedata/gearbox.js/compare/v1.9.0...v1.9.1) (2019-12-04)
 
 
