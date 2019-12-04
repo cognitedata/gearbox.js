@@ -10,6 +10,7 @@ import {
   PinchZoomInterface,
   ZoomCenter,
 } from '../../interfaces';
+import { hasProperty } from '../../utils/utils';
 import * as CustomIcon from './Icons';
 import SVGViewerSearch from './SVGViewerSearch';
 import { getDocumentDownloadLink } from './utils';
@@ -57,20 +58,16 @@ interface SvgViewerDocumentIdProps extends SvgViewerBasicProps {
   documentId: number;
 }
 
-const instanceOfDocumentIdProps = (
-  object: any
-): object is SvgViewerDocumentIdProps => {
-  return !!object.documentId;
-};
+const isDocumentIdProps = (props: object): props is SvgViewerDocumentIdProps =>
+  hasProperty<SvgViewerDocumentIdProps>(props, 'documentId');
 
 interface SvgViewerFileProps extends SvgViewerBasicProps {
   // svg-document file content in string format
   file: string;
 }
 
-const instanceOfFileProps = (object: any): object is SvgViewerFileProps => {
-  return !!object.file;
-};
+const isFileProps = (props: object): props is SvgViewerFileProps =>
+  hasProperty<SvgViewerFileProps>(props, 'file');
 
 export type SvgViewerProps = SvgViewerDocumentIdProps | SvgViewerFileProps;
 
@@ -124,26 +121,21 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
       this.setCustomClasses();
     }
 
-    if (
-      instanceOfDocumentIdProps(prevProps) &&
-      !instanceOfDocumentIdProps(this.props)
-    ) {
-      this.presetSVG();
-    }
-
-    if (
-      instanceOfDocumentIdProps(prevProps) &&
-      instanceOfDocumentIdProps(this.props) &&
-      prevProps.documentId !== this.props.documentId
-    ) {
-      this.presetSVG();
-    }
-    if (
-      instanceOfFileProps(prevProps) &&
-      instanceOfFileProps(this.props) &&
-      prevProps.file !== this.props.file
-    ) {
-      this.presetSVG();
+    if (isDocumentIdProps(prevProps)) {
+      if (
+        isDocumentIdProps(this.props) &&
+        this.props.documentId !== prevProps.documentId
+      ) {
+        this.presetSVG();
+      } else if (isDocumentIdProps(this.props)) {
+        this.presetSVG();
+      }
+    } else if (isFileProps(prevProps)) {
+      if (isFileProps(this.props) && this.props.file !== prevProps.file) {
+        this.presetSVG();
+      } else if (!isFileProps(this.props)) {
+        this.presetSVG();
+      }
     }
   }
 
@@ -294,10 +286,10 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
     const { customClassNames } = this.props;
     let svgString;
     try {
-      if (instanceOfDocumentIdProps(this.props)) {
+      if (isDocumentIdProps(this.props)) {
         const { documentId } = this.props;
         svgString = await getDocumentDownloadLink(this.context!, documentId);
-      } else if (instanceOfFileProps(this.props)) {
+      } else if (isFileProps(this.props)) {
         const { file } = this.props;
         svgString = file;
       }
