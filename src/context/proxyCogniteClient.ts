@@ -1,5 +1,5 @@
 import { CogniteClient } from '@cognite/sdk';
-import { version } from '../../package.json';
+import { version } from '../constants/replacedStrings';
 import { ClientSDKContextType } from './clientSDKContext';
 import { ClientSDKProxyContextType } from './clientSDKProxyContext';
 
