@@ -1,0 +1,62 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { AssetEventsPanel } from '../AssetEventsPanel';
+import { AssetEventsPanelPure } from '../components/AssetEventsPanelPure';
+import { decorators } from './helper';
+
+<Meta title="Assets|AssetEventsPanel" decorators={decorators} />
+
+# Asset Events Panel
+
+This component loads a list of events related to the asset and presents it as a table with four columns and pagination.
+Click on a row of the table shows more detailed information about the event in the modal pop-up window.
+The component is used as one of the panes in `AssetMeta` component.
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+## Basic usage:
+
+Imports:
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { AssetEventsPanel } from '@cognite/gearbox';
+```
+
+<Preview>
+  <Story name="Basic Usage">
+    <AssetEventsPanel assetId={4650652196144007} />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={AssetEventsPanelPure} />
+
+### Types
+
+#### EventListParams
+
+```jsx
+import { EventFilterRequest } from `@cognite/sdk`;
+```
+
+#### TableColumnType
+
+```jsx
+interface TableColumnType {
+  title: string;
+  dataIndex: string;
+  key?: string;
+}
+```
+
+#### AssetEventsPanelStyles
+
+This interface defines inline CSS styles for inner elements of `AssetEventsPanel` component.
+
+```jsx
+import { AssetEventsPanelStyles } from '@cognite/gearbox';
+```
+See more details in AssetMeta component documentation.
