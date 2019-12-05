@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/cognitedata/gearbox.js/compare/v1.10.0...v1.10.1) (2019-12-05)
+
+
+### Bug Fixes
+
+* **time series export:** fixes for windows old versions ([#528](https://github.com/cognitedata/gearbox.js/issues/528)) ([e4d7c1b](https://github.com/cognitedata/gearbox.js/commit/e4d7c1bfda7f98d887c3f53b753a3277fd2b5b78))
+
 # [1.10.0](https://github.com/cognitedata/gearbox.js/compare/v1.9.1...v1.10.0) (2019-12-04)
 
 
