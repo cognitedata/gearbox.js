@@ -1,7 +1,6 @@
 import { Asset } from '@cognite/sdk';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { hasProperty } from '../utils';
 import {
   clampNumber,
   extractValidStrings,
@@ -140,46 +139,6 @@ describe('utils', () => {
           clientWidth: 1780, // this is scaled
         });
       });
-    });
-  });
-  describe('HasProperty', () => {
-    it('should check property correctly', () => {
-      interface A {
-        a: string;
-      }
-      interface B {
-        b: string;
-      }
-      type C = A & B;
-      type D = A | B;
-      const a = {
-        a: 'test',
-      };
-      const b = {
-        b: 'test',
-      };
-      const c = {
-        a: 'test',
-        b: 'test',
-      };
-      const d = {
-        a: 'test',
-      };
-      const invalid = {};
-      expect(hasProperty<A>(a, 'a')).toBe(true);
-      expect(hasProperty<B>(a, 'b')).toBe(false);
-      expect(hasProperty<A>(a, 'b')).toBe(false);
-      expect(hasProperty<B>(b, 'b')).toBe(true);
-      expect(hasProperty<B>(c, 'b')).toBe(true);
-      expect(hasProperty<A>(c, 'a')).toBe(true);
-      expect(hasProperty<C>(c, 'a')).toBe(true);
-      expect(hasProperty<D>(c, 'b')).toBe(true);
-      expect(hasProperty<D>(d, 'a')).toBe(true);
-      expect(hasProperty<C>(d, 'b')).toBe(false);
-      expect(hasProperty<D>(invalid, 'a')).toBe(false);
-      expect(hasProperty<C>(invalid, 'a')).toBe(false);
-      expect(hasProperty<A>(invalid, 'a')).toBe(false);
-      expect(hasProperty<B>(invalid, 'a')).toBe(false);
     });
   });
 });

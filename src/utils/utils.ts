@@ -153,8 +153,3 @@ export function removeImageBase(imageString: string = ''): string {
 export function getGranularityInMS(granularity: string): number {
   return ms(granularity);
 }
-
-export const hasProperty = <PropertyType>(
-  object: any,
-  propertyName: string
-): object is PropertyType => propertyName in object;
