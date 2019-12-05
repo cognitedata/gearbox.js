@@ -43,10 +43,10 @@ const data = [
     ],
   },
 ];
-const csvString = `timestamp,${timeseriesId}\n${currentDate.getTime()},1`;
-const csvStringFormated = `timestamp${Delimiters.Semicolon}${timeseriesId}\n${formatedDate}${Delimiters.Semicolon}1`;
-const csvStringFormattedLabel = `timestamp${Delimiters.Semicolon}Timeseries${timeseriesId}\n${formatedDate}${Delimiters.Semicolon}1`;
-const csvStringMax = `timestamp,${timeseriesId}\n${currentDate.getTime()},2`;
+const csvString = `timestamp,${timeseriesId}\r\n${currentDate.getTime()},1`;
+const csvStringFormated = `timestamp${Delimiters.Semicolon}${timeseriesId}\r\n${formatedDate}${Delimiters.Semicolon}1`;
+const csvStringFormattedLabel = `timestamp${Delimiters.Semicolon}Timeseries${timeseriesId}\r\n${formatedDate}${Delimiters.Semicolon}1`;
+const csvStringMax = `timestamp,${timeseriesId}\r\n${currentDate.getTime()},2`;
 const emptyCsvString = `timestamp,${timeseriesId}`;
 const saveAs = jest.spyOn(fileSaver, 'saveAs').mockImplementation(() => null);
 
