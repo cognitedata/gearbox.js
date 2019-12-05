@@ -1,17 +1,16 @@
 import { FilesMetadata } from '@cognite/sdk';
 import React from 'react';
 import { AssetDocumentsPanelStyles } from '../../../interfaces';
-import { DOCUMENTS } from '../../../mocks';
+import { DOCUMENTS, sleep } from '../../../mocks';
 import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 class CogniteClient extends MockCogniteClient {
   files: any = {
     list: () => ({
       autoPagingToArray: () => {
-        return new Promise(resolve => {
-          setTimeout(() => {
-            resolve(DOCUMENTS);
-          }, 1000);
+        return new Promise(async resolve => {
+          await sleep(1000);
+          resolve(DOCUMENTS);
         });
       },
     }),
