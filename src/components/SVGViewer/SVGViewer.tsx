@@ -121,21 +121,23 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
       this.setCustomClasses();
     }
 
-    if (isDocumentIdProps(prevProps)) {
-      if (
-        isDocumentIdProps(this.props) &&
-        this.props.documentId !== prevProps.documentId
-      ) {
-        this.presetSVG();
-      } else if (isDocumentIdProps(this.props)) {
-        this.presetSVG();
-      }
-    } else if (isFileProps(prevProps)) {
-      if (isFileProps(this.props) && this.props.file !== prevProps.file) {
-        this.presetSVG();
-      } else if (!isFileProps(this.props)) {
-        this.presetSVG();
-      }
+    // If supplied props has changed from `documentId` to `file` or vice versa
+    if (isDocumentIdProps(prevProps) !== isDocumentIdProps(this.props)) {
+      this.presetSVG();
+    } else if (
+      // If supplied `documentId` changed
+      isDocumentIdProps(this.props) &&
+      isDocumentIdProps(prevProps) &&
+      this.props.documentId !== prevProps.documentId
+    ) {
+      this.presetSVG();
+    } else if (
+      // If supplied `file` changed
+      isFileProps(this.props) &&
+      isFileProps(prevProps) &&
+      this.props.file !== prevProps.file
+    ) {
+      this.presetSVG();
     }
   }
 
