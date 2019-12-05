@@ -27,9 +27,9 @@ const data = [
     ],
   },
 ];
-const csvString = `timestamp,123\n${currentDate.getTime()},1`;
-const csvStringFormated = `timestamp${Delimiters.Semicolon}123\n${formatedDate}${Delimiters.Semicolon}1`;
-const csvStringMax = `timestamp,123\n${currentDate.getTime()},2`;
+const csvString = `timestamp,123\r\n${currentDate.getTime()},1`;
+const csvStringFormated = `timestamp${Delimiters.Semicolon}123\r\n${formatedDate}${Delimiters.Semicolon}1`;
+const csvStringMax = `timestamp,123\r\n${currentDate.getTime()},2`;
 const emptyCsvString = `timestamp,123`;
 const saveAs = jest.spyOn(fileSaver, 'saveAs').mockImplementation(() => null);
 
