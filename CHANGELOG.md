@@ -1,3 +1,18 @@
+# [1.11.0](https://github.com/cognitedata/gearbox.js/compare/v1.10.1...v1.11.0) (2019-12-06)
+
+
+### Bug Fixes
+
+* **model-3d-viewer:** add readonly for focus catching input field ([#523](https://github.com/cognitedata/gearbox.js/issues/523)) ([1c91821](https://github.com/cognitedata/gearbox.js/commit/1c918218d8127a4de8c6d25c82105bb48db674a3)), closes [#497](https://github.com/cognitedata/gearbox.js/issues/497)
+* **time series chart:** cursor overview with multiple series support ([310f074](https://github.com/cognitedata/gearbox.js/commit/310f074e889e64a8f0f4b63eb0d1b15e2610f956))
+
+
+### Features
+
+* **asset breadcrumbs:** allow custom asset fetch function, closes [#478](https://github.com/cognitedata/gearbox.js/issues/478) ([f9fc7e4](https://github.com/cognitedata/gearbox.js/commit/f9fc7e4d44acddcedf8ac1d0100dea156fae56a4))
+* **svg-viewer:** add file props to take in raw svg ([#537](https://github.com/cognitedata/gearbox.js/issues/537)) ([96bfd99](https://github.com/cognitedata/gearbox.js/commit/96bfd99ac85f2c1f6d91e3eeb49c5534cb1077dd))
+* **timeseries-data-export:** prop to customise timeseries label ([45a0faa](https://github.com/cognitedata/gearbox.js/commit/45a0faaf1d52f882abff124ebabf23cc95672e59)), closes [#495](https://github.com/cognitedata/gearbox.js/issues/495)
+
 ## [1.10.1](https://github.com/cognitedata/gearbox.js/compare/v1.10.0...v1.10.1) (2019-12-05)
 
 
