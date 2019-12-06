@@ -8,13 +8,29 @@ import {
   AxisPlacement,
   DataProvider,
   LineChart,
-  Ruler,
 } from '@cognite/griff-react';
 import { Spin } from 'antd';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';
 import { decimalTickFormatter } from '../../utils/axisSigFix';
 import { getColorByString } from '../../utils/colors';
+import { CursorOverview } from './components/CursorOverview';
+
+export interface ChartRulerPoint {
+  id: number | string;
+  name: string;
+  value: number | string;
+  color: string;
+  timestamp: number;
+  x: number;
+  y: number;
+}
+
+export interface ChartRulerConfig {
+  visible?: boolean;
+  timeLabel?: (point: ChartRulerPoint) => string;
+  yLabel?: (point: ChartRulerPoint) => string;
+}
 
 export interface TimeseriesChartStyles {
   container?: React.CSSProperties;
@@ -33,7 +49,7 @@ export type TimeseriesChartProps = {
   timeseriesColors: { [id: number]: string };
   hiddenSeries: { [id: number]: boolean };
   annotations: Annotation[];
-  ruler: Ruler;
+  ruler: ChartRulerConfig;
   collections: any;
   xAxisHeight: number;
   yAxisDisplayMode: 'ALL' | 'COLLAPSED' | 'NONE';
@@ -46,12 +62,13 @@ export type TimeseriesChartProps = {
   onFetchDataError: (e: Error) => void;
 } & ({ timeseriesIds: number[] } | { series: any });
 
-interface TimeseriesChartState {
-  loaded: boolean;
-}
-
 // Don't allow updating faster than every 1000ms.
 const MINIMUM_UPDATE_FREQUENCY_MILLIS = 1000;
+
+interface TimeseriesChartState {
+  loaded: boolean;
+  rulerPoints: { [key: string]: ChartRulerPoint };
+}
 
 export class TimeseriesChart extends React.Component<
   TimeseriesChartProps,
@@ -93,6 +110,7 @@ export class TimeseriesChart extends React.Component<
     super(props);
     this.state = {
       loaded: false,
+      rulerPoints: {},
     };
     if (!context) {
       console.error(ERROR_NO_SDK_CLIENT);
@@ -104,6 +122,20 @@ export class TimeseriesChart extends React.Component<
   onFetchData = () => {
     if (!this.state.loaded) {
       this.setState({ loaded: true });
+    }
+  };
+
+  onMouseMove = (data: any) => {
+    const { onMouseMove } = this.props;
+    const { points = [] } = data;
+    const rulerPoints: { [key: string]: ChartRulerPoint } = {};
+    points.forEach((point: ChartRulerPoint) => {
+      rulerPoints[point.id] = point;
+    });
+    this.setState({ rulerPoints });
+
+    if (onMouseMove) {
+      onMouseMove(data);
     }
   };
 
@@ -132,7 +164,6 @@ export class TimeseriesChart extends React.Component<
       ruler,
       height,
       width,
-      onMouseMove,
       onMouseOut,
       onBlur,
       onFetchDataError,
@@ -165,6 +196,8 @@ export class TimeseriesChart extends React.Component<
           y1Accessor: DataLoader.y1Accessor,
         }));
 
+    const showCrosshair: boolean = crosshair || ruler !== undefined;
+
     return (
       griffSeries.length !== 0 && (
         <Spin spinning={!loaded}>
@@ -192,9 +225,18 @@ export class TimeseriesChart extends React.Component<
                   : 0
               }
             >
+              {ruler && (
+                <CursorOverview
+                  series={griffSeries}
+                  hiddenSeries={hiddenSeries}
+                  rulerPoints={this.state.rulerPoints}
+                  ruler={ruler}
+                />
+              )}
+
               <LineChart
                 zoomable={zoomable}
-                crosshair={crosshair}
+                crosshair={showCrosshair}
                 annotations={annotations}
                 contextChart={{
                   visible: contextChart,
@@ -203,11 +245,10 @@ export class TimeseriesChart extends React.Component<
                 }}
                 height={height}
                 width={width}
-                ruler={ruler}
                 yAxisFormatter={decimalTickFormatter}
                 yAxisPlacement={AxisPlacement[yAxisPlacement]}
                 xAxisHeight={xAxisHeight}
-                onMouseMove={onMouseMove}
+                onMouseMove={this.onMouseMove}
                 onMouseOut={onMouseOut}
                 onBlur={onBlur}
               />

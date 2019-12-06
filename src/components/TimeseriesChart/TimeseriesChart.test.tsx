@@ -5,7 +5,8 @@ import React from 'react';
 import { datapointsList, sleep, timeseriesListV2 } from '../../mocks';
 import { MockCogniteClient } from '../../mocks/mockSdk';
 import { ClientSDKProvider } from '../ClientSDKProvider';
-import { TimeseriesChart } from './TimeseriesChart';
+import { CursorOverview } from './components/CursorOverview';
+import { ChartRulerPoint, TimeseriesChart } from './TimeseriesChart';
 
 configure({ adapter: new Adapter() });
 
@@ -54,6 +55,7 @@ describe('TimeseriesChart', () => {
     expect(sdk.datapoints.retrieve).toHaveBeenCalledWith({
       items: [expect.objectContaining({ id })],
     });
+    expect(wrapper.find(CursorOverview).exists()).toBeFalsy();
   });
 
   it('renders correctly when ids are specified', async () => {
@@ -103,4 +105,51 @@ describe('TimeseriesChart', () => {
     wrapper.update();
     expect(wrapper.find('.context-container').exists()).toBeTruthy();
   });
+});
+
+it('cursor overview renders with ruler specified', async () => {
+  const yLabel = jest.fn();
+  const timeLabel = jest.fn();
+  const eventMap: { [name: string]: any } = {};
+  const timeseriesPoints: { [name: string]: ChartRulerPoint } = {
+    [timeseriesListV2[0].id]: {
+      id: 1,
+      name: 'test',
+      value: 100,
+      color: '#000',
+      timestamp: Date.now(),
+      x: 100,
+      y: 100,
+    },
+  };
+  window.addEventListener = jest.fn((event: string, cb: any) => {
+    eventMap[event] = cb;
+  });
+  const props = {
+    timeseriesIds: [timeseriesListV2[0].id],
+    ruler: {
+      visible: true,
+      yLabel,
+      timeLabel,
+    },
+  };
+  const wrapper = mount(
+    <ClientSDKProvider client={sdk}>
+      <TimeseriesChart {...props} />
+    </ClientSDKProvider>
+  );
+  await sleep(300);
+  wrapper.update();
+
+  expect(wrapper.find(CursorOverview).exists()).toBeTruthy();
+
+  wrapper.find(TimeseriesChart).setState({
+    rulerPoints: timeseriesPoints,
+  });
+  wrapper.update();
+
+  eventMap.mousemove({ clientX: 100, clientY: 100 });
+
+  expect(yLabel).toHaveBeenCalled();
+  expect(timeLabel).toHaveBeenCalled();
 });
