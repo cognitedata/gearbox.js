@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 import React from 'react';
 import styled from 'styled-components';
 import { ZoomCenter } from '../../../interfaces';
-import { SVG } from '../../../mocks/svg-viewer';
+import { CUSTOM_SVG_FILE, SVG } from '../../../mocks/svg-viewer';
 
 import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
@@ -13,6 +13,7 @@ import classesDescription from './classes.md';
 import clickDescription from './click.md';
 import closableDescription from './closeable.md';
 import customDescription from './custom.md';
+import fileDescription from './file.md';
 import fullDescription from './full.md';
 import locateDescription from './locate.md';
 import search from './search.md';
@@ -290,6 +291,22 @@ storiesOf('SVGViewer/Examples', module)
     {
       readme: {
         content: search,
+      },
+    }
+  )
+  .add(
+    'File',
+    () => {
+      const file = CUSTOM_SVG_FILE;
+      return (
+        <div style={{ height: '100vh' }}>
+          <SVGViewer file={file} />
+        </div>
+      );
+    },
+    {
+      readme: {
+        content: fileDescription,
       },
     }
   );
