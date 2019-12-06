@@ -62,7 +62,7 @@ export function datapointsToCSV({
 
   const csvStrings = generateCSVStringsArray(arrangedData, delimiter, format);
 
-  return [['timestamp', ...labels].join(delimiter), ...csvStrings].join('\n');
+  return [['timestamp', ...labels].join(delimiter), ...csvStrings].join('\r\n');
 }
 
 export function downloadCSV(src: string, filename: string = 'data.csv') {

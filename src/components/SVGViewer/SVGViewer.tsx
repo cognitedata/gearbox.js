@@ -19,9 +19,7 @@ const wheelZoomLevel = 0.15;
 const currentAssetClassName = 'current-asset';
 const minDesktopWidth = 992;
 
-export interface SvgViewerProps {
-  // CDF fileId to fetch svg-document
-  documentId: number;
+interface SvgViewerBasicProps {
   // List of classes and conditions on when they should be applied for equipment
   metadataClassesConditions?: Conditions[];
   // Document title
@@ -53,6 +51,17 @@ export interface SvgViewerProps {
   // Subscribe to SVGVieweSearch changes
   handleSearchChange?: () => void;
 }
+
+interface SvgViewerDocumentIdProps extends SvgViewerBasicProps {
+  // CDF fileId to fetch svg-document
+  documentId: number;
+}
+interface SvgViewerFileProps extends SvgViewerBasicProps {
+  // svg-document file content in string format
+  file: string;
+}
+
+export type SvgViewerProps = SvgViewerDocumentIdProps | SvgViewerFileProps;
 
 interface SvgViewerState {
   isSearchVisible: boolean;
@@ -100,11 +109,19 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
   }
 
   componentDidUpdate(prevProps: SvgViewerProps) {
+    const { documentId: prevDocId } = prevProps as SvgViewerDocumentIdProps;
+    const { documentId: curDocId } = this.props as SvgViewerDocumentIdProps;
+    const { file: prevFile } = prevProps as SvgViewerFileProps;
+    const { file: currFile } = this.props as SvgViewerFileProps;
+
     if (this.svg) {
       this.setCustomClasses();
     }
 
-    if (prevProps.documentId !== this.props.documentId) {
+    if (
+      (curDocId !== undefined && curDocId !== prevDocId) ||
+      (currFile !== undefined && currFile !== prevFile)
+    ) {
       this.presetSVG();
     }
   }
@@ -253,10 +270,16 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
   };
 
   presetSVG = async () => {
-    const { documentId, customClassNames } = this.props;
+    const { customClassNames } = this.props;
     let svgString;
     try {
-      svgString = await getDocumentDownloadLink(this.context!, documentId);
+      const { documentId } = this.props as SvgViewerDocumentIdProps;
+      const { file } = this.props as SvgViewerFileProps;
+      if (file) {
+        svgString = file;
+      } else if (documentId) {
+        svgString = await getDocumentDownloadLink(this.context!, documentId);
+      }
     } catch (e) {
       if (this.props.handleDocumentLoadError) {
         this.props.handleDocumentLoadError(e);
