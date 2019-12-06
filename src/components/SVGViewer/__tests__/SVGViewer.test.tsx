@@ -9,6 +9,8 @@ import { SVGViewer } from '../SVGViewer';
 
 configure({ adapter: new Adapter() });
 
+const CANCEL_BUTTON_ATTR = '[data-test-id="close-svgviewer-btn"]';
+
 class CogniteClient extends MockCogniteClient {
   files: any = {
     getDownloadUrls: async () => [{ downloadUrl: 'url', id: 123 }],
@@ -24,7 +26,7 @@ describe('SVGViewer', () => {
         <SVGViewer documentId={0} />
       </ClientSDKProvider>
     );
-    expect(wrapper.find('[data-test-id="close-svgviewer-btn"]').length).toBe(0);
+    expect(wrapper.find(CANCEL_BUTTON_ATTR).length).toBe(0);
     expect(wrapper).toHaveLength(1);
   });
 
@@ -35,10 +37,20 @@ describe('SVGViewer', () => {
         <SVGViewer documentId={0} handleCancel={handleCancel} />
       </ClientSDKProvider>
     );
-    const closeButton = wrapper.find('[data-test-id="close-svgviewer-btn"]');
+    const closeButton = wrapper.find(CANCEL_BUTTON_ATTR);
     expect(closeButton).toBeTruthy();
     closeButton.first().simulate('click');
 
     expect(handleCancel.called).toBeTruthy();
+  });
+
+  it('Renders without exploding with a file', () => {
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <SVGViewer file="" />
+      </ClientSDKProvider>
+    );
+    expect(wrapper.find(CANCEL_BUTTON_ATTR).length).toBe(0);
+    expect(wrapper).toHaveLength(1);
   });
 });
