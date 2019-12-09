@@ -8,11 +8,9 @@ import { ClientSDKProvider } from '../../ClientSDKProvider';
 class CogniteClient extends MockCogniteClient {
   events: any = {
     list: () => ({
-      autoPagingToArray: () => {
-        return new Promise(async resolve => {
-          await sleep(1000);
-          resolve(fakeEvents);
-        });
+      autoPagingToArray: async () => {
+        await sleep(1000);
+        return fakeEvents;
       },
     }),
   };
