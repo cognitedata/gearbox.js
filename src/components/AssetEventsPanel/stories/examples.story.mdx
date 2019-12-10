@@ -1,0 +1,91 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { AssetEventsPanel } from '../AssetEventsPanel';
+import { decorators, customColumns, customStyle, handleAssetEventsLoaded } from './helper';
+
+<Meta title="Assets|AssetEventsPanel/Example" decorators={decorators} />
+
+## Custom Column Names
+
+```jsx
+const customColumns = [
+        {
+          title: 'Name',
+          dataIndex: 'typeAndSubtype',
+          key: 'typeAndSubtype',
+        },
+        {
+          title: 'Custom Description',
+          dataIndex: 'description',
+          key: 'description',
+        },
+        {
+          title: 'From',
+          dataIndex: 'start',
+          key: 'start',
+        },
+        {
+          title: 'To',
+          dataIndex: 'end',
+          key: 'end',
+        },
+      ];
+```
+<Preview>
+  <Story name="Custom Column Names">
+     <AssetEventsPanel
+      assetId={4650652196144007}
+      columns={customColumns}
+    />
+  </Story>
+</Preview>
+
+## Custom Loading Spinner
+
+<Preview>
+  <Story name="Custom Loading Spinner ">
+    <AssetEventsPanel
+      assetId={4650652196144007}
+      customSpinner={<div>Loading...</div>}
+    />
+  </Story>
+</Preview>
+
+## Custom Styles
+
+```jsx
+import { AssetEventsPanelStyles } from '@cognite/gearbox';
+
+const customStyle: AssetEventsPanelStyles = {
+  table: { border: '1px solid red' },
+  tableRow: { borderBottom: '2px solid #999' },
+  tableCell: { backgroundColor: '#DDD' },
+};
+```
+<Preview>
+  <Story name="Custom Styles">  
+    <AssetEventsPanel
+      assetId={4650652196144007}
+      styles={customStyle}
+    />
+  </Story>
+</Preview>
+
+## Handle callbacks
+
+A callback function can be provided to fire when the asset is loaded:
+
+```jsx
+import { CogniteEvent } from '@cognite/sdk';
+
+const handleAssetEventsLoaded = (events: CogniteEvent[]) => console.log(events);
+```
+
+<Preview>
+  <Story name="Load Callback">  
+    <AssetEventsPanel
+      assetId={4650652196144007}
+      onAssetEventsLoaded={handleAssetEventsLoaded}
+    />
+  </Story>
+</Preview>
+
