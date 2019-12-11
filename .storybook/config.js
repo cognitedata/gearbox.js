@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { addDecorator, addParameters, configure } from '@storybook/react';
 import { addReadme, configureReadme } from 'storybook-readme';
-import { DocsContainer } from '@storybook/addon-docs/dist/blocks';
+import { DocsContainer, Preview } from '@storybook/addon-docs/dist/blocks';
+import { SourceState } from '@storybook/addon-docs/dist/blocks';
 
 
 const StoryWrapper = styled.div`
@@ -26,6 +27,7 @@ addDecorator(addReadme);
 addParameters({
   docs: {
     container: DocsContainer,
+    preview: Preview.defaultProps = { withSource: SourceState.OPEN }
   },
 });
 
