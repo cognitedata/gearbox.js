@@ -6,7 +6,7 @@ import { AssetTimeseriesPanel } from '../AssetTimeseriesPanel';
 
 ## Custom Spinner
       
-<Preview withSource='open'>
+<Preview>
   <Story name="Custom Spinner">  
     <AssetTimeseriesPanel
       assetId={4650652196144007}
@@ -29,7 +29,7 @@ const customStyle = {
 };
 ```
       
-<Preview withSource='open'>
+<Preview>
   <Story name="Custom Styles">  
     <AssetTimeseriesPanel
       assetId={4650652196144007}
@@ -38,7 +38,7 @@ const customStyle = {
   </Story>
 </Preview>
 
-## Custom Time Series Chart Meta
+## Custom TimeSeriesChartMeta
 
 This component takes all optional props of TimeseriesChartMeta component. These props are passed to every instance of TimeseriesChartMeta in the list of timeseries. See TimeseriesChartMeta component for more details.
 
@@ -53,7 +53,7 @@ const metaOptions = {
   showPeriods: true,
 };
 ```
-<Preview withSource='open'>
+<Preview>
   <Story name="Custom Time Series Chart Meta">  
     <AssetTimeseriesPanel
       assetId={4650652196144007}
@@ -69,7 +69,7 @@ import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 
 const handleAssetTimeseriesLoaded = (files: GetTimeSeriesMetadataDTO[]) => console.log(files);
 ```
-<Preview withSource='open'>
+<Preview>
   <Story name="Load Callback">  
     <AssetTimeseriesPanel
       assetId={4650652196144007}

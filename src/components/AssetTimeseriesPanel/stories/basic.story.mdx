@@ -1,12 +1,10 @@
-import { Meta, Story, Preview, Props, Source } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { AssetTimeseriesPanel } from '../AssetTimeseriesPanel';
 import { decorators } from './helper';
 
 <Meta title="Assets|AssetTimeseriesPanel" decorators={decorators} />
 
 # Asset Timeseries Panel
-
-#### Description:
 
 This component loads meta information about all timeseries related to the asset and shows them in the list.
 Each item in the list can be expanded showing description, timeseries chart, current data point and metadata.
@@ -26,7 +24,7 @@ import { AssetTimeseriesPanel } from '@cognite/gearbox';
 
 ```
 
-<Preview withSource='open'>
+<Preview>
   <Story name="Basic Usage" >
     <AssetTimeseriesPanel assetId={4650652196144007} />
   </Story>
