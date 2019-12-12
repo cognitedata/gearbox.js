@@ -1,0 +1,115 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { AssetSearch } from '../AssetSearch';
+import { decorators, onLiveSearchSelect, strings, onError, styles, onSearchResult } from './helper';
+
+<Meta title="Assets|AssetSearch/Example" decorators={decorators} />
+
+## Empty Results
+
+```jsx
+export const strings = {
+  searchPlaceholder: 'Asset name',
+  emptyLiveSearch: 'No results',
+};
+```
+
+**Test case:** please type *empty* in search field.
+
+<Preview>
+  <Story name="Empty Results" >
+    <AssetSearch
+      onLiveSearchSelect={onLiveSearchSelect}
+      strings={strings}
+    />
+  </Story>
+</Preview>
+
+## Error Handling
+
+```jsx
+const onError = (error: any): void => console.log(error);
+```
+
+**Test case:** please type *error* in search field.
+
+<Preview>
+  <Story name="Error Handling" >
+    <AssetSearch
+      onLiveSearchSelect={onLiveSearchSelect}
+      onError={onError} 
+    />
+  </Story>
+</Preview>
+
+## Root Asset Select
+
+<Preview>
+  <Story name="Root Asset Select" >
+    <AssetSearch 
+      onLiveSearchSelect={onLiveSearchSelect} 
+      rootAssetSelect={true} 
+    />
+  </Story>
+</Preview>
+
+## Advanced Search
+
+<Preview>
+  <Story name="Advanced Search" >
+    <AssetSearch 
+      onLiveSearchSelect={onLiveSearchSelect} 
+      advancedSearch={true} 
+    />
+  </Story>
+</Preview>
+
+## Custom Style
+
+```jsx
+import { AssetSearchStyles } from '@cognite/gearbox';
+
+const styles: AssetSearchStyles = {
+  advancedSearchButton: { backgroundColor: 'red' },
+  rootAssetSelect: { width: '40%' },
+  searchResultList: {
+    container: {
+      backgroundColor: 'purple',
+      marginTop: '20px',
+    },
+    listItem: { marginTop: '10px' },
+  },
+  advancedSearch: {
+    modalBody: { backgroundColor: 'green' },
+    searchButton: { backgroundColor: 'teal' },
+    clearButton: { backgroundColor: 'magenta' },
+    searchForm: {
+      container: { backgroundColor: 'gray' },
+      addMoreMetadataButton: { backgroundColor: 'lightblue' },
+    },
+  },
+};
+```
+
+<Preview>
+  <Story name="Custom Style" >
+    <AssetSearch 
+      onLiveSearchSelect={onLiveSearchSelect} 
+      advancedSearch={true} 
+      rootAssetSelect={true} 
+      styles={styles}
+    />
+  </Story>
+</Preview>
+
+## Handle Search Results
+
+<!-- TODO show dynamic search results here -->
+
+<Preview>
+  <Story name="Handle Search Results" >
+    <AssetSearch 
+      showLiveSearchResults={false} 
+      onSearchResult={onSearchResult} 
+    />
+  </Story>
+</Preview>
