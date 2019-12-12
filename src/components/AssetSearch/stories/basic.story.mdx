@@ -1,0 +1,49 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { AssetSearch } from '../AssetSearch';
+import { decorators, onLiveSearchSelect } from './helper';
+
+<Meta title="Assets|AssetSearch" decorators={decorators} />
+
+## Asset Search
+
+Use for assets search via name property.
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+## Basic usage:
+
+Imports:
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { AssetSearch } from '@cognite/gearbox';
+import { Asset } from '@cognite/sdk';
+```
+
+```jsx
+const onLiveSearchSelect = (asset: Asset) => console.log(asset);
+```
+
+<Preview>
+  <Story name="Basic Usage" >
+    <AssetSearch onLiveSearchSelect={onLiveSearchSelect} />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={AssetSearch} />
+
+### Types:
+
+#### AssetSearchStyles
+This interface defines inline CSS styles for inner elements of `AssetSearch` component.
+
+```jsx
+import { AssetSearchStyles } from '@cognite/gearbox';
+```
+
+See more details in `Custom Styles` example.
+

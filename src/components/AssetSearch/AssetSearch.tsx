@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { Asset, AssetSearchFilter } from '@cognite/sdk';
 import { AssetsAPI } from '@cognite/sdk/dist/src/resources/assets/assetsApi';
@@ -9,11 +9,8 @@ import {
 import { ClientSDKContext } from '../../context/clientSDKContext';
 
 import { ApiQuery, Callback, PureObject } from '../../interfaces';
-import {
-  Search,
-  SearchStyles as AssetSearchStyles,
-} from '../common/Search/Search';
-export type AssetSearchStyles = AssetSearchStyles;
+import { Search, SearchStyles } from '../common/Search/Search';
+export type AssetSearchStyles = SearchStyles;
 
 type LiveSearchSelect = (asset: Asset) => void;
 type SearchResultCallback = (assets: Asset[]) => void;
@@ -24,13 +21,38 @@ export const defaultStrings: PureObject = {
 };
 
 export interface AssetSearchProps {
+  /**
+   * Triggers after selecting one of items from live search results list.
+   * Required when showLiveSearchResults == true
+   */
   onLiveSearchSelect?: LiveSearchSelect;
+  /**
+   * flag to show live search results in dropdown list
+   */
   showLiveSearchResults?: boolean;
+  /**
+   * Triggers when search error occurs
+   */
   onError?: Callback;
+  /**
+   * Object of strings to be placed in component
+   */
   strings?: PureObject;
+  /**
+   * Enable root asset selection
+   */
   rootAssetSelect: boolean;
+  /**
+   * Enable root advanced search
+   */
   advancedSearch: boolean;
+  /**
+   * Custom styles
+   */
   styles?: AssetSearchStyles;
+  /**
+   * Triggers when search request finishes
+   */
   onSearchResult?: SearchResultCallback;
 }
 
@@ -39,10 +61,7 @@ interface AssetSearchState {
   loading: boolean;
 }
 
-export class AssetSearch extends React.Component<
-  AssetSearchProps,
-  AssetSearchState
-> {
+export class AssetSearch extends Component<AssetSearchProps, AssetSearchState> {
   static defaultProps = {
     rootAssetSelect: false,
     advancedSearch: false,
