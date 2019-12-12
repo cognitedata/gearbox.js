@@ -15,7 +15,7 @@ import { OnSelectAssetTreeParams } from '@cognite/gearbox';
 const onSelect = (e: OnSelectAssetTreeParams) => {};
 ```
 
-<Preview withSource='open'>
+<Preview>
   <Story name="Click Item">
     <AssetTree
       onSelect={onSelect}
@@ -34,7 +34,7 @@ const customStyle = {
 };
 ```
       
-<Preview withSource='open'>
+<Preview>
   <Story name="Custom Styles">  
   <AssetTree
       styles={customStyle}
@@ -44,7 +44,7 @@ const customStyle = {
 
 ## Default Expanded Node
       
-<Preview withSource='open'>
+<Preview>
   <Story name="Default Expanded Node">  
     <AssetTree
       defaultExpandedKeys={[6687602007296940]}
@@ -57,7 +57,7 @@ const customStyle = {
 ```jsx
 const displayIdAsName = ({ id }: { id: number }) => `Id: ${id}`
 ```
-<Preview withSource='open'>
+<Preview>
   <Story name="Custom Display Name">  
     <AssetTree
       displayName={displayIdAsName}
@@ -79,15 +79,15 @@ const exampleTheme = {
   },
 };
 ```
-<Preview withSource='open'>
+<Preview>
   <Story name="With Theme">  
     <ThemeProvider theme={exampleTheme}><AssetTree /></ThemeProvider>
   </Story>
 </Preview>
 
-## With Asset Id
+## custom root assets
 
-<Preview withSource='open'>
+<Preview>
   <Story name="With Asset Id">  
     <AssetTree
       assetIds={[3111454725058294]}
