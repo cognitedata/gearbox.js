@@ -1,0 +1,293 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { AssetScanner } from '../AssetScanner';
+import { 
+  ocrRequest, 
+  onError, 
+  onOcrError, 
+  renderButton, 
+  customNotification, 
+  FileInputComponent, 
+  onImageRecognizeFinish, 
+  cropSize,
+  webcamCropOverlay,
+  getAssetHandlerCustom
+} from './helper';
+
+<Meta title="Assets|AssetScanner"/>
+
+# Asset Scanner
+
+The component can be used for recognizing the name of an asset in a captured image (from a webcam)
+
+#### Usage requirements:
+
+By default, component uses Google Vision API (to recognize text on the picture). User has to provide a valid API key for Google Vision via **ocrKey** prop to use embedded OCR functional.
+Please, follow this guide to generate an API key:
+
+**Google Vision API**
+
+> Before you can use the Cloud Vision API, you must enable it for your project and generate your API key, see here how – [Enable the Vision API](https://cloud.google.com/vision/docs/before-you-begin).
+
+> Don't forget to set API key restrictions – [Using API Keys](https://cloud.google.com/docs/authentication/api-keys).
+
+You might provide your custom `extractOcrStrings` function to retrieve an array of strings from OCR recognition response structure.
+
+You also can use your own implementation of OCR call if you use your own OCR service.
+Just provide `ocrRequest` function to retrieve strings recognized from an image with your own implementation of OCR request.
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+### Basic usage:
+
+Imports:
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { AssetScanner } from '@cognite/gearbox';
+
+```
+```jsx
+const onError = (error: any) => {
+  console.log('onError', error);
+};
+```
+
+<Preview>
+  <Story name="Basic Usage" >
+    <AssetScanner
+      onError={onError}
+      ocrKey={'YOUR_GOOGLE_VISION_KEY'}
+    />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={AssetScanner} />
+
+### Types
+
+#### ButtonRenderProp:
+
+```jsx
+type ButtonRenderProp = (
+  onCapture: (...args: any[]) => void,
+  image?: string
+) => React.ReactNode;
+```
+
+#### ASNotifyTypes:
+
+```jsx
+enum ASNotifyTypes {
+  recognizeSuccess = 'recognizeSuccess',
+  recognizeFails = 'recognizeFails',
+  assetsFind = 'assetsFind',
+  assetsEmpty = 'assetsEmpty',
+  errorVideoAccess = 'errorVideoAccess',
+  errorOccurred = 'errorOccurred',
+}
+```
+
+#### OcrRequest:
+
+```jsx
+interface OcrRequest {
+  image: string;
+  key?: string;
+  extractOcrStrings?: (data: any) => string[];
+}
+```
+
+#### AssetScannerStyles:
+
+```jsx
+interface AssetScannerStyles {
+  button: React.CSSProperties;
+}
+```
+## Examples 
+
+### Custom ocrRequest
+
+```jsx
+const onImageRecognizeFinish = (result: string[] | null) => {
+  console.log('onImageRecognizeFinish', result);
+};
+
+const ocrRequest = async ({ image }: { image: string }) => {
+  return ['test result'];
+};
+```
+<Preview>
+  <Story name="Custom ocrRequest">  
+    <AssetScanner
+      onError={onError}
+      onImageRecognizeFinish={onImageRecognizeFinish}
+      ocrRequest={ocrRequest}
+    />
+  </Story>
+</Preview>
+
+### Custom button
+
+```jsx
+import { Callback } from '@cognite/gearbox';
+import styled from 'styled-components';
+
+export const renderButton = (
+  capture: Callback,
+  isReady: boolean = true
+): React.ReactNode => {
+  const Button = styled('button')`
+    border-radius: 10px;
+    height: 50px;
+    background-color: red;
+    position: absolute;
+    top: 50%;
+    left: 30px;
+    transform: translateY(-50%);
+  `;
+  return <Button onClick={capture}>{!isReady ? 'Reset' : 'Capture'}</Button>;
+};
+```
+<Preview>
+  <Story name="Custom button">  
+    <AssetScanner
+      ocrRequest={ocrRequest}
+      button={renderButton}
+    />
+  </Story>
+</Preview>
+
+### Notifications
+
+```jsx
+import { message } from 'antd';
+
+const customNotification = (type: ASNotifyTypes) => message.info(type);
+```
+<Preview>
+  <Story name="Notifications">  
+    <AssetScanner
+      onOcrError={onOcrError}
+      ocrKey={'YOUR_GOOGLE_VISION_KEY'}
+      enableNotification={true}
+      customNotification={customNotification}
+    />
+  </Story>
+</Preview>
+
+### Input image
+
+```jsx
+const FileInputComponent = ({render}) => {
+  const [image, setImage] = useState('');
+
+  const onChange = async (e: any) => {
+    const file = e.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    const fr = new FileReader();
+    fr.readAsDataURL(file);
+
+    const uploadedImage = await new Promise(resolve => {
+      fr.onloadend = res => {
+        if (res) {
+          resolve(res.currentTarget.result);
+        }
+      };
+    });
+
+    setImage(uploadedImage);
+  };
+
+  return (
+    <>
+      {render(image)}
+      <p style={{ margin: '10px' }}>
+        <input type="file" accept={'image/png'} onChange={onChange} />
+      </p>
+    </>
+  );
+};
+```
+<Preview>
+  <Story name="Input image">  
+      <FileInputComponent
+        render={(image) => (
+          <AssetScanner
+            onError={onError}
+            ocrRequest={ocrRequest}
+            onImageRecognizeFinish={onImageRecognizeFinish}
+            image={image}
+          />
+        )}
+      />
+  </Story>
+</Preview>
+
+### Crop placeholder horizontal
+
+```jsx
+const cropSize = { width: 400, height: 200 };
+```
+
+<Preview>
+  <Story name="Crop placeholder horizontal">  
+    <AssetScanner
+      onError={onError}
+      onImageRecognizeFinish={onImageRecognizeFinish}
+      ocrRequest={ocrRequest}
+      cropSize={cropSize}
+    />
+  </Story>
+</Preview>
+
+### Crop placeholder with custom overlay
+
+```jsx
+const webcamCropOverlay = () => (
+  <div
+    style={{
+      border: '20px solid red',
+      height: '440px',
+      width: '240px',
+    }}
+  />
+);
+```
+
+<Preview>
+  <Story name="Crop placeholder with custom overlay">  
+    <AssetScanner
+      onError={onError}
+      ocrRequest={ocrRequest}
+      onImageRecognizeFinish={onImageRecognizeFinish}
+      cropSize={cropSize}
+      webcamCropOverlay={webcamCropOverlay}
+    />
+  </Story>
+</Preview>
+
+### Custom asset search
+
+```jsx
+const getAssetHandlerCustom = async (strings) => await customAssetSearch(strings); 
+```
+
+<Preview>
+  <Story name="Custom asset search">  
+    <AssetScanner
+      onError={onError}
+      ocrRequest={ocrRequest}
+      onImageRecognizeFinish={onImageRecognizeFinish}
+      getAssetsHandlerCustom={getAssetHandlerCustom}
+    />
+  </Story>
+</Preview>
