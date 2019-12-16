@@ -1,4 +1,4 @@
-import { Meta, Story, Preview, Props, Source } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { SVGViewer } from '../SVGViewer';
 import { decorators } from './helper';
 
@@ -20,7 +20,7 @@ SVG-viewer provides the following functionality:
 
 Imports:
 
-```typescript jsx
+```jsx
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -46,13 +46,13 @@ import { SVGViewer } from '@cognite/gearbox';
 This type describes the parameters the `metadataClassesConditions` function is called with.
 The type can be imported from `@cognite/gearbox`:
 
-```typescript
+```jsx
 import { Conditions } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```typescript
+```jsx
 interface Conditions {
   condition: (metadataNode: Element) => boolean;
   className: string;
@@ -65,13 +65,13 @@ interface Conditions {
 This type describes parameter passed to `handleAnimateZoom` handler.
 The type can be imported from `@cognite/gearbox`:
 
-```typescript
+```jsx
 import { ZoomCenter } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```typescript
+```jsx
 interface ZoomCenter {
   x: number;
   y: number;
@@ -84,13 +84,13 @@ interface ZoomCenter {
 This type describes the parameters the `handleAnimateZoom` function is called with.
 The type can be imported from `@cognite/gearbox`:
 
-```typescript
+```jsx
 import { CustomClassNames } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```typescript
+```jsx
 interface CustomClassNames {
   searchResults: string;
   currentSearchResult: string;
