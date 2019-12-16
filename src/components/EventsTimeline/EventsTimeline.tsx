@@ -115,7 +115,7 @@ export const EventsTimeline: React.FC<EventsTimelineProps> = (
       return;
     }
 
-    const { width: currentWidth } = wrapperRef.current!.getBoundingClientRect();
+    const { width: currentWidth } = wrapperRef.current.getBoundingClientRect();
 
     setWidth(currentWidth);
   };
@@ -178,7 +178,7 @@ export const EventsTimeline: React.FC<EventsTimelineProps> = (
       return onEventHover([]);
     }
 
-    const filteredEvents = getEventsByTimestamp(time!, timelines);
+    const filteredEvents = getEventsByTimestamp(time, timelines);
 
     onEventHover(filteredEvents);
   }, onEventHoverDebounce);
