@@ -1,7 +1,7 @@
 import { Asset } from '@cognite/sdk';
 import { Tree } from 'antd';
 import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
@@ -43,7 +43,7 @@ interface AssetTreeNode {
   isLeaf: boolean;
 }
 
-class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
+class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
   static contextType = ClientSDKContext;
   static defaultProps = {
     theme: { ...defaultTheme },
@@ -208,7 +208,8 @@ const TreeNodeWrapper = styled(TreeNode)<AntTreeNodeProps>`
   }
 `;
 
-const Component = withDefaultTheme(AssetTree);
-Component.displayName = 'AssetTree';
+const AssetTreeWithTheme = withDefaultTheme(AssetTree);
+AssetTreeWithTheme.displayName = 'AssetTree';
 
-export { Component as AssetTree };
+export { AssetTreeWithTheme as AssetTree };
+export { AssetTree as AssetTreeWithoutTheme };
