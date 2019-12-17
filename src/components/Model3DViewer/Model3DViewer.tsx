@@ -3,7 +3,7 @@ import { AssetMapping3D, Revision3D } from '@cognite/sdk';
 import { Button, Slider } from 'antd';
 import { SliderValue } from 'antd/lib/slider';
 import { isEqual } from 'lodash';
-import React, { RefObject } from 'react';
+import React, { Component, RefObject } from 'react';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';
 import { CacheObject, Callback, MouseScreenPosition } from '../../interfaces';
@@ -40,22 +40,75 @@ export interface SliderProps {
 }
 
 export interface Model3DViewerProps {
+  /**
+   * model ID number
+   */
   modelId: number;
+  /**
+   * model revision ID number
+   */
   revisionId: number;
+  /**
+   * id of asset to highlight
+   */
   assetId?: number;
+  /**
+   * bounding box object, that describes dimension of viewed asset nodes
+   */
   boundingBox?: THREE.Box3;
+  /**
+   * object for caching 3D viewers instances
+   */
   cache?: CacheObject;
+  /**
+   * enable keyboard navigation in viewer. Viewer must be in focus
+   */
   enableKeyboardNavigation?: boolean;
+  /**
+   * on error occurs callback
+   */
   onError?: Callback;
+  /**
+   * on model loading progress callback
+   */
   onProgress?: Callback;
+  /**
+   * on model complete loading callback (in this callback you can
+   * start to call viewer and model methods)
+   */
   onComplete?: Callback;
+  /**
+   * on scene prepared to display model callback
+   * (return internal instances of viewer and model)
+   */
   onReady?: Callback;
+  /**
+   * on model click handler
+   */
   onClick?: Callback;
+  /**
+   * on scene camera change position callback
+   */
   onCameraChange?: Callback;
+  /**
+   * use default camera position
+   */
   useDefaultCameraPosition?: boolean;
+  /**
+   * set the slicing property of viewer
+   */
   slice?: SlicingProps;
+  /**
+   * enable visual sliders for the viewer
+   */
   slider?: SliderProps;
+  /**
+   * enable screenshot button in viewer
+   */
   showScreenshotButton?: boolean;
+  /**
+   * callback after screenshot is taken
+   */
   onScreenshot?: (url: string) => void;
 }
 interface Model3DViewerState {
@@ -74,7 +127,7 @@ const containerStyles = {
   justifyContent: 'spaceAround',
 } as React.CSSProperties;
 
-export class Model3DViewer extends React.Component<Model3DViewerProps> {
+export class Model3DViewer extends Component<Model3DViewerProps> {
   [x: string]: any;
   static defaultProps = {
     enableKeyboardNavigation: true,
