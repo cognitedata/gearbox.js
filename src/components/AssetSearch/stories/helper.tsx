@@ -1,5 +1,4 @@
 import { Asset, AssetListScope, AssetSearchFilter } from '@cognite/sdk';
-import { action } from '@storybook/addon-actions';
 import { pick } from 'lodash';
 import React from 'react';
 import { assetsList } from '../../../mocks';
@@ -11,7 +10,7 @@ class CogniteClient extends MockCogniteClient {
   assets: any = {
     // @ts-ignore
     list: (scope: AssetListScope) => {
-      action('assets.list')(scope);
+      console.log('assets.list', scope);
       // @ts-ignore
       // pick only required fields
       const items: Asset[] = assetsList.map(asset =>
@@ -27,7 +26,7 @@ class CogniteClient extends MockCogniteClient {
     },
     // @ts-ignore
     search: (query: AssetSearchFilter) => {
-      action('Assets.search')(query);
+      console.log('Assets.search', query);
       if (query.search && query.search.name === 'empty') {
         return [];
       }
