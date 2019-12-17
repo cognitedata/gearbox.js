@@ -1,0 +1,96 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { AssetTree, OnSelectAssetTreeParams } from '../AssetTree';
+import { decorators, onSelect, customStyle, exampleTheme, displayIdAsName } from './helper';
+import { ThemeProvider } from 'styled-components';
+
+<Meta title="Assets|AssetTree/Example" decorators={decorators} />
+
+## Click Item
+
+A function can be provided to fire when an item clicked:
+
+```jsx
+import { OnSelectAssetTreeParams } from '@cognite/gearbox';
+
+const onSelect = (e: OnSelectAssetTreeParams) => {};
+```
+
+<Preview>
+  <Story name="Click Item">
+    <AssetTree
+      onSelect={onSelect}
+    />
+  </Story>
+</Preview>
+
+## Custom Styles
+
+```jsx
+const customStyle = {
+  list: {
+    fontFamily: 'Courier New',
+    fontSize: 'large',
+  },
+};
+```
+      
+<Preview>
+  <Story name="Custom Styles">  
+    <AssetTree
+      styles={customStyle}
+    />
+  </Story>
+</Preview>
+
+## Default Expanded Node
+      
+<Preview>
+  <Story name="Default Expanded Node">  
+    <AssetTree
+      defaultExpandedKeys={[6687602007296940]}
+    />
+  </Story>
+</Preview>
+
+## Custom Display Name
+
+```jsx
+const displayIdAsName = ({ id }: { id: number }) => `Id: ${id}`
+```
+<Preview>
+  <Story name="Custom Display Name">  
+    <AssetTree
+      displayName={displayIdAsName}
+    />
+  </Story>
+</Preview>
+
+## With Theme
+
+```jsx
+import { ThemeProvider } from 'styled-components';
+
+const exampleTheme = {
+  gearbox: {
+    fontFamily: 'Courier New',
+    fontSize: 'large',
+    textColor: '#a88400',
+    highlightColor: '#00b893',
+  },
+};
+```
+<Preview>
+  <Story name="With Theme">  
+    <ThemeProvider theme={exampleTheme}><AssetTree /></ThemeProvider>
+  </Story>
+</Preview>
+
+## Custom Root Assets
+
+<Preview>
+  <Story name="With Asset Id">  
+    <AssetTree
+      assetIds={[3111454725058294]}
+    />
+  </Story>
+</Preview>
