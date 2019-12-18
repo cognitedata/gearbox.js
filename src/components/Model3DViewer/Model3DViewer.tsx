@@ -51,6 +51,7 @@ export interface Model3DViewerProps {
   boundingBox?: THREE.Box3;
   cache?: CacheObject;
   enableKeyboardNavigation?: boolean;
+  highlightMappedNodes?: boolean;
   onError?: Callback;
   onProgress?: Callback;
   onComplete?: Callback;
@@ -84,6 +85,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   [x: string]: any;
   static defaultProps = {
     enableKeyboardNavigation: true,
+    highlightMappedNodes: true,
     useDefaultCameraPosition: true,
     showScreenshotButton: false,
   };
@@ -253,7 +255,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
     try {
       this.nodes = await this.findMappedNodes();
-      this.highlightNodes();
+      this.highlightMappedNodesIfAllowed();
     } catch (error) {
       if (onError) {
         onError(error);
@@ -515,7 +517,12 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     return this.context!.revisions3D.retrieve(modelId, revisionId);
   }
 
-  private highlightNodes() {
+  private highlightMappedNodesIfAllowed() {
+    const { highlightMappedNodes } = this.props;
+    if (!highlightMappedNodes) {
+      return;
+    }
+
     const { length } = this.nodes;
 
     if (!this.model || !this.viewer) {
@@ -549,7 +556,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     const { onComplete, assetId } = this.props;
 
     if (assetId) {
-      this.highlightNodes();
+      this.highlightMappedNodesIfAllowed();
     }
 
     if (onComplete) {
