@@ -54,11 +54,11 @@ describe('Model3DViewer', () => {
     done();
   });
 
-  it('renders with highlightNodes set to false', done => {
+  it('renders with highlightMappedNodes set to false', done => {
     const props = {
       modelId: 0,
       revisionId: 0,
-      highlightNodes: false,
+      highlightMappedNodes: false,
     };
 
     const wrapper = mount(
