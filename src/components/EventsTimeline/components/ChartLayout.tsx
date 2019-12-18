@@ -219,7 +219,7 @@ export const ChartLayout: React.FC<ChartLayoutProps> = (
     <>
       {renderTimelines()}
       {rulerVisibility && (
-        <Ruler width={width} height={height} onMouseMove={onRulerMove} />
+        <Ruler width={width} height={height} positionChanged={onRulerMove} />
       )}
     </>
   );

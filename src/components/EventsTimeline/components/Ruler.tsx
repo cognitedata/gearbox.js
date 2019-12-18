@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 export interface EventTimelineRulerProps {
   width: number;
   height: number;
-  onMouseMove?: (e: React.SyntheticEvent | null) => void;
+  positionChanged?: (e: React.SyntheticEvent | null) => void;
 }
 
 export const Ruler: React.FC<EventTimelineRulerProps> = props => {
-  const { width, height, onMouseMove } = props;
+  const { width, height, positionChanged } = props;
   const [x, setX] = useState<number | null>(null);
 
   const mouseMoveHandler = (e: React.SyntheticEvent) => {
@@ -15,15 +15,15 @@ export const Ruler: React.FC<EventTimelineRulerProps> = props => {
 
     setX(offsetX);
 
-    if (onMouseMove) {
-      onMouseMove(e);
+    if (positionChanged) {
+      positionChanged(e);
     }
   };
 
   const hideRuler = () => {
     setX(null);
-    if (onMouseMove) {
-      onMouseMove(null);
+    if (positionChanged) {
+      positionChanged(null);
     }
   };
 
