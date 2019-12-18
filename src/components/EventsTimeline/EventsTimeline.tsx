@@ -1,103 +1,77 @@
-import { CogniteEvent } from '@cognite/sdk';
-import { event as d3Event } from 'd3';
-import { select } from 'd3-selection';
-import { zoom, ZoomScale } from 'd3-zoom';
 import { Dictionary, groupBy } from 'lodash';
-import { debounce } from 'lodash';
-import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';
 import { LoadingBlock } from '../common/LoadingBlock/LoadingBlock';
 import {
-  EventTimelineType,
-  EventTimelineView,
-  Ruler,
-  Timeline,
+  ChartLayout,
+  CogniteEventForTimeline,
+  TimelineEvent,
+  TimelineRuler,
+  TimelineSize,
+  TimelineZoom,
 } from './components';
-import { getEventsByTimestamp, getScaleTime } from './helpers';
-
-export interface TimelineEvent {
-  id: number;
-  view: EventTimelineView;
-  type: EventTimelineType;
-}
-
-export interface TimelineSize {
-  height: number;
-  bottom: number;
-}
-
-export interface TimelineRuler {
-  show: boolean;
-  onChange?: (event: React.SyntheticEvent, date: number) => void;
-  onEventHover?: (event: CogniteEventForTimeline[] | null) => void;
-  onEventHoverDebounce?: number;
-  onHide?: () => void;
-}
-
-export interface CogniteEventForTimeline extends CogniteEvent {
-  timeline: TimelineEvent;
-}
 
 export interface EventsTimelineProps {
   events: TimelineEvent[];
   start: number;
   end: number;
   ruler?: TimelineRuler;
+  zoom?: TimelineZoom;
   toTimelines?: (event: CogniteEventForTimeline) => string;
   timelineSize?: TimelineSize;
-  dateFormatter?: string;
+  dateFormatter?: (date: number) => string;
 }
 
 const toTimelinesDefault = (_: CogniteEventForTimeline) => '#000';
 
-export const EventsTimeline: React.FC<EventsTimelineProps> = (
-  props: EventsTimelineProps
-) => {
-  const {
-    events,
-    start,
-    end,
-    toTimelines,
-    ruler: {
-      show: showRuler,
-      onChange: onRulerChange,
-      onHide: onRulerHide,
-      onEventHover,
-      onEventHoverDebounce,
-    } = {
-      show: false,
-      onChange: undefined,
-      onHide: undefined,
-      onEventHover: undefined,
-      onEventHoverDebounce: 500,
-    },
-    dateFormatter = 'hh:mm, DD MMM YYYY',
-    timelineSize: { height: tlHeight, bottom: tlBottom } = {
-      height: 10,
-      bottom: 10,
-    },
-  } = props;
+export const EventsTimeline = ({
+  events,
+  start,
+  end,
+  ruler,
+  zoom,
+  toTimelines,
+  timelineSize: { height: tlHeight, bottom: tlBottom } = {
+    height: 10,
+    bottom: 10,
+  },
+  dateFormatter,
+}: EventsTimelineProps) => {
   const context = useCogniteContext(EventsTimeline);
+
+  const svgRef = useRef<SVGSVGElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const [width, setWidth] = useState<number>(0);
+  const [height, setHeight] = useState<number>(0);
+  const [domain, setDomain] = useState<[number, number]>([start, end]);
+
   const [timelines, setTimelines] = useState<
     Dictionary<CogniteEventForTimeline[]>
   >({});
-  const [height, setHeight] = useState<number>(0);
-  const [width, setWidth] = useState<number>(0);
-  const [domain, setDomain] = useState<[number, number]>([start, end]);
-  const [rulerVisability, setRulerVisability] = useState<boolean>(showRuler);
-  const zoomScale = getScaleTime(start, end, width);
-  // @ts-ignore
-  const scale = getScaleTime(...domain, width);
 
-  const retrieveEvents = async () => {
+  const handleResize = () => {
+    if (!wrapperRef.current) {
+      return;
+    }
+
+    const { width: currentWidth } = wrapperRef.current.getBoundingClientRect();
+
+    setWidth(currentWidth);
+  };
+
+  const retrieveEvents = async (): Promise<CogniteEventForTimeline[]> => {
     const ids = events.map(({ id }) => ({ id }));
     const sdkEvents = await context!.events.retrieve(ids);
 
-    return sdkEvents.map((e, i) => ({ ...e, timeline: events[i] }));
+    return sdkEvents.map((e, i) => {
+      const { view, type } = events[i];
+
+      return { ...e, appearance: { view, type } };
+    });
   };
+
   const onEventsPropChanges = async () => {
     const timelineEvents = await retrieveEvents();
     const groupTimelines: Dictionary<CogniteEventForTimeline[]> = groupBy<
@@ -110,82 +84,25 @@ export const EventsTimeline: React.FC<EventsTimelineProps> = (
     setHeight(componentHeight);
   };
 
-  const handleResize = () => {
-    if (!wrapperRef.current) {
-      return;
-    }
-
-    const { width: currentWidth } = wrapperRef.current.getBoundingClientRect();
-
-    setWidth(currentWidth);
-  };
-
-  const zoomStart = () => {
-    setRulerVisability(false);
-  };
-
-  const zoomed = () => {
-    if (!d3Event || d3Event.type !== 'zoom') {
-      return;
-    }
-
-    const t = d3Event.transform;
-    const newDomain = t.rescaleX(zoomScale as ZoomScale).domain();
-
+  const onZoomCallback = (newDomain: [number, number]) => {
     setDomain(newDomain);
-  };
 
-  const zoomEnd = () => {
-    setRulerVisability(showRuler);
-  };
-
-  const d3zoom = zoom()
-    .scaleExtent([1, 100])
-    .on('start', zoomStart)
-    .on('zoom', zoomed)
-    .on('end', zoomEnd);
-
-  const onRulerMove = (event: React.SyntheticEvent | null) => {
-    if (!event) {
-      if (onRulerHide) {
-        onRulerHide();
-      }
-      if (onEventHover) {
-        debounceOnEventHover(null);
-      }
-
-      return;
-    }
-
-    const { offsetX } = event.nativeEvent as MouseEvent;
-    const time = scale.invert(offsetX).getTime();
-
-    if (onRulerChange) {
-      onRulerChange(event, time);
-    }
-
-    if (onEventHover) {
-      debounceOnEventHover(time);
+    if (zoom!.onZoom) {
+      zoom!.onZoom(newDomain);
     }
   };
 
-  const debounceOnEventHover = debounce((time: number | null) => {
-    if (!onEventHover) {
-      return;
+  const renderDates = () => {
+    if (!dateFormatter) {
+      return null;
     }
 
-    if (time === null) {
-      return onEventHover([]);
-    }
+    const dates = domain.map(date => (
+      <span key={date}>{dateFormatter(date)}</span>
+    ));
 
-    const filteredEvents = getEventsByTimestamp(time, timelines);
-
-    onEventHover(filteredEvents);
-  }, onEventHoverDebounce);
-
-  useEffect(() => {
-    onEventsPropChanges();
-  }, [events]);
+    return <Dates>{dates}</Dates>;
+  };
 
   useEffect(() => {
     handleResize();
@@ -195,38 +112,29 @@ export const EventsTimeline: React.FC<EventsTimelineProps> = (
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const renderTimelines = () =>
-    Object.keys(timelines).map((color, index) => (
-      <Timeline
-        key={color}
-        events={timelines[color]}
-        width={width}
-        color={color}
-        height={tlHeight}
-        index={index}
-        scale={scale}
-      />
-    ));
+  useEffect(() => {
+    onEventsPropChanges();
+  }, [events]);
+
+  const zoomConfig = zoom ? { ...zoom, onZoom: onZoomCallback } : zoom;
 
   return (
     <Wrapper ref={wrapperRef}>
+      {renderDates()}
       {width && Object.keys(timelines).length ? (
-        <>
-          <Dates>
-            <span>{moment(domain[0]).format(dateFormatter)}</span>
-            <span>{moment(domain[1]).format(dateFormatter)}</span>
-          </Dates>
-          <svg
+        <svg ref={svgRef} width={width} height={height}>
+          <ChartLayout
+            svg={svgRef}
             width={width}
             height={height}
-            ref={ref => select(ref as Element).call(d3zoom)}
-          >
-            {renderTimelines()}
-            {rulerVisability && (
-              <Ruler width={width} height={height} onMouseMove={onRulerMove} />
-            )}
-          </svg>
-        </>
+            timelines={timelines}
+            start={domain[0]}
+            end={domain[1]}
+            ruler={ruler}
+            zoom={zoomConfig}
+            timelineSize={{ height: tlHeight, bottom: tlBottom }}
+          />
+        </svg>
       ) : (
         <LoadingBlock height={'50px'} />
       )}
@@ -238,8 +146,9 @@ const Wrapper = styled.div`
   width: 100%;
   min-height: 1px;
 `;
+
 const Dates = styled.div`
-  width: 100%;
   display: flex;
+  width: 100%;
   justify-content: space-between;
 `;

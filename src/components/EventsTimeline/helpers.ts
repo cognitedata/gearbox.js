@@ -3,10 +3,10 @@ import { Dictionary } from 'lodash';
 import { CogniteEventForTimeline } from './EventsTimeline';
 
 export const getScaleTime: (
+  width: number,
   start: number,
-  end: number,
-  width: number
-) => ScaleTime<number, number> = (start, end, width) =>
+  end: number
+) => ScaleTime<number, number> = (width, start, end) =>
   scaleTime()
     .domain([start, end])
     .range([0, width]);

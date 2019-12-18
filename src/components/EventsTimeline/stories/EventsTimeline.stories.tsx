@@ -3,12 +3,13 @@ import React from 'react';
 import { sleep } from '../../../mocks';
 import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { EventTimelineType, EventTimelineView } from '../components/Event';
 import {
   CogniteEventForTimeline,
-  EventsTimeline,
+  EventTimelineType,
+  EventTimelineView,
   TimelineEvent,
-} from '../EventsTimeline';
+} from '../components';
+import { EventsTimeline } from '../EventsTimeline';
 
 const now = Date.now();
 const start = now - 60 * 60 * 1000;
@@ -73,10 +74,11 @@ storiesOf('EventsTimeline', module)
         end={end}
         toTimelines={toTimelines}
         ruler={{
-          show: true,
-          onEventHover: hovered => console.log(hovered),
-          onEventHoverDebounce: 200,
+          show: false,
+          // onEventHover: hovered => console.log(hovered),
+          // hoverDebounceTime: 200,
         }}
+        zoom={{ enable: true }}
       />
     ),
     {}
