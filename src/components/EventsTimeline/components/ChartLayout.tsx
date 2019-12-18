@@ -7,11 +7,12 @@ import {
   ZoomedElementBaseType,
   ZoomScale,
 } from 'd3-zoom';
-import { Dictionary } from 'lodash';
-import { debounce } from 'lodash';
+import { debounce, Dictionary } from 'lodash';
 import React, { RefObject, useEffect, useState } from 'react';
 import { getEventsByTimestamp, getScaleTime } from '../helpers';
-import { EventTimelineType, EventTimelineView, Ruler, Timeline } from './index';
+import { EventTimelineType, EventTimelineView } from './Event';
+import { Ruler } from './Ruler';
+import { Timeline } from './Timeline';
 
 interface TimelineEventAppearance {
   view: EventTimelineView;
