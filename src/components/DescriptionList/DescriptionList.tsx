@@ -1,6 +1,6 @@
 import { Collapse } from 'antd';
 import { Dictionary, groupBy } from 'lodash';
-import React, { CSSProperties, Fragment } from 'react';
+import React, { CSSProperties, FC, Fragment } from 'react';
 import styled from 'styled-components';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { AnyIfEmpty, ValueListType } from '../../interfaces';
@@ -24,7 +24,7 @@ export interface DescriptionListProps extends MetaDescriptionListProps {
   theme?: AnyIfEmpty<{}>;
 }
 
-const DescriptionList = ({
+const DescriptionList: FC<DescriptionListProps> = ({
   styles,
   valueSet,
   toCategory,
