@@ -54,6 +54,22 @@ describe('Model3DViewer', () => {
     done();
   });
 
+  it('renders with highlightMappedNodes set to false', done => {
+    const props = {
+      modelId: 0,
+      revisionId: 0,
+      highlightMappedNodes: false,
+    };
+
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <Model3DViewer {...props} />
+      </ClientSDKProvider>
+    );
+    expect(wrapper.exists()).toBe(true);
+    done();
+  });
+
   it('should trigger provided callbacks', done => {
     const props = {
       modelId: 0,
