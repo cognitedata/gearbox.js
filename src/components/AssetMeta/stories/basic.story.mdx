@@ -1,8 +1,20 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { AssetMeta, AssetMetaWithoutTheme } from '../AssetMeta';
+import { ASSET_META_STYLES as customStyle } from '../../../mocks';
+import {
+  decorators,
+  onPaneChange,
+  detailsProps,
+  priorityCategoriesDocsProps,
+  categoriesSortDocsProps,
+  priorityAndSortDocsProps,
+  handleDocumentClick,
+  timeseriesProps
+} from './helper';
+
+<Meta title="Assets|AssetMeta" decorators={decorators} />
+
 # Asset Meta
-
-<!-- STORY -->
-
-### Description:
 
 This component loads meta information for an asset and presents in four tabbed panes: "Details", "Timeseries", "Documents" and "Events".
 First pane "Details" shows metadata about the asset itself as a table with two columns containing key-value pairs.
@@ -12,60 +24,46 @@ Third pane "Documents" presents uploaded files related to the asset. Fourth pane
 The component requires only `assetId` prop and once passed it makes four API requests for asset metadata, timeseries, documents, and events.
 In case if some of the panes are not necessary it can be disabled by `hidePanels` prop.
 
-
 If you need to use one of these four panes separately without tabs please see following components: `AssetDetailsPanel`, `AssetTimeseriesPanel`, `AssetDocumentsPanel` and `AssetEventsPanel`.
 
 **NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
 
-#### Usage:
+### Basic usage:
 
-```typescript jsx
+Imports:
+
+```jsx
 import 'antd/dist/antd.css';
 
 import React from 'react';
 import { AssetMeta } from '@cognite/gearbox';
 
-function ExampleComponent(props) {
-  return <AssetMeta assetId={4650652196144007} />;
-
-}
 ```
 
-#### Available props:
+<Preview>
+  <Story name="Basic Usage" >
+   <AssetMeta assetId={4650652196144007} />
+  </Story>
+</Preview>
 
-##### Required:
+## Available props
 
-| Property  | Description | Type     | Default |
-| --------- | ----------- | -------- | ------- |
-| `assetId` | Asset Id    | `number` |         |
+<Props of={AssetMetaWithoutTheme} />
 
-##### Optionals:
-
-| Property       | Description                                                            | Type                                          | Default     |
-| -------------- | ---------------------------------------------------------------------- | --------------------------------------------- | ----------- |
-| `hidePanels`   | List of panes to be hidden                                             | `Array<'details' \| 'documents' \| 'events'>` |             |
-| `tab`          | Defines pane that will be activated once the data has been loaded      | `'details' \| 'documents' \| 'events'`        | `'details'` |
-| `onPaneChange` | Function triggered when a user changes panes                           | `(tab: string) => void`                       |             |
-| `detailsProps` | Object passed as props to inner component that presents details pane   | `MetaAssetDetailsProps`                       |             |
-| `timeseriesProps`| Object passed as props to inner component that presents timeseries pane | `MetaTimeseriesProps`                      |             |
-| `docsProps`    | Object passed as props to inner component that presents documents pane | `MetaDocProps`                                |             |
-| `eventProps`   | Object passed as props to inner component that presents events pane    | `MetaEventsProps`                             |             |
-| `customSpinner`| A custom spinner to be shown in tabs while data is being loaded        | `React.ReactNode`                             |             |
-| `styles`       | Object that defines inline CSS styles for inner elements of the component.| `AssetMetaStyles`, `AssetTimeseriesPanelStyles`, `AssetDocumentsPanelStyles`, `AssetEventsPanelStyles`|             |
-
-### Types
+## Types
 
 ### MetaAssetDetailsProps
+
 The object that customizes the appearance of "Details" pane. All metadata properties will be hidden inside "collapse" component when optional property function  `toCategory` is passed. All uncategorized properties will appear under "Uncategorised" label, or the name specified with `unknownCategoryName`. See `DescriptionList` component for more details.
 `MetaAssetDetailsProps` type can be imported from @cognite/gearbox:
 
-```typescript
+```jsx
 import { MetaAssetDetailsProps } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```typescript
+```jsx
 export interface MetaAssetDetailsProps {
   toCategory?: (name: string) => string | undefined;
   categoryPriorityList?: string[];
@@ -76,17 +74,18 @@ export interface MetaAssetDetailsProps {
 ```
 
 ### MetaTimeseriesProps
+
 The object that customizes the appearance of "Timeseries" pane. Property `strings` defines text literals for the inner component that represents a list of timeseries and in particular `noTimeseriesSign` property defines a custom message to be shown if no timeseries were found for the asset.
 Other properties define appearance of `TimeseriesChartMeta` component which is shown if any entry in the list was expanded. See `TimeseriesChartMeta` component for more details.
 `MetaTimeseriesProps` type can be imported from @cognite/gearbox:
 
-```typescript
+```jsx
 import { MetaTimeseriesProps } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```typescript
+```jsx
 interface MetaTimeseriesProps {
   strings?: {
     noTimeseriesSign?: string;
@@ -110,6 +109,7 @@ type TimeseriesChartMetaPeriod =  'lastYear' | 'lastMonth' | 'lastWeek' | 'lastD
 ```
 
 #### MetaDocProps
+
 This prop customizes the appearance of "Documents" pane.
 It also contains a handler triggered when a user clicks on a certain document.
 Please notice that document categories "P&ID" and "Logic diagrams" are prioritized by default
@@ -119,13 +119,13 @@ but if `customCategorySort` is provided this function will be used for sorting n
 Priority categories are delimited from regular categories by gray line.
 `MetaDocProps` type can be imported from @cognite/gearbox:
 
-```typescript
+```jsx
 import { MetaDocProps } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```typescript
+```jsx
 import { CollapseProps } from 'antd/lib/collapse';
 import { FilesMetadata as Document } from '@cognite/sdk';
 
@@ -162,16 +162,17 @@ interface JsonDocTypes {
 ```
 
 #### MetaEventsProps
+
 This prop is supposed to customize appearance of "Events" pane.
 The type can be imported from @cognite/gearbox:
 
-```typescript
+```jsx
 import { MetaEventsProps } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```typescript
+```jsx
 interface MetaEventsProps extends TableDesignType {
   columns?: TableColumnType[];
 }
@@ -200,26 +201,32 @@ interface TableColumnType {
 
 ```
 #### AssetMetaStyles
+
 This interface defines inline CSS styles for inner elements of `AssetMeta` component.
 You can override styles of following blocks:
 <p>Details tab:</p>
-<img src="asset_meta/styling_schema1.jpg" alt="Tenant Styling" width="700px"><br><br>
+<img src="asset_meta/styling_schema1.jpg" alt="Tenant Styling" width="700px"/><br/><br/>
 <p>Timeseries tab:</p>
-<img src="asset_meta/styling_schema4.jpg" alt="Tenant Styling" width="700px"><br><br>
+<img src="asset_meta/styling_schema4.jpg" alt="Tenant Styling" width="700px"/><br/><br/>
 <p>Documents tab:</p>
-<img src="asset_meta/styling_schema2.jpg" alt="Tenant Styling" width="700px"><br><br>
+<img src="asset_meta/styling_schema2.jpg" alt="Tenant Styling" width="700px"/><br/><br/>
 <p>Events tab:</p>
-<img src="asset_meta/styling_schema3.jpg" alt="Tenant Styling" width="700px"><br><br>
+<img src="asset_meta/styling_schema3.jpg" alt="Tenant Styling" width="700px"/><br/><br/>
 
 The type can be imported from `@cognite/gearbox`:
 
-```typescript
-import { AssetMetaStyles, AssetTimeseriesPanelStyles, AssetDocumentsPanelStyles, AssetEventsPanelStyles } from '@cognite/gearbox';
+```jsx
+import { 
+  AssetMetaStyles, 
+  AssetTimeseriesPanelStyles, 
+  AssetDocumentsPanelStyles, 
+  AssetEventsPanelStyles 
+  } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```typescript
+```jsx
 interface AssetMetaStyles {
   header?: React.CSSProperties;
   emptyTab?: React.CSSProperties;
@@ -229,13 +236,13 @@ interface AssetMetaStyles {
   events?: AssetEventsPanelStyles;
 }
 ```
-```typescript
+```jsx
 interface AssetTimeseriesPanelStyles {
   wrapper?: React.CSSProperties;
   timeseriesContainer?: React.CSSProperties;
 }
 ```
-```typescript
+```jsx
 interface AssetDocumentsPanelStyles {
   wrapper?: React.CSSProperties;
   fileContainer?: React.CSSProperties;
@@ -243,7 +250,7 @@ interface AssetDocumentsPanelStyles {
   fileTitle?: React.CSSProperties;
 }
 ```
-```typescript
+```jsx
 interface AssetEventsPanelStyles {
   table?: React.CSSProperties;
   tableRow?: React.CSSProperties;
@@ -252,3 +259,216 @@ interface AssetEventsPanelStyles {
 ```
 
 See more details in `Custom Styles` example.
+
+## Examples 
+
+### Returns Selected Pane
+
+```jsx
+const onPaneChange = (key: string) => console.log('onPaneChange', key);
+```
+<Preview>
+  <Story name="Returns Selected Pane">  
+    <AssetMeta assetId={4650652196144007} onPaneChange={onPaneChange} />
+  </Story>
+</Preview>
+
+### Alternate Default Tab
+
+<Preview>
+  <Story name="Alternate Default Tab">  
+    <AssetMeta assetId={4650652196144007} tab="documents" />;
+  </Story>
+</Preview>
+
+### Hide A Tab
+
+<Preview>
+  <Story name="Hide A Tab">  
+    <AssetMeta
+      assetId={4650652196144007}
+      tab="events"
+      hidePanels={['details']}
+    />
+  </Story>
+</Preview>
+
+### Custom Details Category
+
+```jsx
+const detailsProps = {
+  toCategory: (name: string) => name.split('_')[0],
+  expandedCategories: ['SOURCE'],
+};
+```
+
+<Preview>
+  <Story name="Custom Details Category">  
+    <AssetMeta
+      assetId={4650652196144007}
+      detailsProps={detailsProps}
+    />
+  </Story>
+</Preview>
+
+### Returns Selected Document
+
+```jsx
+ const handleDocumentClick = (
+  document: Document,
+  category: string,
+  description: string
+) => {
+  console.log('handleDocumentClick', document, category, description);
+}
+```
+
+<Preview>
+  <Story name="Returns Selected Document">  
+    <AssetMeta assetId={123} docsProps={ handleDocumentClick } />;
+  </Story>
+</Preview>
+
+### Custom Document Priority Categories
+
+```jsx
+const priorityCategoriesDocsProps = { categoryPriorityList: ['AB', 'ZE'] };
+```
+
+<Preview>
+  <Story name="Custom Document Priority Categories">  
+    <AssetMeta
+      assetId={123}
+      docsProps={priorityCategoriesDocsProps}
+    />
+  </Story>
+</Preview>
+
+### Custom Document Categories Sort
+
+```jsx
+const categoriesSortDocsProps = {
+  customCategorySort: (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0),
+  categoryPriorityList: [],
+};
+
+```
+
+<Preview>
+  <Story name="Custom Document Categories Sort">  
+    <AssetMeta
+      assetId={123}
+      docsProps={categoriesSortDocsProps}
+    />
+  </Story>
+</Preview>
+
+### Custom Document Category Priority And Sort
+
+```jsx
+priorityAndSortDocsProps = {
+  customCategorySort: (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0),
+  categoryPriorityList: ['ZE'],
+};
+
+```
+
+<Preview>
+  <Story name="Custom Document Category Priority And Sort">  
+    <AssetMeta
+      assetId={123}
+      docsProps={priorityAndSortDocsProps}
+    />
+  </Story>
+</Preview>
+
+### Custom TimeseriesChartMeta
+
+```jsx
+const timeseriesProps = {
+  defaultTimePeriod: 'lastYear',
+  showMetadata: false,
+  showDatapoint: false,
+  showDescription: false,
+  liveUpdate: false,
+};
+```
+
+<Preview>
+  <Story name="Custom TimeseriesChartMeta">  
+    <AssetMeta
+      assetId={123}
+      timeseriesProps={timeseriesProps}
+    />
+  </Story>
+</Preview>
+
+### With Custom Spinner
+
+<Preview>
+  <Story name="With Custom Spinner">  
+    <AssetMeta assetId={123456} customSpinner={<div>Loading...</div>} />
+  </Story>
+</Preview>
+
+### With Custom Styles
+
+```jsx
+customStyle = { 
+  header: {
+    textAlign: 'center',
+    fontFamily: 'Comic Sans MS',
+    fontSize: '1.2em',
+    background: '#ffa3d2',
+  },
+  emptyTab: {
+    color: 'yellow',
+  },
+  details: {
+    fontSize: '1.2em',
+    color: 'green',
+  },
+  timeseries: {
+    wrapper: {
+      border: '2px red solid',
+      width: '70%',
+    },
+    timeseriesContainer: {
+      backgroundColor: '#efefef',
+    },
+  },
+  documents: {
+    wrapper: {
+      backgroundColor: 'yellow',
+    },
+    fileTitle: {
+      textAlign: 'right',
+      color: 'blue',
+    },
+    fileLink: {
+      textAlign: 'right',
+      color: 'red',
+    },
+    fileContainer: {
+      width: '50%',
+    },
+  },
+  events: {
+    table: {
+      width: '80%',
+    },
+    tableRow: {
+      background: '#00FF00',
+    },
+    tableCell: {
+      fontStyle: 'italic',
+    },
+  },
+}
+```
+
+<Preview>
+  <Story name="With Custom Styles">  
+    <AssetMeta assetId={123456} styles={customStyle} />
+  </Story>
+</Preview>
