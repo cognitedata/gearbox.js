@@ -9,4 +9,5 @@ export type AssetDocumentsPanelProps = WithAssetFilesProps &
   MetaDocProps &
   DocumentsPanelStylesProps;
 
+DocumentTable.displayName = 'AssetDocumentsPanel';
 export const AssetDocumentsPanel = withAssetFiles(DocumentTable);
