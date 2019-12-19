@@ -1,6 +1,14 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { AssetSearch } from '../AssetSearch';
-import { decorators, onLiveSearchSelect } from './helper';
+import { 
+  decorators, 
+  onLiveSearchSelect, 
+  strings, 
+  onError, 
+  styles, 
+  onSearchResult, 
+  heightProp, 
+} from './helper';
 
 <Meta title="Assets|AssetSearch" decorators={decorators} />
 
@@ -47,3 +55,112 @@ import { AssetSearchStyles } from '@cognite/gearbox';
 
 See more details in `Custom Styles` example.
 
+## Examples
+
+### Empty Results
+
+```jsx
+export const strings = {
+  searchPlaceholder: 'Asset name',
+  emptyLiveSearch: 'No results',
+};
+```
+
+**Test case:** please type *empty* in search field.
+
+<Preview>
+  <Story name="Empty Results" height = {heightProp}>
+    <AssetSearch
+      onLiveSearchSelect={onLiveSearchSelect}
+      strings={strings}
+    />
+  </Story>
+</Preview>
+
+### Error Handling
+
+```jsx
+const onError = (error: any): void => console.log(error);
+```
+
+**Test case:** please type *error* in search field.
+
+<Preview>
+  <Story name="Error Handling" height = {heightProp} >
+    <AssetSearch
+      onLiveSearchSelect={onLiveSearchSelect}
+      onError={onError} 
+    />
+  </Story>
+</Preview>
+
+### Root Asset Select
+
+<Preview>
+  <Story name="Root Asset Select" height = {heightProp}>
+    <AssetSearch 
+      onLiveSearchSelect={onLiveSearchSelect} 
+      rootAssetSelect={true} 
+    />
+  </Story>
+</Preview>
+
+### Advanced Search
+
+<Preview>
+  <Story name="Advanced Search" height = {heightProp}>
+    <AssetSearch 
+      onLiveSearchSelect={onLiveSearchSelect} 
+      advancedSearch={true} 
+    />
+  </Story>
+</Preview>
+
+### Custom Style
+
+```jsx
+import { AssetSearchStyles } from '@cognite/gearbox';
+
+const styles: AssetSearchStyles = {
+  advancedSearchButton: { backgroundColor: 'red' },
+  rootAssetSelect: { width: '40%' },
+  searchResultList: {
+    container: {
+      backgroundColor: 'purple',
+      marginTop: '20px',
+    },
+    listItem: { marginTop: '10px' },
+  },
+  advancedSearch: {
+    modalBody: { backgroundColor: 'green' },
+    searchButton: { backgroundColor: 'teal' },
+    clearButton: { backgroundColor: 'magenta' },
+    searchForm: {
+      container: { backgroundColor: 'gray' },
+      addMoreMetadataButton: { backgroundColor: 'lightblue' },
+    },
+  },
+};
+```
+
+<Preview>
+  <Story name="Custom Style" height = {heightProp}>
+    <AssetSearch 
+      onLiveSearchSelect={onLiveSearchSelect} 
+      advancedSearch={true} 
+      rootAssetSelect={true} 
+      styles={styles}
+    />
+  </Story>
+</Preview>
+
+### Handle Search Results
+
+<Preview>
+  <Story name="Handle Search Results" height = {heightProp}>
+    <AssetSearch 
+      showLiveSearchResults={false} 
+      onSearchResult={onSearchResult} 
+    />
+  </Story>
+</Preview>

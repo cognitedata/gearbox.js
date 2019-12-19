@@ -61,6 +61,8 @@ export const onError = (error: any): void => console.log(error);
 
 export const onSearchResult = (assets: Asset[]): void => console.log(assets);
 
+export const heightProp = '100px';
+
 export const strings = {
   searchPlaceholder: 'Asset name',
   emptyLiveSearch: 'No results',
