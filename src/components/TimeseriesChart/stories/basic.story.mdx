@@ -1,0 +1,352 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { TimeseriesChart } from '../TimeseriesChart';
+import { 
+  decorators,
+  annotationsProp,
+  customContainerStyle,
+  zoomableClientDecorator,
+  timeSeriesColors,
+  rulerProp,
+  handleMouseMove,
+  handleMouseOut,
+  handleBlur,
+  series,
+} from './helper';
+
+<Meta title="Time Series|TimeSeriesChart" decorators={decorators} />
+
+# Timeseries Chart
+
+This component loads the datapoints given a timeseries id and renders a line chart of those points.
+The component requires only `timeseriesIds`
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+### Basic usage:
+
+Imports:
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { TimeseriesChart } from '@cognite/gearbox';
+
+```
+
+<Preview>
+  <Story name="Basic Usage" >
+   <TimeseriesChart timeseriesIds={[123]} />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={TimeseriesChart} />
+
+### Types
+
+### TimeseriesChartStyles
+
+This interface defines inline CSS styles for inner elements of `TimeseriesChart`component.
+You can only override the outermost container.
+
+The type can be imported from `@cognite/gearbox`:
+
+```jsx
+import { TimeseriesChartStyles } from '@cognite/gearbox';
+```
+
+Definition:
+
+```jsx
+interface TimeseriesChartStyles {
+  container?: React.CSSProperties;
+}
+```
+
+See more details in `Custom container styles` example.
+
+## Examples
+
+### Empty 
+
+<Preview>
+  <Story name="Empty" >
+   <TimeseriesChart timeseriesIds={[]} />
+  </Story>
+</Preview>
+
+### Single 
+
+<Preview>
+  <Story name="Single" >
+   <TimeseriesChart timeseriesIds={[123]} />
+  </Story>
+</Preview>
+
+### Multiple 
+
+<Preview>
+  <Story name="Multiple" >
+   <TimeseriesChart timeseriesIds={[123, 456]} />
+  </Story>
+</Preview>
+
+### Hidden 
+
+<Preview>
+  <Story name="Hidden" >
+   <TimeseriesChart 
+      timeseriesIds={[123, 456]}
+      hiddenSeries={{ 123: true }} 
+    />
+  </Story>
+</Preview>
+
+### Height And Width 
+
+<Preview>
+  <Story name="Height And Width" >
+    <TimeseriesChart timeseriesIds={[123]} height={300} width={800} />
+  </Story>
+</Preview>
+
+### Custom Container Styles
+
+```jsx
+const customContainerStyle = {
+  container: { height: '300px', backgroundColor: 'lightblue' },
+};
+```
+<Preview>
+  <Story name="Custom Container Styles" >
+    <TimeseriesChart 
+      timeseriesIds={[123]}
+      styled={customContainerStyles}
+    />
+  </Story>
+</Preview>
+
+### Left y-axis
+
+<Preview>
+  <Story name="Left y-axiss" >
+    <TimeseriesChart timeseriesIds={[123]} yAxisPlacement={'LEFT'} />
+  </Story>
+</Preview>
+
+### No y-axis
+
+<Preview>
+  <Story name="No y-axis" >
+    <TimeseriesChart timeseriesIds={[123]} yAxisDisplayMode={'NONE'} />
+  </Story>
+</Preview>
+
+### Collapsed y-axis
+
+<Preview>
+  <Story name="Collapsed y-axis" >
+    <TimeseriesChart
+      timeseriesIds={[123]}
+      yAxisDisplayMode={'COLLAPSED'}
+    />
+  </Story>
+</Preview>
+
+### X-axis Height
+
+<Preview>
+  <Story name="X-axis Height" >
+    <TimeseriesChart timeseriesIds={[123]} xAxisHeight={100} />
+  </Story>
+</Preview>
+
+### No x-axis
+
+<Preview>
+  <Story name="No x-axis" >
+    <TimeseriesChart timeseriesIds={[123]} xAxisHeight={0} />
+  </Story>
+</Preview>
+
+### Start And End Time
+
+<Preview>
+  <Story name="Start And End Time" >
+    <TimeseriesChart
+      timeseriesIds={[123]}
+      startTime={new Date(2019, 3, 1)}
+      endTime={new Date(2019, 4, 1)}
+    />
+  </Story>
+</Preview>
+
+### Crosshair
+
+<Preview>
+  <Story name="Crosshair" >
+    <TimeseriesChart timeseriesIds={[123]} crosshair={true} />
+  </Story>
+</Preview>
+
+### Context Char
+
+<Preview>
+  <Story name="Context Char" >
+    <TimeseriesChart
+      timeseriesIds={[123]}
+      startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
+      endTime={Date.now()}
+      zoomable={true}
+      contextChart={true}
+    />
+  </Story>
+</Preview>
+
+### Zoomable
+
+<Preview>
+  <Story name="Zoomable" decorators={[zoomableClientDecorator]}>
+        <TimeseriesChart
+      timeseriesIds={[123]}
+      startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
+      endTime={Date.now()}
+      zoomable={true}
+      contextChart={true}
+    />
+  </Story>
+</Preview>
+
+### Live Update
+
+<Preview>
+  <Story name="Live Update" decorators={[zoomableClientDecorator]}>
+    <TimeseriesChart
+      timeseriesIds={[123]}
+      startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
+      endTime={Date.now()}
+      liveUpdate={true}
+      updateIntervalMillis={2000}
+    />
+  </Story>
+</Preview>
+
+### Custom Colors
+
+```jsx
+const timeSeriesColors = { 123: 'red', 456: '#00ff00' }
+```
+
+<Preview>
+  <Story name="Custom Colors" >
+   <TimeseriesChart
+      timeseriesIds={[123, 456]}
+      timeseriesColors={timeSeriesColors}
+    />
+  </Story>
+</Preview>
+
+### Annotations
+
+```jsx
+const annotations = [
+  {
+    data: [Date.now() - 30 * 1000, Date.now() - 20 * 1000],
+    height: 30,
+    id: 888,
+  },
+];
+```
+
+<Preview>
+  <Story name="Annotations" >
+    <TimeseriesChart
+      timeseriesIds={[123]}
+      startTime={Date.now() - 60 * 1000}
+      endTime={Date.now()}
+      annotations={annotationsProp}
+      />
+  </Story>
+</Preview>
+
+### Ruler
+
+```jsx
+const ruler = {
+  visible: true,
+  yLabel: (point: any) => `${Number.parseFloat(point.value).toFixed(3)}`,
+  timeLabel: (point: any) => point.timestamp.toString(),
+};
+```
+
+<Preview>
+  <Story name="Ruler" >
+    <TimeseriesChart
+      timeseriesIds={[123]}
+      startTime={Date.now() - 60 * 1000}
+      endTime={Date.now()}
+      ruler={rulerProp}
+      />
+  </Story>
+</Preview>
+
+### Mouse events
+
+```jsx
+const handleMouseMove = (e: any) => console.log('onMouseMove', e)
+
+const handleMouseOut = (e: any) => console.log('onMouseOut', e)
+
+const handleBlur = (e: any) => console.log('onBlur', e)
+
+```
+
+<Preview>
+  <Story name="Mouse events" >
+    <TimeseriesChart
+      timeseriesIds={[123]}
+      startTime={Date.now() - 60 * 1000}
+      endTime={Date.now()}
+      onMouseMove={handleMouseMove}
+      onMouseOut={handleMouseOut}
+      onBlur={handleBlur}
+    />
+  </Story>
+</Preview>
+
+### Custom Series
+
+```jsx
+import { AxisDisplayMode } from '@cognite/griff-react';
+import { DataLoader } from '@cognite/gearbox';
+
+const series = [
+  {
+    id: 123,
+    color: 'green',
+    yAxisDisplayMode: AxisDisplayMode.ALL,
+    hidden: false,
+    y0Accessor: DataLoader.y0Accessor,
+    y1Accessor: DataLoader.y1Accessor,
+    yAccessor: DataLoader.yAccessor,
+  },
+  {
+    id: 456,
+    color: 'red',
+    y0Accessor: DataLoader.y0Accessor,
+    y1Accessor: DataLoader.y1Accessor,
+    yAccessor: DataLoader.yAccessor,
+  },
+];
+```
+
+<Preview>
+  <Story name="Custom Series" >
+    <TimeseriesChart 
+      series={series} 
+      yAxisDisplayMode={'NONE'} 
+    />
+  </Story>
+</Preview>
