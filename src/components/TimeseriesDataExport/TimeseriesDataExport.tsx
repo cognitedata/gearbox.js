@@ -14,7 +14,13 @@ import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import { FormComponentProps } from 'antd/lib/form';
 import { ColProps } from 'antd/lib/grid';
 import moment, { Moment } from 'moment-timezone';
-import React, { SyntheticEvent, useContext, useEffect, useState } from 'react';
+import React, {
+  FC,
+  SyntheticEvent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { ClientSDKContext } from '../../context/clientSDKContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { AnyIfEmpty, PureObject } from '../../interfaces';
@@ -50,21 +56,63 @@ export interface TimeseriesDataExportFormFields {
 }
 
 export interface TimeseriesDataExportProps extends FormComponentProps {
+  /**
+   * Array of timeserie ids
+   */
   timeseriesIds: number[];
+  /**
+   * String, that represents initial granularity (ex. 2m, 15s, 1h) to be displayed in form
+   */
   granularity: string;
+  /**
+   * Array with start - end timestamp values for initial time range
+   */
   defaultTimeRange: number[];
+  /**
+   * Flag that shows/hides modal with form
+   */
   visible: boolean;
+  /**
+   * Flag that shows/hides modal with form
+   */
   modalWidth?: number;
+  /**
+   * Limit of cells for generated CSV documents, can't be greater then 10000
+   */
   cellLimit?: number;
+  /**
+   * Function, that triggers on Download SVG button click. Button appears if this function is defined
+   */
   downloadAsSvg?: () => void;
+  /**
+   * Async function that return CSV-kind string that will be a source for CSV file
+   */
   fetchCSV?: FetchCSVCall;
+  /**
+   * Callback that handles modal close action
+   */
   hideModal?: () => void;
+  /**
+   * Async function that fetches data about timeseries
+   */
   retrieveTimeseries?: FetchTimeseriesCall;
+  /**
+   * Callback that triggers in case of API call errors
+   */
   onError?: (err: any) => void;
+  /**
+   * Callback that triggers after success CSV file generation
+   */
   onSuccess?: () => void;
+  /**
+   * Object that configures form layout based on antd rules for label and wrapper
+   */
   formItemLayout?: FormItemLayout;
-  theme?: AnyIfEmpty<{}>;
+  /**
+   * Strings, that can be customized
+   */
   strings?: PureObject;
+  theme?: AnyIfEmpty<{}>;
 }
 
 const defaultStrings: PureObject = {
@@ -111,7 +159,10 @@ const isGreaterThenLimit = (
 };
 
 // tslint:disable-next-line:no-big-function
-const TimeseriesDataExportFC = (props: TimeseriesDataExportProps) => {
+export const TimeseriesDataExportFC: FC<TimeseriesDataExportProps> = (
+  props: TimeseriesDataExportProps
+  // tslint:disable-next-line:no-big-function
+) => {
   const {
     form,
     form: { getFieldDecorator },
