@@ -1,9 +1,10 @@
-import { Asset } from '@cognite/sdk';
+import { Asset, CogniteClient } from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
 
 import { ocrRecognize } from '../../api';
-import { ClientSDKContext } from '../../context/clientSDKContext';
+import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import {
   Callback,
   CropSize,
@@ -98,9 +99,10 @@ export class AssetScanner extends React.Component<
     enableNotification: false,
   };
 
-  static contextType = ClientSDKContext;
+  static contextType = ClientSDKProxyContext;
 
-  context!: React.ContextType<typeof ClientSDKContext>;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   notification: ASNotification = this.prepareNotifications();
 
@@ -154,6 +156,12 @@ export class AssetScanner extends React.Component<
   }
 
   componentDidMount() {
+    this.client = this.context('AssetScanner')!;
+    if (!this.client) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
+
     if (this.props.image) {
       this.capture();
     }
@@ -330,11 +338,13 @@ export class AssetScanner extends React.Component<
   }
 
   private getAssetList(query: string): Promise<Asset[]> {
-    return this.context!.assets.list({
-      filter: {
-        name: query,
-      },
-    }).autoPagingToArray();
+    return this.client.assets
+      .list({
+        filter: {
+          name: query,
+        },
+      })
+      .autoPagingToArray();
   }
 
   private getImage(): Promise<string> {

@@ -1,4 +1,4 @@
-import { List3DNodesQuery, RevealNode3D } from '@cognite/sdk';
+import { CogniteClient, List3DNodesQuery, RevealNode3D } from '@cognite/sdk';
 import { Tree } from 'antd';
 import {
   AntTreeNode,
@@ -7,7 +7,8 @@ import {
 } from 'antd/lib/tree';
 import React from 'react';
 import styled from 'styled-components';
-import { ClientSDKContext } from '../../context/clientSDKContext';
+import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import {
   NodeTreeProps,
@@ -39,7 +40,7 @@ interface NodeTreeState {
 }
 
 class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
-  static contextType = ClientSDKContext;
+  static contextType = ClientSDKProxyContext;
   static defaultProps = {
     modelId: 0,
     revisionId: 0,
@@ -62,7 +63,8 @@ class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
     return path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
   }
 
-  context!: React.ContextType<typeof ClientSDKContext>;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   constructor(props: NodeTreeProps) {
     super(props);
@@ -80,7 +82,13 @@ class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
   }
 
   async componentDidMount() {
-    const threeDNodes = await this.context!.viewer3D.listRevealNodes3D(
+    this.client = this.context('ThreeDNodeTree')!;
+    if (!this.client) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
+
+    const threeDNodes = await this.client.viewer3D.listRevealNodes3D(
       this.state.modelId,
       this.state.revisionId,
       { depth: 1 }
@@ -244,7 +252,7 @@ class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
     params: List3DNodesQuery,
     data: RevealNode3D[] = []
   ): Promise<RevealNode3D[]> => {
-    const result = await this.context!.viewer3D.listRevealNodes3D(
+    const result = await this.client.viewer3D.listRevealNodes3D(
       modelId,
       revisionId,
       params
