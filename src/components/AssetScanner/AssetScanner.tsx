@@ -94,6 +94,7 @@ export class AssetScanner extends React.Component<
   AssetScannerProps,
   AssetScannerState
 > {
+  static displayName = 'AssetScanner';
   static defaultProps = {
     ocrRequest: ocrRecognize,
     enableNotification: false,
@@ -156,7 +157,7 @@ export class AssetScanner extends React.Component<
   }
 
   componentDidMount() {
-    this.client = this.context('AssetScanner')!;
+    this.client = this.context(AssetScanner.displayName || '')!;
     if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;

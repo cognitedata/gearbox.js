@@ -59,6 +59,7 @@ export class TimeseriesSearch extends React.Component<
   TimeseriesSearchProps,
   TimeseriesSearchState
 > {
+  static displayName = 'TimeseriesSearch';
   static contextType = ClientSDKProxyContext;
   static defaultProps = {
     selectedTimeseries: [],
@@ -100,7 +101,7 @@ export class TimeseriesSearch extends React.Component<
   }
 
   async componentDidMount() {
-    this.client = this.context('TimeseriesSearch')!;
+    this.client = this.context(TimeseriesSearch.displayName || '')!;
     if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;

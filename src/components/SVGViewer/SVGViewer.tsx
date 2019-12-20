@@ -72,6 +72,7 @@ interface SvgViewerState {
 }
 
 export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
+  static displayName = 'SVGViewer';
   static contextType = ClientSDKProxyContext;
   context!: React.ContextType<typeof ClientSDKProxyContext>;
   client!: CogniteClient;
@@ -101,7 +102,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
   }
 
   componentDidMount() {
-    this.client = this.context('SVGViewer')!;
+    this.client = this.context(SVGViewer.displayName || '')!;
     if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;

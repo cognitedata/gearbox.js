@@ -82,7 +82,7 @@ class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
   }
 
   async componentDidMount() {
-    this.client = this.context('ThreeDNodeTree')!;
+    this.client = this.context(Component.displayName || '')!;
     if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;

@@ -38,6 +38,7 @@ export class EventPreview extends React.Component<
   EventPreviewProps,
   EventPreviewState
 > {
+  static displayName = 'EventPreview';
   static contextType = ClientSDKProxyContext;
   context!: React.ContextType<typeof ClientSDKProxyContext>;
   client!: CogniteClient;
@@ -52,7 +53,7 @@ export class EventPreview extends React.Component<
   }
 
   componentDidMount() {
-    this.client = this.context('EventPreview')!;
+    this.client = this.context(EventPreview.displayName || '')!;
     if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;

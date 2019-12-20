@@ -42,6 +42,7 @@ export class AssetSearch extends React.Component<
   AssetSearchProps,
   AssetSearchState
 > {
+  static displayName = 'AssetSearch';
   static defaultProps = {
     rootAssetSelect: false,
     advancedSearch: false,
@@ -68,7 +69,7 @@ export class AssetSearch extends React.Component<
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
-    this.client = this.context('AssetSearch')!;
+    this.client = this.context(AssetSearch.displayName || '')!;
     this.assetsApi = this.client.assets;
   }
 
