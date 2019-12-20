@@ -18,8 +18,8 @@ Visualize parent-child relationship of 3D nodes in a tree structure. It will ini
 
 To retrieve a tree you need to provide:
 
-- `modelId` – you can find it using `sdk.ThreeD.listModels()` call
-- `revisionId` – you can find it via `sdk.ThreeD.listRevisions(modelID)` call
+- `modelId` – you can find it using `client.models3D.list().autoPagingToArray()` call
+- `revisionId` – you can find it via `client.revisions3D.list(modelId).autoPagingToArray()` call
 
 **NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
 
