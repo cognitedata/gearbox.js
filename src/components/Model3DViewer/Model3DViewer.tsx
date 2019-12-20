@@ -49,7 +49,8 @@ export interface Model3DViewerProps {
    */
   revisionId: number;
   /**
-   * id of asset to highlight
+   * this is used to control highlighting of asset node in the model right after init process
+   * or by changing `assetId` prop after viewer has been initialized
    */
   assetId?: number;
   /**

@@ -48,7 +48,12 @@ export const onReady = () =>
   );
 
 export const onScreenshot = (url: string) => {
+  document.createElement('br');
   const img = document.createElement('img');
+  img.setAttribute(
+    'style',
+    'display: block; margin-left: auto; margin-right: auto'
+  );
   img.src = url;
   document.body.append(img);
 };
