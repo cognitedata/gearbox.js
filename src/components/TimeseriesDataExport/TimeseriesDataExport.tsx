@@ -18,8 +18,8 @@ import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import { FormComponentProps } from 'antd/lib/form';
 import { ColProps } from 'antd/lib/grid';
 import moment, { Moment } from 'moment';
-import React, { SyntheticEvent, useContext, useEffect, useState } from 'react';
-import { ClientSDKContext } from '../../context/clientSDKContext';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
+import { useCogniteContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { AnyIfEmpty, PureObject } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
@@ -144,7 +144,7 @@ const TimeseriesDataExportFC = (props: TimeseriesDataExportProps) => {
     strings = {},
     labelFormatter,
   } = props;
-  const context = useContext(ClientSDKContext);
+  const context = useCogniteContext(Component, true);
   const [limit, setLimit] = useState(cellLimit);
   const [limitHit, setLimitHit] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -433,4 +433,7 @@ Wrapper.defaultProps = {
   theme: defaultTheme,
 };
 
-export const TimeseriesDataExport = withDefaultTheme(Wrapper);
+const Component = withDefaultTheme(Wrapper);
+Component.displayName = 'TimeseriesDataExport';
+
+export { Component as TimeseriesDataExport };
