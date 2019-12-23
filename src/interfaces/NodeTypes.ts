@@ -21,11 +21,29 @@ export interface NodeTreeStyles {
 }
 
 export interface NodeTreeProps {
+  /**
+   * model ID number
+   */
   modelId: number;
+  /**
+   * model revision ID number
+   */
   revisionId: number;
+  /**
+   * Triggers when a node is selected
+   */
   onSelect?: (onSelect: OnSelectNodeTreeParams) => void;
+  /**
+   * Triggers when a node is right clicked
+   */
   onRightClick?: (event: OnRightClickNodeTreeParams) => void;
+  /**
+   * List of node ids to be expanded by default
+   */
   defaultExpandedKeys?: number[];
+  /**
+   * Object that defines inline CSS styles for inner elements of the component.
+   */
   styles?: NodeTreeStyles;
   theme?: AnyIfEmpty<{}>;
 }

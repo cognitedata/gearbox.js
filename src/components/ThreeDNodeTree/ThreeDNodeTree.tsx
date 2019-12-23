@@ -6,7 +6,7 @@ import {
   AntTreeNodeMouseEvent,
   AntTreeNodeProps,
 } from 'antd/lib/tree';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import { ClientSDKContext } from '../../context/clientSDKContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
@@ -61,7 +61,7 @@ const cursorApiRequest = async (
   return [...data, ...result.items];
 };
 
-class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
+class ThreeDNodeTree extends Component<NodeTreeProps, NodeTreeState> {
   static contextType = ClientSDKContext;
   static defaultProps = {
     modelId: 0,
@@ -274,7 +274,8 @@ const TreeNodeWrapper = styled(TreeNode)<AntTreeNodeProps>`
   }
 `;
 
-const Component = withDefaultTheme(ThreeDNodeTree);
-Component.displayName = 'ThreeDNodeTree';
+const ThreeDNodeTreeWithTheme = withDefaultTheme(ThreeDNodeTree);
+ThreeDNodeTreeWithTheme.displayName = 'ThreeDNodeTree';
 
-export { Component as ThreeDNodeTree };
+export { ThreeDNodeTreeWithTheme as ThreeDNodeTree };
+export { ThreeDNodeTree as ThreeDNodeTreeWithoutTheme };
