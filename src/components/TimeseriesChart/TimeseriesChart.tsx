@@ -1,5 +1,7 @@
+import { CogniteClient } from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { DataLoader } from './dataLoader';
 
 import {
@@ -11,7 +13,6 @@ import {
 } from '@cognite/griff-react';
 import { Spin } from 'antd';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
-import { ClientSDKContext } from '../../context/clientSDKContext';
 import { decimalTickFormatter } from '../../utils/axisSigFix';
 import { getColorByString } from '../../utils/colors';
 import { CursorOverview } from './components/CursorOverview';
@@ -74,7 +75,8 @@ export class TimeseriesChart extends React.Component<
   TimeseriesChartProps,
   TimeseriesChartState
 > {
-  static contextType = ClientSDKContext;
+  static displayName = 'TimeseriesChart';
+  static contextType = ClientSDKProxyContext;
   static defaultProps = {
     startTime: Date.now() - 60 * 60 * 1000,
     endTime: Date.now(),
@@ -99,13 +101,13 @@ export class TimeseriesChart extends React.Component<
     },
   };
 
-  context!: React.ContextType<typeof ClientSDKContext>;
+  client!: CogniteClient;
 
   dataLoader!: DataLoader;
 
   constructor(
     props: TimeseriesChartProps,
-    context: React.ContextType<typeof ClientSDKContext>
+    context: React.ContextType<typeof ClientSDKProxyContext>
   ) {
     super(props);
     this.state = {
@@ -116,7 +118,9 @@ export class TimeseriesChart extends React.Component<
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
-    this.dataLoader = new DataLoader(context);
+
+    this.client = context(TimeseriesChart.displayName || '')!;
+    this.dataLoader = new DataLoader(this.client);
   }
 
   onFetchData = () => {
