@@ -1,1 +1,1 @@
-export * from './ThreeDNodeTree';
+export { ThreeDNodeTree } from './ThreeDNodeTree';
