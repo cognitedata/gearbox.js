@@ -1,8 +1,9 @@
-import { Asset } from '@cognite/sdk';
+import { Asset, CogniteClient } from '@cognite/sdk';
 import { Select } from 'antd';
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
-import { ClientSDKContext } from '../../../context/clientSDKContext';
+import { ERROR_NO_SDK_CLIENT } from '../../../constants/errorMessages';
+import { ClientSDKProxyContext } from '../../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
 import { AnyIfEmpty, IdCallback, PureObject } from '../../../interfaces';
 import { defaultTheme } from '../../../theme/defaultTheme';
@@ -35,7 +36,6 @@ export class RootAssetSelectComponent extends React.Component<
   RootAssetSelectProps,
   RootAssetSelectState
 > {
-  static contextType = ClientSDKContext;
   static defaultProps = {
     allowAll: true,
     assetId: 0,
@@ -43,7 +43,9 @@ export class RootAssetSelectComponent extends React.Component<
     strings: {},
     theme: { ...defaultTheme },
   };
-  context!: React.ContextType<typeof ClientSDKContext>;
+  static contextType = ClientSDKProxyContext;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   constructor(props: RootAssetSelectProps) {
     super(props);
@@ -57,6 +59,11 @@ export class RootAssetSelectComponent extends React.Component<
   }
 
   async componentDidMount() {
+    this.client = this.context(Component.displayName || '')!;
+    if (!this.client) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
     const assets = await this.getRootAssetList();
     this.setState({ assets });
   }
@@ -72,7 +79,7 @@ export class RootAssetSelectComponent extends React.Component<
   };
 
   getRootAssetList = async (): Promise<Asset[]> => {
-    const apiAssets = await this.context!.assets.list({
+    const apiAssets = await this.client.assets.list({
       filter: { root: true },
     });
 
