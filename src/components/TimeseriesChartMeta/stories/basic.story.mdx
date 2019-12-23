@@ -1,0 +1,123 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { TimeseriesChartMeta } from '../TimeseriesChartMeta';
+import { TimeseriesChartMetaPure } from '../TimeseriesChartMetaPure';
+import { 
+  decorators,
+  exampleTheme,
+  defaultBasePeriodProps,
+} from './helper';
+import { ThemeProvider } from 'styled-components';
+
+<Meta title="Time Series|TimeSeriesChartMeta" decorators={decorators} />
+
+# Timeseries Chart Meta
+
+This component loads timeseries data by `timeseriesId` and shows an instance of `TimeseriesChart` component along with additional information about the timeseries such as current data point (sensor value),
+meta data of the timeserie, description. It also shows group of radio buttons to control a time period for `TimeseriesChart`.
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+### Basic usage:
+
+Imports:
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { TimeseriesChartMeta } from '@cognite/gearbox';
+
+```
+
+<Preview>
+  <Story name="Basic Usage" >
+    <TimeseriesChartMeta timeseriesId={123} />;
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={TimeseriesChartMetaPure} />
+
+### Types
+
+#### TimeseriesChartMetaPeriod
+
+Definition:
+
+```typescript
+type TimeseriesChartMetaPeriod =  'lastYear' | 'lastMonth' | 'lastWeek' | 'lastDay' | 'lastHour' | 'last15minutes';
+```
+
+## Examples
+
+### Predefined Period 
+
+<Preview>
+  <Story name="Predefined Period" >
+    <TimeseriesChartMeta timeseriesId={123} defaultTimePeriod="lastMonth" />
+  </Story>
+</Preview>
+
+### Hide Elements
+
+<Preview>
+  <Story name="Hide Elements" >
+    <TimeseriesChartMeta
+      timeseriesId={123}
+      showChart={true}
+      showDescription={false}
+      showDatapoint={false}
+      showMetadata={false}
+      showPeriods={false}
+    />
+  </Story>
+</Preview>
+
+### Disable Live Updates
+
+<Preview>
+  <Story name="Disable Live Updates" >
+    <TimeseriesChartMeta timeseriesId={123} liveUpdate={false} />
+  </Story>
+</Preview>
+
+### Custom Update Interval
+
+<Preview>
+  <Story name="Custom Update Interval" >
+    <TimeseriesChartMeta
+      timeseriesId={123}
+      liveUpdate={true}
+      updateIntervalMillis={1000}
+    />
+  </Story>
+</Preview>
+
+### Custom Update Interval
+
+<Preview>
+  <Story name="Custom Base Period" >
+    <TimeseriesChartMeta
+      timeseriesId={123}
+      defaultBasePeriodProps={defaultBasePeriodProps}
+    />
+  </Story>
+</Preview>
+
+### With Theme
+
+```jsx
+const exampleTheme = {
+  gearbox: {
+    textColor: 'Red',
+    textColorSecondary: 'Coral',
+  },
+};
+```
+
+<Preview>
+  <Story name="With Theme" >
+    <ThemeProvider theme={exampleTheme}><TimeseriesChartMeta timeseriesId={123}/></ThemeProvider>
+  </Story>
+</Preview>
