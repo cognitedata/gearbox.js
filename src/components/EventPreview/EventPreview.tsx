@@ -1,4 +1,4 @@
-import { CogniteEvent } from '@cognite/sdk';
+import { CogniteClient, CogniteEvent } from '@cognite/sdk';
 import { Spin } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
@@ -6,7 +6,7 @@ import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
-import { ClientSDKContext } from '../../context/clientSDKContext';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { PureObject } from '../../interfaces';
 import {
   EventPreviewStyles as Styles,
@@ -38,8 +38,10 @@ export class EventPreview extends React.Component<
   EventPreviewProps,
   EventPreviewState
 > {
-  static contextType = ClientSDKContext;
-  context!: React.ContextType<typeof ClientSDKContext>;
+  static displayName = 'EventPreview';
+  static contextType = ClientSDKProxyContext;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   isComponentUnmount: boolean = false;
 
@@ -51,10 +53,12 @@ export class EventPreview extends React.Component<
   }
 
   componentDidMount() {
-    if (!this.context) {
+    this.client = this.context(EventPreview.displayName || '')!;
+    if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
+
     this.loadEvent();
   }
 
@@ -70,7 +74,7 @@ export class EventPreview extends React.Component<
   }
 
   async loadEvent() {
-    const events = await this.context!.events.retrieve([
+    const events = await this.client.events.retrieve([
       { id: this.props.eventId },
     ]);
     if (events.length !== 1) {

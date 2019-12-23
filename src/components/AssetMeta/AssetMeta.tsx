@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk';
+import { Asset, CogniteClient } from '@cognite/sdk';
 import { Tabs } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
@@ -6,7 +6,7 @@ import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
-import { ClientSDKContext } from '../../context/clientSDKContext';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import {
   AnyIfEmpty,
@@ -64,7 +64,7 @@ interface AssetMetaState {
 
 class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
   implements ComponentWithUnmountState {
-  static contextType = ClientSDKContext;
+  static contextType = ClientSDKProxyContext;
   static defaultProps = {
     theme: { ...defaultTheme },
   };
@@ -82,7 +82,8 @@ class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
       return null;
     }
   }
-  context!: React.ContextType<typeof ClientSDKContext>;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   isComponentUnmounted = false;
 
@@ -98,7 +99,8 @@ class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
   componentDidMount() {
     // @ts-ignore
     if (!this.includesPanel('details') && this.props.assetId) {
-      if (!this.context) {
+      this.client = this.context(Component.displayName || '')!;
+      if (!this.client) {
         console.error(ERROR_NO_SDK_CLIENT);
         return;
       }
@@ -123,7 +125,7 @@ class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
     try {
       const assets = await connectPromiseToUnmountState(
         this,
-        this.context!.assets.retrieve([{ id: assetId }])
+        this.client.assets.retrieve([{ id: assetId }])
       );
       if (!assets || assets.length !== 1) {
         console.error(ERROR_API_UNEXPECTED_RESULTS);
