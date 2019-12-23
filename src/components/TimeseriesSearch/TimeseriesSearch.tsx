@@ -1,11 +1,12 @@
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 import { Button, Spin } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
 import { debounce } from 'lodash';
 import React, { KeyboardEvent } from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
-import { ClientSDKContext } from '../../context/clientSDKContext';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { ApiQuery, PureObject } from '../../interfaces';
 import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
 import { defaultStrings as rootAssetSelectStrings } from '../common/RootAssetSelect/RootAssetSelect';
@@ -58,7 +59,8 @@ export class TimeseriesSearch extends React.Component<
   TimeseriesSearchProps,
   TimeseriesSearchState
 > {
-  static contextType = ClientSDKContext;
+  static displayName = 'TimeseriesSearch';
+  static contextType = ClientSDKProxyContext;
   static defaultProps = {
     selectedTimeseries: [],
     strings: {},
@@ -80,7 +82,8 @@ export class TimeseriesSearch extends React.Component<
     }
     return null;
   }
-  context!: React.ContextType<typeof ClientSDKContext>;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   constructor(props: TimeseriesSearchProps) {
     super(props);
@@ -98,14 +101,15 @@ export class TimeseriesSearch extends React.Component<
   }
 
   async componentDidMount() {
-    if (!this.context) {
+    this.client = this.context(TimeseriesSearch.displayName || '')!;
+    if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
 
     const { selectedTimeseries } = this.props;
     if (selectedTimeseries && selectedTimeseries.length > 0) {
-      const timeseries = await this.context.timeseries.retrieve(
+      const timeseries = await this.client.timeseries.retrieve(
         selectedTimeseries.map(x => ({ id: x }))
       );
       this.setState({ selectedTimeseries: timeseries });
@@ -151,10 +155,10 @@ export class TimeseriesSearch extends React.Component<
       });
       return;
     }
-    if (!this.context) {
+    if (!this.client) {
       return;
     }
-    this.context.timeseries
+    this.client.timeseries
       .search({
         limit: 100,
         filter: {
