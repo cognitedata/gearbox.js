@@ -1,11 +1,11 @@
 import { Cognite3DModel, Cognite3DViewer, THREE } from '@cognite/3d-viewer';
-import { AssetMapping3D, Revision3D } from '@cognite/sdk';
+import { AssetMapping3D, CogniteClient, Revision3D } from '@cognite/sdk';
 import { Button, Slider } from 'antd';
 import { SliderValue } from 'antd/lib/slider';
 import { isEqual } from 'lodash';
 import React, { RefObject } from 'react';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
-import { ClientSDKContext } from '../../context/clientSDKContext';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { CacheObject, Callback, MouseScreenPosition } from '../../interfaces';
 import {
   createViewer as originalCreateViewer,
@@ -89,7 +89,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     useDefaultCameraPosition: true,
     showScreenshotButton: false,
   };
-  static contextType = ClientSDKContext;
+  static contextType = ClientSDKProxyContext;
 
   static getDerivedStateFromProps(
     props: Model3DViewerProps,
@@ -109,7 +109,8 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
   state: Model3DViewerState = {};
 
-  context!: React.ContextType<typeof ClientSDKContext>;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   disposeCalls: any[] = [];
   divWrapper: RefObject<HTMLDivElement> = React.createRef();
@@ -135,7 +136,8 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   }
 
   async componentDidMount() {
-    if (!this.context) {
+    this.client = this.context('Model3DViewer')!;
+    if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
@@ -143,7 +145,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       return;
     }
 
-    const sdk = this.context;
+    const sdk = this.client;
 
     const {
       modelId,
@@ -506,15 +508,17 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       return Promise.resolve([]);
     }
 
-    return await this.context!.assetMappings3D.list(modelId, revisionId, {
-      assetId,
-    }).autoPagingToArray();
+    return await this.client.assetMappings3D
+      .list(modelId, revisionId, {
+        assetId,
+      })
+      .autoPagingToArray();
   }
 
   private getRevision() {
     const { modelId, revisionId } = this.props;
 
-    return this.context!.revisions3D.retrieve(modelId, revisionId);
+    return this.client.revisions3D.retrieve(modelId, revisionId);
   }
 
   private highlightMappedNodesIfAllowed() {

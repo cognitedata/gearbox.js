@@ -1,9 +1,10 @@
+import { CogniteClient } from '@cognite/sdk';
 import { Icon } from 'antd';
 import PinchZoom from 'pinch-zoom-js';
 import React, { KeyboardEvent, RefObject } from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
-import { ClientSDKContext } from '../../context/clientSDKContext';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import {
   Conditions,
   CustomClassNames,
@@ -71,8 +72,10 @@ interface SvgViewerState {
 }
 
 export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
-  static contextType = ClientSDKContext;
-  context!: React.ContextType<typeof ClientSDKContext>;
+  static displayName = 'SVGViewer';
+  static contextType = ClientSDKProxyContext;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
   prevMoveDistanceX: number = 0;
   prevMoveDistanceY: number = 0;
   dragging: boolean = false;
@@ -99,7 +102,8 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
   }
 
   componentDidMount() {
-    if (!this.context) {
+    this.client = this.context(SVGViewer.displayName || '')!;
+    if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
@@ -152,7 +156,11 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
             onBlur={this.onContainerBlur}
             onFocus={this.onContainerFocus}
             ref={this.inputWrapper}
-            style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
+            style={{
+              opacity: 0,
+              position: 'absolute',
+              pointerEvents: 'none',
+            }}
           />
         )}
         <SvgNode
@@ -278,7 +286,7 @@ export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
       if (file) {
         svgString = file;
       } else if (documentId) {
-        svgString = await getDocumentDownloadLink(this.context!, documentId);
+        svgString = await getDocumentDownloadLink(this.client, documentId);
       }
     } catch (e) {
       if (this.props.handleDocumentLoadError) {

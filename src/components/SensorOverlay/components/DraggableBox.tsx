@@ -1,4 +1,8 @@
-import { DatapointsGetDatapoint, GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import {
+  CogniteClient,
+  DatapointsGetDatapoint,
+  GetTimeSeriesMetadataDTO,
+} from '@cognite/sdk';
 import { Icon } from 'antd';
 import numeral from 'numeral';
 import React, { Component } from 'react';
@@ -15,7 +19,7 @@ import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
 } from '../../../constants/errorMessages';
-import { ClientSDKContext } from '../../../context/clientSDKContext';
+import { ClientSDKProxyContext } from '../../../context/clientSDKProxyContext';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
@@ -105,8 +109,9 @@ export class DraggableBox
     alertColor: '#e74c3c',
   };
 
-  static contextType = ClientSDKContext;
-  context!: React.ContextType<typeof ClientSDKContext>;
+  static contextType = ClientSDKProxyContext;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   isComponentUnmounted = false;
 
@@ -123,7 +128,10 @@ export class DraggableBox
   }
 
   componentDidMount() {
-    if (!this.context) {
+    // DraggableBox is only used inside SensorOverlay
+    this.client = this.context('SensorOverlay')!;
+
+    if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
@@ -176,7 +184,7 @@ export class DraggableBox
     try {
       const timeseries = await connectPromiseToUnmountState(
         this,
-        this.context!.timeseries.retrieve([{ id }])
+        this.client.timeseries.retrieve([{ id }])
       );
       if (timeseries.length !== 1) {
         console.error(ERROR_API_UNEXPECTED_RESULTS);
@@ -196,7 +204,7 @@ export class DraggableBox
     try {
       const datapoints: DatapointsGetDatapoint[] = await connectPromiseToUnmountState(
         this,
-        this.context!.datapoints.retrieveLatest([
+        this.client.datapoints.retrieveLatest([
           { id: this.props.id, before: 'now' },
         ])
       );
