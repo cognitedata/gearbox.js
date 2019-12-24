@@ -1,1 +1,5 @@
-export * from './TenantSelector';
+export {
+  TenantSelector,
+  TenantSelectorProps,
+  TenantSelectorStyles,
+} from './TenantSelector';
