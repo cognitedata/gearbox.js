@@ -1,6 +1,6 @@
 import { CogniteEvent } from '@cognite/sdk';
 import { Spin } from 'antd';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
@@ -22,11 +22,29 @@ const LoadingSpinner: React.SFC = () => (
 );
 
 export interface EventPreviewProps {
+  /**
+   * Event Id
+   */
   eventId: number;
+  /**
+   * Function triggered when user clicks on the 'Explore event details' button. If the function is not provided the button will not be rendered.
+   */
   onShowDetails?: (e: CogniteEvent) => void;
+  /**
+   * Object map with strings to customize/localize text in the component
+   */
   strings?: PureObject;
+  /**
+   * List of event properties to be hidden
+   */
   hideProperties?: (keyof CogniteEvent)[];
+  /**
+   * Defines whether to hide the loading spinner
+   */
   hideLoadingSpinner?: boolean;
+  /**
+   * Object that defines inline CSS styles for inner elements of the component.
+   */
   styles?: EventPreviewStyles;
 }
 
@@ -34,7 +52,7 @@ interface EventPreviewState {
   event: CogniteEvent | null;
 }
 
-export class EventPreview extends React.Component<
+export class EventPreview extends Component<
   EventPreviewProps,
   EventPreviewState
 > {
