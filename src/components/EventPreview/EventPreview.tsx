@@ -35,7 +35,7 @@ export interface EventPreviewProps {
    */
   strings?: PureObject;
   /**
-   * List of event properties to be hidden. Possible values:
+   * List of event properties to be hidden
    */
   hideProperties?: (keyof CogniteEvent)[];
   /**
