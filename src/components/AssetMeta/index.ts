@@ -1,1 +1,1 @@
-export * from './AssetMeta';
+export { AssetMeta, AssetMetaStyles } from './AssetMeta';
