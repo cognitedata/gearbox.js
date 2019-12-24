@@ -1,5 +1,5 @@
 import { CogniteClient } from '@cognite/sdk';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { DataLoader } from './dataLoader';
@@ -38,29 +38,80 @@ export interface TimeseriesChartStyles {
 }
 
 export type TimeseriesChartProps = {
-  styles?: TimeseriesChartStyles;
-  pointsPerSeries: number;
+  /**
+   * The time the timeseries should start from. Should be UNIX timestamp or Date
+   */
   startTime: number | Date;
+  /**
+   * The time the timeseries should end. Should be UNIX timestamp or Date
+   */
   endTime: number | Date;
+  /**
+   * Whether the context chart should be showed
+   */
   contextChart: boolean;
+  /**
+   * Custom styles for the component
+   */
+  styles?: TimeseriesChartStyles;
+  /**
+   * The number of aggregated datapoints to show
+   */
+  pointsPerSeries: number;
+  /**
+   * Whether zooming on the chart is enabled
+   */
   zoomable: boolean;
+  /**
+   * Whether live update of chart is enabled
+   */
   liveUpdate: boolean;
+  /**
+   * Whether crosshair should be shown
+   */
   crosshair: boolean;
+  /**
+   * The update interval when live update is enabled
+   */
   updateIntervalMillis: number;
+  /**
+   * Map of timeseries ids and color
+   */
   timeseriesColors: { [id: number]: string };
+  /**
+   * Object desribing if timeseries id should be hidden
+   */
   hiddenSeries: { [id: number]: boolean };
-  annotations: Annotation[];
+  /**
+   * Display the ruler and configure custom label formatters
+   */
   ruler: ChartRulerConfig;
-  collections: any;
+  /**
+   * Height of x-axis container in pixels. 0 will hide it completely
+   */
   xAxisHeight: number;
+  /**
+   * Display mode of the y-axis
+   */
   yAxisDisplayMode: 'ALL' | 'COLLAPSED' | 'NONE';
+  /**
+   * Placement of the y-axis
+   */
   yAxisPlacement: 'RIGHT' | 'LEFT' | 'BOTH';
+  /**
+   * Height of the chart
+   */
   height?: number;
+  /**
+   * Width of the chart
+   */
   width?: number;
   onMouseMove?: (e: any) => void;
   onBlur?: (e: any) => void;
   onMouseOut?: (e: any) => void;
   onFetchDataError: (e: Error) => void;
+  annotations: Annotation[];
+  collections: any;
 } & ({ timeseriesIds: number[] } | { series: any });
 
 // Don't allow updating faster than every 1000ms.
@@ -71,7 +122,7 @@ interface TimeseriesChartState {
   rulerPoints: { [key: string]: ChartRulerPoint };
 }
 
-export class TimeseriesChart extends React.Component<
+export class TimeseriesChart extends Component<
   TimeseriesChartProps,
   TimeseriesChartState
 > {
