@@ -3,8 +3,9 @@ import {
   TimeseriesIdEither,
   TimeSeriesSearchDTO,
 } from '@cognite/sdk';
+import { pick } from 'lodash';
 import React from 'react';
-import { sleep, timeseriesListV2 } from '../../../mocks';
+import { assetsList, sleep, timeseriesListV2 } from '../../../mocks';
 import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 
@@ -31,6 +32,22 @@ class CogniteClient extends MockCogniteClient {
           x.name.toUpperCase().indexOf(query.search.query.toUpperCase()) >= 0
       );
       return result || [];
+    },
+  };
+  assets: any = {
+    // @ts-ignore
+    list: (scope: AssetListScope) => {
+      // @ts-ignore
+      const items: Asset[] = assetsList.map(asset =>
+        pick(asset, [
+          'id',
+          'name',
+          'description',
+          'lastUpdatedTime',
+          'createdTime',
+        ])
+      );
+      return { items };
     },
   };
 }
