@@ -1,6 +1,16 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { SVGViewer } from '../SVGViewer';
-import { decorators } from './helper';
+import { 
+    decorators,
+    onCancel,
+    metadataClassesConditions,
+    SearchContainer,
+    zoomCallback,
+    handleSearchChange,
+    ClassesContainer,
+    handleClick,
+    isCurrentAsset
+} from './helper';
 
 <Meta title='Other|SVGViewer' decorators={decorators} />
 
@@ -99,4 +109,221 @@ interface CustomClassNames {
 
 ```
 
+## Item click
 
+When user clicks on any equipment this callback will be called with `HTMLElement` passed
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+export const handleClick = (node: HTMLElement): void => {};
+```
+
+<Preview>
+  <Story name='Handle item click'>
+<div style={{height: '100vh'}}>
+    <SVGViewer
+        documentId={5185355395511590}
+        handleItemClick={handleClick}
+    />
+</div>
+  </Story>
+</Preview>
+
+
+## Include a close button
+
+Close button will be displayed on the top bar if `handleCancel` is set
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+const onCancel = () => {};
+```
+
+<Preview>
+  <Story name='Handle cancel'>
+<div style={{height: '100vh'}}>
+    <SVGViewer
+        documentId={5185355395511590}
+        handleCancel={onCancel}
+    />
+</div>
+  </Story>
+</Preview>
+
+
+## Specify custom classes for equipment
+
+`metadataClassesConditions` callback is responsible for listing of classes and conditions on when they should be applied for equipment
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+const ClassesContainer = styled.div`
+    .checklist-asset {
+        outline: auto 2px #3838ff;
+        transition: all 0.2s ease;
+        > {
+        text {
+            stroke: #3838ff;
+            fill: #3838ff;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        path {
+            stroke: #3838ff;
+            transition: all 0.2s ease;
+        }
+        }
+        &:hover,
+        &:focus {
+        outline: auto 2px #36a2c2;
+        }
+    }
+`;
+
+const metadataClassesConditions = [{
+    condition: (metadata: Element) => (metadata.textContent || '').replace(/\s/g, '').length % 2 === 0,
+    className: 'checklist-asset',
+}];
+```
+
+<Preview>
+  <Story name='Custom classes'>
+<ClassesContainer style={{ height: '100vh' }}>
+    <SVGViewer
+        documentId={5185355395511590}
+        metadataClassesConditions={metadataClassesConditions}
+    />
+</ClassesContainer>
+  </Story>
+</Preview>
+
+
+## Specify custom default classes
+
+`customClassNames` object is responsible for overriding default classNames
+
+```jsx
+import 'antd/dist/antd.css';
+import styled from 'styled-components';
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+const SearchContainer = styled.div` 
+    &.search-result {
+        &.metadata-container {
+        text {
+            stroke: red !important;
+            fill: red !important;
+            font-weight: bold;
+        }
+        }
+        &:not(.metadata-container) {
+        stroke: red !important;
+        fill: red !important;
+        font-weight: bold;
+        }
+    }
+    `;
+```
+<Preview>
+  <Story name='Custom search result color'>
+<SearchContainer style={{ height: '100vh' }}>
+    <SVGViewer
+        documentId={5185355395511590}
+        customClassNames={{searchResults: 'search-result'}}
+    />
+</SearchContainer>
+  </Story>
+</Preview>
+
+## Zoom callback
+
+While zooming callback with params will be fired
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer, ZoomCenter } from '@cognite/gearbox';
+
+const zoomCallback = ({ 
+    zoomProgress, 
+    source, 
+    zoomCenter 
+} : { 
+    zoomProgress: number;
+    source: string; 
+    zoomCenter?: ZoomCenter; 
+}): void => {};
+```
+<Preview>
+  <Story name='On zoom change callback'>
+    <div style={{ height: '100vh' }}>
+        <SVGViewer
+            documentId={5185355395511590}
+            handleAnimateZoom={zoomCallback}
+        />
+    </div>
+  </Story>
+</Preview>
+
+## Subscribe to search changes
+
+Custom `handleSearchChange` method will provide search value as paramter.
+Click search icon and start typing.
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+const handleSearchChange = (value?: string): void => {};
+```
+
+<Preview>
+  <Story name='Subscribe to search changes'>
+<div style={{height: '100vh'}}>
+    <SVGViewer
+        documentId={5185355395511590}
+        handleSearchChange={handleSearchChange}
+    />
+</div>
+  </Story>
+</Preview>
+
+## Locate asset in the document
+
+`isCurrentAsset` callback is responsible for locating the asset and zooming into its area
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+const isCurrentAsset = metadata => (metadata.textContent || '').replace(/\s/g, '') === '21PT1019';
+```
+
+<Preview>
+  <Story name='Locate asset'>
+<div style={{height: '45vh', width:'45vw' }}>
+    <SVGViewer
+        documentId={5185355395511590}
+        isCurrentAsset={isCurrentAsset}
+    />
+</div>
+  </Story>
+</Preview>
