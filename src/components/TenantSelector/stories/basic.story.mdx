@@ -1,0 +1,299 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { TenantSelector, TenantSelectorWithoutTheme } from '../TenantSelector';
+import { 
+onTenantSelected,
+validateTenantSucess,
+validateTenantFailed,
+advancedOptionsProps,
+validateTenantForever,
+customStyle,
+themeExample,
+} from './helper';
+import { ThemeProvider } from 'styled-components';
+
+<Meta title="Others|TenantSelector" />
+
+# Tenant Selector
+
+Component to select a tenant.
+The component requires two props, `title` and `onTenantSelected`. 
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+### Basic usage:
+
+Imports:
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { TenantSelector, PureObject } from '@cognite/gearbox';
+```
+```jsx
+onTenantSelected = (tenant: string, advancedOptions: PureObject | null) => {};
+```
+
+<Preview>
+  <Story name="Basic Usage" >
+    <TenantSelector
+      title="Example app"
+      onTenantSelected={onTenantSelected}
+    />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={TenantSelectorWithoutTheme} />
+
+### Types
+
+#### PureObject
+
+This type describes a generic type used in gearbox.
+The type can be imported from @cognite/gearbox:
+
+```jsx
+import { PureObject } from '@cognite/gearbox';
+```
+
+Definition:
+
+```jsx
+interface ID = number | string;
+
+interface PureObject {
+  [name: string]: ID;
+};
+
+```
+
+#### TenantSelectorStyles
+
+This interface defines inline CSS styles for inner elements of `TenantSelector` component.
+You can override styles of following blocks:
+
+<img src="tenant_selector/styling_schema.jpg" alt="Tenant Styling" width="600px"/>
+<br/><br/>
+The type can be imported from `@cognite/gearbox`:
+
+```jsx
+import { TenantSelectorStyles } from '@cognite/gearbox';
+```
+
+Definition:
+
+```jsx
+interface TenantSelectorStyles {
+  button?: React.CSSProperties;
+  collapseWrapper?: React.CSSProperties;
+  input?: React.CSSProperties;
+  subTitle?: React.CSSProperties;
+  title?: React.CSSProperties;
+  wrapper?: React.CSSProperties;
+}
+```
+
+See more details in `Custom Styles` example.
+
+## Examples
+
+### Login Text
+
+<Preview>
+  <Story name="Login Text" >
+    <TenantSelector
+      title="Example app"
+      onTenantSelected={onTenantSelected}
+      header="Your company"
+      loginText="LET'S ROLL!"
+    />
+  </Story>
+</Preview>
+
+### Header Text
+
+<Preview>
+  <Story name="Header Text" >
+    <TenantSelector
+      title="Example app"
+      onTenantSelected={onTenantSelected}
+      header={<em>What are you waiting for?</em>}
+    />
+  </Story>
+</Preview>
+
+### Custom Validation Success
+
+```jsx
+const validateTenantSucess = async () => true;
+```
+
+<Preview>
+  <Story name="Custom Validation Success" >
+    <TenantSelector
+      title="Example app"
+      onTenantSelected={onTenantSelected}
+      validateTenant={validateTenantSucess}
+    />
+  </Story>
+</Preview>
+
+### Custom Validation Error
+
+```jsx
+const validateTenantFailed = async (tenant: string) => {
+  throw new Error(tenant);
+};
+```
+
+<Preview>
+  <Story name="Custom Validation Error" >
+    <TenantSelector
+      title="Example app"
+      onTenantSelected={onTenantSelected}
+      validateTenant={validateTenantFailed}
+    />
+  </Story>
+</Preview>
+
+### Custom Error Message On Validation Error
+
+<Preview>
+  <Story name="Custom Error Message On Validation Error" >
+    <TenantSelector
+      title="Example app"
+      onTenantSelected={onTenantSelected}
+      unknownMessage="ARE YOU NUTS?!"
+      validateTenant={validateTenantFailed}
+    />
+  </Story>
+</Preview> 
+
+### Loads Forever
+
+```jsx
+const loadsForEver = () => Promise.race([]);
+```
+
+<Preview>
+  <Story name="Loads Forever" >
+    <TenantSelector
+      title="Example app"
+      onTenantSelected={onTenantSelected}
+      validateTenant={validateTenantForever}
+    />
+  </Story>
+</Preview>
+
+### Initial Tenant
+
+<Preview>
+  <Story name="Initial Tenant" >
+    <TenantSelector
+      title="Example app"
+      onTenantSelected={onTenantSelected}
+      initialTenant="sample-tenant"
+    />
+  </Story>
+</Preview>
+
+### Placeholder Tenant
+
+<Preview>
+  <Story name="Placeholder Tenant" >
+    <TenantSelector
+      title="Example app"
+      onTenantSelected={onTenantSelected}
+      placeholder="Enter your company's CDP project name"
+    />
+  </Story>
+</Preview>
+
+### Advanced Options
+
+```jsx
+const advancedOptions = { apiUrl: '', comment: 'Comment' };
+```
+
+<Preview>
+  <Story name="Advanced Options" >
+    <TenantSelector
+      title="Example app"
+      onTenantSelected={onTenantSelected}
+      advancedOptions={advancedOptionsProps}
+    />
+  </Story>
+</Preview>
+
+### With Custom Styles
+
+```jsx
+const customStyle = {
+  title: {
+    color: 'red',
+    alignSelf: 'center',
+    fontFamily: 'Comic Sans MS',
+  },
+  subTitle: {
+    color: 'purple',
+    alignSelf: 'center',
+  },
+  wrapper: {
+    width: 400,
+    backgroundColor: '#ffffa7',
+    borderRadius: 30,
+    boxShadow: 'none',
+  },
+  button: {
+    width: 200,
+    textTransform: 'none',
+    alignSelf: 'center',
+    borderRadius: 10,
+    backgroundColor: 'magenta',
+    color: 'white',
+  },
+  input: {
+    borderRadius: 10,
+    border: '2px solid #33DD33',
+  },
+  collapseWrapper: {
+    backgroundColor: '#ffffa7',
+  },
+};
+```
+
+<Preview>
+  <Story name="With Custom Styles" >
+    <TenantSelector
+      title="Example app"
+      onTenantSelected={onTenantSelected}
+      advancedOptions={advancedOptionsProps}
+      styles={customStyle}
+    />
+  </Story>
+</Preview>
+
+### With Theme
+
+```jsx
+import { ThemeProvider } from 'styled-components';
+
+const themeExample = {
+  gearbox: {
+    primaryColor: 'orange',
+    textColor: '#999',
+    containerColor: '#F4F4F4',
+    lightGrey: 'white',
+    buttonDisabledColor: '#DDD',
+    lightShadow: 'rgba(0, 0, 0, 0.15) 10px 10px 8px 8px',
+  },
+};
+```
+
+<Preview>
+  <Story name="With Theme" >
+    <ThemeProvider theme={themeExample}><TenantSelector title="Styled App" onTenantSelected={onTenantSelected} /></ThemeProvider>
+  </Story>
+</Preview>

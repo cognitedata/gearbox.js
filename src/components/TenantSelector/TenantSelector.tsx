@@ -1,7 +1,7 @@
 import { Button, Collapse, Form, Input, Spin } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
 import { InputProps } from 'antd/lib/input';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
 import { AnyIfEmpty, PureObject } from '../../interfaces';
@@ -26,22 +26,55 @@ export interface TenantSelectorStyles {
 }
 
 export interface TenantSelectorProps {
-  header?: string | React.ReactNode;
-  initialTenant?: string;
-  loginText?: string;
-  onInvalidTenant?: (tenant: string) => void;
+  /**
+   * A title text
+   */
+  title: string | React.ReactNode;
+  /**
+   * A function called when the button is clicked
+   */
   onTenantSelected: (
     tenant: string,
     advancedOptions: PureObject | null
   ) => void;
+  /**
+   * Text to show as header
+   */
+  header?: string | React.ReactNode;
+  /**
+   * Initial value of the input field
+   */
+  initialTenant?: string;
+  /**
+   * Text to show on the button
+   */
+  loginText?: string;
+  /**
+   * Placeholder text
+   */
   placeholder?: string;
-  title: string | React.ReactNode;
+  /**
+   * Message to show if validation fails
+   */
   unknownMessage?: string;
+  /**
+   * function called when tenant is invalid
+   */
+  onInvalidTenant?: (tenant: string) => void;
+  /**
+   * Asyncronous function to validate the input
+   */
   validateTenant?: (
     tenant: string,
     advancedOptions: PureObject | null
   ) => Promise<boolean>;
+  /**
+   * Object to show as advanced options
+   */
   advancedOptions?: PureObject;
+  /**
+   * Object that defines inline CSS styles for inner elements of the component.
+   */
   styles?: TenantSelectorStyles;
   theme?: AnyIfEmpty<{}>;
 }
@@ -52,7 +85,7 @@ interface TenantSelectorState {
   advanced: PureObject;
 }
 
-class TenantSelector extends React.Component<
+class TenantSelector extends Component<
   TenantSelectorProps,
   TenantSelectorState
 > {
@@ -351,7 +384,8 @@ const CollapseWrapper = styled(Collapse)`
   }
 `;
 
-const Component = withDefaultTheme(TenantSelector);
-Component.displayName = 'TenantSelector';
+const TenantSelectorWithTheme = withDefaultTheme(TenantSelector);
+TenantSelectorWithTheme.displayName = 'TenantSelector';
 
-export { Component as TenantSelector };
+export { TenantSelectorWithTheme as TenantSelector };
+export { TenantSelector as TenantSelectorWithoutTheme };
