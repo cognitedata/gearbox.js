@@ -1,5 +1,5 @@
 import { omit, sortedIndex } from 'lodash';
-import React, { Component } from 'react';
+import React, { Component, ReactNode } from 'react';
 import {
   ConnectDropTarget,
   DragDropContext,
@@ -94,7 +94,7 @@ export interface SensorOverlayProps {
   /**
    * Wrapped content. Usually infographic image
    */
-  children: React.ReactNode;
+  children: ReactNode;
   /**
    * Number in milliseconds that defines refresh interval for fetching latest timeserie data
    */
