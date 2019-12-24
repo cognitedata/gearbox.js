@@ -1,0 +1,273 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { SensorOverlay, SensorOverlayWithoutCustomize } from '../SensorOverlay';
+import { 
+  decorators,
+  CustomizedDiv,
+  timeseriesIds,
+  colorMap,
+  defaultPositionMap,
+  SensorOverlayWrapperComponent,
+  handleClick,
+  handleLinkClick,
+  linksMap,
+  minMaxMap,
+  stickyMap,
+} from './helper';
+import { ThemeProvider } from 'styled-components';
+
+<Meta title="Other|SensorOverlay" decorators={decorators} />
+
+# Sensor Overlay
+
+Renders set of latest timeseries (sensors) data. Each sensor is represented as a draggable box (tag) connected by line with round pointer. All sensor items are drawn on top of wrapped content.
+This component can be used as a container of an infographic image for displaying real-time sensors data.
+The height of SensorOverlay component is defined by content in `children` and the width takes `100%` unless `fixedWidth` is provided. This component requires a list of timeserie IDs and once they are passed via
+`timeseriesIds` prop SensorOverlay fetches meta information (name, description, etc) for all timeseries in the list and then constantly fetches latest data (Datapoint) for each timeserie with interval provided in `refreshInterval` (5 seconds by default).
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+### Basic usage:
+
+Imports:
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SensorOverlay } from '@cognite/gearbox';
+
+CustomizedDiv = () => (
+  <div style={{ width: '100%', height: '160px', background: '#EEE' }} />
+);
+```
+
+<Preview>
+  <Story name="Basic usage"><SensorOverlay timeseriesIds={[8681821313339919]}><CustomizedDiv/></SensorOverlay></Story>
+</Preview>
+
+## Available props
+
+<Props of={SensorOverlayWithoutCustomize} />
+
+### Types
+
+#### SensorPosition
+ This type can be imported from @cognite/gearbox:
+```jsx
+import { SensorPosition } from '@cognite/gearbox';
+```
+Definition:
+```jsx
+interface SensorPosition {
+  left: number;
+  top: number;
+  pointer: {
+    left: number;
+    top: number;
+  };
+}
+```
+The interface defines position for tag and pointer of a sensor relatively to the size of wrapped content provided as `children`. `left` and `top` are coordinates of the tag whereas `pointer` object contains coordinates of the pointer.
+These coordinates are float numbers from 0 to 1.
+#### SensorMinMaxRange
+This interface defines minimum and maximum values for a datapoint of a timeserie.
+The type can be imported from @cognite/gearbox:
+```jsx
+import { SensorMinMaxRange } from '@cognite/gearbox';
+```
+Definition: 
+```jsx
+interface SensorMinMaxRange {
+  min?: number;
+  max?: number;
+}
+```
+
+#### SensorDatapoint
+This type can be imported from `@cognite/gearbox`:
+```jsx
+import { SensorDatapoint } from '@cognite/gearbox';
+```
+
+Definition:
+```jsx
+export interface SensorDatapoint {
+  isString: boolean;
+  value: number | string;
+  timestamp: Date;
+}
+```
+## Examples
+
+### With Many Sensors
+
+```jsx
+ const timeseriesIds = [
+    8681821313339919,
+    4965555138606429,
+    1762612637163055,
+    7108578362782757,
+  ];
+```
+<Preview>
+  <Story name="With Many Sensors">
+    <SensorOverlay timeseriesIds={timeseriesIds}><CustomizedDiv/></SensorOverlay>
+  </Story>
+</Preview>
+
+### Default Position And Color
+
+```jsx
+const colorMap = { [8681821313339919]: '#33AA33' };
+
+const defaultPositionMap = {
+  [8681821313339919]: {
+    left: 0.5,
+    top: 0.2,
+    pointer: {
+      left: 0.4,
+      top: 0.8,
+    },
+  },
+};
+```
+
+<Preview>
+  <Story name="Default Position And Color">
+    <SensorOverlay timeseriesIds={timeseriesIds} defaultPositionMap={defaultPositionMap} colorMap={colorMap}><CustomizedDiv/></SensorOverlay>
+  </Story>
+</Preview>
+
+### Disabled Dragging
+
+<Preview>
+  <Story name="Disabled Dragging">
+    <SensorOverlay timeseriesIds={[8681821313339919]} isTagDraggable={false} isPointerDraggable={false}><CustomizedDiv/></SensorOverlay>
+  </Story>
+</Preview>
+ 
+
+### With Link
+
+```jsx
+import { SensorDatapoint } from '@cognite/gearbox';
+
+const handleClick = (timeserieId: number) => {};
+const handleLinkClick = (timeserieId: number, datapoint: SensorDatapoint) => {};
+```
+
+<Preview>
+  <Story name="With Link">
+    <SensorOverlay timeseriesIds={[8681821313339919]}  linksMap={linksMap} onClick={handleClick} onLinkClick={handleLinkClick}><CustomizedDiv/></SensorOverlay>
+  </Story>
+</Preview>
+
+### With Sticky Tooltips
+
+```jsx
+const stickyMap = { [8681821313339919]: true };
+```
+
+<Preview>
+  <Story name="With Sticky Tooltips">
+    <SensorOverlay timeseriesIds={[8681821313339919]} stickyMap={stickyMap} defaultPositionMap={defaultPositionMap}><CustomizedDiv/></SensorOverlay>
+  </Story>
+</Preview>
+
+### With Min-Max Limit
+
+```jsx
+export const minMaxMap = {
+  [8681821313339919]: {
+    min: 5,
+    max: 10,
+  },
+};
+```
+
+<Preview>
+  <Story name="With Min-Max Limit">
+    <SensorOverlay  timeseriesIds={[8681821313339919]} stickyMap={stickyMap} defaultPositionMap={defaultPositionMap} alertColor={'magenta'} minMaxMap={minMaxMap}><CustomizedDiv/></SensorOverlay>
+  </Story>
+</Preview>
+
+### With Image
+
+```jsx
+export const minMaxMap = {
+  [8681821313339919]: {
+    min: 5,
+    max: 10,
+  },
+};
+```
+
+<Preview>
+  <Story name="With Image">
+    <SensorOverlay  timeseriesIds={[8681821313339919]}><img src="sensor_overlay/infographic-sample.jpg" width="100%" /></SensorOverlay>
+  </Story>
+</Preview>
+
+### With Fixed Width
+
+```jsx
+export const minMaxMap = {
+  [8681821313339919]: {
+    min: 5,
+    max: 10,
+  },
+};
+```
+
+<Preview>
+  <Story name="With Fixed Width">
+    <SensorOverlay  timeseriesIds={[8681821313339919]}><img src="sensor_overlay/infographic-sample.jpg" width="1000px" /></SensorOverlay>
+  </Story>
+</Preview>
+
+### Add Sensors Dynamically
+
+```jsx
+class SensorOverlayWrapperComponent extends React.Component {
+  state = {
+    counter: 0,
+    timeseriesIds: [],
+  };
+
+  render() {
+    return (
+      <div>
+        <button
+          style={{ marginBottom: 20 }}
+          onClick={() =>
+            this.setState({
+              timeseriesIds: [
+                ...this.state.timeseriesIds,
+                fakeTimeseries[this.state.counter].id,
+              ],
+              counter: this.state.counter + 1,
+            })
+          }
+        >
+          Add Sensor
+        </button>
+        <SensorOverlay timeseriesIds={this.state.timeseriesIds}>
+          <div
+            style={{
+              width: '100%',
+              height: '300px',
+              background: '#EEE',
+            }}
+          />
+        </SensorOverlay>
+      </div>
+    );
+  }
+}
+```
+
+<Preview>
+  <Story name="Add Sensors Dynamically">
+    <SensorOverlayWrapperComponent />
+  </Story>
+</Preview>
