@@ -1,6 +1,6 @@
 import { Asset, CogniteClient } from '@cognite/sdk';
 import { Tabs } from 'antd';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
@@ -42,17 +42,47 @@ export interface AssetMetaStyles {
   events?: AssetEventsPanelStyles;
 }
 
-interface AssetMetaProps {
+export interface AssetMetaProps {
+  /**
+   * Asset Id
+   */
   assetId: number;
-  tab?: string;
-  docsProps?: MetaDocProps;
-  eventProps?: MetaEventsProps;
-  timeseriesProps?: MetaTimeseriesProps;
-  detailsProps?: MetaDescriptionListProps;
+  /**
+   * List of panes to be hidden
+   */
   hidePanels?: AssetPanelType[];
+  /**
+   * Defines pane that will be activated once the data has been loaded
+   */
+  tab?: string;
+  /**
+   * Function triggered when a user changes panes
+   */
   onPaneChange?: (key: string) => void;
-  styles?: AssetMetaStyles;
+  /**
+   * Object passed as props to inner component that presents details pane
+   */
+  detailsProps?: MetaDescriptionListProps;
+  /**
+   * Object passed as props to inner component that presents timeseries pane
+   */
+  timeseriesProps?: MetaTimeseriesProps;
+  /**
+   * Object passed as props to inner component that presents documents pane
+   */
+  docsProps?: MetaDocProps;
+  /**
+   * Object passed as props to inner component that presents events pane
+   */
+  eventProps?: MetaEventsProps;
+  /**
+   * A custom spinner to be shown in tabs while data is being loaded
+   */
   customSpinner?: React.ReactNode;
+  /**
+   * Object that defines inline CSS styles for inner elements of the component.
+   */
+  styles?: AssetMetaStyles;
   theme?: AnyIfEmpty<{}>;
 }
 
@@ -62,7 +92,7 @@ interface AssetMetaState {
   isLoading: boolean;
 }
 
-class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
+class AssetMeta extends Component<AssetMetaProps, AssetMetaState>
   implements ComponentWithUnmountState {
   static contextType = ClientSDKProxyContext;
   static defaultProps = {
@@ -249,7 +279,8 @@ const AssetMetaHeader = styled.div<{ isLoading: boolean }>`
   visibility: ${({ isLoading }) => (isLoading ? 'hidden' : 'visible')};
 `;
 
-const Component = withDefaultTheme(AssetMeta);
-Component.displayName = 'AssetMeta';
+const ComponentWithTheme = withDefaultTheme(AssetMeta);
+ComponentWithTheme.displayName = 'AssetMeta';
 
-export { Component as AssetMeta };
+export { AssetMeta as AssetMetaWithoutTheme };
+export { ComponentWithTheme as AssetMeta };
