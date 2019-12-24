@@ -36,7 +36,7 @@ import { TimeseriesChart } from '@cognite/gearbox';
 
 <Preview>
   <Story name="Basic Usage" >
-   <TimeseriesChart timeseriesIds={[123]} />
+    <TimeseriesChart timeseriesIds={[123]} />
   </Story>
 </Preview>
 
@@ -73,7 +73,7 @@ See more details in `Custom container styles` example.
 
 <Preview>
   <Story name="Empty" >
-   <TimeseriesChart timeseriesIds={[]} />
+    <TimeseriesChart timeseriesIds={[]} />
   </Story>
 </Preview>
 
@@ -81,7 +81,7 @@ See more details in `Custom container styles` example.
 
 <Preview>
   <Story name="Single" >
-   <TimeseriesChart timeseriesIds={[123]} />
+    <TimeseriesChart timeseriesIds={[123]} />
   </Story>
 </Preview>
 
@@ -89,7 +89,7 @@ See more details in `Custom container styles` example.
 
 <Preview>
   <Story name="Multiple" >
-   <TimeseriesChart timeseriesIds={[123, 456]} />
+    <TimeseriesChart timeseriesIds={[123, 456]} />
   </Story>
 </Preview>
 
@@ -97,7 +97,7 @@ See more details in `Custom container styles` example.
 
 <Preview>
   <Story name="Hidden" >
-   <TimeseriesChart 
+    <TimeseriesChart 
       timeseriesIds={[123, 456]}
       hiddenSeries={{ 123: true }} 
     />
@@ -209,7 +209,7 @@ const customContainerStyle = {
 
 <Preview>
   <Story name="Zoomable" decorators={[zoomableClientDecorator]}>
-        <TimeseriesChart
+    <TimeseriesChart
       timeseriesIds={[123]}
       startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
       endTime={Date.now()}
