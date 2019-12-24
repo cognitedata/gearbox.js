@@ -3,20 +3,15 @@ import {
   DatapointsMultiQuery,
   GetTimeSeriesMetadataDTO,
 } from '@cognite/sdk';
-import { storiesOf } from '@storybook/react';
 import React, { useState } from 'react';
 import { randomData, timeseriesListV2 } from '../../../mocks';
 import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { getGranularityInMS } from '../../../utils/utils';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import {
-  CSVLabelFormatter,
   TimeseriesDataExport,
   TimeseriesDataExportProps,
 } from '../TimeseriesDataExport';
-import formatLabel from './format-label.md';
-import fullDescription from './full.md';
-import outOfLimit from './out-of-limit.md';
 
 const MockTimeseriesClientObject = {
   retrieve: (): Promise<GetTimeSeriesMetadataDTO[]> => {
@@ -52,7 +47,7 @@ export class MockClient extends MockCogniteClient {
 
 const client = new MockClient({ appId: 'storybook' });
 
-const TimeseriesChartExportWrapper: React.FC<
+export const TimeseriesChartExportWrapper: React.FC<
   Omit<TimeseriesDataExportProps, 'visible' | 'form'>
 > = props => {
   const [open, setOpen] = useState(false);
@@ -60,65 +55,19 @@ const TimeseriesChartExportWrapper: React.FC<
   const onOpen = () => setOpen(true);
 
   return (
-    <ClientSDKProvider client={client}>
+    <>
       <button onClick={onOpen}>Export Chart Data</button>
       <TimeseriesDataExport visible={open} hideModal={onClose} {...props} />
-    </ClientSDKProvider>
+    </>
   );
 };
-const labelFormatter: CSVLabelFormatter = (ts: GetTimeSeriesMetadataDTO) =>
-  ts.name || `timeserie-${ts.id}`;
 
-storiesOf('TimeseriesDataExport', module).add(
-  'Full Description',
-  () => (
-    <TimeseriesChartExportWrapper
-      timeseriesIds={[41852231325889, 7433885982156917]}
-      granularity={'2m'}
-      defaultTimeRange={[1567321800000, 1567408200000]}
-    />
+export const decorators = [
+  (storyFn: any) => (
+    <ClientSDKProvider client={client}>{storyFn()}</ClientSDKProvider>
   ),
-  {
-    readme: {
-      content: fullDescription,
-    },
-  }
-);
-
-storiesOf('TimeseriesDataExport/Examples', module)
-  .add(
-    'Hit Limit',
-    () => (
-      <TimeseriesChartExportWrapper
-        timeseriesIds={[41852231325889, 7433885982156917]}
-        granularity={'2s'}
-        defaultTimeRange={[1567321800000, 1567408200000]}
-        cellLimit={5000}
-        strings={{
-          cellLimitErr:
-            'Oops, you rich cell limit for CSV document – {{ cellLimit }} cells, some data may be omitted',
-        }}
-      />
-    ),
-    {
-      readme: {
-        content: outOfLimit,
-      },
-    }
-  )
-  .add(
-    'Format label',
-    () => (
-      <TimeseriesChartExportWrapper
-        timeseriesIds={[41852231325889, 7433885982156917]}
-        granularity={'2m'}
-        defaultTimeRange={[1567321800000, 1567408200000]}
-        labelFormatter={labelFormatter}
-      />
-    ),
-    {
-      readme: {
-        content: formatLabel,
-      },
-    }
-  );
+];
+export const strings = {
+  cellLimitErr:
+    'Oops, you rich cell limit for CSV document – {{ cellLimit }} cells, some data may be omitted',
+};
