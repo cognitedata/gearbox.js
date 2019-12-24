@@ -1,10 +1,33 @@
 import { message } from 'antd';
-import React, { SyntheticEvent, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Callback, ErrorResponse } from '../../../interfaces';
+import { assetsList, sleep } from '../../../mocks';
+import { MockCogniteClient } from '../../../utils/mockSdk';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { ASNotifyTypes } from '../AssetScanner';
 
-export const FileInputComponent = ({ render }) => {
+class CogniteClient extends MockCogniteClient {
+  assets: any = {
+    list: () => ({
+      autoPagingToArray: async () => {
+        await sleep(1000);
+        // @ts-ignore
+        return assetsList;
+      },
+    }),
+  };
+}
+
+const client = new CogniteClient({ appId: 'gearbox test' });
+
+export const decorators = [
+  (storyFn: any) => (
+    <ClientSDKProvider client={client}>{storyFn()}</ClientSDKProvider>
+  ),
+];
+
+export const FileInputComponent = ({ render }: any) => {
   const [image, setImage] = useState('');
 
   const onChange = async (e: any) => {

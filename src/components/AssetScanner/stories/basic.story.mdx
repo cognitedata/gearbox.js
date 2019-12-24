@@ -1,6 +1,7 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { AssetScanner } from '../AssetScanner';
-import { 
+import {
+  decorators, 
   ocrRequest, 
   onError, 
   onOcrError, 
@@ -13,7 +14,7 @@ import {
   getAssetHandlerCustom
 } from './helper';
 
-<Meta title="Assets|AssetScanner"/>
+<Meta title="Assets|AssetScanner" decorators={decorators}/>
 
 # Asset Scanner
 
