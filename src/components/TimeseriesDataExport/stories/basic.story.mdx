@@ -26,7 +26,7 @@ import 'antd/dist/antd.css';
 import React from 'react';
 import { TimeseriesDataExport } from '@cognite/gearbox';
 ```
-We use small Functional component to demonstrate basic behavior.
+TimeseriesChartExportWrapper component to demonstrate basic behavior
 
 ```jsx
 const TimeseriesChartExportWrapper: React.FC<
@@ -59,7 +59,7 @@ const TimeseriesChartExportWrapper: React.FC<
 
 <Props of={TimeseriesDataExportFC} />
 
-Please ignore `form*`	and `wrappedComponentRef` props.
+**Note**: Props `form` and `wrappedComponentRef` come from Form HOC of antd library and displays here just as a part of the properties interface. You haven't to provide them by yourself.
 
 ### Types:
 
