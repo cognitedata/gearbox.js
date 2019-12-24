@@ -3,7 +3,7 @@ import { CogniteClient } from '@cognite/sdk';
 import { Button, Spin } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
 import { debounce } from 'lodash';
-import React, { KeyboardEvent } from 'react';
+import React, { Component, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
@@ -21,20 +21,49 @@ export interface TimeseriesSearchStyles {
 }
 
 export interface TimeseriesSearchProps {
-  selectedTimeseries: number[];
-  single: boolean;
-
-  hideSelected: boolean;
-  allowStrings: boolean;
+  /**
+   * Callback function called when the selection changes. Called with two parameters:
+   * the current list of selected ids and the last added/removed timeseries
+   */
   onTimeserieSelectionChange: (
     newTimeseriesIds: number[],
     selectedTimeseries: GetTimeSeriesMetadataDTO | null
   ) => void;
+  /**
+   * List of preselected timeseries
+   */
+  selectedTimeseries: number[];
+  /**
+   * Removes the checkboxes from search result and will only callback with one id
+   */
+  single: boolean;
+  /**
+   * Hides the row with selected timeseries above the search bar
+   */
+  hideSelected: boolean;
+  /**
+   * Allows the user to select search results that are strings
+   */
+  allowStrings: boolean;
+  /**
+   * The selected root asset id. undefined will select all
+   */
   rootAsset?: number;
+  /**
+   * Custom rule to filter search results
+   */
   filterRule?: (timeseries: GetTimeSeriesMetadataDTO) => boolean;
+  /**
+   * Function called on fetch timeseries error
+   */
   onError?: (error: Error) => void;
+  /**
+   * Custom styles for the component
+   */
   styles?: TimeseriesSearchStyles;
-
+  /**
+   * Enable/disable RootAssetSelect component
+   */
   rootAssetSelect: boolean;
   strings: PureObject;
 }
@@ -55,7 +84,7 @@ interface TimeseriesSearchState {
   cursor?: number;
 }
 
-export class TimeseriesSearch extends React.Component<
+export class TimeseriesSearch extends Component<
   TimeseriesSearchProps,
   TimeseriesSearchState
 > {
