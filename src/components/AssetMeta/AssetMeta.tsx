@@ -42,7 +42,7 @@ export interface AssetMetaStyles {
   events?: AssetEventsPanelStyles;
 }
 
-interface AssetMetaProps {
+export interface AssetMetaProps {
   /**
    * Asset Id
    */
