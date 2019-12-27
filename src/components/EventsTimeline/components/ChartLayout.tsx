@@ -163,6 +163,7 @@ export const ChartLayout: React.FC<ChartLayoutProps> = (
       }
       if (onEventHover) {
         debounceOnEventHover(null);
+        debounceOnEventHover.flush();
       }
 
       return;

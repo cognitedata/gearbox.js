@@ -28,7 +28,7 @@ export const Ruler: React.FC<EventTimelineRulerProps> = props => {
   };
 
   return (
-    <g>
+    <g data-test-id="ruler">
       {x !== null && (
         <path
           style={{ pointerEvents: 'none' }}

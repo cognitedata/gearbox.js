@@ -24,6 +24,7 @@ export interface EventsTimelineProps {
 }
 
 const toTimelinesDefault = (_: CogniteEventForTimeline) => '#000';
+const minimalWidth = 100;
 
 export const EventsTimeline = ({
   events,
@@ -58,7 +59,7 @@ export const EventsTimeline = ({
 
     const { width: currentWidth } = wrapperRef.current.getBoundingClientRect();
 
-    setWidth(currentWidth);
+    setWidth(currentWidth || minimalWidth);
   };
 
   const retrieveEvents = async (): Promise<CogniteEventForTimeline[]> => {
@@ -101,7 +102,7 @@ export const EventsTimeline = ({
       <span key={date}>{dateFormatter(date)}</span>
     ));
 
-    return <Dates>{dates}</Dates>;
+    return <Dates data-test-id="dates">{dates}</Dates>;
   };
 
   useEffect(() => {

@@ -88,6 +88,7 @@
     "lint-staged": "^8.1.4",
     "prettier": "^1.16.4",
     "react": "^16.10.2",
+    "react-app-polyfill": "^1.0.5",
     "react-dnd-test-backend": "^7.4.4",
     "react-docgen-typescript-loader": "^3.3.0",
     "react-dom": "^16.10.2",
