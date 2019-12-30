@@ -1,7 +1,7 @@
 import { CogniteClient } from '@cognite/sdk';
 import { Icon } from 'antd';
 import PinchZoom from 'pinch-zoom-js';
-import React, { KeyboardEvent, RefObject } from 'react';
+import React, { Component, KeyboardEvent, RefObject } from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
@@ -71,7 +71,7 @@ interface SvgViewerState {
   handleKeyDown: boolean;
 }
 
-export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
+export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   static displayName = 'SVGViewer';
   static contextType = ClientSDKProxyContext;
   context!: React.ContextType<typeof ClientSDKProxyContext>;
