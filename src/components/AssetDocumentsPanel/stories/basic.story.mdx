@@ -1,6 +1,6 @@
 import { Meta, Story, Preview, Props, Source } from '@storybook/addon-docs/blocks';
 import { AssetDocumentsPanel } from '../AssetDocumentsPanel';
-import { decorators } from './helper';
+import { decorators, docTypes, handleAssetFilesLoaded, customStyle } from './helper';
 
 <Meta title="Assets|AssetDocumentsPanel" decorators={decorators} />
 
@@ -84,3 +84,71 @@ import { AssetDocumentsPanelStyles } from '@cognite/gearbox';
 ```
 
 See more details in AssetMeta component documentation.
+
+## Examples
+
+### Handle callbacks
+
+A callback function can be provided to fire when the documents are loaded:
+
+```jsx
+import { FilesMetadata } from '@cognite/sdk';
+
+const handleAssetFilesLoaded = (files: FilesMetadata[]) => { };
+```
+
+<Preview>
+  <Story name="Load callbacks">
+    <AssetDocumentsPanel
+      assetId={4650652196144007}
+      onAssetFilesLoaded={handleAssetFilesLoaded}
+    />
+  </Story>
+</Preview>
+
+### Custom Loading Spinner 
+
+<Preview>
+  <Story name="Custom Loading Spinner">
+    <AssetDocumentsPanel
+      assetId={4650652196144007}
+      customSpinner={<div>Loading...</div>}
+    />
+  </Story>
+</Preview>
+
+### Custom Category Names
+
+```jsx
+const docTypes = { XB: 'My Category', XL: 'Another Custom Category' };
+```
+
+<Preview>
+  <Story name="Custom Category Names">
+    <AssetDocumentsPanel
+      assetId={4650652196144007}
+      docTypes={docTypes}
+    />
+  </Story>
+</Preview>
+
+### Custom Styles
+
+```jsx
+import { AssetDocumentsPanelStyles } from '@cognite/gearbox';
+
+const customStyles: AssetDocumentsPanelStyles = {
+  wrapper: { border: '1px solid red' },
+  fileContainer: { backgroundColor: '#DDD', padding: 8 },
+  fileLink: { color: 'purple' },
+  fileTitle: { color: 'magenta', fontSize: '1em' },
+};
+```
+<Preview>
+  <Story name="Custom Styles">  
+  <AssetDocumentsPanel
+      assetId={4650652196144007}
+      styles={customStyle}
+    />
+  </Story>
+</Preview>

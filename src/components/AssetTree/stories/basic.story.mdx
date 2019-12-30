@@ -1,6 +1,6 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { AssetTree, AssetTreeWithoutTheme } from '../AssetTree';
-import { decorators } from './helper';
+import { decorators, onSelect, customStyle, exampleTheme, displayIdAsName } from './helper';
 
 <Meta title="Assets|AssetTree" decorators={decorators} />
 
@@ -10,7 +10,7 @@ Visualize parent-child relationship of assets in a tree structure. It will initi
 
 **NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
 
-## Basic usage:
+### Basic usage:
 
 Imports:
 
@@ -62,3 +62,95 @@ import { AssetTreeStyles } from '@cognite/gearbox';
 
 
 See more details in `Custom Styles` example.
+
+## Examples
+
+### Click Item
+
+A function can be provided to fire when an item clicked:
+
+```jsx
+import { OnSelectAssetTreeParams } from '@cognite/gearbox';
+
+const onSelect = (e: OnSelectAssetTreeParams) => {};
+```
+
+<Preview>
+  <Story name="Click Item">
+    <AssetTree
+      onSelect={onSelect}
+    />
+  </Story>
+</Preview>
+
+### Custom Styles
+
+```jsx
+const customStyle = {
+  list: {
+    fontFamily: 'Courier New',
+    fontSize: 'large',
+  },
+};
+```
+      
+<Preview>
+  <Story name="Custom Styles">  
+    <AssetTree
+      styles={customStyle}
+    />
+  </Story>
+</Preview>
+
+### Default Expanded Node
+      
+<Preview>
+  <Story name="Default Expanded Node">  
+    <AssetTree
+      defaultExpandedKeys={[6687602007296940]}
+    />
+  </Story>
+</Preview>
+
+### Custom Display Name
+
+```jsx
+const displayIdAsName = ({ id }: { id: number }) => `Id: ${id}`
+```
+<Preview>
+  <Story name="Custom Display Name">  
+    <AssetTree
+      displayName={displayIdAsName}
+    />
+  </Story>
+</Preview>
+
+### With Theme
+
+```jsx
+import { ThemeProvider } from 'styled-components';
+
+const exampleTheme = {
+  gearbox: {
+    fontFamily: 'Courier New',
+    fontSize: 'large',
+    textColor: '#a88400',
+    highlightColor: '#00b893',
+  },
+};
+```
+<Preview>
+  <Story name="With Theme">  
+    <ThemeProvider theme={exampleTheme}><AssetTree /></ThemeProvider>
+  </Story>
+</Preview>
+
+### Custom Root Assets
+
+<Preview>
+  <Story name="With Asset Id">  
+    <AssetTree
+      assetIds={[3111454725058294]}
+    />
+  </Story>
+</Preview>
