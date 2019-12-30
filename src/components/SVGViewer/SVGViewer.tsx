@@ -1,6 +1,6 @@
 import Icon from 'antd/lib/icon';
 import PinchZoom from 'pinch-zoom-js';
-import React, { KeyboardEvent, RefObject } from 'react';
+import React, { Component, KeyboardEvent, RefObject } from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKContext } from '../../context/clientSDKContext';
@@ -61,7 +61,7 @@ interface SvgViewerState {
   handleKeyDown: boolean;
 }
 
-export class SVGViewer extends React.Component<SvgViewerProps, SvgViewerState> {
+export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   static contextType = ClientSDKContext;
   context!: React.ContextType<typeof ClientSDKContext>;
   prevMoveDistanceX: number = 0;
