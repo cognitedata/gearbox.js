@@ -18,10 +18,17 @@ export const getEventsByTimestamp = (
   return Object.keys(timelines).flatMap(color => {
     const tl = timelines[color];
 
-    return tl.filter(
-      ({ startTime, endTime }) =>
+    return tl.reduce((filtered: CogniteEventForTimeline[], event) => {
+      const { startTime, endTime } = event;
+
+      if (
         startTime === date ||
         (startTime && endTime && startTime <= date && endTime >= date)
-    );
+      ) {
+        filtered.push({ ...event, color });
+      }
+
+      return filtered;
+    }, []);
   });
 };

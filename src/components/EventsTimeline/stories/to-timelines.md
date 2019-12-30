@@ -19,20 +19,20 @@ import {
 function ExampleComponent(props) {
   const events: TimelineEvent[] = [
     {
-        id: 0,
-        view: EventTimelineView.fill,
-        type: EventTimelineType.continuous,
-      },
-      {
-        id: 1,
-        view: EventTimelineView.outline,
-        type: EventTimelineType.continuous,
-      },
-      {
-        id: 2,
-        view: EventTimelineView.outline,
-        type: EventTimelineType.discrete,
-      },
+      id: 0,
+      view: EventTimelineView.fill,
+      type: EventTimelineType.continuous,
+    },
+    {
+     id: 1,
+      view: EventTimelineView.outline,
+      type: EventTimelineType.continuous,
+    },
+    {
+     id: 2,
+      view: EventTimelineView.outline,
+      type: EventTimelineType.discrete,
+    },
   ];
   const end = Date.now();
   const start = end - 60 * 60 * 1000;

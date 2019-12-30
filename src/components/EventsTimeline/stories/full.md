@@ -14,14 +14,29 @@
 import 'antd/dist/antd.css';
 
 import React from 'react';
-import { EventsTimeline, TimelineEvent } from '@cognite/gearbox';
+import { 
+  EventsTimeline, 
+  TimelineEvent, 
+  EventTimelineView, 
+  EventTimelineType 
+} from '@cognite/gearbox';
 
 function ExampleComponent(props) {
   const events: TimelineEvent[] = [
     {
       id: 0,
-      type: 'continuous',
-      view: 'fill',
+      view: EventTimelineView.fill,
+      type: EventTimelineType.continuous,
+    },
+    {
+     id: 1,
+      view: EventTimelineView.outline,
+      type: EventTimelineType.continuous,
+    },
+    {
+     id: 2,
+      view: EventTimelineView.outline,
+      type: EventTimelineType.discrete,
     },
   ];
   const end = Date.now();
@@ -86,14 +101,13 @@ interface CogniteEventForTimeline extends CogniteEvent {
     view: EventTimelineView;
     type: EventTimelineType;
   };
+  color?: string;
 
 }
 
 interface TimelineRuler {
   show: boolean;
-  onChange?: (event: React.SyntheticEvent, date: number) => void;
-  onEventHover?: (event: CogniteEventForTimeline[] | null) => void;
-  hoverDebounceTime?: number;
+  onChange?: (event: React.SyntheticEvent, date: number, events?: CogniteEventForTimeline[]) => void;
   onHide?: () => void;
 
 }

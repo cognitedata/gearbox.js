@@ -23,10 +23,8 @@ function ExampleComponent(props) {
   const toTimelines = ({ id }: CogniteEventForTimeline) => {
     return !id ? '#3b7c14' : id === 1 ? '#ee5d7d' : '#cccccc';
   };
-  const onChange = (event, date) => console.log('Date - ', new Date(date));
-  const onEventHover = event => console.log('Event - ', event);
+  const onChange = (event, date, events) => console.log('Date - ', new Date(date), 'Events - ', events);
   const onHide = () => console.log('Ruler is hidden');
-  const hoverDebounceTime = 200;
 
   return (
     <EventsTimeline 
@@ -36,10 +34,8 @@ function ExampleComponent(props) {
       toTimelines={toTimelines}
       ruler={{
         show: true,
-        onChange: onChange,
-        onEventHover: onEventHover,
-        hoverDebounceTime: hoverDebounceTime,
-        onHide: onHide,
+        onChange,
+        onHide,
       }}
     />
   );

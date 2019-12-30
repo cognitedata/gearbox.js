@@ -1,6 +1,5 @@
 import { configure, mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import lodash from 'lodash';
 import React, { useRef } from 'react';
 import { act } from 'react-dom/test-utils';
 import { getCogniteEventsForTimeline, timelineEvents } from '../mocks/events';
@@ -41,12 +40,6 @@ const defaultProps: Omit<ChartLayoutProps, 'svg'> = {
 
 beforeEach(() => {
   wrapper = new ReactWrapper(<div />);
-
-  jest.spyOn(lodash, 'debounce').mockImplementation((f: any) => {
-    f.flush = () => undefined;
-
-    return f;
-  });
 });
 
 afterEach(() => {
@@ -64,13 +57,11 @@ describe('ChartLayout', () => {
   });
   it('should trigger ruler callbacks if provided', async () => {
     const onChange = jest.fn();
-    const onEventHover = jest.fn();
     const onHide = jest.fn();
 
     const ruler: TimelineRuler = {
       show: true,
       onChange,
-      onEventHover,
       onHide,
     };
 
@@ -86,25 +77,22 @@ describe('ChartLayout', () => {
       rulerLayout.simulate('mousemove', { nativeEvent: { offsetX: 0 } });
     });
 
-    expect(onChange).toHaveBeenCalled();
-    expect(onEventHover).toHaveBeenCalledTimes(1);
-    expect(onEventHover.mock.calls[0][0].length).toBeTruthy();
-    expect(onHide).toHaveBeenCalledTimes(0);
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange.mock.calls[0][2].length).toBeTruthy();
 
     await act(async () => {
       rulerLayout.simulate('mousemove', { nativeEvent: { offsetX: 450 } });
     });
 
     // in offsetX = 450 position there is no events placed
-    expect(onEventHover).toHaveBeenCalledTimes(2);
-    expect(onEventHover.mock.calls[1][0].length).toBeFalsy();
+    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(onChange.mock.calls[1][2].length).toBeFalsy();
 
     await act(async () => {
       rulerLayout.simulate('mouseleave');
     });
 
     expect(onHide).toHaveBeenCalledTimes(1);
-    expect(onEventHover).toHaveBeenCalledTimes(3);
-    expect(onEventHover.mock.calls[2][0].length).toBeFalsy();
+    expect(onChange).toHaveBeenCalledTimes(2);
   });
 });

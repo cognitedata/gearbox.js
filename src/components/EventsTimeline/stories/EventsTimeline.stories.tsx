@@ -13,9 +13,11 @@ import {
 import { EventsTimeline } from '../EventsTimeline';
 
 import dateFormat from './date-formatter.md';
+import { EventsTimelineTooltip } from './EventsTimelineTooltip';
 import fullDescription from './full.md';
 import ruler from './ruler.md';
 import timelines from './to-timelines.md';
+import tooltip from './tooltip.md';
 import zoom from './zoom.md';
 
 const now = Date.now();
@@ -45,6 +47,8 @@ class CogniteClient extends MockCogniteClient {
       await sleep(200);
 
       return ids.map(({ id }, index) => ({
+        externalId: `Event #${id}`,
+        description: `Lorem ipsum dolor`,
         id,
         createdTime: new Date(),
         lastUpdatedTime: new Date(),
@@ -64,12 +68,12 @@ const ClientSDKDecorator = (storyFn: any) => (
 const toTimelines = ({ id }: CogniteEventForTimeline) => {
   return !id ? '#3b7c14' : id === 1 ? '#ee5d7d' : '#cccccc';
 };
-const onChange = (_: React.SyntheticEvent, date: number) =>
-  console.log('Date - ', new Date(date));
-const onEventHover = (event: CogniteEventForTimeline[] | null) =>
-  console.log('Event - ', event);
+const onChange = (
+  _: React.SyntheticEvent,
+  date: number,
+  tlEvents?: CogniteEventForTimeline[]
+) => console.log('Date - ', new Date(date), 'Events – ', tlEvents);
 const onHide = () => console.log('Ruler is hidden');
-const hoverDebounceTime = 200;
 
 const onZoomStart = () => console.log('Zoom start');
 const onZoom = ([newStart, newEnd]: [number, number]) =>
@@ -116,9 +120,7 @@ storiesOf('EventsTimeline', module)
         ruler={{
           show: true,
           onChange,
-          onEventHover,
           onHide,
-          hoverDebounceTime,
         }}
       />
     ),
@@ -167,6 +169,27 @@ storiesOf('EventsTimeline', module)
     {
       readme: {
         content: dateFormat,
+      },
+    }
+  )
+  .add(
+    'Hover tooltip',
+    () => (
+      <EventsTimelineTooltip
+        events={events}
+        start={start}
+        end={end}
+        toTimelines={toTimelines}
+        ruler={{
+          show: true,
+          onChange,
+          onHide,
+        }}
+      />
+    ),
+    {
+      readme: {
+        content: tooltip,
       },
     }
   );

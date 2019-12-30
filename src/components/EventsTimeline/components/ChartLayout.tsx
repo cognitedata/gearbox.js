@@ -7,8 +7,8 @@ import {
   ZoomedElementBaseType,
   ZoomScale,
 } from 'd3-zoom';
-import { debounce, Dictionary } from 'lodash';
-import React, { RefObject, useEffect, useState } from 'react';
+import { Dictionary } from 'lodash';
+import React, { RefObject, SyntheticEvent, useEffect, useState } from 'react';
 import { getEventsByTimestamp, getScaleTime } from '../helpers';
 import { EventTimelineType, EventTimelineView } from './Event';
 import { Ruler } from './Ruler';
@@ -25,9 +25,11 @@ export interface TimelineEvent extends TimelineEventAppearance {
 
 export interface TimelineRuler {
   show: boolean;
-  onChange?: (event: React.SyntheticEvent, date: number) => void;
-  onEventHover?: (event: CogniteEventForTimeline[] | null) => void;
-  hoverDebounceTime?: number;
+  onChange?: (
+    e: SyntheticEvent,
+    date: number,
+    events?: CogniteEventForTimeline[]
+  ) => void;
   onHide?: () => void;
 }
 
@@ -45,6 +47,7 @@ export interface TimelineZoom {
 
 export interface CogniteEventForTimeline extends CogniteEvent {
   appearance: TimelineEventAppearance;
+  color?: string;
 }
 
 export interface ChartLayoutProps {
@@ -70,18 +73,10 @@ export const ChartLayout: React.FC<ChartLayoutProps> = (
     timelineSize: { height: tlHeight },
     start,
     end,
-    ruler: {
-      show: showRuler,
-      onChange: onRulerChange,
-      onHide: onRulerHide,
-      onEventHover,
-      hoverDebounceTime,
-    } = {
+    ruler: { show: showRuler, onChange: onRulerChange, onHide: onRulerHide } = {
       show: false,
       onChange: undefined,
       onHide: undefined,
-      onEventHover: undefined,
-      hoverDebounceTime: undefined,
     },
     zoom: { enable: zoomEnable, onZoomStart, onZoom, onZoomEnd } = {
       enable: false,
@@ -161,10 +156,6 @@ export const ChartLayout: React.FC<ChartLayoutProps> = (
       if (onRulerHide) {
         onRulerHide();
       }
-      if (onEventHover) {
-        debounceOnEventHover(null);
-        debounceOnEventHover.flush();
-      }
 
       return;
     }
@@ -173,27 +164,11 @@ export const ChartLayout: React.FC<ChartLayoutProps> = (
     const time = scale.invert(offsetX).getTime();
 
     if (onRulerChange) {
-      onRulerChange(event, time);
-    }
+      const filteredEvents = getEventsByTimestamp(time, timelines);
 
-    if (onEventHover) {
-      debounceOnEventHover(time);
+      onRulerChange(event, time, filteredEvents);
     }
   };
-
-  const debounceOnEventHover = debounce((time: number | null) => {
-    if (!onEventHover) {
-      return;
-    }
-
-    if (time === null) {
-      return onEventHover([]);
-    }
-
-    const filteredEvents = getEventsByTimestamp(time, timelines);
-
-    onEventHover(filteredEvents);
-  }, hoverDebounceTime);
 
   useEffect(() => {
     const zoom = handleZoom();
