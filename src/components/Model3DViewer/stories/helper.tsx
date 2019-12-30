@@ -48,14 +48,13 @@ export const onReady = () =>
   );
 
 export const onScreenshot = (url: string) => {
-  document.createElement('br');
-  const img = document.createElement('img');
-  img.setAttribute(
-    'style',
-    'display: block; margin-left: auto; margin-right: auto'
-  );
-  img.src = url;
-  document.body.append(img);
+  const randomCode = Math.random()
+    .toString(36)
+    .substring(8);
+  const downloadElm = document.createElement('a');
+  downloadElm.href = url;
+  downloadElm.download = `model_3D_viewer_screen_shot_${randomCode}`;
+  downloadElm.click();
 };
 
 export const slice = { y: { coord: 0, direction: false } };
