@@ -125,9 +125,10 @@ Set the onScreenshot property to customize what you want to do witht the screens
 
 ```jsx
 const onScreenshot = (url: string) => {
-  const img = document.createElement('img');
-  img.src = url;
-  document.body.append(img);
+  const downloadElm = document.createElement('a');
+  downloadElm.href = url;
+  downloadElm.download = 'model_3D_viewer_screen_shot';
+  downloadElm.click();
 };
 ```
 
