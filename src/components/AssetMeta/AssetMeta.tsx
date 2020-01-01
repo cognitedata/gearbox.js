@@ -13,6 +13,7 @@ import {
   AssetDocumentsPanelStyles,
   AssetEventsPanelStyles,
   AssetPanelType,
+  MetaDescriptionListProps,
 } from '../../interfaces';
 import { MetaDocProps } from '../../interfaces/DocumentTypes';
 import { defaultTheme } from '../../theme/defaultTheme';
@@ -29,7 +30,6 @@ import {
   AssetTimeseriesPanelStyles,
   MetaTimeseriesProps,
 } from '../AssetTimeseriesPanel';
-import { MetaDescriptionListProps } from '../DescriptionList';
 
 const { TabPane } = Tabs;
 

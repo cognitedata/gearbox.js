@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
-import { WithAssetDataProps } from '../../hoc/withAsset';
+import {
+  AssetDetailsPanelStylesProps,
+  WithAssetDataProps,
+} from '../../interfaces/AssetTypes';
+import { MetaDescriptionListProps } from '../../interfaces/DescriptionListTypes';
 import { DescriptionList } from '../DescriptionList';
-import { MetaDescriptionListProps } from '../DescriptionList';
-
-export interface AssetDetailsPanelStylesProps {
-  styles?: React.CSSProperties;
-}
 
 export type AssetDetailsPanelPureProps = WithAssetDataProps &
   MetaDescriptionListProps &

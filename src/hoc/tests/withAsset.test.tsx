@@ -2,9 +2,10 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
+import { WithAssetDataProps } from '../../interfaces/AssetTypes';
 import { fakeAsset } from '../../mocks';
 import { MockCogniteClient } from '../../utils/mockSdk';
-import { withAsset, WithAssetDataProps } from '../withAsset';
+import { withAsset } from '../withAsset';
 
 configure({ adapter: new Adapter() });
 

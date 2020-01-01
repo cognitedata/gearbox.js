@@ -1,5 +1,10 @@
 import { Asset } from '@cognite/sdk';
-import React from 'react';
+import React, { FC } from 'react';
+import {
+  AssetDetailsPanelStylesProps,
+  WithAssetProps,
+} from '../../../interfaces/AssetTypes';
+import { MetaDescriptionListProps } from '../../../interfaces/DescriptionListTypes';
 import { fakeAsset } from '../../../mocks';
 import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
@@ -32,3 +37,11 @@ export const toCategory = (name: string): string => name.split('_')[0];
 export const onAssetLoaded = (asset: Asset) => {
   console.log(asset);
 };
+
+export type AssetDetailsPanelPureProps = WithAssetProps &
+  MetaDescriptionListProps &
+  AssetDetailsPanelStylesProps;
+
+export const FakeAssetDetailsPanel: FC<AssetDetailsPanelPureProps> = () => (
+  <></>
+);

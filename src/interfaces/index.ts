@@ -5,3 +5,4 @@ export * from './DocumentTypes';
 export * from './EventTypes';
 export * from './SVGViewerTypes';
 export * from './NodeTypes';
+export * from './DescriptionListTypes';

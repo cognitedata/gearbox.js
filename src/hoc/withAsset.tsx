@@ -1,5 +1,5 @@
 import { Asset } from '@cognite/sdk';
-import React from 'react';
+import React, { ComponentType } from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
 import {
@@ -7,21 +7,12 @@ import {
   ERROR_NO_SDK_CLIENT,
 } from '../constants/errorMessages';
 import { ClientSDKContext } from '../context/clientSDKContext';
+import { WithAssetDataProps, WithAssetProps } from '../interfaces/AssetTypes';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
   connectPromiseToUnmountState,
 } from '../utils/promise';
-
-export interface WithAssetDataProps {
-  asset: Asset;
-}
-
-export interface WithAssetProps {
-  assetId: number;
-  customSpinner?: React.ReactNode;
-  onAssetLoaded?: (asset: Asset) => void;
-}
 
 export interface WithAssetState {
   isLoading: boolean;
@@ -30,7 +21,7 @@ export interface WithAssetState {
 }
 
 export const withAsset = <P extends WithAssetDataProps>(
-  WrapperComponent: React.ComponentType<P>
+  WrapperComponent: ComponentType<P>
 ) =>
   class
     extends React.Component<

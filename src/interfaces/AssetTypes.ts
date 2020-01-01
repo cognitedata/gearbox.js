@@ -1,5 +1,6 @@
 import { Asset } from '@cognite/sdk';
 import { AutoPagingToArrayOptions } from '@cognite/sdk/dist/src/autoPagination';
+import { CSSProperties, ReactNode } from 'react';
 import { AnyIfEmpty } from '../interfaces';
 import { MetadataId } from './index';
 
@@ -91,4 +92,30 @@ export interface AdvancedSearch {
   name?: string;
   description?: string;
   metadata?: MetadataId[];
+}
+
+export interface WithAssetDataProps {
+  asset: Asset;
+}
+
+export interface AssetDetailsPanelStylesProps {
+  /**
+   * Object that defines inline CSS style for container of the table
+   */
+  styles?: CSSProperties;
+}
+
+export interface WithAssetProps {
+  /**
+   * Asset Id
+   */
+  assetId: number;
+  /**
+   * A custom spinner to be shown in tabs while data is being loaded
+   */
+  customSpinner?: ReactNode;
+  /**
+   * callback function triggered after asset loaded
+   */
+  onAssetLoaded?: (asset: Asset) => void;
 }

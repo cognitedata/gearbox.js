@@ -1,9 +1,10 @@
-import { withAsset, WithAssetProps } from '../../hoc/withAsset';
-import { MetaDescriptionListProps } from '../DescriptionList';
+import { withAsset } from '../../hoc/withAsset';
 import {
-  AssetDetailsPanelPure,
   AssetDetailsPanelStylesProps,
-} from './AssetDetailsPanelPure';
+  WithAssetProps,
+} from '../../interfaces/AssetTypes';
+import { MetaDescriptionListProps } from '../../interfaces/DescriptionListTypes';
+import { AssetDetailsPanelPure } from './AssetDetailsPanelPure';
 
 export type AssetDetailsPanelProps = WithAssetProps &
   MetaDescriptionListProps &

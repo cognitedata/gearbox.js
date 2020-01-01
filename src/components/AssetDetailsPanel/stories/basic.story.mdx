@@ -1,7 +1,7 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
 import { AssetDetailsPanelPure } from '../AssetDetailsPanelPure';
-import { decorators, onAssetLoaded, toCategory, customStyle } from './helper';
+import { decorators, onAssetLoaded, toCategory, customStyle, FakeAssetDetailsPanel } from './helper';
 
 <Meta title="Assets|AssetDetailsPanel" decorators={decorators} />
 
@@ -31,7 +31,7 @@ import { AssetDetailsPanel } from '@cognite/gearbox';
 
 ## Available props
 
-<Props of={AssetDetailsPanelPure} />
+<Props of={FakeAssetDetailsPanel} />
 
 ### Types
 

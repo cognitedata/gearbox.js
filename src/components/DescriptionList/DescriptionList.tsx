@@ -3,16 +3,13 @@ import { Dictionary, groupBy } from 'lodash';
 import React, { CSSProperties, FC, Fragment } from 'react';
 import styled from 'styled-components';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import { AnyIfEmpty, ValueListType } from '../../interfaces';
+import {
+  AnyIfEmpty,
+  MetaDescriptionListProps,
+  ValueListType,
+} from '../../interfaces';
 import { mapMetaData } from '../../utils/formatters';
 const { Panel } = Collapse;
-
-export interface MetaDescriptionListProps {
-  toCategory?: (name: string) => string | undefined;
-  categoryPriorityList?: string[];
-  unknownCategoryName?: string;
-  expandedCategories?: string[];
-}
 
 export interface DescriptionListProps extends MetaDescriptionListProps {
   description?: {
