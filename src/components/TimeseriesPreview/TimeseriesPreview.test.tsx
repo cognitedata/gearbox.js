@@ -106,6 +106,56 @@ describe('TimeseriesChart', () => {
     expect(valueElement.text()).toEqual(`${value} psi`);
     expect(dateElement.text()).toEqual(expectDateString);
   });
+  it('should display provided custom name and description', async () => {
+    const timestamp = new Date();
+    const value = 32;
+    const valueToDisplay = { value, timestamp };
+    const customName = 'customName';
+    const customDescriptrion = 'customdescription';
+    const customNameFunctionCall = 'Test name from function call';
+    const customDescriptrionFunctionCall =
+      'Test description from function call';
+    const customNameFunction = (name: string) =>
+      name ? '' : customNameFunctionCall;
+    const customDescriptrionFunction = (description: string) =>
+      description ? '' : customDescriptrionFunctionCall;
+
+    await act(async () => {
+      wrapper = mount(
+        <ComponentWrapper
+          {...{
+            ...defaultProps,
+            valueToDisplay,
+            // tslint:disable-next-line:object-literal-shorthand
+            customName: customName,
+            customDescription: customDescriptrion,
+          }}
+        />
+      );
+    });
+
+    wrapper.update();
+    const customNameElement = wrapper.find('p[data-test-id="name"]');
+    const customDescriptionElement = wrapper.find(
+      'p[data-test-id="description"]'
+    );
+
+    expect(customNameElement.text()).toEqual(customName);
+    expect(customDescriptionElement.text()).toEqual(customDescriptrion);
+
+    const previousProps = wrapper.props();
+    const updatedProps = {
+      ...previousProps,
+      customName: customNameFunction,
+      customDescription: customDescriptrionFunction,
+    };
+    wrapper.setProps(updatedProps);
+
+    expect(customNameElement.text()).toEqual(customNameFunctionCall);
+    expect(customDescriptionElement.text()).toEqual(
+      customDescriptrionFunctionCall
+    );
+  });
   it('should display dropdown menu', async () => {
     const options = {
       edit: 'Edit item',

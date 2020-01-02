@@ -25,6 +25,8 @@ export interface TimeseriesPreviewProps {
   timeseriesId: number;
   color?: string;
   dateFormat?: string;
+  customName?: ((name?: string) => string) | string;
+  customDescription?: ((description?: string) => string) | string;
   updateInterval?: number;
   valueToDisplay?: GetDoubleDatapoint | GetStringDatapoint;
   dropdown?: TimeseriesPreviewMenuConfig;
@@ -47,6 +49,16 @@ export interface TimeseriesPreviewStyles {
   date?: React.CSSProperties;
   dropdown?: DropdownMenuStyles;
 }
+
+const displayCustomString = (
+  defaultString: string | undefined,
+  customString: ((value?: string) => string) | string | undefined
+) =>
+  customString
+    ? typeof customString === 'string'
+      ? customString
+      : customString(defaultString)
+    : defaultString;
 
 export interface TimeseriesPreviewMenuConfig {
   options: PureObject;
@@ -95,6 +107,8 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
   onToggleVisibility,
   color = defaultProps.color,
   valueToDisplay,
+  customName,
+  customDescription,
   retrieveTimeseries,
   retrieveLatestDatapoint,
   updateInterval = defaultProps.updateInterval,
@@ -251,8 +265,12 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
               {dropdownMenu}
             </LeftSide>
             <RightSide style={rightSideStyle}>
-              <TagName style={tagNameStyle}>{timeseries.name}</TagName>
-              <p style={descriptionStyle}>{timeseries.description}</p>
+              <TagName style={tagNameStyle} data-test-id={'name'}>
+                {displayCustomString(timeseries.name, customName)}
+              </TagName>
+              <p style={descriptionStyle} data-test-id={'description'}>
+                {displayCustomString(timeseries.description, customDescription)}
+              </p>
               <ValueContainer data-test-id={'value'}>
                 <Value style={valueStyle}>
                   <span>{displayValue() || lang.noData}</span>
