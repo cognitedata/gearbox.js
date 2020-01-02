@@ -25,6 +25,8 @@ export interface TimeseriesPreviewProps {
   timeseriesId: number;
   color?: string;
   dateFormat?: string;
+  nameFormatter?: (name?: string) => string;
+  descriptionFormatter?: (description?: string) => string;
   updateInterval?: number;
   valueToDisplay?: GetDoubleDatapoint | GetStringDatapoint;
   dropdown?: TimeseriesPreviewMenuConfig;
@@ -95,6 +97,8 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
   onToggleVisibility,
   color = defaultProps.color,
   valueToDisplay,
+  nameFormatter,
+  descriptionFormatter,
   retrieveTimeseries,
   retrieveLatestDatapoint,
   updateInterval = defaultProps.updateInterval,
@@ -251,8 +255,16 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
               {dropdownMenu}
             </LeftSide>
             <RightSide style={rightSideStyle}>
-              <TagName style={tagNameStyle}>{timeseries.name}</TagName>
-              <p style={descriptionStyle}>{timeseries.description}</p>
+              <TagName style={tagNameStyle} data-test-id={'name'}>
+                {nameFormatter
+                  ? nameFormatter(timeseries.name)
+                  : timeseries.name}
+              </TagName>
+              <p style={descriptionStyle} data-test-id={'description'}>
+                {descriptionFormatter
+                  ? descriptionFormatter(timeseries.description)
+                  : timeseries.description}
+              </p>
               <ValueContainer data-test-id={'value'}>
                 <Value style={valueStyle}>
                   <span>{displayValue() || lang.noData}</span>
