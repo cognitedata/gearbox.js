@@ -39,7 +39,9 @@ function ExampleComponent(props) {
 | `color`                   | Rendered as a background color for the left side of the component                                          | `string`                                                     | `#6c65ee`                |
 | `dateFormat`              | Defines [date format](https://momentjs.com/docs/#/displaying/format/) to be applied on datapoint timestamp | `string`                                                     | `DD MMM YYYY - HH:mm:ss` |
 | `updateInterval`          | Refresh latest datapoint interval in ms                                                                    | `number`                                                     | `5000`                   |
-| `valueToDisplay`          | Datapoint to be rendered instead of latest datapoint. Pause fetching latest datapoint if provided            | `GetDoubleDatapoint \| GetStringDatapoint`                   |                          |
+| `valueToDisplay`          | Datapoint to be rendered instead of latest datapoint. Pause fetching latest datapoint if provided            | `GetDoubleDatapoint \| GetStringDatapoint`
+| `nameFormatter`              | Function, that formats timeseries name value to be displayed          | `(name?: string) => string`
+| `descriptionFormatter`       | Function that formats timeseries description value to be displayed          | `(description?: string) => string`                   |                          |
 | `dropdown`                | Configuration, that describes dropdown menu to be rendered                                                 | `TimeseriesPreviewMenuConfig`                                |                          |
 | `retrieveTimeseries`      | Function that can be used to replace embedded timeseries fetching logic                                 | `FetchTimeserieCall`                                         |                          |
 | `retrieveLatestDatapoint` | Function that can be used to replace embedded latest datapoint fetching                                 | `FetchLatestDatapointCall`                                   |                          |

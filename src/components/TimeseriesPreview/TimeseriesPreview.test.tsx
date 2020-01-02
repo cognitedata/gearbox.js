@@ -106,6 +106,42 @@ describe('TimeseriesChart', () => {
     expect(valueElement.text()).toEqual(`${value} psi`);
     expect(dateElement.text()).toEqual(expectDateString);
   });
+  it('should display provided custom name and description', async () => {
+    const timestamp = new Date();
+    const value = 32;
+    const valueToDisplay = { value, timestamp };
+    const customNameFunctionCall = 'Test name from function call';
+    const customDescriptrionFunctionCall =
+      'Test description from function call';
+    const nameFormatter = (name?: string) =>
+      name ? '' : customNameFunctionCall;
+    const descriptionFormatter = (description?: string) =>
+      description ? '' : customDescriptrionFunctionCall;
+
+    await act(async () => {
+      wrapper = mount(
+        <ComponentWrapper
+          {...{
+            ...defaultProps,
+            valueToDisplay,
+            nameFormatter,
+            descriptionFormatter,
+          }}
+        />
+      );
+    });
+
+    wrapper.update();
+    const customNameElement = wrapper.find('p[data-test-id="name"]');
+    const customDescriptionElement = wrapper.find(
+      'p[data-test-id="description"]'
+    );
+
+    expect(customNameElement.text()).toEqual(customNameFunctionCall);
+    expect(customDescriptionElement.text()).toEqual(
+      customDescriptrionFunctionCall
+    );
+  });
   it('should display dropdown menu', async () => {
     const options = {
       edit: 'Edit item',
