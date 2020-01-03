@@ -39,10 +39,10 @@ const ComponentWrapper: React.FC<TimeseriesPreviewProps> = props => (
 
 beforeEach(() => {
   wrapper = new ReactWrapper(<div />);
-  sdk.timeseries.retrieve.mockResolvedValue([singleTimeseries]);
-  sdk.datapoints.retrieveLatest.mockResolvedValue([
-    randomLatestDatapoint(41852231325889),
-  ]);
+  sdk.timeseries.retrieve.mockResolvedValue(singleTimeseries);
+  sdk.datapoints.retrieveLatest.mockResolvedValue(
+    randomLatestDatapoint(41852231325889)
+  );
 });
 
 afterEach(() => {
@@ -51,7 +51,7 @@ afterEach(() => {
   wrapper.unmount();
 });
 
-describe('TimeseriesChart', () => {
+describe('TimeseriesPreview', () => {
   it('renders correctly when ids are specified', async () => {
     await act(async () => {
       wrapper = mount(<ComponentWrapper {...defaultProps} />);
@@ -114,9 +114,9 @@ describe('TimeseriesChart', () => {
     const customDescriptrionFunctionCall =
       'Test description from function call';
     const nameFormatter = (name?: string) =>
-      name ? '' : customNameFunctionCall;
+      !name ? '' : customNameFunctionCall;
     const descriptionFormatter = (description?: string) =>
-      description ? '' : customDescriptrionFunctionCall;
+      !description ? '' : customDescriptrionFunctionCall;
 
     await act(async () => {
       wrapper = mount(
