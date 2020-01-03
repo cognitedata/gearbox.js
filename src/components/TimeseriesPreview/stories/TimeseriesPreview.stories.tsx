@@ -30,6 +30,9 @@ const retrieveTimeseries = async (
   });
 };
 
+const nameFormatter = (name?: string) => `Name: ${name}`;
+const descriptionFormatter = (descr?: string) => `Descr: ${descr}`;
+
 const retrieveLatestDatapoint = async (
   id: InternalId
 ): Promise<DatapointsGetDatapoint[]> => {
@@ -121,6 +124,8 @@ storiesOf('TimeseriesPreview/Examples', module)
         timeseriesId={41852231325889}
         valueToDisplay={valueToDisplay}
         formatDisplayValue={formatValue}
+        nameFormatter={nameFormatter}
+        descriptionFormatter={descriptionFormatter}
       />
     ),
     {
