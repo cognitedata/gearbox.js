@@ -110,14 +110,12 @@ describe('TimeseriesChart', () => {
     const timestamp = new Date();
     const value = 32;
     const valueToDisplay = { value, timestamp };
-    const customName = 'customName';
-    const customDescriptrion = 'customdescription';
     const customNameFunctionCall = 'Test name from function call';
     const customDescriptrionFunctionCall =
       'Test description from function call';
-    const customNameFunction = (name: string) =>
+    const nameFormatter = (name?: string) =>
       name ? '' : customNameFunctionCall;
-    const customDescriptrionFunction = (description: string) =>
+    const descriptionFormatter = (description?: string) =>
       description ? '' : customDescriptrionFunctionCall;
 
     await act(async () => {
@@ -126,9 +124,8 @@ describe('TimeseriesChart', () => {
           {...{
             ...defaultProps,
             valueToDisplay,
-            // tslint:disable-next-line:object-literal-shorthand
-            customName: customName,
-            customDescription: customDescriptrion,
+            nameFormatter,
+            descriptionFormatter,
           }}
         />
       );
@@ -139,17 +136,6 @@ describe('TimeseriesChart', () => {
     const customDescriptionElement = wrapper.find(
       'p[data-test-id="description"]'
     );
-
-    expect(customNameElement.text()).toEqual(customName);
-    expect(customDescriptionElement.text()).toEqual(customDescriptrion);
-
-    const previousProps = wrapper.props();
-    const updatedProps = {
-      ...previousProps,
-      customName: customNameFunction,
-      customDescription: customDescriptrionFunction,
-    };
-    wrapper.setProps(updatedProps);
 
     expect(customNameElement.text()).toEqual(customNameFunctionCall);
     expect(customDescriptionElement.text()).toEqual(

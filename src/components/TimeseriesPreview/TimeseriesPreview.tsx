@@ -25,8 +25,8 @@ export interface TimeseriesPreviewProps {
   timeseriesId: number;
   color?: string;
   dateFormat?: string;
-  customName?: ((name?: string) => string) | string;
-  customDescription?: ((description?: string) => string) | string;
+  nameFormatter?: (name?: string) => string;
+  descriptionFormatter?: (description?: string) => string;
   updateInterval?: number;
   valueToDisplay?: GetDoubleDatapoint | GetStringDatapoint;
   dropdown?: TimeseriesPreviewMenuConfig;
@@ -49,16 +49,6 @@ export interface TimeseriesPreviewStyles {
   date?: React.CSSProperties;
   dropdown?: DropdownMenuStyles;
 }
-
-const displayCustomString = (
-  defaultString: string | undefined,
-  customString: ((value?: string) => string) | string | undefined
-) =>
-  customString
-    ? typeof customString === 'string'
-      ? customString
-      : customString(defaultString)
-    : defaultString;
 
 export interface TimeseriesPreviewMenuConfig {
   options: PureObject;
@@ -107,8 +97,8 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
   onToggleVisibility,
   color = defaultProps.color,
   valueToDisplay,
-  customName,
-  customDescription,
+  nameFormatter,
+  descriptionFormatter,
   retrieveTimeseries,
   retrieveLatestDatapoint,
   updateInterval = defaultProps.updateInterval,
@@ -266,10 +256,14 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
             </LeftSide>
             <RightSide style={rightSideStyle}>
               <TagName style={tagNameStyle} data-test-id={'name'}>
-                {displayCustomString(timeseries.name, customName)}
+                {nameFormatter
+                  ? nameFormatter(timeseries.name)
+                  : timeseries.name}
               </TagName>
               <p style={descriptionStyle} data-test-id={'description'}>
-                {displayCustomString(timeseries.description, customDescription)}
+                {descriptionFormatter
+                  ? descriptionFormatter(timeseries.description)
+                  : timeseries.description}
               </p>
               <ValueContainer data-test-id={'value'}>
                 <Value style={valueStyle}>
