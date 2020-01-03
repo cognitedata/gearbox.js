@@ -19,12 +19,16 @@ function ExampleComponent(props) {
   const formatValue = value => {
     return `${Math.floor(Number(value))} psi`;
   };
+  const nameFormatter = (name?: string) => `Name: ${name}`;
+  const descriptionFormatter = (descr?: string) => `Descr: ${descr}`;
 
   return (
     <TimeseriesPreview
       timeseriesId={41852231325889}
       valueToDisplay={valueToDisplay}
       formatDisplayValue={formatValue}
+      nameFormatter={nameFormatter}
+      descriptionFormatter={descriptionFormatter}
     />
   );
 
