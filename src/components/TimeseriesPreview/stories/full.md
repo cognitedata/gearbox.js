@@ -40,8 +40,8 @@ function ExampleComponent(props) {
 | `dateFormat`              | Defines [date format](https://momentjs.com/docs/#/displaying/format/) to be applied on datapoint timestamp | `string`                                                     | `DD MMM YYYY - HH:mm:ss` |
 | `updateInterval`          | Refresh latest datapoint interval in ms                                                                    | `number`                                                     | `5000`                   |
 | `valueToDisplay`          | Datapoint to be rendered instead of latest datapoint. Pause fetching latest datapoint if provided            | `GetDoubleDatapoint \| GetStringDatapoint`
-| `customName`              | Define a custom name           | `((name?: string) => string) \| string`
-| `customDescription`       | Define a custom description           | `((description?: string) => string) \| string`                   |                          |
+| `nameFormatter`              | Function, that formats timeseries name value to be displayed          | `(name?: string) => string`
+| `descriptionFormatter`       | Function that formats timeseries description value to be displayed          | `(description?: string) => string`                   |                          |
 | `dropdown`                | Configuration, that describes dropdown menu to be rendered                                                 | `TimeseriesPreviewMenuConfig`                                |                          |
 | `retrieveTimeseries`      | Function that can be used to replace embedded timeseries fetching logic                                 | `FetchTimeserieCall`                                         |                          |
 | `retrieveLatestDatapoint` | Function that can be used to replace embedded latest datapoint fetching                                 | `FetchLatestDatapointCall`                                   |                          |
