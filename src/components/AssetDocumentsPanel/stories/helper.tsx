@@ -2,7 +2,7 @@ import { FilesMetadata } from '@cognite/sdk';
 import React from 'react';
 import { AssetDocumentsPanelStyles } from '../../../interfaces';
 import { DOCUMENTS, sleep } from '../../../mocks';
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 class CogniteClient extends MockCogniteClient {
   files: any = {

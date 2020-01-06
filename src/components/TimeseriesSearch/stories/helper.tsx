@@ -6,7 +6,7 @@ import {
 import { pick } from 'lodash';
 import React from 'react';
 import { assetsList, sleep, timeseriesListV2 } from '../../../mocks';
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 
 class CogniteClient extends MockCogniteClient {

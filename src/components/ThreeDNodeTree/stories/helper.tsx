@@ -12,7 +12,7 @@ import {
   NODE_MAINLIST,
   NODE_SUBLIST,
 } from '../../../mocks';
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { ThreeDNodeTree } from '../ThreeDNodeTree';
 

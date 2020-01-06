@@ -8,36 +8,15 @@ import {
 } from '@cognite/sdk';
 import React from 'react';
 import { randomData, sleep, timeseriesListV2 } from '../../../mocks';
+import { TimeseriesMockClient } from '../../../mocks/datapoints';
 import { MockCogniteClient } from '../../../mocks/mockSdk';
-import { getGranularityInMS } from '../../../utils/utils';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DataLoader } from '../dataLoader';
-
-export const MockTimeseriesClientObject = {
-  retrieve: async (): Promise<GetTimeSeriesMetadataDTO[]> => {
-    await sleep(1000);
-    return [timeseriesListV2[0]];
-  },
-};
 
 type DatapointsArray = (
   | DatapointsGetAggregateDatapoint
   | DatapointsGetStringDatapoint
   | DatapointsGetDoubleDatapoint)[];
-
-export const MockDatapointsClientObject = {
-  retrieve: async (query: DatapointsMultiQuery): Promise<DatapointsArray> => {
-    console.log('client.datapoints.retrieve', query);
-    const { granularity, start, end } = query.items[0];
-    const result = randomData(
-      (start && +start) || 0,
-      (end && +end) || 0,
-      100,
-      granularity ? getGranularityInMS(granularity) : undefined
-    );
-    return [result];
-  },
-};
 
 class FakeZoomableClient extends MockCogniteClient {
   timeseries: any = {
@@ -61,12 +40,6 @@ class FakeZoomableClient extends MockCogniteClient {
       return [result];
     },
   };
-}
-
-// tslint:disable-next-line:max-classes-per-file
-export class TimeseriesMockClient extends MockCogniteClient {
-  timeseries: any = MockTimeseriesClientObject;
-  datapoints: any = MockDatapointsClientObject;
 }
 
 const client = new TimeseriesMockClient({ appId: 'gearbox test' });

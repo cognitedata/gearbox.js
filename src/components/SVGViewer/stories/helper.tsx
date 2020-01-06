@@ -3,8 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { ZoomCenter } from '../../../interfaces';
 import { sleep } from '../../../mocks';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { SVG } from '../../../mocks/svg-viewer';
-import { MockCogniteClient } from '../../../utils/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 
 const API_REQUEST = 'https://example.com';
@@ -115,5 +115,5 @@ export const handleClick = (node: HTMLElement): void => {
   }
 };
 
-export const isCurrentAsset = metadata =>
+export const isCurrentAsset = (metadata: any) =>
   (metadata.textContent || '').replace(/\s/g, '') === '21PT1019';

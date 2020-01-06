@@ -1,7 +1,7 @@
 import { Asset } from '@cognite/sdk';
 import React from 'react';
 import { fakeAsset } from '../../../mocks';
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 
 class CogniteClient extends MockCogniteClient {

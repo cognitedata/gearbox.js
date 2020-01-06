@@ -1,7 +1,7 @@
 import { CogniteEvent, IdEither } from '@cognite/sdk';
 import React from 'react';
 import { fakeEvents, sleep } from '../../../mocks';
-import { MockCogniteClient } from '../../../utils/mockSdk';
+import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { EventPreviewStyles } from '../EventPreview';
 

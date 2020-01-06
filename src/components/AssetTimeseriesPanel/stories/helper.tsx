@@ -3,12 +3,12 @@ import { CogniteAsyncIterator } from '@cognite/sdk/dist/src/autoPagination';
 import React from 'react';
 import { sleep } from '../../../mocks';
 import { timeseriesListV2 } from '../../../mocks/';
-import { ClientSDKProvider } from '../../ClientSDKProvider';
 import {
   MockDatapointsClientObject,
   MockTimeseriesClientObject,
   TimeseriesMockClient,
-} from '../../TimeseriesChart/stories/TimeseriesChart.stories';
+} from '../../../mocks/datapoints';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 
 class CogniteClient extends TimeseriesMockClient {
   timeseries: any = {

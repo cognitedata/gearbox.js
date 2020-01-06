@@ -6,12 +6,12 @@ import {
   timeseriesListV2,
 } from '../../../mocks';
 import { sleep } from '../../../mocks';
-import { ClientSDKProvider } from '../../ClientSDKProvider';
 import {
   MockDatapointsClientObject,
   MockTimeseriesClientObject,
   TimeseriesMockClient,
-} from '../../TimeseriesChart/stories/TimeseriesChart.stories';
+} from '../../../mocks/datapoints';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 
 class CogniteClient extends TimeseriesMockClient {
   timeseries: any = {

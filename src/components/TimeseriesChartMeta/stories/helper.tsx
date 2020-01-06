@@ -1,11 +1,11 @@
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import React from 'react';
 import { sleep } from '../../../mocks';
-import { ClientSDKProvider } from '../../ClientSDKProvider';
 import {
   MockDatapointsClientObject,
   TimeseriesMockClient,
-} from '../../TimeseriesChart/stories/TimeseriesChart.stories';
+} from '../../../mocks/datapoints';
+import { ClientSDKProvider } from '../../ClientSDKProvider';
 
 class CogniteClient extends TimeseriesMockClient {
   timeseries: any = {

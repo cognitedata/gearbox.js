@@ -129,7 +129,7 @@ class AssetMeta extends Component<AssetMetaProps, AssetMetaState>
   componentDidMount() {
     // @ts-ignore
     if (!this.includesPanel('details') && this.props.assetId) {
-      this.client = this.context(Component.displayName || '')!;
+      this.client = this.context(ComponentWithTheme.displayName || '')!;
       if (!this.client) {
         console.error(ERROR_NO_SDK_CLIENT);
         return;
