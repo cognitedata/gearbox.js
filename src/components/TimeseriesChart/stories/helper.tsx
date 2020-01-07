@@ -7,7 +7,12 @@ import {
   GetTimeSeriesMetadataDTO,
 } from '@cognite/sdk';
 import React from 'react';
-import { randomData, sleep, timeseriesListV2 } from '../../../mocks';
+import {
+  randomData,
+  RandomDataStateFul,
+  sleep,
+  timeseriesListV2,
+} from '../../../mocks';
 import { TimeseriesMockClient } from '../../../mocks/datapoints';
 import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
@@ -17,6 +22,8 @@ type DatapointsArray = (
   | DatapointsGetAggregateDatapoint
   | DatapointsGetStringDatapoint
   | DatapointsGetDoubleDatapoint)[];
+
+const randomDataStateFul = new RandomDataStateFul();
 
 class FakeZoomableClient extends MockCogniteClient {
   timeseries: any = {
@@ -32,7 +39,7 @@ class FakeZoomableClient extends MockCogniteClient {
       console.log('client.datapoints.retrieve', query);
       const { granularity = '10s', start, end } = query.items[0];
       const n = granularity === 's' ? 2 : granularity.includes('s') ? 10 : 250;
-      const result = randomData(
+      const result = randomDataStateFul.getrandomData(
         (start && +start) || 0,
         (end && +end) || 100,
         n

@@ -3,23 +3,71 @@ import {
   DatapointsGetDoubleDatapoint,
 } from '@cognite/sdk';
 
+const dataPointGenerateFnArray = [
+  (i: number) => () =>
+    Math.sin(i / 20) * 50 +
+    Math.cos(Math.PI - i / 40) * 50 +
+    Math.random() * 40,
+  (i: number) => () =>
+    Math.cos(i / 10) * 50 +
+    Math.sin(Math.PI - i / 20) * 60 +
+    Math.random() * 60,
+  (i: number) => () =>
+    Math.sin(i / 50) * 50 +
+    Math.cos(Math.PI - i / 20) * 100 +
+    Math.random() * 80,
+];
+export class RandomDataStateFul {
+  timeSeriesNumber: number;
+
+  constructor() {
+    this.timeSeriesNumber = 0;
+  }
+
+  incrementTimeSeriesNumber = () => {
+    this.timeSeriesNumber =
+      this.timeSeriesNumber === dataPointGenerateFnArray.length - 1
+        ? 0
+        : this.timeSeriesNumber + 1;
+  };
+
+  getrandomData = (
+    start: number,
+    end: number,
+    n: number,
+    granularity?: number
+  ) => {
+    const res = randomData(
+      start,
+      end,
+      n,
+      granularity,
+      dataPointGenerateFnArray[this.timeSeriesNumber]
+    );
+    this.incrementTimeSeriesNumber();
+    return res;
+  };
+}
+
 export function randomData(
   start: number,
   end: number,
   n: number,
-  granularity?: number
+  granularity?: number,
+  generateFunction?: (i: number) => () => number
 ): DatapointsGetAggregateDatapoint {
   const data = [];
-
   const dt = granularity ? granularity : (end - start) / n;
 
   for (let i = start; i <= end; i += dt) {
     const values = [0, 0, 0]
       .map(
-        () =>
-          Math.sin(i / 20) * 50 +
-          Math.cos(Math.PI - i / 40) * 50 +
-          Math.random() * 40
+        generateFunction
+          ? generateFunction(i)
+          : () =>
+              Math.sin(i / 20) * 50 +
+              Math.cos(Math.PI - i / 40) * 50 +
+              Math.random() * 40
       )
       .sort((a: number, b: number) => a - b);
     data.push({
@@ -30,7 +78,6 @@ export function randomData(
       count: 7000,
     });
   }
-
   return { datapoints: data, id: 1337 };
 }
 

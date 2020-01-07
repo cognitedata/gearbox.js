@@ -8,7 +8,7 @@ import {
 import { getGranularityInMS } from '../utils/utils';
 import { sleep } from './common';
 import { MockCogniteClient } from './mockSdk';
-import { randomData } from './timeseriesDataPointsList';
+import { RandomDataStateFul } from './timeseriesDataPointsList';
 import { timeseriesListV2 } from './timeseriesListV2';
 
 export type DatapointsArray = (
@@ -23,11 +23,13 @@ export const MockTimeseriesClientObject = {
   },
 };
 
+const randomDataStateFul = new RandomDataStateFul();
+
 export const MockDatapointsClientObject = {
   retrieve: async (query: DatapointsMultiQuery): Promise<DatapointsArray> => {
     console.log('client.datapoints.retrieve', query);
     const { granularity, start, end } = query.items[0];
-    const result = randomData(
+    const result = randomDataStateFul.getrandomData(
       (start && +start) || 0,
       (end && +end) || 0,
       100,
