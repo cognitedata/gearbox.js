@@ -1,0 +1,15 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Docs|Internals" />
+
+# Gearbox Internals
+
+> Work in progress
+
+## API Access
+
+### Shared CogniteClient instance
+
+Most components in Gearbox should be wrapped inside the `ClientSDKProvider` component so that they can use the `@cognite/sdk/CogniteClient` instance- which they utilize for accessing the CDF API.
+
+### Cache
