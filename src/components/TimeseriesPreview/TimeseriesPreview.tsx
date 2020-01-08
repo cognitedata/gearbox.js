@@ -107,12 +107,6 @@ interface GenarateDropdownMenuProps extends TimeseriesPreviewMenuConfig {
   styles?: DropdownMenuStyles;
 }
 
-const defaultProps = {
-  color: '#6c65ee',
-  dateFormat: 'DD MMM YYYY - HH:mm:ss',
-  updateInterval: 5000,
-};
-
 const defaultStrings = {
   noData: 'No Data',
 };
@@ -137,14 +131,14 @@ const TimeseriesPreview: FC<TimeseriesPreviewProps> = ({
   timeseriesId,
   dropdown,
   onToggleVisibility,
-  color = defaultProps.color,
+  color,
   valueToDisplay,
   nameFormatter,
   descriptionFormatter,
   retrieveTimeseries,
   retrieveLatestDatapoint,
-  updateInterval = defaultProps.updateInterval,
-  dateFormat = defaultProps.dateFormat,
+  updateInterval,
+  dateFormat,
   formatDisplayValue,
   styles = {},
   strings = {},
@@ -321,6 +315,12 @@ const TimeseriesPreview: FC<TimeseriesPreviewProps> = ({
       </Card>
     </Wrapper>
   );
+};
+
+TimeseriesPreview.defaultProps = {
+  color: '#6c65ee',
+  updateInterval: 5000,
+  dateFormat: 'DD MMM YYYY - HH:mm:ss',
 };
 
 const Component = withDefaultTheme(TimeseriesPreview);
