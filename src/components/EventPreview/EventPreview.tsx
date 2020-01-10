@@ -7,46 +7,14 @@ import {
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
-import { PureObject } from '../../interfaces';
-import {
-  EventPreviewStyles as Styles,
-  EventPreviewView,
-} from './components/EventPreviewView';
-
-export type EventPreviewStyles = Styles;
+import { EventPreviewView } from './components/EventPreviewView';
+import { EventPreviewProps } from './interfaces';
 
 const LoadingSpinner: React.FC = () => (
   <SpinContainer>
     <Spin />
   </SpinContainer>
 );
-
-export interface EventPreviewProps {
-  /**
-   * Event Id
-   */
-  eventId: number;
-  /**
-   * Function triggered when user clicks on the 'Explore event details' button. If the function is not provided the button will not be rendered.
-   */
-  onShowDetails?: (e: CogniteEvent) => void;
-  /**
-   * Object map with strings to customize/localize text in the component
-   */
-  strings?: PureObject;
-  /**
-   * List of event properties to be hidden
-   */
-  hideProperties?: (keyof CogniteEvent)[];
-  /**
-   * Defines whether to hide the loading spinner
-   */
-  hideLoadingSpinner?: boolean;
-  /**
-   * Object that defines inline CSS styles for inner elements of the component.
-   */
-  styles?: EventPreviewStyles;
-}
 
 interface EventPreviewState {
   event: CogniteEvent | null;

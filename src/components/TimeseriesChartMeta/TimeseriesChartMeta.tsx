@@ -1,12 +1,6 @@
-import { withTimeseries } from '../../hoc/withTimeseries';
-import {
-  TimeseriesChartMetaPeriod as Period,
-  TimeseriesChartMetaProps as Props,
-  TimeseriesChartMetaPure,
-} from './TimeseriesChartMetaPure';
-
-export type TimeseriesChartMetaProps = Props;
-export type TimeseriesChartMetaPeriod = Period;
+import { withTimeseries } from '../../hoc';
+import { TimeseriesChartMetaProps } from './interfaces';
+import { TimeseriesChartMetaPure } from './TimeseriesChartMetaPure';
 
 export const TimeseriesChartMeta = withTimeseries<TimeseriesChartMetaProps>(
   TimeseriesChartMetaPure

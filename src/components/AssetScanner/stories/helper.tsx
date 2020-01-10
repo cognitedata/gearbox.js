@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Callback, ErrorResponse } from '../../../interfaces';
 import { assetsList, sleep } from '../../../mocks';
-import { MockCogniteClient } from '../../../mocks/mockSdk';
+import { MockCogniteClient } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { ASNotifyTypes } from '../AssetScanner';
+import { ASNotifyTypes } from '../interfaces';
 
 class CogniteClient extends MockCogniteClient {
   assets: any = {

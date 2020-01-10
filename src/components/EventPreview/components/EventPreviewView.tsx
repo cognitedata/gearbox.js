@@ -7,6 +7,7 @@ import { AnyIfEmpty, PureObject } from '../../../interfaces';
 import { formatDatetime } from '../../../utils/formatters';
 import { applyThemeFontFamily } from '../../../utils/theme';
 import { ComplexString } from '../../common/ComplexString/ComplexString';
+import { EventPreviewStyles } from '../interfaces';
 
 export const defaultStrings: PureObject = {
   noDescription: 'No description',
@@ -18,16 +19,7 @@ export const defaultStrings: PureObject = {
   metadataSummary: 'Contains {{count}} additional pieces of data',
 };
 
-export interface EventPreviewStyles {
-  wrapper?: React.CSSProperties;
-  eventType?: React.CSSProperties;
-  description?: React.CSSProperties;
-  button?: React.CSSProperties;
-  times?: React.CSSProperties;
-  metadata?: React.CSSProperties;
-}
-
-export interface EventPreviewProps {
+interface EventPreviewViewProps {
   event: CogniteEvent;
   onShowDetails?: (event: CogniteEvent) => void;
   strings?: PureObject;
@@ -42,7 +34,7 @@ const EventPreviewView = ({
   strings = {},
   hideProperties = [],
   styles = {},
-}: EventPreviewProps) => {
+}: EventPreviewViewProps) => {
   const lang = { ...defaultStrings, ...strings };
   const { startTime, endTime, description, metadata, type, subtype } = event;
   const {

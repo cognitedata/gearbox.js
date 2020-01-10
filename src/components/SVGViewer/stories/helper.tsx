@@ -1,11 +1,11 @@
 import { FileLink, IdEither } from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
-import { ZoomCenter } from '../../../interfaces';
 import { sleep } from '../../../mocks';
-import { MockCogniteClient } from '../../../mocks/mockSdk';
+import { MockCogniteClient } from '../../../mocks';
 import { SVG } from '../../../mocks/svg-viewer';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
+import { ZoomCenter } from '../interfaces';
 
 const API_REQUEST = 'https://example.com';
 

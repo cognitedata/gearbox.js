@@ -1,14 +1,12 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import React from 'react';
+import React, { FC } from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { SDK_LIST_LIMIT } from '../../constants/sdk';
 import { timeseriesListV2 } from '../../mocks';
-import { MockCogniteClient } from '../../mocks/mockSdk';
-import {
-  withAssetTimeseries,
-  WithAssetTimeseriesDataProps,
-} from '../withAssetTimeseries';
+import { MockCogniteClient } from '../../mocks';
+import { WithAssetTimeseriesDataProps } from '../interfaces';
+import { withAssetTimeseries } from '../withAssetTimeseries';
 
 configure({ adapter: new Adapter() });
 
@@ -75,7 +73,7 @@ describe('withAssetTimeseries', () => {
   });
 
   it('Wrapped component should receive asset events  after loading', done => {
-    const TestComponent: React.SFC<WithAssetTimeseriesDataProps> = props => (
+    const TestComponent: FC<WithAssetTimeseriesDataProps> = props => (
       <div>
         <p className="ts-number">{props.assetTimeseries.length}</p>
         <p className="first-ts-description">

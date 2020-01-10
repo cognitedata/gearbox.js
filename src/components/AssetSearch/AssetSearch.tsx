@@ -9,53 +9,14 @@ import {
 } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 
-import { ApiQuery, Callback, PureObject } from '../../interfaces';
-import { Search, SearchStyles } from '../common/Search/Search';
-export type AssetSearchStyles = SearchStyles;
-
-type LiveSearchSelect = (asset: Asset) => void;
-type SearchResultCallback = (assets: Asset[]) => void;
+import { ApiQuery, PureObject } from '../../interfaces';
+import { Search } from '../common/Search/Search';
+import { AssetSearchProps } from './interfaces';
 
 export const defaultStrings: PureObject = {
   searchPlaceholder: 'Search for an asset',
   emptyLiveSearch: 'Nothing found',
 };
-
-export interface AssetSearchProps {
-  /**
-   * Triggers after selecting one of items from live search results list.
-   * Required when showLiveSearchResults == true
-   */
-  onLiveSearchSelect?: LiveSearchSelect;
-  /**
-   * flag to show live search results in dropdown list
-   */
-  showLiveSearchResults?: boolean;
-  /**
-   * Triggers when search error occurs
-   */
-  onError?: Callback;
-  /**
-   * Object of strings to be placed in component
-   */
-  strings?: PureObject;
-  /**
-   * Enable root asset selection
-   */
-  rootAssetSelect: boolean;
-  /**
-   * Enable root advanced search
-   */
-  advancedSearch: boolean;
-  /**
-   * Custom styles
-   */
-  styles?: AssetSearchStyles;
-  /**
-   * Triggers when search request finishes
-   */
-  onSearchResult?: SearchResultCallback;
-}
 
 interface AssetSearchState {
   items: Asset[];

@@ -4,9 +4,10 @@ import { InputProps } from 'antd/lib/input';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import { AnyIfEmpty, PureObject } from '../../interfaces';
+import { PureObject } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
 import { isEmptyString, sanitizeTenant } from '../../utils/sanitize';
+import { TenantSelectorProps } from './interfaces';
 
 const Panel = Collapse.Panel;
 
@@ -14,69 +15,6 @@ enum TenantValidity {
   CHECKING = 0,
   INVALID = 1,
   UNKNOWN = 2,
-}
-
-export interface TenantSelectorStyles {
-  button?: React.CSSProperties;
-  collapseWrapper?: React.CSSProperties;
-  input?: React.CSSProperties;
-  subTitle?: React.CSSProperties;
-  title?: React.CSSProperties;
-  wrapper?: React.CSSProperties;
-}
-
-export interface TenantSelectorProps {
-  /**
-   * A title text
-   */
-  title: string | React.ReactNode;
-  /**
-   * A function called when the button is clicked
-   */
-  onTenantSelected: (
-    tenant: string,
-    advancedOptions: PureObject | null
-  ) => void;
-  /**
-   * Text to show as header
-   */
-  header?: string | React.ReactNode;
-  /**
-   * Initial value of the input field
-   */
-  initialTenant?: string;
-  /**
-   * Text to show on the button
-   */
-  loginText?: string;
-  /**
-   * Placeholder text
-   */
-  placeholder?: string;
-  /**
-   * Message to show if validation fails
-   */
-  unknownMessage?: string;
-  /**
-   * function called when tenant is invalid
-   */
-  onInvalidTenant?: (tenant: string) => void;
-  /**
-   * Asyncronous function to validate the input
-   */
-  validateTenant?: (
-    tenant: string,
-    advancedOptions: PureObject | null
-  ) => Promise<boolean>;
-  /**
-   * Object to show as advanced options
-   */
-  advancedOptions?: PureObject;
-  /**
-   * Object that defines inline CSS styles for inner elements of the component.
-   */
-  styles?: TenantSelectorStyles;
-  theme?: AnyIfEmpty<{}>;
 }
 
 interface TenantSelectorState {

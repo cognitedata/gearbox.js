@@ -1,12 +1,12 @@
 import React from 'react';
-import { OnSelectAssetTreeParams } from '../../../interfaces';
-import { sleep } from '../../../mocks';
 import {
   ASSET_LIST_CHILD,
   ASSET_ZERO_DEPTH_ARRAY,
-} from '../../../mocks/assetsListV2';
-import { MockCogniteClient } from '../../../mocks/mockSdk';
+  MockCogniteClient,
+  sleep,
+} from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
+import { OnSelectAssetTreeParams } from '../interfaces';
 
 class CogniteClient extends MockCogniteClient {
   assets: any = {

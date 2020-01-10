@@ -5,13 +5,15 @@ import React, { Component, KeyboardEvent, RefObject } from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
+import * as CustomIcon from './Icons';
 import {
-  Conditions,
   CustomClassNames,
   PinchZoomInterface,
+  SvgViewerDocumentIdProps,
+  SvgViewerFileProps,
+  SvgViewerProps,
   ZoomCenter,
-} from '../../interfaces';
-import * as CustomIcon from './Icons';
+} from './interfaces';
 import SVGViewerSearch from './SVGViewerSearch';
 import { getDocumentDownloadLink } from './utils';
 
@@ -19,50 +21,6 @@ const zoomLevel = 0.7;
 const wheelZoomLevel = 0.15;
 const currentAssetClassName = 'current-asset';
 const minDesktopWidth = 992;
-
-interface SvgViewerBasicProps {
-  // List of classes and conditions on when they should be applied for equipment
-  metadataClassesConditions?: Conditions[];
-  // Document title
-  title?: string;
-  // Document description
-  description?: string;
-  // Display text with stroke-width: 0
-  showOverlappedText?: boolean;
-  // Override default colors with custom classNames
-  customClassNames?: CustomClassNames;
-  // Condition to locate and highlight current asset during first render
-  isCurrentAsset?: (metadataNode: Element) => boolean;
-  // Viewer close callback
-  handleCancel?: () => void;
-  // Zoom callback
-  handleAnimateZoom?: ({
-    zoomProgress,
-    source,
-    zoomCenter,
-  }: {
-    zoomProgress: number;
-    source: string;
-    zoomCenter?: ZoomCenter;
-  }) => void;
-  // Item click callback
-  handleItemClick?: (metadataNode: HTMLElement) => void;
-  // Error document load callback
-  handleDocumentLoadError?: (error: Error) => void;
-  // Subscribe to SVGVieweSearch changes
-  handleSearchChange?: () => void;
-}
-
-interface SvgViewerDocumentIdProps extends SvgViewerBasicProps {
-  // CDF fileId to fetch svg-document
-  documentId: number;
-}
-interface SvgViewerFileProps extends SvgViewerBasicProps {
-  // svg-document file content in string format
-  file: string;
-}
-
-export type SvgViewerProps = SvgViewerDocumentIdProps | SvgViewerFileProps;
 
 interface SvgViewerState {
   isSearchVisible: boolean;

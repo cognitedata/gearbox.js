@@ -4,8 +4,8 @@ import {
   DocumentType,
   JsonDocTypes,
   Priority,
-  PureObject,
-} from '../interfaces';
+} from '../components/AssetDocumentsPanel';
+import { PureObject } from '../interfaces';
 import { docTypes } from './resources/docTypes';
 import { sortStringsAlphabetically } from './utils';
 

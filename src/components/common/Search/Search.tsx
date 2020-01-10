@@ -11,7 +11,6 @@ import {
   Callback,
   EmptyCallback,
   IdCallback,
-  OnClick,
   PureObject,
 } from '../../../interfaces';
 import { defaultTheme } from '../../../theme/defaultTheme';
@@ -19,6 +18,7 @@ import {
   defaultStrings as rootAssetSelectStrings,
   RootAssetSelect,
 } from '../RootAssetSelect/RootAssetSelect';
+import { SearchStyles } from './interfaces';
 import { SearchForm } from './SearchForm/SearchForm';
 
 export const defaultStrings: PureObject = {
@@ -31,25 +31,7 @@ export const defaultStrings: PureObject = {
   rootAssetSelectAll: rootAssetSelectStrings.all,
 };
 
-export interface SearchStyles {
-  rootAssetSelect?: React.CSSProperties;
-  advancedSearchButton?: React.CSSProperties;
-  searchResultList?: {
-    container?: React.CSSProperties;
-    listItem?: React.CSSProperties;
-  };
-  advancedSearch?: {
-    modalBody?: React.CSSProperties;
-    searchButton?: React.CSSProperties;
-    clearButton?: React.CSSProperties;
-    searchForm?: {
-      container?: React.CSSProperties;
-      addMoreMetadataButton?: React.CSSProperties;
-    };
-  };
-}
-
-export interface SearchProps {
+interface SearchProps {
   fetchingLimit: number;
   debounceTime: number;
   loading: boolean;
@@ -112,7 +94,7 @@ export class SearchComponent extends React.Component<SearchProps, SearchState> {
     return null;
   }
 
-  onSearchBlurBounded: OnClick;
+  onSearchBlurBounded: (event: SyntheticEvent) => void;
 
   onSearch = debounce(this.debouncedSearch.bind(this), this.props.debounceTime);
 
@@ -412,7 +394,7 @@ export class SearchComponent extends React.Component<SearchProps, SearchState> {
   private toggleInputIcon(
     iconType: string,
     searchQuery: string,
-    onClick?: OnClick
+    onClick?: (event: SyntheticEvent) => void
   ) {
     const { loading } = this.props;
 

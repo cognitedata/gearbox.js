@@ -5,13 +5,11 @@ import {
 } from '@cognite/sdk';
 import React, { useState } from 'react';
 import { randomData, timeseriesListV2 } from '../../../mocks';
-import { MockCogniteClient } from '../../../mocks/mockSdk';
+import { MockCogniteClient } from '../../../mocks';
 import { getGranularityInMS } from '../../../utils/utils';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import {
-  TimeseriesDataExport,
-  TimeseriesDataExportProps,
-} from '../TimeseriesDataExport';
+import { TimeseriesDataExportProps } from '../interfaces';
+import { TimeseriesDataExport } from '../TimeseriesDataExport';
 
 const MockTimeseriesClientObject = {
   retrieve: (): Promise<GetTimeSeriesMetadataDTO[]> => {

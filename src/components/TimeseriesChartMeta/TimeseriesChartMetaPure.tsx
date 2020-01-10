@@ -1,13 +1,17 @@
-import Radio, { RadioChangeEvent } from 'antd/lib/radio';
+import { Radio } from 'antd';
+import { RadioChangeEvent } from 'antd/lib/radio';
 import moment from 'moment';
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
-import { WithTimeseriesDataProps } from '../../hoc/withTimeseries';
 import { TimeseriesChart } from '../TimeseriesChart';
 import { TimeseriesMetaInfo } from './components/TimeseriesMetaInfo';
 import { TimeseriesValue } from './components/TimeseriesValue';
+import {
+  TimeseriesChartMetaPeriod,
+  TimeseriesChartMetaProps,
+} from './interfaces';
 
-const timeScales: { [key: string]: { unit: string; number: number } } = {
+export const timeScales: { [key: string]: { unit: string; number: number } } = {
   last10Years: {
     unit: 'years',
     number: 10,
@@ -37,50 +41,6 @@ const timeScales: { [key: string]: { unit: string; number: number } } = {
     number: 15,
   },
 };
-
-export type TimeseriesChartMetaPeriod = keyof typeof timeScales;
-
-export interface TimeseriesChartMetaProps extends WithTimeseriesDataProps {
-  /**
-   * Defines whether to get live updates in chart and data point
-   */
-  liveUpdate?: boolean;
-  /**
-   * Interval in milliseconds for live updates
-   */
-  updateIntervalMillis?: number;
-  /**
-   *  One of six predefined time periods: `'lastYear'`, `'lastMonth'`, `'lastWeek'`, `'lastDay'`, `'lastHour'`, `'last15Minutes'`
-   */
-  defaultTimePeriod?: TimeseriesChartMetaPeriod;
-  /**
-   * Custom time period for TimeseriesChart. This prop overrides defaultTimePeriod. Time values should be in timestamp format.
-   */
-  defaultBasePeriod?: {
-    startTime: number;
-    endTime: number;
-  };
-  /**
-   * Defines whether to show description of the timeseries
-   */
-  showDescription?: boolean;
-  /**
-   * Defines whether to show time periods radio buttons
-   */
-  showPeriods?: boolean;
-  /**
-   * Defines whether to show timeseries chart
-   */
-  showChart?: boolean;
-  /**
-   * Defines whether to show current data point (sensor value)
-   */
-  showDatapoint?: boolean;
-  /**
-   * Defines whether to show meta data of the timeseries
-   */
-  showMetadata?: boolean;
-}
 
 interface TimeseriesChartMetaState {
   timePeriod: TimeseriesChartMetaPeriod;

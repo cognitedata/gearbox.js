@@ -1,5 +1,5 @@
 import { Checkbox } from 'antd';
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
 import { AnyIfEmpty } from '../../../interfaces';
@@ -16,23 +16,15 @@ export interface DetailCheckboxProps {
   theme?: AnyIfEmpty<{}>;
 }
 
-const defaultProps = {
-  checkable: true,
-  onContainerClick: null,
-  disabled: false,
-  checked: false,
-  className: 'detail-checkbox',
-};
-
-const DetailCheckbox: React.SFC<DetailCheckboxProps> = ({
-  checked,
+const DetailCheckbox: FC<DetailCheckboxProps> = ({
+  checked = false,
   description,
-  disabled,
-  onContainerClick,
+  disabled = false,
+  onContainerClick = null,
   onContainerMouseOver,
   title,
-  className,
-  checkable,
+  className = 'detail-checkbox',
+  checkable = true,
 }) => (
   <Container
     className={className}
@@ -66,8 +58,6 @@ const DetailCheckbox: React.SFC<DetailCheckboxProps> = ({
     )}
   </Container>
 );
-
-DetailCheckbox.defaultProps = defaultProps;
 
 const Container = styled.div`
   background: white;

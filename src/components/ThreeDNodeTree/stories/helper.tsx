@@ -3,17 +3,17 @@ import { Menu } from 'antd';
 import MenuItem from 'antd/lib/menu/MenuItem';
 import React from 'react';
 import {
-  OnRightClickNodeTreeParams,
-  OnSelectNodeTreeParams,
-} from '../../../interfaces';
-import {
   NODE_LEAF,
   NODE_LIST,
   NODE_MAINLIST,
   NODE_SUBLIST,
 } from '../../../mocks';
-import { MockCogniteClient } from '../../../mocks/mockSdk';
+import { MockCogniteClient } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
+import {
+  OnRightClickNodeTreeParams,
+  OnSelectNodeTreeParams,
+} from '../interfaces';
 import { ThreeDNodeTree } from '../ThreeDNodeTree';
 
 class CogniteClient extends MockCogniteClient {

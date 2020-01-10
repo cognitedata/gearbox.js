@@ -1,9 +1,7 @@
 import {
-  DatapointsGetDatapoint,
   GetDoubleDatapoint,
   GetStringDatapoint,
   GetTimeSeriesMetadataDTO,
-  InternalId,
 } from '@cognite/sdk';
 import { Card, Dropdown, Icon, Menu } from 'antd';
 import moment from 'moment';
@@ -11,54 +9,11 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import { PureObject } from '../../interfaces';
-
-export type FetchLatestDatapointCall = (
-  timeseriesId: InternalId
-) => Promise<DatapointsGetDatapoint[]>;
-
-export type FetchTimeserieCall = (
-  timeseriesId: InternalId
-) => Promise<GetTimeSeriesMetadataDTO[]>;
-
-export interface TimeseriesPreviewProps {
-  timeseriesId: number;
-  color?: string;
-  dateFormat?: string;
-  nameFormatter?: (name?: string) => string;
-  descriptionFormatter?: (description?: string) => string;
-  updateInterval?: number;
-  valueToDisplay?: GetDoubleDatapoint | GetStringDatapoint;
-  dropdown?: TimeseriesPreviewMenuConfig;
-  retrieveTimeseries?: FetchTimeserieCall;
-  retrieveLatestDatapoint?: FetchLatestDatapointCall;
-  formatDisplayValue?: (value?: string | number) => string | number;
-  onToggleVisibility?: (timeseries: GetTimeSeriesMetadataDTO) => void;
-  styles?: TimeseriesPreviewStyles;
-  strings?: PureObject;
-}
-
-export interface TimeseriesPreviewStyles {
-  wrapper?: React.CSSProperties;
-  card?: React.CSSProperties;
-  leftSide?: React.CSSProperties;
-  rightSide?: React.CSSProperties;
-  tagName?: React.CSSProperties;
-  description?: React.CSSProperties;
-  value?: React.CSSProperties;
-  date?: React.CSSProperties;
-  dropdown?: DropdownMenuStyles;
-}
-
-export interface TimeseriesPreviewMenuConfig {
-  options: PureObject;
-  onClick: (key: string, timeseries: GetTimeSeriesMetadataDTO) => void;
-}
-
-export interface DropdownMenuStyles {
-  menu?: React.CSSProperties;
-  item?: React.CSSProperties;
-}
+import {
+  DropdownMenuStyles,
+  TimeseriesPreviewMenuConfig,
+  TimeseriesPreviewProps,
+} from './interfaces';
 
 interface GenarateDropdownMenuProps extends TimeseriesPreviewMenuConfig {
   timeseries: GetTimeSeriesMetadataDTO;

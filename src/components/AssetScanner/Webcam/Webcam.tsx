@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Callback, PureObject, SetVideoRefCallback } from '../../../interfaces';
+import { Callback, PureObject } from '../../../interfaces';
+import { SetVideoRefCallback } from '../interfaces';
 
 function hasGetUserMedia() {
   return !!(

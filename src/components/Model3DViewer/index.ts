@@ -1,1 +1,2 @@
-export { Model3DViewer, Model3DViewerProps } from './Model3DViewer';
+export { Model3DViewer } from './Model3DViewer';
+export { Model3DViewerProps } from './interfaces';

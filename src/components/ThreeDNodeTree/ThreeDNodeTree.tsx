@@ -10,18 +10,18 @@ import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import {
-  NodeTreeProps,
-  OnSelectNodeTreeParams,
-  TreeNodeData,
-  TreeNodeType,
-} from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
 import {
   applyThemeFontFamily,
   applyThemeFontSize,
   applyThemeListHighlight,
 } from '../../utils/theme';
+import {
+  NodeTreeProps,
+  OnSelectNodeTreeParams,
+  TreeNodeData,
+  TreeNodeType,
+} from './interfaces';
 
 // TODO GENERAL
 const { TreeNode } = Tree;

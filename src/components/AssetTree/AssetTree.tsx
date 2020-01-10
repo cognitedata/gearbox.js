@@ -10,13 +10,13 @@ import {
 } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import { AssetTreeProps } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
 import {
   applyThemeFontFamily,
   applyThemeFontSize,
   applyThemeListHighlight,
 } from '../../utils/theme';
+import { AssetTreeProps } from './interfaces';
 
 const { TreeNode } = Tree;
 
