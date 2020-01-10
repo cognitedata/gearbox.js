@@ -1,8 +1,11 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { datapoints, timeseriesListV2 } from '../../../mocks';
-import { MockCogniteClient } from '../../../mocks/mockSdk';
+import {
+  datapoints,
+  MockCogniteClient,
+  timeseriesListV2,
+} from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesValue } from './TimeseriesValue';
 

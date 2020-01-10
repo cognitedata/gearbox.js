@@ -1,4 +1,4 @@
-import { CogniteClient, GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
@@ -9,21 +9,11 @@ import {
   ComponentWithUnmountState,
   connectPromiseToUnmountState,
 } from '../utils/promise';
-
-export interface WithTimeseriesDataProps {
-  timeseries: GetTimeSeriesMetadataDTO;
-}
-
-export interface WithTimeseriesProps {
-  timeseriesId: number;
-  customSpinner?: React.ReactNode;
-}
-
-export interface WithTimeseriesState {
-  isLoading: boolean;
-  timeseries: GetTimeSeriesMetadataDTO | null;
-  timeseriesId: number;
-}
+import {
+  WithTimeseriesDataProps,
+  WithTimeseriesProps,
+  WithTimeseriesState,
+} from './interfaces';
 
 export const withTimeseries = <P extends WithTimeseriesDataProps>(
   WrapperComponent: React.ComponentType<P>

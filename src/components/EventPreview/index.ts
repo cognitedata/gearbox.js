@@ -1,5 +1,2 @@
-export {
-  EventPreview,
-  EventPreviewProps,
-  EventPreviewStyles,
-} from './EventPreview';
+export { EventPreview } from './EventPreview';
+export * from './interfaces';

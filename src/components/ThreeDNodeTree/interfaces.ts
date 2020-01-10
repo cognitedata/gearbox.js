@@ -1,8 +1,22 @@
 import { RevealNode3D } from '@cognite/sdk';
 import { AntTreeNodeProps } from 'antd/lib/tree';
-import { AnyIfEmpty } from './CommonTypes';
+import { CSSProperties, MouseEvent } from 'react';
+import { AnyIfEmpty } from '../../interfaces';
 
-export type NodePanelType = 'details' | 'events' | 'documents' | 'timeseries';
+export interface TreeNodeData {
+  title: string;
+  key: number | string;
+  children?: TreeNodeData[];
+  isLeaf?: boolean;
+  [name: string]: any;
+}
+
+export interface TreeNodeType {
+  title: string;
+  description?: string;
+  children?: TreeNodeType[];
+  [name: string]: any;
+}
 
 export interface OnSelectNodeTreeParams {
   key: number | string;
@@ -12,12 +26,12 @@ export interface OnSelectNodeTreeParams {
 }
 
 export interface OnRightClickNodeTreeParams {
-  event: React.MouseEvent<HTMLElement>;
+  event: MouseEvent<HTMLElement>;
   node: AntTreeNodeProps;
 }
 
 export interface NodeTreeStyles {
-  list?: React.CSSProperties;
+  list?: CSSProperties;
 }
 
 export interface NodeTreeProps {

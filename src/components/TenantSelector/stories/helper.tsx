@@ -1,4 +1,4 @@
-import { PureObject } from '../../../interfaces/CommonTypes';
+import { PureObject } from '../../../interfaces';
 
 export const onTenantSelected = (
   tenant: string,

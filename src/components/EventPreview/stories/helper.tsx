@@ -1,9 +1,9 @@
 import { CogniteEvent, IdEither } from '@cognite/sdk';
 import React from 'react';
 import { fakeEvents, sleep } from '../../../mocks';
-import { MockCogniteClient } from '../../../mocks/mockSdk';
+import { MockCogniteClient } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { EventPreviewStyles } from '../EventPreview';
+import { EventPreviewStyles } from '../interfaces';
 
 class CogniteClient extends MockCogniteClient {
   events: any = {

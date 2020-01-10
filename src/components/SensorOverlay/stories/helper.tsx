@@ -1,9 +1,10 @@
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import React from 'react';
 import { sleep, timeseriesListV2 as fakeTimeseries } from '../../../mocks';
-import { MockCogniteClient } from '../../../mocks/mockSdk';
+import { MockCogniteClient } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { SensorDatapoint, SensorOverlay } from '../SensorOverlay';
+import { SensorDatapoint } from '../interfaces';
+import { SensorOverlay } from '../SensorOverlay';
 
 class CogniteClient extends MockCogniteClient {
   timeseries: any = {

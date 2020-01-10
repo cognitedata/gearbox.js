@@ -8,13 +8,6 @@ import {
 } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import {
-  AnyIfEmpty,
-  AssetDocumentsPanelStyles,
-  AssetEventsPanelStyles,
-  AssetPanelType,
-} from '../../interfaces';
-import { MetaDocProps } from '../../interfaces/DocumentTypes';
 import { defaultTheme } from '../../theme/defaultTheme';
 import {
   CanceledPromiseException,
@@ -23,68 +16,11 @@ import {
 } from '../../utils/promise';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
 import { AssetDocumentsPanel } from '../AssetDocumentsPanel';
-import { AssetEventsPanel, MetaEventsProps } from '../AssetEventsPanel';
-import {
-  AssetTimeseriesPanel,
-  AssetTimeseriesPanelStyles,
-  MetaTimeseriesProps,
-} from '../AssetTimeseriesPanel';
-import { MetaDescriptionListProps } from '../DescriptionList';
+import { AssetEventsPanel } from '../AssetEventsPanel';
+import { AssetTimeseriesPanel } from '../AssetTimeseriesPanel';
+import { AssetMetaProps, AssetPanelType } from './interfaces';
 
 const { TabPane } = Tabs;
-
-export interface AssetMetaStyles {
-  header?: React.CSSProperties;
-  emptyTab?: React.CSSProperties;
-  details?: React.CSSProperties;
-  timeseries?: AssetTimeseriesPanelStyles;
-  documents?: AssetDocumentsPanelStyles;
-  events?: AssetEventsPanelStyles;
-}
-
-export interface AssetMetaProps {
-  /**
-   * Asset Id
-   */
-  assetId: number;
-  /**
-   * List of panes to be hidden
-   */
-  hidePanels?: AssetPanelType[];
-  /**
-   * Defines pane that will be activated once the data has been loaded
-   */
-  tab?: string;
-  /**
-   * Function triggered when a user changes panes
-   */
-  onPaneChange?: (key: string) => void;
-  /**
-   * Object passed as props to inner component that presents details pane
-   */
-  detailsProps?: MetaDescriptionListProps;
-  /**
-   * Object passed as props to inner component that presents timeseries pane
-   */
-  timeseriesProps?: MetaTimeseriesProps;
-  /**
-   * Object passed as props to inner component that presents documents pane
-   */
-  docsProps?: MetaDocProps;
-  /**
-   * Object passed as props to inner component that presents events pane
-   */
-  eventProps?: MetaEventsProps;
-  /**
-   * A custom spinner to be shown in tabs while data is being loaded
-   */
-  customSpinner?: React.ReactNode;
-  /**
-   * Object that defines inline CSS styles for inner elements of the component.
-   */
-  styles?: AssetMetaStyles;
-  theme?: AnyIfEmpty<{}>;
-}
 
 interface AssetMetaState {
   assetId: number;

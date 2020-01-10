@@ -7,9 +7,13 @@ import {
   GetTimeSeriesMetadataDTO,
 } from '@cognite/sdk';
 import React from 'react';
-import { randomData, sleep, timeseriesListV2 } from '../../../mocks';
+import {
+  MockCogniteClient,
+  randomData,
+  sleep,
+  timeseriesListV2,
+} from '../../../mocks';
 import { TimeseriesMockClient } from '../../../mocks/datapoints';
-import { MockCogniteClient } from '../../../mocks/mockSdk';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DataLoader } from '../dataLoader';
 

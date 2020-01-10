@@ -1,10 +1,11 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import React from 'react';
+import React, { FC } from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { fakeAsset } from '../../mocks';
-import { MockCogniteClient } from '../../mocks/mockSdk';
-import { withAsset, WithAssetDataProps } from '../withAsset';
+import { MockCogniteClient } from '../../mocks';
+import { WithAssetDataProps } from '../interfaces';
+import { withAsset } from '../withAsset';
 
 configure({ adapter: new Adapter() });
 
@@ -52,7 +53,7 @@ describe('withAsset', () => {
   });
 
   it('Wrapped component should receive asset data after loading', done => {
-    const TestComponent: React.SFC<WithAssetDataProps> = props => (
+    const TestComponent: FC<WithAssetDataProps> = props => (
       <div>
         <p className="name">{props.asset.name}</p>
         <p className="description">{props.asset.description}</p>

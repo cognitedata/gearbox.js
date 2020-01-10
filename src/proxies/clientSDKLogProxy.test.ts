@@ -1,5 +1,5 @@
 import { version } from '../constants/replacedStrings';
-import { MockCogniteClient } from '../mocks/mockSdk';
+import { MockCogniteClient } from '../mocks';
 import { wrapInLogProxy } from './clientSDKLogProxy';
 
 class CogniteClient extends MockCogniteClient {

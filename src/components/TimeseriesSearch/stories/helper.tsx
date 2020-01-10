@@ -5,8 +5,12 @@ import {
 } from '@cognite/sdk';
 import { pick } from 'lodash';
 import React from 'react';
-import { assetsList, sleep, timeseriesListV2 } from '../../../mocks';
-import { MockCogniteClient } from '../../../mocks/mockSdk';
+import {
+  assetsList,
+  MockCogniteClient,
+  sleep,
+  timeseriesListV2,
+} from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 
 class CogniteClient extends MockCogniteClient {

@@ -1,28 +1,10 @@
 import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { WithAssetTimeseriesDataProps } from '../../../hoc/withAssetTimeseries';
-import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
-import { AnyIfEmpty } from '../../../interfaces';
+import { WithAssetTimeseriesDataProps, withDefaultTheme } from '../../../hoc';
 import { defaultTheme } from '../../../theme/defaultTheme';
-import {
-  TimeseriesChartMetaProps,
-  TimeseriesChartMetaPure,
-} from '../../TimeseriesChartMeta/TimeseriesChartMetaPure';
-
-export interface AssetTimeseriesPanelStyles {
-  wrapper?: React.CSSProperties;
-  timeseriesContainer?: React.CSSProperties;
-}
-
-export interface MetaTimeseriesProps
-  extends Omit<TimeseriesChartMetaProps, 'timeseries'> {
-  strings?: {
-    noTimeseriesSign?: string;
-  };
-  styles?: AssetTimeseriesPanelStyles;
-  theme?: AnyIfEmpty<{}>;
-}
+import { TimeseriesChartMetaPure } from '../../TimeseriesChartMeta/TimeseriesChartMetaPure';
+import { MetaTimeseriesProps } from '../interfaces';
 
 export interface TimeseriesPanelProps
   extends MetaTimeseriesProps,

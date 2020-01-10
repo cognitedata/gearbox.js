@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import { LoadingOverlay } from '../LoadingOverlay/LoadingOverlay';
 
@@ -7,7 +7,7 @@ interface LoadingBlockProps {
   backgroundColor?: string;
 }
 
-export const LoadingBlock: React.SFC<LoadingBlockProps> = ({
+export const LoadingBlock: FC<LoadingBlockProps> = ({
   height,
   backgroundColor,
 }) => (

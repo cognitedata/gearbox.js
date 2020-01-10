@@ -1,7 +1,7 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { Mock3DCogniteClient } from '../../mocks/threeD';
+import { Mock3DCogniteClient } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { mockCreateViewer, Model3DViewer } from './Model3DViewer';
 

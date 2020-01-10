@@ -1,5 +1,3 @@
-export {
-  TenantSelector,
-  TenantSelectorProps,
-  TenantSelectorStyles,
-} from './TenantSelector';
+export { TenantSelector } from './TenantSelector';
+
+export * from './interfaces';

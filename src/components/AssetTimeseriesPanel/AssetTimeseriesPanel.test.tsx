@@ -3,14 +3,12 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { timeseriesListV2 } from '../../mocks';
 
-import { MockCogniteClient } from '../../mocks/mockSdk';
+import { MockCogniteClient } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { LoadingBlock } from '../common/LoadingBlock/LoadingBlock';
-import {
-  AssetTimeseriesPanel,
-  AssetTimeseriesPanelProps,
-} from './AssetTimeseriesPanel';
+import { AssetTimeseriesPanel } from './AssetTimeseriesPanel';
 import { TimeseriesPanelPure } from './components/TimeseriesPanelPure';
+import { AssetTimeseriesPanelProps } from './interfaces';
 
 configure({ adapter: new Adapter() });
 

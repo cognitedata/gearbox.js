@@ -1,28 +1,11 @@
 import { Collapse } from 'antd';
 import { Dictionary, groupBy } from 'lodash';
-import React, { CSSProperties, FC, Fragment } from 'react';
+import React, { FC, Fragment } from 'react';
 import styled from 'styled-components';
-import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import { AnyIfEmpty, ValueListType } from '../../interfaces';
+import { withDefaultTheme } from '../../hoc';
 import { mapMetaData } from '../../utils/formatters';
+import { DescriptionListProps, ValueListType } from './interfaces';
 const { Panel } = Collapse;
-
-export interface MetaDescriptionListProps {
-  toCategory?: (name: string) => string | undefined;
-  categoryPriorityList?: string[];
-  unknownCategoryName?: string;
-  expandedCategories?: string[];
-}
-
-export interface DescriptionListProps extends MetaDescriptionListProps {
-  description?: {
-    descriptionId: string;
-    descriptionText: string;
-  };
-  valueSet: { [name: string]: any };
-  styles?: CSSProperties;
-  theme?: AnyIfEmpty<{}>;
-}
 
 const DescriptionList: FC<DescriptionListProps> = ({
   styles,

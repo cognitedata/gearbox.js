@@ -8,7 +8,7 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import { randomLatestDatapoint, singleTimeseries } from '../../../mocks';
-import { MockCogniteClient } from '../../../mocks/mockSdk';
+import { MockCogniteClient } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { TimeseriesPreview } from '../TimeseriesPreview';
 import callbacks from './callbacks.md';

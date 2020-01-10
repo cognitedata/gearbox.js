@@ -1,11 +1,12 @@
 import { Asset } from '@cognite/sdk';
-import { AssetTreeStyles } from '../interfaces';
-
-export const vmateDba = 'wmate_dba.wmt_location';
-export const randomTime = '1999-09-01 07:00:00';
-export const valDescription = 'Valhall plattform';
-export const gasCompressionString = 'GAS COMPRESSION AND RE-INJECTION (PH)';
-export const wmtag = 'wmate_dba.wmt_tag';
+import { AssetTreeStyles } from '../components/AssetTree';
+import {
+  gasCompressionString,
+  randomTime,
+  valDescription,
+  vmateDba,
+  wmtag,
+} from './assetsList';
 
 export const ASSET_TREE_STYLES: AssetTreeStyles = {
   list: {

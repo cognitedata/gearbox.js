@@ -1,16 +1,4 @@
-import {
-  withAssetEvents,
-  WithAssetEventsProps,
-} from '../../hoc/withAssetEvents';
-import {
-  AssetEventsPanelPure,
-  AssetEventsPanelStylesProps,
-  MetaEventsProps as Props,
-} from './components/AssetEventsPanelPure';
-
-export type AssetEventsPanelProps = WithAssetEventsProps &
-  Props &
-  AssetEventsPanelStylesProps;
-export type MetaEventsProps = Props;
+import { withAssetEvents } from '../../hoc/withAssetEvents';
+import { AssetEventsPanelPure } from './components/AssetEventsPanelPure';
 
 export const AssetEventsPanel = withAssetEvents(AssetEventsPanelPure);

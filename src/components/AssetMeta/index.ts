@@ -1,1 +1,2 @@
-export { AssetMeta, AssetMetaStyles, AssetMetaProps } from './AssetMeta';
+export { AssetMeta } from './AssetMeta';
+export * from './interfaces';

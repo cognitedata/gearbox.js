@@ -9,7 +9,7 @@ const initialState = {
   currentResult: 0,
 };
 
-export interface ComponentProps {
+interface ComponentProps {
   visible: boolean;
   svg: SVGSVGElement;
   isDesktop: boolean;

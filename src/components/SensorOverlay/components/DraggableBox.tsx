@@ -27,7 +27,7 @@ import {
 } from '../../../utils/promise';
 import { ComplexString } from '../../common/ComplexString/ComplexString';
 import { DragTargets } from '../constants';
-import { SensorMinMaxRange } from '../SensorOverlay';
+import { Datapoint, SensorMinMaxRange } from '../interfaces';
 import StyledOdometer from './StyledOdometer';
 
 const HELLIP = String.fromCharCode(0x02026);
@@ -76,12 +76,6 @@ interface DraggableBoxProps extends DragSourceProps {
   minMaxRange?: SensorMinMaxRange;
   strings: { [key: string]: string };
   alertColor: string;
-}
-
-export interface Datapoint {
-  isString: boolean;
-  value: number | string;
-  timestamp: Date;
 }
 
 interface DraggableBoxState {

@@ -1,9 +1,8 @@
 import { CogniteEvent } from '@cognite/sdk';
 import React from 'react';
-import { AssetEventsPanelStyles } from '../../../interfaces';
-import { fakeEvents, sleep } from '../../../mocks';
-import { MockCogniteClient } from '../../../mocks/mockSdk';
+import { fakeEvents, MockCogniteClient, sleep } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
+import { AssetEventsPanelStyles } from '../interfaces';
 
 class CogniteClient extends MockCogniteClient {
   events: any = {

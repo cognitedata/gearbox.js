@@ -1,14 +1,7 @@
 import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { WithAssetFilesDataProps } from '../../../hoc/withAssetFiles';
 import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
-import {
-  AnyIfEmpty,
-  AssetDocumentsPanelStyles,
-  Document,
-  MetaDocProps,
-} from '../../../interfaces';
 import { defaultTheme } from '../../../theme/defaultTheme';
 import {
   getCategoryByPriority,
@@ -16,21 +9,9 @@ import {
   getDocumentTitle,
   getShortDescription,
 } from '../../../utils/documents';
+import { Document, DocumentTableProps } from '../interfaces';
 
 const { Panel } = Collapse;
-
-export interface DocumentsPanelStylesProps {
-  styles?: AssetDocumentsPanelStyles;
-}
-
-export interface DocumentsPanelThemeProps {
-  theme?: AnyIfEmpty<{}>;
-}
-
-export type DocumentTableProps = MetaDocProps &
-  WithAssetFilesDataProps &
-  DocumentsPanelStylesProps &
-  DocumentsPanelThemeProps;
 
 interface DocumentTableState {
   stateParam?: string;
