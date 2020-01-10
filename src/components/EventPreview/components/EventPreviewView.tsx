@@ -2,7 +2,7 @@ import { CogniteEvent } from '@cognite/sdk';
 import { Button } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
+import { withDefaultTheme } from '../../../hoc';
 import { AnyIfEmpty, PureObject } from '../../../interfaces';
 import { formatDatetime } from '../../../utils/formatters';
 import { applyThemeFontFamily } from '../../../utils/theme';

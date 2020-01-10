@@ -4,7 +4,7 @@ import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';
-import { withDefaultTheme } from '../../hoc/withDefaultTheme';
+import { withDefaultTheme } from '../../hoc';
 import { AssetBreadcrumbProps } from './interfaces';
 
 const ENTER_KEY_CODE = 13;

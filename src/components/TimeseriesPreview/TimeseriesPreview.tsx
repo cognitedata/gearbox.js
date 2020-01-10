@@ -8,7 +8,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';
-import { withDefaultTheme } from '../../hoc/withDefaultTheme';
+import { withDefaultTheme } from '../../hoc';
 import {
   DropdownMenuStyles,
   TimeseriesPreviewMenuConfig,

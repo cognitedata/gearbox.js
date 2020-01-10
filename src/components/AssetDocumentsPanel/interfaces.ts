@@ -1,10 +1,7 @@
 import { FilesMetadata } from '@cognite/sdk';
 import { CollapseProps } from 'antd/lib/collapse';
 import React from 'react';
-import {
-  WithAssetFilesDataProps,
-  WithAssetFilesProps,
-} from '../../hoc/withAssetFiles';
+import { WithAssetFilesDataProps, WithAssetFilesProps } from '../../hoc';
 import { AnyIfEmpty } from '../../interfaces';
 
 export type Document = FilesMetadata;

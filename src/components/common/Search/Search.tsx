@@ -3,7 +3,7 @@ import { NativeButtonProps } from 'antd/lib/button/button';
 import { debounce } from 'lodash';
 import React, { KeyboardEvent, SyntheticEvent } from 'react';
 import styled from 'styled-components';
-import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
+import { withDefaultTheme } from '../../../hoc';
 import {
   AdvancedSearch,
   AnyIfEmpty,

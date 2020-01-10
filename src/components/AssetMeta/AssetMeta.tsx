@@ -7,7 +7,7 @@ import {
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
-import { withDefaultTheme } from '../../hoc/withDefaultTheme';
+import { withDefaultTheme } from '../../hoc';
 import { defaultTheme } from '../../theme/defaultTheme';
 import {
   CanceledPromiseException,
