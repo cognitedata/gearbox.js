@@ -1,14 +1,14 @@
 import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
+import { withDefaultTheme } from '../../../hoc';
+import { defaultTheme } from '../../../theme/defaultTheme';
 import {
   getCategoryByPriority,
   getDocumentsByCategory,
   getDocumentTitle,
   getShortDescription,
-} from '../../..';
-import { withDefaultTheme } from '../../../hoc';
-import { defaultTheme } from '../../../theme/defaultTheme';
+} from '../../../utils/documents';
 import { Document, DocumentTableProps } from '../interfaces';
 
 const { Panel } = Collapse;
