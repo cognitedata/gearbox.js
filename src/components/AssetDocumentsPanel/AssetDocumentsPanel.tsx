@@ -1,4 +1,4 @@
-import { withAssetFiles } from '../../hoc/withAssetFiles';
+import { withAssetFiles } from '../../hoc';
 import { DocumentTable } from './DocumentTable/DocumentTable';
 
 export const AssetDocumentsPanel = withAssetFiles(DocumentTable);

@@ -14,7 +14,7 @@ import { FormComponentProps } from 'antd/lib/form';
 import moment from 'moment';
 import React, { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';
-import { withDefaultTheme } from '../../hoc/withDefaultTheme';
+import { withDefaultTheme } from '../../hoc';
 import { PureObject } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
 import { datapointsToCSV, Delimiters, downloadCSV } from '../../utils/csv';

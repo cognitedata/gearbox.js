@@ -3,7 +3,7 @@ import { NativeButtonProps } from 'antd/lib/button/button';
 import { InputProps } from 'antd/lib/input';
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { withDefaultTheme } from '../../hoc/withDefaultTheme';
+import { withDefaultTheme } from '../../hoc';
 import { PureObject } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
 import { isEmptyString, sanitizeTenant } from '../../utils/sanitize';

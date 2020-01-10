@@ -1,7 +1,7 @@
 import { Checkbox } from 'antd';
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
+import { withDefaultTheme } from '../../../hoc';
 import { AnyIfEmpty } from '../../../interfaces';
 
 export interface DetailCheckboxProps {
