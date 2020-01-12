@@ -34,14 +34,6 @@ addParameters({
 const loadStories = () => {
   return [
     require.context('../docs', true, /About.story.mdx/),
-    require.context('../docs', true, /Overview.story.mdx/),
-    require.context('../docs', true, /Assets.story.mdx/),
-    require.context('../docs', true, /Timeseries.story.mdx/),
-    require.context('../docs', true, /Events.story.mdx/),
-    require.context('../docs', true, /Models2D.story.mdx/),
-    require.context('../docs', true, /Models3D.story.mdx/),
-    require.context('../docs', true, /More.story.mdx/),
-    require.context('../docs', true, /Internals.story.mdx/),
     require.context('../src', true, /.(stories|story).(tsx|mdx)$/),
   ];}
 

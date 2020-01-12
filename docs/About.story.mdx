@@ -1,7 +1,7 @@
 import { Meta } from '@storybook/addon-docs/blocks';
-import Logo from './res/logo.png';
+import Logo from './res/collage.png';
 
-<Meta title="Docs|About" />
+<Meta title="Docs|Cognite Gearbox" />
 
 <div style={{ margin: '0 auto', maxWidth: '600px', color: 'white', textAlign: 'center' }}>
   <img
@@ -21,41 +21,33 @@ import Logo from './res/logo.png';
   </a>&nbsp;&nbsp;
   <a href="https://bundlephobia.com/result?p=@cognite/gearbox">
     <img src="https://badgen.net/bundlephobia/minzip/@cognite/gearbox" />
-  </a>
+  </a>&nbsp;&nbsp;
   <a href="https://github.com/cognitedata/gearbox.js">
     <img alt="GitHub stars" src="https://img.shields.io/github/stars/cognitedata/gearbox.js?style=social" />
   </a>
 
 ---
 
-Gearbox is a library of React.JS components for building web applications on top of the Cognite Data Fusion library.
+Gearbox is a library of React.JS components for building web applications on top of the Cognite Data Fusion platform.
 
 </div>
 
+It is entirely possible to build the service layer of your [Cognite Data Fusion](https://docs.cognite.com/cdf/) powered web app by
+making direct HTTP calls to the [Cognite API](https://docs.cognite.com/api/v1/) endpoints. But you don't have to:
+because, instead of HTTP calls, you can call the typed methods on the
+[CogniteClient](https://cognitedata.github.io/cognite-sdk-js/classes/cogniteclient.html) class from the
+[JavaScript SDK](https://github.com/cognitedata/cognite-sdk-js).
 
+Similarly, it is entirely possible to build the view layer from scratch. But you don't have to, because Gearbox gives
+you a set of [ReactJS](https://reactjs.org/) components to handle the most common use cases.
 
+For example, to view all info on an asset given its ID, you just: `<AssetMeta assetId={420042000042042} />`.
 
-| Component            | Role                                                         |
-| -------------------- | ------------------------------------------------------------ |
-| AssetBreadcrumb      | Breadcrub visualization of an asset's position in the hierarchy |
-| AssetDetailsPanel    | Two column table visualization of an assets key details      |
-| AssetDocumentsPanel  | A list of documents associated with an asset                 |
-| AssetEventsPanel     | Four column paginated table visualization of events associated with an asset |
-| AssetMeta            | All info on an asset                                         |
-| AssetScanner         | Recognize assets from an image                               |
-| AssetSearch          | Search asset by name                                         |
-| AssetTimeseriesPanel | A list of timeseries associated with an asset                |
-| AssetTree            | Multi-root tree visualization of assets                      |
-| DescriptionList      | A generic table visualization for two column data            |
-| EventPreview         | Display event details                                        |
-| Model3DViewer        | View 3D models                                               |
-| SensorOverlay        | An overlay with live labels for time series sensor data for use in infographics |
-| SVGViewer            | View SVG asset diagrams with search/locate, zoom/pan         |
-| TenantSelector       | A form for selecting a tenant. This can be used to implement a sign-in form |
-| ThreeDNodeTree       | Tree visualization of 3D node hierarchy                      |
-| TimeseriesChart      | Visualize time series                                        |
-| TimeseriesChartMeta  | Enhances TimeseriesChart with period selection, current sensor value, and meta data |
-| TimeseriesDataExport | Export TS data in CSV format                                 |
-| TimeseriesPreview    | Display the current sensor value for a TS                    |
-| TimeseriesSearch     | Search and select time series by name                        |
+Doing an `<AssetTree />` gives you a hierarchical view of all your assets.
+Now if you also take the `AssetSearch` component out of the gearbox, what you have are the basic building blocks of
+your app's navigation user experience.
 
+`Model3DViewer` component lets you build user interfaces around navigating a 3D model of your assets,
+while the `TimeseriesChart` allows visualizing and interacting with the timeseries data streaming out of your assets.
+
+There are many more components in Cognite Gearbox for you to pick and choose from. Continue reading to find out all about them.
