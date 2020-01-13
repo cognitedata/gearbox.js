@@ -17,10 +17,19 @@ module.exports = async ({ config }) => {
 
   config.resolve.extensions.push('.ts', '.tsx');
   config.optimization = {
+    splitChunks: {
+      // include all types of chunks
+      chunks: 'all'
+    },
     minimizer: [
       new TerserPlugin({
-        cache: true,
+        chunkFilter: (chunk) => {
+          // Exclude uglification for the `vendor` chunk
+          return chunk.name !== 'vendor';
+        },
+        cache: false,
         parallel: true,
+        sourceMap: false,
         extractComments: false,
       })
     ]
