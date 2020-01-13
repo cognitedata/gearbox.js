@@ -1,6 +1,6 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { Model3DViewer } from '../Model3DViewer';
-import { 
+import {
   decorators,
   modelId,
   revisionId,
@@ -14,7 +14,7 @@ import {
   slider
 } from './helper';
 
-<Meta title="Others|Model3DViewer" decorators={decorators} />
+<Meta title="Others/Model3DViewer" decorators={decorators} />
 
 # Model3DViewer
 
@@ -23,7 +23,7 @@ The component will visualize the full 3D model by default, but by providing an o
 
 To retrieve a 3D model you need to provide:
 
-- `modelId` – you can get it via SDK call – `Models3DAPI.list()`. You receive an iterator as a result, which could be used to get list of model ids associated to your tenant. 
+- `modelId` – you can get it via SDK call – `Models3DAPI.list()`. You receive an iterator as a result, which could be used to get list of model ids associated to your tenant.
 - `revisionId` – you can get it via SDK call `Revisions3DAPI.list(modelId)`. You receive an iterator as a result, which could be used to get list of revision ids available for provided modelId
 
 **NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.

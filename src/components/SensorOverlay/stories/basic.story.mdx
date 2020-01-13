@@ -1,6 +1,6 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { SensorOverlay, SensorOverlayWithoutCustomize } from '../SensorOverlay';
-import { 
+import {
   decorators,
   CustomizedDiv,
   timeseriesIds,
@@ -15,7 +15,7 @@ import {
 } from './helper';
 import { ThemeProvider } from 'styled-components';
 
-<Meta title="Others|SensorOverlay" decorators={decorators} />
+<Meta title="Others/SensorOverlay" decorators={decorators} />
 
 # Sensor Overlay
 
@@ -75,7 +75,7 @@ The type can be imported from @cognite/gearbox:
 ```jsx
 import { SensorMinMaxRange } from '@cognite/gearbox';
 ```
-Definition: 
+Definition:
 ```jsx
 interface SensorMinMaxRange {
   min?: number;
@@ -145,7 +145,7 @@ const defaultPositionMap = {
     <SensorOverlay timeseriesIds={[8681821313339919]} isTagDraggable={false} isPointerDraggable={false}><CustomizedDiv/></SensorOverlay>
   </Story>
 </Preview>
- 
+
 
 ### With Link
 

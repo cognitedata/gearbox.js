@@ -1,6 +1,6 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { TimeseriesSearch } from '../TimeseriesSearch';
-import { 
+import {
   names,
   decorators,
   onTimeserieSelectionChange,
@@ -12,9 +12,9 @@ import {
 import { ThemeProvider } from 'styled-components';
 
 
-<Meta title="Time Series|TimeseriesSearch" decorators={decorators} />
+<Meta title="Time Series/TimeseriesSearch" decorators={decorators} />
 
-# Timeseries Search 
+# Timeseries Search
 
 This component searches for timeseries by name. Search results will be shown in a list. Each result have a checkbox for selection, and all selected timeseries are shown above the search bar. Selected timeseries can be removed by clicking the cross on the selected row.
 The component requires only `onTimeserieSelectionChange`prop which is called when the selection changes. It is called with two parameters: the current list of selected ids, and the last added/removed timeseries.
@@ -36,7 +36,7 @@ import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 const onTimeserieSelectionChange = (newTimeseriesIds: number[], selectedTimeseries: GetTimeSeriesMetadataDTO) => {}
 ```
 
-#### Info: 
+#### Info:
 
 <p>You can search for {names}</p>
 
@@ -85,7 +85,7 @@ See more details in `Custom styles` example.
 
 ### Show Root Asset Select
 
-#### Info: 
+#### Info:
 
 <p>For all examples You can search for {names}</p>
 
@@ -154,7 +154,7 @@ const filterRule = (timeseries: GetTimeSeriesMetadataDTO): boolean =>
     <TimeseriesSearch
       onTimeserieSelectionChange={onTimeserieSelectionChange}
       filterRule={filterRule}
-    />  
+    />
   </Story>
 </Preview>
 
@@ -176,7 +176,7 @@ const customString = {
       onTimeserieSelectionChange={onTimeserieSelectionChange}
       rootAssetSelect={true}
       strings={customString}
-    />  
+    />
   </Story>
 </Preview>
 
@@ -199,7 +199,7 @@ const customStyles = {
     <TimeseriesSearch
       onTimeserieSelectionChange={onTimeserieSelectionChange}
       styles={customStyles}
-    />  
+    />
   </Story>
 </Preview>
 

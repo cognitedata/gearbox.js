@@ -1,20 +1,20 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { AssetScanner } from '../AssetScanner';
 import {
-  decorators, 
-  ocrRequest, 
-  onError, 
-  onOcrError, 
-  renderButton, 
-  customNotification, 
-  FileInputComponent, 
-  onImageRecognizeFinish, 
+  decorators,
+  ocrRequest,
+  onError,
+  onOcrError,
+  renderButton,
+  customNotification,
+  FileInputComponent,
+  onImageRecognizeFinish,
   cropSize,
   webcamCropOverlay,
   getAssetHandlerCustom
 } from './helper';
 
-<Meta title="Assets|AssetScanner" decorators={decorators}/>
+<Meta title="Assets/AssetScanner" decorators={decorators}/>
 
 # Asset Scanner
 
@@ -109,7 +109,7 @@ interface AssetScannerStyles {
   button: React.CSSProperties;
 }
 ```
-## Examples 
+## Examples
 
 ### Custom ocrRequest
 
@@ -123,7 +123,7 @@ const ocrRequest = async ({ image }: { image: string }) => {
 };
 ```
 <Preview>
-  <Story name="Custom ocrRequest">  
+  <Story name="Custom ocrRequest">
     <AssetScanner
       onError={onError}
       onImageRecognizeFinish={onImageRecognizeFinish}
@@ -155,7 +155,7 @@ export const renderButton = (
 };
 ```
 <Preview>
-  <Story name="Custom button">  
+  <Story name="Custom button">
     <AssetScanner
       ocrRequest={ocrRequest}
       button={renderButton}
@@ -171,7 +171,7 @@ import { message } from 'antd';
 const customNotification = (type: ASNotifyTypes) => message.info(type);
 ```
 <Preview>
-  <Story name="Notifications">  
+  <Story name="Notifications">
     <AssetScanner
       onOcrError={onOcrError}
       ocrKey={'YOUR_GOOGLE_VISION_KEY'}
@@ -219,7 +219,7 @@ const FileInputComponent = ({render}) => {
 };
 ```
 <Preview>
-  <Story name="Input image">  
+  <Story name="Input image">
       <FileInputComponent
         render={(image) => (
           <AssetScanner
@@ -240,7 +240,7 @@ const cropSize = { width: 400, height: 200 };
 ```
 
 <Preview>
-  <Story name="Crop placeholder horizontal">  
+  <Story name="Crop placeholder horizontal">
     <AssetScanner
       onError={onError}
       onImageRecognizeFinish={onImageRecognizeFinish}
@@ -265,7 +265,7 @@ const webcamCropOverlay = () => (
 ```
 
 <Preview>
-  <Story name="Crop placeholder with custom overlay">  
+  <Story name="Crop placeholder with custom overlay">
     <AssetScanner
       onError={onError}
       ocrRequest={ocrRequest}
@@ -279,11 +279,11 @@ const webcamCropOverlay = () => (
 ### Custom asset search
 
 ```jsx
-const getAssetHandlerCustom = async (strings) => await customAssetSearch(strings); 
+const getAssetHandlerCustom = async (strings) => await customAssetSearch(strings);
 ```
 
 <Preview>
-  <Story name="Custom asset search">  
+  <Story name="Custom asset search">
     <AssetScanner
       onError={onError}
       ocrRequest={ocrRequest}

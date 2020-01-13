@@ -1,8 +1,8 @@
 import { Meta, Story, Preview, Props, Source } from '@storybook/addon-docs/blocks';
 import { AssetDocumentsPanel } from '../AssetDocumentsPanel';
-import { decorators, docTypes, handleAssetFilesLoaded, customStyle } from './helper';
+import { decorators, docTypes, handleAssetFilesLoaded, customStyle, ComponentProps } from './helper';
 
-<Meta title="Assets|AssetDocumentsPanel" decorators={decorators} />
+<Meta title="Assets/AssetDocumentsPanel" decorators={decorators} />
 
  # Asset Documents Panel
 
@@ -31,7 +31,7 @@ import { AssetDocumentsPanel } from '@cognite/gearbox';
 
 ## Available props
 
-<Props of={AssetDocumentsPanel} />
+<Props of={ComponentProps} />
 
 ## Types
 <br/>
@@ -106,7 +106,7 @@ const handleAssetFilesLoaded = (files: FilesMetadata[]) => { };
   </Story>
 </Preview>
 
-### Custom Loading Spinner 
+### Custom Loading Spinner
 
 <Preview>
   <Story name="Custom Loading Spinner">
@@ -145,7 +145,7 @@ const customStyles: AssetDocumentsPanelStyles = {
 };
 ```
 <Preview>
-  <Story name="Custom Styles">  
+  <Story name="Custom Styles">
   <AssetDocumentsPanel
       assetId={4650652196144007}
       styles={customStyle}

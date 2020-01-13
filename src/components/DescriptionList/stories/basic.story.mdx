@@ -1,16 +1,17 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { DescriptionList } from '../DescriptionList';
-import { 
-  metadata, 
-  description, 
-  sourceCategory, 
-  otherCategory, 
-  toCategory 
+import {
+  metadata,
+  description,
+  sourceCategory,
+  otherCategory,
+  toCategory,
+  ComponentProps
 } from './helper'
 
-<Meta title="Others|DescriptionList" />
+<Meta title="Others/DescriptionList" />
 
-# Description List 
+# Description List
 
 This component displays an object in a table layout.
 
@@ -43,7 +44,7 @@ const metadata = {
 
 ## Available props
 
-<Props of={DescriptionList} />
+<Props of={ComponentProps} />
 
 ## Examples
 
@@ -65,7 +66,7 @@ const description = {
 ```
 <Preview>
   <Story name="With Description Text">
-    <DescriptionList 
+    <DescriptionList
       valueSet={metadata}
       description={description}
     />

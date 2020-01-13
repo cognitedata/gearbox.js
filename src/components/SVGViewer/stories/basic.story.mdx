@@ -1,6 +1,6 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { SVGViewer } from '../SVGViewer';
-import { 
+import {
     decorators,
     onCancel,
     metadataClassesConditions,
@@ -12,7 +12,7 @@ import {
     isCurrentAsset
 } from './helper';
 
-<Meta title='Others|SVGViewer' decorators={decorators} />
+<Meta title='Others/SVGViewer' decorators={decorators} />
 
 # SVG-viewer
 
@@ -220,7 +220,7 @@ import styled from 'styled-components';
 import React from 'react';
 import { SVGViewer } from '@cognite/gearbox';
 
-const SearchContainer = styled.div` 
+const SearchContainer = styled.div`
     &.search-result {
         &.metadata-container {
         text {
@@ -258,14 +258,14 @@ import 'antd/dist/antd.css';
 import React from 'react';
 import { SVGViewer, ZoomCenter } from '@cognite/gearbox';
 
-const zoomCallback = ({ 
-    zoomProgress, 
-    source, 
-    zoomCenter 
-} : { 
+const zoomCallback = ({
+    zoomProgress,
+    source,
+    zoomCenter
+} : {
     zoomProgress: number;
-    source: string; 
-    zoomCenter?: ZoomCenter; 
+    source: string;
+    zoomCenter?: ZoomCenter;
 }): void => {};
 ```
 <Preview>
