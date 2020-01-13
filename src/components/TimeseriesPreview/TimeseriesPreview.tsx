@@ -131,14 +131,14 @@ const TimeseriesPreview: FC<TimeseriesPreviewProps> = ({
   timeseriesId,
   dropdown,
   onToggleVisibility,
-  color,
+  color = '#6c65ee',
   valueToDisplay,
   nameFormatter,
   descriptionFormatter,
   retrieveTimeseries,
   retrieveLatestDatapoint,
-  updateInterval,
-  dateFormat,
+  updateInterval = 5000,
+  dateFormat = 'DD MMM YYYY - HH:mm:ss',
   formatDisplayValue,
   styles = {},
   strings = {},
@@ -315,12 +315,6 @@ const TimeseriesPreview: FC<TimeseriesPreviewProps> = ({
       </Card>
     </Wrapper>
   );
-};
-
-TimeseriesPreview.defaultProps = {
-  color: '#6c65ee',
-  updateInterval: 5000,
-  dateFormat: 'DD MMM YYYY - HH:mm:ss',
 };
 
 const Component = withDefaultTheme(TimeseriesPreview);
