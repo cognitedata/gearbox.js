@@ -3,7 +3,7 @@ import { AssetDetailsPanel } from '../AssetDetailsPanel';
 import { AssetDetailsPanelPure } from '../AssetDetailsPanelPure';
 import { decorators, onAssetLoaded, toCategory, customStyle } from './helper';
 
-<Meta title="Assets|AssetDetailsPanel" decorators={decorators} />
+<Meta title="Assets/AssetDetailsPanel" decorators={decorators} />
 
 # Asset Details Panel
 
@@ -77,7 +77,7 @@ const customStyle: React.CSSProperties = {
 };
 ```
 <Preview>
-  <Story name="Custom Styles">  
+  <Story name="Custom Styles">
     <AssetDetailsPanel
       assetId={4650652196144007}
       styles={customStyle}
@@ -96,7 +96,7 @@ const onAssetLoaded = (asset: Asset) => console.log(asset);
 ```
 
 <Preview>
-  <Story name="Load Callback">  
+  <Story name="Load Callback">
     <AssetDetailsPanel
       assetId={4650652196144007}
       onAssetLoaded={onAssetLoaded}

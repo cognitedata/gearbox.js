@@ -2,7 +2,7 @@ import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { AssetTree, AssetTreeWithoutTheme } from '../AssetTree';
 import { decorators, onSelect, customStyle, exampleTheme, displayIdAsName } from './helper';
 
-<Meta title="Assets|AssetTree" decorators={decorators} />
+<Meta title="Assets/AssetTree" decorators={decorators} />
 
 # Asset Tree
 
@@ -93,9 +93,9 @@ const customStyle = {
   },
 };
 ```
-      
+
 <Preview>
-  <Story name="Custom Styles">  
+  <Story name="Custom Styles">
     <AssetTree
       styles={customStyle}
     />
@@ -103,9 +103,9 @@ const customStyle = {
 </Preview>
 
 ### Default Expanded Node
-      
+
 <Preview>
-  <Story name="Default Expanded Node">  
+  <Story name="Default Expanded Node">
     <AssetTree
       defaultExpandedKeys={[6687602007296940]}
     />
@@ -118,7 +118,7 @@ const customStyle = {
 const displayIdAsName = ({ id }: { id: number }) => `Id: ${id}`
 ```
 <Preview>
-  <Story name="Custom Display Name">  
+  <Story name="Custom Display Name">
     <AssetTree
       displayName={displayIdAsName}
     />
@@ -140,7 +140,7 @@ const exampleTheme = {
 };
 ```
 <Preview>
-  <Story name="With Theme">  
+  <Story name="With Theme">
     <ThemeProvider theme={exampleTheme}><AssetTree /></ThemeProvider>
   </Story>
 </Preview>
@@ -148,7 +148,7 @@ const exampleTheme = {
 ### Custom Root Assets
 
 <Preview>
-  <Story name="With Asset Id">  
+  <Story name="With Asset Id">
     <AssetTree
       assetIds={[3111454725058294]}
     />

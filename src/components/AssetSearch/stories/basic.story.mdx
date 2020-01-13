@@ -1,16 +1,16 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { AssetSearch } from '../AssetSearch';
-import { 
-  decorators, 
-  onLiveSearchSelect, 
-  strings, 
-  onError, 
-  styles, 
-  onSearchResult, 
-  heightProp, 
+import {
+  decorators,
+  onLiveSearchSelect,
+  strings,
+  onError,
+  styles,
+  onSearchResult,
+  heightProp,
 } from './helper';
 
-<Meta title="Assets|AssetSearch" decorators={decorators} />
+<Meta title="Assets/AssetSearch" decorators={decorators} />
 
 ## Asset Search
 
@@ -89,7 +89,7 @@ const onError = (error: any): void => console.log(error);
   <Story name="Error Handling" height = {heightProp} >
     <AssetSearch
       onLiveSearchSelect={onLiveSearchSelect}
-      onError={onError} 
+      onError={onError}
     />
   </Story>
 </Preview>
@@ -98,9 +98,9 @@ const onError = (error: any): void => console.log(error);
 
 <Preview>
   <Story name="Root Asset Select" height = {heightProp}>
-    <AssetSearch 
-      onLiveSearchSelect={onLiveSearchSelect} 
-      rootAssetSelect={true} 
+    <AssetSearch
+      onLiveSearchSelect={onLiveSearchSelect}
+      rootAssetSelect={true}
     />
   </Story>
 </Preview>
@@ -109,9 +109,9 @@ const onError = (error: any): void => console.log(error);
 
 <Preview>
   <Story name="Advanced Search" height = {heightProp}>
-    <AssetSearch 
-      onLiveSearchSelect={onLiveSearchSelect} 
-      advancedSearch={true} 
+    <AssetSearch
+      onLiveSearchSelect={onLiveSearchSelect}
+      advancedSearch={true}
     />
   </Story>
 </Preview>
@@ -145,10 +145,10 @@ const styles: AssetSearchStyles = {
 
 <Preview>
   <Story name="Custom Style" height = {heightProp}>
-    <AssetSearch 
-      onLiveSearchSelect={onLiveSearchSelect} 
-      advancedSearch={true} 
-      rootAssetSelect={true} 
+    <AssetSearch
+      onLiveSearchSelect={onLiveSearchSelect}
+      advancedSearch={true}
+      rootAssetSelect={true}
       styles={styles}
     />
   </Story>
@@ -158,9 +158,9 @@ const styles: AssetSearchStyles = {
 
 <Preview>
   <Story name="Handle Search Results" height = {heightProp}>
-    <AssetSearch 
-      showLiveSearchResults={false} 
-      onSearchResult={onSearchResult} 
+    <AssetSearch
+      showLiveSearchResults={false}
+      onSearchResult={onSearchResult}
     />
   </Story>
 </Preview>

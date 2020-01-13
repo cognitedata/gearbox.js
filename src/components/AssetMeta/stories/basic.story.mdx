@@ -12,7 +12,7 @@ import {
   timeseriesProps
 } from './helper';
 
-<Meta title="Assets|AssetMeta" decorators={decorators} />
+<Meta title="Assets/AssetMeta" decorators={decorators} />
 
 # Asset Meta
 
@@ -216,11 +216,11 @@ You can override styles of following blocks:
 The type can be imported from `@cognite/gearbox`:
 
 ```jsx
-import { 
-  AssetMetaStyles, 
-  AssetTimeseriesPanelStyles, 
-  AssetDocumentsPanelStyles, 
-  AssetEventsPanelStyles 
+import {
+  AssetMetaStyles,
+  AssetTimeseriesPanelStyles,
+  AssetDocumentsPanelStyles,
+  AssetEventsPanelStyles
   } from '@cognite/gearbox';
 ```
 
@@ -260,7 +260,7 @@ interface AssetEventsPanelStyles {
 
 See more details in `Custom Styles` example.
 
-## Examples 
+## Examples
 
 ### Returns Selected Pane
 
@@ -268,7 +268,7 @@ See more details in `Custom Styles` example.
 const onPaneChange = (key: string) => console.log('onPaneChange', key);
 ```
 <Preview>
-  <Story name="Returns Selected Pane">  
+  <Story name="Returns Selected Pane">
     <AssetMeta assetId={4650652196144007} onPaneChange={onPaneChange} />
   </Story>
 </Preview>
@@ -276,7 +276,7 @@ const onPaneChange = (key: string) => console.log('onPaneChange', key);
 ### Alternate Default Tab
 
 <Preview>
-  <Story name="Alternate Default Tab">  
+  <Story name="Alternate Default Tab">
     <AssetMeta assetId={4650652196144007} tab="documents" />;
   </Story>
 </Preview>
@@ -284,7 +284,7 @@ const onPaneChange = (key: string) => console.log('onPaneChange', key);
 ### Hide A Tab
 
 <Preview>
-  <Story name="Hide A Tab">  
+  <Story name="Hide A Tab">
     <AssetMeta
       assetId={4650652196144007}
       tab="events"
@@ -303,7 +303,7 @@ const detailsProps = {
 ```
 
 <Preview>
-  <Story name="Custom Details Category">  
+  <Story name="Custom Details Category">
     <AssetMeta
       assetId={4650652196144007}
       detailsProps={detailsProps}
@@ -324,7 +324,7 @@ const detailsProps = {
 ```
 
 <Preview>
-  <Story name="Returns Selected Document">  
+  <Story name="Returns Selected Document">
     <AssetMeta assetId={123} docsProps={ handleDocumentClick } />;
   </Story>
 </Preview>
@@ -336,7 +336,7 @@ const priorityCategoriesDocsProps = { categoryPriorityList: ['AB', 'ZE'] };
 ```
 
 <Preview>
-  <Story name="Custom Document Priority Categories">  
+  <Story name="Custom Document Priority Categories">
     <AssetMeta
       assetId={123}
       docsProps={priorityCategoriesDocsProps}
@@ -355,7 +355,7 @@ const categoriesSortDocsProps = {
 ```
 
 <Preview>
-  <Story name="Custom Document Categories Sort">  
+  <Story name="Custom Document Categories Sort">
     <AssetMeta
       assetId={123}
       docsProps={categoriesSortDocsProps}
@@ -374,7 +374,7 @@ priorityAndSortDocsProps = {
 ```
 
 <Preview>
-  <Story name="Custom Document Category Priority And Sort">  
+  <Story name="Custom Document Category Priority And Sort">
     <AssetMeta
       assetId={123}
       docsProps={priorityAndSortDocsProps}
@@ -395,7 +395,7 @@ const timeseriesProps = {
 ```
 
 <Preview>
-  <Story name="Custom TimeseriesChartMeta">  
+  <Story name="Custom TimeseriesChartMeta">
     <AssetMeta
       assetId={123}
       timeseriesProps={timeseriesProps}
@@ -406,7 +406,7 @@ const timeseriesProps = {
 ### With Custom Spinner
 
 <Preview>
-  <Story name="With Custom Spinner">  
+  <Story name="With Custom Spinner">
     <AssetMeta assetId={123456} customSpinner={<div>Loading...</div>} />
   </Story>
 </Preview>
@@ -414,7 +414,7 @@ const timeseriesProps = {
 ### With Custom Styles
 
 ```jsx
-customStyle = { 
+customStyle = {
   header: {
     textAlign: 'center',
     fontFamily: 'Comic Sans MS',
@@ -468,7 +468,7 @@ customStyle = {
 ```
 
 <Preview>
-  <Story name="With Custom Styles">  
+  <Story name="With Custom Styles">
     <AssetMeta assetId={123456} styles={customStyle} />
   </Story>
 </Preview>

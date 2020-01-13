@@ -1,8 +1,8 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { AssetTimeseriesPanel } from '../AssetTimeseriesPanel';
-import { decorators, customStyle, metaOptions, handleAssetTimeseriesLoaded } from './helper';
+import { decorators, customStyle, metaOptions, handleAssetTimeseriesLoaded, ComponentProps } from './helper';
 
-<Meta title="Assets|AssetTimeseriesPanel" decorators={decorators} />
+<Meta title="Assets/AssetTimeseriesPanel" decorators={decorators} />
 
 # Asset Timeseries Panel
 
@@ -32,7 +32,7 @@ import { AssetTimeseriesPanel } from '@cognite/gearbox';
 
 ## Available props
 
-<Props of={AssetTimeseriesPanel} />
+<Props of={ComponentProps} />
 
 ### Types
 
@@ -56,9 +56,9 @@ See more details in AssetMeta component documentation.
 ## Examples
 
 ### Custom Spinner
-      
+
 <Preview>
-  <Story name="Custom Spinner">  
+  <Story name="Custom Spinner">
     <AssetTimeseriesPanel
       assetId={4650652196144007}
       customSpinner={<div>Loading...</div>}
@@ -79,9 +79,9 @@ const customStyle = {
   },
 };
 ```
-      
+
 <Preview>
-  <Story name="Custom Styles">  
+  <Story name="Custom Styles">
     <AssetTimeseriesPanel
       assetId={4650652196144007}
       styles={customStyle}
@@ -105,7 +105,7 @@ const metaOptions = {
 };
 ```
 <Preview>
-  <Story name="Custom Time Series Chart Meta">  
+  <Story name="Custom Time Series Chart Meta">
     <AssetTimeseriesPanel
       assetId={4650652196144007}
       {...metaOptions}
@@ -121,7 +121,7 @@ import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 const handleAssetTimeseriesLoaded = (files: GetTimeSeriesMetadataDTO[]) => console.log(files);
 ```
 <Preview>
-  <Story name="Load Callback">  
+  <Story name="Load Callback">
     <AssetTimeseriesPanel
       assetId={4650652196144007}
       onAssetTimeseriesLoaded={handleAssetTimeseriesLoaded}

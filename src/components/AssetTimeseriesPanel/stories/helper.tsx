@@ -1,14 +1,15 @@
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import { CogniteAsyncIterator } from '@cognite/sdk/dist/src/autoPagination';
-import React from 'react';
-import { sleep } from '../../../mocks';
-import { timeseriesListV2 } from '../../../mocks/';
+import React, { FC } from 'react';
 import {
   MockDatapointsClientObject,
   MockTimeseriesClientObject,
+  sleep,
+  timeseriesListV2,
   TimeseriesMockClient,
-} from '../../../mocks/datapoints';
+} from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
+import { AssetTimeseriesPanelProps } from '../interfaces';
 
 class CogniteClient extends TimeseriesMockClient {
   timeseries: any = {
@@ -72,3 +73,5 @@ export const metaOptions = {
   showMetadata: false,
   showPeriods: true,
 };
+
+export const ComponentProps: FC<AssetTimeseriesPanelProps> = () => <></>;

@@ -1,6 +1,6 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { TenantSelector, TenantSelectorWithoutTheme } from '../TenantSelector';
-import { 
+import {
 onTenantSelected,
 validateTenantSucess,
 validateTenantFailed,
@@ -11,12 +11,12 @@ themeExample,
 } from './helper';
 import { ThemeProvider } from 'styled-components';
 
-<Meta title="Others|TenantSelector" />
+<Meta title="Others/TenantSelector" />
 
 # Tenant Selector
 
 Component to select a tenant.
-The component requires two props, `title` and `onTenantSelected`. 
+The component requires two props, `title` and `onTenantSelected`.
 
 **NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
 
@@ -169,7 +169,7 @@ const validateTenantFailed = async (tenant: string) => {
       validateTenant={validateTenantFailed}
     />
   </Story>
-</Preview> 
+</Preview>
 
 ### Loads Forever
 

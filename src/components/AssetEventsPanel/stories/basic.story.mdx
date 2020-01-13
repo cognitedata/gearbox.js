@@ -1,9 +1,9 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { AssetEventsPanel } from '../AssetEventsPanel';
 import { AssetEventsPanelPure } from '../components/AssetEventsPanelPure';
-import { decorators, customColumns, customStyle, handleAssetEventsLoaded } from './helper';
+import { decorators, customColumns, customStyle, handleAssetEventsLoaded, ComponentProps } from './helper';
 
-<Meta title="Assets|AssetEventsPanel" decorators={decorators} />
+<Meta title="Assets/AssetEventsPanel" decorators={decorators} />
 
 # Asset Events Panel
 
@@ -32,7 +32,7 @@ import { AssetEventsPanel } from '@cognite/gearbox';
 
 ## Available props
 
-<Props of={AssetEventsPanelPure} />
+<Props of={ComponentProps} />
 
 ### Types
 
@@ -121,7 +121,7 @@ const customStyle: AssetEventsPanelStyles = {
 };
 ```
 <Preview>
-  <Story name="Custom Styles">  
+  <Story name="Custom Styles">
     <AssetEventsPanel
       assetId={4650652196144007}
       styles={customStyle}
@@ -140,7 +140,7 @@ const handleAssetEventsLoaded = (events: CogniteEvent[]) => console.log(events);
 ```
 
 <Preview>
-  <Story name="Load Callback">  
+  <Story name="Load Callback">
     <AssetEventsPanel
       assetId={4650652196144007}
       onAssetEventsLoaded={handleAssetEventsLoaded}

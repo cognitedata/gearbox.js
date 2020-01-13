@@ -1,8 +1,11 @@
 import { FilesMetadata } from '@cognite/sdk';
-import React from 'react';
+import React, { FC } from 'react';
 import { DOCUMENTS, MockCogniteClient, sleep } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { AssetDocumentsPanelStyles } from '../interfaces';
+import {
+  AssetDocumentsPanelProps,
+  AssetDocumentsPanelStyles,
+} from '../interfaces';
 class CogniteClient extends MockCogniteClient {
   files: any = {
     list: () => ({
@@ -36,3 +39,5 @@ export const customStyle: AssetDocumentsPanelStyles = {
   fileLink: { color: 'purple' },
   fileTitle: { color: 'magenta', fontSize: '1em' },
 };
+
+export const ComponentProps: FC<AssetDocumentsPanelProps> = () => <></>;

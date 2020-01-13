@@ -1,3 +1,6 @@
+import React, { FC } from 'react';
+import { DescriptionListProps } from '../interfaces';
+
 export const metadata = {
   SOURCE_DB: 'workmate',
   SOURCE_TABLE: 'wmate_dba.wmt_location',
@@ -17,3 +20,5 @@ export const otherCategory = 'Other';
 
 export const toCategory = (name: string) =>
   name.includes('SOURCE') ? sourceCategory : undefined;
+
+export const ComponentProps: FC<DescriptionListProps> = () => <></>;

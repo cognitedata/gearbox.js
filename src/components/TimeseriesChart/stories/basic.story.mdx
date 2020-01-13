@@ -1,6 +1,6 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { TimeseriesChart } from '../TimeseriesChart';
-import { 
+import {
   decorators,
   annotationsProp,
   customContainerStyle,
@@ -13,7 +13,7 @@ import {
   series,
 } from './helper';
 
-<Meta title="Time Series|TimeSeriesChart" decorators={decorators} />
+<Meta title="Time Series/TimeSeriesChart" decorators={decorators} />
 
 # Timeseries Chart
 
@@ -69,7 +69,7 @@ See more details in `Custom container styles` example.
 
 ## Examples
 
-### Empty 
+### Empty
 
 <Preview>
   <Story name="Empty" >
@@ -77,7 +77,7 @@ See more details in `Custom container styles` example.
   </Story>
 </Preview>
 
-### Single 
+### Single
 
 <Preview>
   <Story name="Single" >
@@ -85,7 +85,7 @@ See more details in `Custom container styles` example.
   </Story>
 </Preview>
 
-### Multiple 
+### Multiple
 
 <Preview>
   <Story name="Multiple" >
@@ -93,18 +93,18 @@ See more details in `Custom container styles` example.
   </Story>
 </Preview>
 
-### Hidden 
+### Hidden
 
 <Preview>
   <Story name="Hidden" >
-    <TimeseriesChart 
+    <TimeseriesChart
       timeseriesIds={[123, 456]}
-      hiddenSeries={{ 123: true }} 
+      hiddenSeries={{ 123: true }}
     />
   </Story>
 </Preview>
 
-### Height And Width 
+### Height And Width
 
 <Preview>
   <Story name="Height And Width" >
@@ -121,7 +121,7 @@ const customContainerStyle = {
 ```
 <Preview>
   <Story name="Custom Container Styles" >
-    <TimeseriesChart 
+    <TimeseriesChart
       timeseriesIds={[123]}
       styled={customContainerStyles}
     />
@@ -344,9 +344,9 @@ const series = [
 
 <Preview>
   <Story name="Custom Series" >
-    <TimeseriesChart 
-      series={series} 
-      yAxisDisplayMode={'NONE'} 
+    <TimeseriesChart
+      series={series}
+      yAxisDisplayMode={'NONE'}
     />
   </Story>
 </Preview>
