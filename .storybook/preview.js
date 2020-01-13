@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { addDecorator, addParameters, configure } from '@storybook/react';
+import { addDecorator, addParameters } from '@storybook/react';
 import { addReadme, configureReadme } from 'storybook-readme';
 import { DocsContainer, Preview } from '@storybook/addon-docs/dist/blocks';
 import { SourceState } from '@storybook/addon-docs/dist/blocks';
-
 
 const StoryWrapper = styled.div`
   margin: 1em;
@@ -30,8 +29,3 @@ addParameters({
     preview: Preview.defaultProps = { withSource: SourceState.OPEN }
   },
 });
-
-// automatically import all files ending in *.stories.tsx or *.stories.mdx
-const req = require.context('../src', true, /.(stories|story).(tsx|mdx)$/);
-
-configure(req, module);

@@ -1,22 +1,7 @@
-const createCompiler = require('@storybook/addon-docs/mdx-compiler-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 
 module.exports = async ({ config }) => {
-  config.module.rules.push({
-    test: /\.(stories|story)\.mdx$/,
-    use: [
-      {
-        loader: require.resolve('babel-loader'),
-      },
-      {
-        loader: '@mdx-js/loader',
-        options: {
-          compilers: [createCompiler({})],
-        },
-      },
-    ],
-  });
   config.module.rules.push({
     include: path.resolve(__dirname, "../src"),
     use: [
@@ -28,14 +13,6 @@ module.exports = async ({ config }) => {
       },require.resolve("react-docgen-typescript-loader"),
     ],
     test: /\.(ts|tsx)$/,
-  },
-  {
-    test: /\.md$/,
-    use: [
-      {
-        loader: 'markdown-loader',
-      },
-    ],
   });
 
   config.resolve.extensions.push('.ts', '.tsx');
