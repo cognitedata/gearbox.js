@@ -1,11 +1,12 @@
 import { Asset } from '@cognite/sdk';
-import React from 'react';
+import React, { FC } from 'react';
 import {
   ASSET_LIST_CHILD,
   ASSET_ZERO_DEPTH_ARRAY,
   MockCogniteClient,
 } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
+import { AssetBreadcrumbProps } from '../interfaces';
 
 class CogniteClient extends MockCogniteClient {
   assets: any = {
@@ -41,3 +42,5 @@ export const customElementRendering = (
 
 export const onBreadcrumbClick = (asset: Asset, depth: number) =>
   console.log(asset, depth);
+
+export const ComponentProps: FC<AssetBreadcrumbProps> = () => <></>;

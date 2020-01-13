@@ -24,7 +24,6 @@ module.exports = async ({ config }) => {
         extractComments: false,
       })
     ]
-
   };
 
   return config;

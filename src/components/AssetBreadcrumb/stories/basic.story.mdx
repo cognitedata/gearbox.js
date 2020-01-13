@@ -1,6 +1,6 @@
 import { Meta, Story, Preview, Props, Source } from '@storybook/addon-docs/blocks';
 import { AssetBreadcrumb } from '../AssetBreadcrumb';
-import { decorators, customElementRendering, onBreadcrumbClick } from './helper';
+import { decorators, customElementRendering, onBreadcrumbClick, ComponentProps } from './helper';
 
 <Meta title="Assets|AssetBreadcrumb" decorators={decorators} />
 
@@ -29,7 +29,7 @@ import { AssetBreadcrumb } from '@cognite/gearbox';
 
 ## Available props
 
-<Props of={AssetBreadcrumb} />
+<Props of={ComponentProps} />
 
 ### Types
 
@@ -38,6 +38,13 @@ import { AssetBreadcrumb } from '@cognite/gearbox';
 ```js
 import { Asset } from '@cognite/sdk';
 ```
+
+`FetchAssetCall` type can be imported from '@cognite/gearbox', type looks like:
+
+```typescript
+type FetchAssetCall = (assetId: CogniteInternalId) => Promise<Asset>
+```
+
 ## Examples
 
 ### Define max length (number of elements) of rendered breadcrumb
