@@ -21,6 +21,11 @@ class CogniteClient extends MockCogniteClient {
         return ASSET_ZERO_DEPTH_ARRAY;
       },
     }),
+    retrieve: async (ids: { id: number }[]) => {
+      await sleep(300);
+      const allAssets = [...ASSET_ZERO_DEPTH_ARRAY, ...ASSET_LIST_CHILD];
+      return ids.map(({ id }) => allAssets.find(asset => asset.id === id));
+    },
   };
 }
 
