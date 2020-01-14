@@ -29,7 +29,7 @@ also can be redefined via `retrieveTimeseries` and `retrieveLatestDatapoint` pro
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -50,7 +50,7 @@ import { TimeseriesPreview } from '@cognite/gearbox';
 
 #### Exported types:
 
-```jsx
+```typescript
 import {
   DatapointsGetDatapoint,
   GetTimeSeriesMetadataDTO,
@@ -101,14 +101,14 @@ const defaultStrings = {
 
 ### Value To Display
 
-```jsx
+```typescript
 const valToDisplay = {
   value: 32,
   timestamp: new Date(),
 } 
 ```
 
-```jsx
+```typescript
 const nameFormatter = (name?: string) => `Name: ${name}`;
 
 const descriptionFormatter = (descr?: string) => `Descr: ${descr}`;
@@ -132,7 +132,7 @@ const formatValue = (value: number | string | undefined) => {
 
 ### Custom Data Fetching
 
-```jsx
+```typescript
 const retrieveTimeseries = async (id: InternalId) => { /* ... */ }
 
 const retrieveLatestDatapoint = async (id: InternalId) => { /* ... */ }
@@ -150,7 +150,7 @@ const retrieveLatestDatapoint = async (id: InternalId) => { /* ... */ }
 
 ### Dropdown Menu
 
-```jsx
+```typescript
 const menuConfig = {
   edit: 'Edit item',
   emphasize: 'Emphasize',
@@ -176,7 +176,7 @@ const dropdown = { options: menuConfig, onClick: onMenuClick }
 
 ### Callbacks
 
-```jsx
+```typescript
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 
 const onToggleVisibility = (timeseries: GetTimeSeriesMetadataDTO) => { /* ... */ };
@@ -193,7 +193,7 @@ const onToggleVisibility = (timeseries: GetTimeSeriesMetadataDTO) => { /* ... */
 
 ### Styling
 
-```jsx
+```typescript
 const styles = {
     wrapper: { padding: '5px', backgroundColor: '#ffe25a' },
     card: { padding: '5px', backgroundColor: '#8fffbb' },
