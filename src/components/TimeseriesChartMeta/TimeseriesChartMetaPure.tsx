@@ -3,12 +3,13 @@ import { RadioChangeEvent } from 'antd/lib/radio';
 import moment from 'moment';
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
+import { WithTimeseriesDataProps } from '../../hoc/interfaces';
 import { TimeseriesChart } from '../TimeseriesChart';
 import { TimeseriesMetaInfo } from './components/TimeseriesMetaInfo';
 import { TimeseriesValue } from './components/TimeseriesValue';
 import {
+  TimeseriesChartMetaBase,
   TimeseriesChartMetaPeriod,
-  TimeseriesChartMetaProps,
 } from './interfaces';
 
 export const timeScales: { [key: string]: { unit: string; number: number } } = {
@@ -42,6 +43,10 @@ export const timeScales: { [key: string]: { unit: string; number: number } } = {
   },
 };
 
+export interface TimeseriesChartMetaPureProps
+  extends WithTimeseriesDataProps,
+    TimeseriesChartMetaBase {}
+
 interface TimeseriesChartMetaState {
   timePeriod: TimeseriesChartMetaPeriod;
   basePeriod: {
@@ -51,7 +56,7 @@ interface TimeseriesChartMetaState {
 }
 
 export class TimeseriesChartMetaPure extends PureComponent<
-  TimeseriesChartMetaProps,
+  TimeseriesChartMetaPureProps,
   TimeseriesChartMetaState
 > {
   static defaultProps = {
@@ -65,7 +70,7 @@ export class TimeseriesChartMetaPure extends PureComponent<
     showMetadata: true,
   };
 
-  constructor(props: TimeseriesChartMetaProps) {
+  constructor(props: TimeseriesChartMetaPureProps) {
     super(props);
     this.state = {
       timePeriod: props.defaultBasePeriod ? '-' : props.defaultTimePeriod!,

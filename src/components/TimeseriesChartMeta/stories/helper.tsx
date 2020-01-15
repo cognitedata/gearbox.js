@@ -1,11 +1,12 @@
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
-import React from 'react';
+import React, { FC } from 'react';
 import {
   MockDatapointsClientObject,
   sleep,
   TimeseriesMockClient,
 } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
+import { TimeseriesChartMetaProps } from '../interfaces';
 
 class CogniteClient extends TimeseriesMockClient {
   timeseries: any = {
@@ -72,3 +73,5 @@ export const exampleTheme = {
     textColorSecondary: 'Coral',
   },
 };
+
+export const ComponentProps: FC<TimeseriesChartMetaProps> = () => <></>;

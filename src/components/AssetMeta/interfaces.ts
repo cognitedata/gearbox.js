@@ -1,4 +1,4 @@
-import React from 'react';
+import { CSSProperties, ReactNode } from 'react';
 import { AnyIfEmpty } from '../../interfaces';
 import {
   AssetDocumentsPanelStyles,
@@ -14,9 +14,9 @@ import { MetaDescriptionListProps } from '../DescriptionList';
 export type AssetPanelType = 'details' | 'events' | 'documents' | 'timeseries';
 
 export interface AssetMetaStyles {
-  header?: React.CSSProperties;
-  emptyTab?: React.CSSProperties;
-  details?: React.CSSProperties;
+  header?: CSSProperties;
+  emptyTab?: CSSProperties;
+  details?: CSSProperties;
   timeseries?: AssetTimeseriesPanelStyles;
   documents?: AssetDocumentsPanelStyles;
   events?: AssetEventsPanelStyles;
@@ -58,10 +58,13 @@ export interface AssetMetaProps {
   /**
    * A custom spinner to be shown in tabs while data is being loaded
    */
-  customSpinner?: React.ReactNode;
+  customSpinner?: ReactNode;
   /**
    * Object that defines inline CSS styles for inner elements of the component.
    */
   styles?: AssetMetaStyles;
+  /**
+   * @ignore
+   */
   theme?: AnyIfEmpty<{}>;
 }

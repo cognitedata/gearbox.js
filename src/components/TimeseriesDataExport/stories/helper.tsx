@@ -3,7 +3,7 @@ import {
   DatapointsMultiQuery,
   GetTimeSeriesMetadataDTO,
 } from '@cognite/sdk';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { randomData, timeseriesListV2 } from '../../../mocks';
 import { MockCogniteClient } from '../../../mocks';
 import { getGranularityInMS } from '../../../utils/utils';
@@ -69,3 +69,5 @@ export const strings = {
   cellLimitErr:
     'Oops, you rich cell limit for CSV document – {{ cellLimit }} cells, some data may be omitted',
 };
+
+export const ComponentProps: FC<TimeseriesDataExportProps> = () => <></>;

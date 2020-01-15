@@ -74,4 +74,8 @@ export const metaOptions = {
   showPeriods: true,
 };
 
-export const ComponentProps: FC<AssetTimeseriesPanelProps> = () => <></>;
+export const ComponentProps: FC<AssetTimeseriesPanelProps> = ({
+  strings = {
+    noTimeseriesSign: 'No timeseries linked to this asset',
+  },
+}) => <>{strings}</>;

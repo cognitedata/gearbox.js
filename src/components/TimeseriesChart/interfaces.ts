@@ -1,27 +1,11 @@
-import { Annotation } from '@cognite/griff-react';
+import {
+  Annotation,
+  DataProviderSerie as ProviderSeries,
+} from '@cognite/griff-react';
 import React from 'react';
 
-export interface ChartRulerPoint {
-  id: number | string;
-  name: string;
-  value: number | string;
-  color: string;
-  timestamp: number;
-  x: number;
-  y: number;
-}
-
-export interface ChartRulerConfig {
-  visible?: boolean;
-  timeLabel?: (point: ChartRulerPoint) => string;
-  yLabel?: (point: ChartRulerPoint) => string;
-}
-
-export interface TimeseriesChartStyles {
-  container?: React.CSSProperties;
-}
-
-export type TimeseriesChartProps = {
+type DataProviderSerie = ProviderSeries;
+interface TimeseriesChartPropsBase {
   /**
    * The time the timeseries should start from. Should be UNIX timestamp or Date
    */
@@ -90,10 +74,66 @@ export type TimeseriesChartProps = {
    * Width of the chart
    */
   width?: number;
+  /**
+   * Mouse move callback
+   */
   onMouseMove?: (e: any) => void;
+  /**
+   * On blur event callback
+   */
   onBlur?: (e: any) => void;
+  /**
+   * On mouseout event callback
+   */
   onMouseOut?: (e: any) => void;
-  onFetchDataError: (e: Error) => void;
+  /**
+   * Callback for failed data request
+   */
+  onFetchDataError?: (e: Error) => void;
+  /**
+   * @ignore
+   */
   annotations: Annotation[];
+  /**
+   * @ignore
+   */
   collections: any;
-} & ({ timeseriesIds: number[] } | { series: any });
+}
+
+export interface ChartRulerPoint {
+  id: number | string;
+  name: string;
+  value: number | string;
+  color: string;
+  timestamp: number;
+  x: number;
+  y: number;
+}
+
+export interface ChartRulerConfig {
+  visible?: boolean;
+  timeLabel?: (point: ChartRulerPoint) => string;
+  yLabel?: (point: ChartRulerPoint) => string;
+}
+
+export interface TimeseriesChartStyles {
+  container?: React.CSSProperties;
+}
+
+export interface TimeseriesChartByTimeseriesId {
+  /**
+   * Array of timeseries ids
+   */
+  timeseriesIds: number[];
+}
+
+export interface TimeseriesChartBySeries {
+  /**
+   * Array of DataProviderSerie
+   */
+  series: DataProviderSerie[];
+}
+
+export type TimeseriesChartProps =
+  | (TimeseriesChartByTimeseriesId & TimeseriesChartPropsBase)
+  | (TimeseriesChartBySeries & TimeseriesChartPropsBase);

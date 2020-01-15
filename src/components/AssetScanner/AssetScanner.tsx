@@ -27,7 +27,7 @@ import {
   AssetScannerProps,
   SetVideoRefCallback,
 } from './interfaces';
-import { WebcamScanner } from './WebcamScanner/WebcamScanner';
+import { defaultStrings, WebcamScanner } from './WebcamScanner/WebcamScanner';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -51,6 +51,7 @@ export class AssetScanner extends Component<
   static defaultProps = {
     ocrRequest: ocrRecognize,
     enableNotification: false,
+    strings: defaultStrings,
   };
 
   static contextType = ClientSDKProxyContext;

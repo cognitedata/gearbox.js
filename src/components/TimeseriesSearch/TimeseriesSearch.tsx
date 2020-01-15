@@ -39,7 +39,6 @@ export class TimeseriesSearch extends Component<
   static contextType = ClientSDKProxyContext;
   static defaultProps = {
     selectedTimeseries: [],
-    strings: {},
     filterRule: undefined,
     hideSelected: false,
     allowStrings: false,
@@ -47,6 +46,7 @@ export class TimeseriesSearch extends Component<
     single: false,
     onError: undefined,
     rootAsset: undefined,
+    strings: defaultStrings,
   };
 
   static getDerivedStateFromProps(

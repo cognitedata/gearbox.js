@@ -25,7 +25,7 @@ import { AssetDocumentsPanel } from '@cognite/gearbox';
 
 <Preview>
   <Story name="Basic Usage">
-    <AssetDocumentsPanel assetId={4650652196144007} />
+    <AssetDocumentsPanel assetId={4650652196144007} documentTitleField={'DOC_TITLE'} />
   </Story>
 </Preview>
 
@@ -43,35 +43,30 @@ This type can be imported from `@cognite/sdk`:
 import { FileRequestFilter } from `@cognite/sdk`;
 ```
 
-#### OnDocumentClick
+Types that come from `@cognite/gearbox`:
 
+```typescript
+import { FilesMetadata } from `@cognite/sdk`;
 
-```jsx
 type OnDocumentClick = (
   document: Document,
   category: string,
   description: string
 ) => void;
-```
-
-#### CollapseProps
-This type can be imported from `antd`:
-
-```jsx
-import { CollapseProps } from 'antd/lib/collapse';
-```
-
-#### DocumentRenderer
-
-```jsx
-import { FilesMetadata } from `@cognite/sdk`;
 
 type DocumentRenderer = (
   document: FilesMetadata,
   i: number,
   documents: FilesMetadata[]
 ) => React.ReactNode;
+```
 
+
+#### CollapseProps
+This type can be imported from `antd`:
+
+```jsx
+import { CollapseProps } from 'antd/lib/collapse';
 ```
 
 #### AssetDocumentsPanelStyles

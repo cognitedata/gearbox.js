@@ -1,9 +1,12 @@
-import React from 'react';
+import { CSSProperties } from 'react';
 import { WithAssetDataProps, WithAssetProps } from '../../hoc';
 import { MetaDescriptionListProps } from '../DescriptionList';
 
 export interface AssetDetailsPanelStylesProps {
-  styles?: React.CSSProperties;
+  /**
+   * Object that defines inline CSS style for container of the table
+   */
+  styles?: CSSProperties;
 }
 
 export type AssetDetailsPanelPureProps = WithAssetDataProps &

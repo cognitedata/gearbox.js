@@ -33,21 +33,37 @@ export interface PinchZoomInterface {
 }
 
 interface SvgViewerBasicProps {
-  // List of classes and conditions on when they should be applied for equipment
+  /**
+   * List of classes and conditions on when they should be applied for equipment
+   */
   metadataClassesConditions?: Conditions[];
-  // Document title
+  /**
+   * Document title
+   */
   title?: string;
-  // Document description
+  /**
+   * Document description
+   */
   description?: string;
-  // Display text with stroke-width: 0
+  /**
+   * Display text with stroke-width: 0
+   */
   showOverlappedText?: boolean;
-  // Override default colors with custom classNames
+  /**
+   * Override default colors with custom classNames
+   */
   customClassNames?: CustomClassNames;
-  // Condition to locate and highlight current asset during first render
+  /**
+   * Condition to locate and highlight current asset during first render
+   */
   isCurrentAsset?: (metadataNode: Element) => boolean;
-  // Viewer close callback
+  /**
+   * Viewer close callback
+   */
   handleCancel?: () => void;
-  // Zoom callback
+  /**
+   * Zoom callback
+   */
   handleAnimateZoom?: ({
     zoomProgress,
     source,
@@ -57,21 +73,31 @@ interface SvgViewerBasicProps {
     source: string;
     zoomCenter?: ZoomCenter;
   }) => void;
-  // Item click callback
+  /**
+   * Item click callback
+   */
   handleItemClick?: (metadataNode: HTMLElement) => void;
-  // Error document load callback
+  /**
+   * Error document load callback
+   */
   handleDocumentLoadError?: (error: Error) => void;
-  // Subscribe to SVGVieweSearch changes
+  /**
+   * Subscribe to SVGVieweSearch changes
+   */
   handleSearchChange?: () => void;
 }
 
 export type SvgViewerProps = SvgViewerDocumentIdProps | SvgViewerFileProps;
 
 export interface SvgViewerDocumentIdProps extends SvgViewerBasicProps {
-  // CDF fileId to fetch svg-document
+  /**
+   * CDF fileId to fetch svg-document
+   */
   documentId: number;
 }
 export interface SvgViewerFileProps extends SvgViewerBasicProps {
-  // svg-document file content in string format
+  /**
+   * svg-document file content in string format
+   */
   file: string;
 }

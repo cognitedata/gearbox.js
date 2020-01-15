@@ -54,5 +54,8 @@ export interface TimeseriesSearchProps {
    * Enable/disable RootAssetSelect component
    */
   rootAssetSelect: boolean;
+  /**
+   * Object with strings that will appear instead of default
+   */
   strings: PureObject;
 }

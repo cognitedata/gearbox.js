@@ -75,7 +75,7 @@ const isGreaterThenLimit = (
 };
 
 // tslint:disable-next-line:no-big-function
-export const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
+const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
   props: TimeseriesDataExportFormProps
   // tslint:disable-next-line:no-big-function
 ) => {
@@ -95,7 +95,7 @@ export const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     retrieveTimeseries,
     onError,
     onSuccess,
-    strings = {},
+    strings = defaultStrings,
     labelFormatter,
   } = props;
   const context = useCogniteContext(Component, true);
