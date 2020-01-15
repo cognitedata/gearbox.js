@@ -11,7 +11,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { withSize } from 'react-sizeme';
 import { getColorByString } from '../../utils/colors';
 import { clampNumber } from '../../utils/utils';
-import DraggableBox from './components/DraggableBox';
+import DraggableBox, { defaultStrings } from './components/DraggableBox';
 import DraggablePoint from './components/DraggablePoint';
 import SvgLine from './components/SvgLine';
 import { DragTargets } from './constants';
@@ -83,6 +83,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
   static defaultProps: Partial<SensorOverlayProps> = {
     isTagDraggable: true,
     isPointerDraggable: true,
+    strings: defaultStrings,
   };
 
   static getDerivedStateFromProps(

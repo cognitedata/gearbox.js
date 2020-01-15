@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import { WithAssetEventsDataProps, WithAssetEventsProps } from '../../hoc';
 import { AnyIfEmpty } from '../../interfaces';
 
@@ -8,35 +9,59 @@ export interface TableColumnType {
 }
 
 export interface TableDesignType {
+  /**
+   * Configure table pagination appearance
+   */
   pagination?: {
     pageSize?: number;
     position?: 'top' | 'bottom' | 'both';
     showSizeChanger?: boolean;
   };
+  /**
+   * Configure scroll appearance
+   */
   scroll?: {
     y?: string;
     x?: string;
   };
+  /**
+   * Define if table has borders
+   */
   bordered?: boolean;
+  /**
+   * Toggles table header visibility
+   */
   showHeader?: boolean;
-  style?: object;
+  /**
+   * Custom table styles
+   */
+  style?: CSSProperties;
 }
 
 export interface AssetEventsPanelStyles {
-  table?: React.CSSProperties;
-  tableRow?: React.CSSProperties;
-  tableCell?: React.CSSProperties;
+  table?: CSSProperties;
+  tableRow?: CSSProperties;
+  tableCell?: CSSProperties;
 }
 
 export interface MetaEventsProps extends TableDesignType {
+  /**
+   * Array of objects that customize titles of the columns in the table
+   */
   columns?: TableColumnType[];
 }
 
 export interface AssetEventsPanelStylesProps {
+  /**
+   * Object that defines inline CSS styles for inner elements of the component
+   */
   styles?: AssetEventsPanelStyles;
 }
 
 export interface AssetEventsPanelThemeProps {
+  /**
+   * @ignore
+   */
   theme?: AnyIfEmpty<{}>;
 }
 

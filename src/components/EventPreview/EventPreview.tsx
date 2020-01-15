@@ -7,7 +7,10 @@ import {
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
-import { EventPreviewView } from './components/EventPreviewView';
+import {
+  defaultStrings,
+  EventPreviewView,
+} from './components/EventPreviewView';
 import { EventPreviewProps } from './interfaces';
 
 const LoadingSpinner: React.FC = () => (
@@ -26,6 +29,9 @@ export class EventPreview extends Component<
 > {
   static displayName = 'EventPreview';
   static contextType = ClientSDKProxyContext;
+  static defaultProps = {
+    strings: defaultStrings,
+  };
   context!: React.ContextType<typeof ClientSDKProxyContext>;
   client!: CogniteClient;
 

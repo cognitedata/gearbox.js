@@ -1,19 +1,18 @@
 import { Asset } from '@cognite/sdk';
-import React from 'react';
-import {
-  Callback,
-  CropSize,
-  EmptyCallback,
-  PureObject,
-} from '../../interfaces';
+import { ComponentType, CSSProperties, ReactNode } from 'react';
+import { Callback, CropSize, EmptyCallback } from '../../interfaces';
+import { defaultStrings } from './WebcamScanner/WebcamScanner';
 
+export type AssetScannerStrings = {
+  [name in keyof typeof defaultStrings]: string;
+};
 export type OnAssetListCallback = (assets: Asset[]) => void;
 export type SetVideoRefCallback = (element: HTMLVideoElement | null) => void;
 export type ASNotification = (type: ASNotifyTypes) => any;
 export type ButtonRenderProp = (
   onCapture: Callback,
   isReady: boolean
-) => React.ReactNode;
+) => ReactNode;
 
 export interface OcrRequest {
   image: string;
@@ -31,7 +30,7 @@ export enum ASNotifyTypes {
 }
 
 export interface AssetScannerStyles {
-  button: React.CSSProperties;
+  button: CSSProperties;
 }
 
 export interface AssetScannerProps {
@@ -112,8 +111,20 @@ export interface AssetScannerProps {
    * Object that defines strings to be passed to component
    */
   imageAltText?: string;
-  strings?: PureObject;
+  /**
+   * Object with strings that can be passed to replace default strings
+   */
+  strings?: AssetScannerStrings;
+  /**
+   * Object to specify dimension of crop area
+   */
   cropSize?: CropSize;
-  webcamCropOverlay?: React.ComponentType;
+  /**
+   * Component overlaid cropped area
+   */
+  webcamCropOverlay?: ComponentType;
+  /**
+   * Function replaces default asset fetching behaviour
+   */
   getAssetsHandlerCustom?: (strings: string[]) => Promise<Asset[]>;
 }

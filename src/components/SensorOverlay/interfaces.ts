@@ -43,6 +43,10 @@ export interface SensorOverlayProps {
     [id: string]: string;
   };
   /**
+   * @ignore
+   */
+  connectDropTarget: ConnectDropTarget;
+  /**
    * Object map that defines position of newly added sensors in timeseriesIds.
    * The map doesn't affect position of previously added or dragged sensors.
    */
@@ -67,6 +71,13 @@ export interface SensorOverlayProps {
    */
   minMaxMap: {
     [id: string]: SensorMinMaxRange;
+  };
+  /**
+   * @ignore
+   */
+  size: {
+    width: number;
+    height: number;
   };
   /**
    * Works in conjuction with minMaxMap.
@@ -94,7 +105,6 @@ export interface SensorOverlayProps {
    * Function triggered when user clicks on a sensor value link. The link should be enabled with linksMap
    */
   onLinkClick?: (id: number, dataPoint?: Datapoint) => void;
-  connectDropTarget: ConnectDropTarget;
   /**
    * Function triggered when either a tag or a pointer has been dragged.
    */
@@ -108,8 +118,4 @@ export interface SensorOverlayProps {
    * Object map with strings to customize/localize text in the component
    */
   strings?: { [key: string]: string };
-  size: {
-    width: number;
-    height: number;
-  };
 }

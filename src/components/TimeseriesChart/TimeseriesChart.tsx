@@ -50,9 +50,6 @@ export class TimeseriesChart extends Component<
     xAxisHeight: 50,
     collections: {},
     ruler: undefined,
-    onFetchDataError: (e: Error) => {
-      throw e;
-    },
   };
 
   client!: CogniteClient;
@@ -173,7 +170,13 @@ export class TimeseriesChart extends Component<
                 })
               )}
               timeDomain={[+startTime, +endTime]}
-              onFetchDataError={onFetchDataError}
+              onFetchDataError={
+                onFetchDataError
+                  ? onFetchDataError
+                  : (e: any) => {
+                      throw e;
+                    }
+              }
               updateInterval={
                 liveUpdate
                   ? Math.max(

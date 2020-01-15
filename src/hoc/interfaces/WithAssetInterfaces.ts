@@ -1,9 +1,18 @@
 import { Asset } from '@cognite/sdk';
-import React from 'react';
+import { ReactNode } from 'react';
 
 export interface WithAssetProps {
+  /**
+   * Asset ID
+   */
   assetId: number;
-  customSpinner?: React.ReactNode;
+  /**
+   * A custom spinner to be shown in tabs while data is being loaded
+   */
+  customSpinner?: ReactNode;
+  /**
+   * Function to be called after an asset has been fetched
+   */
   onAssetLoaded?: (asset: Asset) => void;
 }
 

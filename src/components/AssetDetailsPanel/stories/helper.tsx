@@ -1,7 +1,8 @@
 import { Asset } from '@cognite/sdk';
-import React from 'react';
+import React, { FC } from 'react';
 import { fakeAsset, MockCogniteClient } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
+import { AssetDetailsPanelProps } from '../interfaces';
 
 class CogniteClient extends MockCogniteClient {
   assets: any = {
@@ -31,3 +32,5 @@ export const toCategory = (name: string): string => name.split('_')[0];
 export const onAssetLoaded = (asset: Asset) => {
   console.log(asset);
 };
+
+export const ComponentProps: FC<AssetDetailsPanelProps> = () => <></>;

@@ -1,9 +1,9 @@
-import { WithTimeseriesDataProps } from '../../hoc';
+import { WithTimeseriesProps } from '../../hoc';
 import { timeScales } from './TimeseriesChartMetaPure';
 
 export type TimeseriesChartMetaPeriod = keyof typeof timeScales;
 
-export interface TimeseriesChartMetaProps extends WithTimeseriesDataProps {
+export interface TimeseriesChartMetaBase {
   /**
    * Defines whether to get live updates in chart and data point
    */
@@ -44,3 +44,7 @@ export interface TimeseriesChartMetaProps extends WithTimeseriesDataProps {
    */
   showMetadata?: boolean;
 }
+
+export interface TimeseriesChartMetaProps
+  extends WithTimeseriesProps,
+    TimeseriesChartMetaBase {}

@@ -9,11 +9,20 @@ export interface AssetTimeseriesPanelStyles {
 }
 
 export interface MetaTimeseriesProps
-  extends Omit<TimeseriesChartMetaProps, 'timeseries'> {
+  extends Omit<TimeseriesChartMetaProps, 'timeseriesId'> {
+  /**
+   * Strings that can be customized
+   */
   strings?: {
     noTimeseriesSign?: string;
   };
+  /**
+   * Custom styles for component
+   */
   styles?: AssetTimeseriesPanelStyles;
+  /**
+   * @ignore
+   */
   theme?: AnyIfEmpty<{}>;
 }
 

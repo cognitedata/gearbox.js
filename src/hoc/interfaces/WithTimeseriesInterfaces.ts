@@ -1,13 +1,19 @@
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
-import React from 'react';
+import { ReactNode } from 'react';
 
 export interface WithTimeseriesDataProps {
   timeseries: GetTimeSeriesMetadataDTO;
 }
 
 export interface WithTimeseriesProps {
+  /**
+   * TimeseriesID
+   */
   timeseriesId: number;
-  customSpinner?: React.ReactNode;
+  /**
+   * A custom spinner to be shown while data is being loaded
+   */
+  customSpinner?: ReactNode;
 }
 
 export interface WithTimeseriesState {

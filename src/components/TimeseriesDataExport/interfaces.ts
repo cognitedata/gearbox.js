@@ -99,5 +99,8 @@ export interface TimeseriesDataExportProps {
    * Strings, that can be customized
    */
   strings?: PureObject;
+  /**
+   * @ignore
+   */
   theme?: AnyIfEmpty<{}>;
 }

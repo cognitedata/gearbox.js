@@ -6,16 +6,20 @@ import {
   DatapointsMultiQuery,
   GetTimeSeriesMetadataDTO,
 } from '@cognite/sdk';
-import React from 'react';
+import React, { FC } from 'react';
 import {
   MockCogniteClient,
   randomData,
   sleep,
   timeseriesListV2,
+  TimeseriesMockClient,
 } from '../../../mocks';
-import { TimeseriesMockClient } from '../../../mocks/datapoints';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DataLoader } from '../dataLoader';
+import {
+  TimeseriesChartBySeries,
+  TimeseriesChartByTimeseriesId,
+} from '../interfaces';
 
 type DatapointsArray = (
   | DatapointsGetAggregateDatapoint
@@ -104,3 +108,8 @@ export const series = [
     yAccessor: DataLoader.yAccessor,
   },
 ];
+
+export const TimeseriesIdsComponentProps: FC<
+  TimeseriesChartByTimeseriesId
+> = () => <></>;
+export const SeriesComponentProps: FC<TimeseriesChartBySeries> = () => <></>;

@@ -11,9 +11,11 @@ import {
   handleMouseOut,
   handleBlur,
   series,
+  TimeseriesIdsComponentProps,
+  SeriesComponentProps,
 } from './helper';
 
-<Meta title="Time Series/TimeSeriesChart" decorators={decorators} />
+<Meta title="Time Series/TimeseriesChart" decorators={decorators} />
 
 # Timeseries Chart
 
@@ -42,9 +44,34 @@ import { TimeseriesChart } from '@cognite/gearbox';
 
 ## Available props
 
+### Required
+Component has two ways of initialization. You should choose one of them to provide component data to render proper charts
+
+**via** `timeseriesIds`
+<Props of={TimeseriesIdsComponentProps} />
+
+**via** `series`
+<Props of={SeriesComponentProps} />
+
+### Optional
+
 <Props of={TimeseriesChart} />
 
 ### Types
+
+### DataProviderSerie
+
+```typescript
+interface DataProviderSerie {
+  id: number;
+  color?: string;
+  yAxisDisplayMode?: AxisDisplayModeType;
+  hidden?: boolean;
+  yAccessor?: YAccessor;
+  y0Accessor?: YAccessor;
+  y1Accessor?: YAccessor;
+}
+```
 
 ### TimeseriesChartStyles
 
@@ -61,7 +88,7 @@ Definition:
 
 ```jsx
 interface TimeseriesChartStyles {
-  container?: React.CSSProperties;
+  container?: CSSProperties;
 }
 ```
 

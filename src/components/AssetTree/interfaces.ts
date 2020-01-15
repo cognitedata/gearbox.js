@@ -39,7 +39,9 @@ export interface AssetTreeProps {
    * inner elements of the component.
    */
   styles?: AssetTreeStyles;
-
+  /**
+   * @ignore
+   */
   theme?: AnyIfEmpty<{}>;
 
   autoPagingToArrayOptions?: AutoPagingToArrayOptions;

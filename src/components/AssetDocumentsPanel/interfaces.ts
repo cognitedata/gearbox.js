@@ -1,6 +1,6 @@
 import { FilesMetadata } from '@cognite/sdk';
 import { CollapseProps } from 'antd/lib/collapse';
-import React from 'react';
+import { CSSProperties, ReactNode } from 'react';
 import { WithAssetFilesDataProps, WithAssetFilesProps } from '../../hoc';
 import { AnyIfEmpty } from '../../interfaces';
 
@@ -10,7 +10,7 @@ export type DocumentRenderer = (
   document: Document,
   i: number,
   documents: Document[]
-) => React.ReactNode;
+) => ReactNode;
 
 export type OnDocumentClick = (
   document: Document,
@@ -39,6 +39,9 @@ export interface Priority {
 }
 
 export interface DocumentsPanelStylesProps {
+  /**
+   * Object that defines inline CSS styles for inner elements of the component
+   */
   styles?: AssetDocumentsPanelStyles;
 }
 
@@ -52,29 +55,57 @@ export type DocumentTableProps = MetaDocProps &
   DocumentsPanelThemeProps;
 
 export interface AssetDocumentsPanelStyles {
-  wrapper?: React.CSSProperties;
-  fileContainer?: React.CSSProperties;
-  fileLink?: React.CSSProperties;
-  fileTitle?: React.CSSProperties;
+  wrapper?: CSSProperties;
+  fileContainer?: CSSProperties;
+  fileLink?: CSSProperties;
+  fileTitle?: CSSProperties;
 }
 
 export interface MetaDocProps {
+  /**
+   * Callback function triggered when user clicks on a file (document)
+   */
   handleDocumentClick?: OnDocumentClick;
+  /**
+   * Object with props to be passed to atn design Collapse component
+   */
   collapseProps?: CollapseProps;
+  /**
+   * List of categories codes to be shown on the top of the list.
+   * Categories "P&ID" and "Logic Diagrams" are prioritized by default.
+   */
   categoryPriorityList?: string[];
+  /**
+   * Name for the category that includes all files with undefined category
+   */
   unknownCategoryName?: string;
+  /**
+   * Key to get document title from <metadata> object
+   */
   documentTitleField?: string;
   /**
-   * The {@code metadata} field used to group documents into types. If this is
-   * not specified, then {@code doc_type} field will be attempted. If no
-   * {@code doc_type} field is present in the metadata, then the filename will
+   * The <metadata> field used to group documents into types. If this is
+   * not specified, then <doc_type> field will be attempted. If no
+   * <doc_type> field is present in the metadata, then the filename will
    * be attempted to be parsed using the NORSOK standard. If this fails, then
    * the document will be in the "unknown" group.
    */
   documentTypeField?: string;
+  /**
+   * Object map used to show custom category names
+   */
   docTypes?: JsonDocTypes;
+  /**
+   * Text to be shown if no documents have been found for the asset
+   */
   noDocumentsSign?: string;
+  /**
+   * Custom render function to modify documents appearing
+   */
   documentRenderer?: DocumentRenderer;
+  /**
+   * Function to sort categories after theirs prioritization
+   */
   customCategorySort?: (a: string, b: string) => number;
 }
 

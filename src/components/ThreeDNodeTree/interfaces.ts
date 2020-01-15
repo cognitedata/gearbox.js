@@ -59,5 +59,8 @@ export interface NodeTreeProps {
    * Object that defines inline CSS styles for inner elements of the component.
    */
   styles?: NodeTreeStyles;
+  /**
+   * @ignore
+   */
   theme?: AnyIfEmpty<{}>;
 }
