@@ -27,7 +27,7 @@ addParameters({
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  padding: 4rem 20px;
+  padding: 0 20px;
 `;
 
 const Content = styled.div`
