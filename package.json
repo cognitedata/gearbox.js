@@ -25,8 +25,8 @@
     "prepublishOnly": "yarn build",
     "test": "yarn jest",
     "test:watch": "yarn jest --watchAll",
-    "storybook": "start-storybook -p 6006 -s ./public --docs",
-    "storybook-ssl": "start-storybook -p 6006 --https --ssl-cert ./server.cert --ssl-key ./server.key -s ./public --docs"
+    "storybook": "start-storybook -p 6006 -s ./public",
+    "storybook-ssl": "start-storybook -p 6006 --https --ssl-cert ./server.cert --ssl-key ./server.key -s ./public"
   },
   "repository": "cognitedata/gearbox.js",
   "homepage": "https://github.com/cognitedata/gearbox.js#readme",
