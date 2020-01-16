@@ -5,7 +5,7 @@ import {
 } from '@cognite/sdk';
 import { Card, Dropdown, Icon, Menu } from 'antd';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc';
@@ -19,12 +19,6 @@ interface GenarateDropdownMenuProps extends TimeseriesPreviewMenuConfig {
   timeseries: GetTimeSeriesMetadataDTO;
   styles?: DropdownMenuStyles;
 }
-
-const defaultProps = {
-  color: '#6c65ee',
-  dateFormat: 'DD MMM YYYY - HH:mm:ss',
-  updateInterval: 5000,
-};
 
 const defaultStrings = {
   noData: 'No Data',
@@ -46,18 +40,18 @@ const generateDropdownMenu = ({
   return <Menu style={{ padding: 0, borderRadius: 0, ...menu }}>{items}</Menu>;
 };
 
-const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
+const TimeseriesPreview: FC<TimeseriesPreviewProps> = ({
   timeseriesId,
   dropdown,
   onToggleVisibility,
-  color = defaultProps.color,
+  color = '#6c65ee',
   valueToDisplay,
   nameFormatter,
   descriptionFormatter,
   retrieveTimeseries,
   retrieveLatestDatapoint,
-  updateInterval = defaultProps.updateInterval,
-  dateFormat = defaultProps.dateFormat,
+  updateInterval = 5000,
+  dateFormat = 'DD MMM YYYY - HH:mm:ss',
   formatDisplayValue,
   styles = {},
   strings = {},
@@ -239,6 +233,7 @@ const TimeseriesPreview: React.FC<TimeseriesPreviewProps> = ({
 const Component = withDefaultTheme(TimeseriesPreview);
 Component.displayName = 'TimeseriesPreview';
 
+export { TimeseriesPreview as TimeseriesPreviewWithoutTheme };
 export { Component as TimeseriesPreview };
 
 const Wrapper = styled.div`

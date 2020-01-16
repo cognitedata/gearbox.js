@@ -1,0 +1,221 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { TimeseriesPreview, TimeseriesPreviewWithoutTheme } from '../TimeseriesPreview';
+import { 
+  decorators,
+  dropdown,
+  valToDisplay,
+  formatValue,
+  nameFormatter,
+  descriptionFormatter,
+  retrieveTimeseries,
+  onToggleVisibility,
+  retrieveLatestDatapoint,
+  styles
+} from './helper';
+import { ThemeProvider } from 'styled-components';
+
+
+<Meta title="Time Series|TimeseriesPreview" decorators={decorators} />
+
+# Timeseries Preview 
+
+Component displays data related to provided `timeseriesId` with latest datapoint available. Latest datapoint value is updated with interval provided via `updateInterval` prop.
+
+Component has embedded logic for fetching timeseries data and latest datapoint available for it. To make it work properly, component
+has to be wrapped into `ClientSDKProvider` component with defined client SDK instance. Fetching logic
+also can be redefined via `retrieveTimeseries` and `retrieveLatestDatapoint` props to retrieve timeseries data and latest datapoint respectively
+
+### Basic usage:
+
+Imports:
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { TimeseriesPreview } from '@cognite/gearbox';
+
+```
+
+<Preview>
+  <Story name="Basic Usage" >
+    <TimeseriesPreview timeseriesId={41852231325889} />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={TimeseriesPreviewWithoutTheme} />
+
+
+#### Exported types:
+
+```typescript
+import {
+  DatapointsGetDatapoint,
+  GetTimeSeriesMetadataDTO,
+  InternalId,
+} from '@cognite/sdk';
+import { PureObject } from '@cognite/gearbox';
+
+interface TimeseriesPreviewMenuConfig {
+  config: PureObject;
+  onClick: (key: string, timeseries: GetTimeSeriesMetadataDTO) => void;
+}
+
+interface TimeseriesPreviewStyles {
+  wrapper?: React.CSSProperties;
+  card?: React.CSSProperties;
+  leftSide?: React.CSSProperties;
+  rightSide?: React.CSSProperties;
+  tagName?: React.CSSProperties;
+  description?: React.CSSProperties;
+  value?: React.CSSProperties;
+  date?: React.CSSProperties;
+  dropdown?: DropdownMenuStyles;
+}
+
+interface DropdownMenuStyles {
+  menu?: React.CSSProperties;
+  item?: React.CSSProperties;
+}
+
+type FetchTimeserieCall = (
+  timeseriesId: InternalId
+) => Promise<GetTimeSeriesMetadataDTO[]>;
+
+type FetchLatestDatapointCall = (
+  timeseriesId: InternalId
+) => Promise<DatapointsGetDatapoint[]>;
+```
+
+#### Default strings
+
+```typescript
+const defaultStrings = {
+  noData: 'No Data',
+};
+```
+
+## Examples
+
+### Value To Display
+
+```typescript
+const valToDisplay = {
+  value: 32,
+  timestamp: new Date(),
+} 
+```
+
+```typescript
+const nameFormatter = (name?: string) => `Name: ${name}`;
+
+const descriptionFormatter = (descr?: string) => `Descr: ${descr}`;
+
+const formatValue = (value: number | string | undefined) => {
+  return `${Math.floor(Number(value))} psi`;
+};
+```
+
+<Preview>
+  <Story name="Value To Display" >
+    <TimeseriesPreview
+      timeseriesId={41852231325889}
+      valueToDisplay={valToDisplay}
+      formatDisplayValue={formatValue}
+      nameFormatter={nameFormatter}
+      descriptionFormatter={descriptionFormatter}
+    />
+  </Story>
+</Preview>
+
+### Custom Data Fetching
+
+```typescript
+const retrieveTimeseries = async (id: InternalId) => { /* ... */ }
+
+const retrieveLatestDatapoint = async (id: InternalId) => { /* ... */ }
+```
+
+<Preview>
+  <Story name="Custom Data Fetching" >
+    <TimeseriesPreview
+      timeseriesId={41852231325889}
+      retrieveTimeseries={retrieveTimeseries}
+      retrieveLatestDatapoint={retrieveLatestDatapoint}
+    />
+  </Story>
+</Preview>
+
+### Dropdown Menu
+
+```typescript
+const menuConfig = {
+  edit: 'Edit item',
+  emphasize: 'Emphasize',
+  remove: 'Remove',
+}
+
+const onMenuClick = (
+  key: string,
+  timeseries: GetTimeSeriesMetadataDTO
+) => {/* ... */}
+
+const dropdown = { options: menuConfig, onClick: onMenuClick }
+```
+
+<Preview>
+  <Story name="Dropdown Menu" >
+    <TimeseriesPreview
+      timeseriesId={41852231325889}
+      dropdown={dropdown}
+    />
+  </Story>
+</Preview>
+
+### Callbacks
+
+```typescript
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+
+const onToggleVisibility = (timeseries: GetTimeSeriesMetadataDTO) => { /* ... */ };
+```
+
+<Preview>
+  <Story name="Callbacks" >
+    <TimeseriesPreview
+      timeseriesId={41852231325889}
+      onToggleVisibility={onToggleVisibility}
+    />
+  </Story>
+</Preview>
+
+### Styling
+
+```typescript
+const styles = {
+    wrapper: { padding: '5px', backgroundColor: '#ffe25a' },
+    card: { padding: '5px', backgroundColor: '#8fffbb' },
+    leftSide: { padding: '5px', backgroundColor: '#454aff' },
+    rightSide: { padding: '5px', backgroundColor: '#ffeeac' },
+    tagName: { padding: '5px', backgroundColor: '#944eff' },
+    description: { padding: '5px', backgroundColor: '#ff7ac1' },
+    value: { padding: '5px', backgroundColor: '#ff5344' },
+    date: { padding: '5px', backgroundColor: '#bbff1c' },
+    dropdown: {
+      menu: { padding: '5px', backgroundColor: '#8883ff' },
+      item: { padding: '5px', backgroundColor: '#00d8ff' },
+    },
+  };
+```
+
+<Preview>
+  <Story name="Styling" >
+    <TimeseriesPreview
+      timeseriesId={41852231325889}
+      styles={styles}
+      dropdown={dropdown}
+    />
+  </Story>
+</Preview>
