@@ -1,4 +1,4 @@
-import { Asset } from '@cognite/sdk';
+import { Asset, CogniteInternalId } from '@cognite/sdk';
 import React, { FC } from 'react';
 import {
   ASSET_LIST_CHILD,
@@ -42,5 +42,16 @@ export const customElementRendering = (
 
 export const onBreadcrumbClick = (asset: Asset, depth: number) =>
   console.log(asset, depth);
+
+export const retrieveAsset = async (
+  assetId: CogniteInternalId
+): Promise<Asset> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const result = ASSET_LIST_CHILD.find(asset => asset.id === assetId);
+      resolve(result);
+    }, 100);
+  });
+};
 
 export const ComponentProps: FC<AssetBreadcrumbProps> = () => <></>;
