@@ -4,6 +4,10 @@ import {
 } from '@cognite/griff-react';
 import React from 'react';
 
+export interface ScaleOptions {
+  min: number;
+  max: number;
+}
 type DataProviderSeries = ProviderSeries;
 interface TimeseriesChartPropsBase {
   /**
@@ -75,8 +79,9 @@ interface TimeseriesChartPropsBase {
    */
   width?: number;
   /**
-   * Mouse move callback
+   * y domain displaying range (max minimum y values) configurations
    */
+  yDomainScaleOptions?: ScaleOptions | { [key: number]: ScaleOptions };
   onMouseMove?: (e: any) => void;
   /**
    * On blur event callback

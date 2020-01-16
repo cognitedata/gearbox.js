@@ -113,3 +113,25 @@ export const TimeseriesIdsComponentProps: FC<
   TimeseriesChartByTimeseriesId
 > = () => <></>;
 export const SeriesComponentProps: FC<TimeseriesChartBySeries> = () => <></>;
+export const customYdomainSeries = [
+  {
+    id: 123,
+    color: 'green',
+    yAxisDisplayMode: AxisDisplayMode.ALL,
+    hidden: false,
+    y0Accessor: DataLoader.y0Accessor,
+    y1Accessor: DataLoader.y1Accessor,
+    yAccessor: DataLoader.yAccessor,
+    yDomainScaleOptions: { min: -200, max: 200 },
+  },
+  {
+    id: 456,
+    color: 'red',
+    y0Accessor: DataLoader.y0Accessor,
+    y1Accessor: DataLoader.y1Accessor,
+    yAccessor: DataLoader.yAccessor,
+    yDomainScaleOptions: { min: -100, max: 160 },
+  },
+];
+
+export const yDomainScaleOptions = { 123: { min: -200, max: 200 } };

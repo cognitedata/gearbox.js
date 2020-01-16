@@ -94,6 +94,26 @@ export class TimeseriesChart extends Component<
     }
   };
 
+  getYdomainValues = (
+    ydomainConfig: any,
+    timeSeriesId: number = NaN
+  ): number[] | undefined => {
+    if (ydomainConfig === undefined) {
+      return undefined;
+    }
+
+    if (!isNaN(timeSeriesId)) {
+      const scaleOptions = ydomainConfig[timeSeriesId];
+      const min = scaleOptions ? scaleOptions.min : undefined;
+      const max = scaleOptions ? scaleOptions.max : undefined;
+      return scaleOptions && min && max ? [min, max] : undefined;
+    } else {
+      const min = ydomainConfig.min ? ydomainConfig.min : undefined;
+      const max = ydomainConfig.max ? ydomainConfig.max : undefined;
+      return min && max ? [min, max] : undefined;
+    }
+  };
+
   render() {
     const {
       startTime,
@@ -116,6 +136,7 @@ export class TimeseriesChart extends Component<
       yAxisPlacement,
       hiddenSeries,
       annotations,
+      yDomainScaleOptions,
       ruler,
       height,
       width,
@@ -140,6 +161,7 @@ export class TimeseriesChart extends Component<
           yAccessor: s.yAccessor || DataLoader.yAccessor,
           y0Accessor: s.y0Accessor || DataLoader.y0Accessor,
           y1Accessor: s.y1Accessor || DataLoader.y1Accessor,
+          ySubDomain: this.getYdomainValues(s.yDomainScaleOptions),
         }))
       : timeseriesIds.map((id: number) => ({
           id,
@@ -149,6 +171,7 @@ export class TimeseriesChart extends Component<
           yAccessor: DataLoader.yAccessor,
           y0Accessor: DataLoader.y0Accessor,
           y1Accessor: DataLoader.y1Accessor,
+          ySubDomain: this.getYdomainValues(yDomainScaleOptions, id),
         }));
 
     const showCrosshair: boolean = crosshair || ruler !== undefined;
