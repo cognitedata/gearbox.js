@@ -1,10 +1,10 @@
 import {
   Annotation,
-  DataProviderSerie as ProviderSeries,
+  DataProviderSeries as ProviderSeries,
 } from '@cognite/griff-react';
 import React from 'react';
 
-type DataProviderSerie = ProviderSeries;
+type DataProviderSeries = ProviderSeries;
 interface TimeseriesChartPropsBase {
   /**
    * The time the timeseries should start from. Should be UNIX timestamp or Date
@@ -129,9 +129,9 @@ export interface TimeseriesChartByTimeseriesId {
 
 export interface TimeseriesChartBySeries {
   /**
-   * Array of DataProviderSerie
+   * Array of DataProviderSeries
    */
-  series: DataProviderSerie[];
+  series: DataProviderSeries[];
 }
 
 export type TimeseriesChartProps =

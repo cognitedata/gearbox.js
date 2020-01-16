@@ -43,13 +43,13 @@ declare module '@cognite/griff-react' {
     defaultLoader: (params: DataProviderLoaderParams) => Promise<Series>;
     onFetchDataError: (e: Error) => void;
     pointsPerSeries: number;
-    series: DataProviderSerie[];
+    series: DataProviderSeries[];
     timeDomain: number[] | Domain;
     updateInterval: number;
     collections: any;
   }
 
-  export interface DataProviderSerie {
+  export interface DataProviderSeries {
     id: number;
     color?: string;
     yAxisDisplayMode?: AxisDisplayModeType;
