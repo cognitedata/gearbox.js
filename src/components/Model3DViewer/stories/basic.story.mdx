@@ -73,12 +73,16 @@ import { Model3DViewer } from '@cognite/gearbox';
 
 <Props of={Model3DViewer} />
 
-##### Styles prop interface description:
+### Types
+
+Styles prop interface description:
 
 ``` jsx
+import { CSSProperties } from 'react';
+
 export interface Model3DViewerStyles {
-  wrapper: React.CSSProperties;
-  viewer: React.CSSProperties;
+  wrapper: CSSProperties;
+  viewer: CSSProperties;
 }
 ```
 
