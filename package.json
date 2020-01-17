@@ -17,7 +17,7 @@
   "scripts": {
     "build": "yarn clean && rollup -c && yarn esCheck",
     "build:watch": "yarn clean && rollup -c --watch && yarn esCheck",
-    "build-storybook": "node --max_old_space_size=2048 ./node_modules/.bin/build-storybook -s ./public --docs",
+    "build-storybook": "node --max_old_space_size=2048 ./node_modules/.bin/build-storybook -s ./public",
     "clean": "rimraf dist",
     "esCheck": "es-check es5 ./dist/index.js",
     "lint": "tslint -c tslint.json -p tsconfig.json",
