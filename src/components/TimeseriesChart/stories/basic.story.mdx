@@ -59,10 +59,10 @@ Component has two ways of initialization. You should choose one of them to provi
 
 ### Types
 
-### DataProviderSerie
+### DataProviderSeries
 
-```typescript
-interface DataProviderSerie {
+```jsx
+interface DataProviderSeries {
   id: number;
   color?: string;
   yAxisDisplayMode?: AxisDisplayModeType;
@@ -93,6 +93,20 @@ interface TimeseriesChartStyles {
 ```
 
 See more details in `Custom container styles` example.
+
+### ChartRulerConfig
+
+This interface defines the visibilty and custom label formatters for ruler in `TimeseriesChart`component.
+
+Definition:
+
+```jsx
+interface ChartRulerConfig {
+  visible?: boolean;
+  timeLabel?: (point: ChartRulerPoint) => string;
+  yLabel?: (point: ChartRulerPoint) => string;
+}
+```
 
 ## Examples
 
