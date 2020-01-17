@@ -1,6 +1,6 @@
 import { Meta, Story, Preview, Props, Source } from '@storybook/addon-docs/blocks';
 import { AssetBreadcrumb } from '../AssetBreadcrumb';
-import { decorators, customElementRendering, onBreadcrumbClick, ComponentProps } from './helper';
+import { decorators, customElementRendering, onBreadcrumbClick, ComponentProps, retrieveAsset } from './helper';
 
 <Meta title="Assets/AssetBreadcrumb" decorators={decorators} />
 
@@ -52,6 +52,26 @@ type FetchAssetCall = (assetId: CogniteInternalId) => Promise<Asset>
 <Preview>
   <Story name="Define breadcrumb length">
     <AssetBreadcrumb assetId={4518112062673878} maxLength={5} />
+  </Story>
+</Preview>
+
+
+### Custom assets fetching
+
+Function that replaces embedded asset fetching:
+
+```jsx
+import { Asset, CogniteInternalId } from '@cognite/sdk';
+
+const retrieveAsset = async (assetId:CogniteInternalId): Promise<Asset> => {/* ... \*/}
+```
+
+<Preview>
+  <Story name="Custom assets fetching">
+    <AssetBreadcrumb
+      assetId={4518112062673878} 
+      retrieveAsset={retrieveAsset} 
+    />
   </Story>
 </Preview>
 
