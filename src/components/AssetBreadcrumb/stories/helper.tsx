@@ -11,15 +11,14 @@ import { AssetBreadcrumbProps } from '../interfaces';
 
 class CogniteClient extends MockCogniteClient {
   assets: any = {
-    retrieve: (ids: { id: number }[]) =>
-      new Promise(async resolve => {
-        await sleep(200);
-        const allAssets = [...ASSET_ZERO_DEPTH_ARRAY, ...ASSET_LIST_CHILD];
-        const result = ids.map(({ id }) => {
-          return allAssets.find(asset => asset.id === id);
-        });
-        resolve(result || []);
-      }),
+    retrieve: async (ids: { id: number }[]) => {
+      await sleep(200);
+      const allAssets = [...ASSET_ZERO_DEPTH_ARRAY, ...ASSET_LIST_CHILD];
+      const result = ids.map(({ id }) => {
+        return allAssets.find(asset => asset.id === id);
+      });
+      return (result || []);
+    }
   };
 }
 
@@ -44,12 +43,10 @@ export const onBreadcrumbClick = (asset: Asset, depth: number) =>
 
 export const retrieveAsset = async (
   assetId: CogniteInternalId
-): Promise<Asset> => {
-  return new Promise(async resolve => {
-    await sleep(100);
-    const result = ASSET_LIST_CHILD.find(asset => asset.id === assetId);
-    resolve(result);
-  });
+) => {
+  await sleep(100);
+  const result = ASSET_LIST_CHILD.find(asset => asset.id === assetId);
+  return (result);
 };
 
 export const ComponentProps: FC<AssetBreadcrumbProps> = () => <></>;
