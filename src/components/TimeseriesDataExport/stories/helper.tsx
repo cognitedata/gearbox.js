@@ -8,7 +8,7 @@ import { randomData, timeseriesListV2 } from '../../../mocks';
 import { MockCogniteClient } from '../../../mocks';
 import { getGranularityInMS } from '../../../utils/utils';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { TimeseriesDataExportProps } from '../interfaces';
+import { CSVLabelFormatter, TimeseriesDataExportProps } from '../interfaces';
 import { TimeseriesDataExport } from '../TimeseriesDataExport';
 
 const MockTimeseriesClientObject = {
@@ -69,5 +69,9 @@ export const strings = {
   cellLimitErr:
     'Oops, you rich cell limit for CSV document – {{ cellLimit }} cells, some data may be omitted',
 };
+
+export const labelFormatter: CSVLabelFormatter = (
+  ts: GetTimeSeriesMetadataDTO
+) => ts.name || `timeserie-${ts.id}`;
 
 export const ComponentProps: FC<TimeseriesDataExportProps> = () => <></>;

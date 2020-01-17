@@ -4,7 +4,8 @@ import {
   decorators,
   strings,
   TimeseriesChartExportWrapper,
-  ComponentProps
+  ComponentProps,
+  labelFormatter
 } from './helper';
 
 <Meta title="Time Series/TimeseriesDataExport" decorators={decorators} />
@@ -146,6 +147,26 @@ const strings = {
       defaultTimeRange={[1567321800000, 1567408200000]}
       cellLimit={5000}
       strings={strings}
+    />
+  </Story>
+</Preview>
+
+
+### Format label
+
+```jsx
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk'; 
+import { CSVLabelFormatter } from '@cognite/gearbox';
+
+const labelFormatter: CSVLabelFormatter = (ts: GetTimeSeriesMetadataDTO) => ts.name || \`timeserie-${ts.id}\`; 
+```
+<Preview>
+  <Story name="Format label" >
+    <TimeseriesChartExportWrapper
+      timeseriesIds={[41852231325889, 7433885982156917]}
+      granularity={'2m'}
+      defaultTimeRange={[1567321800000, 1567408200000]}
+      labelFormatter={labelFormatter}
     />
   </Story>
 </Preview>
