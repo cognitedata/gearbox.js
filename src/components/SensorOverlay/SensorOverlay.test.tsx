@@ -6,7 +6,7 @@ import DNDTestBackend from 'react-dnd-test-backend';
 import sizeMe from 'react-sizeme';
 import sinon from 'sinon';
 import { timeseriesListV2 } from '../../mocks';
-import { MockCogniteClient } from '../../mocks/mockSdk';
+import { MockCogniteClient } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { DraggableBox, Tag } from './components/DraggableBox';
 import { DraggablePoint } from './components/DraggablePoint';

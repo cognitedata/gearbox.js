@@ -1,6 +1,6 @@
 import { IdEither } from '@cognite/sdk';
 import { ClientSDKCache } from '../cache/ClientSDKCache';
-import { MockCogniteClient } from '../mocks/mockSdk';
+import { MockCogniteClient } from '../mocks';
 import { wrapInCacheProxy } from './clientSDKCacheProxy';
 
 class CogniteClient extends MockCogniteClient {

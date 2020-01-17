@@ -27,8 +27,13 @@ import {
 } from '../../../utils/promise';
 import { ComplexString } from '../../common/ComplexString/ComplexString';
 import { DragTargets } from '../constants';
-import { SensorMinMaxRange } from '../SensorOverlay';
+import { Datapoint, SensorMinMaxRange } from '../interfaces';
 import StyledOdometer from './StyledOdometer';
+
+export const defaultStrings = {
+  underPercentage: '{{ percent }}% under the set limit of {{ min }}',
+  overPercentage: '{{ percent }}% over the set limit of {{ max }}',
+};
 
 const HELLIP = String.fromCharCode(0x02026);
 
@@ -78,12 +83,6 @@ interface DraggableBoxProps extends DragSourceProps {
   alertColor: string;
 }
 
-export interface Datapoint {
-  isString: boolean;
-  value: number | string;
-  timestamp: Date;
-}
-
 interface DraggableBoxState {
   tag: GetTimeSeriesMetadataDTO | null;
   dataPoint: Datapoint | null;
@@ -102,10 +101,7 @@ export class DraggableBox
     sticky: false,
     isDraggable: true,
     refreshInterval: 5000, // update datapoint every five seconds
-    strings: {
-      underPercentage: '{{ percent }}% under the set limit of {{ min }}',
-      overPercentage: '{{ percent }}% over the set limit of {{ max }}',
-    },
+    strings: defaultStrings,
     alertColor: '#e74c3c',
   };
 

@@ -5,13 +5,13 @@ import moment from 'moment';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { randomLatestDatapoint, singleTimeseries } from '../../mocks';
-import { MockCogniteClient } from '../../mocks/mockSdk';
+import { MockCogniteClient } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import {
-  TimeseriesPreview,
   TimeseriesPreviewMenuConfig,
   TimeseriesPreviewProps,
-} from './TimeseriesPreview';
+} from './interfaces';
+import { TimeseriesPreview } from './TimeseriesPreview';
 
 configure({ adapter: new Adapter() });
 

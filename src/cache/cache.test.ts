@@ -1,6 +1,5 @@
 import { Asset } from '@cognite/sdk';
-import { singleTimeseries } from '../mocks';
-import { MockCogniteClient } from '../mocks/mockSdk';
+import { MockCogniteClient, singleTimeseries } from '../mocks';
 import { CacheAssets } from './resources/CacheAssets';
 import { CacheTimeseries } from './resources/CacheTimeseries';
 

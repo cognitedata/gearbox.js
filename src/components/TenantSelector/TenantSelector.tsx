@@ -1,12 +1,13 @@
 import { Button, Collapse, Form, Input, Spin } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
 import { InputProps } from 'antd/lib/input';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
-import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import { AnyIfEmpty, PureObject } from '../../interfaces';
+import { withDefaultTheme } from '../../hoc';
+import { PureObject } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
 import { isEmptyString, sanitizeTenant } from '../../utils/sanitize';
+import { TenantSelectorProps } from './interfaces';
 
 const Panel = Collapse.Panel;
 
@@ -16,43 +17,13 @@ enum TenantValidity {
   UNKNOWN = 2,
 }
 
-export interface TenantSelectorStyles {
-  button?: React.CSSProperties;
-  collapseWrapper?: React.CSSProperties;
-  input?: React.CSSProperties;
-  subTitle?: React.CSSProperties;
-  title?: React.CSSProperties;
-  wrapper?: React.CSSProperties;
-}
-
-export interface TenantSelectorProps {
-  header?: string | React.ReactNode;
-  initialTenant?: string;
-  loginText?: string;
-  onInvalidTenant?: (tenant: string) => void;
-  onTenantSelected: (
-    tenant: string,
-    advancedOptions: PureObject | null
-  ) => void;
-  placeholder?: string;
-  title: string | React.ReactNode;
-  unknownMessage?: string;
-  validateTenant?: (
-    tenant: string,
-    advancedOptions: PureObject | null
-  ) => Promise<boolean>;
-  advancedOptions?: PureObject;
-  styles?: TenantSelectorStyles;
-  theme?: AnyIfEmpty<{}>;
-}
-
 interface TenantSelectorState {
   tenant: string;
   validity: TenantValidity;
   advanced: PureObject;
 }
 
-class TenantSelector extends React.Component<
+class TenantSelector extends Component<
   TenantSelectorProps,
   TenantSelectorState
 > {
@@ -351,7 +322,8 @@ const CollapseWrapper = styled(Collapse)`
   }
 `;
 
-const Component = withDefaultTheme(TenantSelector);
-Component.displayName = 'TenantSelector';
+const TenantSelectorWithTheme = withDefaultTheme(TenantSelector);
+TenantSelectorWithTheme.displayName = 'TenantSelector';
 
-export { Component as TenantSelector };
+export { TenantSelectorWithTheme as TenantSelector };
+export { TenantSelector as TenantSelectorWithoutTheme };

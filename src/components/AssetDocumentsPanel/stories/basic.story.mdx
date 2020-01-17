@@ -1,0 +1,149 @@
+import { Meta, Story, Preview, Props, Source } from '@storybook/addon-docs/blocks';
+import { AssetDocumentsPanel } from '../AssetDocumentsPanel';
+import { decorators, docTypes, handleAssetFilesLoaded, customStyle, ComponentProps } from './helper';
+
+<Meta title="Assets/AssetDocumentsPanel" decorators={decorators} />
+
+ # Asset Documents Panel
+
+This component loads list of documents related to the asset and presents it in the list of categories.
+Each item in the list can be expanded showing list of files.
+The component is used as one of the panes in `AssetMeta` component.
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+### Basic usage:
+
+Imports:
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { AssetDocumentsPanel } from '@cognite/gearbox';
+```
+
+<Preview>
+  <Story name="Basic Usage">
+    <AssetDocumentsPanel assetId={4650652196144007} documentTitleField={'DOC_TITLE'} />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={ComponentProps} />
+
+## Types
+<br/>
+<h4>FileRequestFilter</h4>
+
+This type can be imported from `@cognite/sdk`:
+
+```typescript
+import { FileRequestFilter } from `@cognite/sdk`;
+```
+
+Types that come from `@cognite/gearbox`:
+
+```typescript
+import { FilesMetadata } from `@cognite/sdk`;
+
+type OnDocumentClick = (
+  document: Document,
+  category: string,
+  description: string
+) => void;
+
+type DocumentRenderer = (
+  document: FilesMetadata,
+  i: number,
+  documents: FilesMetadata[]
+) => React.ReactNode;
+```
+
+
+#### CollapseProps
+This type can be imported from `antd`:
+
+```typescript
+import { CollapseProps } from 'antd/lib/collapse';
+```
+
+#### AssetDocumentsPanelStyles
+
+This interface defines inline CSS styles for inner elements of `AssetDocumentsPanel` component.
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { AssetDocumentsPanelStyles } from '@cognite/gearbox';
+```
+
+See more details in AssetMeta component documentation.
+
+## Examples
+
+### Handle callbacks
+
+A callback function can be provided to fire when the documents are loaded:
+
+```typescript
+import { FilesMetadata } from '@cognite/sdk';
+
+const handleAssetFilesLoaded = (files: FilesMetadata[]) => { /* ... */ };
+```
+
+<Preview>
+  <Story name="Load callbacks">
+    <AssetDocumentsPanel
+      assetId={4650652196144007}
+      onAssetFilesLoaded={handleAssetFilesLoaded}
+    />
+  </Story>
+</Preview>
+
+### Custom Loading Spinner
+
+<Preview>
+  <Story name="Custom Loading Spinner">
+    <AssetDocumentsPanel
+      assetId={4650652196144007}
+      customSpinner={<div>Loading...</div>}
+    />
+  </Story>
+</Preview>
+
+### Custom Category Names
+
+```typescript
+const docTypes = { XB: 'My Category', XL: 'Another Custom Category' };
+```
+
+<Preview>
+  <Story name="Custom Category Names">
+    <AssetDocumentsPanel
+      assetId={4650652196144007}
+      docTypes={docTypes}
+    />
+  </Story>
+</Preview>
+
+### Custom Styles
+
+```typescript
+import { AssetDocumentsPanelStyles } from '@cognite/gearbox';
+
+const customStyles: AssetDocumentsPanelStyles = {
+  wrapper: { border: '1px solid red' },
+  fileContainer: { backgroundColor: '#DDD', padding: 8 },
+  fileLink: { color: 'purple' },
+  fileTitle: { color: 'magenta', fontSize: '1em' },
+};
+```
+<Preview>
+  <Story name="Custom Styles">
+  <AssetDocumentsPanel
+      assetId={4650652196144007}
+      styles={customStyle}
+    />
+  </Story>
+</Preview>

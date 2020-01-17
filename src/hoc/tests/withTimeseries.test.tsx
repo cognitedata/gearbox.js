@@ -1,10 +1,11 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import React from 'react';
+import React, { FC } from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { timeseriesListV2 } from '../../mocks';
-import { MockCogniteClient } from '../../mocks/mockSdk';
-import { withTimeseries, WithTimeseriesDataProps } from '../withTimeseries';
+import { MockCogniteClient } from '../../mocks';
+import { WithTimeseriesDataProps } from '../interfaces';
+import { withTimeseries } from '../withTimeseries';
 
 configure({ adapter: new Adapter() });
 
@@ -54,7 +55,7 @@ describe('withTimeresries', () => {
   });
 
   it('Wrapped component should receive timeseries data after loading', done => {
-    const TestComponent: React.SFC<WithTimeseriesDataProps> = props => (
+    const TestComponent: FC<WithTimeseriesDataProps> = props => (
       <div>
         <p className="name">{props.timeseries.name}</p>
         <p className="description">{props.timeseries.description}</p>

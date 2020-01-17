@@ -1,19 +1,16 @@
 declare module '@cognite/griff-react' {
-  import {
-    DatapointsGetAggregateDatapoint,
-    DatapointsGetDatapoint,
-    DatapointsGetDoubleDatapoint,
-    GetStringDatapoint,
-    GetAggregateDatapoint,
-    GetDoubleDatapoint,
-    GetTimeSeriesMetadataDTO,
-  } from '@cognite/sdk';
+  import { GetAggregateDatapoint, GetDoubleDatapoint } from '@cognite/sdk';
+  import { Component } from 'react';
 
   export interface AxisDisplayModeType {
     id: string;
     width: (axisWidth: number, numAxes: number) => number;
     toString: () => string;
   }
+
+  export type YAccessor = (
+    d: GetDoubleDatapoint | GetAggregateDatapoint
+  ) => number;
 
   export const AxisDisplayMode: {
     ALL: AxisDisplayModeType;
@@ -46,13 +43,23 @@ declare module '@cognite/griff-react' {
     defaultLoader: (params: DataProviderLoaderParams) => Promise<Series>;
     onFetchDataError: (e: Error) => void;
     pointsPerSeries: number;
-    series: any;
+    series: DataProviderSeries[];
     timeDomain: number[] | Domain;
     updateInterval: number;
     collections: any;
   }
 
-  export class DataProvider extends React.Component<DataProviderProps> {}
+  export interface DataProviderSeries {
+    id: number;
+    color?: string;
+    yAxisDisplayMode?: AxisDisplayModeType;
+    hidden?: boolean;
+    yAccessor?: YAccessor;
+    y0Accessor?: YAccessor;
+    y1Accessor?: YAccessor;
+  }
+
+  export class DataProvider extends Component<DataProviderProps> {}
 
   export interface Annotation {
     assetIds: number[];
@@ -119,5 +126,6 @@ declare module '@cognite/griff-react' {
     onMouseOut?: (e: any) => void;
   }
 
+  // tslint:disable-next-line:max-classes-per-file
   export class LineChart extends React.Component<LineChartProps> {}
 }

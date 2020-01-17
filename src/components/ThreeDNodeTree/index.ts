@@ -1,1 +1,2 @@
-export * from './ThreeDNodeTree';
+export { ThreeDNodeTree } from './ThreeDNodeTree';
+export * from './interfaces';

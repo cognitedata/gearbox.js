@@ -37,12 +37,12 @@ export const defaultStrings: PureObject = {
   search: 'Search',
 };
 
-export interface SearchFormStyles {
+interface SearchFormStyles {
   container?: React.CSSProperties;
   addMoreMetadataButton?: React.CSSProperties;
 }
 
-export interface SearchProps {
+interface SearchFormProps {
   form: WrappedFormUtils;
   value: AdvancedSearch | null;
   onChange?: OnAdvancedSearchChange;
@@ -52,7 +52,7 @@ export interface SearchProps {
   styles?: SearchFormStyles;
 }
 
-export interface MetadataField {
+interface MetadataField {
   id: number;
   key: string;
   value: string;
@@ -64,7 +64,7 @@ const SearchForm = ({
   onPressEnter,
   styles,
   strings = {},
-}: SearchProps) => {
+}: SearchFormProps) => {
   const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
   const lang = { ...defaultStrings, ...strings };
   const {
@@ -244,7 +244,7 @@ const SearchForm = ({
 
 const SearchFormHOC = Form.create({
   name: 'asset-search',
-  onValuesChange(props: SearchProps, _, allValues: AdvancedSearch = {}) {
+  onValuesChange(props: SearchFormProps, _, allValues: AdvancedSearch = {}) {
     const { onChange } = props;
     if (onChange) {
       onChange(allValues);

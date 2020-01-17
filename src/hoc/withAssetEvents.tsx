@@ -1,4 +1,4 @@
-import { CogniteClient, CogniteEvent, EventFilterRequest } from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
@@ -13,23 +13,11 @@ import {
   ComponentWithUnmountState,
   connectPromiseToUnmountState,
 } from '../utils/promise';
-
-export interface WithAssetEventsDataProps {
-  assetEvents: CogniteEvent[];
-}
-
-export interface WithAssetEventsProps {
-  assetId: number;
-  queryParams?: EventFilterRequest;
-  customSpinner?: React.ReactNode;
-  onAssetEventsLoaded?: (assetEvents: CogniteEvent[]) => void;
-}
-
-export interface WithAssetEventsState {
-  isLoading: boolean;
-  assetEvents: CogniteEvent[] | null;
-  assetId: number;
-}
+import {
+  WithAssetEventsDataProps,
+  WithAssetEventsProps,
+  WithAssetEventsState,
+} from './interfaces';
 
 export const withAssetEvents = <P extends WithAssetEventsDataProps>(
   WrapperComponent: React.ComponentType<P>

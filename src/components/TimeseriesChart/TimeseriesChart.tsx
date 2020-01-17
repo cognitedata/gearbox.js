@@ -1,11 +1,10 @@
 import { CogniteClient } from '@cognite/sdk';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { DataLoader } from './dataLoader';
 
 import {
-  Annotation,
   AxisDisplayMode,
   AxisPlacement,
   DataProvider,
@@ -16,52 +15,7 @@ import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { decimalTickFormatter } from '../../utils/axisSigFix';
 import { getColorByString } from '../../utils/colors';
 import { CursorOverview } from './components/CursorOverview';
-
-export interface ChartRulerPoint {
-  id: number | string;
-  name: string;
-  value: number | string;
-  color: string;
-  timestamp: number;
-  x: number;
-  y: number;
-}
-
-export interface ChartRulerConfig {
-  visible?: boolean;
-  timeLabel?: (point: ChartRulerPoint) => string;
-  yLabel?: (point: ChartRulerPoint) => string;
-}
-
-export interface TimeseriesChartStyles {
-  container?: React.CSSProperties;
-}
-
-export type TimeseriesChartProps = {
-  styles?: TimeseriesChartStyles;
-  pointsPerSeries: number;
-  startTime: number | Date;
-  endTime: number | Date;
-  contextChart: boolean;
-  zoomable: boolean;
-  liveUpdate: boolean;
-  crosshair: boolean;
-  updateIntervalMillis: number;
-  timeseriesColors: { [id: number]: string };
-  hiddenSeries: { [id: number]: boolean };
-  annotations: Annotation[];
-  ruler: ChartRulerConfig;
-  collections: any;
-  xAxisHeight: number;
-  yAxisDisplayMode: 'ALL' | 'COLLAPSED' | 'NONE';
-  yAxisPlacement: 'RIGHT' | 'LEFT' | 'BOTH';
-  height?: number;
-  width?: number;
-  onMouseMove?: (e: any) => void;
-  onBlur?: (e: any) => void;
-  onMouseOut?: (e: any) => void;
-  onFetchDataError: (e: Error) => void;
-} & ({ timeseriesIds: number[] } | { series: any });
+import { ChartRulerPoint, TimeseriesChartProps } from './interfaces';
 
 // Don't allow updating faster than every 1000ms.
 const MINIMUM_UPDATE_FREQUENCY_MILLIS = 1000;
@@ -71,7 +25,7 @@ interface TimeseriesChartState {
   rulerPoints: { [key: string]: ChartRulerPoint };
 }
 
-export class TimeseriesChart extends React.Component<
+export class TimeseriesChart extends Component<
   TimeseriesChartProps,
   TimeseriesChartState
 > {
@@ -96,9 +50,6 @@ export class TimeseriesChart extends React.Component<
     xAxisHeight: 50,
     collections: {},
     ruler: undefined,
-    onFetchDataError: (e: Error) => {
-      throw e;
-    },
   };
 
   client!: CogniteClient;
@@ -219,7 +170,13 @@ export class TimeseriesChart extends React.Component<
                 })
               )}
               timeDomain={[+startTime, +endTime]}
-              onFetchDataError={onFetchDataError}
+              onFetchDataError={
+                onFetchDataError
+                  ? onFetchDataError
+                  : (e: any) => {
+                      throw e;
+                    }
+              }
               updateInterval={
                 liveUpdate
                   ? Math.max(
