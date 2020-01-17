@@ -9,8 +9,11 @@ import {
     handleSearchChange,
     ClassesContainer,
     handleClick,
-    isCurrentAsset
+    isCurrentAsset,
+    DocumentIdComponentProps,
+    FileComponentProps
 } from './helper';
+import { CUSTOM_SVG_FILE as svg_file } from '../../../mocks/svg-viewer';
 
 <Meta title='Others/SVGViewer' decorators={decorators} />
 
@@ -46,6 +49,17 @@ import { SVGViewer } from '@cognite/gearbox';
 </Preview>
 
 ## Available props
+
+### Required
+Component has two ways of initialization. You should choose one of them to provide component data to visualise svg documents
+
+**via** `documentId`
+<Props of={DocumentIdComponentProps} />
+
+**via** `file`
+<Props of={FileComponentProps} />
+
+### Optional
 
 <Props of={SVGViewer} />
 
@@ -327,3 +341,28 @@ const isCurrentAsset = metadata => (metadata.textContent || '').replace(/\s/g, '
 </div>
   </Story>
 </Preview>
+
+
+## File
+
+You can use any SVG and put it into `SvgViewer` if you would like through the `file` prop. `file` simply has to include the contents of the `svg` in a string format, like the following.
+
+```jsx
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+const svg_file = `...`
+```
+
+<Preview>
+  <Story name='File'>
+    <div style={{ height: '100vh' }}>
+      <SVGViewer
+          file={svg_file}
+      />
+    </div>
+  </Story>
+</Preview>
+
