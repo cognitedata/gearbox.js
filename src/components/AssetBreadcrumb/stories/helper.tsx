@@ -17,8 +17,8 @@ class CogniteClient extends MockCogniteClient {
       const result = ids.map(({ id }) => {
         return allAssets.find(asset => asset.id === id);
       });
-      return (result || []);
-    }
+      return result || [];
+    },
   };
 }
 
@@ -41,12 +41,9 @@ export const customElementRendering = (
 export const onBreadcrumbClick = (asset: Asset, depth: number) =>
   console.log(asset, depth);
 
-export const retrieveAsset = async (
-  assetId: CogniteInternalId
-) => {
+export const retrieveAsset = async (assetId: CogniteInternalId) => {
   await sleep(100);
-  const result = ASSET_LIST_CHILD.find(asset => asset.id === assetId);
-  return (result);
+  return ASSET_LIST_CHILD.find(asset => asset.id === assetId);
 };
 
 export const ComponentProps: FC<AssetBreadcrumbProps> = () => <></>;
