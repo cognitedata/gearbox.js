@@ -17,7 +17,7 @@ The component is used as one of the panes in `AssetMeta` component.
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -38,13 +38,13 @@ import { AssetEventsPanel } from '@cognite/gearbox';
 
 #### EventListParams
 
-```jsx
+```typescript
 import { EventFilterRequest } from `@cognite/sdk`;
 ```
 
 #### TableColumnType
 
-```jsx
+```typescript
 interface TableColumnType {
   title: string;
   dataIndex: string;
@@ -56,7 +56,7 @@ interface TableColumnType {
 
 This interface defines inline CSS styles for inner elements of `AssetEventsPanel` component.
 
-```jsx
+```typescript
 import { AssetEventsPanelStyles } from '@cognite/gearbox';
 ```
 See more details in AssetMeta component documentation.
@@ -65,29 +65,29 @@ See more details in AssetMeta component documentation.
 
 ### Custom Column Names
 
-```jsx
+```typescript
 const customColumns = [
-        {
-          title: 'Name',
-          dataIndex: 'typeAndSubtype',
-          key: 'typeAndSubtype',
-        },
-        {
-          title: 'Custom Description',
-          dataIndex: 'description',
-          key: 'description',
-        },
-        {
-          title: 'From',
-          dataIndex: 'start',
-          key: 'start',
-        },
-        {
-          title: 'To',
-          dataIndex: 'end',
-          key: 'end',
-        },
-      ];
+  {
+    title: 'Name',
+    dataIndex: 'typeAndSubtype',
+    key: 'typeAndSubtype',
+  },
+  {
+    title: 'Custom Description',
+    dataIndex: 'description',
+    key: 'description',
+  },
+  {
+    title: 'From',
+    dataIndex: 'start',
+    key: 'start',
+  },
+  {
+    title: 'To',
+    dataIndex: 'end',
+    key: 'end',
+  },
+];
 ```
 <Preview>
   <Story name="Custom Column Names">
@@ -111,7 +111,7 @@ const customColumns = [
 
 ### Custom Styles
 
-```jsx
+```typescript
 import { AssetEventsPanelStyles } from '@cognite/gearbox';
 
 const customStyle: AssetEventsPanelStyles = {
@@ -133,7 +133,7 @@ const customStyle: AssetEventsPanelStyles = {
 
 A callback function can be provided to fire when the asset is loaded:
 
-```jsx
+```typescript
 import { CogniteEvent } from '@cognite/sdk';
 
 const handleAssetEventsLoaded = (events: CogniteEvent[]) => console.log(events);

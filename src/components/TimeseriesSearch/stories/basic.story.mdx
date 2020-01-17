@@ -23,7 +23,7 @@ The component requires only `onTimeserieSelectionChange`prop which is called whe
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -32,8 +32,11 @@ import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 
 ```
 
-```jsx
-const onTimeserieSelectionChange = (newTimeseriesIds: number[], selectedTimeseries: GetTimeSeriesMetadataDTO) => {}
+```typescript
+const onTimeserieSelectionChange = (
+  newTimeseriesIds: number[],
+  selectedTimeseries: GetTimeSeriesMetadataDTO
+) => { /* ... */ }
 ```
 
 #### Info:
@@ -64,13 +67,13 @@ This interface defines inline CSS styles for inner elements of `TimeseriesSearch
 
 The type can be imported from `@cognite/gearbox`:
 
-```jsx
+```typescript
 import { TimeseriesSearchStyles } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```jsxExampleTheme
+```typescript
 export interface TimeseriesSearchStyles {
   buttonRow?: React.CSSProperties;
   list?: React.CSSProperties;
@@ -144,7 +147,7 @@ See more details in `Custom styles` example.
 
 ### Custom Filter Rule
 
-```jsx
+```typescript
 const filterRule = (timeseries: GetTimeSeriesMetadataDTO): boolean =>
   !timeseries.isString;
 ```
@@ -160,7 +163,7 @@ const filterRule = (timeseries: GetTimeSeriesMetadataDTO): boolean =>
 
 ### Custom Strings
 
-```jsx
+```typescript
 const customString = {
   rootAssetSelectAll: 'No filter',
   searchPlaceholder: 'search for stuff!',
@@ -182,7 +185,7 @@ const customString = {
 
 ### With Custom Styles
 
-```jsx
+```typescript
 const customStyles = {
   list: { height: '200px' },
   buttonRow: { marginTop: '30px' },
@@ -205,7 +208,7 @@ const customStyles = {
 
 ### With Theme
 
-```jsx
+```typescript
 import { ThemeProvider } from 'styled-components';
 
 const ExampleTheme = {

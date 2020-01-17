@@ -16,7 +16,7 @@ The component is used as one of the panes in `AssetMeta` component.
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -40,14 +40,14 @@ import { AssetTimeseriesPanel } from '@cognite/gearbox';
 
 This type can be imported from `@cognite/sdk`:
 
-```jsx
+```typescript
 import { TimeseriesListParams } from `@cognite/sdk`;
 ```
 #### AssetTimeseriesPanelStyles
 
 This interface defines inline CSS styles for inner elements of `AssetTimeseriesPanel` component.
 
-```jsx
+```typescript
 import { AssetTimeseriesPanelStyles } from '@cognite/gearbox';
 ```
 
@@ -68,7 +68,7 @@ See more details in AssetMeta component documentation.
 
 ### Custom Styles
 
-```jsx
+```typescript
 const customStyle = {
   wrapper: {
     border: '2px red solid',
@@ -93,7 +93,7 @@ const customStyle = {
 
 This component takes all optional props of TimeseriesChartMeta component. These props are passed to every instance of TimeseriesChartMeta in the list of timeseries. See TimeseriesChartMeta component for more details.
 
-```jsx
+```typescript
 const metaOptions = {
   defaultTimePeriod: 'lastYear',
   liveUpdate: false,
@@ -115,7 +115,7 @@ const metaOptions = {
 
 ### Load Callbacks
 
-```jsx
+```typescript
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 
 const handleAssetTimeseriesLoaded = (files: GetTimeSeriesMetadataDTO[]) => console.log(files);

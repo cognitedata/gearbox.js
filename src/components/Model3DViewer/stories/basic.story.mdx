@@ -40,7 +40,7 @@ yarn add @cognite/3d-viewer@5
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -93,7 +93,7 @@ export interface Model3DViewerStyles {
 Specify the direction and the length you want to slice from the corresponding axis to render
 a sliced model.
 
-```jsx
+```typescript
 const slice = { y: { coord: 0, direction: false } }
 ```
 
@@ -113,7 +113,7 @@ const slice = { y: { coord: 0, direction: false } }
 Specify the direction and the length you want to slice from the corresponding axis to render
 a sliced model.
 
-```jsx
+```typescript
 const slider = {
   x: { min: -1.5, max: 1.5 },
   y: { min: -1.5, max: 1.5 },
@@ -136,7 +136,7 @@ const slider = {
 Set showScreenshotButton to true to add a button that takes screenshot of the model after being clicked.
 Set the onScreenshot property to customize what you want to do witht the screenshots.
 
-```jsx
+```typescript
 const onScreenshot = (url: string) => {
   const downloadElm = document.createElement('a');
   downloadElm.href = url;

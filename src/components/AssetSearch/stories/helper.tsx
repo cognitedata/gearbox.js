@@ -4,7 +4,7 @@ import React from 'react';
 import { assetsList } from '../../../mocks';
 import { MockCogniteClient } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { AssetSearchStyles } from '../AssetSearch';
+import { AssetSearchStyles } from '../interfaces';
 
 class CogniteClient extends MockCogniteClient {
   assets: any = {

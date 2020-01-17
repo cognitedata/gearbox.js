@@ -30,7 +30,7 @@ The height of SensorOverlay component is defined by content in `children` and th
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -53,11 +53,11 @@ CustomizedDiv = () => (
 
 #### SensorPosition
  This type can be imported from @cognite/gearbox:
-```jsx
+```typescript
 import { SensorPosition } from '@cognite/gearbox';
 ```
 Definition:
-```jsx
+```typescript
 interface SensorPosition {
   left: number;
   top: number;
@@ -72,11 +72,11 @@ These coordinates are float numbers from 0 to 1.
 #### SensorMinMaxRange
 This interface defines minimum and maximum values for a datapoint of a timeserie.
 The type can be imported from @cognite/gearbox:
-```jsx
+```typescript
 import { SensorMinMaxRange } from '@cognite/gearbox';
 ```
 Definition:
-```jsx
+```typescript
 interface SensorMinMaxRange {
   min?: number;
   max?: number;
@@ -85,12 +85,12 @@ interface SensorMinMaxRange {
 
 #### SensorDatapoint
 This type can be imported from `@cognite/gearbox`:
-```jsx
+```typescript
 import { SensorDatapoint } from '@cognite/gearbox';
 ```
 
 Definition:
-```jsx
+```typescript
 export interface SensorDatapoint {
   isString: boolean;
   value: number | string;
@@ -101,7 +101,7 @@ export interface SensorDatapoint {
 
 ### With Many Sensors
 
-```jsx
+```typescript
  const timeseriesIds = [
     8681821313339919,
     4965555138606429,
@@ -117,7 +117,7 @@ export interface SensorDatapoint {
 
 ### Default Position And Color
 
-```jsx
+```typescript
 const colorMap = { [8681821313339919]: '#33AA33' };
 
 const defaultPositionMap = {
@@ -149,7 +149,7 @@ const defaultPositionMap = {
 
 ### With Link
 
-```jsx
+```typescript
 import { SensorDatapoint } from '@cognite/gearbox';
 
 const handleClick = (timeserieId: number) => {};
@@ -164,7 +164,7 @@ const handleLinkClick = (timeserieId: number, datapoint: SensorDatapoint) => {};
 
 ### With Sticky Tooltips
 
-```jsx
+```typescript
 const stickyMap = { [8681821313339919]: true };
 ```
 
@@ -176,7 +176,7 @@ const stickyMap = { [8681821313339919]: true };
 
 ### With Min-Max Limit
 
-```jsx
+```typescript
 export const minMaxMap = {
   [8681821313339919]: {
     min: 5,
@@ -193,7 +193,7 @@ export const minMaxMap = {
 
 ### With Image
 
-```jsx
+```typescript
 export const minMaxMap = {
   [8681821313339919]: {
     min: 5,
@@ -210,7 +210,7 @@ export const minMaxMap = {
 
 ### With Fixed Width
 
-```jsx
+```typescript
 export const minMaxMap = {
   [8681821313339919]: {
     min: 5,
@@ -227,7 +227,7 @@ export const minMaxMap = {
 
 ### Add Sensors Dynamically
 
-```jsx
+```typescript
 class SensorOverlayWrapperComponent extends React.Component {
   state = {
     counter: 0,

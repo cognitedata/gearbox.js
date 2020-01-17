@@ -16,7 +16,7 @@ The component is used as one of the panes in `AssetMeta` component.
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -39,7 +39,7 @@ import { AssetDocumentsPanel } from '@cognite/gearbox';
 
 This type can be imported from `@cognite/sdk`:
 
-```jsx
+```typescript
 import { FileRequestFilter } from `@cognite/sdk`;
 ```
 
@@ -65,7 +65,7 @@ type DocumentRenderer = (
 #### CollapseProps
 This type can be imported from `antd`:
 
-```jsx
+```typescript
 import { CollapseProps } from 'antd/lib/collapse';
 ```
 
@@ -74,7 +74,7 @@ import { CollapseProps } from 'antd/lib/collapse';
 This interface defines inline CSS styles for inner elements of `AssetDocumentsPanel` component.
 The type can be imported from `@cognite/gearbox`:
 
-```jsx
+```typescript
 import { AssetDocumentsPanelStyles } from '@cognite/gearbox';
 ```
 
@@ -86,10 +86,10 @@ See more details in AssetMeta component documentation.
 
 A callback function can be provided to fire when the documents are loaded:
 
-```jsx
+```typescript
 import { FilesMetadata } from '@cognite/sdk';
 
-const handleAssetFilesLoaded = (files: FilesMetadata[]) => { };
+const handleAssetFilesLoaded = (files: FilesMetadata[]) => { /* ... */ };
 ```
 
 <Preview>
@@ -114,7 +114,7 @@ const handleAssetFilesLoaded = (files: FilesMetadata[]) => { };
 
 ### Custom Category Names
 
-```jsx
+```typescript
 const docTypes = { XB: 'My Category', XL: 'Another Custom Category' };
 ```
 
@@ -129,7 +129,7 @@ const docTypes = { XB: 'My Category', XL: 'Another Custom Category' };
 
 ### Custom Styles
 
-```jsx
+```typescript
 import { AssetDocumentsPanelStyles } from '@cognite/gearbox';
 
 const customStyles: AssetDocumentsPanelStyles = {

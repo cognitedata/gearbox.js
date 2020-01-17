@@ -23,7 +23,7 @@ shows loading spinner.
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -31,7 +31,7 @@ import { CogniteEvent } from '@cognite/sdk';
 import { EventPreview } from '@cognite/gearbox';
 
 ```
-```jsx
+```typescript
 const onShowDetails = (e: CogniteEvent) => {
   console.log('onShowDetails', e);
 };
@@ -52,7 +52,7 @@ const onShowDetails = (e: CogniteEvent) => {
 #### CogniteEvent
 `CogniteEvent` type can be imported from `@cognite/sdk`:
 
-```jsx
+```typescript
 import { CogniteEvent } from '@cognite/sdk';
 ```
 
@@ -65,13 +65,13 @@ You can override styles of following blocks:
 
 The type can be imported from `@cognite/gearbox`:
 
-```jsx
+```typescript
 import { EventPreviewStyles } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```jsx
+```typescript
 interface EventPreviewStyles {
   wrapper?: React.CSSProperties;
   eventType?: React.CSSProperties;
@@ -167,7 +167,7 @@ See more details in `Custom Styles` example.
 
 ### With Custom Text
 
-```jsx
+```typescript
 const strings = {
   start: 'From',
   end: 'To',
@@ -188,7 +188,7 @@ const strings = {
 
 ### With Custom Styles
 
-```jsx
+```typescript
 import { EventPreviewStyles } from '@cognite/gearbox';
 
 const customStyle: EventPreviewStyles = {
@@ -213,7 +213,7 @@ const customStyle: EventPreviewStyles = {
 
 ### With Theme
 
-```jsx
+```typescript
 import { ThemeProvider } from 'styled-components';
 
 const exampleTheme = {

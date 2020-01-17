@@ -14,7 +14,7 @@ Visualize parent-child relationship of assets in a tree structure. It will initi
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -40,7 +40,7 @@ import { AssetTree } from '@cognite/gearbox';
 This type describes the parameters the `onSelect` function is called with.
 The type can be imported from @cognite/gearbox:
 
-```jsx
+```typescript
 import { OnSelectAssetTreeParams } from '@cognite/gearbox';
 ```
 
@@ -56,7 +56,7 @@ You can override styles of following blocks:
 
 The type can be imported from `@cognite/gearbox`:
 
-```jsx
+```typescript
 import { AssetTreeStyles } from '@cognite/gearbox';
 ```
 
@@ -69,7 +69,7 @@ See more details in `Custom Styles` example.
 
 A function can be provided to fire when an item clicked:
 
-```jsx
+```typescript
 import { OnSelectAssetTreeParams } from '@cognite/gearbox';
 
 const onSelect = (e: OnSelectAssetTreeParams) => {};
@@ -85,7 +85,7 @@ const onSelect = (e: OnSelectAssetTreeParams) => {};
 
 ### Custom Styles
 
-```jsx
+```typescript
 const customStyle = {
   list: {
     fontFamily: 'Courier New',
@@ -114,7 +114,7 @@ const customStyle = {
 
 ### Custom Display Name
 
-```jsx
+```typescript
 const displayIdAsName = ({ id }: { id: number }) => `Id: ${id}`
 ```
 <Preview>
@@ -127,7 +127,7 @@ const displayIdAsName = ({ id }: { id: number }) => `Id: ${id}`
 
 ### With Theme
 
-```jsx
+```typescript
 import { ThemeProvider } from 'styled-components';
 
 const exampleTheme = {

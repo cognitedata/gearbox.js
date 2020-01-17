@@ -14,7 +14,7 @@ This component renders breadcrumb for assets chain, that represents path from ro
 
 Don't forget to import:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -35,7 +35,7 @@ import { AssetBreadcrumb } from '@cognite/gearbox';
 
 `Asset` type can be imported from `@cognite/sdk`:
 
-```js
+```typescript
 import { Asset } from '@cognite/sdk';
 ```
 
@@ -60,17 +60,17 @@ type FetchAssetCall = (assetId: CogniteInternalId) => Promise<Asset>
 
 Function that replaces embedded asset fetching:
 
-```jsx
+```typescript
 import { Asset, CogniteInternalId } from '@cognite/sdk';
 
-const retrieveAsset = async (assetId:CogniteInternalId): Promise<Asset> => {/* ... \*/}
+const retrieveAsset = async (assetId:CogniteInternalId): Promise<Asset> => {/* ... */}
 ```
 
 <Preview>
   <Story name="Custom assets fetching">
     <AssetBreadcrumb
-      assetId={4518112062673878} 
-      retrieveAsset={retrieveAsset} 
+      assetId={4518112062673878}
+      retrieveAsset={retrieveAsset}
     />
   </Story>
 </Preview>
@@ -103,7 +103,7 @@ const customElementRendering = (
 
 Function that provides as callback:
 
-```jsx
+```typescript
 const onBreadcrumbClick = (asset: Asset, depth: number) => console.log(asset, depth);
 ```
 

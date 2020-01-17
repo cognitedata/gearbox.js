@@ -24,13 +24,13 @@ The component requires two props, `title` and `onTenantSelected`.
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
 import { TenantSelector, PureObject } from '@cognite/gearbox';
 ```
-```jsx
+```typescript
 onTenantSelected = (tenant: string, advancedOptions: PureObject | null) => {};
 ```
 
@@ -54,13 +54,13 @@ onTenantSelected = (tenant: string, advancedOptions: PureObject | null) => {};
 This type describes a generic type used in gearbox.
 The type can be imported from @cognite/gearbox:
 
-```jsx
+```typescript
 import { PureObject } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```jsx
+```typescript
 interface ID = number | string;
 
 interface PureObject {
@@ -78,13 +78,13 @@ You can override styles of following blocks:
 <br/><br/>
 The type can be imported from `@cognite/gearbox`:
 
-```jsx
+```typescript
 import { TenantSelectorStyles } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```jsx
+```typescript
 interface TenantSelectorStyles {
   button?: React.CSSProperties;
   collapseWrapper?: React.CSSProperties;
@@ -126,7 +126,7 @@ See more details in `Custom Styles` example.
 
 ### Custom Validation Success
 
-```jsx
+```typescript
 const validateTenantSucess = async () => true;
 ```
 
@@ -142,7 +142,7 @@ const validateTenantSucess = async () => true;
 
 ### Custom Validation Error
 
-```jsx
+```typescript
 const validateTenantFailed = async (tenant: string) => {
   throw new Error(tenant);
 };
@@ -173,7 +173,7 @@ const validateTenantFailed = async (tenant: string) => {
 
 ### Loads Forever
 
-```jsx
+```typescript
 const loadsForEver = () => Promise.race([]);
 ```
 
@@ -213,7 +213,7 @@ const loadsForEver = () => Promise.race([]);
 
 ### Advanced Options
 
-```jsx
+```typescript
 const advancedOptions = { apiUrl: '', comment: 'Comment' };
 ```
 
@@ -229,7 +229,7 @@ const advancedOptions = { apiUrl: '', comment: 'Comment' };
 
 ### With Custom Styles
 
-```jsx
+```typescript
 const customStyle = {
   title: {
     color: 'red',
@@ -277,7 +277,7 @@ const customStyle = {
 
 ### With Theme
 
-```jsx
+```typescript
 import { ThemeProvider } from 'styled-components';
 
 const themeExample = {

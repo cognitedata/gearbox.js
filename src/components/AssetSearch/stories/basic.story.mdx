@@ -12,7 +12,7 @@ import {
 
 <Meta title="Assets/AssetSearch" decorators={decorators} />
 
-## Asset Search
+# Asset Search
 
 Use for assets search via name property.
 
@@ -22,7 +22,7 @@ Use for assets search via name property.
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -30,7 +30,7 @@ import { AssetSearch } from '@cognite/gearbox';
 import { Asset } from '@cognite/sdk';
 ```
 
-```jsx
+```typescript
 const onLiveSearchSelect = (asset: Asset) => console.log(asset);
 ```
 
@@ -49,7 +49,7 @@ const onLiveSearchSelect = (asset: Asset) => console.log(asset);
 #### AssetSearchStyles
 This interface defines inline CSS styles for inner elements of `AssetSearch` component.
 
-```jsx
+```typescript
 import { AssetSearchStyles } from '@cognite/gearbox';
 ```
 
@@ -59,7 +59,7 @@ See more details in `Custom Styles` example.
 
 ### Empty Results
 
-```jsx
+```typescript
 export const strings = {
   searchPlaceholder: 'Asset name',
   emptyLiveSearch: 'No results',
@@ -79,7 +79,7 @@ export const strings = {
 
 ### Error Handling
 
-```jsx
+```typescript
 const onError = (error: any): void => console.log(error);
 ```
 
@@ -118,7 +118,7 @@ const onError = (error: any): void => console.log(error);
 
 ### Custom Style
 
-```jsx
+```typescript
 import { AssetSearchStyles } from '@cognite/gearbox';
 
 const styles: AssetSearchStyles = {
@@ -155,6 +155,10 @@ const styles: AssetSearchStyles = {
 </Preview>
 
 ### Handle Search Results
+
+```typescript
+const onSearchResult = (assets: Asset[]): void => console.log(assets);
+```
 
 <Preview>
   <Story name="Handle Search Results" height = {heightProp}>

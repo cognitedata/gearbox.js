@@ -32,7 +32,7 @@ If you need to use one of these four panes separately without tabs please see fo
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -57,13 +57,13 @@ import { AssetMeta } from '@cognite/gearbox';
 The object that customizes the appearance of "Details" pane. All metadata properties will be hidden inside "collapse" component when optional property function  `toCategory` is passed. All uncategorized properties will appear under "Uncategorised" label, or the name specified with `unknownCategoryName`. See `DescriptionList` component for more details.
 `MetaAssetDetailsProps` type can be imported from @cognite/gearbox:
 
-```jsx
+```typescript
 import { MetaAssetDetailsProps } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```jsx
+```typescript
 export interface MetaAssetDetailsProps {
   toCategory?: (name: string) => string | undefined;
   categoryPriorityList?: string[];
@@ -79,13 +79,13 @@ The object that customizes the appearance of "Timeseries" pane. Property `string
 Other properties define appearance of `TimeseriesChartMeta` component which is shown if any entry in the list was expanded. See `TimeseriesChartMeta` component for more details.
 `MetaTimeseriesProps` type can be imported from @cognite/gearbox:
 
-```jsx
+```typescript
 import { MetaTimeseriesProps } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```jsx
+```typescript
 interface MetaTimeseriesProps {
   strings?: {
     noTimeseriesSign?: string;
@@ -119,13 +119,13 @@ but if `customCategorySort` is provided this function will be used for sorting n
 Priority categories are delimited from regular categories by gray line.
 `MetaDocProps` type can be imported from @cognite/gearbox:
 
-```jsx
+```typescript
 import { MetaDocProps } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```jsx
+```typescript
 import { CollapseProps } from 'antd/lib/collapse';
 import { FilesMetadata as Document } from '@cognite/sdk';
 
@@ -166,13 +166,13 @@ interface JsonDocTypes {
 This prop is supposed to customize appearance of "Events" pane.
 The type can be imported from @cognite/gearbox:
 
-```jsx
+```typescript
 import { MetaEventsProps } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```jsx
+```typescript
 interface MetaEventsProps extends TableDesignType {
   columns?: TableColumnType[];
 }
@@ -215,18 +215,18 @@ You can override styles of following blocks:
 
 The type can be imported from `@cognite/gearbox`:
 
-```jsx
+```typescript
 import {
   AssetMetaStyles,
   AssetTimeseriesPanelStyles,
   AssetDocumentsPanelStyles,
-  AssetEventsPanelStyles
-  } from '@cognite/gearbox';
+  AssetEventsPanelStyles,
+} from '@cognite/gearbox';
 ```
 
 Definition:
 
-```jsx
+```typescript
 interface AssetMetaStyles {
   header?: React.CSSProperties;
   emptyTab?: React.CSSProperties;
@@ -236,13 +236,13 @@ interface AssetMetaStyles {
   events?: AssetEventsPanelStyles;
 }
 ```
-```jsx
+```typescript
 interface AssetTimeseriesPanelStyles {
   wrapper?: React.CSSProperties;
   timeseriesContainer?: React.CSSProperties;
 }
 ```
-```jsx
+```typescript
 interface AssetDocumentsPanelStyles {
   wrapper?: React.CSSProperties;
   fileContainer?: React.CSSProperties;
@@ -250,7 +250,7 @@ interface AssetDocumentsPanelStyles {
   fileTitle?: React.CSSProperties;
 }
 ```
-```jsx
+```typescript
 interface AssetEventsPanelStyles {
   table?: React.CSSProperties;
   tableRow?: React.CSSProperties;
@@ -264,7 +264,7 @@ See more details in `Custom Styles` example.
 
 ### Returns Selected Pane
 
-```jsx
+```typescript
 const onPaneChange = (key: string) => console.log('onPaneChange', key);
 ```
 <Preview>
@@ -295,7 +295,7 @@ const onPaneChange = (key: string) => console.log('onPaneChange', key);
 
 ### Custom Details Category
 
-```jsx
+```typescript
 const detailsProps = {
   toCategory: (name: string) => name.split('_')[0],
   expandedCategories: ['SOURCE'],
@@ -313,7 +313,7 @@ const detailsProps = {
 
 ### Returns Selected Document
 
-```jsx
+```typescript
  const handleDocumentClick = (
   document: Document,
   category: string,
@@ -331,7 +331,7 @@ const detailsProps = {
 
 ### Custom Document Priority Categories
 
-```jsx
+```typescript
 const priorityCategoriesDocsProps = { categoryPriorityList: ['AB', 'ZE'] };
 ```
 
@@ -346,7 +346,7 @@ const priorityCategoriesDocsProps = { categoryPriorityList: ['AB', 'ZE'] };
 
 ### Custom Document Categories Sort
 
-```jsx
+```typescript
 const categoriesSortDocsProps = {
   customCategorySort: (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0),
   categoryPriorityList: [],
@@ -365,8 +365,8 @@ const categoriesSortDocsProps = {
 
 ### Custom Document Category Priority And Sort
 
-```jsx
-priorityAndSortDocsProps = {
+```typescript
+const priorityAndSortDocsProps = {
   customCategorySort: (a: string, b: string) => (a > b ? -1 : a < b ? 1 : 0),
   categoryPriorityList: ['ZE'],
 };
@@ -384,7 +384,7 @@ priorityAndSortDocsProps = {
 
 ### Custom TimeseriesChartMeta
 
-```jsx
+```typescript
 const timeseriesProps = {
   defaultTimePeriod: 'lastYear',
   showMetadata: false,
@@ -413,8 +413,8 @@ const timeseriesProps = {
 
 ### With Custom Styles
 
-```jsx
-customStyle = {
+```typescript
+const customStyle = {
   header: {
     textAlign: 'center',
     fontFamily: 'Comic Sans MS',

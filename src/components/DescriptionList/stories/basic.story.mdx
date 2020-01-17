@@ -19,14 +19,14 @@ This component displays an object in a table layout.
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
 import { DescriptionList } from '@cognite/gearbox';
 ```
 
-```jsx
+```typescript
 const metadata = {
   SOURCE_DB: 'workmate',
   SOURCE_TABLE: 'wmate_dba.wmt_location',
@@ -58,7 +58,7 @@ const metadata = {
 
 ### With Description Text
 
-```jsx
+```typescript
 const description = {
   descriptionId: 'list1',
   descriptionText: 'List with interesting data you might like to know.'
@@ -75,7 +75,7 @@ const description = {
 
 ### With Custom Categories
 
-```jsx
+```typescript
 const sourceCategory = 'Source data';
 
 const otherCategory = 'Other';

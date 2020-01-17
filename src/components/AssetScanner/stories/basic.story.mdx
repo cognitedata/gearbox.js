@@ -42,14 +42,14 @@ Just provide `ocrRequest` function to retrieve strings recognized from an image 
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
 import { AssetScanner } from '@cognite/gearbox';
 
 ```
-```jsx
+```typescript
 const onError = (error: any) => {
   console.log('onError', error);
 };
@@ -81,7 +81,7 @@ type ButtonRenderProp = (
 
 #### ASNotifyTypes:
 
-```jsx
+```typescript
 enum ASNotifyTypes {
   recognizeSuccess = 'recognizeSuccess',
   recognizeFails = 'recognizeFails',
@@ -94,7 +94,7 @@ enum ASNotifyTypes {
 
 #### OcrRequest:
 
-```jsx
+```typescript
 interface OcrRequest {
   image: string;
   key?: string;
@@ -104,7 +104,7 @@ interface OcrRequest {
 
 #### AssetScannerStyles:
 
-```jsx
+```typescript
 interface AssetScannerStyles {
   button: React.CSSProperties;
 }
@@ -114,7 +114,7 @@ interface AssetScannerStyles {
 
 ### Custom ocrRequest
 
-```jsx
+```typescript
 const onImageRecognizeFinish = (result: string[] | null) => {
   console.log('onImageRecognizeFinish', result);
 };
@@ -166,7 +166,7 @@ export const renderButton = (
 
 ### Notifications
 
-```jsx
+```typescript
 import { message } from 'antd';
 
 const customNotification = (type: ASNotifyTypes) => message.info(type);
@@ -236,7 +236,7 @@ const FileInputComponent = ({render}) => {
 
 ### Crop placeholder horizontal
 
-```jsx
+```typescript
 const cropSize = { width: 400, height: 200 };
 ```
 
@@ -253,7 +253,7 @@ const cropSize = { width: 400, height: 200 };
 
 ### Crop placeholder with custom overlay
 
-```jsx
+```typescript
 const webcamCropOverlay = () => (
   <div
     style={{
@@ -279,7 +279,7 @@ const webcamCropOverlay = () => (
 
 ### Custom asset search
 
-```jsx
+```typescript
 const getAssetHandlerCustom = async (strings) => await customAssetSearch(strings);
 ```
 

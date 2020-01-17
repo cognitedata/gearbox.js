@@ -27,7 +27,7 @@ To retrieve a tree you need to provide:
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -52,7 +52,7 @@ import { ThreeDNodeTree } from '@cognite/gearbox';
 This type describes the parameters the `onRightClick` function is called with.
 The type can be imported from @cognite/gearbox:
 
-```jsx
+```typescript
 import { OnRightClickNodeTreeParams } from '@cognite/gearbox';
 ```
 
@@ -71,7 +71,7 @@ You can override styles of following blocks:
 
 The type can be imported from `@cognite/gearbox`:
 
-```jsx
+```typescript
 import { NodeTreeStyles } from '@cognite/gearbox';
 ```
 
@@ -79,7 +79,7 @@ import { NodeTreeStyles } from '@cognite/gearbox';
 
 ### Click Item In Tree
 
-```jsx
+```typescript
 import { OnSelectNodeTreeParams } from '@cognite/gearbox';
 
 const onSelectTreeNode = (e: OnSelectNodeTreeParams) => console.log('onSelect', e)
@@ -97,7 +97,7 @@ const onSelectTreeNode = (e: OnSelectNodeTreeParams) => console.log('onSelect', 
 
 ### Right Click Item In Tree
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 import React from 'react';
 import { Menu } from 'antd';
@@ -185,7 +185,7 @@ export class RightClickExample extends React.Component<{}, RightClickState> {
 
 ### Default Expanded Node
 
-```jsx
+```typescript
 const expandedKeys: number[] = [
   8901019261985265,
   7587176698924415,
@@ -205,7 +205,7 @@ const expandedKeys: number[] = [
 
 ### With Custom Styles
 
-```jsx
+```typescript
 const customStyle = {
   list: {
     fontFamily: 'Courier New',
@@ -226,7 +226,7 @@ const customStyle = {
 
 ### With Theme
 
-```jsx
+```typescript
 import { ThemeProvider } from 'styled-components';
 
 const exampleTheme = {

@@ -15,7 +15,7 @@ The component is used as one of the panes in AssetMeta component.
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
@@ -36,14 +36,14 @@ import { AssetDetailsPanel } from '@cognite/gearbox';
 
 `Asset` type can be imported from `@cognite/sdk`:
 
-```js
+```typescript
 import { Asset } from '@cognite/sdk';
 ```
 ## Examples
 
 ### Custom categories
 
-```jsx
+```typescript
 const toCategory = (name: string): string => name.split('_')[0];
 ```
 
@@ -70,7 +70,7 @@ const toCategory = (name: string): string => name.split('_')[0];
 
 ### Custom Styles
 
-```jsx
+```typescript
 const customStyle: React.CSSProperties = {
   border: '1px solid red',
 };
@@ -88,7 +88,7 @@ const customStyle: React.CSSProperties = {
 
 A callback function can be provided to fire when the asset is loaded:
 
-```jsx
+```typescript
 import { Asset } from '@cognite/sdk';
 
 const onAssetLoaded = (asset: Asset) => console.log(asset);

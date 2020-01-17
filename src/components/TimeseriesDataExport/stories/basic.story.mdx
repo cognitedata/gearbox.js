@@ -22,13 +22,13 @@ also can be redefined via `retrieveTimeseries` and `fetchCSV` props.
 
 Imports:
 
-```jsx
+```typescript
 import 'antd/dist/antd.css';
 
 import React from 'react';
 import { TimeseriesDataExport } from '@cognite/gearbox';
 ```
-TimeseriesChartExportWrapper component to demonstrate basic behavior
+`TimeseriesChartExportWrapper` is a component to demonstrate basic behavior
 
 ```jsx
 const TimeseriesChartExportWrapper: React.FC<
@@ -63,17 +63,17 @@ const TimeseriesChartExportWrapper: React.FC<
 
 ### Types:
 
-#### `FetchCSVCall`
+#### FetchCSVCall
 
 The type can be imported from `@cognite/gearbox`:
 
-```jsx
+```typescript
 import { FetchCSVCall } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```jsx
+```typescript
 import { DatapointsMultiQuery, Aggregate } from '@cognite/sdk';
 
 interface CsvParseOptions {
@@ -89,17 +89,17 @@ type FetchCSVCall = (
 ) => Promise<string>;
 ```
 
-#### `FetchTimeseriesCall`
+#### FetchTimeseriesCall
 
 The type can be imported from `@cognite/gearbox`:
 
-```jsx
+```typescript
 import { FetchTimeseriesCall } from '@cognite/gearbox';
 ```
 
 Definition:
 
-```jsx
+```typescript
 import { InternalId, TimeSeries } from '@cognite/sdk';
 
 type FetchTimeseriesCall = (
@@ -109,7 +109,7 @@ type FetchTimeseriesCall = (
 
 #### Default strings
 
-```jsx
+```typescript
 const defaultStrings: PureObject = {
   title: 'Export chart data',
   labelRange: 'Range',
@@ -133,7 +133,7 @@ const defaultStrings: PureObject = {
 
 ### Hit Limit
 
-```jsx
+```typescript
 const strings = {
   cellLimitErr:
     'Oops, you rich cell limit for CSV document – {{ cellLimit }} cells, some data may be omitted',
@@ -154,11 +154,11 @@ const strings = {
 
 ### Format label
 
-```jsx
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk'; 
+```typescript
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import { CSVLabelFormatter } from '@cognite/gearbox';
 
-const labelFormatter: CSVLabelFormatter = (ts: GetTimeSeriesMetadataDTO) => ts.name || \`timeserie-${ts.id}\`; 
+const labelFormatter: CSVLabelFormatter = (ts: GetTimeSeriesMetadataDTO) => ts.name || \`timeserie-${ts.id}\`;
 ```
 <Preview>
   <Story name="Format label" >
