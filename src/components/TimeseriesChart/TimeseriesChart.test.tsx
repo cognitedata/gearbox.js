@@ -3,10 +3,11 @@ import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
 import React from 'react';
 import { datapointsList, sleep, timeseriesListV2 } from '../../mocks';
-import { MockCogniteClient } from '../../mocks/mockSdk';
+import { MockCogniteClient } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { CursorOverview } from './components/CursorOverview';
-import { ChartRulerPoint, TimeseriesChart } from './TimeseriesChart';
+import { ChartRulerPoint } from './interfaces';
+import { TimeseriesChart } from './TimeseriesChart';
 
 configure({ adapter: new Adapter() });
 

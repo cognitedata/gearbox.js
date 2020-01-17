@@ -1,0 +1,227 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { TimeseriesSearch } from '../TimeseriesSearch';
+import {
+  names,
+  decorators,
+  onTimeserieSelectionChange,
+  customString,
+  filterRule,
+  customStyles,
+  ExampleTheme,
+} from './helper';
+import { ThemeProvider } from 'styled-components';
+
+
+<Meta title="Time Series/TimeseriesSearch" decorators={decorators} />
+
+# Timeseries Search
+
+This component searches for timeseries by name. Search results will be shown in a list. Each result have a checkbox for selection, and all selected timeseries are shown above the search bar. Selected timeseries can be removed by clicking the cross on the selected row.
+The component requires only `onTimeserieSelectionChange`prop which is called when the selection changes. It is called with two parameters: the current list of selected ids, and the last added/removed timeseries.
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+Imports:
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { TimeseriesSearch } from '@cognite/gearbox';
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+
+```
+
+```typescript
+const onTimeserieSelectionChange = (
+  newTimeseriesIds: number[],
+  selectedTimeseries: GetTimeSeriesMetadataDTO
+) => { /* ... */ }
+```
+
+#### Info:
+
+<p>You can search for {names}</p>
+
+<Preview>
+  <Story name="Basic Usage" >
+    <TimeseriesSearch onTimeserieSelectionChange={onTimeserieSelectionChange} />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={TimeseriesSearch} />
+
+### Types
+
+#### GetTimeSeriesMetadataDTO
+
+This type describes what the cognite API returns when fetching timeseries.
+It can be imported from `@cognite/sdk`.
+Documentation can be found at https://js-sdk-docs.cogniteapp.com/interfaces/timeseries.html.
+
+#### TimeseriesSearchStyles
+
+This interface defines inline CSS styles for inner elements of `TimeseriesSearch` component.
+
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { TimeseriesSearchStyles } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+export interface TimeseriesSearchStyles {
+  buttonRow?: React.CSSProperties;
+  list?: React.CSSProperties;
+  selectAllButton?: React.CSSProperties;
+  selectNoneButton?: React.CSSProperties;
+}
+```
+
+See more details in `Custom styles` example.
+
+## Examples
+
+### Show Root Asset Select
+
+#### Info:
+
+<p>For all examples You can search for {names}</p>
+
+<Preview>
+  <Story name="Show Root Asset Select" >
+    <TimeseriesSearch
+      onTimeserieSelectionChange={onTimeserieSelectionChange}
+      rootAssetSelect={true}
+    />
+  </Story>
+</Preview>
+
+### Hide Selected Row
+
+<Preview>
+  <Story name="Hide Selected Row" >
+    <TimeseriesSearch
+      onTimeserieSelectionChange={onTimeserieSelectionChange}
+      hideSelected={true}
+    />
+  </Story>
+</Preview>
+
+### Single Selection
+
+<Preview>
+  <Story name="Single Selection" >
+    <TimeseriesSearch
+      onTimeserieSelectionChange={onTimeserieSelectionChange}
+      single={true}
+    />
+  </Story>
+</Preview>
+
+### Allow Strings
+
+<Preview>
+  <Story name="Allow Strings" >
+    <TimeseriesSearch
+      onTimeserieSelectionChange={onTimeserieSelectionChange}
+      allowStrings={true}
+    />
+  </Story>
+</Preview>
+
+### Preselected
+
+<Preview>
+  <Story name="Preselected" >
+    <TimeseriesSearch
+      onTimeserieSelectionChange={onTimeserieSelectionChange}
+      selectedTimeseries={[8681821313339919, 285034733763395]}
+    />
+  </Story>
+</Preview>
+
+### Custom Filter Rule
+
+```typescript
+const filterRule = (timeseries: GetTimeSeriesMetadataDTO): boolean =>
+  !timeseries.isString;
+```
+
+<Preview>
+  <Story name="Custom Filter Rule" >
+    <TimeseriesSearch
+      onTimeserieSelectionChange={onTimeserieSelectionChange}
+      filterRule={filterRule}
+    />
+  </Story>
+</Preview>
+
+### Custom Strings
+
+```typescript
+const customString = {
+  rootAssetSelectAll: 'No filter',
+  searchPlaceholder: 'search for stuff!',
+  selectAll: 'EfilterRuleverything!',
+  selectNone: 'Nothing!',
+};
+
+```
+
+<Preview>
+  <Story name="Custom Strings" >
+    <TimeseriesSearch
+      onTimeserieSelectionChange={onTimeserieSelectionChange}
+      rootAssetSelect={true}
+      strings={customString}
+    />
+  </Story>
+</Preview>
+
+### With Custom Styles
+
+```typescript
+const customStyles = {
+  list: { height: '200px' },
+  buttonRow: { marginTop: '30px' },
+  selectAllButton: { backgroundColor: 'lightblue' },
+  selectNoneButton: {
+    backgroundColor: 'magenta',
+    marginLeft: '50px',
+  },
+};
+```
+
+<Preview>
+  <Story name="With Custom Styles" >
+    <TimeseriesSearch
+      onTimeserieSelectionChange={onTimeserieSelectionChange}
+      styles={customStyles}
+    />
+  </Story>
+</Preview>
+
+### With Theme
+
+```typescript
+import { ThemeProvider } from 'styled-components';
+
+const ExampleTheme = {
+  gearbox: {
+    selectColor: 'red',
+    white: '#fff',
+  },
+};
+```
+
+<Preview>
+  <Story name="With Theme" >
+    <ThemeProvider theme={ExampleTheme}><TimeseriesSearch onTimeserieSelectionChange={onTimeserieSelectionChange}/></ThemeProvider>
+  </Story>
+</Preview>
+

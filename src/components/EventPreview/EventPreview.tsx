@@ -1,19 +1,17 @@
 import { CogniteClient, CogniteEvent } from '@cognite/sdk';
 import { Spin } from 'antd';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
-import { PureObject } from '../../interfaces';
 import {
-  EventPreviewStyles as Styles,
+  defaultStrings,
   EventPreviewView,
 } from './components/EventPreviewView';
-
-export type EventPreviewStyles = Styles;
+import { EventPreviewProps } from './interfaces';
 
 const LoadingSpinner: React.FC = () => (
   <SpinContainer>
@@ -21,25 +19,19 @@ const LoadingSpinner: React.FC = () => (
   </SpinContainer>
 );
 
-export interface EventPreviewProps {
-  eventId: number;
-  onShowDetails?: (e: CogniteEvent) => void;
-  strings?: PureObject;
-  hideProperties?: (keyof CogniteEvent)[];
-  hideLoadingSpinner?: boolean;
-  styles?: EventPreviewStyles;
-}
-
 interface EventPreviewState {
   event: CogniteEvent | null;
 }
 
-export class EventPreview extends React.Component<
+export class EventPreview extends Component<
   EventPreviewProps,
   EventPreviewState
 > {
   static displayName = 'EventPreview';
   static contextType = ClientSDKProxyContext;
+  static defaultProps = {
+    strings: defaultStrings,
+  };
   context!: React.ContextType<typeof ClientSDKProxyContext>;
   client!: CogniteClient;
 

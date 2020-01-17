@@ -1,11 +1,12 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import React from 'react';
+import React, { FC } from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { SDK_LIST_LIMIT } from '../../constants/sdk';
 import { fakeEvents } from '../../mocks';
-import { MockCogniteClient } from '../../mocks/mockSdk';
-import { withAssetEvents, WithAssetEventsDataProps } from '../withAssetEvents';
+import { MockCogniteClient } from '../../mocks';
+import { WithAssetEventsDataProps } from '../interfaces';
+import { withAssetEvents } from '../withAssetEvents';
 
 configure({ adapter: new Adapter() });
 
@@ -72,7 +73,7 @@ describe('withAssetEvents', () => {
   });
 
   it('Wrapped component should receive asset events after loading', done => {
-    const TestComponent: React.SFC<WithAssetEventsDataProps> = props => (
+    const TestComponent: FC<WithAssetEventsDataProps> = props => (
       <div>
         <p className="events-number">{props.assetEvents.length}</p>
         <p className="first-event-description">

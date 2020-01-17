@@ -1,4 +1,4 @@
-import { OcrRequest } from '../interfaces';
+import { OcrRequest } from '../components/AssetScanner/interfaces';
 import { extractValidStrings } from '../utils/utils';
 
 const ocrVisionURL = 'https://vision.googleapis.com/v1/images:annotate';

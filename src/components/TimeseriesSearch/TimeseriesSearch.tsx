@@ -3,7 +3,7 @@ import { CogniteClient } from '@cognite/sdk';
 import { Button, Spin } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
 import { debounce } from 'lodash';
-import React, { KeyboardEvent } from 'react';
+import React, { Component, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
@@ -11,33 +11,9 @@ import { ApiQuery, PureObject } from '../../interfaces';
 import { DetailCheckbox } from '../common/DetailCheckbox/DetailCheckbox';
 import { defaultStrings as rootAssetSelectStrings } from '../common/RootAssetSelect/RootAssetSelect';
 import { Search } from '../common/Search/Search';
+import { TimeseriesSearchProps } from './interfaces';
 import { Item, SelectedItems } from './SelectedItems';
 
-export interface TimeseriesSearchStyles {
-  buttonRow?: React.CSSProperties;
-  list?: React.CSSProperties;
-  selectAllButton?: React.CSSProperties;
-  selectNoneButton?: React.CSSProperties;
-}
-
-export interface TimeseriesSearchProps {
-  selectedTimeseries: number[];
-  single: boolean;
-
-  hideSelected: boolean;
-  allowStrings: boolean;
-  onTimeserieSelectionChange: (
-    newTimeseriesIds: number[],
-    selectedTimeseries: GetTimeSeriesMetadataDTO | null
-  ) => void;
-  rootAsset?: number;
-  filterRule?: (timeseries: GetTimeSeriesMetadataDTO) => boolean;
-  onError?: (error: Error) => void;
-  styles?: TimeseriesSearchStyles;
-
-  rootAssetSelect: boolean;
-  strings: PureObject;
-}
 export const defaultStrings: PureObject = {
   searchPlaceholder: 'Search for timeseries',
   selectAll: 'Select all',
@@ -55,7 +31,7 @@ interface TimeseriesSearchState {
   cursor?: number;
 }
 
-export class TimeseriesSearch extends React.Component<
+export class TimeseriesSearch extends Component<
   TimeseriesSearchProps,
   TimeseriesSearchState
 > {
@@ -63,7 +39,6 @@ export class TimeseriesSearch extends React.Component<
   static contextType = ClientSDKProxyContext;
   static defaultProps = {
     selectedTimeseries: [],
-    strings: {},
     filterRule: undefined,
     hideSelected: false,
     allowStrings: false,
@@ -71,6 +46,7 @@ export class TimeseriesSearch extends React.Component<
     single: false,
     onError: undefined,
     rootAsset: undefined,
+    strings: defaultStrings,
   };
 
   static getDerivedStateFromProps(

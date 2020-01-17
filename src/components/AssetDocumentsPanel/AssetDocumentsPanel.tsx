@@ -1,12 +1,4 @@
-import { withAssetFiles, WithAssetFilesProps } from '../../hoc/withAssetFiles';
-import { MetaDocProps } from '../../interfaces';
-import {
-  DocumentsPanelStylesProps,
-  DocumentTable,
-} from './DocumentTable/DocumentTable';
-
-export type AssetDocumentsPanelProps = WithAssetFilesProps &
-  MetaDocProps &
-  DocumentsPanelStylesProps;
+import { withAssetFiles } from '../../hoc';
+import { DocumentTable } from './DocumentTable/DocumentTable';
 
 export const AssetDocumentsPanel = withAssetFiles(DocumentTable);

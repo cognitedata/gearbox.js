@@ -2,16 +2,16 @@ import { configure, mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { MockCogniteClient } from '../../mocks/mockSdk';
+import { MockCogniteClient } from '../../mocks';
 import { LabelFormatter } from '../../utils/csv';
 import * as csv from '../../utils/csv';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import {
   FetchCSVCall,
   FetchTimeseriesCall,
-  TimeseriesDataExport,
   TimeseriesDataExportProps,
-} from './TimeseriesDataExport';
+} from './interfaces';
+import { TimeseriesDataExport } from './TimeseriesDataExport';
 
 configure({ adapter: new Adapter() });
 

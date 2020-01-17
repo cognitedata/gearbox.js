@@ -1,14 +1,9 @@
-import { CogniteClient } from '@cognite/sdk';
-import React from 'react';
+import React, { FC } from 'react';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { wrapInProxies } from '../../proxies/clientSDKProxies';
+import { ClientSDKProviderProps } from './interfaces';
 
-export interface ClientSDKProxyProviderProps {
-  client: CogniteClient;
-  children: React.ReactNode;
-}
-
-export const ClientSDKProxyProvider: React.FC<ClientSDKProxyProviderProps> = ({
+export const ClientSDKProxyProvider: FC<ClientSDKProviderProps> = ({
   client,
   children,
 }) => (

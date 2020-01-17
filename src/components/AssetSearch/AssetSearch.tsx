@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { Asset, AssetSearchFilter } from '@cognite/sdk';
 import { CogniteClient } from '@cognite/sdk';
@@ -9,39 +9,21 @@ import {
 } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 
-import { ApiQuery, Callback, PureObject } from '../../interfaces';
-import { Search, SearchStyles as Styles } from '../common/Search/Search';
-
-export type AssetSearchStyles = Styles;
-
-type LiveSearchSelect = (asset: Asset) => void;
-type SearchResultCallback = (assets: Asset[]) => void;
+import { ApiQuery, PureObject } from '../../interfaces';
+import { Search } from '../common/Search/Search';
+import { AssetSearchProps } from './interfaces';
 
 export const defaultStrings: PureObject = {
   searchPlaceholder: 'Search for an asset',
   emptyLiveSearch: 'Nothing found',
 };
 
-export interface AssetSearchProps {
-  onLiveSearchSelect?: LiveSearchSelect;
-  showLiveSearchResults?: boolean;
-  onError?: Callback;
-  strings?: PureObject;
-  rootAssetSelect: boolean;
-  advancedSearch: boolean;
-  styles?: AssetSearchStyles;
-  onSearchResult?: SearchResultCallback;
-}
-
 interface AssetSearchState {
   items: Asset[];
   loading: boolean;
 }
 
-export class AssetSearch extends React.Component<
-  AssetSearchProps,
-  AssetSearchState
-> {
+export class AssetSearch extends Component<AssetSearchProps, AssetSearchState> {
   static displayName = 'AssetSearch';
   static defaultProps = {
     rootAssetSelect: false,

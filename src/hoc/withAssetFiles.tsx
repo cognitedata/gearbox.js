@@ -1,4 +1,4 @@
-import { CogniteClient, FileRequestFilter, FilesMetadata } from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
@@ -13,23 +13,11 @@ import {
   ComponentWithUnmountState,
   connectPromiseToUnmountState,
 } from '../utils/promise';
-
-export interface WithAssetFilesDataProps {
-  assetFiles: FilesMetadata[];
-}
-
-export interface WithAssetFilesProps {
-  assetId: number;
-  queryParams?: FileRequestFilter;
-  customSpinner?: React.ReactNode;
-  onAssetFilesLoaded?: (assetFiles: FilesMetadata[]) => void;
-}
-
-export interface WithAssetFilesState {
-  isLoading: boolean;
-  assetFiles: FilesMetadata[] | null;
-  assetId: number;
-}
+import {
+  WithAssetFilesDataProps,
+  WithAssetFilesProps,
+  WithAssetFilesState,
+} from './interfaces/WithAssetFilesInterfaces';
 
 export const withAssetFiles = <P extends WithAssetFilesDataProps>(
   WrapperComponent: React.ComponentType<P>

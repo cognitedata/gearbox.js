@@ -1,0 +1,97 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { DescriptionList } from '../DescriptionList';
+import {
+  metadata,
+  description,
+  sourceCategory,
+  otherCategory,
+  toCategory,
+  ComponentProps
+} from './helper'
+
+<Meta title="Others/DescriptionList" />
+
+# Description List
+
+This component displays an object in a table layout.
+
+### Basic Usage:
+
+Imports:
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { DescriptionList } from '@cognite/gearbox';
+```
+
+```typescript
+const metadata = {
+  SOURCE_DB: 'workmate',
+  SOURCE_TABLE: 'wmate_dba.wmt_location',
+  WMT_LOCATION_ID: '1004',
+  WMT_LOCATION_WORKSTART: '1999-09-01 07:00:00',
+  latestUpdateTimeSource: '1552471210000',
+}
+```
+
+<Preview>
+  <Story name="Basic Usage">
+    <DescriptionList valueSet={metadata} />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={ComponentProps} />
+
+## Examples
+
+### No Data
+
+<Preview>
+  <Story name="No Data">
+    <DescriptionList valueSet={{}} />
+  </Story>
+</Preview>
+
+### With Description Text
+
+```typescript
+const description = {
+  descriptionId: 'list1',
+  descriptionText: 'List with interesting data you might like to know.'
+};
+```
+<Preview>
+  <Story name="With Description Text">
+    <DescriptionList
+      valueSet={metadata}
+      description={description}
+    />
+  </Story>
+</Preview>
+
+### With Custom Categories
+
+```typescript
+const sourceCategory = 'Source data';
+
+const otherCategory = 'Other';
+
+const toCategory = (name: string) =>
+  name.includes('SOURCE') ? sourceCategory : undefined;
+```
+
+<Preview>
+  <Story name="With Custom Categories">
+    <DescriptionList
+      valueSet={metadata}
+      toCategory={toCategory}
+      unknownCategoryName={otherCategory}
+      expandedCategories={[otherCategory]}
+      categoryPriorityList={[sourceCategory]}
+    />
+  </Story>
+</Preview>

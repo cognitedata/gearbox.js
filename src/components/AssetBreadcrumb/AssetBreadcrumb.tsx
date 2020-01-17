@@ -1,23 +1,11 @@
-import { Asset, CogniteInternalId } from '@cognite/sdk';
+import { Asset } from '@cognite/sdk';
 import { Breadcrumb, Icon } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';
-import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import { AnyIfEmpty } from '../../interfaces';
-import { defaultTheme } from '../../theme/defaultTheme';
-
-export type FetchAssetCall = (assetId: CogniteInternalId) => Promise<Asset>;
-
-export interface AssetBreadcrumbProps {
-  assetId: number;
-  maxLength?: number;
-  renderItem?: (asset: Asset, depth: number) => JSX.Element;
-  retrieveAsset?: FetchAssetCall;
-  onBreadcrumbClick?: (asset: Asset, depth: number) => void;
-  theme?: AnyIfEmpty<{}>;
-}
+import { withDefaultTheme } from '../../hoc';
+import { AssetBreadcrumbProps } from './interfaces';
 
 const ENTER_KEY_CODE = 13;
 
@@ -50,7 +38,15 @@ const renderBreadcrumbs = (
   return renderedList;
 };
 
-const AssetBreadcrumb: React.FC<AssetBreadcrumbProps> = ({
+/**
+ * Component AssetBreadcrumb
+ * @param assetId: number
+ * @param maxLength: number = 3
+ * @param renderItem: (asset: Asset, depth: number) => JSX.Element;
+ * @param onBreadcrumbClick: (asset: Asset, depth: number) => void;
+ * @constructor
+ */
+const AssetBreadcrumb: FC<AssetBreadcrumbProps> = ({
   assetId,
   maxLength = 3,
   renderItem,
@@ -149,10 +145,6 @@ const AssetBreadcrumb: React.FC<AssetBreadcrumbProps> = ({
       </Breadcrumb>
     </BreadcrumbWrapper>
   );
-};
-
-AssetBreadcrumb.defaultProps = {
-  theme: defaultTheme,
 };
 
 const BreadcrumbWrapper = styled.div`
