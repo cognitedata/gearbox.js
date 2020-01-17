@@ -1,14 +1,18 @@
 import { Radio } from 'antd';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import moment from 'moment';
-import React from 'react';
+import React, { PureComponent } from 'react';
 import styled from 'styled-components';
-import { WithTimeseriesDataProps } from '../../hoc/withTimeseries';
+import { WithTimeseriesDataProps } from '../../hoc/interfaces';
 import { TimeseriesChart } from '../TimeseriesChart';
 import { TimeseriesMetaInfo } from './components/TimeseriesMetaInfo';
 import { TimeseriesValue } from './components/TimeseriesValue';
+import {
+  TimeseriesChartMetaBase,
+  TimeseriesChartMetaPeriod,
+} from './interfaces';
 
-const timeScales: { [key: string]: { unit: string; number: number } } = {
+export const timeScales: { [key: string]: { unit: string; number: number } } = {
   last10Years: {
     unit: 'years',
     number: 10,
@@ -39,22 +43,9 @@ const timeScales: { [key: string]: { unit: string; number: number } } = {
   },
 };
 
-export type TimeseriesChartMetaPeriod = keyof typeof timeScales;
-
-export interface TimeseriesChartMetaProps extends WithTimeseriesDataProps {
-  liveUpdate?: boolean;
-  updateIntervalMillis?: number;
-  defaultTimePeriod?: TimeseriesChartMetaPeriod;
-  defaultBasePeriod?: {
-    startTime: number;
-    endTime: number;
-  };
-  showDescription?: boolean;
-  showPeriods?: boolean;
-  showChart?: boolean;
-  showDatapoint?: boolean;
-  showMetadata?: boolean;
-}
+export interface TimeseriesChartMetaPureProps
+  extends WithTimeseriesDataProps,
+    TimeseriesChartMetaBase {}
 
 interface TimeseriesChartMetaState {
   timePeriod: TimeseriesChartMetaPeriod;
@@ -64,8 +55,8 @@ interface TimeseriesChartMetaState {
   };
 }
 
-export class TimeseriesChartMetaPure extends React.PureComponent<
-  TimeseriesChartMetaProps,
+export class TimeseriesChartMetaPure extends PureComponent<
+  TimeseriesChartMetaPureProps,
   TimeseriesChartMetaState
 > {
   static defaultProps = {
@@ -79,7 +70,7 @@ export class TimeseriesChartMetaPure extends React.PureComponent<
     showMetadata: true,
   };
 
-  constructor(props: TimeseriesChartMetaProps) {
+  constructor(props: TimeseriesChartMetaPureProps) {
     super(props);
     this.state = {
       timePeriod: props.defaultBasePeriod ? '-' : props.defaultTimePeriod!,

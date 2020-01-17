@@ -1,1 +1,2 @@
-export * from './AssetTimeseriesPanel';
+export { AssetTimeseriesPanel } from './AssetTimeseriesPanel';
+export * from './interfaces';

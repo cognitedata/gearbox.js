@@ -1,1 +1,3 @@
-export * from './TenantSelector';
+export { TenantSelector } from './TenantSelector';
+
+export * from './interfaces';

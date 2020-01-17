@@ -1,1 +1,2 @@
-export * from './AssetMeta';
+export { AssetMeta } from './AssetMeta';
+export * from './interfaces';

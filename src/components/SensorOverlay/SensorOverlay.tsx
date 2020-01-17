@@ -1,7 +1,6 @@
 import { omit, sortedIndex } from 'lodash';
 import React, { Component } from 'react';
 import {
-  ConnectDropTarget,
   DragDropContext,
   DropTarget,
   DropTargetConnector,
@@ -12,10 +11,11 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { withSize } from 'react-sizeme';
 import { getColorByString } from '../../utils/colors';
 import { clampNumber } from '../../utils/utils';
-import DraggableBox, { Datapoint } from './components/DraggableBox';
+import DraggableBox, { defaultStrings } from './components/DraggableBox';
 import DraggablePoint from './components/DraggablePoint';
 import SvgLine from './components/SvgLine';
 import { DragTargets } from './constants';
+import { SensorOverlayProps, SensorPosition } from './interfaces';
 
 const boxTarget: DropTargetSpec<SensorOverlayProps> = {
   hover(
@@ -64,61 +64,10 @@ const boxTarget: DropTargetSpec<SensorOverlayProps> = {
   },
 };
 
-export interface SensorPosition {
-  left: number;
-  top: number;
-  pointer: {
-    left: number;
-    top: number;
-  };
-}
-
-export type SensorDatapoint = Datapoint;
-
-export interface SensorMinMaxRange {
-  min?: number;
-  max?: number;
-}
-
 interface DraggableBoxPosition extends SensorPosition {
   id: number;
   defaultSlot: number | null;
   color: string;
-}
-
-export interface SensorOverlayProps {
-  children: React.ReactNode;
-  timeseriesIds: number[];
-  alertColor?: string;
-  colorMap: {
-    [id: string]: string;
-  };
-  defaultPositionMap: {
-    [id: string]: SensorPosition;
-  };
-  linksMap: {
-    [id: string]: boolean;
-  };
-  stickyMap: {
-    [id: string]: boolean;
-  };
-  minMaxMap: {
-    [id: string]: SensorMinMaxRange;
-  };
-  isTagDraggable: boolean;
-  isPointerDraggable: boolean;
-  onSensorPositionChange?: (id: number, position: SensorPosition) => void;
-  onSettingsClick?: (id: number) => void;
-  onClick?: (id: number) => void;
-  onLinkClick?: (id: number, dataPoint?: Datapoint) => void;
-  connectDropTarget: ConnectDropTarget;
-  size: {
-    width: number;
-    height: number;
-  };
-  fixedWidth?: number;
-  refreshInterval?: number;
-  strings?: { [key: string]: string };
 }
 
 interface SensorOverlayState {
@@ -134,6 +83,7 @@ class SensorOverlay extends Component<SensorOverlayProps, SensorOverlayState> {
   static defaultProps: Partial<SensorOverlayProps> = {
     isTagDraggable: true,
     isPointerDraggable: true,
+    strings: defaultStrings,
   };
 
   static getDerivedStateFromProps(
@@ -432,3 +382,5 @@ const FinalSensorOverlay = DragDropContext(HTML5Backend)(SizeWrapper);
 FinalSensorOverlay.displayName = 'SensorOverlay';
 
 export { FinalSensorOverlay as SensorOverlay };
+
+export { SensorOverlay as SensorOverlayWithoutCustomize };

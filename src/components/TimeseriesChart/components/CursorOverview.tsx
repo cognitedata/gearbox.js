@@ -2,7 +2,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import React from 'react';
 import styled from 'styled-components';
-import { ChartRulerConfig, ChartRulerPoint } from '../TimeseriesChart';
+import { ChartRulerConfig, ChartRulerPoint } from '../interfaces';
 
 const Container = styled.div`
   position: fixed;

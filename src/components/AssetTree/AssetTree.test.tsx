@@ -3,13 +3,13 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { sleep } from '../../mocks';
 import {
   ASSET_LIST_CHILD,
   ASSET_TREE_STYLES,
   ASSET_ZERO_DEPTH_ARRAY,
-} from '../../mocks/assetsListV2';
-import { MockCogniteClient } from '../../mocks/mockSdk';
+  MockCogniteClient,
+  sleep,
+} from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { AssetTree } from './AssetTree';
 

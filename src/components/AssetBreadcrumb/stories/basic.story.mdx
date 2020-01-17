@@ -1,0 +1,118 @@
+import { Meta, Story, Preview, Props, Source } from '@storybook/addon-docs/blocks';
+import { AssetBreadcrumb } from '../AssetBreadcrumb';
+import { decorators, customElementRendering, onBreadcrumbClick, ComponentProps, retrieveAsset } from './helper';
+
+<Meta title="Assets/AssetBreadcrumb" decorators={decorators} />
+
+# AssetBreadcrumb
+
+This component renders breadcrumb for assets chain, that represents path from root asset to provided asset.
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+### Basic usage:
+
+Don't forget to import:
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { AssetBreadcrumb } from '@cognite/gearbox';
+```
+
+<Preview withSource={'none'}>
+  <Story name="Basic Usage">
+    <AssetBreadcrumb assetId={4518112062673878} />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={ComponentProps} />
+
+### Types
+
+`Asset` type can be imported from `@cognite/sdk`:
+
+```typescript
+import { Asset } from '@cognite/sdk';
+```
+
+`FetchAssetCall` type can be imported from '@cognite/gearbox', type looks like:
+
+```typescript
+type FetchAssetCall = (assetId: CogniteInternalId) => Promise<Asset>
+```
+
+## Examples
+
+### Define max length (number of elements) of rendered breadcrumb
+
+<Preview>
+  <Story name="Define breadcrumb length">
+    <AssetBreadcrumb assetId={4518112062673878} maxLength={5} />
+  </Story>
+</Preview>
+
+
+### Custom assets fetching
+
+Function that replaces embedded asset fetching:
+
+```typescript
+import { Asset, CogniteInternalId } from '@cognite/sdk';
+
+const retrieveAsset = async (assetId:CogniteInternalId): Promise<Asset> => {/* ... */}
+```
+
+<Preview>
+  <Story name="Custom assets fetching">
+    <AssetBreadcrumb
+      assetId={4518112062673878}
+      retrieveAsset={retrieveAsset}
+    />
+  </Story>
+</Preview>
+
+### Custom element rendering
+
+Function that modifies element to be rendered:
+
+```jsx
+const customElementRendering = (
+  asset: Asset,
+  depth: number
+): JSX.Element => (
+  <span style={{ backgroundColor: 'red' }}>{`${depth}. ${asset.name ||
+    'undefined'}`}</span>
+);
+```
+
+<Preview>
+  <Story name="Custom breadcrumb rendering">
+    <AssetBreadcrumb
+      assetId={4518112062673878}
+      maxLength={5}
+      renderItem={customElementRendering}
+    />
+  </Story>
+</Preview>
+
+### Handle callbacks
+
+Function that provides as callback:
+
+```typescript
+const onBreadcrumbClick = (asset: Asset, depth: number) => console.log(asset, depth);
+```
+
+<Preview>
+  <Story name="Handle callbacks">
+    <AssetBreadcrumb
+      assetId={4518112062673878}
+      onBreadcrumbClick={onBreadcrumbClick}
+    />
+  </Story>
+</Preview>
+

@@ -3,68 +3,26 @@ import { AssetMapping3D, CogniteClient, Revision3D } from '@cognite/sdk';
 import { Button, Slider } from 'antd';
 import { SliderValue } from 'antd/lib/slider';
 import { isEqual } from 'lodash';
-import React, { RefObject } from 'react';
+import React, { Component, RefObject } from 'react';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
-import { CacheObject, Callback, MouseScreenPosition } from '../../interfaces';
+import { Callback, MouseScreenPosition } from '../../interfaces';
 import {
   createViewer as originalCreateViewer,
   setCameraPosition,
   ViewerEventTypes,
 } from '../../utils/threeD';
+import {
+  Model3DViewerProps,
+  SlicingDetail,
+  SlicingProps,
+  SliderRange,
+} from './interfaces';
 
 let createViewer = originalCreateViewer;
 
 type ClickHandler = (position: MouseScreenPosition) => void;
 
-interface SliderRange {
-  max: number;
-  min: number;
-}
-
-interface SlicingDetail {
-  coord: number;
-  direction: boolean;
-}
-
-export interface SlicingProps {
-  x?: SlicingDetail;
-  y?: SlicingDetail;
-  z?: SlicingDetail;
-}
-
-export interface SliderProps {
-  x?: SliderRange;
-  y?: SliderRange;
-  z?: SliderRange;
-}
-
-export interface Model3DViewerStyles {
-  wrapper: React.CSSProperties;
-  viewer: React.CSSProperties;
-}
-
-export interface Model3DViewerProps {
-  modelId: number;
-  revisionId: number;
-  assetId?: number;
-  boundingBox?: THREE.Box3;
-  cache?: CacheObject;
-  enableKeyboardNavigation?: boolean;
-  highlightMappedNodes?: boolean;
-  onError?: Callback;
-  onProgress?: Callback;
-  onComplete?: Callback;
-  onReady?: Callback;
-  onClick?: Callback;
-  onCameraChange?: Callback;
-  useDefaultCameraPosition?: boolean;
-  slice?: SlicingProps;
-  slider?: SliderProps;
-  showScreenshotButton?: boolean;
-  onScreenshot?: (url: string) => void;
-  styles?: Model3DViewerStyles;
-}
 interface Model3DViewerState {
   boundingBox?: THREE.Box3;
 }
@@ -81,7 +39,7 @@ const containerStyles = {
   justifyContent: 'spaceAround',
 } as React.CSSProperties;
 
-export class Model3DViewer extends React.Component<Model3DViewerProps> {
+export class Model3DViewer extends Component<Model3DViewerProps> {
   [x: string]: any;
   static defaultProps = {
     enableKeyboardNavigation: true,

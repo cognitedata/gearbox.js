@@ -1,7 +1,7 @@
 # Gearbox.js
 [![Build Status](https://travis-ci.org/cognitedata/gearbox.js.svg?branch=master)](https://travis-ci.org/cognitedata/gearbox.js)
 [![codecov](https://codecov.io/gh/cognitedata/gearbox.js/branch/master/graph/badge.svg)](https://codecov.io/gh/cognitedata/gearbox.js)
-[![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://cognitedata.github.io/gearbox.js)
+[![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://cognitedata.github.io/gearbox.js/?path=/docs/assets-assetbreadcrumb--basic-usage)
 
 [Gearbox](https://github.com/cognitedata/gearbox.js) is a set of open-source front-end components natively integrated with Cognite Data Fusion [(CDF)](https://docs.cognite.com/dev/). 
 The Gearbox components are written in the [React](https://reactjs.org) front-end framework and make it easier to build web applications on top of CDF.
@@ -78,7 +78,7 @@ The Gearbox components are written in the [React](https://reactjs.org) front-end
 You can find example Gearbox applications in our [public repository](https://github.com/cognitedata/javascript-getting-started). Also, see our [YouTube channel](https://www.youtube.com/playlist?list=PLrRAbrQ_glsXGzl5OIen3eSS8bz-YFjTV) for Gearbox video tutorials.
 
 ## Storybook
-See the up-to-date storybook [here](https://cognitedata.github.io/gearbox.js).
+See the up-to-date storybook [here](https://cognitedata.github.io/gearbox.js/?path=/docs/assets-assetbreadcrumb--basic-usage).
 
 ## Contribution guidelines
 

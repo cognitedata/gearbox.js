@@ -1,0 +1,150 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { AssetEventsPanel } from '../AssetEventsPanel';
+import { AssetEventsPanelPure } from '../components/AssetEventsPanelPure';
+import { decorators, customColumns, customStyle, handleAssetEventsLoaded, ComponentProps } from './helper';
+
+<Meta title="Assets/AssetEventsPanel" decorators={decorators} />
+
+# Asset Events Panel
+
+This component loads a list of events related to the asset and presents it as a table with four columns and pagination.
+Click on a row of the table shows more detailed information about the event in the modal pop-up window.
+The component is used as one of the panes in `AssetMeta` component.
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+### Basic usage:
+
+Imports:
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { AssetEventsPanel } from '@cognite/gearbox';
+```
+
+<Preview>
+  <Story name="Basic Usage">
+    <AssetEventsPanel assetId={4650652196144007} />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={ComponentProps} />
+
+### Types
+
+#### EventListParams
+
+```typescript
+import { EventFilterRequest } from `@cognite/sdk`;
+```
+
+#### TableColumnType
+
+```typescript
+interface TableColumnType {
+  title: string;
+  dataIndex: string;
+  key?: string;
+}
+```
+
+#### AssetEventsPanelStyles
+
+This interface defines inline CSS styles for inner elements of `AssetEventsPanel` component.
+
+```typescript
+import { AssetEventsPanelStyles } from '@cognite/gearbox';
+```
+See more details in AssetMeta component documentation.
+
+## Examples
+
+### Custom Column Names
+
+```typescript
+const customColumns = [
+  {
+    title: 'Name',
+    dataIndex: 'typeAndSubtype',
+    key: 'typeAndSubtype',
+  },
+  {
+    title: 'Custom Description',
+    dataIndex: 'description',
+    key: 'description',
+  },
+  {
+    title: 'From',
+    dataIndex: 'start',
+    key: 'start',
+  },
+  {
+    title: 'To',
+    dataIndex: 'end',
+    key: 'end',
+  },
+];
+```
+<Preview>
+  <Story name="Custom Column Names">
+     <AssetEventsPanel
+      assetId={4650652196144007}
+      columns={customColumns}
+    />
+  </Story>
+</Preview>
+
+### Custom Loading Spinner
+
+<Preview>
+  <Story name="Custom Loading Spinner ">
+    <AssetEventsPanel
+      assetId={4650652196144007}
+      customSpinner={<div>Loading...</div>}
+    />
+  </Story>
+</Preview>
+
+### Custom Styles
+
+```typescript
+import { AssetEventsPanelStyles } from '@cognite/gearbox';
+
+const customStyle: AssetEventsPanelStyles = {
+  table: { border: '1px solid red' },
+  tableRow: { borderBottom: '2px solid #999' },
+  tableCell: { backgroundColor: '#DDD' },
+};
+```
+<Preview>
+  <Story name="Custom Styles">
+    <AssetEventsPanel
+      assetId={4650652196144007}
+      styles={customStyle}
+    />
+  </Story>
+</Preview>
+
+### Handle callbacks
+
+A callback function can be provided to fire when the asset is loaded:
+
+```typescript
+import { CogniteEvent } from '@cognite/sdk';
+
+const handleAssetEventsLoaded = (events: CogniteEvent[]) => console.log(events);
+```
+
+<Preview>
+  <Story name="Load Callback">
+    <AssetEventsPanel
+      assetId={4650652196144007}
+      onAssetEventsLoaded={handleAssetEventsLoaded}
+    />
+  </Story>
+</Preview>
+

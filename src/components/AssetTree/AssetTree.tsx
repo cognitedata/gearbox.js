@@ -2,21 +2,21 @@ import { Asset, CogniteClient } from '@cognite/sdk';
 import { Spin, Tree } from 'antd';
 import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';
 import { isEqual } from 'lodash';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
-import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import { AssetTreeProps } from '../../interfaces';
+import { withDefaultTheme } from '../../hoc';
 import { defaultTheme } from '../../theme/defaultTheme';
 import {
   applyThemeFontFamily,
   applyThemeFontSize,
   applyThemeListHighlight,
 } from '../../utils/theme';
+import { AssetTreeProps } from './interfaces';
 
 const { TreeNode } = Tree;
 
@@ -46,7 +46,7 @@ interface AssetTreeNode {
   isLeaf: boolean;
 }
 
-class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
+class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
   static contextType = ClientSDKProxyContext;
   static defaultProps = {
     theme: { ...defaultTheme },
@@ -100,7 +100,7 @@ class AssetTree extends React.Component<AssetTreeProps, AssetTreeState> {
   }
 
   loadAssetInfo = async () => {
-    this.client = this.context(Component.displayName || '')!;
+    this.client = this.context(AssetTreeWithTheme.displayName || '')!;
     if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;
@@ -260,7 +260,8 @@ const TreeNodeWrapper = styled(TreeNode)<AntTreeNodeProps>`
   }
 `;
 
-const Component = withDefaultTheme(AssetTree);
-Component.displayName = 'AssetTree';
+const AssetTreeWithTheme = withDefaultTheme(AssetTree);
+AssetTreeWithTheme.displayName = 'AssetTree';
 
-export { Component as AssetTree };
+export { AssetTreeWithTheme as AssetTree };
+export { AssetTree as AssetTreeWithoutTheme };

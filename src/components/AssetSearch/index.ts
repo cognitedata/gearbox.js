@@ -1,5 +1,2 @@
-export {
-  AssetSearch,
-  AssetSearchProps,
-  AssetSearchStyles,
-} from './AssetSearch';
+export { AssetSearch } from './AssetSearch';
+export * from './interfaces';

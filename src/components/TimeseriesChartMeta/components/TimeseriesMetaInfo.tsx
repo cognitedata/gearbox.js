@@ -1,5 +1,5 @@
 import { Collapse } from 'antd';
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 
 interface TimeseriesMetaInfoProps {
@@ -8,7 +8,7 @@ interface TimeseriesMetaInfoProps {
   };
 }
 
-export const TimeseriesMetaInfo: React.SFC<TimeseriesMetaInfoProps> = ({
+export const TimeseriesMetaInfo: FC<TimeseriesMetaInfoProps> = ({
   metaInfo,
 }) => {
   const metaList = Object.keys(metaInfo).map(key => ({

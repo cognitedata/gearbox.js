@@ -1,14 +1,14 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import {
   fakeAsset,
   fakeEvents,
   fakeFiles,
   timeseriesListV2,
 } from '../../mocks';
-import { MockCogniteClient } from '../../mocks/mockSdk';
+import { MockCogniteClient } from '../../mocks';
+import { ClientSDKProvider } from '../ClientSDKProvider';
 import { AssetMeta } from './AssetMeta';
 
 console.error = jest.fn();

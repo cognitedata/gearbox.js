@@ -1,4 +1,4 @@
-import { Asset, CogniteClient } from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
@@ -12,22 +12,11 @@ import {
   ComponentWithUnmountState,
   connectPromiseToUnmountState,
 } from '../utils/promise';
-
-export interface WithAssetDataProps {
-  asset: Asset;
-}
-
-export interface WithAssetProps {
-  assetId: number;
-  customSpinner?: React.ReactNode;
-  onAssetLoaded?: (asset: Asset) => void;
-}
-
-export interface WithAssetState {
-  isLoading: boolean;
-  asset: Asset | null;
-  assetId: number;
-}
+import {
+  WithAssetDataProps,
+  WithAssetProps,
+  WithAssetState,
+} from './interfaces';
 
 export const withAsset = <P extends WithAssetDataProps>(
   WrapperComponent: React.ComponentType<P>

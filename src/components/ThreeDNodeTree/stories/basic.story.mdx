@@ -1,0 +1,246 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { ThreeDNodeTree, ThreeDNodeTreeWithoutTheme } from '../ThreeDNodeTree';
+import {
+  decorators,
+  onSelectTreeNode,
+  RightClickExample,
+  customStyle,
+  exampleTheme,
+  expandedKeys,
+} from './helper';
+import { ThemeProvider } from 'styled-components';
+
+<Meta title="Others/ThreeDNodeTree" decorators={decorators} />
+
+# ThreeDNode Tree
+
+Visualize parent-child relationship of 3D nodes in a tree structure. It will initially fetch all available root from a model. When a node is expanded, its children will be fetched dynamically. It behaves the same with Asset Tree.
+
+To retrieve a tree you need to provide:
+
+- `modelId` – you can find it using `client.models3D.list().autoPagingToArray()` call
+- `revisionId` – you can find it via `client.revisions3D.list(modelId).autoPagingToArray()` call
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+### Basic Usage:
+
+Imports:
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { ThreeDNodeTree } from '@cognite/gearbox';
+
+```
+
+<Preview>
+  <Story name="Basic Usage">
+    <ThreeDNodeTree modelId = {0} revisionId = {0}/>
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={ThreeDNodeTreeWithoutTheme} />
+
+### Types
+
+#### OnRightClickNodeTreeParams
+
+This type describes the parameters the `onRightClick` function is called with.
+The type can be imported from @cognite/gearbox:
+
+```typescript
+import { OnRightClickNodeTreeParams } from '@cognite/gearbox';
+```
+
+#### Node
+
+The Node type documentation can be found at https://js-sdk-docs.cogniteapp.com/interfaces/node.html
+
+#### NodeTreeStyles
+
+This interface defines inline CSS styles for inner elements of `NodeTree` component.
+You can override styles of following blocks:
+
+<br/>
+<img src="asset_tree/styling_schema.jpg" alt="List Styling" width="350px"/><br/><br/>
+
+
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { NodeTreeStyles } from '@cognite/gearbox';
+```
+
+## Examples
+
+### Click Item In Tree
+
+```typescript
+import { OnSelectNodeTreeParams } from '@cognite/gearbox';
+
+const onSelectTreeNode = (e: OnSelectNodeTreeParams) => console.log('onSelect', e)
+```
+
+<Preview>
+  <Story name="Click Item In Tree">
+    <ThreeDNodeTree
+    modelId={0}
+    revisionId={0}
+    onSelect={onSelectTreeNode}
+    />
+  </Story>
+</Preview>
+
+### Right Click Item In Tree
+
+```typescript
+import 'antd/dist/antd.css';
+import React from 'react';
+import { Menu } from 'antd';
+import MenuItem from 'antd/lib/menu/MenuItem';
+import { ClickParam } from 'antd/lib/menu';
+import { ThreeDNodeTree, OnRightClickNodeTreeParams } from '@cognite/gearbox';
+
+interface RightClickState {
+  visible: boolean;
+  rightClickedNode?: string;
+  menuStyle: {
+    [_: string]: string;
+  };
+}
+
+export class RightClickExample extends React.Component<{}, RightClickState> {
+  menu: HTMLDivElement | null = null;
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      visible: false,
+      menuStyle: {},
+    };
+  }
+  renderSubMenu = () => {
+    return this.state.visible ? (
+      <Menu
+        theme="dark"
+        style={this.state.menuStyle}
+        onClick={() => {
+          if (this.state.rightClickedNode) {
+            alert(this.state.rightClickedNode);
+          }
+        }}
+      >
+        <MenuItem>Menu Item 1</MenuItem>
+        <MenuItem>Menu Item 2</MenuItem>
+      </Menu>
+    ) : (
+      <></>
+    );
+  };
+  componentDidMount() {
+    document.body.addEventListener('click', (e: MouseEvent) => {
+      // Ignore clicks on the context menu itself
+      if (this.menu && this.menu.contains(e.target as Node)) {
+        return;
+      }
+      // Close context menu when click outside of it
+      this.setState({
+        visible: false,
+      });
+    });
+  }
+  render() {
+    return (
+      <>
+        <ThreeDNodeTree
+          modelId={6265454237631097}
+          revisionId={3496204575166890}
+          onRightClick={(e: OnRightClickNodeTreeParams) => {
+            this.setState({
+              visible: true,
+              menuStyle: {
+                position: 'fixed',
+                top: `${e.event.clientY}px`,
+                left: `${e.event.clientX + 20}px`,
+              },
+              rightClickedNode: e.node.props.title,
+            });
+          }}
+        />
+        <div ref={node => (this.menu = node)}>{this.renderSubMenu()}</div>
+      </>
+    );
+  }
+}
+```
+
+<Preview>
+  <Story name="Right Click Item In Tree">
+   <RightClickExample />
+  </Story>
+</Preview>
+
+### Default Expanded Node
+
+```typescript
+const expandedKeys: number[] = [
+  8901019261985265,
+  7587176698924415,
+  256009974666491,
+];
+```
+
+<Preview>
+  <Story name="Default Expanded Node">
+    <ThreeDNodeTree
+      modelId={0}
+      revisionId={0}
+      defaultExpandedKeys={expandedKeys}
+    />
+  </Story>
+</Preview>
+
+### With Custom Styles
+
+```typescript
+const customStyle = {
+  list: {
+    fontFamily: 'Courier New',
+    fontSize: 'large',
+  },
+};
+```
+
+<Preview>
+  <Story name="With Custom Styles">
+    <ThreeDNodeTree
+      modelId={0}
+      revisionId={0}
+      styles={customStyle}
+    />
+  </Story>
+</Preview>
+
+### With Theme
+
+```typescript
+import { ThemeProvider } from 'styled-components';
+
+const exampleTheme = {
+  gearbox: {
+    textColor: 'Chocolate',
+    fontFamily: 'Comic Sans MS',
+    fontSize: '16px',
+  },
+};
+```
+
+<Preview>
+  <Story name="With Theme">
+    <ThemeProvider theme={exampleTheme}><ThreeDNodeTree modelId={0} revisionId={0} /></ThemeProvider>
+  </Story>
+</Preview>
+
