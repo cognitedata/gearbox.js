@@ -9,7 +9,9 @@ import {
     handleSearchChange,
     ClassesContainer,
     handleClick,
-    isCurrentAsset
+    isCurrentAsset,
+    DocumentIdComponentProps,
+    FileComponentProps
 } from './helper';
 import { CUSTOM_SVG_FILE as svg_file } from '../../../mocks/svg-viewer';
 
@@ -47,6 +49,17 @@ import { SVGViewer } from '@cognite/gearbox';
 </Preview>
 
 ## Available props
+
+### Required
+Component has two ways of initialization. You should choose one of them to provide component data to visualise svg documents
+
+**via** `documentId`
+<Props of={DocumentIdComponentProps} />
+
+**via** `file`
+<Props of={FileComponentProps} />
+
+### Optional
 
 <Props of={SVGViewer} />
 

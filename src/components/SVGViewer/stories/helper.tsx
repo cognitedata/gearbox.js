@@ -1,11 +1,15 @@
 import { FileLink, IdEither } from '@cognite/sdk';
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import { sleep } from '../../../mocks';
 import { MockCogniteClient } from '../../../mocks';
 import { SVG } from '../../../mocks/svg-viewer';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { ZoomCenter } from '../interfaces';
+import {
+  SvgViewerDocumentIdProps,
+  SvgViewerFileProps,
+  ZoomCenter,
+} from '../interfaces';
 
 const API_REQUEST = 'https://example.com';
 
@@ -117,3 +121,9 @@ export const handleClick = (node: HTMLElement): void => {
 
 export const isCurrentAsset = (metadata: any) =>
   (metadata.textContent || '').replace(/\s/g, '') === '21PT1019';
+
+export const DocumentIdComponentProps: FC<SvgViewerDocumentIdProps> = () => (
+  <></>
+);
+
+export const FileComponentProps: FC<SvgViewerFileProps> = () => <></>;

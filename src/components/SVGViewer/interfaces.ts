@@ -87,17 +87,20 @@ interface SvgViewerBasicProps {
   handleSearchChange?: () => void;
 }
 
-export type SvgViewerProps = SvgViewerDocumentIdProps | SvgViewerFileProps;
-
-export interface SvgViewerDocumentIdProps extends SvgViewerBasicProps {
+export interface SvgViewerDocumentIdProps {
   /**
    * CDF fileId to fetch svg-document
    */
   documentId: number;
 }
-export interface SvgViewerFileProps extends SvgViewerBasicProps {
+
+export interface SvgViewerFileProps {
   /**
    * svg-document file content in string format
    */
   file: string;
 }
+
+export type SvgViewerProps =
+  | (SvgViewerDocumentIdProps & SvgViewerBasicProps)
+  | (SvgViewerFileProps & SvgViewerBasicProps);
