@@ -21,6 +21,13 @@ class CogniteClient extends MockCogniteClient {
         return ASSET_ZERO_DEPTH_ARRAY;
       },
     }),
+    retrieve: () => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve([ASSET_ZERO_DEPTH_ARRAY[0]]);
+        }, 300);
+      });
+    },
   };
 }
 

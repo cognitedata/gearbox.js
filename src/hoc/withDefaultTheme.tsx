@@ -2,7 +2,7 @@ import React from 'react';
 import { ThemeProvider, withTheme } from 'styled-components';
 import { AnyIfEmpty } from '../interfaces';
 import { defaultTheme } from '../theme/defaultTheme';
-import { GearboxTheme } from './interfaces/WithDefaultThemeInterfaces';
+import { GearboxTheme } from './interfaces';
 
 const ThemeWrapper = ({
   theme,
