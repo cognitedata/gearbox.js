@@ -4,13 +4,10 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { baseTimestamp } from '../../../mocks';
 import { getScaleTime } from '../helpers';
+import { EventTimelineType, EventTimelineView } from '../interfaces';
 import { end, start } from '../mocks/time';
-import {
-  Event,
-  EventProps,
-  EventTimelineType,
-  EventTimelineView,
-} from './Event';
+import { Event } from './Event';
+import { EventProps } from './interfaces';
 
 configure({ adapter: new Adapter() });
 

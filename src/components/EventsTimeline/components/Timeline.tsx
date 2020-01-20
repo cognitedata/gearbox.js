@@ -1,17 +1,6 @@
-import { ScaleTime } from 'd3-scale';
 import React from 'react';
-import { CogniteEventForTimeline } from './ChartLayout';
 import { Event } from './Event';
-
-export interface TimelineProps {
-  width: number;
-  height: number;
-  events: CogniteEventForTimeline[];
-  color: string;
-  index: number;
-  scale: ScaleTime<number, number>;
-  padding?: number;
-}
+import { TimelineProps } from './interfaces';
 
 export const Timeline: React.FC<TimelineProps> = (props: TimelineProps) => {
   const { events, width, color, height, index, padding = 10, scale } = props;

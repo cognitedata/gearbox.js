@@ -2,7 +2,8 @@ import { configure, mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { EventTimelineRulerProps, Ruler } from './Ruler';
+import { EventTimelineRulerProps } from './interfaces';
+import { Ruler } from './Ruler';
 
 configure({ adapter: new Adapter() });
 

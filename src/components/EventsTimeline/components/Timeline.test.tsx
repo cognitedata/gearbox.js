@@ -5,8 +5,9 @@ import { act } from 'react-dom/test-utils';
 import { getScaleTime } from '../helpers';
 import { getCogniteEventsForTimeline, timelineEvents } from '../mocks/events';
 import { end, start } from '../mocks/time';
+import { TimelineProps } from './interfaces';
 
-import { Timeline, TimelineProps } from './Timeline';
+import { Timeline } from './Timeline';
 
 configure({ adapter: new Adapter() });
 

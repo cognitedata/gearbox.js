@@ -1,27 +1,7 @@
-import { ScaleTime } from 'd3-scale';
 import React from 'react';
 import styled from 'styled-components';
-
-export enum EventTimelineType {
-  discrete = 'discrete',
-  continuous = 'continuous',
-}
-
-export enum EventTimelineView {
-  fill = 'fill',
-  outline = 'outline',
-}
-
-export interface EventProps {
-  color: string;
-  scale: ScaleTime<number, number>;
-  start: number | Date;
-  end?: number | Date;
-  type?: EventTimelineType;
-  view?: EventTimelineView;
-  discreteWidth?: number;
-  height?: number;
-}
+import { EventTimelineType, EventTimelineView } from '../interfaces';
+import { EventProps } from './interfaces';
 
 export const Event: React.FC<EventProps> = props => {
   const {

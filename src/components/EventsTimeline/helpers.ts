@@ -1,6 +1,6 @@
 import { ScaleTime, scaleTime } from 'd3-scale';
 import { Dictionary } from 'lodash';
-import { CogniteEventForTimeline } from './components';
+import { CogniteEventForTimeline } from './interfaces';
 
 export const getScaleTime: (
   width: number,

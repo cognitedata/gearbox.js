@@ -14,16 +14,16 @@ import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { baseTimestamp, fakeEvents } from '../../mocks';
-import { MockCogniteClient } from '../../mocks/mockSdk';
+import { baseTimestamp, fakeEvents, MockCogniteClient } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
+import { EventsTimeline } from './EventsTimeline';
 import {
   CogniteEventForTimeline,
+  EventsTimelineProps,
   EventTimelineView,
   TimelineRuler,
   TimelineSize,
-} from './components';
-import { EventsTimeline, EventsTimelineProps } from './EventsTimeline';
+} from './interfaces';
 import { timelineEvents } from './mocks/events';
 
 configure({ adapter: new Adapter() });

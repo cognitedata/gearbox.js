@@ -1,4 +1,3 @@
-import { CogniteEvent } from '@cognite/sdk';
 import { event as d3Event } from 'd3';
 import { select } from 'd3-selection';
 import {
@@ -7,60 +6,11 @@ import {
   ZoomedElementBaseType,
   ZoomScale,
 } from 'd3-zoom';
-import { Dictionary } from 'lodash';
-import React, { RefObject, SyntheticEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getEventsByTimestamp, getScaleTime } from '../helpers';
-import { EventTimelineType, EventTimelineView } from './Event';
+import { ChartLayoutProps } from './interfaces';
 import { Ruler } from './Ruler';
 import { Timeline } from './Timeline';
-
-interface TimelineEventAppearance {
-  view: EventTimelineView;
-  type: EventTimelineType;
-}
-
-export interface TimelineEvent extends TimelineEventAppearance {
-  id: number;
-}
-
-export interface TimelineRuler {
-  show: boolean;
-  onChange?: (
-    e: SyntheticEvent,
-    date: number,
-    events?: CogniteEventForTimeline[]
-  ) => void;
-  onHide?: () => void;
-}
-
-export interface TimelineSize {
-  height: number;
-  bottom: number;
-}
-
-export interface TimelineZoom {
-  enable: boolean;
-  onZoomStart?: () => void;
-  onZoom?: (domain: [number, number]) => void;
-  onZoomEnd?: () => void;
-}
-
-export interface CogniteEventForTimeline extends CogniteEvent {
-  appearance: TimelineEventAppearance;
-  color?: string;
-}
-
-export interface ChartLayoutProps {
-  svg: RefObject<Element> | null;
-  width: number;
-  height: number;
-  timelines: Dictionary<CogniteEventForTimeline[]>;
-  timelineSize: TimelineSize;
-  start: number;
-  end: number;
-  ruler?: TimelineRuler;
-  zoom?: TimelineZoom;
-}
 
 export const ChartLayout: React.FC<ChartLayoutProps> = (
   props: ChartLayoutProps

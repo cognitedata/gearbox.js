@@ -3,25 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';
 import { LoadingBlock } from '../common/LoadingBlock/LoadingBlock';
-import {
-  ChartLayout,
-  CogniteEventForTimeline,
-  TimelineEvent,
-  TimelineRuler,
-  TimelineSize,
-  TimelineZoom,
-} from './components';
-
-export interface EventsTimelineProps {
-  events: TimelineEvent[];
-  start: number;
-  end: number;
-  ruler?: TimelineRuler;
-  zoom?: TimelineZoom;
-  toTimelines?: (event: CogniteEventForTimeline) => string;
-  timelineSize?: TimelineSize;
-  dateFormatter?: (date: number) => string;
-}
+import { ChartLayout } from './components';
+import { CogniteEventForTimeline, EventsTimelineProps } from './interfaces';
 
 const toTimelinesDefault = (_: CogniteEventForTimeline) => '#000';
 const minimalWidth = 100;

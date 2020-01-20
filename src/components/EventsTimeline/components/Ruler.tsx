@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-
-export interface EventTimelineRulerProps {
-  width: number;
-  height: number;
-  positionChanged?: (e: React.SyntheticEvent | null) => void;
-}
+import { EventTimelineRulerProps } from './interfaces';
 
 export const Ruler: React.FC<EventTimelineRulerProps> = props => {
   const { width, height, positionChanged } = props;

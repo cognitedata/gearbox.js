@@ -2,9 +2,11 @@ import { configure, mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React, { useRef } from 'react';
 import { act } from 'react-dom/test-utils';
+import { TimelineRuler } from '../interfaces';
 import { getCogniteEventsForTimeline, timelineEvents } from '../mocks/events';
 import { end, start } from '../mocks/time';
-import { ChartLayout, ChartLayoutProps, TimelineRuler } from './ChartLayout';
+import { ChartLayout } from './ChartLayout';
+import { ChartLayoutProps } from './interfaces';
 
 configure({ adapter: new Adapter() });
 
