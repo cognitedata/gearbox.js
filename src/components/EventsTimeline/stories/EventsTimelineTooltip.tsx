@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useState } from 'react';
 import styled from 'styled-components';
-import { CogniteEventForTimeline } from '../components';
-import { EventsTimeline, EventsTimelineProps } from '../EventsTimeline';
+import { EventsTimeline } from '../EventsTimeline';
+import { CogniteEventForTimeline, EventsTimelineProps } from '../interfaces';
 
 export const EventsTimelineTooltip = (props: EventsTimelineProps) => {
   const [events, setEvents] = useState<CogniteEventForTimeline[]>([]);
@@ -52,7 +52,7 @@ export const EventsTimelineTooltip = (props: EventsTimelineProps) => {
 
 const renderEvents = (events: CogniteEventForTimeline[]) =>
   events.map(e => (
-    <Event>
+    <Event key={e.externalId}>
       <Line style={{ color: e.color || '#000' }}>{e.externalId || e.type}</Line>
       <Line>{e.description}</Line>
     </Event>

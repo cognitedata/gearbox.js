@@ -4,7 +4,7 @@ import {
   EventTimelineType,
   EventTimelineView,
   TimelineEvent,
-} from '../components';
+} from '../interfaces';
 
 export const timelineEvents: TimelineEvent[] = [
   {
