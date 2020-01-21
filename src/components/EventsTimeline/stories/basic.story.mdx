@@ -108,7 +108,6 @@ const toTimelines = ({ id }: CogniteEventForTimeline) => {
 
 ```typescript
 const onChange = ({
-  event: React.SyntheticEvent,
   timestamp: number,
   timelineEvents?: CogniteEventForTimeline[]
 }) => console.log('Date - ', new Date(timestamp), 'Events – ', timelineEvents);
