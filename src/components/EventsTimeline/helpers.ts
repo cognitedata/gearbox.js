@@ -12,7 +12,7 @@ export const getScaleTime: (
     .range([0, width]);
 
 export const getEventsByTimestamp = (
-  date: number,
+  timestamp: number,
   timelines: Dictionary<CogniteEventForTimeline[]>
 ): CogniteEventForTimeline[] => {
   return Object.keys(timelines).flatMap(color => {
@@ -22,8 +22,8 @@ export const getEventsByTimestamp = (
       const { startTime, endTime } = event;
 
       if (
-        startTime === date ||
-        (startTime && endTime && startTime <= date && endTime >= date)
+        startTime === timestamp ||
+        (startTime && endTime && startTime <= timestamp && endTime >= timestamp)
       ) {
         filtered.push({ ...event, color });
       }

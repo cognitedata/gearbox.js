@@ -80,7 +80,7 @@ describe('ChartLayout', () => {
     });
 
     expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange.mock.calls[0][2].length).toBeTruthy();
+    expect(onChange.mock.calls[0][0].timelineEvents.length).toBeTruthy();
 
     await act(async () => {
       rulerLayout.simulate('mousemove', { nativeEvent: { offsetX: 450 } });
@@ -88,7 +88,7 @@ describe('ChartLayout', () => {
 
     // in offsetX = 450 position there is no events placed
     expect(onChange).toHaveBeenCalledTimes(2);
-    expect(onChange.mock.calls[1][2].length).toBeFalsy();
+    expect(onChange.mock.calls[1][0].timelineEvents.length).toBeFalsy();
 
     await act(async () => {
       rulerLayout.simulate('mouseleave');

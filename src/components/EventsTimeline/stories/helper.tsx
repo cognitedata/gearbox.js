@@ -2,7 +2,11 @@ import moment from 'moment';
 import React from 'react';
 import { MockCogniteClient, sleep } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { CogniteEventForTimeline, TimelineEvent } from '../interfaces';
+import {
+  CogniteEventForTimeline,
+  TimelineEvent,
+  TimelineRulerChangeProps,
+} from '../interfaces';
 import { EventTimelineType, EventTimelineView } from '../interfaces';
 
 const now = Date.now();
@@ -56,11 +60,11 @@ export const toTimelines = ({ id }: CogniteEventForTimeline) => {
   return !id ? '#3b7c14' : id === 1 ? '#ee5d7d' : '#cccccc';
 };
 
-export const onChange = (
-  _: React.SyntheticEvent,
-  date: number,
-  tlEvents?: CogniteEventForTimeline[]
-) => console.log('Date - ', new Date(date), 'Events – ', tlEvents);
+export const onChange = ({
+  timestamp,
+  timelineEvents,
+}: TimelineRulerChangeProps) =>
+  console.log('Date - ', new Date(timestamp), 'Events – ', timelineEvents);
 
 export const onHide = () => console.log('Ruler is hidden');
 
@@ -71,7 +75,5 @@ export const onZoom = ([newStart, newEnd]: [number, number]) =>
 
 export const onZoomEnd = () => console.log('Zoom end');
 
-export const dateFormatter = (date: number) =>
-  moment(date).format('DD MMM YYYY, hh:mm');
-
-export const dateFormatterCode = dateFormatter.toString();
+export const dateFormatter = (timestamp: number) =>
+  moment(timestamp).format('DD MMM YYYY, hh:mm');

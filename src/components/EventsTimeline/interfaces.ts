@@ -25,13 +25,15 @@ export interface CogniteEventForTimeline extends CogniteEvent {
   color?: string;
 }
 
+export interface TimelineRulerChangeProps {
+  event: SyntheticEvent;
+  timestamp: number;
+  timelineEvents?: CogniteEventForTimeline[];
+}
+
 export interface TimelineRuler {
   show: boolean;
-  onChange?: (
-    e: SyntheticEvent,
-    date: number,
-    events?: CogniteEventForTimeline[]
-  ) => void;
+  onChange?: (change: TimelineRulerChangeProps) => void;
   onHide?: () => void;
 }
 
@@ -55,5 +57,5 @@ export interface EventsTimelineProps {
   zoom?: TimelineZoom;
   toTimelines?: (event: CogniteEventForTimeline) => string;
   timelineSize?: TimelineSize;
-  dateFormatter?: (date: number) => string;
+  dateFormatter?: (timestamp: number) => string;
 }

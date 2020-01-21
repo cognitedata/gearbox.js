@@ -116,7 +116,7 @@ export const ChartLayout: React.FC<ChartLayoutProps> = (
     if (onRulerChange) {
       const filteredEvents = getEventsByTimestamp(time, timelines);
 
-      onRulerChange(event, time, filteredEvents);
+      onRulerChange({ event, timestamp: time, timelineEvents: filteredEvents });
     }
   };
 

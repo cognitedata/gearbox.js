@@ -1,7 +1,11 @@
-import React, { SyntheticEvent, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { EventsTimeline } from '../EventsTimeline';
-import { CogniteEventForTimeline, EventsTimelineProps } from '../interfaces';
+import {
+  CogniteEventForTimeline,
+  EventsTimelineProps,
+  TimelineRulerChangeProps,
+} from '../interfaces';
 
 export const EventsTimelineTooltip = (props: EventsTimelineProps) => {
   const [events, setEvents] = useState<CogniteEventForTimeline[]>([]);
@@ -9,18 +13,18 @@ export const EventsTimelineTooltip = (props: EventsTimelineProps) => {
 
   const { show, onChange, onHide } = props.ruler || { show: false };
 
-  const rulerChange = (
-    e: SyntheticEvent,
-    date: number,
-    tlEvents?: CogniteEventForTimeline[]
-  ) => {
+  const rulerChange = ({
+    event,
+    timestamp,
+    timelineEvents,
+  }: TimelineRulerChangeProps) => {
     if (onChange) {
-      onChange(e, date, tlEvents);
+      onChange({ event, timestamp, timelineEvents });
     }
 
-    const { offsetX, offsetY } = e.nativeEvent as MouseEvent;
+    const { offsetX, offsetY } = event.nativeEvent as MouseEvent;
 
-    setEvents(tlEvents ? tlEvents : []);
+    setEvents(timelineEvents ? timelineEvents : []);
     setPosition([offsetX, offsetY]);
   };
 

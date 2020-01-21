@@ -71,7 +71,7 @@ const start = end - 60 * 60 * 1000;
 ### Types
 
 `TimelineEvent`, `TimelineRuler`, `TimelineZoom`, `TimelineSize`, `CogniteEventForTimeline`
-type can be imported from `@cognite/gerabox`:
+type can be imported from `@cognite/gearbox`:
 
 ```typescript
 import {
@@ -80,7 +80,7 @@ import {
   TimelineRuler,
   TimelineZoom,
   TimelineSize,
-} from '@cognite/sdk';
+} from '@cognite/gearbox';
 ```
 
 ## Examples
@@ -107,11 +107,11 @@ const toTimelines = ({ id }: CogniteEventForTimeline) => {
 ### Ruler
 
 ```typescript
-const onChange = (
-  _: React.SyntheticEvent,
-  date: number,
-  tlEvents?: CogniteEventForTimeline[]
-) => console.log('Date - ', new Date(date), 'Events – ', tlEvents);
+const onChange = ({
+  event: React.SyntheticEvent,
+  timestamp: number,
+  timelineEvents?: CogniteEventForTimeline[]
+}) => console.log('Date - ', new Date(timestamp), 'Events – ', timelineEvents);
 
 const onHide = () => console.log('Ruler is hidden');
 ```
