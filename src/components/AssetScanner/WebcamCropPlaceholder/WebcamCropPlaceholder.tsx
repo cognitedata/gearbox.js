@@ -45,7 +45,7 @@ const Container = styled.div`
 
 const Item = styled.div`
   background-color: ${({ backgroundColor }: WebcamCropPlaceholderProps) =>
-    backgroundColor ? backgroundColor : 'rgba(0,0,0,0.8)'};
+    backgroundColor ? backgroundColor : 'rgba(0,0,0,0.5)'};
   color: #fff;
 `;
 
