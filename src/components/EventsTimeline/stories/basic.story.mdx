@@ -107,10 +107,8 @@ const toTimelines = ({ id }: CogniteEventForTimeline) => {
 ### Ruler
 
 ```typescript
-const onChange = ({
-  timestamp: number,
-  timelineEvents?: CogniteEventForTimeline[]
-}) => console.log('Date - ', new Date(timestamp), 'Events – ', timelineEvents);
+const onChange = ({timestamp, timelineEvents}: TimelineRulerChangeProps) =>
+  console.log('Date - ', new Date(timestamp), 'Events – ', timelineEvents);
 
 const onHide = () => console.log('Ruler is hidden');
 ```
@@ -206,13 +204,14 @@ Example provided by custom component `EventsTimelineTooltip`, which implements h
 Code example below:
 
 ```jsx
-import React, { SyntheticEvent, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { EventsTimeline } from '../EventsTimeline';
 import {
-  EventsTimeline,
   CogniteEventForTimeline,
-  EventsTimelineProps
-} from '@cognite/gearbox';
+  EventsTimelineProps,
+  TimelineRulerChangeProps,
+} from '../interfaces';
 
 export const EventsTimelineTooltip = (props: EventsTimelineProps) => {
   const [events, setEvents] = useState<CogniteEventForTimeline[]>([]);
@@ -220,18 +219,18 @@ export const EventsTimelineTooltip = (props: EventsTimelineProps) => {
 
   const { show, onChange, onHide } = props.ruler || { show: false };
 
-  const rulerChange = (
-    e: SyntheticEvent,
-    date: number,
-    tlEvents?: CogniteEventForTimeline[]
-  ) => {
+  const rulerChange = ({
+    event,
+    timestamp,
+    timelineEvents,
+  }: TimelineRulerChangeProps) => {
     if (onChange) {
-      onChange(e, date, tlEvents);
+      onChange({ event, timestamp, timelineEvents });
     }
 
-    const { offsetX, offsetY } = e.nativeEvent as MouseEvent;
+    const { offsetX, offsetY } = event.nativeEvent as MouseEvent;
 
-    setEvents(tlEvents ? tlEvents : []);
+    setEvents(timelineEvents ? timelineEvents : []);
     setPosition([offsetX, offsetY]);
   };
 
