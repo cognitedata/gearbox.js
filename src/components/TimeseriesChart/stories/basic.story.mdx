@@ -4,6 +4,7 @@ import {
   decorators,
   customContainerStyle,
   zoomableClientDecorator,
+  ySubDomains,
   timeSeriesColors,
   rulerProp,
   handleMouseMove,
@@ -12,6 +13,7 @@ import {
   series,
   TimeseriesIdsComponentProps,
   SeriesComponentProps,
+  seriesWithCustomYdomain,
 } from './helper';
 
 <Meta title="Time Series/TimeseriesChart" decorators={decorators} />
@@ -405,6 +407,57 @@ const series = [
     <TimeseriesChart
       series={series}
       yAxisDisplayMode={'NONE'}
+    />
+  </Story>
+</Preview>
+
+### Define Y-axis Subdomain
+
+```jsx
+const ySubDomains = { 123: [-200, 200] };
+```
+
+<Preview>
+  <Story name="Define Y-axis Subdomain" >
+    <TimeseriesChart
+      timeseriesIds={[123]}
+      ySubDomains = {ySubDomains}
+    />
+  </Story>
+</Preview>
+
+### Define Y-axis Subdomain For Series
+
+```jsx
+import { AxisDisplayMode } from '@cognite/griff-react';
+import { DataLoader } from '@cognite/gearbox';
+
+const seriesWithCustomYdomain = [
+  {
+    id: 123,
+    color: 'green',
+    yAxisDisplayMode: AxisDisplayMode.ALL,
+    hidden: false,
+    y0Accessor: DataLoader.y0Accessor,
+    y1Accessor: DataLoader.y1Accessor,
+    yAccessor: DataLoader.yAccessor,
+    ySubDomain: [-200, 200],
+  }
+  {
+    id: 456,
+    color: 'red',
+    y0Accessor: DataLoader.y0Accessor,
+    y1Accessor: DataLoader.y1Accessor,
+    yAccessor: DataLoader.yAccessor,
+    ySubDomain: [-100, 160],
+  },
+];
+```
+
+<Preview>
+  <Story name="Define Y-axis Subdomain For Series" >
+    <TimeseriesChart
+      series={seriesWithCustomYdomain} 
     />
   </Story>
 </Preview>
