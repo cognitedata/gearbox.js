@@ -94,6 +94,7 @@ export class TimeseriesChart extends Component<
     }
   };
 
+  // tslint:disable-next-line:cognitive-complexity
   render() {
     const {
       startTime,
@@ -116,6 +117,7 @@ export class TimeseriesChart extends Component<
       yAxisPlacement,
       hiddenSeries,
       annotations,
+      ySubDomains,
       ruler,
       height,
       width,
@@ -141,6 +143,7 @@ export class TimeseriesChart extends Component<
           y0Accessor: s.y0Accessor || DataLoader.y0Accessor,
           y1Accessor: s.y1Accessor || DataLoader.y1Accessor,
           xAccessor: s.xAccessor || DataLoader.xAccessor,
+          ySubDomain: s.ySubDomain,
         }))
       : timeseriesIds.map((id: number) => ({
           id,
@@ -151,6 +154,7 @@ export class TimeseriesChart extends Component<
           y0Accessor: DataLoader.y0Accessor,
           y1Accessor: DataLoader.y1Accessor,
           xAccessor: DataLoader.xAccessor,
+          ySubDomain: ySubDomains ? ySubDomains[id] : undefined,
         }));
 
     const showCrosshair: boolean = crosshair || ruler !== undefined;
