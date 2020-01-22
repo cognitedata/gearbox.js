@@ -54,8 +54,8 @@
     "@commitlint/config-conventional": "^8.2.0",
     "@commitlint/travis-cli": "^8.2.0",
     "@rollup/plugin-replace": "^2.2.1",
-    "@semantic-release/changelog": "^3.0.4",
-    "@semantic-release/git": "^7.0.16",
+    "@semantic-release/changelog": "^4.0.0",
+    "@semantic-release/git": "^8.0.0",
     "@storybook/addon-actions": "^5.2.6",
     "@storybook/addons": "^5.2.6",
     "@storybook/react": "^5.2.6",
@@ -139,7 +139,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "release": {
-    "branch": "master",
+    "branches": ["master"],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
