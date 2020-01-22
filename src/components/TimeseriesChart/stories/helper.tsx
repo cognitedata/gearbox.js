@@ -100,7 +100,31 @@ export const series = [
   },
 ];
 
+export const seriesWithCustomYdomain = [
+  {
+    id: 123,
+    color: 'green',
+    yAxisDisplayMode: AxisDisplayMode.ALL,
+    hidden: false,
+    y0Accessor: DataLoader.y0Accessor,
+    y1Accessor: DataLoader.y1Accessor,
+    yAccessor: DataLoader.yAccessor,
+    ySubDomain: [-200, 200],
+  },
+  {
+    id: 456,
+    color: 'red',
+    y0Accessor: DataLoader.y0Accessor,
+    y1Accessor: DataLoader.y1Accessor,
+    yAccessor: DataLoader.yAccessor,
+    ySubDomain: [-100, 160],
+  },
+];
+
+export const ySubDomains = { 123: [-200, 200] };
+
 export const TimeseriesIdsComponentProps: FC<
   TimeseriesChartByTimeseriesId
 > = () => <></>;
+
 export const SeriesComponentProps: FC<TimeseriesChartBySeries> = () => <></>;
