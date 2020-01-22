@@ -53,8 +53,8 @@ export class TimeseriesChart extends Component<
   };
 
   client!: CogniteClient;
-
   dataLoader!: DataLoader;
+  chartWrapper: HTMLElement | null = null;
 
   constructor(
     props: TimeseriesChartProps,
@@ -156,7 +156,10 @@ export class TimeseriesChart extends Component<
     return (
       griffSeries.length !== 0 && (
         <Spin spinning={!loaded}>
-          <Wrapper style={styles && styles.container}>
+          <Wrapper
+            style={styles && styles.container}
+            ref={ref => (this.chartWrapper = ref)}
+          >
             <DataProvider
               defaultLoader={this.dataLoader.cogniteloader}
               onFetchData={this.onFetchData}
@@ -188,13 +191,13 @@ export class TimeseriesChart extends Component<
             >
               {ruler && (
                 <CursorOverview
+                  wrapperRef={this.chartWrapper}
                   series={griffSeries}
                   hiddenSeries={hiddenSeries}
                   rulerPoints={this.state.rulerPoints}
                   ruler={ruler}
                 />
               )}
-
               <LineChart
                 zoomable={zoomable}
                 crosshair={showCrosshair}
