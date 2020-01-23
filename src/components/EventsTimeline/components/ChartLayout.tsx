@@ -59,14 +59,12 @@ export const ChartLayout: React.FC<ChartLayoutProps> = (
   const removeZoomListener = <T extends ZoomedElementBaseType, K>(
     zoom: ZoomBehavior<T, K> | null
   ) => {
-    if (!zoom) {
-      return;
+    if (zoom) {
+      zoom
+        .on('start', null)
+        .on('end', null)
+        .on('zoom', null);
     }
-
-    zoom
-      .on('start', null)
-      .on('end', null)
-      .on('zoom', null);
   };
 
   const zoomStart = () => {
