@@ -17,7 +17,7 @@ import {
   WithAssetFilesDataProps,
   WithAssetFilesProps,
   WithAssetFilesState,
-} from './interfaces/WithAssetFilesInterfaces';
+} from './interfaces';
 
 export const withAssetFiles = <P extends WithAssetFilesDataProps>(
   WrapperComponent: React.ComponentType<P>

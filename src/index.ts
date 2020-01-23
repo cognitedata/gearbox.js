@@ -20,6 +20,7 @@ export * from './components/AssetDocumentsPanel';
 export * from './components/AssetEventsPanel';
 export * from './components/AssetTimeseriesPanel';
 export * from './components/TimeseriesDataExport';
-export * from './components/TimeseriesPreview/TimeseriesPreview';
+export * from './components/TimeseriesPreview';
+export * from './components/EventsTimeline';
 export * from './utils/documents';
 export * from './interfaces';
