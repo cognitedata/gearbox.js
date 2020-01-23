@@ -80,13 +80,13 @@ export interface MetaDocProps {
    */
   unknownCategoryName?: string;
   /**
-   * Key to get document title from <metadata> object
+   * Key to get document title from `metadata` object
    */
   documentTitleField?: string;
   /**
-   * The <metadata> field used to group documents into types. If this is
-   * not specified, then <doc_type> field will be attempted. If no
-   * <doc_type> field is present in the metadata, then the filename will
+   * The `metadata` field used to group documents into types. If this is
+   * not specified, then `doc_type` field will be attempted. If no
+   * `doc_type` field is present in the metadata, then the filename will
    * be attempted to be parsed using the NORSOK standard. If this fails, then
    * the document will be in the "unknown" group.
    */
