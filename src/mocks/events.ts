@@ -53,7 +53,7 @@ export const eventWithout = (field: string) => ({
   [field]: undefined,
 });
 
-const baseTimestamp = 1556120152466;
+export const baseTimestamp = 1556120152466;
 
 export const ASSET_META_SERIES_STYLES: AssetTimeseriesPanelStyles = {
   wrapper: {
