@@ -50,12 +50,40 @@ export interface TimelineSize {
 }
 
 export interface EventsTimelineProps {
+  /**
+   * Array of events objects represented by event `id`, `view` and `type`.
+   * `view` and `type` describes event appearance on the timeline.
+   */
   events: TimelineEvent[];
+  /**
+   * Timeline start timestamp
+   */
   start: number;
+  /**
+   * Timeline end timestamp
+   */
   end: number;
+  /**
+   * Object that defines ruler appearance while user hovering component.
+   */
   ruler?: TimelineRuler;
+  /**
+   * Object that defines zoom capabilities of the component
+   */
   zoom?: TimelineZoom;
+  /**
+   * Function that passed to `_.groupBy()` function of `lodash` library
+   * as an argument and grouping events by timelines, which are represented
+   * by color strings (`#000` as a default). Check related story for more info
+   */
   toTimelines?: (event: CogniteEventForTimeline) => string;
+  /**
+   * Object that defines paddings of each timeline in the component
+   */
   timelineSize?: TimelineSize;
+  /**
+   * Function that receives timestamp to format it and render as a readable
+   * time string
+   */
   dateFormatter?: (timestamp: number) => string;
 }
