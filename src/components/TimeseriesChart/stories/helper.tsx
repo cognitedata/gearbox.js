@@ -70,14 +70,6 @@ export const customContainerStyle = {
 
 export const timeSeriesColors = { 123: 'red', 456: '#00ff00' };
 
-export const annotationsProp = [
-  {
-    data: [Date.now() - 30 * 1000, Date.now() - 20 * 1000],
-    height: 30,
-    id: 888,
-  },
-];
-
 export const rulerProp = {
   visible: true,
   yLabel: (point: any) => `${Number.parseFloat(point.value).toFixed(3)}`,
