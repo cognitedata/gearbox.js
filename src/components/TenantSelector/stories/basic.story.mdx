@@ -35,7 +35,7 @@ onTenantSelected = (tenant: string, advancedOptions: PureObject | null) => {};
 ```
 
 <Preview>
-  <Story name="Basic Usage" >
+  <Story name="Basic usage" >
     <TenantSelector
       title="Example app"
       onTenantSelected={onTenantSelected}
@@ -99,10 +99,10 @@ See more details in `Custom Styles` example.
 
 ## Examples
 
-### Login Text
+### Login text
 
 <Preview>
-  <Story name="Login Text" >
+  <Story name="Login text" >
     <TenantSelector
       title="Example app"
       onTenantSelected={onTenantSelected}
@@ -112,10 +112,10 @@ See more details in `Custom Styles` example.
   </Story>
 </Preview>
 
-### Header Text
+### Header text
 
 <Preview>
-  <Story name="Header Text" >
+  <Story name="Header text" >
     <TenantSelector
       title="Example app"
       onTenantSelected={onTenantSelected}
@@ -124,14 +124,14 @@ See more details in `Custom Styles` example.
   </Story>
 </Preview>
 
-### Custom Validation Success
+### Custom validation success
 
 ```typescript
 const validateTenantSucess = async () => true;
 ```
 
 <Preview>
-  <Story name="Custom Validation Success" >
+  <Story name="Custom validation success" >
     <TenantSelector
       title="Example app"
       onTenantSelected={onTenantSelected}
@@ -140,7 +140,7 @@ const validateTenantSucess = async () => true;
   </Story>
 </Preview>
 
-### Custom Validation Error
+### Custom validation error
 
 ```typescript
 const validateTenantFailed = async (tenant: string) => {
@@ -149,7 +149,7 @@ const validateTenantFailed = async (tenant: string) => {
 ```
 
 <Preview>
-  <Story name="Custom Validation Error" >
+  <Story name="Custom validation error" >
     <TenantSelector
       title="Example app"
       onTenantSelected={onTenantSelected}
@@ -158,10 +158,10 @@ const validateTenantFailed = async (tenant: string) => {
   </Story>
 </Preview>
 
-### Custom Error Message On Validation Error
+### Custom error message on validation error
 
 <Preview>
-  <Story name="Custom Error Message On Validation Error" >
+  <Story name="Validation error message" >
     <TenantSelector
       title="Example app"
       onTenantSelected={onTenantSelected}
@@ -171,14 +171,14 @@ const validateTenantFailed = async (tenant: string) => {
   </Story>
 </Preview>
 
-### Loads Forever
+### Loads forever
 
 ```typescript
 const loadsForEver = () => Promise.race([]);
 ```
 
 <Preview>
-  <Story name="Loads Forever" >
+  <Story name="Loads forever" >
     <TenantSelector
       title="Example app"
       onTenantSelected={onTenantSelected}
@@ -187,10 +187,10 @@ const loadsForEver = () => Promise.race([]);
   </Story>
 </Preview>
 
-### Initial Tenant
+### Initial tenant
 
 <Preview>
-  <Story name="Initial Tenant" >
+  <Story name="Initial tenant" >
     <TenantSelector
       title="Example app"
       onTenantSelected={onTenantSelected}
@@ -199,10 +199,10 @@ const loadsForEver = () => Promise.race([]);
   </Story>
 </Preview>
 
-### Placeholder Tenant
+### Placeholder tenant
 
 <Preview>
-  <Story name="Placeholder Tenant" >
+  <Story name="Placeholder tenant" >
     <TenantSelector
       title="Example app"
       onTenantSelected={onTenantSelected}
@@ -211,14 +211,14 @@ const loadsForEver = () => Promise.race([]);
   </Story>
 </Preview>
 
-### Advanced Options
+### Advanced options
 
 ```typescript
 const advancedOptions = { apiUrl: '', comment: 'Comment' };
 ```
 
 <Preview>
-  <Story name="Advanced Options" >
+  <Story name="Advanced options" >
     <TenantSelector
       title="Example app"
       onTenantSelected={onTenantSelected}
@@ -227,7 +227,7 @@ const advancedOptions = { apiUrl: '', comment: 'Comment' };
   </Story>
 </Preview>
 
-### With Custom Styles
+### With custom styles
 
 ```typescript
 const customStyle = {
@@ -265,7 +265,7 @@ const customStyle = {
 ```
 
 <Preview>
-  <Story name="With Custom Styles" >
+  <Story name="With custom styles" >
     <TenantSelector
       title="Example app"
       onTenantSelected={onTenantSelected}
@@ -275,7 +275,7 @@ const customStyle = {
   </Story>
 </Preview>
 
-### With Theme
+### With theme
 
 ```typescript
 import { ThemeProvider } from 'styled-components';
@@ -293,7 +293,7 @@ const themeExample = {
 ```
 
 <Preview>
-  <Story name="With Theme" >
+  <Story name="With theme" >
     <ThemeProvider theme={themeExample}><TenantSelector title="Styled App" onTenantSelected={onTenantSelected} /></ThemeProvider>
   </Story>
 </Preview>

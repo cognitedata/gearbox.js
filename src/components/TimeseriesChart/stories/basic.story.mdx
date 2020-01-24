@@ -37,7 +37,7 @@ import { TimeseriesChart } from '@cognite/gearbox';
 ```
 
 <Preview>
-  <Story name="Basic Usage" >
+  <Story name="Basic usage" >
     <TimeseriesChart timeseriesIds={[123]} />
   </Story>
 </Preview>
@@ -145,15 +145,15 @@ interface ChartRulerConfig {
   </Story>
 </Preview>
 
-### Height And Width
+### Height and width
 
 <Preview>
-  <Story name="Height And Width" >
+  <Story name="Height and width" >
     <TimeseriesChart timeseriesIds={[123]} height={300} width={800} />
   </Story>
 </Preview>
 
-### Custom Container Styles
+### Custom container styles
 
 ```typescript
 const customContainerStyle = {
@@ -161,7 +161,7 @@ const customContainerStyle = {
 };
 ```
 <Preview>
-  <Story name="Custom Container Styles" >
+  <Story name="Custom container styles" >
     <TimeseriesChart
       timeseriesIds={[123]}
       styled={customContainerStyles}
@@ -172,7 +172,7 @@ const customContainerStyle = {
 ### Left y-axis
 
 <Preview>
-  <Story name="Left y-axiss" >
+  <Story name="Left y-axis" >
     <TimeseriesChart timeseriesIds={[123]} yAxisPlacement={'LEFT'} />
   </Story>
 </Preview>
@@ -196,10 +196,10 @@ const customContainerStyle = {
   </Story>
 </Preview>
 
-### X-axis Height
+### X-axis height
 
 <Preview>
-  <Story name="X-axis Height" >
+  <Story name="X-axis height" >
     <TimeseriesChart timeseriesIds={[123]} xAxisHeight={100} />
   </Story>
 </Preview>
@@ -212,10 +212,10 @@ const customContainerStyle = {
   </Story>
 </Preview>
 
-### Start And End Time
+### Start and end time
 
 <Preview>
-  <Story name="Start And End Time" >
+  <Story name="Start and end time" >
     <TimeseriesChart
       timeseriesIds={[123]}
       startTime={new Date(2019, 3, 1)}
@@ -232,10 +232,10 @@ const customContainerStyle = {
   </Story>
 </Preview>
 
-### Context Char
+### Context chart
 
 <Preview>
-  <Story name="Context Char" >
+  <Story name="Context chart" >
     <TimeseriesChart
       timeseriesIds={[123]}
       startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
@@ -260,10 +260,10 @@ const customContainerStyle = {
   </Story>
 </Preview>
 
-### Live Update
+### Live update
 
 <Preview>
-  <Story name="Live Update" decorators={[zoomableClientDecorator]}>
+  <Story name="Live update" decorators={[zoomableClientDecorator]}>
     <TimeseriesChart
       timeseriesIds={[123]}
       startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
@@ -274,14 +274,14 @@ const customContainerStyle = {
   </Story>
 </Preview>
 
-### Custom Colors
+### Custom colors
 
 ```typescript
 const timeSeriesColors = { 123: 'red', 456: '#00ff00' }
 ```
 
 <Preview>
-  <Story name="Custom Colors" >
+  <Story name="Custom colors" >
    <TimeseriesChart
       timeseriesIds={[123, 456]}
       timeseriesColors={timeSeriesColors}
@@ -369,7 +369,7 @@ const handleBlur = (e: any) => console.log('onBlur', e)
   </Story>
 </Preview>
 
-### Custom Series
+### Custom series
 
 ```typescript
 import { AxisDisplayMode } from '@cognite/griff-react';
@@ -396,7 +396,7 @@ const series = [
 ```
 
 <Preview>
-  <Story name="Custom Series" >
+  <Story name="Custom series" >
     <TimeseriesChart
       series={series}
       yAxisDisplayMode={'NONE'}

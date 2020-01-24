@@ -23,7 +23,7 @@ To retrieve a tree you need to provide:
 
 **NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
 
-### Basic Usage:
+### Basic usage:
 
 Imports:
 
@@ -36,7 +36,7 @@ import { ThreeDNodeTree } from '@cognite/gearbox';
 ```
 
 <Preview>
-  <Story name="Basic Usage">
+  <Story name="Basic usage">
     <ThreeDNodeTree modelId = {0} revisionId = {0}/>
   </Story>
 </Preview>
@@ -77,7 +77,7 @@ import { NodeTreeStyles } from '@cognite/gearbox';
 
 ## Examples
 
-### Click Item In Tree
+### Click item in tree
 
 ```typescript
 import { OnSelectNodeTreeParams } from '@cognite/gearbox';
@@ -86,7 +86,7 @@ const onSelectTreeNode = (e: OnSelectNodeTreeParams) => console.log('onSelect', 
 ```
 
 <Preview>
-  <Story name="Click Item In Tree">
+  <Story name="Click item in tree">
     <ThreeDNodeTree
     modelId={0}
     revisionId={0}
@@ -95,7 +95,7 @@ const onSelectTreeNode = (e: OnSelectNodeTreeParams) => console.log('onSelect', 
   </Story>
 </Preview>
 
-### Right Click Item In Tree
+### Right click item in tree
 
 ```typescript
 import 'antd/dist/antd.css';
@@ -178,12 +178,12 @@ export class RightClickExample extends React.Component<{}, RightClickState> {
 ```
 
 <Preview>
-  <Story name="Right Click Item In Tree">
+  <Story name="Right click item in tree">
    <RightClickExample />
   </Story>
 </Preview>
 
-### Default Expanded Node
+### Default expanded node
 
 ```typescript
 const expandedKeys: number[] = [
@@ -194,7 +194,7 @@ const expandedKeys: number[] = [
 ```
 
 <Preview>
-  <Story name="Default Expanded Node">
+  <Story name="Default expanded node">
     <ThreeDNodeTree
       modelId={0}
       revisionId={0}
@@ -203,7 +203,7 @@ const expandedKeys: number[] = [
   </Story>
 </Preview>
 
-### With Custom Styles
+### With custom styles
 
 ```typescript
 const customStyle = {
@@ -215,7 +215,7 @@ const customStyle = {
 ```
 
 <Preview>
-  <Story name="With Custom Styles">
+  <Story name="With custom styles">
     <ThreeDNodeTree
       modelId={0}
       revisionId={0}
@@ -224,7 +224,7 @@ const customStyle = {
   </Story>
 </Preview>
 
-### With Theme
+### With theme
 
 ```typescript
 import { ThemeProvider } from 'styled-components';
@@ -239,7 +239,7 @@ const exampleTheme = {
 ```
 
 <Preview>
-  <Story name="With Theme">
+  <Story name="With theme">
     <ThemeProvider theme={exampleTheme}><ThreeDNodeTree modelId={0} revisionId={0} /></ThemeProvider>
   </Story>
 </Preview>

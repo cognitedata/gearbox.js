@@ -25,7 +25,7 @@ import { AssetEventsPanel } from '@cognite/gearbox';
 ```
 
 <Preview>
-  <Story name="Basic Usage">
+  <Story name="Basic usage">
     <AssetEventsPanel assetId={4650652196144007} />
   </Story>
 </Preview>
@@ -63,7 +63,7 @@ See more details in AssetMeta component documentation.
 
 ## Examples
 
-### Custom Column Names
+### Custom column names
 
 ```typescript
 const customColumns = [
@@ -90,7 +90,7 @@ const customColumns = [
 ];
 ```
 <Preview>
-  <Story name="Custom Column Names">
+  <Story name="Custom column names">
      <AssetEventsPanel
       assetId={4650652196144007}
       columns={customColumns}
@@ -98,10 +98,10 @@ const customColumns = [
   </Story>
 </Preview>
 
-### Custom Loading Spinner
+### Custom loading spinner
 
 <Preview>
-  <Story name="Custom Loading Spinner ">
+  <Story name="Custom loading spinner ">
     <AssetEventsPanel
       assetId={4650652196144007}
       customSpinner={<div>Loading...</div>}
@@ -109,7 +109,7 @@ const customColumns = [
   </Story>
 </Preview>
 
-### Custom Styles
+### Custom styles
 
 ```typescript
 import { AssetEventsPanelStyles } from '@cognite/gearbox';
@@ -121,7 +121,7 @@ const customStyle: AssetEventsPanelStyles = {
 };
 ```
 <Preview>
-  <Story name="Custom Styles">
+  <Story name="Custom styles">
     <AssetEventsPanel
       assetId={4650652196144007}
       styles={customStyle}
@@ -140,11 +140,10 @@ const handleAssetEventsLoaded = (events: CogniteEvent[]) => console.log(events);
 ```
 
 <Preview>
-  <Story name="Load Callback">
+  <Story name="Handle callbacks">
     <AssetEventsPanel
       assetId={4650652196144007}
       onAssetEventsLoaded={handleAssetEventsLoaded}
     />
   </Story>
 </Preview>
-

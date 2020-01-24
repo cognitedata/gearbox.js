@@ -38,7 +38,7 @@ import { TimeseriesPreview } from '@cognite/gearbox';
 ```
 
 <Preview>
-  <Story name="Basic Usage" >
+  <Story name="Basic usage" >
     <TimeseriesPreview timeseriesId={41852231325889} />
   </Story>
 </Preview>
@@ -99,7 +99,7 @@ const defaultStrings = {
 
 ## Examples
 
-### Value To Display
+### Value to display
 
 ```typescript
 const valToDisplay = {
@@ -119,7 +119,7 @@ const formatValue = (value: number | string | undefined) => {
 ```
 
 <Preview>
-  <Story name="Value To Display" >
+  <Story name="Value to display" >
     <TimeseriesPreview
       timeseriesId={41852231325889}
       valueToDisplay={valToDisplay}
@@ -130,7 +130,7 @@ const formatValue = (value: number | string | undefined) => {
   </Story>
 </Preview>
 
-### Custom Data Fetching
+### Custom data fetching
 
 ```typescript
 const retrieveTimeseries = async (id: InternalId) => { /* ... */ }
@@ -139,7 +139,7 @@ const retrieveLatestDatapoint = async (id: InternalId) => { /* ... */ }
 ```
 
 <Preview>
-  <Story name="Custom Data Fetching" >
+  <Story name="Custom data fetching" >
     <TimeseriesPreview
       timeseriesId={41852231325889}
       retrieveTimeseries={retrieveTimeseries}
@@ -148,7 +148,7 @@ const retrieveLatestDatapoint = async (id: InternalId) => { /* ... */ }
   </Story>
 </Preview>
 
-### Dropdown Menu
+### Dropdown menu
 
 ```typescript
 const menuConfig = {
@@ -166,7 +166,7 @@ const dropdown = { options: menuConfig, onClick: onMenuClick }
 ```
 
 <Preview>
-  <Story name="Dropdown Menu" >
+  <Story name="Dropdown menu" >
     <TimeseriesPreview
       timeseriesId={41852231325889}
       dropdown={dropdown}

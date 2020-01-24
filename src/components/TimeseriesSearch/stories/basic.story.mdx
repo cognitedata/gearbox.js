@@ -44,7 +44,7 @@ const onTimeserieSelectionChange = (
 <p>You can search for {names}</p>
 
 <Preview>
-  <Story name="Basic Usage" >
+  <Story name="Basic usage" >
     <TimeseriesSearch onTimeserieSelectionChange={onTimeserieSelectionChange} />
   </Story>
 </Preview>
@@ -86,14 +86,14 @@ See more details in `Custom styles` example.
 
 ## Examples
 
-### Show Root Asset Select
+### Show root asset select
 
 #### Info:
 
 <p>For all examples You can search for {names}</p>
 
 <Preview>
-  <Story name="Show Root Asset Select" >
+  <Story name="Show root asset select" >
     <TimeseriesSearch
       onTimeserieSelectionChange={onTimeserieSelectionChange}
       rootAssetSelect={true}
@@ -101,10 +101,10 @@ See more details in `Custom styles` example.
   </Story>
 </Preview>
 
-### Hide Selected Row
+### Hide selected row
 
 <Preview>
-  <Story name="Hide Selected Row" >
+  <Story name="Hide selected row" >
     <TimeseriesSearch
       onTimeserieSelectionChange={onTimeserieSelectionChange}
       hideSelected={true}
@@ -112,10 +112,10 @@ See more details in `Custom styles` example.
   </Story>
 </Preview>
 
-### Single Selection
+### Single selection
 
 <Preview>
-  <Story name="Single Selection" >
+  <Story name="Single selection" >
     <TimeseriesSearch
       onTimeserieSelectionChange={onTimeserieSelectionChange}
       single={true}
@@ -123,10 +123,10 @@ See more details in `Custom styles` example.
   </Story>
 </Preview>
 
-### Allow Strings
+### Allow strings
 
 <Preview>
-  <Story name="Allow Strings" >
+  <Story name="Allow strings" >
     <TimeseriesSearch
       onTimeserieSelectionChange={onTimeserieSelectionChange}
       allowStrings={true}
@@ -145,7 +145,7 @@ See more details in `Custom styles` example.
   </Story>
 </Preview>
 
-### Custom Filter Rule
+### Custom filter rule
 
 ```typescript
 const filterRule = (timeseries: GetTimeSeriesMetadataDTO): boolean =>
@@ -153,7 +153,7 @@ const filterRule = (timeseries: GetTimeSeriesMetadataDTO): boolean =>
 ```
 
 <Preview>
-  <Story name="Custom Filter Rule" >
+  <Story name="Custom filter rule" >
     <TimeseriesSearch
       onTimeserieSelectionChange={onTimeserieSelectionChange}
       filterRule={filterRule}
@@ -161,7 +161,7 @@ const filterRule = (timeseries: GetTimeSeriesMetadataDTO): boolean =>
   </Story>
 </Preview>
 
-### Custom Strings
+### Custom strings
 
 ```typescript
 const customString = {
@@ -174,7 +174,7 @@ const customString = {
 ```
 
 <Preview>
-  <Story name="Custom Strings" >
+  <Story name="Custom strings" >
     <TimeseriesSearch
       onTimeserieSelectionChange={onTimeserieSelectionChange}
       rootAssetSelect={true}
@@ -183,7 +183,7 @@ const customString = {
   </Story>
 </Preview>
 
-### With Custom Styles
+### With custom styles
 
 ```typescript
 const customStyles = {
@@ -198,7 +198,7 @@ const customStyles = {
 ```
 
 <Preview>
-  <Story name="With Custom Styles" >
+  <Story name="With custom styles" >
     <TimeseriesSearch
       onTimeserieSelectionChange={onTimeserieSelectionChange}
       styles={customStyles}
@@ -206,7 +206,7 @@ const customStyles = {
   </Story>
 </Preview>
 
-### With Theme
+### With theme
 
 ```typescript
 import { ThemeProvider } from 'styled-components';
@@ -220,7 +220,7 @@ const ExampleTheme = {
 ```
 
 <Preview>
-  <Story name="With Theme" >
+  <Story name="With theme" >
     <ThemeProvider theme={ExampleTheme}><TimeseriesSearch onTimeserieSelectionChange={onTimeserieSelectionChange}/></ThemeProvider>
   </Story>
 </Preview>

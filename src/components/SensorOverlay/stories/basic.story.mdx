@@ -99,7 +99,7 @@ export interface SensorDatapoint {
 ```
 ## Examples
 
-### With Many Sensors
+### With many sensors
 
 ```typescript
  const timeseriesIds = [
@@ -110,12 +110,12 @@ export interface SensorDatapoint {
   ];
 ```
 <Preview>
-  <Story name="With Many Sensors">
+  <Story name="With many sensors">
     <SensorOverlay timeseriesIds={timeseriesIds}><CustomizedDiv/></SensorOverlay>
   </Story>
 </Preview>
 
-### Default Position And Color
+### Default position and color
 
 ```typescript
 const colorMap = { [8681821313339919]: '#33AA33' };
@@ -133,21 +133,21 @@ const defaultPositionMap = {
 ```
 
 <Preview>
-  <Story name="Default Position And Color">
+  <Story name="Default position and color">
     <SensorOverlay timeseriesIds={timeseriesIds} defaultPositionMap={defaultPositionMap} colorMap={colorMap}><CustomizedDiv/></SensorOverlay>
   </Story>
 </Preview>
 
-### Disabled Dragging
+### Disabled dragging
 
 <Preview>
-  <Story name="Disabled Dragging">
+  <Story name="Disabled dragging">
     <SensorOverlay timeseriesIds={[8681821313339919]} isTagDraggable={false} isPointerDraggable={false}><CustomizedDiv/></SensorOverlay>
   </Story>
 </Preview>
 
 
-### With Link
+### With link
 
 ```typescript
 import { SensorDatapoint } from '@cognite/gearbox';
@@ -157,24 +157,24 @@ const handleLinkClick = (timeserieId: number, datapoint: SensorDatapoint) => {};
 ```
 
 <Preview>
-  <Story name="With Link">
+  <Story name="With link">
     <SensorOverlay timeseriesIds={[8681821313339919]}  linksMap={linksMap} onClick={handleClick} onLinkClick={handleLinkClick}><CustomizedDiv/></SensorOverlay>
   </Story>
 </Preview>
 
-### With Sticky Tooltips
+### With sticky tooltips
 
 ```typescript
 const stickyMap = { [8681821313339919]: true };
 ```
 
 <Preview>
-  <Story name="With Sticky Tooltips">
+  <Story name="With sticky tooltips">
     <SensorOverlay timeseriesIds={[8681821313339919]} stickyMap={stickyMap} defaultPositionMap={defaultPositionMap}><CustomizedDiv/></SensorOverlay>
   </Story>
 </Preview>
 
-### With Min-Max Limit
+### With min-max limit
 
 ```typescript
 export const minMaxMap = {
@@ -186,12 +186,12 @@ export const minMaxMap = {
 ```
 
 <Preview>
-  <Story name="With Min-Max Limit">
+  <Story name="With min-max limit">
     <SensorOverlay  timeseriesIds={[8681821313339919]} stickyMap={stickyMap} defaultPositionMap={defaultPositionMap} alertColor={'magenta'} minMaxMap={minMaxMap}><CustomizedDiv/></SensorOverlay>
   </Story>
 </Preview>
 
-### With Image
+### With image
 
 ```typescript
 export const minMaxMap = {
@@ -203,12 +203,12 @@ export const minMaxMap = {
 ```
 
 <Preview>
-  <Story name="With Image">
+  <Story name="With image">
     <SensorOverlay  timeseriesIds={[8681821313339919]}><img src="sensor_overlay/infographic-sample.jpg" width="100%" /></SensorOverlay>
   </Story>
 </Preview>
 
-### With Fixed Width
+### With fixed width
 
 ```typescript
 export const minMaxMap = {
@@ -220,12 +220,12 @@ export const minMaxMap = {
 ```
 
 <Preview>
-  <Story name="With Fixed Width">
+  <Story name="With fixed width">
     <SensorOverlay  timeseriesIds={[8681821313339919]}><img src="sensor_overlay/infographic-sample.jpg" width="1000px" /></SensorOverlay>
   </Story>
 </Preview>
 
-### Add Sensors Dynamically
+### Add sensors dynamically
 
 ```typescript
 class SensorOverlayWrapperComponent extends React.Component {
@@ -267,7 +267,7 @@ class SensorOverlayWrapperComponent extends React.Component {
 ```
 
 <Preview>
-  <Story name="Add Sensors Dynamically">
+  <Story name="Add sensors dynamically">
     <SensorOverlayWrapperComponent />
   </Story>
 </Preview>

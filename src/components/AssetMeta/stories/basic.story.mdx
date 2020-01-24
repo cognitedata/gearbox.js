@@ -41,7 +41,7 @@ import { AssetMeta } from '@cognite/gearbox';
 ```
 
 <Preview>
-  <Story name="Basic Usage" >
+  <Story name="Basic usage" >
    <AssetMeta assetId={4650652196144007} />
   </Story>
 </Preview>
@@ -262,29 +262,29 @@ See more details in `Custom Styles` example.
 
 ## Examples
 
-### Returns Selected Pane
+### Returns selected pane
 
 ```typescript
 const onPaneChange = (key: string) => console.log('onPaneChange', key);
 ```
 <Preview>
-  <Story name="Returns Selected Pane">
+  <Story name="Returns selected pane">
     <AssetMeta assetId={4650652196144007} onPaneChange={onPaneChange} />
   </Story>
 </Preview>
 
-### Alternate Default Tab
+### Alternate default tab
 
 <Preview>
-  <Story name="Alternate Default Tab">
+  <Story name="Alternate default tab">
     <AssetMeta assetId={4650652196144007} tab="documents" />;
   </Story>
 </Preview>
 
-### Hide A Tab
+### Hide a tab
 
 <Preview>
-  <Story name="Hide A Tab">
+  <Story name="Hide a tab">
     <AssetMeta
       assetId={4650652196144007}
       tab="events"
@@ -293,7 +293,7 @@ const onPaneChange = (key: string) => console.log('onPaneChange', key);
   </Story>
 </Preview>
 
-### Custom Details Category
+### Custom details category
 
 ```typescript
 const detailsProps = {
@@ -303,7 +303,7 @@ const detailsProps = {
 ```
 
 <Preview>
-  <Story name="Custom Details Category">
+  <Story name="Custom details category">
     <AssetMeta
       assetId={4650652196144007}
       detailsProps={detailsProps}
@@ -311,7 +311,7 @@ const detailsProps = {
   </Story>
 </Preview>
 
-### Returns Selected Document
+### Returns selected document
 
 ```typescript
  const handleDocumentClick = (
@@ -324,19 +324,19 @@ const detailsProps = {
 ```
 
 <Preview>
-  <Story name="Returns Selected Document">
+  <Story name="Returns selected document">
     <AssetMeta assetId={123} docsProps={ handleDocumentClick } />;
   </Story>
 </Preview>
 
-### Custom Document Priority Categories
+### Custom document priority categories
 
 ```typescript
 const priorityCategoriesDocsProps = { categoryPriorityList: ['AB', 'ZE'] };
 ```
 
 <Preview>
-  <Story name="Custom Document Priority Categories">
+  <Story name="Custom document priority categories">
     <AssetMeta
       assetId={123}
       docsProps={priorityCategoriesDocsProps}
@@ -344,7 +344,7 @@ const priorityCategoriesDocsProps = { categoryPriorityList: ['AB', 'ZE'] };
   </Story>
 </Preview>
 
-### Custom Document Categories Sort
+### Custom document categories sort
 
 ```typescript
 const categoriesSortDocsProps = {
@@ -355,7 +355,7 @@ const categoriesSortDocsProps = {
 ```
 
 <Preview>
-  <Story name="Custom Document Categories Sort">
+  <Story name="Custom document categories sort">
     <AssetMeta
       assetId={123}
       docsProps={categoriesSortDocsProps}
@@ -363,7 +363,7 @@ const categoriesSortDocsProps = {
   </Story>
 </Preview>
 
-### Custom Document Category Priority And Sort
+### Custom document category priority and sort
 
 ```typescript
 const priorityAndSortDocsProps = {
@@ -374,7 +374,7 @@ const priorityAndSortDocsProps = {
 ```
 
 <Preview>
-  <Story name="Custom Document Category Priority And Sort">
+  <Story name="Custom document category priority and sort">
     <AssetMeta
       assetId={123}
       docsProps={priorityAndSortDocsProps}
@@ -403,15 +403,15 @@ const timeseriesProps = {
   </Story>
 </Preview>
 
-### With Custom Spinner
+### With custom spinner
 
 <Preview>
-  <Story name="With Custom Spinner">
+  <Story name="With custom spinner">
     <AssetMeta assetId={123456} customSpinner={<div>Loading...</div>} />
   </Story>
 </Preview>
 
-### With Custom Styles
+### With custom styles
 
 ```typescript
 const customStyle = {
@@ -468,7 +468,7 @@ const customStyle = {
 ```
 
 <Preview>
-  <Story name="With Custom Styles">
+  <Story name="With custom styles">
     <AssetMeta assetId={123456} styles={customStyle} />
   </Story>
 </Preview>
