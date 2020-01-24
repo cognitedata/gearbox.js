@@ -2,7 +2,6 @@ import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { TimeseriesChart } from '../TimeseriesChart';
 import {
   decorators,
-  annotationsProp,
   customContainerStyle,
   zoomableClientDecorator,
   timeSeriesColors,
@@ -307,7 +306,13 @@ const annotations = [
       timeseriesIds={[123]}
       startTime={Date.now() - 60 * 1000}
       endTime={Date.now()}
-      annotations={annotationsProp}
+      annotations={[
+        {
+          data: [Date.now() - 30 * 1000, Date.now() - 20 * 1000],
+          height: 30,
+          id: 888,
+        }
+      ]}
       />
   </Story>
 </Preview>
