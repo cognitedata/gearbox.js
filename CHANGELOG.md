@@ -1,3 +1,18 @@
+# [1.12.0](https://github.com/cognitedata/gearbox.js/compare/v1.11.0...v1.12.0) (2020-01-24)
+
+
+### Bug Fixes
+
+* componentWillUpdate is deprecated ([#593](https://github.com/cognitedata/gearbox.js/issues/593)) ([164c153](https://github.com/cognitedata/gearbox.js/commit/164c15335354138098b5eab1849d82878c0cf377))
+* **timeseries-chart:** change cursor-overview position calculation ([870d9eb](https://github.com/cognitedata/gearbox.js/commit/870d9ebd464109ad4b245520f0bbad2e7258a7d3))
+
+
+### Features
+
+* **3d-viewer:** add highlightMappedNodes prop ([#538](https://github.com/cognitedata/gearbox.js/issues/538)) ([5859478](https://github.com/cognitedata/gearbox.js/commit/5859478dc47fa185490ebaa04dcc2f5a594b634d)), closes [#480](https://github.com/cognitedata/gearbox.js/issues/480)
+* **events-timeline:** introduce events-timeline component ([56395f8](https://github.com/cognitedata/gearbox.js/commit/56395f881036b2e33a310747d2315169d4f1a038))
+* **timeseries-preview:** custom text in time series preview ([#554](https://github.com/cognitedata/gearbox.js/issues/554)) ([1b7d95f](https://github.com/cognitedata/gearbox.js/commit/1b7d95f8ba30990c2a6e3880a320a36c99e679f1))
+
 # [1.11.0](https://github.com/cognitedata/gearbox.js/compare/v1.10.1...v1.11.0) (2019-12-06)
 
 

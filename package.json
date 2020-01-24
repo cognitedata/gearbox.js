@@ -1,6 +1,6 @@
 {
   "name": "@cognite/gearbox",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "GearBox will be a place for application developers to contribute useful, reusable components across applications",
   "contributors": [],
   "main": "dist/index.js",
@@ -142,7 +142,9 @@
     "registry": "https://registry.npmjs.org/"
   },
   "release": {
-    "branches": ["master"],
+    "branches": [
+      "master"
+    ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
