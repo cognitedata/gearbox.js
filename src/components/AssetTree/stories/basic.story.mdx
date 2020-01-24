@@ -23,7 +23,7 @@ import { AssetTree } from '@cognite/gearbox';
 ```
 
 <Preview>
-  <Story name="Basic Usage">
+  <Story name="Basic usage">
     <AssetTree/>
   </Story>
 </Preview>
@@ -65,7 +65,7 @@ See more details in `Custom Styles` example.
 
 ## Examples
 
-### Click Item
+### Click item
 
 A function can be provided to fire when an item clicked:
 
@@ -76,14 +76,14 @@ const onSelect = (e: OnSelectAssetTreeParams) => {};
 ```
 
 <Preview>
-  <Story name="Click Item">
+  <Story name="Click item">
     <AssetTree
       onSelect={onSelect}
     />
   </Story>
 </Preview>
 
-### Custom Styles
+### Custom styles
 
 ```typescript
 const customStyle = {
@@ -95,37 +95,37 @@ const customStyle = {
 ```
 
 <Preview>
-  <Story name="Custom Styles">
+  <Story name="Custom styles">
     <AssetTree
       styles={customStyle}
     />
   </Story>
 </Preview>
 
-### Default Expanded Node
+### Default expanded node
 
 <Preview>
-  <Story name="Default Expanded Node">
+  <Story name="Default expanded node">
     <AssetTree
       defaultExpandedKeys={[6687602007296940]}
     />
   </Story>
 </Preview>
 
-### Custom Display Name
+### Custom display name
 
 ```typescript
 const displayIdAsName = ({ id }: { id: number }) => `Id: ${id}`
 ```
 <Preview>
-  <Story name="Custom Display Name">
+  <Story name="Custom display name">
     <AssetTree
       displayName={displayIdAsName}
     />
   </Story>
 </Preview>
 
-### With Theme
+### With theme
 
 ```typescript
 import { ThemeProvider } from 'styled-components';
@@ -140,15 +140,15 @@ const exampleTheme = {
 };
 ```
 <Preview>
-  <Story name="With Theme">
+  <Story name="With theme">
     <ThemeProvider theme={exampleTheme}><AssetTree /></ThemeProvider>
   </Story>
 </Preview>
 
-### Custom Root Assets
+### Custom root assets
 
 <Preview>
-  <Story name="Custom Root Assets">
+  <Story name="Custom root assets">
     <AssetTree
       assetIds={[6687602007296940]}
     />

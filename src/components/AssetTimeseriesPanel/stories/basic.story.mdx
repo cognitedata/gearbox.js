@@ -25,7 +25,7 @@ import { AssetTimeseriesPanel } from '@cognite/gearbox';
 ```
 
 <Preview>
-  <Story name="Basic Usage" >
+  <Story name="Basic usage" >
     <AssetTimeseriesPanel assetId={4650652196144007} />
   </Story>
 </Preview>
@@ -55,10 +55,10 @@ See more details in AssetMeta component documentation.
 
 ## Examples
 
-### Custom Spinner
+### Custom spinner
 
 <Preview>
-  <Story name="Custom Spinner">
+  <Story name="Custom spinner">
     <AssetTimeseriesPanel
       assetId={4650652196144007}
       customSpinner={<div>Loading...</div>}
@@ -66,7 +66,7 @@ See more details in AssetMeta component documentation.
   </Story>
 </Preview>
 
-### Custom Styles
+### Custom styles
 
 ```typescript
 const customStyle = {
@@ -81,7 +81,7 @@ const customStyle = {
 ```
 
 <Preview>
-  <Story name="Custom Styles">
+  <Story name="Custom styles">
     <AssetTimeseriesPanel
       assetId={4650652196144007}
       styles={customStyle}
@@ -105,7 +105,7 @@ const metaOptions = {
 };
 ```
 <Preview>
-  <Story name="Custom Time Series Chart Meta">
+  <Story name="Custom TimeSeriesChartMeta">
     <AssetTimeseriesPanel
       assetId={4650652196144007}
       {...metaOptions}
@@ -113,7 +113,7 @@ const metaOptions = {
   </Story>
 </Preview>
 
-### Load Callbacks
+### Handle callbacks
 
 ```typescript
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
@@ -121,7 +121,7 @@ import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 const handleAssetTimeseriesLoaded = (files: GetTimeSeriesMetadataDTO[]) => console.log(files);
 ```
 <Preview>
-  <Story name="Load Callback">
+  <Story name="Handle callback">
     <AssetTimeseriesPanel
       assetId={4650652196144007}
       onAssetTimeseriesLoaded={handleAssetTimeseriesLoaded}

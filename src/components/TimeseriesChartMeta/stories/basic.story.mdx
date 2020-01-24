@@ -31,7 +31,7 @@ import { TimeseriesChartMeta } from '@cognite/gearbox';
 ```
 
 <Preview>
-  <Story name="Basic Usage" >
+  <Story name="Basic usage" >
     <TimeseriesChartMeta timeseriesId={123} />;
   </Story>
 </Preview>
@@ -52,18 +52,18 @@ type TimeseriesChartMetaPeriod =  'lastYear' | 'lastMonth' | 'lastWeek' | 'lastD
 
 ## Examples
 
-### Predefined Period
+### Predefined period
 
 <Preview>
-  <Story name="Predefined Period" >
+  <Story name="Predefined period" >
     <TimeseriesChartMeta timeseriesId={123} defaultTimePeriod="lastMonth" />
   </Story>
 </Preview>
 
-### Hide Elements
+### Hide elements
 
 <Preview>
-  <Story name="Hide Elements" >
+  <Story name="Hide elements" >
     <TimeseriesChartMeta
       timeseriesId={123}
       showChart={true}
@@ -75,18 +75,18 @@ type TimeseriesChartMetaPeriod =  'lastYear' | 'lastMonth' | 'lastWeek' | 'lastD
   </Story>
 </Preview>
 
-### Disable Live Updates
+### Disable live updates
 
 <Preview>
-  <Story name="Disable Live Updates" >
+  <Story name="Disable live updates" >
     <TimeseriesChartMeta timeseriesId={123} liveUpdate={false} />
   </Story>
 </Preview>
 
-### Custom Update Interval
+### Custom update interval
 
 <Preview>
-  <Story name="Custom Update Interval" >
+  <Story name="Custom update interval" >
     <TimeseriesChartMeta
       timeseriesId={123}
       liveUpdate={true}
@@ -95,10 +95,10 @@ type TimeseriesChartMetaPeriod =  'lastYear' | 'lastMonth' | 'lastWeek' | 'lastD
   </Story>
 </Preview>
 
-### Custom Update Interval
+### Custom base period
 
 <Preview>
-  <Story name="Custom Base Period" >
+  <Story name="Custom base period" >
     <TimeseriesChartMeta
       timeseriesId={123}
       defaultBasePeriodProps={defaultBasePeriodProps}
@@ -106,7 +106,7 @@ type TimeseriesChartMetaPeriod =  'lastYear' | 'lastMonth' | 'lastWeek' | 'lastD
   </Story>
 </Preview>
 
-### With Theme
+### With theme
 
 ```typescript
 const exampleTheme = {
@@ -118,7 +118,7 @@ const exampleTheme = {
 ```
 
 <Preview>
-  <Story name="With Theme" >
+  <Story name="With theme" >
     <ThemeProvider theme={exampleTheme}><TimeseriesChartMeta timeseriesId={123}/></ThemeProvider>
   </Story>
 </Preview>

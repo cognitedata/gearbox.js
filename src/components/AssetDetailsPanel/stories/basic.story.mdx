@@ -23,7 +23,7 @@ import { AssetDetailsPanel } from '@cognite/gearbox';
 ```
 
 <Preview>
-  <Story name="Basic Usage">
+  <Story name="Basic usage">
     <AssetDetailsPanel assetId={4518112062673878} />
   </Story>
 </Preview>
@@ -57,10 +57,10 @@ const toCategory = (name: string): string => name.split('_')[0];
   </Story>
 </Preview>
 
-### Custom Loading Spinner
+### Custom loading spinner
 
 <Preview>
-  <Story name="Custom Loading Spinner ">
+  <Story name="Custom loading spinner ">
     <AssetDetailsPanel
       assetId={4650652196144007}
       customSpinner={<div>Loading...</div>}
@@ -68,7 +68,7 @@ const toCategory = (name: string): string => name.split('_')[0];
   </Story>
 </Preview>
 
-### Custom Styles
+### Custom styles
 
 ```typescript
 const customStyle: React.CSSProperties = {
@@ -76,7 +76,7 @@ const customStyle: React.CSSProperties = {
 };
 ```
 <Preview>
-  <Story name="Custom Styles">
+  <Story name="Custom styles">
     <AssetDetailsPanel
       assetId={4650652196144007}
       styles={customStyle}
@@ -95,7 +95,7 @@ const onAssetLoaded = (asset: Asset) => console.log(asset);
 ```
 
 <Preview>
-  <Story name="Load Callback">
+  <Story name="Handle callbacks">
     <AssetDetailsPanel
       assetId={4650652196144007}
       onAssetLoaded={onAssetLoaded}

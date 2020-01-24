@@ -15,7 +15,7 @@ import {
 
 This component displays an object in a table layout.
 
-### Basic Usage:
+### Basic usage:
 
 Imports:
 
@@ -37,7 +37,7 @@ const metadata = {
 ```
 
 <Preview>
-  <Story name="Basic Usage">
+  <Story name="Basic usage">
     <DescriptionList valueSet={metadata} />
   </Story>
 </Preview>
@@ -48,15 +48,15 @@ const metadata = {
 
 ## Examples
 
-### No Data
+### No data
 
 <Preview>
-  <Story name="No Data">
+  <Story name="No data">
     <DescriptionList valueSet={{}} />
   </Story>
 </Preview>
 
-### With Description Text
+### With description text
 
 ```typescript
 const description = {
@@ -65,7 +65,7 @@ const description = {
 };
 ```
 <Preview>
-  <Story name="With Description Text">
+  <Story name="With description text">
     <DescriptionList
       valueSet={metadata}
       description={description}
@@ -73,7 +73,7 @@ const description = {
   </Story>
 </Preview>
 
-### With Custom Categories
+### With custom categories
 
 ```typescript
 const sourceCategory = 'Source data';
@@ -85,7 +85,7 @@ const toCategory = (name: string) =>
 ```
 
 <Preview>
-  <Story name="With Custom Categories">
+  <Story name="With custom categories">
     <DescriptionList
       valueSet={metadata}
       toCategory={toCategory}

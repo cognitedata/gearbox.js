@@ -24,7 +24,7 @@ import { AssetDocumentsPanel } from '@cognite/gearbox';
 ```
 
 <Preview>
-  <Story name="Basic Usage">
+  <Story name="Basic usage">
     <AssetDocumentsPanel assetId={4650652196144007} documentTitleField={'DOC_TITLE'} />
   </Story>
 </Preview>
@@ -93,7 +93,7 @@ const handleAssetFilesLoaded = (files: FilesMetadata[]) => { /* ... */ };
 ```
 
 <Preview>
-  <Story name="Load callbacks">
+  <Story name="Handle callbacks">
     <AssetDocumentsPanel
       assetId={4650652196144007}
       onAssetFilesLoaded={handleAssetFilesLoaded}
@@ -101,10 +101,10 @@ const handleAssetFilesLoaded = (files: FilesMetadata[]) => { /* ... */ };
   </Story>
 </Preview>
 
-### Custom Loading Spinner
+### Custom loading spinner
 
 <Preview>
-  <Story name="Custom Loading Spinner">
+  <Story name="Custom loading spinner">
     <AssetDocumentsPanel
       assetId={4650652196144007}
       customSpinner={<div>Loading...</div>}
@@ -112,14 +112,14 @@ const handleAssetFilesLoaded = (files: FilesMetadata[]) => { /* ... */ };
   </Story>
 </Preview>
 
-### Custom Category Names
+### Custom category names
 
 ```typescript
 const docTypes = { XB: 'My Category', XL: 'Another Custom Category' };
 ```
 
 <Preview>
-  <Story name="Custom Category Names">
+  <Story name="Custom category names">
     <AssetDocumentsPanel
       assetId={4650652196144007}
       docTypes={docTypes}
@@ -127,7 +127,7 @@ const docTypes = { XB: 'My Category', XL: 'Another Custom Category' };
   </Story>
 </Preview>
 
-### Custom Styles
+### Custom styles
 
 ```typescript
 import { AssetDocumentsPanelStyles } from '@cognite/gearbox';
@@ -140,7 +140,7 @@ const customStyles: AssetDocumentsPanelStyles = {
 };
 ```
 <Preview>
-  <Story name="Custom Styles">
+  <Story name="Custom styles">
   <AssetDocumentsPanel
       assetId={4650652196144007}
       styles={customStyle}

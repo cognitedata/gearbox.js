@@ -36,7 +36,7 @@ To use this component you have to install `@cognite/3d-viewer` package (version 
 yarn add @cognite/3d-viewer@5
 ```
 
-### Basic Usage:
+### Basic usage:
 
 Imports:
 
@@ -56,7 +56,7 @@ import { Model3DViewer } from '@cognite/gearbox';
 ```
 
 <Preview>
-  <Story name="Basic Usage">
+  <Story name="Basic usage">
     <Model3DViewer
       modelId={modelId}
       revisionId={revisionId}
@@ -88,7 +88,7 @@ export interface Model3DViewerStyles {
 
 ## Examples
 
-### Slice The Model
+### Slice the model
 
 Specify the direction and the length you want to slice from the corresponding axis to render
 a sliced model.
@@ -98,7 +98,7 @@ const slice = { y: { coord: 0, direction: false } }
 ```
 
 <Preview>
-  <Story name="Slice The Model">
+  <Story name="Slice the model">
     <Model3DViewer
       modelId={modelId}
       revisionId={revisionId}
@@ -108,7 +108,7 @@ const slice = { y: { coord: 0, direction: false } }
 </Preview>
 
 
-### Add Visual Sliders
+### Add visual sliders
 
 Specify the direction and the length you want to slice from the corresponding axis to render
 a sliced model.
@@ -122,7 +122,7 @@ const slider = {
 ```
 
 <Preview>
-  <Story name="Add Visual Sliders">
+  <Story name="Add visual sliders">
     <Model3DViewer
       modelId={modelId}
       revisionId={revisionId}
@@ -131,7 +131,7 @@ const slider = {
   </Story>
 </Preview>
 
-### Take Screenshots
+### Take screenshots
 
 Set showScreenshotButton to true to add a button that takes screenshot of the model after being clicked.
 Set the onScreenshot property to customize what you want to do witht the screenshots.
@@ -146,7 +146,7 @@ const onScreenshot = (url: string) => {
 ```
 
 <Preview>
-  <Story name="Take Screenshots">
+  <Story name="Take screenshots">
     <Model3DViewer
       modelId={modelId}
       revisionId={revisionId}
