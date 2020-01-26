@@ -1,0 +1,70 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Docs/About" />
+
+<div style={{ margin: '0 auto', maxWidth: '600px', color: 'white', textAlign: 'center' }}>
+  <img
+    style={{ margin: '0 auto 2em auto' }}
+    src="docs/collage.png"
+  />
+  <br />
+  <br />
+  <a href="https://npm.im/@cognite/gearbox">
+    <img src="https://img.shields.io/npm/v/@cognite/gearbox" />
+  </a>&nbsp;&nbsp;
+  <a href="https://npm.im/@cognite/gearbox">
+    <img src="https://badgen.net/npm/dw/@cognite/gearbox" />
+  </a>&nbsp;&nbsp;
+  <a href="https://github.com/cognitedata/gearbox.js/blob/master/LICENSE">
+    <img src="https://badgen.now.sh/badge/license/apache2" />
+  </a>&nbsp;&nbsp;
+  <a href="https://bundlephobia.com/result?p=@cognite/gearbox">
+    <img src="https://badgen.net/bundlephobia/minzip/@cognite/gearbox" />
+  </a>&nbsp;&nbsp;
+  <a href="https://github.com/cognitedata/gearbox.js">
+    <img alt="GitHub stars" src="https://img.shields.io/github/stars/cognitedata/gearbox.js?style=social" />
+  </a>
+
+---
+
+Gearbox is a library of React.JS components for building web applications on top of the Cognite Data Fusion platform.
+
+</div>
+
+## About Cognite Gearbox
+
+It is entirely possible to build the <strong>service layer</strong> of your [Cognite Data Fusion](https://docs.cognite.com/cdf/) powered web app by
+making direct HTTP calls to the [Cognite API](https://docs.cognite.com/api/v1/) endpoints. But you don't have to:
+because, instead of HTTP calls, you can call the typed methods on the
+[CogniteClient](https://cognitedata.github.io/cognite-sdk-js/classes/cogniteclient.html) class from the
+[JavaScript SDK](https://github.com/cognitedata/cognite-sdk-js).
+
+Similarly, it is entirely possible to build the <strong>view layer</strong> from scratch. But you don't have to, because Gearbox gives
+you a set of [ReactJS](https://reactjs.org/) components to handle the most common use cases.
+
+For example, to view all info on an asset given its ID, you just: `<AssetMeta assetId={420042000042042} />`.
+
+Doing an `<AssetTree />` gives you a hierarchical view of all your assets.
+Now if you also take the `AssetSearch` component out of the gearbox, what you have are the basic building blocks of
+your app's navigation user experience.
+
+`Model3DViewer` component lets you build user interfaces around navigating a 3D model of your assets,
+while the `TimeseriesChart` allows visualizing and interacting with the timeseries data streaming out of your assets.
+
+There are many more components in Cognite Gearbox for you to pick and choose from. Please refer to the components 
+section to find out all about them.
+
+Gearbox components expects a [CogniteClient](https://cognitedata.github.io/cognite-sdk-js/classes/cogniteclient.html)
+from the **Cognite JavaScript SDK** to be provided so that they can interact with the Cognite Data Fusion platform.
+
+Typically, you would instantiate this `CogniteClient` object and authenticate it against a tenant/project as
+part of your web app's bootstraping sequence.
+
+To make this `cogniteClientObject` available to Gearbox components, you can wrap them within
+Gearbox's non-visual `ClientSDKProvider` component like so:
+
+```jsx
+<ClientSDKProvider client={cogniteClientObject}>
+  <YourAppUIWithGearboxComponents />
+</ClientSDKProvider>
+```
