@@ -1,0 +1,24 @@
+import { useContext } from 'react';
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { App } from './app/App';
+import { AnalyseTimeseries } from './AnalyseTimeseries';
+import { Sandbox } from './Sandbox';
+
+<Meta title="Docs/Examples" decorators={[storyFn => <App>{storyFn()}</App>]} />
+
+## Analyse Timeseries
+
+<Preview withSource={'none'}>
+  <Story name="Analyse Timeseries">
+    <AnalyseTimeseries />
+  </Story>
+</Preview>
+
+## Sandbox
+
+<Preview withSource={'none'}>
+  <Story name="Sandbox">
+    <Sandbox />
+  </Story>
+</Preview> 
+
