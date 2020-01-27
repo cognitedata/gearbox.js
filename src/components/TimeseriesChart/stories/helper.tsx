@@ -37,7 +37,6 @@ class FakeZoomableClient extends MockCogniteClient {
   };
   datapoints: any = {
     retrieve: async (query: DatapointsMultiQuery): Promise<DatapointsArray> => {
-      console.log('client.datapoints.retrieve', query);
       const { granularity = '10s', start, end } = query.items[0];
       const n = granularity === 's' ? 2 : granularity.includes('s') ? 10 : 250;
       const result = randomData(

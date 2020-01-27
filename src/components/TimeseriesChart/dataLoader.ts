@@ -43,6 +43,10 @@ export class DataLoader {
     return 0;
   };
 
+  static xAccessor = (d: GetDoubleDatapoint | GetAggregateDatapoint) => {
+    return d.timestamp;
+  };
+
   static y0Accessor = (data: GetAggregateDatapoint) =>
     data.min ? data.min : DataLoader.yAccessor(data);
 

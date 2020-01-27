@@ -12,6 +12,10 @@ declare module '@cognite/griff-react' {
     d: GetDoubleDatapoint | GetAggregateDatapoint
   ) => number;
 
+  export type XAccessor = (
+    d: GetDoubleDatapoint | GetAggregateDatapoint
+  ) => number;
+
   export const AxisDisplayMode: {
     ALL: AxisDisplayModeType;
     NONE: AxisDisplayModeType;
@@ -57,6 +61,7 @@ declare module '@cognite/griff-react' {
     yAccessor?: YAccessor;
     y0Accessor?: YAccessor;
     y1Accessor?: YAccessor;
+    xAccessor?: XAccessor;
   }
 
   export class DataProvider extends Component<DataProviderProps> {}

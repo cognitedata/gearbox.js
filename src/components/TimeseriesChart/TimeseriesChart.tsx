@@ -140,6 +140,7 @@ export class TimeseriesChart extends Component<
           yAccessor: s.yAccessor || DataLoader.yAccessor,
           y0Accessor: s.y0Accessor || DataLoader.y0Accessor,
           y1Accessor: s.y1Accessor || DataLoader.y1Accessor,
+          xAccessor: s.xAccessor || DataLoader.xAccessor,
         }))
       : timeseriesIds.map((id: number) => ({
           id,
@@ -149,6 +150,7 @@ export class TimeseriesChart extends Component<
           yAccessor: DataLoader.yAccessor,
           y0Accessor: DataLoader.y0Accessor,
           y1Accessor: DataLoader.y1Accessor,
+          xAccessor: DataLoader.xAccessor,
         }));
 
     const showCrosshair: boolean = crosshair || ruler !== undefined;
