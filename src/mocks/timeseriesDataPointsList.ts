@@ -1,9 +1,108 @@
 import {
   DatapointsGetAggregateDatapoint,
   DatapointsGetDoubleDatapoint,
+  GetAggregateDatapoint,
 } from '@cognite/sdk';
+import { MockChartDataConfig } from '.';
 
-export function randomData(
+export const defaultConf: MockChartDataConfig = {
+  id: 0,
+  min: 0,
+  max: 150,
+  continousDeviation: 3,
+  peakDeviation: 30,
+};
+
+export function getRandomdata(
+  id: number,
+  start: number,
+  end: number,
+  n: number,
+  granularity?: number,
+  config?: MockChartDataConfig[]
+) {
+  const conf = config ? getConfig(config, id) : defaultConf;
+  const resultDataPoints = randomData(start, end, n, conf, granularity);
+  return insertPeakPoints(resultDataPoints, conf);
+}
+
+function getConfig(config: MockChartDataConfig[], id: number) {
+  const configuration = config.find(conf => conf.id === id);
+  return configuration ? configuration : defaultConf;
+}
+
+function insertPeakPoints(
+  resultDataPoints: DatapointsGetAggregateDatapoint,
+  config: MockChartDataConfig
+) {
+  const {
+    positivePeakPoints = 0,
+    negativePeakPoints = 0,
+    peakDeviation,
+  } = config;
+
+  const resultDataPointsArr = { ...resultDataPoints };
+  const { datapoints: datapointListProp } = resultDataPointsArr;
+  const datapointList = [...datapointListProp];
+  const randomIndexesList = generateRandomIndexesList(
+    datapointList.length - 1,
+    positivePeakPoints + negativePeakPoints
+  );
+
+  let positiveDPsVal = positivePeakPoints;
+  while (positiveDPsVal !== 0) {
+    const index = randomIndexesList.pop() || 0;
+    const dp = datapointList[index];
+    datapointList[index] = addPeakDeviation(dp, peakDeviation);
+    positiveDPsVal -= 1;
+  }
+
+  let negativeDPsVal = negativePeakPoints;
+  while (negativeDPsVal !== 0) {
+    const index = randomIndexesList.pop() || 0;
+    const dp = datapointList[index];
+    datapointList[index] = substractPeakDeviation(dp, peakDeviation);
+    negativeDPsVal -= 1;
+  }
+  resultDataPointsArr.datapoints = datapointList;
+  return resultDataPointsArr;
+}
+
+function addPeakDeviation(dp: GetAggregateDatapoint, peakDeviation: number) {
+  const dataPoint = { ...dp };
+  dataPoint.average = dataPoint.average
+    ? dataPoint.average + peakDeviation
+    : undefined;
+  dataPoint.min = dataPoint.min ? dataPoint.min + peakDeviation : undefined;
+  dataPoint.max = dataPoint.max ? dataPoint.max + peakDeviation : undefined;
+  return dataPoint;
+}
+
+function substractPeakDeviation(
+  dp: GetAggregateDatapoint,
+  peakDeviation: number
+) {
+  const dataPoint = { ...dp };
+  dataPoint.average = dataPoint.average
+    ? dataPoint.average - peakDeviation
+    : undefined;
+  dataPoint.min = dataPoint.min ? dataPoint.min - peakDeviation : undefined;
+  dataPoint.max = dataPoint.max ? dataPoint.max - peakDeviation : undefined;
+  return dataPoint;
+}
+
+function generateRandomIndexesList(
+  maxRandomNumber: number,
+  numberOfRandomIndexes: number
+) {
+  const randomIndexSet = new Set<number>();
+  while (randomIndexSet.size !== numberOfRandomIndexes) {
+    randomIndexSet.add(Math.floor(Math.random() * maxRandomNumber) + 1);
+  }
+  return [...randomIndexSet];
+}
+
+export function randomDataZoomable(
   start: number,
   end: number,
   n: number,
@@ -13,7 +112,7 @@ export function randomData(
 
   const dt = granularity ? granularity : (end - start) / n;
 
-  for (let i = start; i <= end; i += dt) {
+  for (let i = start + dt; i <= end; i += dt) {
     const values = [0, 0, 0]
       .map(
         () =>
@@ -32,6 +131,56 @@ export function randomData(
   }
 
   return { datapoints: data, id: 1337 };
+}
+
+export function randomData(
+  start: number,
+  end: number,
+  n: number,
+  config: MockChartDataConfig,
+  granularity?: number
+): DatapointsGetAggregateDatapoint {
+  const data = [];
+  const { min, max, continousDeviation } = config;
+  const dt = granularity ? granularity : (end - start) / n;
+  let prevMax = (min + max) / 2;
+  for (let i = start; i <= end; i += dt) {
+    const values = getRandomDeviation(min, max, continousDeviation, prevMax);
+    prevMax = values[2];
+    data.push({
+      timestamp: new Date(i),
+      average: values[1],
+      min: values[0],
+      max: values[2],
+      count: 7000,
+    });
+  }
+
+  return { datapoints: data, id: 1337 };
+}
+
+function getRandomDeviation(
+  min: number,
+  max: number,
+  continuousDeviation: number,
+  prevMax: number
+): number[] {
+  let maxNum = generateRandomDeviatedNumber(prevMax, continuousDeviation);
+  maxNum = maxNum > max ? max : maxNum;
+  maxNum =
+    maxNum < min + continuousDeviation ? maxNum + continuousDeviation : maxNum;
+  const minNum = maxNum - continuousDeviation;
+  const average = (maxNum + minNum) / 2;
+  return [minNum, average, maxNum];
+}
+
+function generateRandomDeviatedNumber(
+  prev: number,
+  continousDevition: number
+): number {
+  return parseFloat(
+    ((Math.random() < 0.5 ? -1 : 1) * continousDevition + prev).toFixed(2)
+  );
 }
 
 export const randomLatestDatapoint = (
