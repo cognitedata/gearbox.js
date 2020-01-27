@@ -11,15 +11,16 @@ import {
 } from 'antd';
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import { FormComponentProps } from 'antd/lib/form';
+import isFunction from 'lodash/isFunction';
 import moment from 'moment';
-import React, { FC, SyntheticEvent, useEffect, useState } from 'react';
+import React, { FC, SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc';
-import { PureObject } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
 import { datapointsToCSV, Delimiters, downloadCSV } from '../../utils/csv';
 import { getGranularityInMS } from '../../utils/utils';
 import { ComplexString } from '../common/ComplexString/ComplexString';
+import { defaultStrings } from './constants';
 import {
   CsvParseOptions,
   FetchCSVCall,
@@ -30,24 +31,6 @@ import {
 
 type TimeseriesDataExportFormProps = TimeseriesDataExportProps &
   FormComponentProps;
-
-const defaultStrings: PureObject = {
-  title: 'Export chart data',
-  labelRange: 'Range',
-  labelGranularity: 'Label Granularity',
-  labelGranularityHelp: 'Example inputs: 15s, 1m, 5h, 2d',
-  formatTimestamp: 'Format timestamp?',
-  formatTimestampHelp: 'e.g. 2018-04-02 12:20:20',
-  delimiterLabel: 'Select delimiter',
-  delimiterHelp: 'The character that will separate your data fields',
-  csvDownload: 'Download as CSV',
-  csvDownloadInProgress: 'Download as CSV',
-  closeBtn: 'Close',
-  imageDownloadLabel: 'Image download',
-  imageDownloadBtn: 'Download as SVG',
-  cellLimitErr:
-    'You hit the limit of {{ cellLimit }} datapoints - some data may be omitted',
-};
 
 // TODO: Check tree shacking for TimeseriesDataExport component
 const { RangePicker } = DatePicker;
@@ -103,7 +86,14 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
   const [limitHit, setLimitHit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [series, setSeries] = useState<GetTimeSeriesMetadataDTO[]>([]);
-  const lang = { ...defaultStrings, ...strings };
+  const lang = useMemo(
+    () => ({
+      ...defaultStrings,
+      ...(isFunction(strings) ? strings(defaultStrings) : strings),
+    }),
+    [strings]
+  );
+
   const {
     title,
     labelRange,
