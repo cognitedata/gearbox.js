@@ -350,12 +350,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
               data-test-id="alert"
               style={{ marginTop: 8 }}
               type="error"
-              message={
-                <ComplexString
-                  input={cellLimitErr as string}
-                  cellLimit={limit}
-                />
-              }
+              message={<ComplexString input={cellLimitErr} cellLimit={limit} />}
             />
           )}
         </Form.Item>
