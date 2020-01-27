@@ -1,4 +1,4 @@
-import { AxisDisplayMode } from '@cognite/griff-react';
+import { AxisDisplayMode, YDomainsChange } from '@cognite/griff-react';
 import {
   DatapointsGetAggregateDatapoint,
   DatapointsGetDoubleDatapoint,
@@ -122,6 +122,9 @@ export const seriesWithCustomYdomain = [
 ];
 
 export const ySubDomains = { 123: [-200, 200] };
+
+export const handleYDomainchange = (data: YDomainsChange) =>
+  console.log('handleYDomainchange', data);
 
 export const TimeseriesIdsComponentProps: FC<
   TimeseriesChartByTimeseriesId

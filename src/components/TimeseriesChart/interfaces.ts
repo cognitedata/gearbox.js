@@ -95,6 +95,10 @@ interface TimeseriesChartPropsBase {
    */
   onFetchDataError?: (e: Error) => void;
   /**
+   * Callback on change y-domain(s)
+   */
+  onUpdateYDomain?: (domains: { [id: number]: [number, number] }) => void;
+  /**
    * @ignore
    */
   annotations: Annotation[];

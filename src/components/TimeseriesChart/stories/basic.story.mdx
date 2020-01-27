@@ -2,6 +2,7 @@ import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { TimeseriesChart } from '../TimeseriesChart';
 import {
   decorators,
+  handleYDomainchange,
   customContainerStyle,
   zoomableClientDecorator,
   ySubDomains,
@@ -413,7 +414,7 @@ const series = [
 
 ### Define Y-axis Subdomain
 
-```jsx
+```typescript
 const ySubDomains = { 123: [-200, 200] };
 ```
 
@@ -428,7 +429,7 @@ const ySubDomains = { 123: [-200, 200] };
 
 ### Define Y-axis Subdomain For Series
 
-```jsx
+```typescript
 import { AxisDisplayMode } from '@cognite/griff-react';
 import { DataLoader } from '@cognite/gearbox';
 
@@ -458,6 +459,29 @@ const seriesWithCustomYdomain = [
   <Story name="Define Y-axis Subdomain For Series" >
     <TimeseriesChart
       series={seriesWithCustomYdomain} 
+    />
+  </Story>
+</Preview>
+
+### Y-Domain Changed
+
+```typescript
+const handleYDomainchange = (data: YDomainsChange) =>
+  console.log('handleYDomainchange', data);
+
+interface YDomainsChange {
+    [id: number]:[number, number];
+  }
+```
+<Preview>
+  <Story name="Y-Domain Changed" decorators={[zoomableClientDecorator]}>
+    <TimeseriesChart
+      timeseriesIds={[123]}
+      startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
+      endTime={Date.now()}
+      zoomable={true}
+      onUpdateYDomain={handleYDomainchange}
+      contextChart={true}
     />
   </Story>
 </Preview>

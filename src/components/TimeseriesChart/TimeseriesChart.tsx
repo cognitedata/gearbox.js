@@ -1,20 +1,22 @@
-import { CogniteClient } from '@cognite/sdk';
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
-import { DataLoader } from './dataLoader';
-
 import {
   AxisDisplayMode,
   AxisPlacement,
   DataProvider,
+  DomainsChange,
   LineChart,
+  YDomainsChange,
 } from '@cognite/griff-react';
+import { CogniteClient } from '@cognite/sdk';
 import { Spin } from 'antd';
+import { assign, get, isEqual } from 'lodash';
+import React, { Component } from 'react';
+import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { decimalTickFormatter } from '../../utils/axisSigFix';
 import { getColorByString } from '../../utils/colors';
 import { CursorOverview } from './components/CursorOverview';
+import { DataLoader } from './dataLoader';
 import { ChartRulerPoint, TimeseriesChartProps } from './interfaces';
 
 // Don't allow updating faster than every 1000ms.
@@ -23,6 +25,7 @@ const MINIMUM_UPDATE_FREQUENCY_MILLIS = 1000;
 interface TimeseriesChartState {
   loaded: boolean;
   rulerPoints: { [key: string]: ChartRulerPoint };
+  yDomains: YDomainsChange | null;
 }
 
 export class TimeseriesChart extends Component<
@@ -64,6 +67,7 @@ export class TimeseriesChart extends Component<
     this.state = {
       loaded: false,
       rulerPoints: {},
+      yDomains: null,
     };
     if (!context) {
       console.error(ERROR_NO_SDK_CLIENT);
@@ -78,6 +82,36 @@ export class TimeseriesChart extends Component<
     if (!this.state.loaded) {
       this.setState({ loaded: true });
     }
+  };
+
+  handleDomainChanges = (domains: DomainsChange) => {
+    const { onUpdateYDomain } = this.props;
+    const yDomains = this.checkYDomainChanges(
+      this.state.yDomains,
+      this.createYsubDomains(domains)
+    );
+    if (yDomains && onUpdateYDomain) {
+      onUpdateYDomain(yDomains);
+    }
+  };
+
+  checkYDomainChanges = (
+    yDomainsPrev: YDomainsChange | null,
+    yDomainsNew: YDomainsChange
+  ): YDomainsChange | undefined => {
+    if (!isEqual(yDomainsPrev, yDomainsNew)) {
+      this.setState({ yDomains: yDomainsNew });
+      return yDomainsNew;
+    }
+    return undefined;
+  };
+
+  createYsubDomains = (domains: DomainsChange): YDomainsChange => {
+    const yDomains: YDomainsChange = {};
+    Object.keys(domains).forEach(timeSeriesId =>
+      assign(yDomains, { [timeSeriesId]: get(domains, timeSeriesId).y })
+    );
+    return yDomains;
   };
 
   onMouseMove = (data: any) => {
@@ -171,6 +205,7 @@ export class TimeseriesChart extends Component<
               onFetchData={this.onFetchData}
               pointsPerSeries={pointsPerSeries}
               series={griffSeries}
+              onUpdateDomains={this.handleDomainChanges}
               collections={[...new Set(Object.values(collections))].map(
                 (unit: any) => ({
                   id: unit,

@@ -42,6 +42,17 @@ declare module '@cognite/griff-react' {
     reason: string;
   }
 
+  export interface DomainsChange {
+    [id: number]: {
+      x: [number, number];
+      y: [number, number];
+      time: [number, number];
+    };
+  }
+  
+  interface YDomainsChange {
+    [id: number]:  [number, number];
+  }
   export interface DataProviderProps {
     onFetchData: () => void;
     defaultLoader: (params: DataProviderLoaderParams) => Promise<Series>;
@@ -51,6 +62,7 @@ declare module '@cognite/griff-react' {
     timeDomain: number[] | Domain;
     updateInterval: number;
     collections: any;
+    onUpdateDomains?: (domains: DomainsChange)  => void;
   }
 
   export interface DataProviderSeries {
