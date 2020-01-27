@@ -1,7 +1,7 @@
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import React, { FC } from 'react';
 import {
-  MockDatapointsClientObject,
+  MockDatapointsRetrieve,
   sleep,
   TimeseriesMockClient,
 } from '../../../mocks';
@@ -35,7 +35,7 @@ class CogniteClient extends TimeseriesMockClient {
     },
   };
   datapoints: any = {
-    ...MockDatapointsClientObject,
+    retrieve: MockDatapointsRetrieve,
     retrieveLatest: async () => {
       await sleep(1000);
       return [

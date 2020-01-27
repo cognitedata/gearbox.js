@@ -2,8 +2,7 @@ import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import { CogniteAsyncIterator } from '@cognite/sdk/dist/src/autoPagination';
 import React, { FC } from 'react';
 import {
-  MockDatapointsClientObject,
-  MockTimeseriesClientObject,
+  MockDatapointsRetrieve,
   sleep,
   timeseriesListV2,
   TimeseriesMockClient,
@@ -13,7 +12,7 @@ import { AssetTimeseriesPanelProps } from '../interfaces';
 
 class CogniteClient extends TimeseriesMockClient {
   timeseries: any = {
-    ...MockTimeseriesClientObject,
+    retrieve: MockDatapointsRetrieve,
     list: (): CogniteAsyncIterator<GetTimeSeriesMetadataDTO[]> => ({
       // @ts-ignore TODO - remove this ts-ignore after fixing SDK
       autoPagingToArray: async () => {
@@ -23,7 +22,7 @@ class CogniteClient extends TimeseriesMockClient {
     }),
   };
   datapoints: any = {
-    ...MockDatapointsClientObject,
+    retrieve: MockDatapointsRetrieve,
     retrieveLatest: async () => {
       await sleep(1000);
       return [

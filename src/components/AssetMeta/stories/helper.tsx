@@ -7,7 +7,7 @@ import {
 } from '../../../mocks';
 import { sleep } from '../../../mocks';
 import {
-  MockDatapointsClientObject,
+  MockDatapointsRetrieve,
   MockTimeseriesClientObject,
   TimeseriesMockClient,
 } from '../../../mocks/datapoints';
@@ -24,7 +24,22 @@ class CogniteClient extends TimeseriesMockClient {
     }),
   };
   datapoint = {
-    ...MockDatapointsClientObject,
+    retrieve: MockDatapointsRetrieve,
+    retrieveLatest: async () => {
+      await sleep(1000);
+      return [
+        {
+          isString: false,
+          id: 123,
+          datapoints: [
+            {
+              timestamp: new Date(),
+              value: 15 + Math.random() * 5.0,
+            },
+          ],
+        },
+      ];
+    },
   };
   assets: any = {
     retrieve: async () => {
