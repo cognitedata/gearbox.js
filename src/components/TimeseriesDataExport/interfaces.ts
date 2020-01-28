@@ -6,8 +6,9 @@ import {
 } from '@cognite/sdk';
 import { ColProps } from 'antd/lib/grid';
 import { Moment } from 'moment';
-import { AnyIfEmpty, PureObject } from '../../interfaces';
+import { AnyIfEmpty } from '../../interfaces';
 import { Delimiters, LabelFormatter } from '../../utils/csv';
+import { Strings } from './constants';
 
 export type FetchCSVCall = (
   request: DatapointsMultiQuery,
@@ -98,9 +99,11 @@ export interface TimeseriesDataExportProps {
   /**
    * Strings, that can be customized
    */
-  strings?: PureObject;
+  strings?: ((defaultStrings: Strings) => Partial<Strings>) | Partial<Strings>;
   /**
    * @ignore
    */
   theme?: AnyIfEmpty<{}>;
 }
+
+export type TimeseriesDataExportStrings = Strings;

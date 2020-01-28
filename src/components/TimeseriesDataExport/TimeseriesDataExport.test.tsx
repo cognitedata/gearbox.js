@@ -149,4 +149,21 @@ describe('TimeseriesChart', () => {
 
     expect(labelFormatter).toHaveBeenCalledTimes(1);
   });
+
+  it.only('should be able to customize strings via callback function', async () => {
+    await act(async () => {
+      wrapper = mountComponent({
+        ...defaultProps,
+        strings: defaultStrings => ({
+          csvDownload: defaultStrings.csvDownload + ' customized',
+        }),
+      } as TimeseriesDataExportProps);
+    });
+
+    wrapper.update();
+
+    const submitButton = wrapper.find('button[type="submit"]');
+
+    expect(submitButton.text()).toEqual('Download as CSV customized');
+  });
 });
