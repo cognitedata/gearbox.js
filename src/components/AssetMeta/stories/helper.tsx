@@ -25,21 +25,6 @@ class CogniteClient extends TimeseriesMockClient {
   };
   datapoint = {
     ...MockDatapointsClientObject,
-    retrieveLatest: async () => {
-      await sleep(1000);
-      return [
-        {
-          isString: false,
-          id: 123,
-          datapoints: [
-            {
-              timestamp: new Date(),
-              value: 15 + Math.random() * 5.0,
-            },
-          ],
-        },
-      ];
-    },
   };
   assets: any = {
     retrieve: async () => {

@@ -25,7 +25,6 @@ export const MockTimeseriesClientObject = {
 
 export const MockDatapointsClientObject = {
   retrieve: async (query: DatapointsMultiQuery): Promise<DatapointsArray> => {
-    console.log('client.datapoints.retrieve', query);
     const { granularity, start, end } = query.items[0];
     const result = randomData(
       (start && +start) || 0,
@@ -34,6 +33,21 @@ export const MockDatapointsClientObject = {
       granularity ? getGranularityInMS(granularity) : undefined
     );
     return [result];
+  },
+  retrieveLatest: async () => {
+    await sleep(1000);
+    return [
+      {
+        isString: false,
+        id: 123,
+        datapoints: [
+          {
+            timestamp: new Date(),
+            value: 15 + Math.random() * 5.0,
+          },
+        ],
+      },
+    ];
   },
 };
 
