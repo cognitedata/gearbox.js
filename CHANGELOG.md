@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/cognitedata/gearbox.js/compare/v1.12.0...v1.13.0) (2020-01-28)
+
+
+### Features
+
+* **timeseries-data-export:** support strings callback function ([8779a09](https://github.com/cognitedata/gearbox.js/commit/8779a09f29ea88e6a87e73891ef33bb1527b7a8d))
+
 # [1.12.0](https://github.com/cognitedata/gearbox.js/compare/v1.11.0...v1.12.0) (2020-01-24)
 
 
