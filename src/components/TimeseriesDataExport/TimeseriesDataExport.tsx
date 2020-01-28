@@ -11,7 +11,7 @@ import {
 } from 'antd';
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import { FormComponentProps } from 'antd/lib/form';
-import isFunction from 'lodash/isFunction';
+import { isFunction } from 'lodash';
 import moment from 'moment';
 import React, { FC, SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';

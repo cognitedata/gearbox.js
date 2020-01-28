@@ -105,3 +105,5 @@ export interface TimeseriesDataExportProps {
    */
   theme?: AnyIfEmpty<{}>;
 }
+
+export type TimeseriesDataExportStrings = Strings;
