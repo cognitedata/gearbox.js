@@ -1,0 +1,288 @@
+import { useContext } from 'react';
+import { Meta } from '@storybook/addon-docs/blocks';
+import { App } from './app/App';
+
+<Meta title="Docs/Using Timeseries" />
+
+# Using Timeseries
+
+## Overview
+
+## API
+
+### Time series
+
+Use a [TimeseriesFilter](https://cognitedata.github.io/cognite-sdk-js/interfaces/timeseriesfilter.html)
+and [list](https://cognitedata.github.io/cognite-sdk-js/classes/timeseriesapi.html#list) 
+the first 5 time series with their metadata:
+```typescript
+const firstFiveTimeSeries = await client.timeseries.list({
+  includeMetadata: true,
+  limit: 5
+});
+```
+
+Now we should have an in instance of [TimeSeries](https://cognitedata.github.io/cognite-sdk-js/classes/timeseries.html)
+class at  `firstFiveTimeSeries.items[0]` - e.g.
+```json
+{
+  "id": 35246780681261,
+  "externalId": "VAL_23-LY-92529_SILch0_SC0_TYPSP:VALUE",
+
+  "name": "VAL_23-LY-92529_SILch0_SC0_TYPSP:VALUE",
+  "description": "PH (Profiler) Shutdown Channel 0 - Tube y Position Setpoint",
+
+  "isString": false,
+  "isStep": false,
+
+  "assetId": 3424990723231138,
+
+  "createdTime": "1970-01-01T00:00:00.000Z",
+  "lastUpdatedTime": "1970-01-01T00:00:00.000Z",
+  "metadata": {
+    "tag": "VAL_23-LY-92529_SILch0_SC0_TYPSP:VALUE",
+    "descriptor": "PH (Profiler) Shutdown Channel 0 - Tube y Position Setpoint",
+    "instrumenttag": "23-LY-92529_SILch0_SC0_TYPSP:VALUE",
+    "foobar": "0.0"
+  }
+}
+```
+
+Where:
+
+- `unit: string` - measurement unit for the data point values, e.g. `Pa`, `Celsius`
+- `isString: boolean` - `false` if the data point values are numeric
+- `isStep: boolean`  - applicable only when `isString=false`, defaults to `true` which means the value of the property being sampled is assumed to be stay the same between two adjacent data points. If `isStep=false` the value is assumed to change linearly
+- `assetId: number` - id of associated asset
+
+If we know either the `id: number` or `externalId: string`  of a time series, 
+we can get it with [retrieve](https://cognitedata.github.io/cognite-sdk-js/classes/timeseriesapi.html#retrieve): 
+```typescript
+client.timeseries.retrieve([{ id: 35246780681261}])
+```
+
+External ID works too:
+```typescript
+client.timeseries.retrieve([{ externalId: "The-ID-from-external-System"}])
+```
+
+And we can fetch multiple records:
+```typescript
+client.timeseries.retrieve([{ id: 123}, { externalId: 456}, { id: 456}])
+```
+
+### Time series data points
+
+We use the [DataPointsAPI](https://cognitedata.github.io/cognite-sdk-js/classes/datapointsapi.html) to work with the data points in a time series.
+
+Get the last data point in a time series with [retrieveLatest](https://cognitedata.github.io/cognite-sdk-js/classes/datapointsapi.html#retrievelatest)
+
+```typescript
+client.datapoints.retrieveLatest([{id: 35246780681261, before: 'now'}])
+```
+
+We get a single data point along with info on the time series it belongs to:
+```json
+[
+  {
+    "id": 35246780681261,
+    "externalId": "VAL_23-LY-92529_SILch0_SC0_TYPSP:VALUE",
+    "isString": false,
+    "isStep": false,
+    "datapoints": [{ "timestamp": "2019-10-18T04:58:55.648Z", "value": 0 }]
+  }
+]
+```
+
+Get all the data points for a particular time window with 
+[retrieve](https://cognitedata.github.io/cognite-sdk-js/classes/datapointsapi.html#retrieve)
+```typescript
+client.datapoints.retrieve({
+    items: [{ id: 41852231325889 }, { id: 44435358976768 }],
+    start: new Date("2019-06-01"),
+    end: new Date("2020-01-21"),    
+  });
+```
+
+Normal data points has the shape of  
+[DataPointsGetDataPoint](https://cognitedata.github.io/cognite-sdk-js/index.html#datapointsgetdatapoint) 
+- `timestamp` and `value` fields.
+
+Aggregated data points has the shape [DataPointsGetAggregateDatapoint](https://cognitedata.github.io/cognite-sdk-js/interfaces/getaggregatedatapoint.html) - `timestamp` and following optional fields:
+
+- min, max, average, sum, count
+- continuousVariance, discreteVariance, totalVariation
+- interpolation, stepInterpolation
+
+For example:
+```json
+// TODO: 
+```
+
+## Components
+
+### TimeseriesChart
+
+Given one or more time series IDs, a chart can be displayed with:
+```jsx
+<TimeseriesChart timeseriesIds={[35246780681261, 41852231325889]} />
+```
+
+The chart's time domain (start and end values on the x-Axis) defaults to the last hour.
+
+The x-Axis can be zoomed-in and out by pinching-out and pinching-in on the x-Axis
+
+- Zoomed-in to sub-second granularity
+- Zoomed-out only upto the time domain (one hour ago to now by default)
+
+We can be explicit about the time domain by specifying `startTime` and `endTime`:
+```jsx
+<TimeseriesChart
+  timeseriesIds={[35246780681261, 41852231325889]}
+  startTime={new Date(2019, 11, 1)}
+  endTime={new Date(2020, 1, 15)}
+/>
+```
+
+We can make this chart zoomable by setting `zoomable={true}`:
+```jsx
+<TimeseriesChart
+  timeseriesIds={[35246780681261, 41852231325889]}
+  startTime={new Date(2019, 11, 1)}
+  endTime={new Date(2020, 1, 15)}
+  zoomable={true}
+/>
+```
+
+When the chart is zoombable:
+
+- Chart can be zoomed-in/out by pinching-out/in anywhere on the chart
+- The y-Axes can be zoomed-in/out by pinching-out/in on the y-Axes
+- The y-Axes can be re-aligned by dragging up and down
+
+We can add a crosshair to the mouse pointer with:
+
+```jsx
+<TimeseriesChart
+  timeseriesIds={[35246780681261, 41852231325889]}
+  startTime={new Date(2019, 11, 1)}
+  endTime={new Date(2020, 1, 15)}
+  zoomable={true}
+  crosshair={true}
+/>
+```
+
+Instead of the crosshair, we add a ruler with:
+
+```jsx
+<TimeseriesChart
+  timeseriesIds={[35246780681261, 41852231325889]}
+  startTime={new Date(2019, 11, 1)}
+  endTime={new Date(2020, 1, 15)}
+  zoomable={true}
+  ruler={{ visible: true }}
+/>
+```
+
+In addition to adding crosshair to the mouse pointer, the ruler
+
+- Displays a label with the timestamp of where the ruler is at
+- Displays an overview of the values of each timeseries at that timestamp
+
+These can be customised with:
+
+```jsx
+// TODO:
+```
+
+We can add a context chart with:
+
+```jsx
+// TODO: After zoomable
+```
+
+The context chart displays the full time domain. When the main chart is zoomed-in, the context chart highlights the corresponding time sub domain.
+
+We can specify the number of data points to fetch per each time series with:
+
+```jsx
+// TODO: After time domain
+```
+
+We can foobar with:
+
+```jsx
+// TODO: 
+```
+
+We can foobar with:
+
+```jsx
+// TODO: 
+```
+
+We can set the overall dimensions of the component (or is it just the chart area?) with:
+
+```jsx
+// TODO: 
+width
+height
+```
+
+We can specify the height of the x-Axis with:
+
+```jsx
+// TODO: 
+xAxisHeight
+```
+
+If we set this to 0, the x-Axis is completely hidden
+
+We can customize the y-Axis with:
+
+```jsx
+// TODO: 
+yAxisDisplayMode - "ALL" | "COLLAPSED" | "NONE"
+yAxisPlacement - "RIGHT" | "LEFT" | "BOTH"
+```
+
+We can specify the line color of each time series with:
+
+```jsx
+// TODO: timeseriesColors
+```
+
+We can specify custom styles with:
+
+```jsx
+// TODO: one before the last
+```
+
+We can make the chart update in real time with:
+
+```jsx
+// TODO: the last one
+liveUpdate, updateIntervalMillis 
+```
+
+We can make some the time series hidden with:
+
+```jsx
+// TODO: 
+```
+
+Handle events fired by the chart with:
+
+```jsx
+// TODO: 
+onMouseMove
+onMouseOut
+onBlur
+onFetchDataError
+```
+
+
+## Internals
+
+### TimeseriesChart
+
