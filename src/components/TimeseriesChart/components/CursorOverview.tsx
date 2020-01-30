@@ -14,7 +14,6 @@ const Container = styled.div`
 const Overview = styled.div`
   position: absolute;
   top: 0;
-  margin-left: -150px;
   width: 140px;
   background: #fff;
   padding: 8px 16px 10px;
@@ -28,7 +27,6 @@ const Overview = styled.div`
 const DateContainer = styled.div`
   position: absolute;
   top: 0;
-  margin-left: -230px;
   width: 220px;
   color: black;
   background: #fff;
@@ -56,6 +54,8 @@ const Tag = styled.div`
 const formattedDate = (timestamp: number) =>
   moment(timestamp).format('MMM D, YYYY HH:mm:ss');
 
+const containerMargin = 5;
+
 interface CursorOverviewStyles {
   container?: React.CSSProperties;
 }
@@ -69,6 +69,8 @@ interface CursorOverviewProps {
   ruler: ChartRulerConfig;
   rulerPoints: { [key: string]: ChartRulerPoint };
   styles?: CursorOverviewStyles;
+  xAxisHeight: number;
+  yAxisPlacement: 'RIGHT' | 'LEFT' | 'BOTH';
 }
 
 export class CursorOverview extends React.Component<
@@ -95,26 +97,57 @@ export class CursorOverview extends React.Component<
   };
 
   handleMouseMove = (e: MouseEvent) => {
-    const { wrapperRef } = this.props;
-    if (!wrapperRef) {
+    const { wrapperRef, xAxisHeight, yAxisPlacement } = this.props;
+    if (!wrapperRef || wrapperRef.getElementsByClassName("lines-container").length == 0) {
       return;
     }
 
-    if (this.overviewContainer) {
-      this.overviewContainer.setAttribute(
+    const linesContainer = wrapperRef.getElementsByClassName("lines-container")[0];
+    const linesContainerHeight = linesContainer.getBoundingClientRect().height;
+    const yAxisWidth = linesContainer.getBoundingClientRect().width - wrapperRef.getBoundingClientRect().width;
+    const yAxisShift = yAxisPlacement == 'LEFT' ? yAxisWidth : (yAxisPlacement == 'BOTH' ? (yAxisWidth / 2) : 0);
+
+    let dcHeight = 0;
+
+    if (this.dateContainer) {
+      dcHeight = this.dateContainer.getBoundingClientRect().height;
+      const dcWidth = this.dateContainer.getBoundingClientRect().width;
+      const dcXPosition =
+        (e.offsetX < dcWidth
+          ? e.offsetX + containerMargin
+          : e.offsetX - dcWidth - containerMargin) + yAxisShift;
+          
+      this.dateContainer.setAttribute(
         'style',
-        `transform: translate(${e.offsetX}px,
-        ${e.offsetY -
-          this.overviewContainer.getBoundingClientRect().height / 2}px)`
+        `transform: translate(${dcXPosition}px,
+        ${linesContainerHeight - dcHeight - (xAxisHeight ? containerMargin : 0)}px)`
       );
     }
 
-    if (this.dateContainer && wrapperRef) {
-      const lineChartRect = wrapperRef.getBoundingClientRect();
-      this.dateContainer.setAttribute(
+    if (this.overviewContainer) {
+      const ocHeight = this.overviewContainer.getBoundingClientRect().height;
+      const ocWidth = this.overviewContainer.getBoundingClientRect().width;
+      const ocMinYPosition =
+      linesContainerHeight -
+        (dcHeight +
+          ocHeight +
+          (xAxisHeight ? containerMargin : 0) +
+          (dcHeight ? containerMargin : 0));
+      const ocYPosition = e.offsetY - ocHeight / 2;
+      const ocXPosition =
+        (e.offsetX < ocWidth
+          ? e.offsetX + containerMargin
+          : e.offsetX - ocWidth - containerMargin) + yAxisShift;
+      this.overviewContainer.setAttribute(
         'style',
-        `transform: translate(${e.offsetX}px,
-        ${lineChartRect.height - this.dateContainer.clientHeight - 55}px)`
+        `transform: translate(${ocXPosition}px,
+        ${
+          ocYPosition > ocMinYPosition
+            ? ocMinYPosition
+            : ocYPosition >= 0
+            ? ocYPosition
+            : 0
+        }px)`
       );
     }
   };
