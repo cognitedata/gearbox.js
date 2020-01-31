@@ -3,6 +3,7 @@ import numeral from 'numeral';
 import React from 'react';
 import styled from 'styled-components';
 import { ChartRulerConfig, ChartRulerPoint } from '../interfaces';
+import { DataProviderSeries } from '@cognite/griff-react';
 
 const Container = styled.div`
   position: relative;
@@ -64,7 +65,7 @@ interface CursorOverviewState {
 }
 interface CursorOverviewProps {
   wrapperRef: HTMLElement | null;
-  series: any;
+  series: DataProviderSeries[];
   hiddenSeries: { [id: number]: boolean };
   ruler: ChartRulerConfig;
   rulerPoints: { [key: string]: ChartRulerPoint };
@@ -205,7 +206,7 @@ export class CursorOverview extends React.Component<
           return numeral(point.value).format('0[.]0[00] a');
         };
 
-    const renderTag = ({ id, color }: { id: number; color: string }) =>
+    const renderTag = ({ id, color }: { id: number; color?: string }) =>
       rulerPoints[id] &&
       !hiddenSeries[id] && (
         <Tag color={color} key={id}>
