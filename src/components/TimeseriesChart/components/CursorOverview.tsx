@@ -98,14 +98,26 @@ export class CursorOverview extends React.Component<
 
   handleMouseMove = (e: MouseEvent) => {
     const { wrapperRef, xAxisHeight, yAxisPlacement } = this.props;
-    if (!wrapperRef || wrapperRef.getElementsByClassName("lines-container").length == 0) {
+    if (
+      !wrapperRef ||
+      wrapperRef.getElementsByClassName('lines-container').length === 0
+    ) {
       return;
     }
 
-    const linesContainer = wrapperRef.getElementsByClassName("lines-container")[0];
+    const linesContainer = wrapperRef.getElementsByClassName(
+      'lines-container'
+    )[0];
     const linesContainerHeight = linesContainer.getBoundingClientRect().height;
-    const yAxisWidth = linesContainer.getBoundingClientRect().width - wrapperRef.getBoundingClientRect().width;
-    const yAxisShift = yAxisPlacement == 'LEFT' ? yAxisWidth : (yAxisPlacement == 'BOTH' ? (yAxisWidth / 2) : 0);
+    const yAxisWidth =
+      wrapperRef.getBoundingClientRect().width -
+      linesContainer.getBoundingClientRect().width;
+    const yAxisShift =
+      yAxisPlacement === 'LEFT'
+        ? yAxisWidth
+        : yAxisPlacement === 'BOTH'
+        ? yAxisWidth / 2
+        : 0;
 
     let dcHeight = 0;
 
@@ -116,11 +128,13 @@ export class CursorOverview extends React.Component<
         (e.offsetX < dcWidth
           ? e.offsetX + containerMargin
           : e.offsetX - dcWidth - containerMargin) + yAxisShift;
-          
+
       this.dateContainer.setAttribute(
         'style',
         `transform: translate(${dcXPosition}px,
-        ${linesContainerHeight - dcHeight - (xAxisHeight ? containerMargin : 0)}px)`
+        ${linesContainerHeight -
+          dcHeight -
+          (xAxisHeight ? containerMargin : 0)}px)`
       );
     }
 
@@ -128,7 +142,7 @@ export class CursorOverview extends React.Component<
       const ocHeight = this.overviewContainer.getBoundingClientRect().height;
       const ocWidth = this.overviewContainer.getBoundingClientRect().width;
       const ocMinYPosition =
-      linesContainerHeight -
+        linesContainerHeight -
         (dcHeight +
           ocHeight +
           (xAxisHeight ? containerMargin : 0) +
