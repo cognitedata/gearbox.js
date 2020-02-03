@@ -9,7 +9,11 @@ export const validateTenantFailed = async (tenant: string) => {
   throw new Error(tenant);
 };
 
-export const validateTenantSucess = async () => true;
+export const inputBehaviorOptions = {
+  hasFeedback: false,
+};
+
+export const validateTenantSuccess = async () => true;
 
 export const validateTenantForever = () => Promise.race([]);
 

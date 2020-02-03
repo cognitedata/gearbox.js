@@ -2,7 +2,8 @@ import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { TenantSelector, TenantSelectorWithoutTheme } from '../TenantSelector';
 import {
 onTenantSelected,
-validateTenantSucess,
+inputBehaviorOptions,
+validateTenantSuccess,
 validateTenantFailed,
 advancedOptionsProps,
 validateTenantForever,
@@ -127,7 +128,7 @@ See more details in `Custom Styles` example.
 ### Custom validation success
 
 ```typescript
-const validateTenantSucess = async () => true;
+const validateTenantSuccess = async () => true;
 ```
 
 <Preview>
@@ -135,7 +136,7 @@ const validateTenantSucess = async () => true;
     <TenantSelector
       title="Example app"
       onTenantSelected={onTenantSelected}
-      validateTenant={validateTenantSucess}
+      validateTenant={validateTenantSuccess}
     />
   </Story>
 </Preview>
@@ -167,6 +168,26 @@ const validateTenantFailed = async (tenant: string) => {
       onTenantSelected={onTenantSelected}
       unknownMessage="ARE YOU NUTS?!"
       validateTenant={validateTenantFailed}
+    />
+  </Story>
+</Preview>
+
+### Custom input behavior options
+
+```typescript
+const inputBehaviorOptions = {
+  hasFeedback: false,
+};
+```
+
+<Preview>
+  <Story name="Custom input behavior" >
+    <TenantSelector
+      title="Example app"
+      onTenantSelected={onTenantSelected}
+      unknownMessage="ARE YOU NUTS?!"
+      validateTenant={validateTenantFailed}
+      inputBehaviorOptions={inputBehaviorOptions}
     />
   </Story>
 </Preview>
