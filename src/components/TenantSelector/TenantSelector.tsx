@@ -117,7 +117,7 @@ class TenantSelector extends Component<
           </SubTitle>
         )}
         <Form onSubmit={this.checkTenantValidity}>
-          <Form.Item hasFeedback={true} {...formItemProps}>
+          <Form.Item {...formItemProps}>
             <StyledInput
               style={styles && styles.input}
               data-id="tenant-input"
