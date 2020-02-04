@@ -11,6 +11,7 @@ export const validateTenantFailed = async (tenant: string) => {
 
 export const inputBehaviorOptions = {
   hasFeedback: false,
+  extra: 'Speak and ye shall enter',
 };
 
 export const validateTenantSuccess = async () => true;
