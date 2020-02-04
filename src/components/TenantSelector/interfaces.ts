@@ -69,5 +69,5 @@ export interface TenantSelectorProps {
   /**
    * Customisable UI settings
    */
-  inputBehaviorOptions?: Pick<FormItemProps, 'extra' | 'hasFeedback'>;
+  inputBehaviorOptions?: Pick<FormItemProps, 'hasFeedback'>;
 }
