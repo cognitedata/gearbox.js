@@ -1,3 +1,4 @@
+import { FormItemProps } from 'antd/lib/form/FormItem';
 import React, { CSSProperties } from 'react';
 import { AnyIfEmpty, PureObject } from '../../interfaces';
 
@@ -65,4 +66,8 @@ export interface TenantSelectorProps {
    * @ignore
    */
   theme?: AnyIfEmpty<{}>;
+  /**
+   * Customisable UI settings
+   */
+  inputBehaviorOptions?: Pick<FormItemProps, 'extra' | 'hasFeedback'>;
 }

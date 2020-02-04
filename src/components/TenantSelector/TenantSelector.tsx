@@ -30,6 +30,9 @@ class TenantSelector extends Component<
   static defaultProps = {
     advancedOptions: {},
     theme: { ...defaultTheme },
+    inputBehaviorOptions: {
+      hasFeedback: true,
+    },
   };
 
   constructor(props: TenantSelectorProps) {
@@ -88,6 +91,7 @@ class TenantSelector extends Component<
       title,
       unknownMessage,
       styles,
+      inputBehaviorOptions,
     } = this.props;
 
     const { tenant, validity } = this.state;
@@ -117,7 +121,7 @@ class TenantSelector extends Component<
           </SubTitle>
         )}
         <Form onSubmit={this.checkTenantValidity}>
-          <Form.Item hasFeedback={true} {...formItemProps}>
+          <Form.Item {...inputBehaviorOptions} {...formItemProps}>
             <StyledInput
               style={styles && styles.input}
               data-id="tenant-input"
