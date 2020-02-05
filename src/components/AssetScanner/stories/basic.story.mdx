@@ -184,8 +184,10 @@ const customNotification = (type: ASNotifyTypes) => message.info(type);
 
 ### Input image
 
-```jsx
-const FileInputComponent = ({render}) => {
+```typescript
+import React, {useState} from 'react';
+
+const FileInputComponent = ({ render }: any) => {
   const [image, setImage] = useState('');
 
   const onChange = async (e: any) => {
@@ -201,12 +203,12 @@ const FileInputComponent = ({render}) => {
     const uploadedImage = await new Promise(resolve => {
       fr.onloadend = res => {
         if (res) {
-          resolve(res.currentTarget.result);
+          resolve((res.currentTarget as any).result);
         }
       };
     });
 
-    setImage(uploadedImage);
+    setImage(uploadedImage as any);
   };
 
   return (
@@ -222,11 +224,9 @@ const FileInputComponent = ({render}) => {
 <Preview>
   <Story name="Input image">
       <FileInputComponent
-        render={(image) => (
+        render={image => (
           <AssetScanner
             onError={onError}
-            ocrRequest={ocrRequest}
-            onImageRecognizeFinish={onImageRecognizeFinish}
             image={image}
           />
         )}
@@ -258,8 +258,8 @@ const webcamCropOverlay = () => (
   <div
     style={{
       border: '20px solid red',
-      height: '440px',
-      width: '240px',
+      height: '240px',
+      width: '440px',
     }}
   />
 );
@@ -280,7 +280,9 @@ const webcamCropOverlay = () => (
 ### Custom asset search
 
 ```typescript
-const getAssetHandlerCustom = async (strings) => await customAssetSearch(strings);
+import { Asset } from "@cognite/sdk";
+
+const getAssetHandlerCustom = async (strings: string[]): Promise<Asset[]> => {/* ... */}
 ```
 
 <Preview>

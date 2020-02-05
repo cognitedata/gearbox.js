@@ -123,6 +123,8 @@ interface CustomClassNames {
 
 ```
 
+## Examples
+
 ### Handle item click
 
 When user clicks on any equipment this callback will be called with `HTMLElement` passed
@@ -180,6 +182,7 @@ const onCancel = () => { /* ... */ };
 ```typescript
 import 'antd/dist/antd.css';
 
+import styled from 'styled-components';
 import React from 'react';
 import { SVGViewer } from '@cognite/gearbox';
 
@@ -230,6 +233,7 @@ const metadataClassesConditions = [{
 
 ```typescript
 import 'antd/dist/antd.css';
+
 import styled from 'styled-components';
 import React from 'react';
 import { SVGViewer } from '@cognite/gearbox';
@@ -328,7 +332,7 @@ import 'antd/dist/antd.css';
 import React from 'react';
 import { SVGViewer } from '@cognite/gearbox';
 
-const isCurrentAsset = metadata => (metadata.textContent || '').replace(/\s/g, '') === '21PT1019';
+const isCurrentAsset = (metadata: any) => (metadata.textContent || '').replace(/\s/g, '') === '21PT1019';
 ```
 
 <Preview>
