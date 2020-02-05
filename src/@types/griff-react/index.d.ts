@@ -47,6 +47,7 @@ declare module '@cognite/griff-react' {
     timeDomain: number[] | Domain;
     updateInterval: number;
     collections: any;
+    onTimeSubDomainChanged?: any;
   }
 
   export interface DataProviderSeries {

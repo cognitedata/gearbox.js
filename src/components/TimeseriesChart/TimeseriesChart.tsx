@@ -188,6 +188,7 @@ export class TimeseriesChart extends Component<
                     )
                   : 0
               }
+              onTimeSubDomainChanged={(e: any) => console.log(e)}
             >
               {ruler && (
                 <CursorOverview
