@@ -1,9 +1,9 @@
+import { DataProviderSeries } from '@cognite/griff-react';
 import moment from 'moment';
 import numeral from 'numeral';
 import React from 'react';
 import styled from 'styled-components';
 import { ChartRulerConfig, ChartRulerPoint } from '../interfaces';
-import { DataProviderSeries } from '@cognite/griff-react';
 
 const Container = styled.div`
   position: relative;
@@ -55,7 +55,7 @@ const Tag = styled.div`
 const formattedDate = (timestamp: number) =>
   moment(timestamp).format('MMM D, YYYY HH:mm:ss');
 
-const containerMargin = 5;
+const containerMargin = 5; // margin for overview container and date container
 
 interface CursorOverviewStyles {
   container?: React.CSSProperties;
@@ -118,21 +118,27 @@ export class CursorOverview extends React.Component<
         ? yAxisTotalWidth
         : yAxisPlacement === 'BOTH'
         ? yAxisTotalWidth / 2
-        : 0;
+        : 0; // left side y axis width
 
     let dcHeight = 0;
+
+    const getValidXposition = (
+      offsetX: number,
+      containerWidth: number
+    ): number => {
+      return (
+        (offsetX < containerWidth
+          ? e.offsetX + containerMargin
+          : e.offsetX - containerWidth - containerMargin) + yAxisLeftWidth
+      );
+    };
 
     if (this.dateContainer) {
       dcHeight = this.dateContainer.getBoundingClientRect().height;
       const dcWidth = this.dateContainer.getBoundingClientRect().width;
-      const dcXPosition =
-        (e.offsetX < dcWidth
-          ? e.offsetX + containerMargin
-          : e.offsetX - dcWidth - containerMargin) + yAxisLeftWidth;
-
       this.dateContainer.setAttribute(
         'style',
-        `transform: translate(${dcXPosition}px,
+        `transform: translate(${getValidXposition(e.offsetX, dcWidth)}px,
         ${linesContainerHeight -
           dcHeight -
           (xAxisHeight ? containerMargin : 0)}px)`
@@ -146,22 +152,18 @@ export class CursorOverview extends React.Component<
         linesContainerHeight -
         (dcHeight +
           ocHeight +
-          (xAxisHeight ? containerMargin : 0) +
-          (dcHeight ? containerMargin : 0));
+          (xAxisHeight ? containerMargin : 0) + // if x axis is available, add some bottom margin
+          (dcHeight ? containerMargin : 0)) // if date container is available, add some bottom margin;
       const ocYPosition = e.offsetY - ocHeight / 2;
-      const ocXPosition =
-        (e.offsetX < ocWidth
-          ? e.offsetX + containerMargin
-          : e.offsetX - ocWidth - containerMargin) + yAxisLeftWidth;
       this.overviewContainer.setAttribute(
         'style',
-        `transform: translate(${ocXPosition}px,
+        `transform: translate(${getValidXposition(e.offsetX, ocWidth)}px,
         ${
-          ocYPosition > ocLowestYPosition
+          ocYPosition > ocLowestYPosition // if the cursor goes below the lowest margin
             ? ocLowestYPosition
-            : ocYPosition >= 0
-            ? ocYPosition
-            : 0
+            : ocYPosition < 0 // if the cursor goes beyond the top margin
+            ? 0
+            : ocYPosition
         }px)`
       );
     }
