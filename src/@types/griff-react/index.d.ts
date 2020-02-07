@@ -1,6 +1,7 @@
 declare module '@cognite/griff-react' {
   import { GetAggregateDatapoint, GetDoubleDatapoint } from '@cognite/sdk';
   import { Component } from 'react';
+  import * as d3 from 'd3';
 
   export interface AxisDisplayModeType {
     id: string;
@@ -15,6 +16,8 @@ declare module '@cognite/griff-react' {
   export type XAccessor = (
     d: GetDoubleDatapoint | GetAggregateDatapoint
   ) => number;
+
+  export type ScalerFunction = d3.ScaleContinuousNumeric<number, number>;
 
   export const AxisDisplayMode: {
     ALL: AxisDisplayModeType;
@@ -66,19 +69,6 @@ declare module '@cognite/griff-react' {
 
   export class DataProvider extends Component<DataProviderProps> {}
 
-  export interface Annotation {
-    assetIds: number[];
-    color: string;
-    description: string;
-    endTime: number;
-    eventSubType: string;
-    eventType: string;
-    id: number;
-    key: string;
-    ruleId: string;
-    startTime: number;
-  }
-
   export interface AxisPlacementType {
     id: number;
     name: string;
@@ -98,9 +88,9 @@ declare module '@cognite/griff-react' {
     data: number[];
     height: number;
     id: number;
-    color: string;
-    fillOpacity: number;
-    xScale: any;
+    color?: string;
+    fillOpacity?: number;
+    xScale?: ScalerFunction;
   }
 
   export interface Ruler {

@@ -11,7 +11,8 @@ import {
   onImageRecognizeFinish,
   cropSize,
   webcamCropOverlay,
-  getAssetHandlerCustom
+  getAssetHandlerCustom,
+  renderer
 } from './helper';
 
 <Meta title="Assets/AssetScanner" decorators={decorators}/>
@@ -220,16 +221,14 @@ const FileInputComponent = ({ render }: any) => {
     </>
   );
 };
+
+const renderer = (image: any) => <AssetScanner onError={onError} image={image} />;
+
 ```
 <Preview>
   <Story name="Input image">
       <FileInputComponent
-        render={image => (
-          <AssetScanner
-            onError={onError}
-            image={image}
-          />
-        )}
+        render={renderer}
       />
   </Story>
 </Preview>

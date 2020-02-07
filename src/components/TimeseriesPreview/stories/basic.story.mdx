@@ -106,9 +106,7 @@ const valToDisplay = {
   value: 32,
   timestamp: new Date(),
 }
-```
 
-```typescript
 const nameFormatter = (name?: string) => `Name: ${name}`;
 
 const descriptionFormatter = (descr?: string) => `Descr: ${descr}`;
@@ -133,6 +131,8 @@ const formatValue = (value: number | string | undefined) => {
 ### Custom data fetching
 
 ```typescript
+import { InternalId } from "@cognite/sdk";
+
 const retrieveTimeseries = async (id: InternalId) => { /* ... */ }
 
 const retrieveLatestDatapoint = async (id: InternalId) => { /* ... */ }
@@ -151,6 +151,8 @@ const retrieveLatestDatapoint = async (id: InternalId) => { /* ... */ }
 ### Dropdown menu
 
 ```typescript
+import { GetTimeSeriesMetadataDTO } from "@cognite/sdk";
+
 const menuConfig = {
   edit: 'Edit item',
   emphasize: 'Emphasize',
