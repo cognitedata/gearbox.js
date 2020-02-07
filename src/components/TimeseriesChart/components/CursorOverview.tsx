@@ -110,14 +110,14 @@ export class CursorOverview extends React.Component<
       'lines-container'
     )[0];
     const linesContainerHeight = linesContainer.getBoundingClientRect().height;
-    const yAxisWidth =
+    const yAxisTotalWidth =
       wrapperRef.getBoundingClientRect().width -
       linesContainer.getBoundingClientRect().width;
-    const yAxisShift =
+    const yAxisLeftWidth =
       yAxisPlacement === 'LEFT'
-        ? yAxisWidth
+        ? yAxisTotalWidth
         : yAxisPlacement === 'BOTH'
-        ? yAxisWidth / 2
+        ? yAxisTotalWidth / 2
         : 0;
 
     let dcHeight = 0;
@@ -128,7 +128,7 @@ export class CursorOverview extends React.Component<
       const dcXPosition =
         (e.offsetX < dcWidth
           ? e.offsetX + containerMargin
-          : e.offsetX - dcWidth - containerMargin) + yAxisShift;
+          : e.offsetX - dcWidth - containerMargin) + yAxisLeftWidth;
 
       this.dateContainer.setAttribute(
         'style',
@@ -142,7 +142,7 @@ export class CursorOverview extends React.Component<
     if (this.overviewContainer) {
       const ocHeight = this.overviewContainer.getBoundingClientRect().height;
       const ocWidth = this.overviewContainer.getBoundingClientRect().width;
-      const ocMinYPosition =
+      const ocLowestYPosition =
         linesContainerHeight -
         (dcHeight +
           ocHeight +
@@ -152,13 +152,13 @@ export class CursorOverview extends React.Component<
       const ocXPosition =
         (e.offsetX < ocWidth
           ? e.offsetX + containerMargin
-          : e.offsetX - ocWidth - containerMargin) + yAxisShift;
+          : e.offsetX - ocWidth - containerMargin) + yAxisLeftWidth;
       this.overviewContainer.setAttribute(
         'style',
         `transform: translate(${ocXPosition}px,
         ${
-          ocYPosition > ocMinYPosition
-            ? ocMinYPosition
+          ocYPosition > ocLowestYPosition
+            ? ocLowestYPosition
             : ocYPosition >= 0
             ? ocYPosition
             : 0
