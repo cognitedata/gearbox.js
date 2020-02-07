@@ -151,9 +151,9 @@ export class CursorOverview extends React.Component<
       const ocLowestYPosition =
         linesContainerHeight -
         (dcHeight +
-          ocHeight +
-          (xAxisHeight ? containerMargin : 0) + // if x axis is available, add some bottom margin
-          (dcHeight ? containerMargin : 0)) // if date container is available, add some bottom margin;
+        ocHeight +
+        (xAxisHeight ? containerMargin : 0) + // if x axis is available, add some bottom margin
+          (dcHeight ? containerMargin : 0)); // if date container is available, add some bottom margin;
       const ocYPosition = e.offsetY - ocHeight / 2;
       this.overviewContainer.setAttribute(
         'style',
