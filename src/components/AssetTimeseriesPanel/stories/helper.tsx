@@ -3,6 +3,7 @@ import { CogniteAsyncIterator } from '@cognite/sdk/dist/src/autoPagination';
 import React, { FC } from 'react';
 import {
   MockDatapointsRetrieve,
+  randomLatestDatapoint,
   sleep,
   timeseriesListV2,
   TimeseriesMockClient,
@@ -23,21 +24,7 @@ class CogniteClient extends TimeseriesMockClient {
   };
   datapoints: any = {
     retrieve: MockDatapointsRetrieve,
-    retrieveLatest: async () => {
-      await sleep(1000);
-      return [
-        {
-          isString: false,
-          id: 123,
-          datapoints: [
-            {
-              timestamp: new Date(Date.now()),
-              value: 15 + Math.random() * 5.0,
-            },
-          ],
-        },
-      ];
-    },
+    retrieveLatest: async () => randomLatestDatapoint(),
   };
 }
 

@@ -50,7 +50,7 @@ export function randomData(
 ): DatapointsGetAggregateDatapoint {
   const data = [];
   const dt = granularity ? granularity : (end - start) / n;
-
+  // initilze first 4 datapoints with random values. These values are used to calculate all other points.
   for (let i = start, index = 0; index < 4; i += dt, index++) {
     const randomVal = Math.random();
     data.push({

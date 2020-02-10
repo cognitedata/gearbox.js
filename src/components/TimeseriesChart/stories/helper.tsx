@@ -7,23 +7,8 @@ import {
   TimeseriesChartByTimeseriesId,
 } from '../interfaces';
 
-const mockDataConfig = [
-  {
-    id: 123,
-    min: 0,
-    max: 100,
-    continousDeviation: 2,
-  },
-  {
-    id: 456,
-    min: 200,
-    max: 400,
-    continousDeviation: 3,
-  },
-];
 const client = new TimeseriesMockClient({
   appId: 'gearbox test',
-  mockDataConfig,
 });
 
 const zoomableClient = new FakeZoomableClient({ appId: 'gearbox test' });

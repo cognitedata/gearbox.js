@@ -23,7 +23,9 @@ export const MockTimeseriesClientObject = {
   },
 };
 
-export const MockDatapointsRetrieve = async (query: any): Promise<DatapointsArray> => {
+export const MockDatapointsRetrieve = async (
+  query: DatapointsMultiQuery
+): Promise<DatapointsArray> => {
   const { granularity, start, end } = query.items[0];
   const result = randomData(
     (start && +start) || 0,
