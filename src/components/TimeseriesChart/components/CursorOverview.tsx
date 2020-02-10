@@ -57,6 +57,31 @@ const formattedDate = (timestamp: number) =>
 
 const containerMargin = 5; // margin for overview container and date container
 
+const hasNoSpaceInLeft = (offsetX: number, containerWidth: number): boolean => {
+  return offsetX < containerWidth + containerMargin;
+}; // return true if no space for container in left.
+
+const getPositionInRight = (offsetX: number): number => {
+  return offsetX + containerMargin;
+};
+
+const getPositionInLeft = (offsetX: number, containerWidth: number): number => {
+  return offsetX - containerWidth - containerMargin;
+};
+
+// return x position for requested container (date container and overview container)
+const getValidXposition = (
+  offsetX: number,
+  containerWidth: number,
+  yAxisLeftWidth: number
+): number => {
+  return (
+    (hasNoSpaceInLeft(offsetX, containerWidth)
+      ? getPositionInRight(offsetX)
+      : getPositionInLeft(offsetX, containerWidth)) + yAxisLeftWidth
+  );
+};
+
 interface CursorOverviewStyles {
   container?: React.CSSProperties;
 }
@@ -113,30 +138,6 @@ export class CursorOverview extends React.Component<
       : 0;
   };
 
-  hasNoSpaceInLeft = (offsetX: number, containerWidth: number): boolean => {
-    return offsetX < containerWidth + containerMargin;
-  }; // return true if no space for container in left.
-
-  getPositionInRight = (offsetX: number): number => {
-    return offsetX + containerMargin;
-  };
-
-  getPositionInLeft = (offsetX: number, containerWidth: number): number => {
-    return offsetX - containerWidth - containerMargin;
-  };
-
-  getValidXposition = (
-    offsetX: number,
-    containerWidth: number,
-    yAxisLeftWidth: number
-  ): number => {
-    return (
-      (this.hasNoSpaceInLeft(offsetX, containerWidth)
-        ? this.getPositionInRight(offsetX)
-        : this.getPositionInLeft(offsetX, containerWidth)) + yAxisLeftWidth
-    );
-  };
-
   getDateContainerYPossition = (linesContainerHeight: number): number => {
     const { xAxisHeight } = this.props;
     const dcHeight = this.dateContainer
@@ -187,7 +188,7 @@ export class CursorOverview extends React.Component<
       const dcWidth = this.dateContainer.getBoundingClientRect().width;
       this.dateContainer.setAttribute(
         'style',
-        `transform: translate(${this.getValidXposition(
+        `transform: translate(${getValidXposition(
           e.offsetX,
           dcWidth,
           yAxisLeftWidth
@@ -202,7 +203,7 @@ export class CursorOverview extends React.Component<
       const ocWidth = this.overviewContainer.getBoundingClientRect().width;
       this.overviewContainer.setAttribute(
         'style',
-        `transform: translate(${this.getValidXposition(
+        `transform: translate(${getValidXposition(
           e.offsetX,
           ocWidth,
           yAxisLeftWidth
