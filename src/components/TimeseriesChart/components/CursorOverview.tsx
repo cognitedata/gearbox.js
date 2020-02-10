@@ -97,8 +97,60 @@ export class CursorOverview extends React.Component<
     window.removeEventListener('mousemove', this.handleMouseMove);
   };
 
+  hasNoSpaceInLeft = (offsetX: number, containerWidth: number): boolean => {
+    return offsetX < containerWidth + containerMargin;
+  }; // return true if no space for container in left.
+
+  getPositionInRight = (offsetX: number): number => {
+    return offsetX + containerMargin;
+  };
+
+  getPositionInLeft = (offsetX: number, containerWidth: number): number => {
+    return offsetX - containerWidth - containerMargin;
+  };
+
+  getValidXposition = (
+    offsetX: number,
+    containerWidth: number,
+    yAxisLeftWidth: number
+  ): number => {
+    return (
+      (this.hasNoSpaceInLeft(offsetX, containerWidth)
+        ? this.getPositionInRight(offsetX)
+        : this.getPositionInLeft(offsetX, containerWidth)) + yAxisLeftWidth
+    );
+  };
+
+  getDateContainerYPossition = (linesContainerHeight: number): number => {
+    const { xAxisHeight } = this.props;
+    const dcHeight = this.dateContainer
+      ? this.dateContainer.getBoundingClientRect().height
+      : 0;
+    return (
+      linesContainerHeight - dcHeight - (xAxisHeight ? containerMargin : 0)
+    );
+  };
+
+  getOverviewContainerYPossition = (
+    offsetY: number,
+    linesContainerHeight: number,
+    ocHeight: number
+  ): number => {
+    const bottomBoundry =
+      this.getDateContainerYPossition(linesContainerHeight) -
+      ocHeight -
+      containerMargin;
+    const topBoundry = 0;
+    const currentYPosition = offsetY - ocHeight / 2;
+    return currentYPosition > bottomBoundry // if the cursor goes below the lowest margin
+      ? bottomBoundry
+      : currentYPosition < topBoundry // if the cursor goes beyond the top margin
+      ? topBoundry
+      : currentYPosition;
+  };
+
   handleMouseMove = (e: MouseEvent) => {
-    const { wrapperRef, xAxisHeight, yAxisPlacement } = this.props;
+    const { wrapperRef, yAxisPlacement } = this.props;
     if (
       !wrapperRef ||
       wrapperRef.getElementsByClassName('lines-container').length === 0
@@ -120,51 +172,34 @@ export class CursorOverview extends React.Component<
         ? yAxisTotalWidth / 2
         : 0; // left side y axis width
 
-    let dcHeight = 0;
-
-    const getValidXposition = (
-      offsetX: number,
-      containerWidth: number
-    ): number => {
-      return (
-        (offsetX < containerWidth
-          ? e.offsetX + containerMargin
-          : e.offsetX - containerWidth - containerMargin) + yAxisLeftWidth
-      );
-    };
-
     if (this.dateContainer) {
-      dcHeight = this.dateContainer.getBoundingClientRect().height;
       const dcWidth = this.dateContainer.getBoundingClientRect().width;
       this.dateContainer.setAttribute(
         'style',
-        `transform: translate(${getValidXposition(e.offsetX, dcWidth)}px,
-        ${linesContainerHeight -
-          dcHeight -
-          (xAxisHeight ? containerMargin : 0)}px)`
+        `transform: translate(${this.getValidXposition(
+          e.offsetX,
+          dcWidth,
+          yAxisLeftWidth
+        )}px,
+        ${this.getDateContainerYPossition(linesContainerHeight)}px)`
       );
     }
 
     if (this.overviewContainer) {
       const ocHeight = this.overviewContainer.getBoundingClientRect().height;
       const ocWidth = this.overviewContainer.getBoundingClientRect().width;
-      const ocLowestYPosition =
-        linesContainerHeight -
-        (dcHeight +
-        ocHeight +
-        (xAxisHeight ? containerMargin : 0) + // if x axis is available, add some bottom margin
-          (dcHeight ? containerMargin : 0)); // if date container is available, add some bottom margin;
-      const ocYPosition = e.offsetY - ocHeight / 2;
       this.overviewContainer.setAttribute(
         'style',
-        `transform: translate(${getValidXposition(e.offsetX, ocWidth)}px,
-        ${
-          ocYPosition > ocLowestYPosition // if the cursor goes below the lowest margin
-            ? ocLowestYPosition
-            : ocYPosition < 0 // if the cursor goes beyond the top margin
-            ? 0
-            : ocYPosition
-        }px)`
+        `transform: translate(${this.getValidXposition(
+          e.offsetX,
+          ocWidth,
+          yAxisLeftWidth
+        )}px,
+        ${this.getOverviewContainerYPossition(
+          e.offsetY,
+          linesContainerHeight,
+          ocHeight
+        )}px)`
       );
     }
   };
