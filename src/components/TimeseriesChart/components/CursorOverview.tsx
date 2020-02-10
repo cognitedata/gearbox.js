@@ -97,6 +97,22 @@ export class CursorOverview extends React.Component<
     window.removeEventListener('mousemove', this.handleMouseMove);
   };
 
+  getLeftSideYAxisWidth = (linesContainer: Element): number => {
+    const { wrapperRef, yAxisPlacement } = this.props;
+    if (!wrapperRef) {
+      return 0;
+    }
+    const yAxisTotalWidth =
+      wrapperRef.getBoundingClientRect().width -
+      linesContainer.getBoundingClientRect().width; // difference between wrapper and line chart area width
+
+    return yAxisPlacement === 'LEFT'
+      ? yAxisTotalWidth
+      : yAxisPlacement === 'BOTH'
+      ? yAxisTotalWidth / 2
+      : 0;
+  };
+
   hasNoSpaceInLeft = (offsetX: number, containerWidth: number): boolean => {
     return offsetX < containerWidth + containerMargin;
   }; // return true if no space for container in left.
@@ -150,7 +166,7 @@ export class CursorOverview extends React.Component<
   };
 
   handleMouseMove = (e: MouseEvent) => {
-    const { wrapperRef, yAxisPlacement } = this.props;
+    const { wrapperRef } = this.props;
     if (
       !wrapperRef ||
       wrapperRef.getElementsByClassName('lines-container').length === 0
@@ -162,16 +178,11 @@ export class CursorOverview extends React.Component<
       'lines-container'
     )[0];
     const linesContainerHeight = linesContainer.getBoundingClientRect().height;
-    const yAxisTotalWidth =
-      wrapperRef.getBoundingClientRect().width -
-      linesContainer.getBoundingClientRect().width;
-    const yAxisLeftWidth =
-      yAxisPlacement === 'LEFT'
-        ? yAxisTotalWidth
-        : yAxisPlacement === 'BOTH'
-        ? yAxisTotalWidth / 2
-        : 0; // left side y axis width
 
+    // get left side y axis width in oder to set the position for containers comparatively
+    const yAxisLeftWidth = this.getLeftSideYAxisWidth(linesContainer);
+
+    // set the dynamic x and y position for date container on cursor move
     if (this.dateContainer) {
       const dcWidth = this.dateContainer.getBoundingClientRect().width;
       this.dateContainer.setAttribute(
@@ -185,6 +196,7 @@ export class CursorOverview extends React.Component<
       );
     }
 
+    // set the dynamic x and y position for overview container on cursor move
     if (this.overviewContainer) {
       const ocHeight = this.overviewContainer.getBoundingClientRect().height;
       const ocWidth = this.overviewContainer.getBoundingClientRect().width;
