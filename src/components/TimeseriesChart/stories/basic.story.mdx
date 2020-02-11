@@ -107,6 +107,22 @@ interface ChartRulerConfig {
 }
 ```
 
+### Annotation
+
+This interface defines the configurations for annotation in `TimeseriesChart`component.
+
+Definition:
+
+```typescript
+interface Annotation {
+  data: number[];
+  height: number;
+  id: number;
+  color?: string;
+  fillOpacity?: number;
+}
+```
+
 ## Examples
 
 ### Empty
@@ -325,7 +341,7 @@ When the pointer is moved across the chart, the ruler moves vertically.
 The value of chart point(s) under the ruler are displayed as a list in a "cursor overview" near the pointer and the timestamp of the ruler is displayed at the bottom.
 
 ```typescript
-const ruler = {
+const rulerProp = {
   visible: true,
   yLabel: (point: any) => `${Number.parseFloat(point.value).toFixed(3)}`,
   timeLabel: (point: any) => point.timestamp.toString(),
@@ -378,7 +394,6 @@ const handleBlur = (e: any) => console.log('onBlur', e)
 
 ```typescript
 import { AxisDisplayMode } from '@cognite/griff-react';
-import { DataLoader } from '@cognite/gearbox';
 
 const series = [
   {
@@ -386,16 +401,10 @@ const series = [
     color: 'green',
     yAxisDisplayMode: AxisDisplayMode.ALL,
     hidden: false,
-    y0Accessor: DataLoader.y0Accessor,
-    y1Accessor: DataLoader.y1Accessor,
-    yAccessor: DataLoader.yAccessor,
   },
   {
     id: 456,
     color: 'red',
-    y0Accessor: DataLoader.y0Accessor,
-    y1Accessor: DataLoader.y1Accessor,
-    yAccessor: DataLoader.yAccessor,
   },
 ];
 ```

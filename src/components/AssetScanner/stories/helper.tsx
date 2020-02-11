@@ -5,6 +5,7 @@ import { Callback, ErrorResponse } from '../../../interfaces';
 import { assetsList, sleep } from '../../../mocks';
 import { MockCogniteClient } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
+import { AssetScanner } from '../AssetScanner';
 import { ASNotifyTypes } from '../interfaces';
 
 class CogniteClient extends MockCogniteClient {
@@ -108,4 +109,8 @@ export const webcamCropOverlay = () => (
       width: '440px',
     }}
   />
+);
+
+export const renderer = (image: any) => (
+  <AssetScanner onError={onError} image={image} />
 );

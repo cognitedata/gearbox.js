@@ -35,7 +35,7 @@ import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 ```typescript
 const onTimeserieSelectionChange = (
   newTimeseriesIds: number[],
-  selectedTimeseries: GetTimeSeriesMetadataDTO
+  selectedTimeseries: GetTimeSeriesMetadataDTO | null
 ) => { /* ... */ }
 ```
 

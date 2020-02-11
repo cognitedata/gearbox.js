@@ -15,7 +15,6 @@ import {
   TimeseriesMockClient,
 } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { DataLoader } from '../dataLoader';
 import {
   TimeseriesChartBySeries,
   TimeseriesChartByTimeseriesId,
@@ -87,16 +86,10 @@ export const series = [
     color: 'green',
     yAxisDisplayMode: AxisDisplayMode.ALL,
     hidden: false,
-    y0Accessor: DataLoader.y0Accessor,
-    y1Accessor: DataLoader.y1Accessor,
-    yAccessor: DataLoader.yAccessor,
   },
   {
     id: 456,
     color: 'red',
-    y0Accessor: DataLoader.y0Accessor,
-    y1Accessor: DataLoader.y1Accessor,
-    yAccessor: DataLoader.yAccessor,
   },
 ];
 
