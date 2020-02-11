@@ -1,3 +1,4 @@
+import { DataProviderSeries } from '@cognite/griff-react';
 import moment from 'moment';
 import numeral from 'numeral';
 import React from 'react';
@@ -14,7 +15,6 @@ const Container = styled.div`
 const Overview = styled.div`
   position: absolute;
   top: 0;
-  margin-left: -150px;
   width: 140px;
   background: #fff;
   padding: 8px 16px 10px;
@@ -28,7 +28,6 @@ const Overview = styled.div`
 const DateContainer = styled.div`
   position: absolute;
   top: 0;
-  margin-left: -230px;
   width: 220px;
   color: black;
   background: #fff;
@@ -56,6 +55,33 @@ const Tag = styled.div`
 const formattedDate = (timestamp: number) =>
   moment(timestamp).format('MMM D, YYYY HH:mm:ss');
 
+const containerMargin = 5; // margin for overview container and date container
+
+const hasNoSpaceInLeft = (offsetX: number, containerWidth: number): boolean => {
+  return offsetX < containerWidth + containerMargin;
+}; // return true if no space for container in left.
+
+const getPositionInRight = (offsetX: number): number => {
+  return offsetX + containerMargin;
+};
+
+const getPositionInLeft = (offsetX: number, containerWidth: number): number => {
+  return offsetX - containerWidth - containerMargin;
+};
+
+// return x position for requested container (date container and overview container)
+const getValidXposition = (
+  offsetX: number,
+  containerWidth: number,
+  yAxisLeftWidth: number
+): number => {
+  return (
+    (hasNoSpaceInLeft(offsetX, containerWidth)
+      ? getPositionInRight(offsetX)
+      : getPositionInLeft(offsetX, containerWidth)) + yAxisLeftWidth
+  );
+};
+
 interface CursorOverviewStyles {
   container?: React.CSSProperties;
 }
@@ -64,11 +90,13 @@ interface CursorOverviewState {
 }
 interface CursorOverviewProps {
   wrapperRef: HTMLElement | null;
-  series: any;
+  series: DataProviderSeries[];
   hiddenSeries: { [id: number]: boolean };
   ruler: ChartRulerConfig;
   rulerPoints: { [key: string]: ChartRulerPoint };
   styles?: CursorOverviewStyles;
+  xAxisHeight: number;
+  yAxisPlacement: 'RIGHT' | 'LEFT' | 'BOTH';
 }
 
 export class CursorOverview extends React.Component<
@@ -94,27 +122,97 @@ export class CursorOverview extends React.Component<
     window.removeEventListener('mousemove', this.handleMouseMove);
   };
 
+  getLeftSideYAxisWidth = (linesContainer: Element): number => {
+    const { wrapperRef, yAxisPlacement } = this.props;
+    if (!wrapperRef) {
+      return 0;
+    }
+    const yAxisTotalWidth =
+      wrapperRef.getBoundingClientRect().width -
+      linesContainer.getBoundingClientRect().width; // difference between wrapper and line chart area width
+
+    return yAxisPlacement === 'LEFT'
+      ? yAxisTotalWidth
+      : yAxisPlacement === 'BOTH'
+      ? yAxisTotalWidth / 2
+      : 0;
+  };
+
+  getDateContainerYPossition = (linesContainerHeight: number): number => {
+    const { xAxisHeight } = this.props;
+    const dcHeight = this.dateContainer
+      ? this.dateContainer.getBoundingClientRect().height
+      : 0;
+    return (
+      linesContainerHeight - dcHeight - (xAxisHeight ? containerMargin : 0)
+    );
+  };
+
+  getOverviewContainerYPossition = (
+    offsetY: number,
+    linesContainerHeight: number,
+    ocHeight: number
+  ): number => {
+    const bottomBoundry =
+      this.getDateContainerYPossition(linesContainerHeight) -
+      ocHeight -
+      containerMargin;
+    const topBoundry = 0;
+    const currentYPosition = offsetY - ocHeight / 2;
+    return currentYPosition > bottomBoundry // if the cursor goes below the lowest margin
+      ? bottomBoundry
+      : currentYPosition < topBoundry // if the cursor goes beyond the top margin
+      ? topBoundry
+      : currentYPosition;
+  };
+
   handleMouseMove = (e: MouseEvent) => {
     const { wrapperRef } = this.props;
-    if (!wrapperRef) {
+    if (
+      !wrapperRef ||
+      wrapperRef.getElementsByClassName('lines-container').length === 0
+    ) {
       return;
     }
 
-    if (this.overviewContainer) {
-      this.overviewContainer.setAttribute(
+    const linesContainer = wrapperRef.getElementsByClassName(
+      'lines-container'
+    )[0];
+    const linesContainerHeight = linesContainer.getBoundingClientRect().height;
+
+    // get left side y axis width in oder to set the position for containers comparatively
+    const yAxisLeftWidth = this.getLeftSideYAxisWidth(linesContainer);
+
+    // set the dynamic x and y position for date container on cursor move
+    if (this.dateContainer) {
+      const dcWidth = this.dateContainer.getBoundingClientRect().width;
+      this.dateContainer.setAttribute(
         'style',
-        `transform: translate(${e.offsetX}px,
-        ${e.offsetY -
-          this.overviewContainer.getBoundingClientRect().height / 2}px)`
+        `transform: translate(${getValidXposition(
+          e.offsetX,
+          dcWidth,
+          yAxisLeftWidth
+        )}px,
+        ${this.getDateContainerYPossition(linesContainerHeight)}px)`
       );
     }
 
-    if (this.dateContainer && wrapperRef) {
-      const lineChartRect = wrapperRef.getBoundingClientRect();
-      this.dateContainer.setAttribute(
+    // set the dynamic x and y position for overview container on cursor move
+    if (this.overviewContainer) {
+      const ocHeight = this.overviewContainer.getBoundingClientRect().height;
+      const ocWidth = this.overviewContainer.getBoundingClientRect().width;
+      this.overviewContainer.setAttribute(
         'style',
-        `transform: translate(${e.offsetX}px,
-        ${lineChartRect.height - this.dateContainer.clientHeight - 55}px)`
+        `transform: translate(${getValidXposition(
+          e.offsetX,
+          ocWidth,
+          yAxisLeftWidth
+        )}px,
+        ${this.getOverviewContainerYPossition(
+          e.offsetY,
+          linesContainerHeight,
+          ocHeight
+        )}px)`
       );
     }
   };
@@ -158,7 +256,7 @@ export class CursorOverview extends React.Component<
           return numeral(point.value).format('0[.]0[00] a');
         };
 
-    const renderTag = ({ id, color }: { id: number; color: string }) =>
+    const renderTag = ({ id, color }: { id: number; color?: string }) =>
       rulerPoints[id] &&
       !hiddenSeries[id] && (
         <Tag color={color} key={id}>

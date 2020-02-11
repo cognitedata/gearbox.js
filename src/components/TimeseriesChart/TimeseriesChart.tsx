@@ -198,6 +198,8 @@ export class TimeseriesChart extends Component<
                   hiddenSeries={hiddenSeries}
                   rulerPoints={this.state.rulerPoints}
                   ruler={ruler}
+                  xAxisHeight={xAxisHeight}
+                  yAxisPlacement={yAxisPlacement}
                 />
               )}
               <LineChart
