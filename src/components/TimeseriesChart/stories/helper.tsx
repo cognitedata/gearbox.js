@@ -1,54 +1,15 @@
 import { AxisDisplayMode } from '@cognite/griff-react';
-import {
-  DatapointsGetAggregateDatapoint,
-  DatapointsGetDoubleDatapoint,
-  DatapointsGetStringDatapoint,
-  DatapointsMultiQuery,
-  GetTimeSeriesMetadataDTO,
-} from '@cognite/sdk';
 import React, { FC } from 'react';
-import {
-  MockCogniteClient,
-  randomData,
-  sleep,
-  timeseriesListV2,
-  TimeseriesMockClient,
-} from '../../../mocks';
+import { FakeZoomableClient, TimeseriesMockClient } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import {
   TimeseriesChartBySeries,
   TimeseriesChartByTimeseriesId,
 } from '../interfaces';
 
-type DatapointsArray = (
-  | DatapointsGetAggregateDatapoint
-  | DatapointsGetStringDatapoint
-  | DatapointsGetDoubleDatapoint)[];
-
-class FakeZoomableClient extends MockCogniteClient {
-  timeseries: any = {
-    // tslint:disable-next-line: no-identical-functions
-    retrieve: async (): Promise<GetTimeSeriesMetadataDTO[]> => {
-      // tslint:disable-next-line: no-identical-functions
-      await sleep(1000);
-      return [timeseriesListV2[0]];
-    },
-  };
-  datapoints: any = {
-    retrieve: async (query: DatapointsMultiQuery): Promise<DatapointsArray> => {
-      const { granularity = '10s', start, end } = query.items[0];
-      const n = granularity === 's' ? 2 : granularity.includes('s') ? 10 : 250;
-      const result = randomData(
-        (start && +start) || 0,
-        (end && +end) || 100,
-        n
-      );
-      return [result];
-    },
-  };
-}
-
-const client = new TimeseriesMockClient({ appId: 'gearbox test' });
+const client = new TimeseriesMockClient({
+  appId: 'gearbox test',
+});
 
 const zoomableClient = new FakeZoomableClient({ appId: 'gearbox test' });
 

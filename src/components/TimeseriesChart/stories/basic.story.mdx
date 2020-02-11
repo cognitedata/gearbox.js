@@ -250,7 +250,7 @@ const customContainerStyle = {
 ### Context chart
 
 <Preview>
-  <Story name="Context chart" >
+  <Story name="Context chart" decorators={[zoomableClientDecorator]}>
     <TimeseriesChart
       timeseriesIds={[123]}
       startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
@@ -281,7 +281,7 @@ const customContainerStyle = {
   <Story name="Live update" decorators={[zoomableClientDecorator]}>
     <TimeseriesChart
       timeseriesIds={[123]}
-      startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
+      startTime={Date.now() - 60 * 1000}
       endTime={Date.now()}
       liveUpdate={true}
       updateIntervalMillis={2000}

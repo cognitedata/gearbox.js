@@ -3,7 +3,7 @@ import {
   DatapointsGetDoubleDatapoint,
 } from '@cognite/sdk';
 
-export function randomData(
+export function randomDataZoomable(
   start: number,
   end: number,
   n: number,
@@ -13,7 +13,7 @@ export function randomData(
 
   const dt = granularity ? granularity : (end - start) / n;
 
-  for (let i = start; i <= end; i += dt) {
+  for (let i = start + dt; i <= end; i += dt) {
     const values = [0, 0, 0]
       .map(
         () =>
@@ -32,6 +32,63 @@ export function randomData(
   }
 
   return { datapoints: data, id: 1337 };
+}
+
+/**
+ * https://en.wikipedia.org/wiki/Autoregressive_model (Autoregressive model) to generate mock data
+ * @param start
+ * @param end
+ * @param n
+ * @param config
+ * @param granularity
+ */
+export function randomData(
+  start: number,
+  end: number,
+  n: number,
+  granularity?: number
+): DatapointsGetAggregateDatapoint {
+  const data = [];
+  const dt = granularity ? granularity : (end - start) / n;
+  // initilze first 4 datapoints with random values. These values are used to calculate all other points.
+  for (let i = start, index = 0; index < 4; i += dt, index++) {
+    const randomVal = Math.random();
+    data.push({
+      timestamp: new Date(i),
+      average: randomVal,
+      min: randomVal,
+      max: randomVal,
+      count: 7000,
+    });
+  }
+
+  for (let i = start + 4 * dt, index = 4; i <= end; i += dt, index++) {
+    const nextVal = getNext(data, index);
+    data.push({
+      timestamp: new Date(i),
+      average: nextVal,
+      min: nextVal,
+      max: nextVal,
+      count: 7000,
+    });
+  }
+
+  return { datapoints: data, id: 1337 };
+}
+
+function getNext(generatedArr: any[], index: number) {
+  let val = 0;
+  const p1 = 0.2;
+  const p2 = 0.3;
+  const p3 = 0.5;
+  val += generatedArr[index - 1].average * p1;
+  val += generatedArr[index - 2].average * p2;
+  val += generatedArr[index - 3].average * p3;
+  const randomNoise = parseFloat(
+    ((Math.random() < 0.5 ? -1 : 1) * 2).toFixed(2)
+  );
+  val += randomNoise;
+  return val;
 }
 
 export const randomLatestDatapoint = (

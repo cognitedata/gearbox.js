@@ -4,7 +4,7 @@ import {
   GetTimeSeriesMetadataDTO,
 } from '@cognite/sdk';
 import React, { FC, useState } from 'react';
-import { randomData, timeseriesListV2 } from '../../../mocks';
+import { randomDataZoomable, timeseriesListV2 } from '../../../mocks';
 import { MockCogniteClient } from '../../../mocks';
 import { getGranularityInMS } from '../../../utils/utils';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
@@ -20,13 +20,14 @@ const MockTimeseriesClientObject = {
     });
   },
 };
+
 const MockDatapointsClientObject = {
   retrieve: (
     query: DatapointsMultiQuery
   ): Promise<DatapointsGetAggregateDatapoint[]> => {
     return new Promise(resolve => {
       setTimeout(() => {
-        const result = randomData(
+        const result = randomDataZoomable(
           (query.start as number) || Date.now() - 24 * 60 * 60 * 1000,
           (query.end as number) || Date.now(),
           100,

@@ -3,11 +3,12 @@ import {
   DOCUMENTS,
   fakeAsset,
   fakeEvents,
+  randomLatestDatapoint,
   timeseriesListV2,
 } from '../../../mocks';
 import { sleep } from '../../../mocks';
 import {
-  MockDatapointsClientObject,
+  MockDatapointsRetrieve,
   MockTimeseriesClientObject,
   TimeseriesMockClient,
 } from '../../../mocks/datapoints';
@@ -23,8 +24,9 @@ class CogniteClient extends TimeseriesMockClient {
       },
     }),
   };
-  datapoint = {
-    ...MockDatapointsClientObject,
+  datapoints = {
+    retrieve: MockDatapointsRetrieve,
+    retrieveLatest: async () => randomLatestDatapoint(),
   };
   assets: any = {
     retrieve: async () => {
