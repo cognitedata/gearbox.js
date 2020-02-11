@@ -30,10 +30,11 @@ To retrieve a 3D model you need to provide:
 
 #### Requirements:
 
-To use this component you have to install `@cognite/3d-viewer` package (version 5.x.x):
+To use this component you have to install `@cognite/3d-viewer` package (version 5.x.x) and `three` package (version 0.x.x):
 
 ```bash
 yarn add @cognite/3d-viewer@5
+yarn add three@0
 ```
 
 ### Basic usage:
@@ -52,6 +53,33 @@ import {
 } from '@cognite/3d-viewer';
 import { Revision3D } from '@cognite/sdk';
 import { Model3DViewer } from '@cognite/gearbox';
+import * as THREE from 'three';
+
+const modelId = 0;
+
+const revisionId = 0;
+
+const cache = {};
+
+const onClick = (modelID: number, point: THREE.Vector3) =>
+  console.log(
+    'onClick',
+    modelID,
+    point
+  );
+
+const onProgress = (progress: OnProgressData) =>
+  console.log('onProgress', progress);
+
+const onComplete = () => console.log('onComplete');
+
+const onReady = () =>
+  console.log(
+    'onReady',
+    { name: 'viewer' },
+    { name: 'model' },
+    { name: 'revision' }
+  );
 
 ```
 

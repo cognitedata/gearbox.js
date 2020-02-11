@@ -31,7 +31,7 @@ import React from 'react';
 import { TenantSelector, PureObject } from '@cognite/gearbox';
 ```
 ```typescript
-onTenantSelected = (tenant: string, advancedOptions: PureObject | null) => {};
+const onTenantSelected = (tenant: string, advancedOptions: PureObject | null) => {};
 ```
 
 <Preview>
@@ -174,7 +174,7 @@ const validateTenantFailed = async (tenant: string) => {
 ### Loads forever
 
 ```typescript
-const loadsForEver = () => Promise.race([]);
+const validateTenantForever = () => Promise.race([]);
 ```
 
 <Preview>
@@ -222,7 +222,7 @@ const advancedOptions = { apiUrl: '', comment: 'Comment' };
     <TenantSelector
       title="Example app"
       onTenantSelected={onTenantSelected}
-      advancedOptions={advancedOptionsProps}
+      advancedOptions={advancedOptions}
     />
   </Story>
 </Preview>
@@ -230,7 +230,9 @@ const advancedOptions = { apiUrl: '', comment: 'Comment' };
 ### With custom styles
 
 ```typescript
-const customStyle = {
+import { TenantSelectorStyles } from '@cognite/gearbox';
+
+const customStyle: TenantSelectorStyles = {
   title: {
     color: 'red',
     alignSelf: 'center',

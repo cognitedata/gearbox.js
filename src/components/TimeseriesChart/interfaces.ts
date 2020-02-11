@@ -1,7 +1,4 @@
-import {
-  Annotation,
-  DataProviderSeries as ProviderSeries,
-} from '@cognite/griff-react';
+import { DataProviderSeries as ProviderSeries } from '@cognite/griff-react';
 import React from 'react';
 
 type DataProviderSeries = ProviderSeries;
@@ -75,6 +72,10 @@ interface TimeseriesChartPropsBase {
    */
   width?: number;
   /**
+   * Display and configure annotations
+   */
+  annotations: Annotation[];
+  /**
    * Mouse move callback
    */
   onMouseMove?: (e: any) => void;
@@ -93,11 +94,15 @@ interface TimeseriesChartPropsBase {
   /**
    * @ignore
    */
-  annotations: Annotation[];
-  /**
-   * @ignore
-   */
   collections: any;
+}
+
+export interface Annotation {
+  data: number[];
+  height: number;
+  id: number;
+  color?: string;
+  fillOpacity?: number;
 }
 
 export interface ChartRulerPoint {
