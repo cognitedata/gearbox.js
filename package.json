@@ -32,6 +32,8 @@
   "homepage": "https://github.com/cognitedata/gearbox.js#readme",
   "license": "Apache-2.0",
   "dependencies": {
+    "@types/react-svg-pan-zoom": "^3.3.0",
+    "@types/react-virtualized": "^9.21.7",
     "d3": "^5.14.2",
     "file-saver": "^2.0.2",
     "lodash": "^4.17.15",
@@ -42,6 +44,9 @@
     "react-dnd-html5-backend": "^7.4.4",
     "react-odometerjs": "^2.1.1",
     "react-sizeme": "^2.5.2",
+    "react-svg-pan-zoom": "^3.8.0",
+    "react-virtualized": "^9.21.2",
+    "transformation-matrix": "^2.2.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
