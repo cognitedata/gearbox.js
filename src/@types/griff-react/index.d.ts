@@ -62,6 +62,7 @@ declare module '@cognite/griff-react' {
     y0Accessor?: YAccessor;
     y1Accessor?: YAccessor;
     xAccessor?: XAccessor;
+    ySubDomain?: [number, number];
   }
 
   export class DataProvider extends Component<DataProviderProps> {}
