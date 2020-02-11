@@ -9,7 +9,7 @@ const exportedComponents = fs
     withFileTypes: true,
   })
   .filter(
-    fd => fd.isDirectory() && fd.name !== 'common' && fd.name !== '_internal'
+    fd => fd.isDirectory() && fd.name !== 'common'
   )
   .map(({ name }) => name);
 const external = [

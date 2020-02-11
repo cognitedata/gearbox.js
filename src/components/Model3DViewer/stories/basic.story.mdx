@@ -1,0 +1,157 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { Model3DViewer } from '../Model3DViewer';
+import {
+  decorators,
+  modelId,
+  revisionId,
+  onClick,
+  onProgress,
+  onComplete,
+  onReady,
+  cache,
+  onScreenshot,
+  slice,
+  slider
+} from './helper';
+
+<Meta title="Others/Model3DViewer" decorators={decorators} />
+
+# Model3DViewer
+
+This component can be used to visualize 3D models from Cognite Data Fusion.
+The component will visualize the full 3D model by default, but by providing an optional `boundingBox` parameter, you can download only a specific area. This could for instance be around a specific asset.
+
+To retrieve a 3D model you need to provide:
+
+- `modelId` – you can get it via SDK call – `Models3DAPI.list()`. You receive an iterator as a result, which could be used to get list of model ids associated to your tenant.
+- `revisionId` – you can get it via SDK call `Revisions3DAPI.list(modelId)`. You receive an iterator as a result, which could be used to get list of revision ids available for provided modelId
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+#### Requirements:
+
+To use this component you have to install `@cognite/3d-viewer` package (version 5.x.x):
+
+```bash
+yarn add @cognite/3d-viewer@5
+```
+
+### Basic usage:
+
+Imports:
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+
+import {
+  Cognite3DViewer,
+  Cognite3DModel,
+  OnProgressData,
+} from '@cognite/3d-viewer';
+import { Revision3D } from '@cognite/sdk';
+import { Model3DViewer } from '@cognite/gearbox';
+
+```
+
+<Preview>
+  <Story name="Basic usage">
+    <Model3DViewer
+      modelId={modelId}
+      revisionId={revisionId}
+      onClick={onClick}
+      onProgress={onProgress}
+      onComplete={onComplete}
+      onReady={onReady}
+      cache={cache}
+    />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={Model3DViewer} />
+
+### Types
+
+Styles prop interface description:
+
+``` jsx
+import { CSSProperties } from 'react';
+
+export interface Model3DViewerStyles {
+  wrapper: CSSProperties;
+  viewer: CSSProperties;
+}
+```
+
+## Examples
+
+### Slice the model
+
+Specify the direction and the length you want to slice from the corresponding axis to render
+a sliced model.
+
+```typescript
+const slice = { y: { coord: 0, direction: false } }
+```
+
+<Preview>
+  <Story name="Slice the model">
+    <Model3DViewer
+      modelId={modelId}
+      revisionId={revisionId}
+      slice={slice}
+    />
+  </Story>
+</Preview>
+
+
+### Add visual sliders
+
+Specify the direction and the length you want to slice from the corresponding axis to render
+a sliced model.
+
+```typescript
+const slider = {
+  x: { min: -1.5, max: 1.5 },
+  y: { min: -1.5, max: 1.5 },
+  z: { min: -5.5, max: 1 },
+};
+```
+
+<Preview>
+  <Story name="Add visual sliders">
+    <Model3DViewer
+      modelId={modelId}
+      revisionId={revisionId}
+      slider={slider}
+    />
+  </Story>
+</Preview>
+
+### Take screenshots
+
+Set showScreenshotButton to true to add a button that takes screenshot of the model after being clicked.
+Set the onScreenshot property to customize what you want to do witht the screenshots.
+
+```typescript
+const onScreenshot = (url: string) => {
+  const downloadElm = document.createElement('a');
+  downloadElm.href = url;
+  downloadElm.download = 'model_3D_viewer_screen_shot';
+  downloadElm.click();
+};
+```
+
+<Preview>
+  <Story name="Take screenshots">
+    <Model3DViewer
+      modelId={modelId}
+      revisionId={revisionId}
+      showScreenshotButton={true}
+      onScreenshot={onScreenshot}
+    />
+  </Story>
+</Preview>

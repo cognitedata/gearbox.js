@@ -1,0 +1,172 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { TimeseriesDataExport, TimeseriesDataExportFC } from '../TimeseriesDataExport';
+import {
+  decorators,
+  strings,
+  TimeseriesChartExportWrapper,
+  ComponentProps,
+  labelFormatter
+} from './helper';
+
+<Meta title="Time Series/TimeseriesDataExport" decorators={decorators} />
+
+# Timeseries Data Export
+
+Component allows to export CSV data for provided timeseries in selected timerange with defined granularity.
+
+Component based on antd modal component with form, where user can define all configurations for CSV export.
+
+Component has embedded logic for fetching timeseries data and generating CSV file. To make it work properly, component
+has to be wrapped into `ClientSDKProvider` component with defined client SDK instance. Fetching logic
+also can be redefined via `retrieveTimeseries` and `fetchCSV` props.
+
+Imports:
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { TimeseriesDataExport } from '@cognite/gearbox';
+```
+`TimeseriesChartExportWrapper` is a component to demonstrate basic behavior
+
+```jsx
+const TimeseriesChartExportWrapper: React.FC<
+  Omit<TimeseriesDataExportProps, 'visible' | 'form'>
+> = props => {
+  const [open, setOpen] = useState(false);
+  const onClose = () => setOpen(false);
+  const onOpen = () => setOpen(true);
+
+  return (
+    <>
+      <button onClick={onOpen}>Export Chart Data</button>
+      <TimeseriesDataExport visible={open} hideModal={onClose} {...props} />
+    </>
+  );
+};
+```
+
+<Preview>
+  <Story name="Basic usage" >
+    <TimeseriesChartExportWrapper
+      timeseriesIds={[41852231325889, 7433885982156917]}
+      granularity={'2m'}
+      defaultTimeRange={[1567321800000, 1567408200000]}
+    />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={ComponentProps} />
+
+### Types:
+
+#### FetchCSVCall
+
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { FetchCSVCall } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+import { DatapointsMultiQuery, Aggregate } from '@cognite/sdk';
+
+interface CsvParseOptions {
+  aggregate: Aggregate;
+  delimiter: ',' | '|' | '\t';
+  readableDate: boolean;
+  granularity: string;
+}
+
+type FetchCSVCall = (
+  request: DatapointsMultiQuery,
+  opts: CsvParseOptions
+) => Promise<string>;
+```
+
+#### FetchTimeseriesCall
+
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { FetchTimeseriesCall } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+import { InternalId, TimeSeries } from '@cognite/sdk';
+
+type FetchTimeseriesCall = (
+  ids: InternalId[]
+) => Promise<TimeSeries[]>;
+```
+
+#### Default strings
+
+```typescript
+const defaultStrings: PureObject = {
+  title: 'Export chart data',
+  labelRange: 'Range',
+  labelGranularity: 'Label Granularity',
+  labelGranularityHelp: 'Example inputs: 15s, 1m, 5h, 2d',
+  formatTimestamp: 'Format timestamp?',
+  formatTimestampHelp: 'e.g. 2018-04-02 12:20:20',
+  delimiterLabel: 'Select delimiter',
+  delimiterHelp: 'The character that will separate your data fields',
+  csvDownload: 'Download as CSV',
+  csvDownloadInProgress: 'Download as CSV',
+  closeBtn: 'Close',
+  imageDownloadLabel: 'Image download',
+  imageDownloadBtn: 'Download as SVG',
+  cellLimitErr:
+    'You hit the limit of {{ cellLimit }} datapoints - some data may be omitted',
+};
+```
+
+## Examples
+
+### Hit limit
+
+```typescript
+const strings = {
+  cellLimitErr:
+    'Oops, you rich cell limit for CSV document – {{ cellLimit }} cells, some data may be omitted',
+};
+```
+<Preview>
+  <Story name="Hit limit" >
+    <TimeseriesChartExportWrapper
+      timeseriesIds={[41852231325889, 7433885982156917]}
+      granularity={'2s'}
+      defaultTimeRange={[1567321800000, 1567408200000]}
+      cellLimit={5000}
+      strings={strings}
+    />
+  </Story>
+</Preview>
+
+
+### Format label
+
+```typescript
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import { CSVLabelFormatter } from '@cognite/gearbox';
+
+const labelFormatter: CSVLabelFormatter = (ts: GetTimeSeriesMetadataDTO) => ts.name || \`timeserie-${ts.id}\`;
+```
+<Preview>
+  <Story name="Format label" >
+    <TimeseriesChartExportWrapper
+      timeseriesIds={[41852231325889, 7433885982156917]}
+      granularity={'2m'}
+      defaultTimeRange={[1567321800000, 1567408200000]}
+      labelFormatter={labelFormatter}
+    />
+  </Story>
+</Preview>

@@ -1,19 +1,17 @@
-import { CogniteEvent } from '@cognite/sdk';
+import { CogniteClient, CogniteEvent } from '@cognite/sdk';
 import { Spin } from 'antd';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
-import { ClientSDKContext } from '../../context/clientSDKContext';
-import { PureObject } from '../../interfaces';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import {
-  EventPreviewStyles as Styles,
+  defaultStrings,
   EventPreviewView,
 } from './components/EventPreviewView';
-
-export type EventPreviewStyles = Styles;
+import { EventPreviewProps } from './interfaces';
 
 const LoadingSpinner: React.FC = () => (
   <SpinContainer>
@@ -21,25 +19,21 @@ const LoadingSpinner: React.FC = () => (
   </SpinContainer>
 );
 
-export interface EventPreviewProps {
-  eventId: number;
-  onShowDetails?: (e: CogniteEvent) => void;
-  strings?: PureObject;
-  hideProperties?: (keyof CogniteEvent)[];
-  hideLoadingSpinner?: boolean;
-  styles?: EventPreviewStyles;
-}
-
 interface EventPreviewState {
   event: CogniteEvent | null;
 }
 
-export class EventPreview extends React.Component<
+export class EventPreview extends Component<
   EventPreviewProps,
   EventPreviewState
 > {
-  static contextType = ClientSDKContext;
-  context!: React.ContextType<typeof ClientSDKContext>;
+  static displayName = 'EventPreview';
+  static contextType = ClientSDKProxyContext;
+  static defaultProps = {
+    strings: defaultStrings,
+  };
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   isComponentUnmount: boolean = false;
 
@@ -51,10 +45,12 @@ export class EventPreview extends React.Component<
   }
 
   componentDidMount() {
-    if (!this.context) {
+    this.client = this.context(EventPreview.displayName || '')!;
+    if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
+
     this.loadEvent();
   }
 
@@ -70,7 +66,7 @@ export class EventPreview extends React.Component<
   }
 
   async loadEvent() {
-    const events = await this.context!.events.retrieve([
+    const events = await this.client.events.retrieve([
       { id: this.props.eventId },
     ]);
     if (events.length !== 1) {

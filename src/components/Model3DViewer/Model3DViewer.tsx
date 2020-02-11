@@ -1,69 +1,28 @@
 import { Cognite3DModel, Cognite3DViewer, THREE } from '@cognite/3d-viewer';
-import { AssetMapping3D, Revision3D } from '@cognite/sdk';
+import { AssetMapping3D, CogniteClient, Revision3D } from '@cognite/sdk';
 import { Button, Slider } from 'antd';
 import { SliderValue } from 'antd/lib/slider';
 import { isEqual } from 'lodash';
-import React, { RefObject } from 'react';
+import React, { Component, RefObject } from 'react';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
-import { ClientSDKContext } from '../../context/clientSDKContext';
-import { CacheObject, Callback, MouseScreenPosition } from '../../interfaces';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
+import { Callback, MouseScreenPosition } from '../../interfaces';
 import {
   createViewer as originalCreateViewer,
   setCameraPosition,
   ViewerEventTypes,
 } from '../../utils/threeD';
+import {
+  Model3DViewerProps,
+  SlicingDetail,
+  SlicingProps,
+  SliderRange,
+} from './interfaces';
 
 let createViewer = originalCreateViewer;
 
 type ClickHandler = (position: MouseScreenPosition) => void;
 
-interface SliderRange {
-  max: number;
-  min: number;
-}
-
-interface SlicingDetail {
-  coord: number;
-  direction: boolean;
-}
-
-export interface SlicingProps {
-  x?: SlicingDetail;
-  y?: SlicingDetail;
-  z?: SlicingDetail;
-}
-
-export interface SliderProps {
-  x?: SliderRange;
-  y?: SliderRange;
-  z?: SliderRange;
-}
-
-export interface Model3DViewerStyles {
-  wrapper: React.CSSProperties;
-  viewer: React.CSSProperties;
-}
-
-export interface Model3DViewerProps {
-  modelId: number;
-  revisionId: number;
-  assetId?: number;
-  boundingBox?: THREE.Box3;
-  cache?: CacheObject;
-  enableKeyboardNavigation?: boolean;
-  onError?: Callback;
-  onProgress?: Callback;
-  onComplete?: Callback;
-  onReady?: Callback;
-  onClick?: Callback;
-  onCameraChange?: Callback;
-  useDefaultCameraPosition?: boolean;
-  slice?: SlicingProps;
-  slider?: SliderProps;
-  showScreenshotButton?: boolean;
-  onScreenshot?: (url: string) => void;
-  styles?: Model3DViewerStyles;
-}
 interface Model3DViewerState {
   boundingBox?: THREE.Box3;
 }
@@ -80,14 +39,15 @@ const containerStyles = {
   justifyContent: 'spaceAround',
 } as React.CSSProperties;
 
-export class Model3DViewer extends React.Component<Model3DViewerProps> {
+export class Model3DViewer extends Component<Model3DViewerProps> {
   [x: string]: any;
   static defaultProps = {
     enableKeyboardNavigation: true,
+    highlightMappedNodes: true,
     useDefaultCameraPosition: true,
     showScreenshotButton: false,
   };
-  static contextType = ClientSDKContext;
+  static contextType = ClientSDKProxyContext;
 
   static getDerivedStateFromProps(
     props: Model3DViewerProps,
@@ -107,7 +67,8 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
   state: Model3DViewerState = {};
 
-  context!: React.ContextType<typeof ClientSDKContext>;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   disposeCalls: any[] = [];
   divWrapper: RefObject<HTMLDivElement> = React.createRef();
@@ -133,7 +94,8 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
   }
 
   async componentDidMount() {
-    if (!this.context) {
+    this.client = this.context('Model3DViewer')!;
+    if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
@@ -141,7 +103,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       return;
     }
 
-    const sdk = this.context;
+    const sdk = this.client;
 
     const {
       modelId,
@@ -253,7 +215,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
 
     try {
       this.nodes = await this.findMappedNodes();
-      this.highlightNodes();
+      this.highlightMappedNodesIfAllowed();
     } catch (error) {
       if (onError) {
         onError(error);
@@ -504,18 +466,25 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
       return Promise.resolve([]);
     }
 
-    return await this.context!.assetMappings3D.list(modelId, revisionId, {
-      assetId,
-    }).autoPagingToArray();
+    return await this.client.assetMappings3D
+      .list(modelId, revisionId, {
+        assetId,
+      })
+      .autoPagingToArray();
   }
 
   private getRevision() {
     const { modelId, revisionId } = this.props;
 
-    return this.context!.revisions3D.retrieve(modelId, revisionId);
+    return this.client.revisions3D.retrieve(modelId, revisionId);
   }
 
-  private highlightNodes() {
+  private highlightMappedNodesIfAllowed() {
+    const { highlightMappedNodes } = this.props;
+    if (!highlightMappedNodes) {
+      return;
+    }
+
     const { length } = this.nodes;
 
     if (!this.model || !this.viewer) {
@@ -549,7 +518,7 @@ export class Model3DViewer extends React.Component<Model3DViewerProps> {
     const { onComplete, assetId } = this.props;
 
     if (assetId) {
-      this.highlightNodes();
+      this.highlightMappedNodesIfAllowed();
     }
 
     if (onComplete) {

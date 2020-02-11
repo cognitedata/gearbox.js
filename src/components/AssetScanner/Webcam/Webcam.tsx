@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Callback, PureObject, SetVideoRefCallback } from '../../../interfaces';
+import { Callback, PureObject } from '../../../interfaces';
+import { SetVideoRefCallback } from '../interfaces';
 
 function hasGetUserMedia() {
   return !!(
@@ -66,10 +67,10 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
     }
   }
 
-  componentWillUpdate(nextProps: WebcamProps) {
+  componentDidUpdate(prevProps: WebcamProps) {
     if (
-      nextProps.videoSource !== this.props.videoSource ||
-      nextProps.audioSource !== this.props.audioSource
+      prevProps.videoSource !== this.props.videoSource ||
+      prevProps.audioSource !== this.props.audioSource
     ) {
       this.requestUserMedia();
     }

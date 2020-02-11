@@ -4,7 +4,7 @@ exports[`AssetDetailsPanel renders correctly 1`] = `
 <div>
   <dl
     aria-describedby=""
-    className="sc-bdVaJa empyYx"
+    className="sc-htpNat UlplB"
   >
     <dt>
       SOURCE_DB
@@ -38,7 +38,7 @@ exports[`AssetDetailsPanel renders correctly 1`] = `
     </dl>
   </dl>
   <p
-    className="sc-bwzfXH dRhhuI"
+    className="sc-bxivhb gmxaah"
   >
     No data
   </p>
@@ -54,7 +54,7 @@ exports[`AssetDetailsPanel should render description 1`] = `
   </p>
   <dl
     aria-describedby="123"
-    className="sc-bdVaJa empyYx"
+    className="sc-htpNat UlplB"
   >
     <dt>
       SOURCE_DB
@@ -88,7 +88,7 @@ exports[`AssetDetailsPanel should render description 1`] = `
     </dl>
   </dl>
   <p
-    className="sc-bwzfXH dRhhuI"
+    className="sc-bxivhb gmxaah"
   >
     No data
   </p>

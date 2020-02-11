@@ -1,0 +1,293 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { EventsTimeline } from '../EventsTimeline';
+import { EventsTimelineTooltip } from './EventsTimelineTooltip';
+import {
+  events,
+  start,
+  end,
+  decorators,
+  toTimelines,
+  onChange,
+  onHide,
+  onZoom,
+  onZoomStart,
+  onZoomEnd,
+  dateFormatter,
+  dateFormatterCode,
+} from './helper';
+
+<Meta title="Events/EventsTimeline" decorators={decorators} />
+
+# Events Timeline
+
+`EventsTimeline` representing events as blocks on timeline between `start` and `end` date.
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+### Basic usage:
+
+Imports and props:
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import {
+  EventsTimeline,
+  TimelineEvent,
+  EventTimelineView,
+  EventTimelineType
+} from '@cognite/gearbox';
+
+const events: TimelineEvent[] = [
+  {
+    id: 0,
+    view: EventTimelineView.fill,
+    type: EventTimelineType.continuous,
+  },
+  {
+   id: 1,
+    view: EventTimelineView.outline,
+    type: EventTimelineType.continuous,
+  },
+  {
+   id: 2,
+    view: EventTimelineView.outline,
+    type: EventTimelineType.discrete,
+  },
+];
+const end = Date.now();
+const start = end - 60 * 60 * 1000;
+```
+<Preview>
+  <Story name="Basic usage" >
+    <EventsTimeline events={events} start={start} end={end} />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={EventsTimeline} />
+
+### Types
+
+`TimelineEvent`, `TimelineRuler`, `TimelineZoom`, `TimelineSize`, `CogniteEventForTimeline`
+type can be imported from `@cognite/gearbox`:
+
+```typescript
+import {
+  CogniteEventForTimeline,
+  TimelineEvent,
+  TimelineRuler,
+  TimelineZoom,
+  TimelineSize,
+} from '@cognite/gearbox';
+```
+
+## Examples
+
+### Split to timelines
+
+```typescript
+const toTimelines = ({ id }: CogniteEventForTimeline) => {
+  return !id ? '#3b7c14' : id === 1 ? '#ee5d7d' : '#cccccc';
+};
+```
+
+<Preview>
+  <Story name="Split to timelines">
+    <EventsTimeline
+      events={events}
+      start={start}
+      end={end}
+      toTimelines={toTimelines}
+    />
+  </Story>
+</Preview>
+
+### Ruler
+
+```typescript
+const onChange = ({timestamp, timelineEvents}: TimelineRulerChangeProps) =>
+  console.log('Date - ', new Date(timestamp), 'Events – ', timelineEvents);
+
+const onHide = () => console.log('Ruler is hidden');
+```
+
+<Preview>
+  <Story name="Ruler">
+    <EventsTimeline
+      events={events}
+      start={start}
+      end={end}
+      toTimelines={toTimelines}
+      ruler={{
+        show: true,
+        onChange,
+        onHide,
+      }}
+    />
+  </Story>
+</Preview>
+
+### Zoom
+
+Zoom is available using scroll, also you can pan through the timelines.
+
+```typescript
+const onZoomStart = () => console.log('Zoom start');
+
+const onZoom = ([newStart, newEnd]: [number, number]) =>
+  console.log(`Zoom to ${new Date(newStart)} - ${new Date(newEnd)}`);
+
+const onZoomEnd = () => console.log('Zoom end');
+```
+
+<Preview>
+  <Story name="Zoom">
+    <EventsTimeline
+      events={events}
+      start={start}
+      end={end}
+      toTimelines={toTimelines}
+      zoom={{
+        enable: true,
+        onZoomStart,
+        onZoom,
+        onZoomEnd,
+      }}
+    />
+  </Story>
+</Preview>
+
+### Date formatting
+
+```typescript
+import moment from 'moment';
+
+const dateFormatter = (date: number) =>
+  moment(date).format('DD MMM YYYY, hh:mm');
+```
+
+<Preview>
+  <Story name="Date formatting">
+    <EventsTimeline
+      events={events}
+      start={start}
+      end={end}
+      toTimelines={toTimelines}
+      zoom={{
+        enable: true,
+      }}
+      dateFormatter={dateFormatter}
+    />
+  </Story>
+</Preview>
+
+### Hover tooltip
+
+Example provided by custom component `EventsTimelineTooltip`, which implements hover event behaviour.
+
+<Preview>
+  <Story name="Hover tooltip">
+    <EventsTimelineTooltip
+      events={events}
+      start={start}
+      end={end}
+      toTimelines={toTimelines}
+      ruler={{
+        show: true,
+      }}
+    />
+  </Story>
+</Preview>
+
+Code example below:
+
+```jsx
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { EventsTimeline } from '../EventsTimeline';
+import {
+  CogniteEventForTimeline,
+  EventsTimelineProps,
+  TimelineRulerChangeProps,
+} from '../interfaces';
+
+export const EventsTimelineTooltip = (props: EventsTimelineProps) => {
+  const [events, setEvents] = useState<CogniteEventForTimeline[]>([]);
+  const [t, setPosition] = useState([0, 0]);
+
+  const { show, onChange, onHide } = props.ruler || { show: false };
+
+  const rulerChange = ({
+    event,
+    timestamp,
+    timelineEvents,
+  }: TimelineRulerChangeProps) => {
+    if (onChange) {
+      onChange({ event, timestamp, timelineEvents });
+    }
+
+    const { offsetX, offsetY } = event.nativeEvent as MouseEvent;
+
+    setEvents(timelineEvents ? timelineEvents : []);
+    setPosition([offsetX, offsetY]);
+  };
+
+  const rulerHide = () => {
+    if (onHide) {
+      onHide();
+    }
+    setEvents([]);
+  };
+
+  return (
+    <Wrapper>
+      <EventsTimeline
+        {...props}
+        ruler={{
+          show,
+          onHide: rulerHide,
+          onChange: rulerChange,
+        }}
+      />
+      {!!events.length && (
+        <Tooltip style={{ transform: `translate(${t[0]}px, ${t[1]}px)` }}>
+          {renderEvents(events)}
+        </Tooltip>
+      )}
+    </Wrapper>
+  );
+};
+
+const renderEvents = (events: CogniteEventForTimeline[]) =>
+  events.map(e => (
+    <Event key={e.externalId}>
+      <Line style={{ color: e.color || '#000' }}>{e.externalId || e.type}</Line>
+      <Line>{e.description}</Line>
+    </Event>
+  ));
+
+const Wrapper = styled.div`
+  position: relative;
+`;
+const Tooltip = styled.div`
+  position: absolute;
+  top: 0;
+  left: 15px;
+  pointer-events: none;
+  padding: 5px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 4px;
+`;
+const Event = styled.div`
+  margin-bottom: 5px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+const Line = styled.p`
+  margin: 0;
+`;
+```

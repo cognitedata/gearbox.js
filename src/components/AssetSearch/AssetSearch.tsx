@@ -1,54 +1,39 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { Asset, AssetSearchFilter } from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 import { AssetsAPI } from '@cognite/sdk/dist/src/resources/assets/assetsApi';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
-import { ClientSDKContext } from '../../context/clientSDKContext';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 
-import { ApiQuery, Callback, PureObject } from '../../interfaces';
-import { Search, SearchStyles as Styles } from '../common/Search/Search';
-
-export type AssetSearchStyles = Styles;
-
-type LiveSearchSelect = (asset: Asset) => void;
-type SearchResultCallback = (assets: Asset[]) => void;
+import { ApiQuery, PureObject } from '../../interfaces';
+import { Search } from '../common/Search/Search';
+import { AssetSearchProps } from './interfaces';
 
 export const defaultStrings: PureObject = {
   searchPlaceholder: 'Search for an asset',
   emptyLiveSearch: 'Nothing found',
 };
 
-export interface AssetSearchProps {
-  onLiveSearchSelect?: LiveSearchSelect;
-  showLiveSearchResults?: boolean;
-  onError?: Callback;
-  strings?: PureObject;
-  rootAssetSelect: boolean;
-  advancedSearch: boolean;
-  styles?: AssetSearchStyles;
-  onSearchResult?: SearchResultCallback;
-}
-
 interface AssetSearchState {
   items: Asset[];
   loading: boolean;
 }
 
-export class AssetSearch extends React.Component<
-  AssetSearchProps,
-  AssetSearchState
-> {
+export class AssetSearch extends Component<AssetSearchProps, AssetSearchState> {
+  static displayName = 'AssetSearch';
   static defaultProps = {
     rootAssetSelect: false,
     advancedSearch: false,
     showLiveSearchResults: true,
   };
 
-  static contextType = ClientSDKContext;
-  context!: React.ContextType<typeof ClientSDKContext>;
+  static contextType = ClientSDKProxyContext;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
   assetsApi!: AssetsAPI;
 
   constructor(props: AssetSearchProps) {
@@ -66,7 +51,8 @@ export class AssetSearch extends React.Component<
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
-    this.assetsApi = this.context.assets;
+    this.client = this.context(AssetSearch.displayName || '')!;
+    this.assetsApi = this.client.assets;
   }
 
   generateSearchQuery = (query: ApiQuery) => ({

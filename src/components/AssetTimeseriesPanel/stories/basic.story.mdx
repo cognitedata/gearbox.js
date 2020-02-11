@@ -1,0 +1,130 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { AssetTimeseriesPanel } from '../AssetTimeseriesPanel';
+import { decorators, customStyle, metaOptions, handleAssetTimeseriesLoaded, ComponentProps } from './helper';
+
+<Meta title="Assets/AssetTimeseriesPanel" decorators={decorators} />
+
+# Asset Timeseries Panel
+
+This component loads meta information about all timeseries related to the asset and shows them in the list.
+Each item in the list can be expanded showing description, timeseries chart, current data point and metadata.
+The component is used as one of the panes in `AssetMeta` component.
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+### Basic usage:
+
+Imports:
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { AssetTimeseriesPanel } from '@cognite/gearbox';
+
+```
+
+<Preview>
+  <Story name="Basic usage" >
+    <AssetTimeseriesPanel assetId={4650652196144007} />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={ComponentProps} />
+
+### Types
+
+#### TimeseriesListParams
+
+This type can be imported from `@cognite/sdk`:
+
+```typescript
+import { TimeseriesListParams } from `@cognite/sdk`;
+```
+#### AssetTimeseriesPanelStyles
+
+This interface defines inline CSS styles for inner elements of `AssetTimeseriesPanel` component.
+
+```typescript
+import { AssetTimeseriesPanelStyles } from '@cognite/gearbox';
+```
+
+See more details in AssetMeta component documentation.
+
+## Examples
+
+### Custom spinner
+
+<Preview>
+  <Story name="Custom spinner">
+    <AssetTimeseriesPanel
+      assetId={4650652196144007}
+      customSpinner={<div>Loading...</div>}
+    />
+  </Story>
+</Preview>
+
+### Custom styles
+
+```typescript
+const customStyle = {
+  wrapper: {
+    border: '2px red solid',
+    width: '70%',
+  },
+  timeseriesContainer: {
+    backgroundColor: '#efefef',
+  },
+};
+```
+
+<Preview>
+  <Story name="Custom styles">
+    <AssetTimeseriesPanel
+      assetId={4650652196144007}
+      styles={customStyle}
+    />
+  </Story>
+</Preview>
+
+### Custom TimeSeriesChartMeta
+
+This component takes all optional props of TimeseriesChartMeta component. These props are passed to every instance of TimeseriesChartMeta in the list of timeseries. See TimeseriesChartMeta component for more details.
+
+```typescript
+const metaOptions = {
+  defaultTimePeriod: 'lastYear',
+  liveUpdate: false,
+  showChart: true,
+  showDescription: false,
+  showDatapoint: true,
+  showMetadata: false,
+  showPeriods: true,
+};
+```
+<Preview>
+  <Story name="Custom TimeSeriesChartMeta">
+    <AssetTimeseriesPanel
+      assetId={4650652196144007}
+      {...metaOptions}
+    />
+  </Story>
+</Preview>
+
+### Handle callbacks
+
+```typescript
+import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+
+const handleAssetTimeseriesLoaded = (files: GetTimeSeriesMetadataDTO[]) => console.log(files);
+```
+<Preview>
+  <Story name="Handle callback">
+    <AssetTimeseriesPanel
+      assetId={4650652196144007}
+      onAssetTimeseriesLoaded={handleAssetTimeseriesLoaded}
+    />
+  </Story>
+</Preview>

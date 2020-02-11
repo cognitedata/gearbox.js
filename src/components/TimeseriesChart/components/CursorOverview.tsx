@@ -2,10 +2,10 @@ import moment from 'moment';
 import numeral from 'numeral';
 import React from 'react';
 import styled from 'styled-components';
-import { ChartRulerConfig, ChartRulerPoint } from '../TimeseriesChart';
+import { ChartRulerConfig, ChartRulerPoint } from '../interfaces';
 
 const Container = styled.div`
-  position: fixed;
+  position: relative;
   top: 0;
   left: 0;
   z-index: 100;
@@ -14,7 +14,7 @@ const Container = styled.div`
 const Overview = styled.div`
   position: absolute;
   top: 0;
-  margin-left: -180px;
+  margin-left: -150px;
   width: 140px;
   background: #fff;
   padding: 8px 16px 10px;
@@ -28,7 +28,7 @@ const Overview = styled.div`
 const DateContainer = styled.div`
   position: absolute;
   top: 0;
-  margin-left: -260px;
+  margin-left: -230px;
   width: 220px;
   color: black;
   background: #fff;
@@ -63,6 +63,7 @@ interface CursorOverviewState {
   overviewContainer: HTMLElement | null;
 }
 interface CursorOverviewProps {
+  wrapperRef: HTMLElement | null;
   series: any;
   hiddenSeries: { [id: number]: boolean };
   ruler: ChartRulerConfig;
@@ -75,7 +76,6 @@ export class CursorOverview extends React.Component<
   CursorOverviewState
 > {
   overviewContainer: HTMLElement | null = null;
-
   dateContainer: HTMLElement | null = null;
 
   constructor(props: CursorOverviewProps) {
@@ -95,23 +95,26 @@ export class CursorOverview extends React.Component<
   };
 
   handleMouseMove = (e: MouseEvent) => {
+    const { wrapperRef } = this.props;
+    if (!wrapperRef) {
+      return;
+    }
+
     if (this.overviewContainer) {
       this.overviewContainer.setAttribute(
         'style',
-        `transform: translate(${e.clientX + 16}px, ${e.clientY -
+        `transform: translate(${e.offsetX}px,
+        ${e.offsetY -
           this.overviewContainer.getBoundingClientRect().height / 2}px)`
       );
     }
 
-    const linesContainer = document.getElementsByClassName('lines-container');
-    if (this.dateContainer && linesContainer.length !== 0) {
-      const lineChartRect = linesContainer[0].getBoundingClientRect();
+    if (this.dateContainer && wrapperRef) {
+      const lineChartRect = wrapperRef.getBoundingClientRect();
       this.dateContainer.setAttribute(
         'style',
-        `transform: translate(${e.clientX + 16}px, ${lineChartRect.top +
-          lineChartRect.height -
-          this.dateContainer.clientHeight -
-          16}px)`
+        `transform: translate(${e.offsetX}px,
+        ${lineChartRect.height - this.dateContainer.clientHeight - 55}px)`
       );
     }
   };
@@ -165,18 +168,10 @@ export class CursorOverview extends React.Component<
 
     return (
       <Container>
-        <Overview
-          ref={ref => {
-            this.overviewContainer = ref;
-          }}
-        >
+        <Overview ref={ref => (this.overviewContainer = ref)}>
           {series && series.map(renderTag)}
         </Overview>
-        <DateContainer
-          ref={ref => {
-            this.dateContainer = ref;
-          }}
-        >
+        <DateContainer ref={ref => (this.dateContainer = ref)}>
           {timeLabelFormatted}
         </DateContainer>
       </Container>

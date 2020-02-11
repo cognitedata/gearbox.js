@@ -1,26 +1,27 @@
-import { List3DNodesQuery, RevealNode3D } from '@cognite/sdk';
+import { CogniteClient, List3DNodesQuery, RevealNode3D } from '@cognite/sdk';
 import { Tree } from 'antd';
 import {
   AntTreeNode,
   AntTreeNodeMouseEvent,
   AntTreeNodeProps,
 } from 'antd/lib/tree';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
-import { ClientSDKContext } from '../../context/clientSDKContext';
-import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import {
-  NodeTreeProps,
-  OnSelectNodeTreeParams,
-  TreeNodeData,
-  TreeNodeType,
-} from '../../interfaces';
+import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
+import { withDefaultTheme } from '../../hoc';
 import { defaultTheme } from '../../theme/defaultTheme';
 import {
   applyThemeFontFamily,
   applyThemeFontSize,
   applyThemeListHighlight,
 } from '../../utils/theme';
+import {
+  NodeTreeProps,
+  OnSelectNodeTreeParams,
+  TreeNodeData,
+  TreeNodeType,
+} from './interfaces';
 
 // TODO GENERAL
 const { TreeNode } = Tree;
@@ -38,8 +39,30 @@ interface NodeTreeState {
   loadedKeys: string[];
 }
 
-class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
-  static contextType = ClientSDKContext;
+const cursorApiRequest = async (
+  sdk: CogniteClient,
+  modelId: number,
+  revisionId: number,
+  params: List3DNodesQuery,
+  data: RevealNode3D[] = []
+): Promise<RevealNode3D[]> => {
+  const result = await sdk.viewer3D.listRevealNodes3D(
+    modelId,
+    revisionId,
+    params
+  );
+  const { nextCursor: cursor } = result;
+  if (result.nextCursor) {
+    return cursorApiRequest(sdk, modelId, revisionId, { ...params, cursor }, [
+      ...data,
+      ...result.items,
+    ]);
+  }
+  return [...data, ...result.items];
+};
+
+class ThreeDNodeTree extends Component<NodeTreeProps, NodeTreeState> {
+  static contextType = ClientSDKProxyContext;
   static defaultProps = {
     modelId: 0,
     revisionId: 0,
@@ -62,7 +85,8 @@ class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
     return path.reduce((acc, i) => ({ ...acc, [i]: true }), initial);
   }
 
-  context!: React.ContextType<typeof ClientSDKContext>;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   constructor(props: NodeTreeProps) {
     super(props);
@@ -80,7 +104,13 @@ class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
   }
 
   async componentDidMount() {
-    const threeDNodes = await this.context!.viewer3D.listRevealNodes3D(
+    this.client = this.context(ThreeDNodeTreeWithTheme.displayName || '')!;
+    if (!this.client) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
+
+    const threeDNodes = await this.client.viewer3D.listRevealNodes3D(
       this.state.modelId,
       this.state.revisionId,
       { depth: 1 }
@@ -244,7 +274,7 @@ class ThreeDNodeTree extends React.Component<NodeTreeProps, NodeTreeState> {
     params: List3DNodesQuery,
     data: RevealNode3D[] = []
   ): Promise<RevealNode3D[]> => {
-    const result = await this.context!.viewer3D.listRevealNodes3D(
+    const result = await this.client.viewer3D.listRevealNodes3D(
       modelId,
       revisionId,
       params
@@ -271,7 +301,8 @@ const TreeNodeWrapper = styled(TreeNode)<AntTreeNodeProps>`
   }
 `;
 
-const Component = withDefaultTheme(ThreeDNodeTree);
-Component.displayName = 'ThreeDNodeTree';
+const ThreeDNodeTreeWithTheme = withDefaultTheme(ThreeDNodeTree);
+ThreeDNodeTreeWithTheme.displayName = 'ThreeDNodeTree';
 
-export { Component as ThreeDNodeTree };
+export { ThreeDNodeTreeWithTheme as ThreeDNodeTree };
+export { ThreeDNodeTree as ThreeDNodeTreeWithoutTheme };

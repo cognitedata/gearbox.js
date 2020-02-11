@@ -6,10 +6,9 @@ import {
   CropSize,
   EmptyCallback,
   PureObject,
-  SetVideoRefCallback,
 } from '../../../interfaces';
 import { LoadingOverlay } from '../../common/LoadingOverlay/LoadingOverlay';
-import { ButtonRenderProp } from '../AssetScanner';
+import { ButtonRenderProp, SetVideoRefCallback } from '../interfaces';
 import { Webcam } from '../Webcam/Webcam';
 import { WebcamCropPlaceholder } from '../WebcamCropPlaceholder/WebcamCropPlaceholder';
 import { WebcamScreenshot } from '../WebcamScreenshot/WebcamScreenshot';

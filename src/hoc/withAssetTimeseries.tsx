@@ -1,34 +1,23 @@
-import { GetTimeSeriesMetadataDTO, TimeseriesFilter } from '@cognite/sdk';
+import { CogniteClient, GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
-import { ERROR_NO_SDK_CLIENT } from '../constants/errorMessages';
+import {
+  ERROR_API_UNEXPECTED_RESULTS,
+  ERROR_NO_SDK_CLIENT,
+} from '../constants/errorMessages';
 import { SDK_LIST_LIMIT } from '../constants/sdk';
-import { ClientSDKContext } from '../context/clientSDKContext';
+import { ClientSDKProxyContext } from '../context/clientSDKProxyContext';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
   connectPromiseToUnmountState,
 } from '../utils/promise';
-
-export interface WithAssetTimeseriesDataProps {
-  assetTimeseries: GetTimeSeriesMetadataDTO[];
-}
-
-export interface WithAssetTimeseriesProps {
-  assetId: number;
-  queryParams?: TimeseriesFilter;
-  customSpinner?: React.ReactNode;
-  onAssetTimeseriesLoaded?: (
-    assetTimeseries: GetTimeSeriesMetadataDTO[]
-  ) => void;
-}
-
-export interface WithAssetTimeseriesState {
-  isLoading: boolean;
-  assetTimeseries: GetTimeSeriesMetadataDTO[] | null;
-  assetId: number;
-}
+import {
+  WithAssetTimeseriesDataProps,
+  WithAssetTimeseriesProps,
+  WithAssetTimeseriesState,
+} from './interfaces/WithAssetTimeseriesInterfaces';
 
 export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
   WrapperComponent: React.ComponentType<P>
@@ -39,7 +28,7 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
       WithAssetTimeseriesState
     >
     implements ComponentWithUnmountState {
-    static contextType = ClientSDKContext;
+    static contextType = ClientSDKProxyContext;
 
     static getDerivedStateFromProps(
       props: P & WithAssetTimeseriesProps,
@@ -55,7 +44,8 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
 
       return null;
     }
-    context!: React.ContextType<typeof ClientSDKContext>;
+    context!: React.ContextType<typeof ClientSDKProxyContext>;
+    client!: CogniteClient;
     isComponentUnmounted = false;
 
     constructor(props: P & WithAssetTimeseriesProps) {
@@ -69,6 +59,11 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
     }
 
     componentDidMount() {
+      this.client = this.context(WrapperComponent.displayName || '')!;
+      if (!this.client) {
+        console.error(ERROR_NO_SDK_CLIENT);
+        return;
+      }
       this.loadAssetTimeseries();
     }
 
@@ -83,15 +78,15 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
     }
 
     async loadAssetTimeseries() {
-      if (!this.context || !this.context.timeseries) {
-        console.error(ERROR_NO_SDK_CLIENT);
+      if (!this.client.timeseries) {
+        console.error(ERROR_API_UNEXPECTED_RESULTS);
         return;
       }
       try {
         const { assetId, queryParams } = this.props;
         const assetTimeseries = ((await connectPromiseToUnmountState(
           this,
-          this.context.timeseries
+          this.client.timeseries
             .list({
               limit: SDK_LIST_LIMIT,
               ...queryParams,

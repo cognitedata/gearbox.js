@@ -1,0 +1,170 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { AssetSearch } from '../AssetSearch';
+import {
+  decorators,
+  onLiveSearchSelect,
+  strings,
+  onError,
+  styles,
+  onSearchResult,
+  heightProp,
+} from './helper';
+
+<Meta title="Assets/AssetSearch" decorators={decorators} />
+
+# Asset Search
+
+Use for assets search via name property.
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+### Basic usage:
+
+Imports:
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { AssetSearch } from '@cognite/gearbox';
+import { Asset } from '@cognite/sdk';
+```
+
+```typescript
+const onLiveSearchSelect = (asset: Asset) => console.log(asset);
+```
+
+<Preview>
+  <Story name="Basic usage" height = {heightProp}>
+    <AssetSearch onLiveSearchSelect={onLiveSearchSelect} />
+  </Story>
+</Preview>
+
+## Available props
+
+<Props of={AssetSearch} />
+
+### Types:
+
+#### AssetSearchStyles
+This interface defines inline CSS styles for inner elements of `AssetSearch` component.
+
+```typescript
+import { AssetSearchStyles } from '@cognite/gearbox';
+```
+
+See more details in `Custom Styles` example.
+
+## Examples
+
+### Empty results
+
+```typescript
+export const strings = {
+  searchPlaceholder: 'Asset name',
+  emptyLiveSearch: 'No results',
+};
+```
+
+**Test case:** please type *empty* in search field.
+
+<Preview>
+  <Story name="Empty results" height = {heightProp}>
+    <AssetSearch
+      onLiveSearchSelect={onLiveSearchSelect}
+      strings={strings}
+    />
+  </Story>
+</Preview>
+
+### Error handling
+
+```typescript
+const onError = (error: any): void => console.log(error);
+```
+
+**Test case:** please type *error* in search field.
+
+<Preview>
+  <Story name="Error handling" height = {heightProp} >
+    <AssetSearch
+      onLiveSearchSelect={onLiveSearchSelect}
+      onError={onError}
+    />
+  </Story>
+</Preview>
+
+### Root asset select
+
+<Preview>
+  <Story name="Root asset select" height = {heightProp}>
+    <AssetSearch
+      onLiveSearchSelect={onLiveSearchSelect}
+      rootAssetSelect={true}
+    />
+  </Story>
+</Preview>
+
+### Advanced search
+
+<Preview>
+  <Story name="Advanced search" height = {heightProp}>
+    <AssetSearch
+      onLiveSearchSelect={onLiveSearchSelect}
+      advancedSearch={true}
+    />
+  </Story>
+</Preview>
+
+### Custom style
+
+```typescript
+import { AssetSearchStyles } from '@cognite/gearbox';
+
+const styles: AssetSearchStyles = {
+  advancedSearchButton: { backgroundColor: 'red' },
+  rootAssetSelect: { width: '40%' },
+  searchResultList: {
+    container: {
+      backgroundColor: 'purple',
+      marginTop: '20px',
+    },
+    listItem: { marginTop: '10px' },
+  },
+  advancedSearch: {
+    modalBody: { backgroundColor: 'green' },
+    searchButton: { backgroundColor: 'teal' },
+    clearButton: { backgroundColor: 'magenta' },
+    searchForm: {
+      container: { backgroundColor: 'gray' },
+      addMoreMetadataButton: { backgroundColor: 'lightblue' },
+    },
+  },
+};
+```
+
+<Preview>
+  <Story name="Custom style" height = {heightProp}>
+    <AssetSearch
+      onLiveSearchSelect={onLiveSearchSelect}
+      advancedSearch={true}
+      rootAssetSelect={true}
+      styles={styles}
+    />
+  </Story>
+</Preview>
+
+### Handle search results
+
+```typescript
+const onSearchResult = (assets: Asset[]): void => console.log(assets);
+```
+
+<Preview>
+  <Story name="Handle search results" height = {heightProp}>
+    <AssetSearch
+      showLiveSearchResults={false}
+      onSearchResult={onSearchResult}
+    />
+  </Story>
+</Preview>

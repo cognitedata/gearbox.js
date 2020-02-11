@@ -1,18 +1,11 @@
-import { Asset } from '@cognite/sdk';
-import React from 'react';
+import { Asset, CogniteClient } from '@cognite/sdk';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 
 import { ocrRecognize } from '../../api';
-import { ClientSDKContext } from '../../context/clientSDKContext';
-import {
-  Callback,
-  CropSize,
-  EmptyCallback,
-  OcrRequest,
-  OnAssetListCallback,
-  PureObject,
-  SetVideoRefCallback,
-} from '../../interfaces';
+import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
+import { CropSize, EmptyCallback } from '../../interfaces';
 import {
   notification,
   ocrAssetFind,
@@ -28,7 +21,13 @@ import {
   scaleCropSizeToVideoResolution,
   scaleDomToVideoResolution,
 } from '../../utils/utils';
-import { WebcamScanner } from './WebcamScanner/WebcamScanner';
+import {
+  ASNotification,
+  ASNotifyTypes,
+  AssetScannerProps,
+  SetVideoRefCallback,
+} from './interfaces';
+import { defaultStrings, WebcamScanner } from './WebcamScanner/WebcamScanner';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -38,69 +37,27 @@ const Wrapper = styled.div`
   flex-direction: row;
 `;
 
-export enum ASNotifyTypes {
-  recognizeSuccess = 'recognizeSuccess',
-  recognizeFails = 'recognizeFails',
-  assetsFind = 'assetsFind',
-  assetsEmpty = 'assetsEmpty',
-  errorVideoAccess = 'errorVideoAccess',
-  errorOccurred = 'errorOccurred',
-}
-
-type ASNotification = (type: ASNotifyTypes) => any;
-
-export type ButtonRenderProp = (
-  onCapture: Callback,
-  isReady: boolean
-) => React.ReactNode;
-
-export interface AssetScannerStyles {
-  button: React.CSSProperties;
-}
-
-export interface AssetScannerProps {
-  ocrRequest: (ocrParams: OcrRequest) => Promise<string[]>;
-  image?: string;
-  ocrKey?: string;
-  button?: ButtonRenderProp;
-  extractOcrStrings?: (ocrResult: any) => string[];
-  enableNotification?: boolean;
-  customNotification?: ASNotification;
-  onImageRecognizeStart?: (image: string) => void;
-  onImageRecognizeFinish?: (strings: string[] | null) => void;
-  onImageRecognizeEmpty?: Callback;
-  onAssetFetchResult?: OnAssetListCallback;
-  onStartLoading?: EmptyCallback;
-  onEndLoading?: EmptyCallback;
-  onOcrError?: Callback;
-  onError?: Callback;
-  onImageReset?: Callback;
-  imageAltText?: string;
-  styles?: AssetScannerStyles;
-  strings?: PureObject;
-  cropSize?: CropSize;
-  webcamCropOverlay?: React.ComponentType;
-  getAssetsHandlerCustom?: (strings: string[]) => Promise<Asset[]>;
-}
-
 interface AssetScannerState {
   isLoading: boolean;
   ready: boolean;
   imageSrc: string;
 }
 
-export class AssetScanner extends React.Component<
+export class AssetScanner extends Component<
   AssetScannerProps,
   AssetScannerState
 > {
+  static displayName = 'AssetScanner';
   static defaultProps = {
     ocrRequest: ocrRecognize,
     enableNotification: false,
+    strings: defaultStrings,
   };
 
-  static contextType = ClientSDKContext;
+  static contextType = ClientSDKProxyContext;
 
-  context!: React.ContextType<typeof ClientSDKContext>;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   notification: ASNotification = this.prepareNotifications();
 
@@ -154,6 +111,12 @@ export class AssetScanner extends React.Component<
   }
 
   componentDidMount() {
+    this.client = this.context(AssetScanner.displayName || '')!;
+    if (!this.client) {
+      console.error(ERROR_NO_SDK_CLIENT);
+      return;
+    }
+
     if (this.props.image) {
       this.capture();
     }
@@ -330,11 +293,13 @@ export class AssetScanner extends React.Component<
   }
 
   private getAssetList(query: string): Promise<Asset[]> {
-    return this.context!.assets.list({
-      filter: {
-        name: query,
-      },
-    }).autoPagingToArray();
+    return this.client.assets
+      .list({
+        filter: {
+          name: query,
+        },
+      })
+      .autoPagingToArray();
   }
 
   private getImage(): Promise<string> {

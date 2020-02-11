@@ -1,29 +1,19 @@
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 import React from 'react';
 import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
 import { ERROR_NO_SDK_CLIENT } from '../constants/errorMessages';
-import { ClientSDKContext } from '../context/clientSDKContext';
+import { ClientSDKProxyContext } from '../context/clientSDKProxyContext';
 import {
   CanceledPromiseException,
   ComponentWithUnmountState,
   connectPromiseToUnmountState,
 } from '../utils/promise';
-
-export interface WithTimeseriesDataProps {
-  timeseries: GetTimeSeriesMetadataDTO;
-}
-
-export interface WithTimeseriesProps {
-  timeseriesId: number;
-  customSpinner?: React.ReactNode;
-}
-
-export interface WithTimeseriesState {
-  isLoading: boolean;
-  timeseries: GetTimeSeriesMetadataDTO | null;
-  timeseriesId: number;
-}
+import {
+  WithTimeseriesDataProps,
+  WithTimeseriesProps,
+  WithTimeseriesState,
+} from './interfaces';
 
 export const withTimeseries = <P extends WithTimeseriesDataProps>(
   WrapperComponent: React.ComponentType<P>
@@ -34,7 +24,7 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
       WithTimeseriesState
     >
     implements ComponentWithUnmountState {
-    static contextType = ClientSDKContext;
+    static contextType = ClientSDKProxyContext;
     static getDerivedStateFromProps(
       props: P & WithTimeseriesProps,
       state: WithTimeseriesState
@@ -50,7 +40,8 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
       return null;
     }
     isComponentUnmounted = false;
-    context!: React.ContextType<typeof ClientSDKContext>;
+    context!: React.ContextType<typeof ClientSDKProxyContext>;
+    client!: CogniteClient;
     constructor(props: P & WithTimeseriesProps) {
       super(props);
 
@@ -62,7 +53,8 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
     }
 
     componentDidMount() {
-      if (!this.context) {
+      this.client = this.context(WrapperComponent.displayName || '')!;
+      if (!this.client) {
         console.error(ERROR_NO_SDK_CLIENT);
         return;
       }
@@ -83,7 +75,7 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
       try {
         const timeseries = await connectPromiseToUnmountState(
           this,
-          this.context!.timeseries.retrieve([{ id: this.props.timeseriesId }])
+          this.client.timeseries.retrieve([{ id: this.props.timeseriesId }])
         );
         this.setState({
           isLoading: false,

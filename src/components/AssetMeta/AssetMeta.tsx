@@ -1,20 +1,13 @@
-import { Asset } from '@cognite/sdk';
+import { Asset, CogniteClient } from '@cognite/sdk';
 import { Tabs } from 'antd';
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
 } from '../../constants/errorMessages';
-import { ClientSDKContext } from '../../context/clientSDKContext';
-import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import {
-  AnyIfEmpty,
-  AssetDocumentsPanelStyles,
-  AssetEventsPanelStyles,
-  AssetPanelType,
-} from '../../interfaces';
-import { MetaDocProps } from '../../interfaces/DocumentTypes';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
+import { withDefaultTheme } from '../../hoc';
 import { defaultTheme } from '../../theme/defaultTheme';
 import {
   CanceledPromiseException,
@@ -23,38 +16,11 @@ import {
 } from '../../utils/promise';
 import { AssetDetailsPanel } from '../AssetDetailsPanel';
 import { AssetDocumentsPanel } from '../AssetDocumentsPanel';
-import { AssetEventsPanel, MetaEventsProps } from '../AssetEventsPanel';
-import {
-  AssetTimeseriesPanel,
-  AssetTimeseriesPanelStyles,
-  MetaTimeseriesProps,
-} from '../AssetTimeseriesPanel';
-import { MetaDescriptionListProps } from '../DescriptionList';
+import { AssetEventsPanel } from '../AssetEventsPanel';
+import { AssetTimeseriesPanel } from '../AssetTimeseriesPanel';
+import { AssetMetaProps, AssetPanelType } from './interfaces';
 
 const { TabPane } = Tabs;
-
-export interface AssetMetaStyles {
-  header?: React.CSSProperties;
-  emptyTab?: React.CSSProperties;
-  details?: React.CSSProperties;
-  timeseries?: AssetTimeseriesPanelStyles;
-  documents?: AssetDocumentsPanelStyles;
-  events?: AssetEventsPanelStyles;
-}
-
-interface AssetMetaProps {
-  assetId: number;
-  tab?: string;
-  docsProps?: MetaDocProps;
-  eventProps?: MetaEventsProps;
-  timeseriesProps?: MetaTimeseriesProps;
-  detailsProps?: MetaDescriptionListProps;
-  hidePanels?: AssetPanelType[];
-  onPaneChange?: (key: string) => void;
-  styles?: AssetMetaStyles;
-  customSpinner?: React.ReactNode;
-  theme?: AnyIfEmpty<{}>;
-}
 
 interface AssetMetaState {
   assetId: number;
@@ -62,9 +28,9 @@ interface AssetMetaState {
   isLoading: boolean;
 }
 
-class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
+class AssetMeta extends Component<AssetMetaProps, AssetMetaState>
   implements ComponentWithUnmountState {
-  static contextType = ClientSDKContext;
+  static contextType = ClientSDKProxyContext;
   static defaultProps = {
     theme: { ...defaultTheme },
   };
@@ -82,7 +48,8 @@ class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
       return null;
     }
   }
-  context!: React.ContextType<typeof ClientSDKContext>;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   isComponentUnmounted = false;
 
@@ -98,7 +65,8 @@ class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
   componentDidMount() {
     // @ts-ignore
     if (!this.includesPanel('details') && this.props.assetId) {
-      if (!this.context) {
+      this.client = this.context(ComponentWithTheme.displayName || '')!;
+      if (!this.client) {
         console.error(ERROR_NO_SDK_CLIENT);
         return;
       }
@@ -123,7 +91,7 @@ class AssetMeta extends React.Component<AssetMetaProps, AssetMetaState>
     try {
       const assets = await connectPromiseToUnmountState(
         this,
-        this.context!.assets.retrieve([{ id: assetId }])
+        this.client.assets.retrieve([{ id: assetId }])
       );
       if (!assets || assets.length !== 1) {
         console.error(ERROR_API_UNEXPECTED_RESULTS);
@@ -247,7 +215,8 @@ const AssetMetaHeader = styled.div<{ isLoading: boolean }>`
   visibility: ${({ isLoading }) => (isLoading ? 'hidden' : 'visible')};
 `;
 
-const Component = withDefaultTheme(AssetMeta);
-Component.displayName = 'AssetMeta';
+const ComponentWithTheme = withDefaultTheme(AssetMeta);
+ComponentWithTheme.displayName = 'AssetMeta';
 
-export { Component as AssetMeta };
+export { AssetMeta as AssetMetaWithoutTheme };
+export { ComponentWithTheme as AssetMeta };

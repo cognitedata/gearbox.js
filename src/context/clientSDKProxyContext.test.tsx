@@ -6,7 +6,7 @@ import { AssetTree } from '../components/AssetTree';
 import { ClientSDKProvider } from '../components/ClientSDKProvider';
 import { TimeseriesPreview } from '../components/TimeseriesPreview';
 import { version } from '../constants/replacedStrings';
-import { MockCogniteClient } from '../mocks/mockSdk';
+import { MockCogniteClient } from '../mocks';
 
 configure({ adapter: new Adapter() });
 

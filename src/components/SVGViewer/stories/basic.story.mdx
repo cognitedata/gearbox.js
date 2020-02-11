@@ -1,0 +1,368 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { SVGViewer } from '../SVGViewer';
+import {
+    decorators,
+    onCancel,
+    metadataClassesConditions,
+    SearchContainer,
+    zoomCallback,
+    handleSearchChange,
+    ClassesContainer,
+    handleClick,
+    isCurrentAsset,
+    DocumentIdComponentProps,
+    FileComponentProps
+} from './helper';
+import { CUSTOM_SVG_FILE as svg_file } from '../../../mocks/svg-viewer';
+
+<Meta title='Others/SVGViewer' decorators={decorators} />
+
+# SVG-viewer
+
+SVG-viewer is a component which visualise `.svg`-documents in a user interactive way.
+
+SVG-viewer provides the following functionality:
+- Display documents with zoom and panning functionality for both desktop and mobile
+- Highlight equipment and provide callbacks for further interaction
+- Locate and zoom onto equipment in the document
+- Search by equipment with locating and zooming results
+
+**NOTE:** The component should have `ClientSDKProvider` as a parent component in react component tree.
+
+### Basic usage:
+
+Imports:
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+```
+
+<Preview>
+  <Story name='Basic usage'>
+<div style={{height: '100vh'}}>
+    <SVGViewer documentId={5185355395511590} />
+</div>
+  </Story>
+</Preview>
+
+## Available props
+
+### Required
+Component has two ways of initialization. You should choose one of them to provide component data to visualise svg documents
+
+**via** `documentId`
+<Props of={DocumentIdComponentProps} />
+
+**via** `file`
+<Props of={FileComponentProps} />
+
+### Optional
+
+<Props of={SVGViewer} />
+
+## Types
+
+### Conditions
+
+This type describes the parameters the `metadataClassesConditions` function is called with.
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { Conditions } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+interface Conditions {
+  condition: (metadataNode: Element) => boolean;
+  className: string;
+}
+
+```
+
+### ZoomCenter
+
+This type describes parameter passed to `handleAnimateZoom` handler.
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { ZoomCenter } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+interface ZoomCenter {
+  x: number;
+  y: number;
+}
+
+```
+
+## CustomClassNames
+
+This type describes the parameters the `handleAnimateZoom` function is called with.
+The type can be imported from `@cognite/gearbox`:
+
+```typescript
+import { CustomClassNames } from '@cognite/gearbox';
+```
+
+Definition:
+
+```typescript
+interface CustomClassNames {
+  searchResults: string;
+  currentSearchResult: string;
+  currentAsset: string;
+}
+
+```
+
+### Handle item click
+
+When user clicks on any equipment this callback will be called with `HTMLElement` passed
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+export const handleClick = (node: HTMLElement): void => { /* ... */ };
+```
+
+<Preview>
+  <Story name='Handle item click'>
+<div style={{height: '100vh'}}>
+    <SVGViewer
+        documentId={5185355395511590}
+        handleItemClick={handleClick}
+    />
+</div>
+  </Story>
+</Preview>
+
+
+### Handle cancel
+
+Close button will be displayed on the top bar if `handleCancel` is set
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+const onCancel = () => { /* ... */ };
+```
+
+<Preview>
+  <Story name='Handle cancel'>
+<div style={{height: '100vh'}}>
+    <SVGViewer
+        documentId={5185355395511590}
+        handleCancel={onCancel}
+    />
+</div>
+  </Story>
+</Preview>
+
+
+### Specify custom classes for equipment
+
+`metadataClassesConditions` callback is responsible for listing of classes and conditions on when they should be applied for equipment
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+const ClassesContainer = styled.div`
+    .checklist-asset {
+        outline: auto 2px #3838ff;
+        transition: all 0.2s ease;
+        > {
+        text {
+            stroke: #3838ff;
+            fill: #3838ff;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        path {
+            stroke: #3838ff;
+            transition: all 0.2s ease;
+        }
+        }
+        &:hover,
+        &:focus {
+        outline: auto 2px #36a2c2;
+        }
+    }
+`;
+
+const metadataClassesConditions = [{
+    condition: (metadata: Element) => (metadata.textContent || '').replace(/\s/g, '').length % 2 === 0,
+    className: 'checklist-asset',
+}];
+```
+
+<Preview>
+  <Story name='Custom classes'>
+<ClassesContainer style={{ height: '100vh' }}>
+    <SVGViewer
+        documentId={5185355395511590}
+        metadataClassesConditions={metadataClassesConditions}
+    />
+</ClassesContainer>
+  </Story>
+</Preview>
+
+
+### Specify custom default classes
+
+`customClassNames` object is responsible for overriding default classNames
+
+```typescript
+import 'antd/dist/antd.css';
+import styled from 'styled-components';
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+const SearchContainer = styled.div`
+    &.search-result {
+        &.metadata-container {
+        text {
+            stroke: red !important;
+            fill: red !important;
+            font-weight: bold;
+        }
+        }
+        &:not(.metadata-container) {
+        stroke: red !important;
+        fill: red !important;
+        font-weight: bold;
+        }
+    }
+    `;
+```
+<Preview>
+  <Story name='Specify custom default classes'>
+<SearchContainer style={{ height: '100vh' }}>
+    <SVGViewer
+        documentId={5185355395511590}
+        customClassNames={{searchResults: 'search-result'}}
+    />
+</SearchContainer>
+  </Story>
+</Preview>
+
+### Zoom callback
+
+While zooming callback with params will be fired
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer, ZoomCenter } from '@cognite/gearbox';
+
+const zoomCallback = ({
+    zoomProgress,
+    source,
+    zoomCenter
+} : {
+    zoomProgress: number;
+    source: string;
+    zoomCenter?: ZoomCenter;
+}): void => {};
+```
+<Preview>
+  <Story name='Zoom change callback'>
+    <div style={{ height: '100vh' }}>
+        <SVGViewer
+            documentId={5185355395511590}
+            handleAnimateZoom={zoomCallback}
+        />
+    </div>
+  </Story>
+</Preview>
+
+### Subscribe to search changes
+
+Custom `handleSearchChange` method will provide search value as paramter.
+Click search icon and start typing.
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+const handleSearchChange = (value?: string): void => { /* ... */ };
+```
+
+<Preview>
+  <Story name='Subscribe to search changes'>
+<div style={{height: '100vh'}}>
+    <SVGViewer
+        documentId={5185355395511590}
+        handleSearchChange={handleSearchChange}
+    />
+</div>
+  </Story>
+</Preview>
+
+### Locate asset in the document
+
+`isCurrentAsset` callback is responsible for locating the asset and zooming into its area
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+const isCurrentAsset = metadata => (metadata.textContent || '').replace(/\s/g, '') === '21PT1019';
+```
+
+<Preview>
+  <Story name='Locate asset'>
+<div style={{height: '45vh', width:'45vw' }}>
+    <SVGViewer
+        documentId={5185355395511590}
+        isCurrentAsset={isCurrentAsset}
+    />
+</div>
+  </Story>
+</Preview>
+
+
+### File
+
+You can use any SVG and put it into `SvgViewer` if you would like through the `file` prop. `file` simply has to include the contents of the `svg` in a string format, like the following.
+
+```typescript
+import 'antd/dist/antd.css';
+
+import React from 'react';
+import { SVGViewer } from '@cognite/gearbox';
+
+const svg_file = `...`
+```
+
+<Preview>
+  <Story name='File'>
+    <div style={{ height: '100vh' }}>
+      <SVGViewer
+          file={svg_file}
+      />
+    </div>
+  </Story>
+</Preview>
+

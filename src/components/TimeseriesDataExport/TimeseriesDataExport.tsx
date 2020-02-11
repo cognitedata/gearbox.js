@@ -1,9 +1,4 @@
-import {
-  Aggregate,
-  DatapointsMultiQuery,
-  GetTimeSeriesMetadataDTO,
-  InternalId,
-} from '@cognite/sdk';
+import { DatapointsMultiQuery, GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import {
   Alert,
   Button,
@@ -16,87 +11,26 @@ import {
 } from 'antd';
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import { FormComponentProps } from 'antd/lib/form';
-import { ColProps } from 'antd/lib/grid';
-import moment, { Moment } from 'moment';
-import React, { SyntheticEvent, useContext, useEffect, useState } from 'react';
-import { ClientSDKContext } from '../../context/clientSDKContext';
-import { withDefaultTheme } from '../../hoc/withDefaultTheme';
-import { AnyIfEmpty, PureObject } from '../../interfaces';
+import { isFunction } from 'lodash';
+import moment from 'moment';
+import React, { FC, SyntheticEvent, useEffect, useMemo, useState } from 'react';
+import { useCogniteContext } from '../../context/clientSDKProxyContext';
+import { withDefaultTheme } from '../../hoc';
 import { defaultTheme } from '../../theme/defaultTheme';
-import {
-  datapointsToCSV,
-  Delimiters,
-  downloadCSV,
-  LabelFormatter,
-} from '../../utils/csv';
+import { datapointsToCSV, Delimiters, downloadCSV } from '../../utils/csv';
 import { getGranularityInMS } from '../../utils/utils';
 import { ComplexString } from '../common/ComplexString/ComplexString';
+import { defaultStrings } from './constants';
+import {
+  CsvParseOptions,
+  FetchCSVCall,
+  FormItemLayout,
+  TimeseriesDataExportFormFields,
+  TimeseriesDataExportProps,
+} from './interfaces';
 
-export type FetchCSVCall = (
-  request: DatapointsMultiQuery,
-  opts: CsvParseOptions
-) => Promise<string>;
-
-export type FetchTimeseriesCall = (
-  ids: InternalId[]
-) => Promise<GetTimeSeriesMetadataDTO[]>;
-export type CSVLabelFormatter = LabelFormatter;
-
-export interface CsvParseOptions {
-  aggregate: Aggregate;
-  delimiter: Delimiters;
-  readableDate: boolean;
-  granularity: string;
-}
-
-export interface FormItemLayout {
-  labelCol: ColProps;
-  wrapperCol: ColProps;
-}
-
-export interface TimeseriesDataExportFormFields {
-  range: Moment[];
-  granularity: string;
-  delimiter: Delimiters;
-  readableDate: boolean;
-}
-
-export interface TimeseriesDataExportProps extends FormComponentProps {
-  timeseriesIds: number[];
-  granularity: string;
-  defaultTimeRange: number[];
-  visible: boolean;
-  modalWidth?: number;
-  cellLimit?: number;
-  downloadAsSvg?: () => void;
-  fetchCSV?: FetchCSVCall;
-  hideModal?: () => void;
-  retrieveTimeseries?: FetchTimeseriesCall;
-  onError?: (err: any) => void;
-  onSuccess?: () => void;
-  formItemLayout?: FormItemLayout;
-  labelFormatter?: CSVLabelFormatter;
-  theme?: AnyIfEmpty<{}>;
-  strings?: PureObject;
-}
-
-const defaultStrings: PureObject = {
-  title: 'Export chart data',
-  labelRange: 'Range',
-  labelGranularity: 'Label Granularity',
-  labelGranularityHelp: 'Example inputs: 15s, 1m, 5h, 2d',
-  formatTimestamp: 'Format timestamp?',
-  formatTimestampHelp: 'e.g. 2018-04-02 12:20:20',
-  delimiterLabel: 'Select delimiter',
-  delimiterHelp: 'The character that will separate your data fields',
-  csvDownload: 'Download as CSV',
-  csvDownloadInProgress: 'Download as CSV',
-  closeBtn: 'Close',
-  imageDownloadLabel: 'Image download',
-  imageDownloadBtn: 'Download as SVG',
-  cellLimitErr:
-    'You hit the limit of {{ cellLimit }} datapoints - some data may be omitted',
-};
+type TimeseriesDataExportFormProps = TimeseriesDataExportProps &
+  FormComponentProps;
 
 // TODO: Check tree shacking for TimeseriesDataExport component
 const { RangePicker } = DatePicker;
@@ -124,7 +58,10 @@ const isGreaterThenLimit = (
 };
 
 // tslint:disable-next-line:no-big-function
-const TimeseriesDataExportFC = (props: TimeseriesDataExportProps) => {
+const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
+  props: TimeseriesDataExportFormProps
+  // tslint:disable-next-line:no-big-function
+) => {
   const {
     form,
     form: { getFieldDecorator },
@@ -141,15 +78,22 @@ const TimeseriesDataExportFC = (props: TimeseriesDataExportProps) => {
     retrieveTimeseries,
     onError,
     onSuccess,
-    strings = {},
+    strings = defaultStrings,
     labelFormatter,
   } = props;
-  const context = useContext(ClientSDKContext);
+  const context = useCogniteContext(Component, true);
   const [limit, setLimit] = useState(cellLimit);
   const [limitHit, setLimitHit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [series, setSeries] = useState<GetTimeSeriesMetadataDTO[]>([]);
-  const lang = { ...defaultStrings, ...strings };
+  const lang = useMemo(
+    () => ({
+      ...defaultStrings,
+      ...(isFunction(strings) ? strings(defaultStrings) : strings),
+    }),
+    [strings]
+  );
+
   const {
     title,
     labelRange,
@@ -406,12 +350,7 @@ const TimeseriesDataExportFC = (props: TimeseriesDataExportProps) => {
               data-test-id="alert"
               style={{ marginTop: 8 }}
               type="error"
-              message={
-                <ComplexString
-                  input={cellLimitErr as string}
-                  cellLimit={limit}
-                />
-              }
+              message={<ComplexString input={cellLimitErr} cellLimit={limit} />}
             />
           )}
         </Form.Item>
@@ -425,7 +364,9 @@ const TimeseriesDataExportFC = (props: TimeseriesDataExportProps) => {
   );
 };
 
-const Wrapper = Form.create<TimeseriesDataExportProps>({
+const Wrapper: React.ComponentType<TimeseriesDataExportProps> = Form.create<
+  TimeseriesDataExportFormProps
+>({
   name: 'TimeseriesDataExport',
 })(TimeseriesDataExportFC);
 
@@ -433,4 +374,7 @@ Wrapper.defaultProps = {
   theme: defaultTheme,
 };
 
-export const TimeseriesDataExport = withDefaultTheme(Wrapper);
+const Component = withDefaultTheme(Wrapper);
+Component.displayName = 'TimeseriesDataExport';
+
+export { Component as TimeseriesDataExport };

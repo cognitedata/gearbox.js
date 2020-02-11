@@ -1,9 +1,10 @@
-import React from 'react';
+import { CogniteClient } from '@cognite/sdk';
+import React, { Component } from 'react';
 import styled from 'styled-components';
+import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import { DataLoader } from './dataLoader';
 
 import {
-  Annotation,
   AxisDisplayMode,
   AxisPlacement,
   DataProvider,
@@ -11,56 +12,10 @@ import {
 } from '@cognite/griff-react';
 import { Spin } from 'antd';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
-import { ClientSDKContext } from '../../context/clientSDKContext';
 import { decimalTickFormatter } from '../../utils/axisSigFix';
 import { getColorByString } from '../../utils/colors';
 import { CursorOverview } from './components/CursorOverview';
-
-export interface ChartRulerPoint {
-  id: number | string;
-  name: string;
-  value: number | string;
-  color: string;
-  timestamp: number;
-  x: number;
-  y: number;
-}
-
-export interface ChartRulerConfig {
-  visible?: boolean;
-  timeLabel?: (point: ChartRulerPoint) => string;
-  yLabel?: (point: ChartRulerPoint) => string;
-}
-
-export interface TimeseriesChartStyles {
-  container?: React.CSSProperties;
-}
-
-export type TimeseriesChartProps = {
-  styles?: TimeseriesChartStyles;
-  pointsPerSeries: number;
-  startTime: number | Date;
-  endTime: number | Date;
-  contextChart: boolean;
-  zoomable: boolean;
-  liveUpdate: boolean;
-  crosshair: boolean;
-  updateIntervalMillis: number;
-  timeseriesColors: { [id: number]: string };
-  hiddenSeries: { [id: number]: boolean };
-  annotations: Annotation[];
-  ruler: ChartRulerConfig;
-  collections: any;
-  xAxisHeight: number;
-  yAxisDisplayMode: 'ALL' | 'COLLAPSED' | 'NONE';
-  yAxisPlacement: 'RIGHT' | 'LEFT' | 'BOTH';
-  height?: number;
-  width?: number;
-  onMouseMove?: (e: any) => void;
-  onBlur?: (e: any) => void;
-  onMouseOut?: (e: any) => void;
-  onFetchDataError: (e: Error) => void;
-} & ({ timeseriesIds: number[] } | { series: any });
+import { ChartRulerPoint, TimeseriesChartProps } from './interfaces';
 
 // Don't allow updating faster than every 1000ms.
 const MINIMUM_UPDATE_FREQUENCY_MILLIS = 1000;
@@ -70,11 +25,12 @@ interface TimeseriesChartState {
   rulerPoints: { [key: string]: ChartRulerPoint };
 }
 
-export class TimeseriesChart extends React.Component<
+export class TimeseriesChart extends Component<
   TimeseriesChartProps,
   TimeseriesChartState
 > {
-  static contextType = ClientSDKContext;
+  static displayName = 'TimeseriesChart';
+  static contextType = ClientSDKProxyContext;
   static defaultProps = {
     startTime: Date.now() - 60 * 60 * 1000,
     endTime: Date.now(),
@@ -94,18 +50,15 @@ export class TimeseriesChart extends React.Component<
     xAxisHeight: 50,
     collections: {},
     ruler: undefined,
-    onFetchDataError: (e: Error) => {
-      throw e;
-    },
   };
 
-  context!: React.ContextType<typeof ClientSDKContext>;
-
+  client!: CogniteClient;
   dataLoader!: DataLoader;
+  chartWrapper: HTMLElement | null = null;
 
   constructor(
     props: TimeseriesChartProps,
-    context: React.ContextType<typeof ClientSDKContext>
+    context: React.ContextType<typeof ClientSDKProxyContext>
   ) {
     super(props);
     this.state = {
@@ -116,7 +69,9 @@ export class TimeseriesChart extends React.Component<
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
-    this.dataLoader = new DataLoader(context);
+
+    this.client = context(TimeseriesChart.displayName || '')!;
+    this.dataLoader = new DataLoader(this.client);
   }
 
   onFetchData = () => {
@@ -201,7 +156,10 @@ export class TimeseriesChart extends React.Component<
     return (
       griffSeries.length !== 0 && (
         <Spin spinning={!loaded}>
-          <Wrapper style={styles && styles.container}>
+          <Wrapper
+            style={styles && styles.container}
+            ref={ref => (this.chartWrapper = ref)}
+          >
             <DataProvider
               defaultLoader={this.dataLoader.cogniteloader}
               onFetchData={this.onFetchData}
@@ -215,7 +173,13 @@ export class TimeseriesChart extends React.Component<
                 })
               )}
               timeDomain={[+startTime, +endTime]}
-              onFetchDataError={onFetchDataError}
+              onFetchDataError={
+                onFetchDataError
+                  ? onFetchDataError
+                  : (e: any) => {
+                      throw e;
+                    }
+              }
               updateInterval={
                 liveUpdate
                   ? Math.max(
@@ -227,13 +191,13 @@ export class TimeseriesChart extends React.Component<
             >
               {ruler && (
                 <CursorOverview
+                  wrapperRef={this.chartWrapper}
                   series={griffSeries}
                   hiddenSeries={hiddenSeries}
                   rulerPoints={this.state.rulerPoints}
                   ruler={ruler}
                 />
               )}
-
               <LineChart
                 zoomable={zoomable}
                 crosshair={showCrosshair}

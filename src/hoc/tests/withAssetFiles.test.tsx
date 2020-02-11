@@ -1,11 +1,12 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import React from 'react';
+import React, { FC } from 'react';
 import { ClientSDKProvider } from '../../components/ClientSDKProvider';
 import { SDK_LIST_LIMIT } from '../../constants/sdk';
 import { fakeFiles } from '../../mocks';
-import { MockCogniteClient } from '../../mocks/mockSdk';
-import { withAssetFiles, WithAssetFilesDataProps } from '../withAssetFiles';
+import { MockCogniteClient } from '../../mocks';
+import { WithAssetFilesDataProps } from '../interfaces';
+import { withAssetFiles } from '../withAssetFiles';
 
 configure({ adapter: new Adapter() });
 
@@ -72,7 +73,7 @@ describe('withAssetFiles', () => {
   });
 
   it('Wrapped component should receive asset files after loading', done => {
-    const TestComponent: React.SFC<WithAssetFilesDataProps> = props => (
+    const TestComponent: FC<WithAssetFilesDataProps> = props => (
       <div>
         <p className="files-number">{props.assetFiles.length}</p>
         <p className="first-file-name">{props.assetFiles[0].name}</p>

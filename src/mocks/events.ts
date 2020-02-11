@@ -1,12 +1,10 @@
 /* tslint:disable:no-duplicate-string */
 import { CogniteEvent } from '@cognite/sdk';
 import moment from 'moment';
+import { AssetDocumentsPanelStyles } from '../components/AssetDocumentsPanel';
+import { AssetEventsPanelStyles } from '../components/AssetEventsPanel';
 import { AssetMetaStyles } from '../components/AssetMeta';
-import { AssetTimeseriesPanelStyles } from '../components/AssetTimeseriesPanel/components/TimeseriesPanelPure';
-import {
-  AssetDocumentsPanelStyles,
-  AssetEventsPanelStyles,
-} from '../interfaces';
+import { AssetTimeseriesPanelStyles } from '../components/AssetTimeseriesPanel';
 
 const EVENT_DESCRIPTION = 'PRODUCTION WELL A-23, SLOT-09 (101109)';
 
@@ -55,7 +53,7 @@ export const eventWithout = (field: string) => ({
   [field]: undefined,
 });
 
-const baseTimestamp = 1556120152466;
+export const baseTimestamp = 1556120152466;
 
 export const ASSET_META_SERIES_STYLES: AssetTimeseriesPanelStyles = {
   wrapper: {

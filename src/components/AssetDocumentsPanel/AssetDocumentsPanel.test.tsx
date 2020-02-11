@@ -1,15 +1,12 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { fakeFiles } from '../../mocks';
-import { MockCogniteClient } from '../../mocks/mockSdk';
+import { fakeFiles, MockCogniteClient } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { LoadingBlock } from '../common/LoadingBlock/LoadingBlock';
-import {
-  AssetDocumentsPanel,
-  AssetDocumentsPanelProps,
-} from './AssetDocumentsPanel';
+import { AssetDocumentsPanel } from './AssetDocumentsPanel';
 import { DocumentTable } from './DocumentTable';
+import { AssetDocumentsPanelProps } from './interfaces';
 
 configure({ adapter: new Adapter() });
 

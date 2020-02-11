@@ -1,8 +1,9 @@
+import { CogniteClient } from '@cognite/sdk';
 import React from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../../constants/errorMessages';
-import { ClientSDKContext } from '../../../context/clientSDKContext';
-import { withDefaultTheme } from '../../../hoc/withDefaultTheme';
+import { ClientSDKProxyContext } from '../../../context/clientSDKProxyContext';
+import { withDefaultTheme } from '../../../hoc';
 import { AnyIfEmpty } from '../../../interfaces';
 import { defaultTheme } from '../../../theme/defaultTheme';
 import {
@@ -28,7 +29,7 @@ interface TimeseriesValueState {
 class TimeseriesValue
   extends React.PureComponent<TimeseriesValueProps, TimeseriesValueState>
   implements ComponentWithUnmountState {
-  static contextType = ClientSDKContext;
+  static contextType = ClientSDKProxyContext;
   static defaultProps = {
     liveUpdate: true,
     timeseriesDescription: '',
@@ -37,7 +38,8 @@ class TimeseriesValue
   };
 
   isComponentUnmounted = false;
-  context!: React.ContextType<typeof ClientSDKContext>;
+  context!: React.ContextType<typeof ClientSDKProxyContext>;
+  client!: CogniteClient;
 
   state = {
     value: null,
@@ -47,7 +49,8 @@ class TimeseriesValue
   private interval: number | null = null;
 
   componentDidMount() {
-    if (!this.context) {
+    this.client = this.context(Component.displayName || '')!;
+    if (!this.client) {
       console.error(ERROR_NO_SDK_CLIENT);
       return;
     }
@@ -84,7 +87,7 @@ class TimeseriesValue
     try {
       const datapoints = await connectPromiseToUnmountState(
         this,
-        this.context!.datapoints.retrieveLatest([
+        this.client.datapoints.retrieveLatest([
           { id: this.props.timeseriesId, before: 'now' },
         ])
       );

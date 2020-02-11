@@ -1,1 +1,2 @@
-export * from './TimeseriesDataExport';
+export { TimeseriesDataExport } from './TimeseriesDataExport';
+export * from './interfaces';

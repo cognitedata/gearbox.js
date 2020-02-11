@@ -1,7 +1,7 @@
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { Mock3DCogniteClient } from '../../mocks/threeD';
+import { Mock3DCogniteClient } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { mockCreateViewer, Model3DViewer } from './Model3DViewer';
 
@@ -43,6 +43,22 @@ describe('Model3DViewer', () => {
     const props = {
       modelId: 0,
       revisionId: 0,
+    };
+
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <Model3DViewer {...props} />
+      </ClientSDKProvider>
+    );
+    expect(wrapper.exists()).toBe(true);
+    done();
+  });
+
+  it('renders with highlightMappedNodes set to false', done => {
+    const props = {
+      modelId: 0,
+      revisionId: 0,
+      highlightMappedNodes: false,
     };
 
     const wrapper = mount(
