@@ -1,3 +1,10 @@
+## [1.14.1](https://github.com/cognitedata/gearbox.js/compare/v1.14.0...v1.14.1) (2020-02-25)
+
+
+### Bug Fixes
+
+* **svg-viewer:** show search results counter with 0 results ([61c12b0](https://github.com/cognitedata/gearbox.js/commit/61c12b05415de249650c6d1eddcb8c255d8f00b7))
+
 # [1.14.0](https://github.com/cognitedata/gearbox.js/compare/v1.13.0...v1.14.0) (2020-02-04)
 
 
