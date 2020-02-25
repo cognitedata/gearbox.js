@@ -115,7 +115,7 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
             ref={this.searchInput}
             data-test-id="search-input-svg"
           />
-          <SearchResultsCounter hidden={this.state.amountOfResults === 0}>
+          <SearchResultsCounter hidden={!this.state.searchPhrase}>
             {this.state.currentResult}/{this.state.amountOfResults}
           </SearchResultsCounter>
         </SearchInputContainer>
