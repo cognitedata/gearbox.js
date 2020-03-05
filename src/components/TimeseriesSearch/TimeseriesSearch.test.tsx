@@ -132,7 +132,7 @@ describe('TimeseriesSearch', () => {
       expect(sdk.timeseries.search).toHaveBeenNthCalledWith(2, {
         search: { query: 'value' },
         limit: 100,
-        filter: { assetIds: [assetsList[assetsList.length - 1].id] },
+        filter: { rootAssetIds: [assetsList[assetsList.length - 1].id] },
       });
       done();
     });

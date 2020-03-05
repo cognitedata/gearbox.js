@@ -138,7 +138,7 @@ export class TimeseriesSearch extends Component<
       .search({
         limit: 100,
         filter: {
-          assetIds: assetSubtrees == null ? undefined : assetSubtrees,
+          rootAssetIds: assetSubtrees == null ? undefined : assetSubtrees,
         },
         search: {
           query,
