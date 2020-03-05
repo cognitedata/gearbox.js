@@ -1,3 +1,10 @@
+## [1.14.2](https://github.com/cognitedata/gearbox.js/compare/v1.14.1...v1.14.2) (2020-03-05)
+
+
+### Bug Fixes
+
+* **timeseries-search:** filter on rootAssetIds instead of assetIds ([1b983e7](https://github.com/cognitedata/gearbox.js/commit/1b983e7d464974eba110c3349ca2a5708208383c))
+
 ## [1.14.1](https://github.com/cognitedata/gearbox.js/compare/v1.14.0...v1.14.1) (2020-02-25)
 
 
