@@ -1,3 +1,4 @@
+import { Button, Icons } from '@cognite/cogs.js';
 import { CogniteClient } from '@cognite/sdk';
 import { Icon } from 'antd';
 import PinchZoom from 'pinch-zoom-js';
@@ -153,31 +154,35 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
                 )}
               </StyledHeaderTitle>
               <StyledHeaderButtonsContainer>
-                <ModalButton
+                <Button
+                  shape="circle"
+                  variant="ghost"
                   onClick={this.zoomIn}
                   data-test-id="zoom-in-svgviewer"
-                >
-                  <CustomIcon.ZoomIn />
-                </ModalButton>
-                <ModalButton
+                  icon={<CustomIcon.ZoomIn />}
+                />
+                <Button
+                  shape="circle"
+                  variant="ghost"
                   onClick={this.zoomOut}
                   data-test-id="zoom-out-svgviewer"
-                >
-                  <CustomIcon.ZoomOut />
-                </ModalButton>
-                <ModalButton
+                  icon={<CustomIcon.ZoomOut />}
+                />
+                <Button
+                  shape="circle"
+                  variant="ghost"
                   onClick={this.openSearch}
                   data-test-id="search-button-svgviewer"
-                >
-                  <CustomIcon.FindInPage />
-                </ModalButton>
+                  icon={<CustomIcon.FindInPage />}
+                />
                 {hasCloseButton && (
                   <CloseModalButton
+                    shape="circle"
+                    variant="ghost"
                     onClick={this.handleCloseModal}
                     data-test-id="close-svgviewer-btn"
-                  >
-                    <CustomIcon.Close />
-                  </CloseModalButton>
+                    icon={<Icons.Close />}
+                  />
                 )}
               </StyledHeaderButtonsContainer>
             </StyledHeaderContainer>
@@ -746,6 +751,10 @@ const StyledHeaderDescription = styled(OverflowText)`
 
 const StyledHeaderButtonsContainer = styled.div`
   display: flex;
+
+  button {
+    margin-left: 8px;
+  }
 `;
 
 const StyledFileName = styled(OverflowText)`
@@ -763,7 +772,7 @@ const ModalButton = styled.button`
   }
 `;
 
-const CloseModalButton = styled(ModalButton)`
+const CloseModalButton = styled(Button)`
   width: 45px;
   margin-left: 10px;
   border-left: 1px solid #f5f5f5;

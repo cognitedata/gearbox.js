@@ -32,6 +32,7 @@
   "homepage": "https://github.com/cognitedata/gearbox.js#readme",
   "license": "Apache-2.0",
   "dependencies": {
+    "@cognite/cogs.js": "^0.4.2",
     "d3": "^5.14.2",
     "file-saver": "^2.0.2",
     "lodash": "^4.17.15",

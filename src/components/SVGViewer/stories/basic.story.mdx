@@ -1,3 +1,4 @@
+import '@cognite/cogs.js/dist/cogs-antd.css';
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { SVGViewer } from '../SVGViewer';
 import {
@@ -34,7 +35,7 @@ SVG-viewer provides the following functionality:
 Imports:
 
 ```typescript
-import 'antd/dist/antd.css';
+import '@cognite/cogs.js/dist/cogs-antd.css';
 
 import React from 'react';
 import { SVGViewer } from '@cognite/gearbox';
@@ -128,7 +129,7 @@ interface CustomClassNames {
 When user clicks on any equipment this callback will be called with `HTMLElement` passed
 
 ```typescript
-import 'antd/dist/antd.css';
+import '@cognite/cogs.js/dist/cogs-antd.css';
 
 import React from 'react';
 import { SVGViewer } from '@cognite/gearbox';
@@ -153,7 +154,7 @@ export const handleClick = (node: HTMLElement): void => { /* ... */ };
 Close button will be displayed on the top bar if `handleCancel` is set
 
 ```typescript
-import 'antd/dist/antd.css';
+import '@cognite/cogs.js/dist/cogs-antd.css';
 
 import React from 'react';
 import { SVGViewer } from '@cognite/gearbox';
@@ -178,7 +179,7 @@ const onCancel = () => { /* ... */ };
 `metadataClassesConditions` callback is responsible for listing of classes and conditions on when they should be applied for equipment
 
 ```typescript
-import 'antd/dist/antd.css';
+import '@cognite/cogs.js/dist/cogs-antd.css';
 
 import React from 'react';
 import { SVGViewer } from '@cognite/gearbox';
@@ -229,7 +230,7 @@ const metadataClassesConditions = [{
 `customClassNames` object is responsible for overriding default classNames
 
 ```typescript
-import 'antd/dist/antd.css';
+import '@cognite/cogs.js/dist/cogs-antd.css';
 import styled from 'styled-components';
 import React from 'react';
 import { SVGViewer } from '@cognite/gearbox';
@@ -267,7 +268,7 @@ const SearchContainer = styled.div`
 While zooming callback with params will be fired
 
 ```typescript
-import 'antd/dist/antd.css';
+import '@cognite/cogs.js/dist/cogs-antd.css';
 
 import React from 'react';
 import { SVGViewer, ZoomCenter } from '@cognite/gearbox';
@@ -299,7 +300,7 @@ Custom `handleSearchChange` method will provide search value as paramter.
 Click search icon and start typing.
 
 ```typescript
-import 'antd/dist/antd.css';
+import '@cognite/cogs.js/dist/cogs-antd.css';
 
 import React from 'react';
 import { SVGViewer } from '@cognite/gearbox';
@@ -323,7 +324,7 @@ const handleSearchChange = (value?: string): void => { /* ... */ };
 `isCurrentAsset` callback is responsible for locating the asset and zooming into its area
 
 ```typescript
-import 'antd/dist/antd.css';
+import '@cognite/cogs.js/dist/cogs-antd.css';
 
 import React from 'react';
 import { SVGViewer } from '@cognite/gearbox';
@@ -348,7 +349,7 @@ const isCurrentAsset = metadata => (metadata.textContent || '').replace(/\s/g, '
 You can use any SVG and put it into `SvgViewer` if you would like through the `file` prop. `file` simply has to include the contents of the `svg` in a string format, like the following.
 
 ```typescript
-import 'antd/dist/antd.css';
+import '@cognite/cogs.js/dist/cogs-antd.css';
 
 import React from 'react';
 import { SVGViewer } from '@cognite/gearbox';
