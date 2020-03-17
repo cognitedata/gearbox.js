@@ -3,27 +3,16 @@ import {
   GetTimeSeriesMetadataDTO,
   IdEither,
 } from '@cognite/sdk';
-import {
-  Alert,
-  Button,
-  Checkbox,
-  DatePicker,
-  Form,
-  Input,
-  Modal,
-  Radio,
-} from 'antd';
-import { RangePickerValue } from 'antd/lib/date-picker/interface';
+import { Button, Checkbox, DatePicker, Form, Input, Modal, Radio } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { isFunction } from 'lodash';
+import { chunk, isFunction, range } from 'lodash';
 import moment from 'moment';
-import React, { FC, SyntheticEvent, useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc';
 import { defaultTheme } from '../../theme/defaultTheme';
 import { datapointsToCSV, Delimiters, downloadCSV } from '../../utils/csv';
 import { getGranularityInMS } from '../../utils/utils';
-import { ComplexString } from '../common/ComplexString/ComplexString';
 import { defaultStrings } from './constants';
 import {
   CsvParseOptions,
@@ -36,29 +25,13 @@ import {
 type TimeseriesDataExportFormProps = TimeseriesDataExportProps &
   FormComponentProps;
 
-// TODO: Check tree shacking for TimeseriesDataExport component
+// TODO: Check tree shaking for TimeseriesDataExport component
 const { RangePicker } = DatePicker;
 const CELL_LIMIT = 10000;
 const formatData = 'YYYY-MM-DD HH:mm:ss';
 const formItemLayoutDefault: FormItemLayout = {
   labelCol: { xs: { span: 24 }, sm: { span: 8 } },
   wrapperCol: { xs: { span: 24 }, sm: { span: 16 } },
-};
-
-const isGreaterThenLimit = (
-  limit: number,
-  start: number,
-  end: number,
-  granularity: number,
-  seriesNumber: number
-): boolean => {
-  if (!start || !end || !granularity) {
-    return false;
-  }
-
-  const requestedNumberOfPoints = ((end - start) / granularity) * seriesNumber;
-
-  return requestedNumberOfPoints > limit;
 };
 
 // tslint:disable-next-line:no-big-function
@@ -76,7 +49,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     defaultTimeRange: [startTimestamp, endTimestamp],
     granularity,
     modalWidth = 600,
-    cellLimit = 10000,
     downloadAsSvg,
     hideModal,
     fetchCSV,
@@ -87,8 +59,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     labelFormatter,
   } = props;
   const context = useCogniteContext(Component, true);
-  const [limit, setLimit] = useState(cellLimit);
-  const [limitHit, setLimitHit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [series, setSeries] = useState<GetTimeSeriesMetadataDTO[]>([]);
   const lang = useMemo(
@@ -104,7 +74,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
   const {
     title,
     labelRange,
-    cellLimitErr,
     labelGranularity,
     labelGranularityHelp,
     formatTimestamp,
@@ -118,11 +87,65 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     imageDownloadBtn,
   } = lang;
 
+  const getLimits = async (request: DatapointsMultiQuery) => {
+    let { start = 0, end = 0 } = request;
+
+    const project = context!.project || '';
+    const url = `/api/v1/projects/${project}/timeseries/data/latest`;
+    // @ts-ignore
+    const items = request.items.map(({ id }) => ({ id }));
+
+    const endResults = await context!.post<{ items: any[] }>(url, {
+      data: { items },
+    });
+    end = Math.min(
+      ...endResults.data.items.map(item => +item.datapoints[0].timestamp, end)
+    );
+
+    const getFirstDatapointRequest = {
+      ...request,
+      start,
+      end,
+      limit: CELL_LIMIT,
+    };
+
+    const startResult = await context!.datapoints.retrieve(
+      getFirstDatapointRequest
+    );
+    start = Math.max(
+      // @ts-ignore
+      ...startResult.map(({ datapoints }) => +datapoints[0].timestamp),
+      // @ts-ignore
+      start
+    );
+
+    return { start, end };
+  };
+
+  const fetchDataPoints = async (request: DatapointsMultiQuery) => {
+    const { start = 0, end = 0 } = await getLimits(request);
+    const numericGranularity = getGranularityInMS(granularity);
+    const msPerRequest =
+      (numericGranularity * CELL_LIMIT) / timeseriesIds.length;
+
+    const limits = range(+start, +end, msPerRequest);
+    const lastLimit =
+      limits.length % 2 === 0 ? [+end - msPerRequest, +end] : [+end];
+    const ranges = chunk([...limits, ...lastLimit], 2);
+    const limit = CELL_LIMIT / timeseriesIds.length;
+
+    const requests = ranges
+      .map(([start, end]) => ({ ...request, start, end, limit }))
+      .map(request => context!.datapoints.retrieve(request));
+
+    return (await Promise.all(requests)).flat();
+  };
+
   const fetchCSVCall: FetchCSVCall = async (
     request,
     { aggregate, delimiter, readableDate, granularity: granularityString }
   ) => {
-    const data = await context!.datapoints.retrieve(request);
+    const data = await fetchDataPoints(request);
     const format = readableDate ? formatData : '';
     const formatLabels = labelFormatter
       ? {
@@ -139,34 +162,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
       formatLabels,
       granularity: granularityString,
     });
-  };
-
-  const checkLimitOnGranularityChange = (
-    event: SyntheticEvent<HTMLInputElement>
-  ) => {
-    const [start, end] = form.getFieldValue('range');
-    const granularityString = event.currentTarget.value;
-    const granularityValue = getGranularityInMS(granularityString);
-
-    setLimitHit(
-      isGreaterThenLimit(limit, start, end, granularityValue, seriesNumber)
-    );
-  };
-
-  const checkLimitOnRangeChange = (range: RangePickerValue) => {
-    const granularityString = form.getFieldValue('granularity');
-    let start = 0;
-    let end = 0;
-    const granularityValue = getGranularityInMS(granularityString);
-
-    if (range[0] && range[1]) {
-      start = +range[0];
-      end = +range[1];
-    }
-
-    setLimitHit(
-      isGreaterThenLimit(limit, start, end, granularityValue, seriesNumber)
-    );
   };
 
   const fetchTimeseries = async () => {
@@ -199,8 +194,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
 
-    const limitPerSerie = Math.floor(limit / series.length);
-
     form.validateFields(async (_, values) => {
       const {
         range,
@@ -209,6 +202,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
         readableDate,
       }: TimeseriesDataExportFormFields = values;
       const aggregate = 'average';
+
       const body: DatapointsMultiQuery = {
         items: series.map(({ id }) => ({
           id,
@@ -216,9 +210,9 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
         })),
         start: +range[0],
         end: +range[1],
-        limit: limitPerSerie,
         granularity: granularityVal,
       };
+
       const opts: CsvParseOptions = {
         aggregate,
         delimiter,
@@ -251,23 +245,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
   };
 
   useEffect(() => {
-    if (cellLimit > CELL_LIMIT) {
-      setLimit(CELL_LIMIT);
-    }
-  }, [cellLimit]);
-
-  useEffect(() => {
-    const { range, granularity: granularityString } = form.getFieldsValue();
-    const start = range[0] ? +range[0] : 0;
-    const end = range[1] ? +range[1] : 0;
-    const granularityValue = getGranularityInMS(granularityString);
-
-    setLimitHit(
-      isGreaterThenLimit(limit, start, end, granularityValue, seriesNumber)
-    );
-  }, []);
-
-  useEffect(() => {
     if (!visible || !seriesNumber) {
       return;
     }
@@ -290,7 +267,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
             rules: [{ required: true }],
           })(
             <RangePicker
-              onChange={checkLimitOnRangeChange}
               showTime={{ format: 'HH:mm' }}
               format="YYYY-MM-DD HH:mm"
               style={{ width: '100%' }}
@@ -305,12 +281,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
           {getFieldDecorator('granularity', {
             rules: [{ required: true }],
             initialValue: granularity,
-          })(
-            <Input
-              data-test-id="granularity"
-              onChange={checkLimitOnGranularityChange}
-            />
-          )}
+          })(<Input data-test-id="granularity" />)}
         </Form.Item>
         <Form.Item
           {...formItemLayout}
@@ -355,14 +326,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
           >
             {closeBtn}
           </Button>
-          {limitHit && (
-            <Alert
-              data-test-id="alert"
-              style={{ marginTop: 8 }}
-              type="error"
-              message={<ComplexString input={cellLimitErr} cellLimit={limit} />}
-            />
-          )}
         </Form.Item>
         {downloadAsSvg && (
           <Form.Item {...formItemLayout} label={imageDownloadLabel}>

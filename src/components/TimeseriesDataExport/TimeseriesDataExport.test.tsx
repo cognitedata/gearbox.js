@@ -74,7 +74,7 @@ describe('TimeseriesChart', () => {
     expect(wrapper.exists()).toBeTruthy();
   });
 
-  it('should show omit datapoints limit alert', async () => {
+  it('should be able to fetch more than 10k datapoints', async () => {
     await act(async () => {
       wrapper = mountComponent({
         ...defaultProps,
@@ -83,8 +83,13 @@ describe('TimeseriesChart', () => {
     });
 
     wrapper.update();
+    const form = wrapper.find(formIdentificator);
 
-    expect(wrapper.find('[data-test-id="alert"]').exists()).toBeTruthy();
+    await act(async () => {
+      form.simulate('submit');
+    });
+
+    expect(sdk.datapoints.retrieve).toHaveBeenCalledTimes(3);
   });
 
   it('should use internal retrieveTimeseries and fetchCSV calls', async () => {
@@ -150,7 +155,7 @@ describe('TimeseriesChart', () => {
     expect(labelFormatter).toHaveBeenCalledTimes(1);
   });
 
-  it.only('should be able to customize strings via callback function', async () => {
+  it('should be able to customize strings via callback function', async () => {
     await act(async () => {
       wrapper = mountComponent({
         ...defaultProps,

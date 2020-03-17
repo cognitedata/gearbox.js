@@ -65,7 +65,7 @@ export interface TimeseriesDataExportProps {
    */
   modalWidth?: number;
   /**
-   * Limit of cells for generated CSV documents, can't be greater then 10000
+   * @deprecated Cell-limit has been removed.
    */
   cellLimit?: number;
   /**
