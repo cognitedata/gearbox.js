@@ -12,6 +12,7 @@ export const defaultStrings = {
   closeBtn: 'Close',
   imageDownloadLabel: 'Image download',
   imageDownloadBtn: 'Download as SVG',
+  /** @deprecated Cell-limit no longer exists. */
   cellLimitErr:
     'You hit the limit of {{ cellLimit }} datapoints - some data may be omitted',
 };

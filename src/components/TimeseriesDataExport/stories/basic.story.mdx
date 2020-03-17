@@ -1,11 +1,13 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
-import { TimeseriesDataExport, TimeseriesDataExportFC } from '../TimeseriesDataExport';
+import {
+  TimeseriesDataExport,
+  TimeseriesDataExportFC,
+} from '../TimeseriesDataExport';
 import {
   decorators,
-  strings,
   TimeseriesChartExportWrapper,
   ComponentProps,
-  labelFormatter
+  labelFormatter,
 } from './helper';
 
 <Meta title="Time Series/TimeseriesDataExport" decorators={decorators} />
@@ -28,6 +30,7 @@ import 'antd/dist/antd.css';
 import React from 'react';
 import { TimeseriesDataExport } from '@cognite/gearbox';
 ```
+
 `TimeseriesChartExportWrapper` is a component to demonstrate basic behavior
 
 ```jsx
@@ -48,7 +51,7 @@ const TimeseriesChartExportWrapper: React.FC<
 ```
 
 <Preview>
-  <Story name="Basic usage with timeseriesIds" >
+  <Story name="Basic usage with timeseriesIds">
     <TimeseriesChartExportWrapper
       timeseriesIds={[41852231325889, 7433885982156917]}
       granularity={'2m'}
@@ -58,9 +61,9 @@ const TimeseriesChartExportWrapper: React.FC<
 </Preview>
 
 <Preview>
-  <Story name="Basic usage with timeseriesExternalIds" >
+  <Story name="Basic usage with timeseriesExternalIds">
     <TimeseriesChartExportWrapper
-      timeseriesExternalIds = {['TAM_TGM_GAS_LIFT_A_ FY_31204_STR1_CALIB_TT']}
+      timeseriesExternalIds={['TAM_TGM_GAS_LIFT_A_ FY_31204_STR1_CALIB_TT']}
       granularity={'2m'}
       defaultTimeRange={[1567321800000, 1567408200000]}
     />
@@ -112,9 +115,7 @@ Definition:
 ```typescript
 import { IdEither, TimeSeries } from '@cognite/sdk';
 
-type FetchTimeseriesCall = (
-  ids: IdEither[]
-) => Promise<TimeSeries[]>;
+type FetchTimeseriesCall = (ids: IdEither[]) => Promise<TimeSeries[]>;
 ```
 
 #### Default strings
@@ -134,33 +135,10 @@ const defaultStrings: PureObject = {
   closeBtn: 'Close',
   imageDownloadLabel: 'Image download',
   imageDownloadBtn: 'Download as SVG',
-  cellLimitErr:
-    'You hit the limit of {{ cellLimit }} datapoints - some data may be omitted',
 };
 ```
 
 ## Examples
-
-### Hit limit
-
-```typescript
-const strings = {
-  cellLimitErr:
-    'Oops, you rich cell limit for CSV document – {{ cellLimit }} cells, some data may be omitted',
-};
-```
-<Preview>
-  <Story name="Hit limit" >
-    <TimeseriesChartExportWrapper
-      timeseriesIds={[41852231325889, 7433885982156917]}
-      granularity={'2s'}
-      defaultTimeRange={[1567321800000, 1567408200000]}
-      cellLimit={5000}
-      strings={strings}
-    />
-  </Story>
-</Preview>
-
 
 ### Format label
 
@@ -170,8 +148,9 @@ import { CSVLabelFormatter } from '@cognite/gearbox';
 
 const labelFormatter: CSVLabelFormatter = (ts: GetTimeSeriesMetadataDTO) => ts.name || \`timeserie-${ts.id}\`;
 ```
+
 <Preview>
-  <Story name="Format label" >
+  <Story name="Format label">
     <TimeseriesChartExportWrapper
       timeseriesIds={[41852231325889, 7433885982156917]}
       granularity={'2m'}

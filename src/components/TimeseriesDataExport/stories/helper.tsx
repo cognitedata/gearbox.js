@@ -65,10 +65,6 @@ export const decorators = [
     <ClientSDKProvider client={client}>{storyFn()}</ClientSDKProvider>
   ),
 ];
-export const strings = {
-  cellLimitErr:
-    'Oops, you rich cell limit for CSV document – {{ cellLimit }} cells, some data may be omitted',
-};
 
 export const labelFormatter: CSVLabelFormatter = (
   ts: GetTimeSeriesMetadataDTO
