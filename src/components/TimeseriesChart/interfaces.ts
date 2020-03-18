@@ -77,7 +77,7 @@ interface TimeseriesChartPropsBase {
   /**
    * Define y-Axis Subdomains (min, max values for each time series)
    */
-  ySubDomains?: { [key: number]: [number, number] };
+  ySubDomains?: { [timeseriesId: number]: [number, number] };
   /**
    * Mouse move callback
    */
