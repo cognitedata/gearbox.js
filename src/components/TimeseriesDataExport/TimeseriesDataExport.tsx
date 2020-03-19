@@ -167,7 +167,12 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
   const fetchTimeseries = async () => {
     const fetchTimeseriesCall =
       retrieveTimeseries || context!.timeseries.retrieve;
-    const timeserieIdsObj = timeseriesIds.map(id => ({ id }));
+    const timeserieIdsObj =
+      typeof timeseriesIds[0] === 'number'
+        ? (timeseriesIds as (number[])).map(id => ({ id }))
+        : (timeseriesIds as (string[])).map(externalId => ({
+            externalId,
+          }));
 
     setLoading(true);
 

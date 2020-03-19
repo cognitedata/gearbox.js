@@ -1,6 +1,7 @@
 import {
   Aggregate,
   DatapointsMultiQuery,
+  ExternalId,
   GetTimeSeriesMetadataDTO,
   InternalId,
 } from '@cognite/sdk';
@@ -16,7 +17,7 @@ export type FetchCSVCall = (
 ) => Promise<string>;
 
 export type FetchTimeseriesCall = (
-  ids: InternalId[]
+  ids: InternalId[] | ExternalId[]
 ) => Promise<GetTimeSeriesMetadataDTO[]>;
 export type CSVLabelFormatter = LabelFormatter;
 
@@ -43,7 +44,7 @@ export interface TimeseriesDataExportProps {
   /**
    * Array of timeserie ids
    */
-  timeseriesIds: number[];
+  timeseriesIds: number[] | string[];
   /**
    * String, that represents initial granularity (ex. 2m, 15s, 1h) to be displayed in form
    */
