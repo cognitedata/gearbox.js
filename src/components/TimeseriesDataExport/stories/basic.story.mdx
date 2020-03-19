@@ -48,9 +48,19 @@ const TimeseriesChartExportWrapper: React.FC<
 ```
 
 <Preview>
-  <Story name="Basic usage" >
+  <Story name="Basic usage with timeseriesIds" >
     <TimeseriesChartExportWrapper
       timeseriesIds={[41852231325889, 7433885982156917]}
+      granularity={'2m'}
+      defaultTimeRange={[1567321800000, 1567408200000]}
+    />
+  </Story>
+</Preview>
+
+<Preview>
+  <Story name="Basic usage with timeseriesExternalId" >
+    <TimeseriesChartExportWrapper
+      timeseriesExternalId = {['TAM_TGM_GAS_LIFT_A_ FY_31204_STR1_CALIB_TT']}
       granularity={'2m'}
       defaultTimeRange={[1567321800000, 1567408200000]}
     />
