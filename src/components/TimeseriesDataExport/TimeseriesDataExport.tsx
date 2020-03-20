@@ -1,4 +1,8 @@
-import { DatapointsMultiQuery, GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import {
+  DatapointsMultiQuery,
+  GetTimeSeriesMetadataDTO,
+  IdEither,
+} from '@cognite/sdk';
 import {
   Alert,
   Button,
@@ -174,12 +178,12 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     const fetchTimeseriesCall =
       retrieveTimeseries || context!.timeseries.retrieve;
 
-    const timeserieIdsObj =
-      timeseriesIds.length > 0
-        ? timeseriesIds.map(id => ({ id }))
-        : timeseriesExternalIds.map(externalId => ({
-            externalId,
-          }));
+    const timeserieIdsObj: IdEither[] = [
+      ...timeseriesIds.map(id => ({ id })),
+      ...timeseriesExternalIds.map(externalId => ({
+        externalId,
+      })),
+    ];
 
     setLoading(true);
 
