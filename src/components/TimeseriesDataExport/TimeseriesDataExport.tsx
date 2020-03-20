@@ -99,10 +99,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     [strings]
   );
 
-  const timeseriesNumber =
-    timeseriesIds.length > 0
-      ? timeseriesIds.length
-      : timeseriesExternalIds.length;
+  const seriesNumber = timeseriesIds.length + timeseriesExternalIds.length;
 
   const {
     title,
@@ -148,7 +145,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     event: SyntheticEvent<HTMLInputElement>
   ) => {
     const [start, end] = form.getFieldValue('range');
-    const seriesNumber = timeseriesNumber;
     const granularityString = event.currentTarget.value;
     const granularityValue = getGranularityInMS(granularityString);
 
@@ -159,7 +155,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
 
   const checkLimitOnRangeChange = (range: RangePickerValue) => {
     const granularityString = form.getFieldValue('granularity');
-    const seriesNumber = timeseriesNumber;
     let start = 0;
     let end = 0;
     const granularityValue = getGranularityInMS(granularityString);
@@ -266,7 +261,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     const start = range[0] ? +range[0] : 0;
     const end = range[1] ? +range[1] : 0;
     const granularityValue = getGranularityInMS(granularityString);
-    const seriesNumber = timeseriesNumber;
 
     setLimitHit(
       isGreaterThenLimit(limit, start, end, granularityValue, seriesNumber)
@@ -274,7 +268,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
   }, []);
 
   useEffect(() => {
-    if (!visible || !timeseriesNumber) {
+    if (!visible || !seriesNumber) {
       return;
     }
 
