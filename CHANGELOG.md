@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/cognitedata/gearbox.js/compare/v1.14.2...v1.15.0) (2020-03-23)
+
+
+### Features
+
+* **timeseries-chart:** time-series chart axis realignment ([#551](https://github.com/cognitedata/gearbox.js/issues/551)) ([1e012c7](https://github.com/cognitedata/gearbox.js/commit/1e012c71b5d32827e7417ef89c3bc9f154e2a4d2))
+
 ## [1.14.2](https://github.com/cognitedata/gearbox.js/compare/v1.14.1...v1.14.2) (2020-03-05)
 
 
