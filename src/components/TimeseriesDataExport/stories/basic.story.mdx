@@ -110,10 +110,10 @@ import { FetchTimeseriesCall } from '@cognite/gearbox';
 Definition:
 
 ```typescript
-import { InternalId, TimeSeries } from '@cognite/sdk';
+import { IdEither, TimeSeries } from '@cognite/sdk';
 
 type FetchTimeseriesCall = (
-  ids: InternalId[]
+  ids: IdEither[]
 ) => Promise<TimeSeries[]>;
 ```
 
