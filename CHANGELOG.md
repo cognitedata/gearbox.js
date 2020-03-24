@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/cognitedata/gearbox.js/compare/v1.15.0...v1.16.0) (2020-03-24)
+
+
+### Features
+
+* **timeseries-data-export:** support timeseriesExternalIds ([#636](https://github.com/cognitedata/gearbox.js/issues/636)) ([73937e4](https://github.com/cognitedata/gearbox.js/commit/73937e4ce45816c5338bfb644a488c957e107c6e))
+
 # [1.15.0](https://github.com/cognitedata/gearbox.js/compare/v1.14.2...v1.15.0) (2020-03-23)
 
 
