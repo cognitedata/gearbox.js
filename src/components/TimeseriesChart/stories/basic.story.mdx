@@ -4,6 +4,7 @@ import {
   decorators,
   customContainerStyle,
   zoomableClientDecorator,
+  ySubDomains,
   timeSeriesColors,
   rulerProp,
   handleMouseMove,
@@ -12,6 +13,7 @@ import {
   series,
   TimeseriesIdsComponentProps,
   SeriesComponentProps,
+  seriesWithCustomYdomain,
 } from './helper';
 
 <Meta title="Time Series/TimeseriesChart" decorators={decorators} />
@@ -405,6 +407,50 @@ const series = [
     <TimeseriesChart
       series={series}
       yAxisDisplayMode={'NONE'}
+    />
+  </Story>
+</Preview>
+
+### Define Y-axis Subdomain
+
+```jsx
+const ySubDomains = { 123: [-130, 130] };
+```
+
+<Preview>
+  <Story name="Define Y-axis Subdomain" >
+    <TimeseriesChart
+      timeseriesIds={[123]}
+      ySubDomains = {ySubDomains}
+    />
+  </Story>
+</Preview>
+
+### Define Y-axis Subdomain For Series
+
+```jsx
+import { AxisDisplayMode } from '@cognite/griff-react';
+
+const seriesWithCustomYdomain = [
+  {
+    id: 123,
+    color: 'green',
+    yAxisDisplayMode: AxisDisplayMode.ALL,
+    hidden: false,
+    ySubDomain: [-150, 150],
+  },
+  {
+    id: 456,
+    color: 'red',
+    ySubDomain: [-120, 120],
+  },
+];
+```
+
+<Preview>
+  <Story name="Define Y-axis Subdomain For Series" >
+    <TimeseriesChart
+      series={seriesWithCustomYdomain} 
     />
   </Story>
 </Preview>

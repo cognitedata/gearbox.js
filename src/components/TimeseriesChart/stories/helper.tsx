@@ -101,7 +101,25 @@ export const series = [
   },
 ];
 
+export const seriesWithCustomYdomain = [
+  {
+    id: 123,
+    color: 'green',
+    yAxisDisplayMode: AxisDisplayMode.ALL,
+    hidden: false,
+    ySubDomain: [-150, 150],
+  },
+  {
+    id: 456,
+    color: 'red',
+    ySubDomain: [-120, 120],
+  },
+];
+
+export const ySubDomains = { 123: [-130, 130] };
+
 export const TimeseriesIdsComponentProps: FC<
   TimeseriesChartByTimeseriesId
 > = () => <></>;
+
 export const SeriesComponentProps: FC<TimeseriesChartBySeries> = () => <></>;
