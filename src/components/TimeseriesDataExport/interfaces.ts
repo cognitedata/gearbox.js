@@ -2,7 +2,7 @@ import {
   Aggregate,
   DatapointsMultiQuery,
   GetTimeSeriesMetadataDTO,
-  InternalId,
+  IdEither,
 } from '@cognite/sdk';
 import { ColProps } from 'antd/lib/grid';
 import { Moment } from 'moment';
@@ -16,7 +16,7 @@ export type FetchCSVCall = (
 ) => Promise<string>;
 
 export type FetchTimeseriesCall = (
-  ids: InternalId[]
+  ids: IdEither[]
 ) => Promise<GetTimeSeriesMetadataDTO[]>;
 export type CSVLabelFormatter = LabelFormatter;
 
@@ -43,7 +43,11 @@ export interface TimeseriesDataExportProps {
   /**
    * Array of timeserie ids
    */
-  timeseriesIds: number[];
+  timeseriesIds?: number[];
+  /**
+   * Array of timeserie externalIds
+   */
+  timeseriesExternalIds?: string[];
   /**
    * String, that represents initial granularity (ex. 2m, 15s, 1h) to be displayed in form
    */
