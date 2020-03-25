@@ -1,4 +1,8 @@
-import { DatapointsMultiQuery, GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import {
+  DatapointsMultiQuery,
+  GetTimeSeriesMetadataDTO,
+  IdEither,
+} from '@cognite/sdk';
 import {
   Alert,
   Button,
@@ -66,7 +70,8 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     form,
     form: { getFieldDecorator },
     formItemLayout = formItemLayoutDefault,
-    timeseriesIds,
+    timeseriesIds = [],
+    timeseriesExternalIds = [],
     visible,
     defaultTimeRange: [startTimestamp, endTimestamp],
     granularity,
@@ -93,6 +98,8 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     }),
     [strings]
   );
+
+  const seriesNumber = timeseriesIds.length + timeseriesExternalIds.length;
 
   const {
     title,
@@ -138,7 +145,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     event: SyntheticEvent<HTMLInputElement>
   ) => {
     const [start, end] = form.getFieldValue('range');
-    const seriesNumber = timeseriesIds.length;
     const granularityString = event.currentTarget.value;
     const granularityValue = getGranularityInMS(granularityString);
 
@@ -149,7 +155,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
 
   const checkLimitOnRangeChange = (range: RangePickerValue) => {
     const granularityString = form.getFieldValue('granularity');
-    const seriesNumber = timeseriesIds.length;
     let start = 0;
     let end = 0;
     const granularityValue = getGranularityInMS(granularityString);
@@ -167,7 +172,13 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
   const fetchTimeseries = async () => {
     const fetchTimeseriesCall =
       retrieveTimeseries || context!.timeseries.retrieve;
-    const timeserieIdsObj = timeseriesIds.map(id => ({ id }));
+
+    const timeserieIdsObj: IdEither[] = [
+      ...timeseriesIds.map(id => ({ id })),
+      ...timeseriesExternalIds.map(externalId => ({
+        externalId,
+      })),
+    ];
 
     setLoading(true);
 
@@ -250,7 +261,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     const start = range[0] ? +range[0] : 0;
     const end = range[1] ? +range[1] : 0;
     const granularityValue = getGranularityInMS(granularityString);
-    const seriesNumber = timeseriesIds.length;
 
     setLimitHit(
       isGreaterThenLimit(limit, start, end, granularityValue, seriesNumber)
@@ -258,7 +268,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
   }, []);
 
   useEffect(() => {
-    if (!visible || !timeseriesIds.length) {
+    if (!visible || !seriesNumber) {
       return;
     }
 
