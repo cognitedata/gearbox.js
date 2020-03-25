@@ -44,6 +44,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   pinchZoom: React.RefObject<HTMLDivElement>;
   pinchZoomContainer: React.RefObject<HTMLDivElement>;
   svgParentNode: React.RefObject<HTMLDivElement>;
+  isOptimizationDisabled: boolean = false;
   constructor(props: SvgViewerProps) {
     super(props);
     this.state = {
@@ -262,6 +263,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
         this.initiateScale();
         this.initPinchToZoom();
         this.initAttributesForMetadataContainer();
+        this.shouldDisableOptimization();
         this.setCustomClasses();
         this.svg.addEventListener('click', this.handleItemClick);
         this.zoomOnCurrentAsset(
@@ -336,6 +338,16 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     });
   };
 
+  shouldDisableOptimization = () => {
+    // Because willChange optimization has a calculation cost
+    // we don't want to apply it for a bigger embedded into svg <image />
+    // tags since it slows down the performance instead of providing
+    // a boost. Images are already heavily optimized by browsers
+    // so we don't need to care much about additional optimizations.
+    const metadataArray = this.svg.querySelectorAll('image');
+    this.isOptimizationDisabled = metadataArray.length > 0;
+  };
+
   onMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!this.pinchZoomInstance) {
       return;
@@ -383,7 +395,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   // https://developer.mozilla.org/en-US/docs/Web/CSS/will-change
   // so all the items will be rendered not blurry
   onTouchStart = () => {
-    if (this.pinchZoom.current) {
+    if (this.pinchZoom.current && !this.isOptimizationDisabled) {
       // @ts-ignore 'willChange' is not a part of 'CSSStyleDeclaration'
       this.pinchZoom.current.style.willChange = 'transform';
     }
@@ -391,7 +403,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
 
   // tslint:disable-next-line no-identical-functions
   onTouchEnd = () => {
-    if (this.pinchZoom.current) {
+    if (this.pinchZoom.current && !this.isOptimizationDisabled) {
       // @ts-ignore 'willChange' is not a part of 'CSSStyleDeclaration'
       this.pinchZoom.current.style.willChange = 'auto';
     }
