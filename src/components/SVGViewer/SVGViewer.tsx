@@ -339,10 +339,10 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   };
 
   shouldDisableOptimization = () => {
-    // Bacause willChange optimization has a calculation cost
+    // Because willChange optimization has a calculation cost
     // we don't want to apply it for a bigger embedded into svg <image />
     // tags since it slows down the performance instead of providing
-    // a boost. Images are already heavily optimizaide by browsers
+    // a boost. Images are already heavily optimized by browsers
     // so we don't need to care much about additional optimizations.
     const metadataArray = this.svg.querySelectorAll('image');
     this.isOptimizationDisabled = metadataArray.length > 0;
