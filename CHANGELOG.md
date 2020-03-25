@@ -1,3 +1,10 @@
+## [1.16.1](https://github.com/cognitedata/gearbox.js/compare/v1.16.0...v1.16.1) (2020-03-25)
+
+
+### Performance Improvements
+
+* **svgviewer:** improve performance for svgviewer with images ([#638](https://github.com/cognitedata/gearbox.js/issues/638)) ([efa9add](https://github.com/cognitedata/gearbox.js/commit/efa9addb8cf86698209b4bbf334aebf5bd2e59bd))
+
 # [1.16.0](https://github.com/cognitedata/gearbox.js/compare/v1.15.0...v1.16.0) (2020-03-24)
 
 
