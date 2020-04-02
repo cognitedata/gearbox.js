@@ -1,0 +1,35 @@
+import { Story, Preview, Props } from '@storybook/addon-docs/blocks';
+import { HoverablePreview } from '../HoverablePreview';
+
+<Meta title="Others/HoverablePreview" />
+
+### Basic look
+
+<Preview>
+  <Story name="Basic look" >
+    <HoverablePreview>
+      <HoverablePreview.Header title="Hoverable Preview - basic look" />
+      <HoverablePreview.Cell title="Centered cell">
+        <div>TEST</div>
+      </HoverablePreview.Cell>
+      <HoverablePreview.Cell title="Cell on the left" align="left">
+        <div>TEST</div>
+      </HoverablePreview.Cell>
+      <HoverablePreview.Cell title="Cell on the right" align="right">
+        <div>TEST</div>
+      </HoverablePreview.Cell>
+      <HoverablePreview.Cell title="Centered cell with borders" borders>
+        <div>TEST</div>
+      </HoverablePreview.Cell>
+      <HoverablePreview.Cell title="Cell on the left with borders" borders align="left">
+        <div>TEST</div>
+      </HoverablePreview.Cell>
+      <HoverablePreview.Cell title="Cell on the right with borders" borders align="right">
+        <div>TEST</div>
+      </HoverablePreview.Cell>
+      <HoverablePreview.Cell title="Normal centered cell">
+        <div>TEST</div>
+      </HoverablePreview.Cell>
+    </HoverablePreview>
+  </Story>
+</Preview>
