@@ -1,27 +1,19 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
-import {HoverablePreviewCell} from './components/HoverablePreviewCell';
-import {HoverablePreviewHeader} from './components/HoverablePreviewHeader';
-// import { HoverablePreviewProps } from './types';
+import { HoverablePreviewCell } from './components/HoverablePreviewCell';
+import { HoverablePreviewHeader } from './components/HoverablePreviewHeader';
+import { HoverablePreviewProps } from './types';
 
-type HoverablePreviewProps = {
-    title?: string,
-    borders?: boolean,
-    children: ReactNode,
-};
-
-export const StyledHP = styled.div<HoverablePreviewProps>`
+export const StyledHoverablePreview = styled.div<HoverablePreviewProps>`
     width: 480px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: center;
+    justify-content: flex-start;
     color: #111;
-    box-shadow: 0px 10px 10px #e8e8e8;
-    word-break: break-all;
-    ${props => props.borders && css`
-        border-top: 1px solid #e8e8e8;
-        border-left: 1px solid #e8e8e8;
+    word-break: break-word;
+    ${props => !props.noShadow && css`
+        box-shadow: 0px 10px 10px #e8e8e8;
     `}
 `;
 
@@ -30,9 +22,9 @@ export class HoverablePreview extends React.Component<HoverablePreviewProps> {
     static Header = HoverablePreviewHeader;
     render() {
         return (
-            <StyledHP>
+            <StyledHoverablePreview>
                 {this.props.children}
-            </StyledHP>
+            </StyledHoverablePreview>
         )
     };
 }
