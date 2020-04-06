@@ -8,7 +8,10 @@ import { HoverablePreview } from '../HoverablePreview';
 <Preview>
   <Story name="Basic look without borders" >
     <HoverablePreview>
-      <HoverablePreview.Header title="Hoverable Preview without borders" />
+      <HoverablePreview.Header>
+        <HoverablePreview.Title>Hoverable Preview without borders</HoverablePreview.Title>
+        <HoverablePreview.CloseButton />
+      </HoverablePreview.Header>
       <HoverablePreview.Cell title="Centered cell">
         <div>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -51,7 +54,10 @@ import { HoverablePreview } from '../HoverablePreview';
 <Preview>
   <Story name="Basic look with borders" >
     <HoverablePreview>
-      <HoverablePreview.Header title="Hoverable Preview with borders" />
+      <HoverablePreview.Header>
+        <HoverablePreview.Title>Hoverable Preview with borders</HoverablePreview.Title>
+        <HoverablePreview.CloseButton />
+      </HoverablePreview.Header>
       <HoverablePreview.Cell title="Centered cell" borders={[ 'top', 'bottom' ]}>
         <div>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -85,6 +91,28 @@ import { HoverablePreview } from '../HoverablePreview';
       <HoverablePreview.Cell title="Cell on the left" borders={[ 'right' ]} align="left">
         <div>
           Etiam sed nisl sapien.
+        </div>
+      </HoverablePreview.Cell>
+    </HoverablePreview>
+  </Story>
+</Preview>
+
+<Preview>
+  <Story name="With only title" >
+    <HoverablePreview>
+      <HoverablePreview.Header>
+        <HoverablePreview.Title>Hoverable Preview without borders</HoverablePreview.Title>
+      </HoverablePreview.Header>
+    </HoverablePreview>
+  </Story>
+</Preview>
+
+<Preview>
+  <Story name="With only one cell" >
+    <HoverablePreview>
+      <HoverablePreview.Cell title="Single cell">
+        <div>
+          Lorem ipsum dolor sit amet.
         </div>
       </HoverablePreview.Cell>
     </HoverablePreview>

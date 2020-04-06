@@ -1,1 +1,5 @@
-export { HoverablePreviewHeader } from './HoverablePreviewHeader';
+export {
+  HoverablePreviewHeader,
+  HoverablePreviewTitle,
+  HoverablePreviewCloseButton,
+} from './HoverablePreviewHeader';

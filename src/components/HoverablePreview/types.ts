@@ -1,23 +1,22 @@
 import { ReactNode } from 'react';
 
-// container
-export interface HoverablePreviewProps {
-  title?: string;
-  noShadow?: boolean;
-  children: ReactNode;
-}
+export type TBorders = ['top'?, 'right'?, 'bottom'?, 'left'?];
+export type TAlign = 'left' | 'right' | 'center';
 
+export interface HPBasicProps {
+  className?: string;
+}
+export interface HoverablePreviewProps extends HPBasicProps {
+  noShadow?: boolean;
+  children: ReactNode | string;
+}
+export interface CellProps extends HPBasicProps {
+  children: ReactNode | string;
+  title?: string;
+  align?: TAlign;
+  borders?: TBorders;
+}
 export interface TAssetsProps {
   key: string;
   value: string;
-}
-
-// cell
-export type TBorders = ['top'?, 'right'?, 'bottom'?, 'left'?];
-export type TAlign = 'left' | 'right' | 'center';
-export interface CellProps {
-  title?: string;
-  children: ReactNode | string;
-  align?: TAlign;
-  borders?: TBorders;
 }

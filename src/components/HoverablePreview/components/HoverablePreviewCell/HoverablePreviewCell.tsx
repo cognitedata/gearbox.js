@@ -9,7 +9,7 @@ const adjustBorders = (borders?: TBorders) => {
   const left = borders && borders.includes('left') ? 'solid' : 'none';
 
   return css`
-    border: 1px solid #e8e8e8;
+    border: 1px solid #d9d9d9;
     border-style: ${top} ${right} ${bottom} ${left};
   `;
 };
@@ -17,8 +17,11 @@ const adjustBorders = (borders?: TBorders) => {
 const StyledHPCell = styled.div<CellProps>`
   display: flex;
   flex-direction: column;
-  padding: 15px;
+  padding: 16px;
   box-sizing: border-box;
+  color: #262626;
+  font-size: 14px;
+  line-height: 24px;
   width: ${({ align }) => (align ? '50%' : '100%')};
   ${({ align }) =>
     align === 'right' &&
@@ -29,7 +32,9 @@ const StyledHPCell = styled.div<CellProps>`
 
     .title {
     text-transform: uppercase;
-    font-size: 0.8em;
+    color: #595959;
+    font-size: 12px;
+    line-height: 20px;
   }
 `;
 

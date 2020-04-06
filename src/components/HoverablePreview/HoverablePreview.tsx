@@ -1,11 +1,15 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { HoverablePreviewCell } from './components/HoverablePreviewCell';
-import { HoverablePreviewHeader } from './components/HoverablePreviewHeader';
+import {
+  HoverablePreviewCloseButton,
+  HoverablePreviewHeader,
+  HoverablePreviewTitle,
+} from './components/HoverablePreviewHeader';
 import { HoverablePreviewProps } from './types';
 
 export const StyledHoverablePreview = styled.div<HoverablePreviewProps>`
-  width: 480px;
+  width: 360px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -22,6 +26,8 @@ export const StyledHoverablePreview = styled.div<HoverablePreviewProps>`
 export class HoverablePreview extends React.Component<HoverablePreviewProps> {
   static Cell = HoverablePreviewCell;
   static Header = HoverablePreviewHeader;
+  static Title = HoverablePreviewTitle;
+  static CloseButton = HoverablePreviewCloseButton;
   render() {
     return (
       <StyledHoverablePreview>{this.props.children}</StyledHoverablePreview>

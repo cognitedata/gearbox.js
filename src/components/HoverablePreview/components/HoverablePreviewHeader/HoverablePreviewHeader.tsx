@@ -1,24 +1,22 @@
 import { Icon } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
+import { HPBasicProps } from '../../types';
 
-const StyledHPHeader = styled.div`
+export const HoverablePreviewHeader = styled.div<HPBasicProps>`
   width: 100%;
   min-height: 50px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 15px 15px 20px 15px;
-
-  .close-button {
-    margin-left: 5px;
-  }
+  padding: 16px 16px 20px 16px;
 `;
 
-export const HoverablePreviewHeader = (props: any) => (
-  <StyledHPHeader>
-    <div className="hp-title">{props.title ? props.title : ''}</div>
-    <Icon type="close" />
-  </StyledHPHeader>
-);
+export const HoverablePreviewTitle = styled.span<HPBasicProps>`
+  align-self: flex-start;
+`;
+export const StyledIcon = styled(Icon)<HPBasicProps>`
+  margin-left: 5px;
+`;
+export const HoverablePreviewCloseButton = () => <Icon type="close" />;
