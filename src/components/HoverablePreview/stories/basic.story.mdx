@@ -1,55 +1,89 @@
 import { Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { HoverablePreview } from '../HoverablePreview';
+import { TimeseriesSearch } from '../../TimeseriesSearch';
+import { Icon } from 'antd';
 
 <Meta title="Others/HoverablePreview" />
 
-### Basic look
+# Hoverable Preview
+
+`HoverablePreview` component is meant to be a generic display component appearing after hovering an question mark icon.
+It has four static properties: Header, Title, CloseButton and Cell.
+Cell accepts children - either strings, or React Components. 
+
+## Examples
+
+### Appearing on icon hover
 
 <Preview>
-  <Story name="Basic look without borders" >
+  <Story name="With the hover functionality">
+    <div style={{width: '500px', border: '1px solid #000', padding: '10px', display: 'flex', flexDirection: 'row'}}>
+      Hover me => 
+      <HoverablePreview displayOn='hover'>
+        <HoverablePreview.Header>
+          <HoverablePreview.Title>This component should appear on hover.</HoverablePreview.Title>
+        </HoverablePreview.Header>
+        <HoverablePreview.Cell title="A cell">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </HoverablePreview.Cell>
+      </HoverablePreview>
+    </div>
+  </Story>
+</Preview>
+
+### Appearing on icon click
+
+<Preview>
+  <Story name="With the click functionality">
+    <div style={{width: '500px', border: '1px solid #000', padding: '10px', display: 'flex', flexDirection: 'row'}}>
+      Click me => 
+      <HoverablePreview displayOn='click'>
+        <HoverablePreview.Header>
+          <HoverablePreview.Title>This component should appear on click.</HoverablePreview.Title>
+          <HoverablePreview.CloseButton />
+        </HoverablePreview.Header>
+        <HoverablePreview.Cell title="A cell">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </HoverablePreview.Cell>
+      </HoverablePreview>
+    </div>
+  </Story>
+</Preview>
+
+### Basic look without borders
+
+<Preview>
+  <Story name="Basic look without borders">
     <HoverablePreview>
       <HoverablePreview.Header>
         <HoverablePreview.Title>Hoverable Preview without borders</HoverablePreview.Title>
         <HoverablePreview.CloseButton />
       </HoverablePreview.Header>
       <HoverablePreview.Cell title="Centered cell">
-        <div>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </div>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       </HoverablePreview.Cell>
       <HoverablePreview.Cell title="Cell on the left" align="left">
-        <div>
-          Donec eleifend velit eget hendrerit auctor. Aliquam erat volutpat.
-        </div>
+        Donec eleifend velit eget hendrerit auctor. Aliquam erat volutpat.
       </HoverablePreview.Cell>
       <HoverablePreview.Cell title="Cell on the right" align="right">
-        <div>
-          Morbi efficitur viverra consectetur.
-        </div>
+        Morbi efficitur viverra consectetur.
       </HoverablePreview.Cell>
       <HoverablePreview.Cell title="Centered cell">
-        <div>
-          Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
-        </div>
+        Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
       </HoverablePreview.Cell>
       <HoverablePreview.Cell title="Cell on the right" align="right">
-        <div>
-          Vestibulum ante ipsum primis in faucibus orci luctus.
-        </div>
+        Vestibulum ante ipsum primis in faucibus orci luctus.
       </HoverablePreview.Cell>
-      <HoverablePreview.Cell title="Centered cell">
-        <div>
-          Cras auctor quam in nibh auctor, id mollis ex mattis. Fusce venenatis at ante ut luctus. Morbi erat eros, mattis id semper molestie, euismod et mauris.
-        </div>
+      <HoverablePreview.Cell title="This cell will be loading">
       </HoverablePreview.Cell>
       <HoverablePreview.Cell title="Cell on the left" align="left">
-        <div>
-          Etiam sed nisl sapien.
-        </div>
+        Etiam sed nisl sapien.
       </HoverablePreview.Cell>
     </HoverablePreview>
   </Story>
 </Preview>
+
+### Basic look with borders
 
 <Preview>
   <Story name="Basic look with borders" >
@@ -59,62 +93,26 @@ import { HoverablePreview } from '../HoverablePreview';
         <HoverablePreview.CloseButton />
       </HoverablePreview.Header>
       <HoverablePreview.Cell title="Centered cell" borders={[ 'top', 'bottom' ]}>
-        <div>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </div>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       </HoverablePreview.Cell>
       <HoverablePreview.Cell title="Cell on the left" borders={[ 'right' ]} align="left">
-        <div>
-          Donec eleifend velit eget hendrerit auctor. Aliquam erat volutpat.
-        </div>
+        Donec eleifend velit eget hendrerit auctor. Aliquam erat volutpat.
       </HoverablePreview.Cell>
       <HoverablePreview.Cell title="Cell on the right" align="right">
-        <div>
-          Morbi efficitur viverra consectetur.
-        </div>
+        Morbi efficitur viverra consectetur.
       </HoverablePreview.Cell>
       <HoverablePreview.Cell title="Centered cell" borders={[ 'top', 'bottom' ]}>
-        <div>
-          Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
-        </div>
+        Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
       </HoverablePreview.Cell>
       <HoverablePreview.Cell title="Cell on the right" borders={[ 'left' ]} align="right">
-        <div>
-          Vestibulum ante ipsum primis in faucibus orci luctus.
-        </div>
+        Vestibulum ante ipsum primis in faucibus orci luctus.
       </HoverablePreview.Cell>
-      <HoverablePreview.Cell title="Normal centered cell" borders={[ 'top', 'bottom' ]}>
-        <div>
-          Cras auctor quam in nibh auctor, id mollis ex mattis. Fusce venenatis at ante ut luctus. Morbi erat eros, mattis id semper molestie, euismod et mauris.
-        </div>
+      <HoverablePreview.Cell title="This cell will be loading" borders={[ 'top', 'bottom' ]}>
       </HoverablePreview.Cell>
       <HoverablePreview.Cell title="Cell on the left" borders={[ 'right' ]} align="left">
-        <div>
-          Etiam sed nisl sapien.
-        </div>
+        Etiam sed nisl sapien.
       </HoverablePreview.Cell>
     </HoverablePreview>
   </Story>
 </Preview>
 
-<Preview>
-  <Story name="With only title" >
-    <HoverablePreview>
-      <HoverablePreview.Header>
-        <HoverablePreview.Title>Hoverable Preview without borders</HoverablePreview.Title>
-      </HoverablePreview.Header>
-    </HoverablePreview>
-  </Story>
-</Preview>
-
-<Preview>
-  <Story name="With only one cell" >
-    <HoverablePreview>
-      <HoverablePreview.Cell title="Single cell">
-        <div>
-          Lorem ipsum dolor sit amet.
-        </div>
-      </HoverablePreview.Cell>
-    </HoverablePreview>
-  </Story>
-</Preview>
