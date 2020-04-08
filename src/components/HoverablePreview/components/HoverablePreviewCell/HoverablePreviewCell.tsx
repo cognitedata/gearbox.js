@@ -38,18 +38,15 @@ const StyledHPCell = styled.div<CellProps>`
   }
 `;
 
-export class HoverablePreviewCell extends React.Component<CellProps> {
-  constructor(props: CellProps) {
-    super(props);
-  }
-
+export class HoverablePreviewCell extends React.Component<CellProps, {loaded: boolean}> {
   render() {
     const { title, children, borders, align } = this.props;
+
     return (
-      <StyledHPCell borders={borders} align={align}>
-        {title && <div className="title">{title}</div>}
-        {children}
-      </StyledHPCell>
+        <StyledHPCell borders={borders} align={align}>
+          {title && <div className="title">{title}</div>}
+          {children}
+        </StyledHPCell>
     );
   }
 }
