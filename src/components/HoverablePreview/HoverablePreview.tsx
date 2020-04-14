@@ -43,6 +43,7 @@ export class HoverablePreview extends React.Component<HPProps, { show: boolean }
   static Title = HoverablePreviewTitle;
   static DisplayIcon = HoverablePreviewHoverIcon;
   static CloseButton = HoverablePreviewCloseButton;
+  private wrapperRef: any;
 
   constructor(props:any) {
     super(props);
@@ -50,16 +51,26 @@ export class HoverablePreview extends React.Component<HPProps, { show: boolean }
       show: false,
     }
     this.isShown = this.isShown.bind(this);
-  }
-
-  componentDidMount = () => !this.props.displayOn && this.setState({ show: true });
+    this.wrapperRef = React.createRef();
+  };
   isShown = (show:boolean) => this.setState({ show });
+  handleClickOutside = (event:any) => {
+    if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
+      this.setState({ show: false });
+    }
+  };
+  componentDidMount = () => {
+    !this.props.displayOn && this.setState({ show: true });
+    this.props.displayOn === "click" && document.addEventListener('mousedown', this.handleClickOutside);
+  };
+  componentWillUnmount = () => this.props.displayOn === "click" && document.removeEventListener('mousedown', this.handleClickOutside);
   render() {
     const { noShadow, displayOn, fadeIn } = this.props;
     return (
       <StyledHoverableWrapper
         className="hp-wrapper"
         show={this.state.show}
+        ref={this.wrapperRef}
       >
         <HoverablePreview.DisplayIcon
           onMouseOver={() => displayOn==='hover' && this.isShown(true)}

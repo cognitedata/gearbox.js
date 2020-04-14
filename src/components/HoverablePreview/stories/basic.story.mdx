@@ -7,8 +7,10 @@ import { Icon } from 'antd';
 
 # Hoverable Preview
 
-`HoverablePreview` component is meant to be a generic display component appearing after hovering an question mark icon.
+`HoverablePreview` component is meant to be a generic display component. It can be displayed either after hovering an question mark icon, after clicking the question mark icon, or be displayed by default.
+
 It has four static properties: Header, Title, CloseButton and Cell.
+
 Cell accepts children - either strings, or React Components. 
 
 ## Examples
@@ -19,175 +21,129 @@ Cell accepts children - either strings, or React Components.
   <Story name="Always visible">
     <HoverablePreview>
       <HoverablePreview.Header>
-        <HoverablePreview.Title>This component should be always visible.</HoverablePreview.Title>
-        <HoverablePreview.CloseButton />
+        <HoverablePreview.Title>This component should be always visible....</HoverablePreview.Title>
       </HoverablePreview.Header>
-      <HoverablePreview.Cell title="Cell on the right" align="right">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      <HoverablePreview.Cell title="...because..." align="right">
+        ...it doesn't have the optional "displayOn" property.
       </HoverablePreview.Cell>
-      <HoverablePreview.Cell title="Centered cell">
-        Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
+      <HoverablePreview.Cell title="displayOn='hover'">
+        ...would cause this component to have an (?) icon attached, upon hovering which the component appears.
       </HoverablePreview.Cell>
-      <HoverablePreview.Cell title="Cell on the left" align="left">
-        Morbi efficitur viverra consectetur.
+      <HoverablePreview.Cell title="displayOn='click'" align="left">
+        ...causes this component to appear after clicking on the attached (?) icon.
       </HoverablePreview.Cell>
     </HoverablePreview>
   </Story>
 </Preview>
 
-### Displaying on hover
+### Cells with borders
 
 <Preview>
-  <Story name="With the hover functionality">
-    <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '250px'}}>
-      <div style={{width: '500px', padding: '10px', display: 'flex', flexDirection: 'row'}}>
-        Hover me 
-        <HoverablePreview displayOn='hover'>
-          <HoverablePreview.Header>
-            <HoverablePreview.Title>This component should appear on hover.</HoverablePreview.Title>
-          </HoverablePreview.Header>
-          <HoverablePreview.Cell title="Cell on the right" align="right">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Centered cell">
-            Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Cell on the left" align="left">
-            Morbi efficitur viverra consectetur.
-          </HoverablePreview.Cell>
-        </HoverablePreview>
-      </div>
-      <div style={{width: '500px', padding: '10px', display: 'flex', flexDirection: 'row'}}>
-        Hover me and I'll fade-in
-        <HoverablePreview fadeIn displayOn='hover'>
-          <HoverablePreview.Header>
-            <HoverablePreview.Title>This component should fade-in on hover.</HoverablePreview.Title>
-          </HoverablePreview.Header>
-          <HoverablePreview.Cell title="Cell on the right" align="right">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Centered cell">
-            Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Cell on the left" align="left">
-            Morbi efficitur viverra consectetur.
-          </HoverablePreview.Cell>
-        </HoverablePreview>
-      </div>
-      <div style={{width: '500px', padding: '10px', display: 'flex', flexDirection: 'row'}}>
-        Hover me, I won't have a shadow
-        <HoverablePreview noShadow displayOn='hover'>
-          <HoverablePreview.Header>
-            <HoverablePreview.Title>This component should appear on hover without a shadow.</HoverablePreview.Title>
-          </HoverablePreview.Header>
-          <HoverablePreview.Cell title="Cell on the right" align="right">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Centered cell">
-            Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Cell on the left" align="left">
-            Morbi efficitur viverra consectetur.
-          </HoverablePreview.Cell>
-        </HoverablePreview>
-      </div>
-      <div style={{width: '500px', padding: '10px', display: 'flex', flexDirection: 'row'}}>
-        Hover me, my cells will have borders
-        <HoverablePreview displayOn='hover'>
-          <HoverablePreview.Header>
-            <HoverablePreview.Title>This component should appear on hover and its cells should have borders.</HoverablePreview.Title>
-          </HoverablePreview.Header>
-          <HoverablePreview.Cell title="Cell on the right" borders={[ 'left' ]} align="right">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Centered cell" borders={[ 'top', 'bottom' ]}>
-            Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Cell on the left" borders={[ 'right' ]} align="left">
-            Donec eleifend velit eget hendrerit auctor. 
-          </HoverablePreview.Cell>
-        </HoverablePreview>
-      </div>
-    </div>
+  <Story name="Cells with borders">
+    <HoverablePreview>
+      <HoverablePreview.Header>
+        <HoverablePreview.Title>This component's cells should have borders.</HoverablePreview.Title>
+      </HoverablePreview.Header>
+      <HoverablePreview.Cell title="Cell on the right" borders={[ 'left' ]} align="right">
+        This cell's optional "borders" property contains "left".
+      </HoverablePreview.Cell>
+      <HoverablePreview.Cell title="Centered cell" borders={[ 'top', 'bottom' ]}>
+        This cell optional "borders" property contains "top" and "bottom".
+      </HoverablePreview.Cell>
+      <HoverablePreview.Cell title="Cell on the left" borders={[ 'right' ]} align="left">
+        This cell's optional "borders" property containt "right".
+      </HoverablePreview.Cell>
+    </HoverablePreview>
   </Story>
 </Preview>
 
 ### Displaying on click
 
 <Preview>
-  <Story name="With the click functionality">
-    <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '250px'}}>
-      <div style={{width: '500px', padding: '10px', display: 'flex', flexDirection: 'row'}}>
-        Click me
-        <HoverablePreview displayOn='click'>
-          <HoverablePreview.Header>
-            <HoverablePreview.Title>This component should appear on click.</HoverablePreview.Title>
-            <HoverablePreview.CloseButton />
-          </HoverablePreview.Header>
-          <HoverablePreview.Cell title="Cell on the right" align="right">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Centered cell">
-            Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Cell on the left" align="left">
-            Morbi efficitur viverra consectetur.
-          </HoverablePreview.Cell>
-        </HoverablePreview>
-      </div>
-      <div style={{width: '500px', padding: '10px', display: 'flex', flexDirection: 'row'}}>
-        Click me and I'll fade-in
-        <HoverablePreview fadeIn displayOn='click'>
-          <HoverablePreview.Header>
-            <HoverablePreview.Title>This component should fade-in on click.</HoverablePreview.Title>
-            <HoverablePreview.CloseButton />
-          </HoverablePreview.Header>
-          <HoverablePreview.Cell title="Cell on the right" align="right">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Centered cell">
-            Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Cell on the left" align="left">
-            Morbi efficitur viverra consectetur.
-          </HoverablePreview.Cell>
-        </HoverablePreview>
-      </div>
-      <div style={{width: '500px', padding: '10px', display: 'flex', flexDirection: 'row'}}>
-        Cick me, I won't have a shadow
-        <HoverablePreview noShadow displayOn='click'>
-          <HoverablePreview.Header>
-            <HoverablePreview.Title>This component should appear on click without a shadow.</HoverablePreview.Title>
-            <HoverablePreview.CloseButton />
-          </HoverablePreview.Header>
-          <HoverablePreview.Cell title="Cell on the right" align="right">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Centered cell">
-            Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Cell on the left" align="left">
-            Morbi efficitur viverra consectetur.
-          </HoverablePreview.Cell>
-        </HoverablePreview>
-      </div>
-       <div style={{width: '500px', padding: '10px', display: 'flex', flexDirection: 'row'}}>
-        Click me, my cells will have borders
-        <HoverablePreview displayOn='click'>
-          <HoverablePreview.Header>
-            <HoverablePreview.Title>This component should appear on click and its cells should have borders.</HoverablePreview.Title>
-          </HoverablePreview.Header>
-          <HoverablePreview.Cell title="Cell on the right" borders={[ 'left' ]} align="right">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Centered cell" borders={[ 'top', 'bottom' ]}>
-            Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
-          </HoverablePreview.Cell>
-          <HoverablePreview.Cell title="Cell on the left" borders={[ 'right' ]} align="left">
-            Donec eleifend velit eget hendrerit auctor. 
-          </HoverablePreview.Cell>
-        </HoverablePreview>
-      </div>
+  <Story name="Displaying on click">
+    <div style={{width: '500px', padding: '10px', display: 'flex', flexDirection: 'row'}}>
+      Click me!
+      <HoverablePreview displayOn='click'>
+        <HoverablePreview.Header>
+          <HoverablePreview.Title>This component should appear on click.</HoverablePreview.Title>
+          <HoverablePreview.CloseButton />
+        </HoverablePreview.Header>
+        <HoverablePreview.Cell title="Example cell">
+          Clicking anywhere outside this component, or on the optional CloseButton, will close it.
+        </HoverablePreview.Cell>
+      </HoverablePreview>
+    </div>
+  </Story>
+</Preview>
+
+### Displaying on hover
+
+<Preview>
+  <Story name="Displaying on hover">
+    <div style={{width: '500px', padding: '10px', display: 'flex', flexDirection: 'row'}}>
+      Hover me!
+      <HoverablePreview displayOn='hover'>
+        <HoverablePreview.Header>
+          <HoverablePreview.Title>This component should appear on hover.</HoverablePreview.Title>
+        </HoverablePreview.Header>
+        <HoverablePreview.Cell title="Cell on the right" align="right">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </HoverablePreview.Cell>
+        <HoverablePreview.Cell title="Centered cell">
+          Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
+        </HoverablePreview.Cell>
+        <HoverablePreview.Cell title="Cell on the left" align="left">
+          Morbi efficitur viverra consectetur.
+        </HoverablePreview.Cell>
+      </HoverablePreview>
+    </div>
+  </Story>
+</Preview>
+
+### Displaying on hover with fade-in animation
+
+<Preview>
+  <Story name="Displaying on hover with fade-in animation">
+    <div style={{width: '500px', padding: '10px', display: 'flex', flexDirection: 'row'}}>
+      Hover me!
+      <HoverablePreview fadeIn displayOn='hover'>
+        <HoverablePreview.Header>
+          <HoverablePreview.Title>This component should fade-in on hover.</HoverablePreview.Title>
+        </HoverablePreview.Header>
+        <HoverablePreview.Cell title="Cell on the right" align="right">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </HoverablePreview.Cell>
+        <HoverablePreview.Cell title="Centered cell">
+          Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
+        </HoverablePreview.Cell>
+        <HoverablePreview.Cell title="Cell on the left" align="left">
+          Morbi efficitur viverra consectetur.
+        </HoverablePreview.Cell>
+      </HoverablePreview>
+    </div>
+  </Story>
+</Preview>
+
+### Displaying on hover without a shadow
+
+<Preview>
+  <Story name="Displaying on hover without a shadow">
+    <div style={{width: '500px', padding: '10px', display: 'flex', flexDirection: 'row'}}>
+      Hover me!
+      <HoverablePreview noShadow displayOn='hover'>
+        <HoverablePreview.Header>
+          <HoverablePreview.Title>This component should appear on hover without a shadow.</HoverablePreview.Title>
+        </HoverablePreview.Header>
+        <HoverablePreview.Cell title="Cell on the right" align="right">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </HoverablePreview.Cell>
+        <HoverablePreview.Cell title="Centered cell">
+          Morbi fermentum ut ligula nec pellentesque. Morbi lorem mauris, sagittis quis varius sit amet, accumsan at nisi.
+        </HoverablePreview.Cell>
+        <HoverablePreview.Cell title="Cell on the left" align="left">
+          Morbi efficitur viverra consectetur.
+        </HoverablePreview.Cell>
+      </HoverablePreview>
     </div>
   </Story>
 </Preview>
