@@ -8,7 +8,6 @@ const StyledHoverablePreviewHeader = styled.div`
   min-height: 50px;
   display: flex;
   flex-direction: row;
-  font-family: 'Proxima Nova', Verdana, Geneva, Tahoma, sans-serif;
   font-size: 14px;
   font-weight: 600;
   line-height: 24px;

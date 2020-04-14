@@ -9,7 +9,7 @@ import {
 } from './components/HoverablePreviewElements';
 import { HPProps } from './types';
 
-const StyledHoverableWrapper = styled.div`
+const StyledHoverableWrapper = styled.div<{show:boolean}>`
   display: flex;
   position: relative;
   flex-direction: row;
@@ -18,7 +18,9 @@ const StyledHoverableWrapper = styled.div`
 
 const StyledHoverablePreview = styled.div<HPProps>`
   position: absolute;
-  left: ${props => props.displayOn ? '30px' : '0'};
+  left: ${props => (props.displayOn ? '30px' : '0')};
+  opacity: ${props => (props.show ? "1" : "0")};
+  z-index: ${props => (props.show ? "100" : "auto")};
   width: 360px;
   display: flex;
   flex-direction: row;
@@ -27,11 +29,12 @@ const StyledHoverablePreview = styled.div<HPProps>`
   background-color: #fff;
   color: #111;
   word-break: break-word;
-  ${props =>
+  transition: ${props => (props.fadeIn ? "opacity .2s" : "none")};
+  ${props => (
     !props.noShadow &&
     css`
       box-shadow: 0px 10px 10px #e8e8e8;
-    `}
+    `)}
 `;
 
 export class HoverablePreview extends React.Component<HPProps, { show: boolean }> {
@@ -49,20 +52,14 @@ export class HoverablePreview extends React.Component<HPProps, { show: boolean }
     this.isShown = this.isShown.bind(this);
   }
 
-  componentDidMount = () => {
-    !this.props.displayOn && this.setState({ show: true });
-  }
-
-  isShown = (show:boolean) => {
-    this.setState({ show });
-    console.log(show);
-  };
-
+  componentDidMount = () => !this.props.displayOn && this.setState({ show: true });
+  isShown = (show:boolean) => this.setState({ show });
   render() {
-    const { noShadow, displayOn } = this.props;
+    const { noShadow, displayOn, fadeIn } = this.props;
     return (
       <StyledHoverableWrapper
         className="hp-wrapper"
+        show={this.state.show}
       >
         <HoverablePreview.DisplayIcon
           onMouseOver={() => displayOn==='hover' && this.isShown(true)}
@@ -71,10 +68,11 @@ export class HoverablePreview extends React.Component<HPProps, { show: boolean }
           style={ !displayOn ? { display: 'none' } : {}}
         />
         <StyledHoverablePreview 
-          className="hp-preview"
           noShadow={ noShadow }
           displayOn={ displayOn }
-          style={ this.state.show ? { display: 'flex' } : { display: 'none' }}
+          fadeIn={ fadeIn }
+          show={ this.state.show }
+          className="hp-preview"
         >
           {this.props.children}
         </StyledHoverablePreview>

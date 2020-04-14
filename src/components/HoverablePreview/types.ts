@@ -13,6 +13,8 @@ export interface HPIconProps {
 export interface HPProps {
   displayOn?: 'hover' | 'click' // when ommited, hoverable preview is always visible and HoverIcon is hidden
   noShadow?: boolean;
+  fadeIn?: boolean;
+  show?: boolean;
   className?: string;
   children: React.ReactNode | string;
 }
