@@ -1,7 +1,9 @@
+import { CogniteEvent } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { ASSET_META_EVENTS_STYLES, fakeEvents } from '../../../mocks';
+import { EventAddonsProp, MetadataRenderer } from '../interfaces';
 import {
   AssetEventsPanelPure,
   AssetEventsPanelPureComponent,
@@ -28,6 +30,42 @@ describe('AssetEventsPanel', () => {
       done();
     });
   });
+
+  it('should allow custom rendering of metadata', done => {
+    const assetEvents = fakeEvents;
+
+    const eventCssId = (event: CogniteEvent) => `some-${event.id}`;
+
+    const eventMessage = (event: CogniteEvent) => {
+      const source = (event.metadata && event.metadata.source) || '';
+      return `${source}: lorem-ipsum`;
+    };
+
+    const renderEventMetadata: MetadataRenderer = (event: EventAddonsProp) => (
+      <div key={event.id} id={eventCssId(event)}>
+        {eventMessage(event)}
+      </div>
+    );
+
+    const eventPanelModal = mount(
+      <AssetEventsPanelPure {...{ assetEvents, renderEventMetadata }} />
+    );
+
+    const clickableRow = eventPanelModal.find('td').first();
+    clickableRow.simulate('click');
+
+    setImmediate(() => {
+      eventPanelModal.update();
+
+      const [firstEvent] = fakeEvents;
+      const eventMetadata = eventPanelModal.find(`#${eventCssId(firstEvent)}`);
+
+      const expectedMessage = eventMessage(firstEvent);
+      expect(eventMetadata.text()).toEqual(expectedMessage);
+      done();
+    });
+  });
+
   it.each`
     inlineStyle                           | element
     ${ASSET_META_EVENTS_STYLES.table}     | ${'.ant-table-wrapper'}
