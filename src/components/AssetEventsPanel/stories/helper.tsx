@@ -2,7 +2,12 @@ import { CogniteEvent } from '@cognite/sdk';
 import React, { FC } from 'react';
 import { fakeEvents, MockCogniteClient, sleep } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
-import { AssetEventsPanelProps, AssetEventsPanelStyles } from '../interfaces';
+import {
+  AssetEventsPanelProps,
+  AssetEventsPanelStyles,
+  EventAddonsProp,
+  EventMetadataRenderer,
+} from '../interfaces';
 
 class CogniteClient extends MockCogniteClient {
   events: any = {
@@ -54,5 +59,18 @@ export const decorators = [
 
 export const handleAssetEventsLoaded = (events: CogniteEvent[]) =>
   console.log(events);
+
+export const renderEventMetadata: EventMetadataRenderer = (
+  event: EventAddonsProp
+) => {
+  const { metadata = {} } = event;
+  const { sourceId = 'N/A', source = '' } = metadata;
+
+  return (
+    <div key={event.id} id={event.id.toString()}>
+      <b>{sourceId}</b>: <i>{source}</i>
+    </div>
+  );
+};
 
 export const ComponentProps: FC<AssetEventsPanelProps> = () => <></>;

@@ -1,7 +1,14 @@
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 import { AssetEventsPanel } from '../AssetEventsPanel';
 import { AssetEventsPanelPure } from '../components/AssetEventsPanelPure';
-import { decorators, customColumns, customStyle, handleAssetEventsLoaded, ComponentProps } from './helper';
+import {
+  decorators,
+  customColumns,
+  customStyle,
+  handleAssetEventsLoaded,
+  ComponentProps,
+  renderEventMetadata,
+} from './helper';
 
 <Meta title="Assets/AssetEventsPanel" decorators={decorators} />
 
@@ -59,6 +66,7 @@ This interface defines inline CSS styles for inner elements of `AssetEventsPanel
 ```typescript
 import { AssetEventsPanelStyles } from '@cognite/gearbox';
 ```
+
 See more details in AssetMeta component documentation.
 
 ## Examples
@@ -89,12 +97,10 @@ const customColumns = [
   },
 ];
 ```
+
 <Preview>
   <Story name="Custom column names">
-     <AssetEventsPanel
-      assetId={4650652196144007}
-      columns={customColumns}
-    />
+    <AssetEventsPanel assetId={4650652196144007} columns={customColumns} />
   </Story>
 </Preview>
 
@@ -120,12 +126,10 @@ const customStyle: AssetEventsPanelStyles = {
   tableCell: { backgroundColor: '#DDD' },
 };
 ```
+
 <Preview>
   <Story name="Custom styles">
-    <AssetEventsPanel
-      assetId={4650652196144007}
-      styles={customStyle}
-    />
+    <AssetEventsPanel assetId={4650652196144007} styles={customStyle} />
   </Story>
 </Preview>
 
@@ -144,6 +148,34 @@ const handleAssetEventsLoaded = (events: CogniteEvent[]) => console.log(events);
     <AssetEventsPanel
       assetId={4650652196144007}
       onAssetEventsLoaded={handleAssetEventsLoaded}
+    />
+  </Story>
+</Preview>
+
+### Customer render of metadata.
+
+You can provide a custom function to render your metadata:
+
+```typescript
+import { EventAddonsProp, MetadataRenderer } from '@cognite/gearbox';
+
+const renderEventMetadata: MetadataRenderer = (event: EventAddonsProp) => {
+  const { metadata = {} } = event;
+  const { sourceId = 'N/A', source = '' } = metadata;
+
+  return (
+    <div key={event.id} id={event.id.toString()}>
+      {sourceId}: {source}
+    </div>
+  );
+};
+```
+
+<Preview>
+  <Story name="Custom metadata render">
+    <AssetEventsPanel
+      assetId={4650652196144007}
+      renderEventMetadata={renderEventMetadata}
     />
   </Story>
 </Preview>

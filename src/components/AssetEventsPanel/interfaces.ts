@@ -1,4 +1,5 @@
-import { CSSProperties } from 'react';
+import { CogniteEvent } from '@cognite/sdk';
+import React, { CSSProperties } from 'react';
 import { WithAssetEventsDataProps, WithAssetEventsProps } from '../../hoc';
 import { AnyIfEmpty } from '../../interfaces';
 
@@ -65,12 +66,27 @@ export interface AssetEventsPanelThemeProps {
   theme?: AnyIfEmpty<{}>;
 }
 
+export interface EventAddonsProp extends CogniteEvent {
+  typeAndSubtype: React.ReactNode;
+  start: string;
+  end: string;
+}
+
+export type EventMetadataRenderer = (event: EventAddonsProp) => React.ReactNode;
+
+export interface EventRenderMetadataProps {
+  /** Function which receives event and returns rendered metadata */
+  renderEventMetadata?: EventMetadataRenderer;
+}
+
 export type AssetEventsPanelProps = WithAssetEventsProps &
   MetaEventsProps &
   AssetEventsPanelStylesProps &
-  AssetEventsPanelThemeProps;
+  AssetEventsPanelThemeProps &
+  EventRenderMetadataProps;
 
 export type AssetEventsPanelPropsPure = WithAssetEventsDataProps &
   MetaEventsProps &
   AssetEventsPanelStylesProps &
-  AssetEventsPanelThemeProps;
+  AssetEventsPanelThemeProps &
+  EventRenderMetadataProps;
