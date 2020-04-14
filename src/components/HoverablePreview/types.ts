@@ -3,30 +3,24 @@ import React from 'react';
 export type TBorders = ['top'?, 'right'?, 'bottom'?, 'left'?];
 export type TAlign = 'left' | 'right' | 'center';
 
-export interface HPBasicProps {
-  displayOn?: 'hover' | 'click' // when ommited, hoverable preview is always visible and HoverIcon is hidden
-}
-export interface HPIconProps extends HPBasicProps {
+export interface HPIconProps {
   onMouseOver?: React.MouseEventHandler;
   onMouseEnter?: React.MouseEventHandler;
   onMouseLeave?: React.MouseEventHandler;
   onClick?: React.MouseEventHandler;
   style?: React.CSSProperties;
 }
-export interface HoverablePreviewProps extends HPBasicProps {
+export interface HPProps {
+  displayOn?: 'hover' | 'click' // when ommited, hoverable preview is always visible and HoverIcon is hidden
   noShadow?: boolean;
   className?: string;
   children: React.ReactNode | string;
 }
-export interface CellProps {
+export interface HPCellProps {
   children: React.ReactNode | string;
   className?: string;
   title?: string;
   align?: TAlign;
   borders?: TBorders;
 }
-export interface TAssetsProps {
-  className?: string;
-  key: string;
-  value: string;
-}
+

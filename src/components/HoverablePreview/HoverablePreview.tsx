@@ -7,7 +7,7 @@ import {
   HoverablePreviewTitle,
   HoverablePreviewHoverIcon,
 } from './components/HoverablePreviewElements';
-import { HoverablePreviewProps } from './types';
+import { HPProps } from './types';
 
 const StyledHoverableWrapper = styled.div`
   display: flex;
@@ -16,9 +16,9 @@ const StyledHoverableWrapper = styled.div`
   justify-content: space-between;
 `;
 
-const StyledHoverablePreview = styled.div<HoverablePreviewProps>`
+const StyledHoverablePreview = styled.div<HPProps>`
   position: absolute;
-  left: 30px;
+  left: ${props => props.displayOn ? '30px' : '0'};
   width: 360px;
   display: flex;
   flex-direction: row;
@@ -34,7 +34,7 @@ const StyledHoverablePreview = styled.div<HoverablePreviewProps>`
     `}
 `;
 
-export class HoverablePreview extends React.Component<HoverablePreviewProps, { show: boolean }> {
+export class HoverablePreview extends React.Component<HPProps, { show: boolean }> {
   static Cell = HoverablePreviewCell;
   static Header = HoverablePreviewHeader;
   static Title = HoverablePreviewTitle;
@@ -43,12 +43,14 @@ export class HoverablePreview extends React.Component<HoverablePreviewProps, { s
 
   constructor(props:any) {
     super(props);
-    this.state = { show: false }
+    this.state = { 
+      show: false,
+    }
     this.isShown = this.isShown.bind(this);
   }
 
   componentDidMount = () => {
-    !this.props.displayOn && this.setState({ show: true })
+    !this.props.displayOn && this.setState({ show: true });
   }
 
   isShown = (show:boolean) => {
@@ -57,18 +59,21 @@ export class HoverablePreview extends React.Component<HoverablePreviewProps, { s
   };
 
   render() {
+    const { noShadow, displayOn } = this.props;
     return (
       <StyledHoverableWrapper
         className="hp-wrapper"
       >
         <HoverablePreview.DisplayIcon
-          onMouseOver={() => this.props.displayOn==='hover' && this.isShown(true)}
-          onMouseLeave={() => this.props.displayOn==='hover' && this.isShown(false)}
-          onClick={() => this.props.displayOn==='click' && this.isShown(!this.state.show)}
-          style={ !this.props.displayOn ? { display: 'none' } : {}}
+          onMouseOver={() => displayOn==='hover' && this.isShown(true)}
+          onMouseLeave={() => displayOn==='hover' && this.isShown(false)}
+          onClick={() => displayOn==='click' && this.isShown(!this.state.show)}
+          style={ !displayOn ? { display: 'none' } : {}}
         />
         <StyledHoverablePreview 
           className="hp-preview"
+          noShadow={ noShadow }
+          displayOn={ displayOn }
           style={ this.state.show ? { display: 'flex' } : { display: 'none' }}
         >
           {this.props.children}

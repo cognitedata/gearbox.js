@@ -1,9 +1,9 @@
 import { Icon } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { HPBasicProps, HPIconProps } from '../../types';
+import { HPIconProps } from '../../types';
 
-const StyledHoverablePreviewHeader = styled.div<HPBasicProps>`
+const StyledHoverablePreviewHeader = styled.div`
   width: 100%;
   min-height: 50px;
   display: flex;
@@ -18,10 +18,10 @@ const StyledHoverablePreviewHeader = styled.div<HPBasicProps>`
   padding: 16px 16px 20px 16px;
 `;
 
-const StyledHoverablePreviewTitle = styled.span<HPBasicProps>`
+const StyledHoverablePreviewTitle = styled.span`
   align-self: flex-start;
 `;
-const StyledIcon = styled.div<HPBasicProps>`
+const StyledIcon = styled.div<HPIconProps>`
   margin-left: 5px;
   padding: 0;
   cursor: help;
