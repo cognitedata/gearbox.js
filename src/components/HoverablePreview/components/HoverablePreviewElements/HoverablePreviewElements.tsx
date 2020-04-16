@@ -28,11 +28,16 @@ const StyledIcon = styled.div<HPIconProps>`
 
 export const HoverablePreviewHeader = (props:any) => <StyledHoverablePreviewHeader className="hp-header">{props.children}</StyledHoverablePreviewHeader>
 export const HoverablePreviewTitle = (props:any) => <StyledHoverablePreviewTitle className="hp-title">{props.children}</StyledHoverablePreviewTitle>
-export const HoverablePreviewCloseButton = () => <Icon type="close" className="hp-close" />;
-export const HoverablePreviewHoverIcon = (props:HPIconProps) =>
+export const HoverablePreviewCloseButton = () => 
+  <StyledIcon 
+    className="hp-close"
+  >
+    <Icon type="close" />
+  </StyledIcon>;
+export const HoverablePreviewDisplayIcon = (props:HPIconProps) =>
   <StyledIcon 
     {...props}
-    className="hp-hovericon"
+    className="hp-displayicon"
   >
     <Icon type="question-circle" />
   </StyledIcon>;

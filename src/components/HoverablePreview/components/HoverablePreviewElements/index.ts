@@ -2,5 +2,5 @@ export {
   HoverablePreviewHeader,
   HoverablePreviewTitle,
   HoverablePreviewCloseButton,
-  HoverablePreviewHoverIcon,
+  HoverablePreviewDisplayIcon,
 } from './HoverablePreviewElements';

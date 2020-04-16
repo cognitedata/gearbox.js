@@ -5,7 +5,7 @@ import {
   HoverablePreviewCloseButton,
   HoverablePreviewHeader,
   HoverablePreviewTitle,
-  HoverablePreviewHoverIcon,
+  HoverablePreviewDisplayIcon,
 } from './components/HoverablePreviewElements';
 import { HPProps } from './types';
 
@@ -41,7 +41,7 @@ export class HoverablePreview extends React.Component<HPProps, { show: boolean }
   static Cell = HoverablePreviewCell;
   static Header = HoverablePreviewHeader;
   static Title = HoverablePreviewTitle;
-  static DisplayIcon = HoverablePreviewHoverIcon;
+  static DisplayIcon = HoverablePreviewDisplayIcon;
   static CloseButton = HoverablePreviewCloseButton;
   private wrapperRef: any;
 
@@ -50,20 +50,19 @@ export class HoverablePreview extends React.Component<HPProps, { show: boolean }
     this.state = { 
       show: false,
     }
-    this.isShown = this.isShown.bind(this);
     this.wrapperRef = React.createRef();
   };
   isShown = (show:boolean) => this.setState({ show });
   handleClickOutside = (event:any) => {
     if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
-      this.setState({ show: false });
+      this.isShown(false);
     }
   };
   componentDidMount = () => {
     !this.props.displayOn && this.setState({ show: true });
-    this.props.displayOn === "click" && document.addEventListener('mousedown', this.handleClickOutside);
+    this.props.displayOn === "click" && document.addEventListener('click', this.handleClickOutside);
   };
-  componentWillUnmount = () => this.props.displayOn === "click" && document.removeEventListener('mousedown', this.handleClickOutside);
+  componentWillUnmount = () => this.props.displayOn === "click" && document.removeEventListener('click', this.handleClickOutside);
   render() {
     const { noShadow, displayOn, fadeIn } = this.props;
     return (
@@ -79,11 +78,11 @@ export class HoverablePreview extends React.Component<HPProps, { show: boolean }
           style={ !displayOn ? { display: 'none' } : {}}
         />
         <StyledHoverablePreview 
+          className="hp-preview"
           noShadow={ noShadow }
           displayOn={ displayOn }
           fadeIn={ fadeIn }
           show={ this.state.show }
-          className="hp-preview"
         >
           {this.props.children}
         </StyledHoverablePreview>

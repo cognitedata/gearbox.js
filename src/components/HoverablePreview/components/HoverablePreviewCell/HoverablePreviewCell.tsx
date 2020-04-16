@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { CellProps, TBorders } from '../../types';
+import { HPCellProps, TBorders } from '../../types';
 
 const adjustBorders = (borders?: TBorders) => {
   const top = borders && borders.includes('top') ? 'solid' : 'none';
@@ -14,7 +14,7 @@ const adjustBorders = (borders?: TBorders) => {
   `;
 };
 
-const StyledHPCell = styled.div<CellProps>`
+const StyledHPCell = styled.div<HPCellProps>`
   display: flex;
   flex-direction: column;
   padding: 16px;
@@ -38,13 +38,13 @@ const StyledHPCell = styled.div<CellProps>`
   }
 `;
 
-export class HoverablePreviewCell extends React.Component<CellProps, {loaded: boolean}> {
+export class HoverablePreviewCell extends React.Component<HPCellProps, {loaded: boolean}> {
   render() {
     const { title, children, borders, align } = this.props;
 
     return (
-        <StyledHPCell borders={borders} align={align}>
-          {title && <div className="title">{title}</div>}
+        <StyledHPCell className="hp-cell" borders={borders} align={align}>
+          {title && <div className="hp-cell-title">{title}</div>}
           {children}
         </StyledHPCell>
     );
