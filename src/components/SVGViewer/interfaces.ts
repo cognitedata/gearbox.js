@@ -54,6 +54,14 @@ interface SvgViewerBasicProps {
    */
   customClassNames?: CustomClassNames;
   /**
+   * Maximum zoom for the svg viewer
+   */
+  maxZoom?: number;
+  /**
+   * Minimum zoom for the svg viewer
+   */
+  minZoom?: number;
+  /**
    * Condition to locate and highlight current asset during first render
    */
   isCurrentAsset?: (metadataNode: Element) => boolean;

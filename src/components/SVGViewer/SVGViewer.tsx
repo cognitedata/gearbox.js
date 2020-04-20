@@ -310,8 +310,8 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       this.pinchZoomInstance = new PinchZoom(this.pinchZoom.current, {
         animationDuration: 0,
         tapZoomFactor: 8,
-        maxZoom: 30,
-        minZoom: 1,
+        maxZoom: this.props.maxZoom || 30,
+        minZoom: this.props.minZoom || 1,
         setOffsetsOnce: true,
       });
     }
