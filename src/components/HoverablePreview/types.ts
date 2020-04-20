@@ -1,6 +1,7 @@
 import React from 'react';
 
-export type TBorders = ('top' | 'right' | 'bottom' | 'left')[];
+type TBorderType = 'top' | 'right' | 'bottom' | 'left';
+export type TBorders = TBorderType[];
 export type TAlign = 'left' | 'right' | 'center';
 
 interface HPBasic {
