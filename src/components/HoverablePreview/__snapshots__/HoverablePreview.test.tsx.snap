@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`HoverablePreview renders correctly 1`] = `
+exports[`HoverablePreview basic renders correctly 1`] = `
 <div
   className="hp-wrapper sc-ifAKCX elMEqD"
 >

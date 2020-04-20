@@ -1,14 +1,14 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { HPCellProps, TBorders } from '../../types';
 
-const adjustBorders = (borders?: TBorders) => {
+export const adjustBorders = (borders?: TBorders) => {
   const top = borders && borders.includes('top') ? 'solid' : 'none';
   const right = borders && borders.includes('right') ? 'solid' : 'none';
   const bottom = borders && borders.includes('bottom') ? 'solid' : 'none';
   const left = borders && borders.includes('left') ? 'solid' : 'none';
 
-  return css`
+  return `
     border: 1px solid #d9d9d9;
     border-style: ${top} ${right} ${bottom} ${left};
   `;
@@ -24,9 +24,9 @@ const StyledHPCell = styled.div<HPCellProps>`
   line-height: 24px;
   width: ${({ align }) => (align ? '50%' : '100%')};
   ${({ align }) => align === 'right' && 'margin-left: auto'};
-  ${({ borders }) => borders && adjustBorders(borders)}
+  ${({ borders }) => borders && adjustBorders(borders)};
 
-  .title {
+  .hp-cell-title {
     text-transform: uppercase;
     color: #595959;
     font-size: 12px;
