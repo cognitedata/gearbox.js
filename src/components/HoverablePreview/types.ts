@@ -15,7 +15,7 @@ export interface HPIconProps extends HPBasic {
   style?: React.CSSProperties;
 }
 export interface HPProps extends HPBasic {
-  displayOn?: 'hover' | 'click' // when ommited, hoverable preview is always visible and HoverIcon is hidden
+  displayOn?: 'hover' | 'click'; // when ommited, hoverable preview is always visible and HoverIcon is hidden
   noShadow?: boolean;
   fadeIn?: boolean;
   show?: boolean;
@@ -27,4 +27,3 @@ export interface HPCellProps extends HPBasic {
   align?: TAlign;
   borders?: TBorders;
 }
-

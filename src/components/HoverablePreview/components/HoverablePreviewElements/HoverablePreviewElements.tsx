@@ -26,18 +26,23 @@ const StyledIcon = styled.div<HPIconProps>`
   cursor: help;
 `;
 
-export const HoverablePreviewHeader = (props:any) => <StyledHoverablePreviewHeader className="hp-header">{props.children}</StyledHoverablePreviewHeader>
-export const HoverablePreviewTitle = (props:any) => <StyledHoverablePreviewTitle className="hp-title">{props.children}</StyledHoverablePreviewTitle>
-export const HoverablePreviewCloseButton = () => 
-  <StyledIcon 
-    className="hp-close"
-  >
+export const HoverablePreviewHeader = (props: any) => (
+  <StyledHoverablePreviewHeader className="hp-header">
+    {props.children}
+  </StyledHoverablePreviewHeader>
+);
+export const HoverablePreviewTitle = (props: any) => (
+  <StyledHoverablePreviewTitle className="hp-title">
+    {props.children}
+  </StyledHoverablePreviewTitle>
+);
+export const HoverablePreviewCloseButton = () => (
+  <StyledIcon className="hp-close">
     <Icon type="close" />
-  </StyledIcon>;
-export const HoverablePreviewDisplayIcon = (props:HPIconProps) =>
-  <StyledIcon 
-    {...props}
-    className="hp-displayicon"
-  >
+  </StyledIcon>
+);
+export const HoverablePreviewDisplayIcon = (props: HPIconProps) => (
+  <StyledIcon {...props} className="hp-displayicon">
     <Icon type="question-circle" />
-  </StyledIcon>;
+  </StyledIcon>
+);

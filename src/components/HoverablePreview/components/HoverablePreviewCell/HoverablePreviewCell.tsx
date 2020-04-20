@@ -23,14 +23,10 @@ const StyledHPCell = styled.div<HPCellProps>`
   font-size: 14px;
   line-height: 24px;
   width: ${({ align }) => (align ? '50%' : '100%')};
-  ${({ align }) =>
-    align === 'right' &&
-    css`
-      margin-left: auto;
-    `}
+  ${({ align }) => align === 'right' && 'margin-left: auto'};
   ${({ borders }) => borders && adjustBorders(borders)}
 
-    .title {
+  .title {
     text-transform: uppercase;
     color: #595959;
     font-size: 12px;
@@ -38,15 +34,18 @@ const StyledHPCell = styled.div<HPCellProps>`
   }
 `;
 
-export class HoverablePreviewCell extends React.Component<HPCellProps, {loaded: boolean}> {
+export class HoverablePreviewCell extends React.Component<
+  HPCellProps,
+  { loaded: boolean }
+> {
   render() {
     const { title, children, borders, align } = this.props;
 
     return (
-        <StyledHPCell className="hp-cell" borders={borders} align={align}>
-          {title && <div className="hp-cell-title">{title}</div>}
-          {children}
-        </StyledHPCell>
+      <StyledHPCell className="hp-cell" borders={borders} align={align}>
+        {title && <div className="hp-cell-title">{title}</div>}
+        {children}
+      </StyledHPCell>
     );
   }
 }
