@@ -30,6 +30,10 @@ interface SvgViewerState {
 }
 
 export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
+  static defaultProps = {
+    maxZoom: 30,
+    minZoom: 1,
+  }
   static displayName = 'SVGViewer';
   static contextType = ClientSDKProxyContext;
   context!: React.ContextType<typeof ClientSDKProxyContext>;
@@ -310,8 +314,8 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       this.pinchZoomInstance = new PinchZoom(this.pinchZoom.current, {
         animationDuration: 0,
         tapZoomFactor: 8,
-        maxZoom: this.props.maxZoom || 30,
-        minZoom: this.props.minZoom || 1,
+        maxZoom: this.props.maxZoom,
+        minZoom: this.props.minZoom,
         setOffsetsOnce: true,
       });
     }
