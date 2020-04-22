@@ -53,4 +53,32 @@ describe('SVGViewer', () => {
     expect(wrapper.find(CANCEL_BUTTON_ATTR).length).toBe(0);
     expect(wrapper).toHaveLength(1);
   });
+
+  it('updates maxZoom and minZoom props after creation', done => {
+    const defaultProps = {
+      documentId: 0,
+      maxZoom: 30,
+      minZoom: 1,
+    };
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <SVGViewer documentId={0} />
+      </ClientSDKProvider>
+    );
+    expect(wrapper.props().children.props).toEqual(defaultProps);
+    wrapper.setProps(
+      { children: <SVGViewer documentId={0} maxZoom={50} minZoom={10} /> },
+      () => {
+        setImmediate(() => {
+          wrapper.update();
+          expect(wrapper.props().children.props).toEqual({
+            documentId: 0,
+            maxZoom: 50,
+            minZoom: 10,
+          });
+          done();
+        });
+      }
+    );
+  });
 });
