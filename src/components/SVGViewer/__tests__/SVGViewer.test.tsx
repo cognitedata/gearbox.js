@@ -57,8 +57,7 @@ describe('SVGViewer', () => {
   it('updates maxZoom and minZoom props after creation', done => {
     const defaultProps = {
       documentId: 0,
-      maxZoom: 30,
-      minZoom: 1,
+      ...SVGViewer.defaultProps,
     };
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>
