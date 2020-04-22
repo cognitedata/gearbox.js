@@ -33,7 +33,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   static defaultProps = {
     maxZoom: 30,
     minZoom: 1,
-  }
+  };
   static displayName = 'SVGViewer';
   static contextType = ClientSDKProxyContext;
   context!: React.ContextType<typeof ClientSDKProxyContext>;
