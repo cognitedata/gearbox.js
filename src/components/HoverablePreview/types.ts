@@ -9,17 +9,24 @@ interface HPBasic {
 }
 
 export interface HPIconProps extends HPBasic {
+  ref?: any;
   onMouseOver?: React.MouseEventHandler;
   onMouseEnter?: React.MouseEventHandler;
   onMouseLeave?: React.MouseEventHandler;
   onClick?: React.MouseEventHandler;
   style?: React.CSSProperties;
+  icon?: string;
+}
+export interface HPHeader {
+  children?: React.ReactNode;
+  underline?: boolean;
 }
 export interface HPProps extends HPBasic {
   displayOn?: 'hover' | 'click'; // when ommited, hoverable preview is always visible and HoverIcon is hidden
   noShadow?: boolean;
   fadeIn?: boolean;
   show?: boolean;
+  icon?: string;
   children: React.ReactNode | string;
 }
 export interface HPCellProps extends HPBasic {

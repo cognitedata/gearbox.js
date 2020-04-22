@@ -1,9 +1,9 @@
 import { Icon } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { HPIconProps } from '../../types';
+import { HPIconProps, HPHeader } from '../../types';
 
-const StyledHoverablePreviewHeader = styled.div`
+const StyledHoverablePreviewHeader = styled.div<HPHeader>`
   width: 100%;
   min-height: 50px;
   display: flex;
@@ -15,6 +15,7 @@ const StyledHoverablePreviewHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 16px 16px 20px 16px;
+  ${({ underline }) => underline && 'border-bottom: 1px solid #d9d9d9'}
 `;
 
 const StyledHoverablePreviewTitle = styled.span`
@@ -26,12 +27,12 @@ const StyledIcon = styled.div<HPIconProps>`
   cursor: help;
 `;
 
-export const HoverablePreviewHeader = (props: any) => (
-  <StyledHoverablePreviewHeader className="hp-header">
+export const HoverablePreviewHeader = (props: HPHeader) => (
+  <StyledHoverablePreviewHeader className="hp-header" underline={props.underline}>
     {props.children}
   </StyledHoverablePreviewHeader>
 );
-export const HoverablePreviewTitle = (props: any) => (
+export const HoverablePreviewTitle = (props: { children: React.ReactNode }) => (
   <StyledHoverablePreviewTitle className="hp-title">
     {props.children}
   </StyledHoverablePreviewTitle>
@@ -41,8 +42,11 @@ export const HoverablePreviewCloseButton = () => (
     <Icon type="close" />
   </StyledIcon>
 );
-export const HoverablePreviewDisplayIcon = (props: HPIconProps) => (
-  <StyledIcon {...props} className="hp-displayicon">
-    <Icon type="question-circle" />
+export const HoverablePreviewDisplayIcon = React.forwardRef((props: HPIconProps, ref:any) => (
+  <StyledIcon {...props} ref={ref} className="hp-displayicon">
+    <Icon type={props.icon ? props.icon : "info-circle"} />
   </StyledIcon>
-);
+));
+export const HoverablePreviewLoading = () => {
+
+};
