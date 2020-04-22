@@ -19,7 +19,7 @@ Cell accepts children - either strings, or React Components.
 
 <Preview>
   <Story name="Always visible">
-    <HoverablePreview>
+    <HoverablePreview style={{ left: "100px", top: "100px" }}>
       <HoverablePreview.Header>
         <HoverablePreview.Title>This component should be always visible....</HoverablePreview.Title>
       </HoverablePreview.Header>
@@ -40,8 +40,8 @@ Cell accepts children - either strings, or React Components.
 
 <Preview>
   <Story name="Cells with borders">
-    <HoverablePreview>
-      <HoverablePreview.Header>
+    <HoverablePreview style={{ left: "100px", top: "100px" }}>
+      <HoverablePreview.Header underline>
         <HoverablePreview.Title>This component's cells should have borders.</HoverablePreview.Title>
       </HoverablePreview.Header>
       <HoverablePreview.Cell title="Cell on the right" borders={[ 'left' ]} align="right">
@@ -142,6 +142,24 @@ Cell accepts children - either strings, or React Components.
         </HoverablePreview.Cell>
         <HoverablePreview.Cell title="Cell on the left" align="left">
           Morbi efficitur viverra consectetur.
+        </HoverablePreview.Cell>
+      </HoverablePreview>
+    </div>
+  </Story>
+</Preview>
+
+### Displaying on hover with custom icon
+
+<Preview>
+  <Story name="Displaying on hover with borders and custom icon">
+    <div style={{width: '500px', padding: '10px', display: 'flex', flexDirection: 'row'}}>
+      Hover me!
+      <HoverablePreview icon='question-circle' displayOn='hover'>
+        <HoverablePreview.Header underline>
+          <HoverablePreview.Title>This component should have a custom question mark icon.</HoverablePreview.Title>
+        </HoverablePreview.Header>
+        <HoverablePreview.Cell title="Cell">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </HoverablePreview.Cell>
       </HoverablePreview>
     </div>
