@@ -19,6 +19,8 @@ export interface PinchZoomInterface {
   container: HTMLElement;
   options: {
     animationDuration: number;
+    maxZoom?: number;
+    minZoom?: number;
   };
   animate: (
     duration: number,

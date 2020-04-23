@@ -54,7 +54,7 @@ describe('SVGViewer', () => {
     expect(wrapper).toHaveLength(1);
   });
 
-  it('updates maxZoom and minZoom props after creation', done => {
+  it('updates maxZoom and minZoom props after creation', () => {
     const defaultProps = {
       documentId: 0,
       ...SVGViewer.defaultProps,
@@ -75,9 +75,14 @@ describe('SVGViewer', () => {
             maxZoom: 50,
             minZoom: 10,
           });
-          done();
         });
       }
     );
+    const SVGViewerComponent = wrapper.find(SVGViewer).instance() as SVGViewer;
+    sinon.stub(SVGViewerComponent.pinchZoom.current as any, 'appendChild');
+    SVGViewerComponent.initPinchToZoom();
+    const { options } = SVGViewerComponent.pinchZoomInstance;
+    expect(options.maxZoom).toEqual(50);
+    expect(options.minZoom).toEqual(10);
   });
 });
