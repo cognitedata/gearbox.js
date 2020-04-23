@@ -77,23 +77,21 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
 
   componentDidUpdate(prevProps: SvgViewerProps) {
     const { documentId: prevDocId } = prevProps as SvgViewerDocumentIdProps;
-    const { documentId: curDocId } = this.props as SvgViewerDocumentIdProps;
-    const { maxZoom: curMax } = this.props;
-    const { maxZoom: prevMax } = prevProps;
-    const { minZoom: curMin } = this.props;
-    const { minZoom: prevMin } = prevProps;
+    const { documentId: currDocId } = this.props as SvgViewerDocumentIdProps;
     const { file: prevFile } = prevProps as SvgViewerFileProps;
     const { file: currFile } = this.props as SvgViewerFileProps;
+    const { maxZoom: prevMax, minZoom: prevMin } = prevProps;
+    const { maxZoom: currMax, minZoom: currMin } = this.props;
 
     if (this.svg) {
       this.setCustomClasses();
     }
 
     if (
-      (curDocId !== undefined && curDocId !== prevDocId) ||
+      (currDocId !== undefined && currDocId !== prevDocId) ||
       (currFile !== undefined && currFile !== prevFile) ||
-      curMax !== prevMax ||
-      curMin !== prevMin
+      currMax !== prevMax ||
+      currMin !== prevMin
     ) {
       this.presetSVG();
     }
