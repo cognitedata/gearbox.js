@@ -1,1 +1,7 @@
 * @cognitedata/devx-externals @cognitedata/devx-team
+
+# Send SVGViewer related PRs to the opsup team by default.
+src/components/SVGViewer  @cognitedata/devx-externals @cognitedata/devx-team @cognitedata/opsup-team-dev
+
+# Send AssetScanner related PRs to the opsup team by default.
+src/components/AssetScanner  @cognitedata/devx-externals @cognitedata/devx-team @cognitedata/opsup-team-dev
