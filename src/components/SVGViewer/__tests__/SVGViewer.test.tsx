@@ -55,34 +55,20 @@ describe('SVGViewer', () => {
   });
 
   it('updates maxZoom and minZoom props after creation', () => {
-    const defaultProps = {
-      documentId: 0,
-      ...SVGViewer.defaultProps,
-    };
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>
-        <SVGViewer documentId={0} />
+        <SVGViewer file="<svg/>" />
       </ClientSDKProvider>
     );
-    expect(wrapper.props().children.props).toEqual(defaultProps);
+    const SVGViewerComponent = wrapper.find(SVGViewer).instance() as SVGViewer;
     wrapper.setProps(
-      { children: <SVGViewer documentId={0} maxZoom={50} minZoom={10} /> },
+      { children: <SVGViewer file="<svg/>" maxZoom={50} minZoom={10} /> },
       () => {
-        setImmediate(() => {
-          wrapper.update();
-          expect(wrapper.props().children.props).toEqual({
-            documentId: 0,
-            maxZoom: 50,
-            minZoom: 10,
-          });
-        });
+        wrapper.update();
+        const { options } = SVGViewerComponent.pinchZoomInstance;
+        expect(options.maxZoom).toEqual(50);
+        expect(options.minZoom).toEqual(10);
       }
     );
-    const SVGViewerComponent = wrapper.find(SVGViewer).instance() as SVGViewer;
-    sinon.stub(SVGViewerComponent.pinchZoom.current as any, 'appendChild');
-    SVGViewerComponent.initPinchToZoom();
-    const { options } = SVGViewerComponent.pinchZoomInstance;
-    expect(options.maxZoom).toEqual(50);
-    expect(options.minZoom).toEqual(10);
   });
 });
