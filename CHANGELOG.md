@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/cognitedata/gearbox.js/compare/v1.17.0...v1.18.0) (2020-04-24)
+
+
+### Features
+
+* **asset-events-panel:** render override prop for metadata ([12cb8b0](https://github.com/cognitedata/gearbox.js/commit/12cb8b0f14ba31ea85c47981f4deb59f53144590))
+
 # [1.17.0](https://github.com/cognitedata/gearbox.js/compare/v1.16.1...v1.17.0) (2020-04-24)
 
 
