@@ -157,9 +157,9 @@ const handleAssetEventsLoaded = (events: CogniteEvent[]) => console.log(events);
 You can provide a custom function to render your metadata:
 
 ```typescript
-import { EventAddonsProp, MetadataRenderer } from '@cognite/gearbox';
+import { EventAddonsProp, EventMetadataRenderer } from '@cognite/gearbox';
 
-const renderEventMetadata: MetadataRenderer = (event: EventAddonsProp) => {
+const renderEventMetadata: EventMetadataRenderer = (event: EventAddonsProp) => {
   const { metadata = {} } = event;
   const { sourceId = 'N/A', source = '' } = metadata;
 
