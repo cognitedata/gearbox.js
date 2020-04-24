@@ -19,6 +19,8 @@ export interface PinchZoomInterface {
   container: HTMLElement;
   options: {
     animationDuration: number;
+    maxZoom?: number;
+    minZoom?: number;
   };
   animate: (
     duration: number,
@@ -53,6 +55,14 @@ interface SvgViewerBasicProps {
    * Override default colors with custom classNames
    */
   customClassNames?: CustomClassNames;
+  /**
+   * Maximum zoom for the svg viewer
+   */
+  maxZoom?: number;
+  /**
+   * Minimum zoom for the svg viewer
+   */
+  minZoom?: number;
   /**
    * Condition to locate and highlight current asset during first render
    */
