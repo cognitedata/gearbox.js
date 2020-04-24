@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/cognitedata/gearbox.js/compare/v1.16.1...v1.17.0) (2020-04-24)
+
+
+### Features
+
+* **svg-viewer:** minimum and maximum zoom props ([2791cd0](https://github.com/cognitedata/gearbox.js/commit/2791cd0f5fe5cc8c68f4a0ceb2f1af778c8ea08d))
+
 ## [1.16.1](https://github.com/cognitedata/gearbox.js/compare/v1.16.0...v1.16.1) (2020-03-25)
 
 
