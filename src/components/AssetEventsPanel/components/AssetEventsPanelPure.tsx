@@ -5,17 +5,22 @@ import styled from 'styled-components';
 import { withDefaultTheme } from '../../../hoc';
 import { defaultTheme } from '../../../theme/defaultTheme';
 import { momentFromTimestamp } from '../../../utils/formatters';
-import { AssetEventsPanelPropsPure } from '../interfaces';
-
-interface EventAddonsProp extends CogniteEvent {
-  typeAndSubtype: React.ReactNode;
-  start: string;
-  end: string;
-}
+import { AssetEventsPanelPropsPure, EventAddonsProp } from '../interfaces';
 
 interface AssetEventsPanelState {
   selectedEvent: EventAddonsProp | null;
 }
+
+const defaultRenderEventMetadata = (event: EventAddonsProp) => (
+  <EventMetadataList key="event-metadata">
+    {Object.keys(event.metadata || {}).map(key => (
+      <div key={key} className="event-metadata">
+        <strong>{key}</strong> <br />
+        <span>{event.metadata && event.metadata[key]}</span>
+      </div>
+    ))}
+  </EventMetadataList>
+);
 
 export class AssetEventsPanelPureComponent extends React.Component<
   AssetEventsPanelPropsPure,
@@ -74,17 +79,6 @@ export class AssetEventsPanelPureComponent extends React.Component<
         <span style={{ textAlign: 'right' }}>{event.end}</span>
       </div>
     </EventDetails>
-  );
-
-  renderEventMetadata = (event: EventAddonsProp) => (
-    <EventMetadataList key="event-metadata">
-      {Object.keys(event.metadata || {}).map(key => (
-        <div key={key} className="event-metadata">
-          <strong>{key}</strong> <br />
-          <span>{event.metadata && event.metadata[key]}</span>
-        </div>
-      ))}
-    </EventMetadataList>
   );
 
   mapEvent = (event: CogniteEvent): EventAddonsProp => ({
@@ -155,6 +149,7 @@ export class AssetEventsPanelPureComponent extends React.Component<
     } = this.props;
 
     const { selectedEvent } = this.state;
+    const { renderEventMetadata = defaultRenderEventMetadata } = this.props;
 
     return (
       <>
@@ -179,7 +174,7 @@ export class AssetEventsPanelPureComponent extends React.Component<
           >
             {!!selectedEvent && [
               this.renderEventDetails(selectedEvent),
-              this.renderEventMetadata(selectedEvent),
+              renderEventMetadata(selectedEvent),
             ]}
           </Modal>
         )}
