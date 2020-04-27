@@ -1,6 +1,5 @@
 import { CogniteClient, GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import React from 'react';
-import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
@@ -24,7 +23,7 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
 ) =>
   class
     extends React.Component<
-      Subtract<P, WithAssetTimeseriesDataProps> & WithAssetTimeseriesProps,
+      Omit<P, keyof WithAssetTimeseriesDataProps> & WithAssetTimeseriesProps,
       WithAssetTimeseriesState
     >
     implements ComponentWithUnmountState {

@@ -1,6 +1,5 @@
 import { CogniteClient } from '@cognite/sdk';
 import React from 'react';
-import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
 import { ERROR_NO_SDK_CLIENT } from '../constants/errorMessages';
 import { ClientSDKProxyContext } from '../context/clientSDKProxyContext';
@@ -20,7 +19,7 @@ export const withTimeseries = <P extends WithTimeseriesDataProps>(
 ) =>
   class
     extends React.Component<
-      Subtract<P, WithTimeseriesDataProps> & WithTimeseriesProps,
+      Omit<P, keyof WithTimeseriesDataProps> & WithTimeseriesProps,
       WithTimeseriesState
     >
     implements ComponentWithUnmountState {

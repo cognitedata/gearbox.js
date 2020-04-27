@@ -1,4 +1,9 @@
 import { withAssetTimeseries } from '../../hoc';
-import { TimeseriesPanelPure } from './components/TimeseriesPanelPure';
+import {
+  TimeseriesPanelProps,
+  TimeseriesPanelPure,
+} from './components/TimeseriesPanelPure';
 
-export const AssetTimeseriesPanel = withAssetTimeseries(TimeseriesPanelPure);
+export const AssetTimeseriesPanel = withAssetTimeseries<TimeseriesPanelProps>(
+  TimeseriesPanelPure
+);
