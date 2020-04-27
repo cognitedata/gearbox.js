@@ -1,6 +1,5 @@
 import { CogniteClient } from '@cognite/sdk';
 import React from 'react';
-import { Subtract } from 'utility-types';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
@@ -23,7 +22,7 @@ export const withAsset = <P extends WithAssetDataProps>(
 ) =>
   class
     extends React.Component<
-      Subtract<P, WithAssetDataProps> & WithAssetProps,
+      Omit<P, keyof WithAssetDataProps> & WithAssetProps,
       WithAssetState
     >
     implements ComponentWithUnmountState {
