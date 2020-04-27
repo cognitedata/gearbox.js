@@ -1,3 +1,10 @@
+## [1.18.1](https://github.com/cognitedata/gearbox.js/compare/v1.18.0...v1.18.1) (2020-04-27)
+
+
+### Bug Fixes
+
+* hoc typing issues ([49a3a51](https://github.com/cognitedata/gearbox.js/commit/49a3a519149c65a500098fcb731c369cc4403ad2))
+
 # [1.18.0](https://github.com/cognitedata/gearbox.js/compare/v1.17.0...v1.18.0) (2020-04-24)
 
 
