@@ -53,6 +53,7 @@ export default [
       },
     ],
     plugins: [
+      replace({__REPLACE_package_version__: pkg.version }),
       typescript({
         ...typescriptOpts()
       }),
