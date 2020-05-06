@@ -1,8 +1,14 @@
 import {
   DatapointsMultiQuery,
+  DatapointsQueryId,
   GetTimeSeriesMetadataDTO,
   IdEither,
+  Timestamp,
 } from '@cognite/sdk';
+import {
+  DatapointsGetAggregateDatapoint,
+  DatapointsGetDatapoint,
+} from '@cognite/sdk/dist/src/types/types';
 import { Button, Checkbox, DatePicker, Form, Input, Modal, Radio } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { chunk, isFunction, range } from 'lodash';
@@ -10,6 +16,7 @@ import moment from 'moment';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../hoc';
+import { TimeRange } from '../../interfaces';
 import { defaultTheme } from '../../theme/defaultTheme';
 import { datapointsToCSV, Delimiters, downloadCSV } from '../../utils/csv';
 import { getGranularityInMS } from '../../utils/utils';
@@ -87,28 +94,44 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     imageDownloadBtn,
   } = lang;
 
-  const getLimits = async (request: DatapointsMultiQuery) => {
+  /**
+   * Correct request time frame boundaries to reduce number of redundant chunked calls.
+   * Redundant calls appears when provided time range doesn't have datapoints.
+   * @param request - datapoints request
+   * @return Promise<timerange> - corrected timerange
+   */
+  const getLimits = async (
+    request: DatapointsMultiQuery
+  ): Promise<TimeRange<Timestamp>> => {
     let { start = 0, end = 0 } = request;
 
-    const items = request.items.map(({ id }) => ({ id }));
+    const items = request.items.map(item => ({
+      id: (item as DatapointsQueryId).id,
+    }));
     const endResults = await context!.datapoints.retrieveLatest(items);
 
     end = Math.min(
-      ...endResults.map(item => +item.datapoints[0].timestamp, end)
+      Math.max(
+        ...endResults.map(({ datapoints: [item] }) => item.timestamp.getTime())
+      ),
+      Number(end)
     );
 
-    const getFirstDatapointRequest = {
+    const startResults: (
+      | DatapointsGetAggregateDatapoint
+      | DatapointsGetDatapoint)[] = await context!.datapoints.retrieve({
       ...request,
       start,
       end,
-      limit: CELL_LIMIT,
-    };
-
-    const startResult = await context!.datapoints.retrieve(
-      getFirstDatapointRequest
-    );
-    start = Math.max(...startResult.map(({ datapoints }) => +datapoints[0].timestamp),
-      start
+      limit: 1,
+    });
+    start = Math.max(
+      Math.min(
+        ...startResults.map(({ datapoints: [item] }) =>
+          item.timestamp.getTime()
+        )
+      ),
+      Number(start)
     );
 
     return { start, end };
@@ -127,8 +150,13 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     const limit = CELL_LIMIT / timeseriesIds.length;
 
     const requests = ranges
-      .map(([start, end]) => ({ ...request, start, end, limit }))
-      .map(request => context!.datapoints.retrieve(request));
+      .map(([rangeStart, rangeEnd]) => ({
+        ...request,
+        start: rangeStart,
+        end: rangeEnd,
+        limit,
+      }))
+      .map(params => context!.datapoints.retrieve(params));
 
     return (await Promise.all(requests)).flat();
   };

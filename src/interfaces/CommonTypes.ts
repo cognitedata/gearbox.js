@@ -9,6 +9,11 @@ export interface EventHandlers {
   [name: string]: Callback[];
 }
 
+export interface TimeRange<T> {
+  start: T;
+  end: T;
+}
+
 export interface MetadataId {
   id: number;
   key: string;

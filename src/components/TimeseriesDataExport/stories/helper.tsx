@@ -1,4 +1,5 @@
 import {
+  CogniteClient,
   DatapointsGetAggregateDatapoint,
   DatapointsMultiQuery,
   GetTimeSeriesMetadataDTO,
@@ -43,7 +44,12 @@ export class MockClient extends MockCogniteClient {
   datapoints: any = MockDatapointsClientObject;
 }
 
-const client = new MockClient({ appId: 'storybook' });
+// const client = new MockClient({ appId: 'storybook' });
+const client = new CogniteClient({ appId: 'storybook' });
+client.loginWithApiKey({
+  project: 'publicdata',
+  apiKey: '',
+});
 
 export const TimeseriesChartExportWrapper: React.FC<
   Omit<TimeseriesDataExportProps, 'visible' | 'form'>
