@@ -44,12 +44,7 @@ export class MockClient extends MockCogniteClient {
   datapoints: any = MockDatapointsClientObject;
 }
 
-// const client = new MockClient({ appId: 'storybook' });
-const client = new CogniteClient({ appId: 'storybook' });
-client.loginWithApiKey({
-  project: 'publicdata',
-  apiKey: '',
-});
+const client = new MockClient({ appId: 'storybook' });
 
 export const TimeseriesChartExportWrapper: React.FC<
   Omit<TimeseriesDataExportProps, 'visible' | 'form'>

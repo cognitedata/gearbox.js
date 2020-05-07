@@ -216,7 +216,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
 
     form.validateFields(async (_, values) => {
       const {
-        range,
+        range: [start, end],
         granularity: granularityVal,
         delimiter,
         readableDate,
@@ -228,8 +228,8 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
           id,
           aggregates: [aggregate],
         })),
-        start: +range[0],
-        end: +range[1],
+        start: start.unix(),
+        end: end.unix(),
         granularity: granularityVal,
       };
 
