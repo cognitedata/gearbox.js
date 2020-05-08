@@ -1,5 +1,4 @@
 import {
-  CogniteClient,
   DatapointsGetAggregateDatapoint,
   DatapointsMultiQuery,
   GetTimeSeriesMetadataDTO,

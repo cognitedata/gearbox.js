@@ -3,7 +3,6 @@ import {
   DatapointsQueryId,
   GetTimeSeriesMetadataDTO,
   IdEither,
-  Timestamp,
 } from '@cognite/sdk';
 import {
   DatapointsGetAggregateDatapoint,
@@ -35,7 +34,7 @@ type TimeseriesDataExportFormProps = TimeseriesDataExportProps &
 // TODO: Check tree shaking for TimeseriesDataExport component
 const { RangePicker } = DatePicker;
 const CELL_LIMIT = 10000;
-const formatData = 'YYYY-MM-DD HH:mm:ss';
+const formatData = 'YYYY-MM-DD_HH:mm:ss';
 const formItemLayoutDefault: FormItemLayout = {
   labelCol: { xs: { span: 24 }, sm: { span: 8 } },
   wrapperCol: { xs: { span: 24 }, sm: { span: 16 } },
@@ -102,9 +101,8 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
    */
   const getLimits = async (
     request: DatapointsMultiQuery
-  ): Promise<TimeRange<Timestamp>> => {
+  ): Promise<TimeRange<number>> => {
     let { start = 0, end = 0 } = request;
-
     const items = request.items.map(item => ({
       id: (item as DatapointsQueryId).id,
     }));
@@ -137,15 +135,17 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     return { start, end };
   };
 
-  const fetchDataPoints = async (request: DatapointsMultiQuery) => {
+  const fetchDataPoints = async (
+    request: DatapointsMultiQuery
+  ): Promise<DatapointsGetAggregateDatapoint[]> => {
     const { start = 0, end = 0 } = await getLimits(request);
     const numericGranularity = getGranularityInMS(granularity);
     const msPerRequest =
       (numericGranularity * CELL_LIMIT) / timeseriesIds.length;
 
-    const limits = range(+start, +end, msPerRequest);
+    const limits = range(start, end, msPerRequest);
     const lastLimit =
-      limits.length % 2 === 0 ? [+end - msPerRequest, +end] : [+end];
+      limits.length % 2 === 0 ? [end - msPerRequest, end] : [end];
     const ranges = chunk([...limits, ...lastLimit], 2);
     const limit = CELL_LIMIT / timeseriesIds.length;
 
@@ -158,7 +158,16 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
       }))
       .map(params => context!.datapoints.retrieve(params));
 
-    return (await Promise.all(requests)).flat();
+    const res: DatapointsGetAggregateDatapoint[][] = await Promise.all(
+      requests
+    );
+
+    return res.reduce((acc, current) => {
+      return acc.map((s, i) => {
+        s.datapoints = [...s.datapoints, ...current[i].datapoints];
+        return s;
+      });
+    });
   };
 
   const fetchCSVCall: FetchCSVCall = async (
@@ -213,7 +222,6 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-
     form.validateFields(async (_, values) => {
       const {
         range: [start, end],
@@ -222,14 +230,13 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
         readableDate,
       }: TimeseriesDataExportFormFields = values;
       const aggregate = 'average';
-
       const body: DatapointsMultiQuery = {
         items: series.map(({ id }) => ({
           id,
           aggregates: [aggregate],
         })),
-        start: start.unix(),
-        end: end.unix(),
+        start: start.valueOf(),
+        end: end.valueOf(),
         granularity: granularityVal,
       };
 
