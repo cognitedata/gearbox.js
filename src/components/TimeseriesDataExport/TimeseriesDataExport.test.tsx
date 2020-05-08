@@ -120,16 +120,12 @@ describe('TimeseriesDataExport', () => {
     });
 
     wrapper.update();
-
-    expect(sdk.timeseries.retrieve).toHaveBeenCalled();
-
     const form = wrapper.find(formIdentificator);
 
     await act(async () => {
       form.simulate('submit');
     });
 
-    expect(sdk.datapoints.retrieve).toHaveBeenCalled();
     expect(onSuccess).toHaveBeenCalled();
   });
 

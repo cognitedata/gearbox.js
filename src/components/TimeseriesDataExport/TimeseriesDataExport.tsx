@@ -143,29 +143,33 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     const msPerRequest =
       (numericGranularity * CELL_LIMIT) / timeseriesIds.length;
 
-    const limits = range(start, end, msPerRequest);
-    const lastLimit =
-      limits.length % 2 === 0 ? [end - msPerRequest, end] : [end];
-    const ranges = chunk([...limits, ...lastLimit], 2);
+    const ranges = range(start, end, msPerRequest);
+    const endRange =
+      ranges.length % 2 === 0 ? [end - msPerRequest, end] : [end];
+    const chunks = chunk([...ranges, ...endRange], 2);
     const limit = CELL_LIMIT / timeseriesIds.length;
 
-    const requests = ranges
-      .map(([rangeStart, rangeEnd]) => ({
+    const requests = chunks
+      .map(([chunkStart, chunkEnd]) => ({
         ...request,
-        start: rangeStart,
-        end: rangeEnd,
+        start: chunkStart,
+        end: chunkEnd,
         limit,
       }))
       .map(params => context!.datapoints.retrieve(params));
 
-    const res: DatapointsGetAggregateDatapoint[][] = await Promise.all(
+    const datapoints: DatapointsGetAggregateDatapoint[][] = await Promise.all(
       requests
     );
 
-    return res.reduce((acc, current) => {
-      return acc.map((s, i) => {
-        s.datapoints = [...s.datapoints, ...current[i].datapoints];
-        return s;
+    return datapoints.reduce((result, datapointsChunk) => {
+      return result.map((dp, index) => {
+        dp.datapoints = [
+          ...dp.datapoints,
+          ...datapointsChunk[index].datapoints,
+        ];
+
+        return dp;
       });
     });
   };
