@@ -17,19 +17,24 @@ configure({ adapter: new Adapter() });
 
 class CogniteClient extends MockCogniteClient {
   timeseries: any = {
-    retrieve: jest.fn().mockReturnValue([{ id: 0 }]),
+    retrieve: jest.fn(),
   };
   datapoints: any = {
     retrieve: jest.fn(),
+    retrieveLatest: jest.fn(),
   };
 }
 
 const formIdentificator = 'Form[data-test-id="form"]';
 const sdk = new CogniteClient({ appId: 'gearbox test' });
+const startTimestamp = 1567351800000;
+const endTimestamp = 1567408200000;
+const dpStartTimestamp = startTimestamp + 1000;
+const dpEndTimestamp = endTimestamp - 1000;
 const defaultProps = {
   timeseriesIds: [0],
   granularity: '2m',
-  defaultTimeRange: [1567321800000, 1567408200000],
+  defaultTimeRange: [startTimestamp, endTimestamp],
   visible: true,
 };
 const labelFormatter = jest.fn().mockReturnValue('name') as LabelFormatter;
@@ -43,7 +48,7 @@ const retrieveTimeseries = jest
   .mockReturnValue(
     Promise.resolve([{ id: 1 }, { id: 2 }])
   ) as FetchTimeseriesCall;
-const onSuccess = jest.fn() as () => void;
+const onSuccess = jest.fn();
 const mountComponent = (props: TimeseriesDataExportProps) =>
   mount(
     <ClientSDKProvider client={sdk}>
@@ -58,14 +63,22 @@ let wrapper: ReactWrapper;
 beforeEach(() => {
   wrapper = new ReactWrapper(<div />);
   sdk.timeseries.retrieve.mockResolvedValue([{ id: 0 }]);
-  sdk.datapoints.retrieve.mockResolvedValue([{ id: 0, datapoints: [] }]);
+  sdk.datapoints.retrieve.mockResolvedValue([
+    {
+      id: 0,
+      datapoints: [{ average: 10, timestamp: new Date(dpStartTimestamp) }],
+    },
+  ]);
+  sdk.datapoints.retrieveLatest.mockResolvedValue([
+    { id: 0, datapoints: [{ timestamp: new Date(dpEndTimestamp) }] },
+  ]);
 });
 
 afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe('TimeseriesChart', () => {
+describe('TimeseriesDataExport', () => {
   it('renders correctly when ids are specified', async () => {
     await act(async () => {
       wrapper = mountComponent(defaultProps as TimeseriesDataExportProps);
@@ -74,7 +87,7 @@ describe('TimeseriesChart', () => {
     expect(wrapper.exists()).toBeTruthy();
   });
 
-  it('should show omit datapoints limit alert', async () => {
+  it('should be able to fetch more than 10k datapoints', async () => {
     await act(async () => {
       wrapper = mountComponent({
         ...defaultProps,
@@ -83,11 +96,22 @@ describe('TimeseriesChart', () => {
     });
 
     wrapper.update();
+    const form = wrapper.find(formIdentificator);
 
-    expect(wrapper.find('[data-test-id="alert"]').exists()).toBeTruthy();
+    await act(async () => {
+      form.simulate('submit');
+    });
+
+    expect(sdk.datapoints.retrieve).toHaveBeenCalledTimes(3);
+    expect(sdk.datapoints.retrieve.mock.calls[1][0].start).toEqual(
+      dpStartTimestamp
+    );
+    expect(sdk.datapoints.retrieve.mock.calls[2][0].end).toEqual(
+      dpEndTimestamp
+    );
   });
 
-  it('should use internal retrieveTimeseries and fetchCSV calls', async () => {
+  it('should trigger onSuccess callback if provided', async () => {
     await act(async () => {
       wrapper = mountComponent({
         ...defaultProps,
@@ -96,16 +120,12 @@ describe('TimeseriesChart', () => {
     });
 
     wrapper.update();
-
-    expect(sdk.timeseries.retrieve).toHaveBeenCalled();
-
     const form = wrapper.find(formIdentificator);
 
     await act(async () => {
       form.simulate('submit');
     });
 
-    expect(sdk.datapoints.retrieve).toHaveBeenCalled();
     expect(onSuccess).toHaveBeenCalled();
   });
 
@@ -150,7 +170,7 @@ describe('TimeseriesChart', () => {
     expect(labelFormatter).toHaveBeenCalledTimes(1);
   });
 
-  it.only('should be able to customize strings via callback function', async () => {
+  it('should be able to customize strings via callback function', async () => {
     await act(async () => {
       wrapper = mountComponent({
         ...defaultProps,
