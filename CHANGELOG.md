@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/cognitedata/gearbox.js/compare/v1.18.1...v1.19.0) (2020-05-12)
+
+
+### Features
+
+* **timeseries-data-export:** remove 10k datapoints limit ([#647](https://github.com/cognitedata/gearbox.js/issues/647)) ([5529372](https://github.com/cognitedata/gearbox.js/commit/5529372ac488ae25dd95c0ee2e6b2e49689dc48f))
+
 ## [1.18.1](https://github.com/cognitedata/gearbox.js/compare/v1.18.0...v1.18.1) (2020-04-27)
 
 
