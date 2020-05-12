@@ -1,12 +1,11 @@
 import {
   DatapointsMultiQuery,
-  DatapointsQueryId,
   GetTimeSeriesMetadataDTO,
   IdEither,
 } from '@cognite/sdk';
 import {
   DatapointsGetAggregateDatapoint,
-  DatapointsGetDatapoint,
+  GetDatapointMetadata,
 } from '@cognite/sdk/dist/src/types/types';
 import { Button, Checkbox, DatePicker, Form, Input, Modal, Radio } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
@@ -102,37 +101,34 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
   const getLimits = async (
     request: DatapointsMultiQuery
   ): Promise<TimeRange<number>> => {
+    const { min, max } = Math;
+    const { retrieveLatest, retrieve } = context!.datapoints;
     let { start = 0, end = 0 } = request;
-    const items = request.items.map(item => ({
-      id: (item as DatapointsQueryId).id,
-    }));
-    const endResults = await context!.datapoints.retrieveLatest(items);
+    const ids = request.items.map(extractId);
+    const [startResults, endResults] = await Promise.all([
+      retrieve({
+        ...request,
+        start,
+        end,
+        limit: 1,
+      }),
+      retrieveLatest(ids),
+    ]);
 
-    end = Math.min(
-      Math.max(
-        ...endResults.map(({ datapoints: [item] }) => item.timestamp.getTime())
-      ),
-      Number(end)
-    );
-
-    const startResults: (
-      | DatapointsGetAggregateDatapoint
-      | DatapointsGetDatapoint)[] = await context!.datapoints.retrieve({
-      ...request,
-      start,
-      end,
-      limit: 1,
-    });
-    start = Math.max(
-      Math.min(
-        ...startResults.map(({ datapoints: [item] }) =>
-          item.timestamp.getTime()
-        )
-      ),
-      Number(start)
-    );
+    start = max(min(...getTimestamps(startResults)), Number(start));
+    end = min(max(...getTimestamps(endResults)), Number(end));
 
     return { start, end };
+  };
+
+  const extractId = (either: IdEither): IdEither => {
+    return 'id' in either
+      ? {
+          id: either.id,
+        }
+      : {
+          externalId: either.externalId,
+        };
   };
 
   const fetchDataPoints = async (
@@ -158,11 +154,11 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
       }))
       .map(params => context!.datapoints.retrieve(params));
 
-    const datapoints: DatapointsGetAggregateDatapoint[][] = await Promise.all(
+    const results: DatapointsGetAggregateDatapoint[][] = await Promise.all(
       requests
     );
 
-    return datapoints.reduce((result, datapointsChunk) => {
+    return results.reduce((result, datapointsChunk) => {
       return result.map((dp, index) => {
         dp.datapoints = [
           ...dp.datapoints,
@@ -172,6 +168,10 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
         return dp;
       });
     });
+  };
+
+  const getTimestamps = (arr: { datapoints: GetDatapointMetadata[] }[]) => {
+    return arr.map(({ datapoints: [item] }) => item.timestamp.getTime());
   };
 
   const fetchCSVCall: FetchCSVCall = async (

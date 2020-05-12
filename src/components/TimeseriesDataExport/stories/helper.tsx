@@ -5,36 +5,33 @@ import {
 } from '@cognite/sdk';
 import React, { FC, useState } from 'react';
 import { randomData, timeseriesListV2 } from '../../../mocks';
-import { MockCogniteClient } from '../../../mocks';
+import { MockCogniteClient, sleep } from '../../../mocks';
 import { getGranularityInMS } from '../../../utils/utils';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { CSVLabelFormatter, TimeseriesDataExportProps } from '../interfaces';
 import { TimeseriesDataExport } from '../TimeseriesDataExport';
 
 const MockTimeseriesClientObject = {
-  retrieve: (): Promise<GetTimeSeriesMetadataDTO[]> => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve([timeseriesListV2[0]]);
-      }, 1000); // simulate load delay
-    });
+  retrieve: async (): Promise<GetTimeSeriesMetadataDTO[]> => {
+    sleep(1000);
+    return [timeseriesListV2[0]];
   },
 };
 const MockDatapointsClientObject = {
-  retrieve: (
+  retrieve: async (
     query: DatapointsMultiQuery
   ): Promise<DatapointsGetAggregateDatapoint[]> => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        const result = randomData(
-          (query.start as number) || Date.now() - 24 * 60 * 60 * 1000,
-          (query.end as number) || Date.now(),
-          100,
-          getGranularityInMS(query.granularity as string)
-        );
-        resolve([result]);
-      });
-    });
+    return [
+      randomData(
+        (query.start as number) || Date.now() - 24 * 60 * 60 * 1000,
+        (query.end as number) || Date.now(),
+        100,
+        getGranularityInMS(query.granularity as string)
+      ),
+    ];
+  },
+  retrieveLatest: async () => {
+    return [{ datapoints: [{ timestamp: new Date() }] }];
   },
 };
 
