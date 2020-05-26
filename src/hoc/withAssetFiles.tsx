@@ -21,6 +21,7 @@ import {
 export const withAssetFiles = <P extends WithAssetFilesDataProps>(
   WrapperComponent: React.ComponentType<P>
 ) =>
+  // eslint-disable-next-line react/display-name
   class
     extends React.Component<
       Omit<P, keyof WithAssetFilesDataProps> & WithAssetFilesProps,

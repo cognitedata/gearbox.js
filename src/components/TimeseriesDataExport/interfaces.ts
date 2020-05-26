@@ -6,7 +6,7 @@ import {
 } from '@cognite/sdk';
 import { ColProps } from 'antd/lib/grid';
 import { Moment } from 'moment';
-import { AnyIfEmpty } from '../../interfaces';
+import { Theme } from '../../interfaces';
 import { Delimiters, LabelFormatter } from '../../utils/csv';
 import { Strings } from './constants';
 
@@ -107,7 +107,7 @@ export interface TimeseriesDataExportProps {
   /**
    * @ignore
    */
-  theme?: AnyIfEmpty<{}>;
+  theme?: Theme;
 }
 
 export type TimeseriesDataExportStrings = Strings;

@@ -1,4 +1,3 @@
-/* tslint:disable:no-duplicate-string */
 import { CogniteEvent } from '@cognite/sdk';
 import moment from 'moment';
 import { AssetDocumentsPanelStyles } from '../components/AssetDocumentsPanel';

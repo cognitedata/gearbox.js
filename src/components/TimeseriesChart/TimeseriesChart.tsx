@@ -94,7 +94,6 @@ export class TimeseriesChart extends Component<
     }
   };
 
-  // tslint:disable-next-line:cognitive-complexity
   render() {
     const {
       startTime,

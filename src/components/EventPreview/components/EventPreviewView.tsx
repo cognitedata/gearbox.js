@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import { withDefaultTheme } from '../../../hoc';
-import { AnyIfEmpty, PureObject } from '../../../interfaces';
+import { PureObject, Theme } from '../../../interfaces';
 import { formatDatetime } from '../../../utils/formatters';
 import { applyThemeFontFamily } from '../../../utils/theme';
 import { ComplexString } from '../../common/ComplexString/ComplexString';
@@ -25,7 +25,7 @@ interface EventPreviewViewProps {
   strings?: PureObject;
   hideProperties?: (keyof CogniteEvent)[];
   styles?: EventPreviewStyles;
-  theme?: AnyIfEmpty<{}>;
+  theme?: Theme;
 }
 
 const EventPreviewView = ({

@@ -6,12 +6,12 @@ import styled from 'styled-components';
 import { withDefaultTheme } from '../../../hoc';
 import {
   AdvancedSearch,
-  AnyIfEmpty,
   ApiQuery,
   Callback,
   EmptyCallback,
   IdCallback,
   PureObject,
+  Theme,
 } from '../../../interfaces';
 import { defaultTheme } from '../../../theme/defaultTheme';
 import {
@@ -47,7 +47,7 @@ interface SearchProps {
   onLiveSearchSelect?: Callback;
   onKeyDown?: (e: KeyboardEvent) => void;
   styles?: SearchStyles;
-  theme?: AnyIfEmpty<{}>;
+  theme?: Theme;
 }
 
 interface SearchState {

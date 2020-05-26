@@ -36,7 +36,6 @@ class CogniteClient extends MockCogniteClient {
   };
 }
 
-// tslint:disable-next-line:max-classes-per-file
 export class SensorOverlayWrapperComponent extends React.Component {
   state = {
     counter: 0,

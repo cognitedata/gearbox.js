@@ -165,7 +165,7 @@ describe('AssetSearch', () => {
       wrapper.setProps({
         children: <AssetSearch {...props} rootAssetSelect={true} />,
       });
-      // tslint:disable-next-line: no-identical-functions
+
       setImmediate(() => {
         wrapper.update();
         expect(sdk.assets.list).toHaveBeenCalled();

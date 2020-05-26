@@ -1,7 +1,7 @@
 import { CogniteEvent } from '@cognite/sdk';
 import React, { CSSProperties } from 'react';
 import { WithAssetEventsDataProps, WithAssetEventsProps } from '../../hoc';
-import { AnyIfEmpty } from '../../interfaces';
+import { Theme } from '../../interfaces';
 
 export interface TableColumnType {
   title: string;
@@ -63,7 +63,7 @@ export interface AssetEventsPanelThemeProps {
   /**
    * @ignore
    */
-  theme?: AnyIfEmpty<{}>;
+  theme?: Theme;
 }
 
 export interface EventAddonsProp extends CogniteEvent {

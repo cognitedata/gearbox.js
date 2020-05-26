@@ -39,10 +39,8 @@ const formItemLayoutDefault: FormItemLayout = {
   wrapperCol: { xs: { span: 24 }, sm: { span: 16 } },
 };
 
-// tslint:disable-next-line:no-big-function
 const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
   props: TimeseriesDataExportFormProps
-  // tslint:disable-next-line:no-big-function
 ) => {
   const {
     form,

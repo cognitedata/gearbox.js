@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../../hoc';
-import { AnyIfEmpty } from '../../../interfaces';
+import { Theme } from '../../../interfaces';
 import { defaultTheme } from '../../../theme/defaultTheme';
 import {
   CanceledPromiseException,
@@ -18,7 +18,7 @@ interface TimeseriesValueProps {
   liveUpdate?: boolean;
   updatePeriodMillis?: number;
   unit?: string;
-  theme?: AnyIfEmpty<{}>;
+  theme?: Theme;
 }
 
 interface TimeseriesValueState {

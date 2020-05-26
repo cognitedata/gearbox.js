@@ -36,7 +36,6 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-// tslint:disable:no-big-function
 describe('TimeseriesChart', () => {
   it('calls the sdk', async () => {
     const id = 123;

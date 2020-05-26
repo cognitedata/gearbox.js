@@ -127,6 +127,5 @@ declare module '@cognite/griff-react' {
     onMouseOut?: (e: any) => void;
   }
 
-  // tslint:disable-next-line:max-classes-per-file
   export class LineChart extends React.Component<LineChartProps> {}
 }

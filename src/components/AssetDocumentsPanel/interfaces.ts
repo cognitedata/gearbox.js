@@ -2,7 +2,7 @@ import { FilesMetadata } from '@cognite/sdk';
 import { CollapseProps } from 'antd/lib/collapse';
 import { CSSProperties, ReactNode } from 'react';
 import { WithAssetFilesDataProps, WithAssetFilesProps } from '../../hoc';
-import { AnyIfEmpty } from '../../interfaces';
+import { Theme } from '../../interfaces';
 
 export type Document = FilesMetadata;
 
@@ -46,7 +46,7 @@ export interface DocumentsPanelStylesProps {
 }
 
 export interface DocumentsPanelThemeProps {
-  theme?: AnyIfEmpty<{}>;
+  theme?: Theme;
 }
 
 export type DocumentTableProps = MetaDocProps &

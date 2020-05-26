@@ -20,6 +20,7 @@ import {
 export const withAsset = <P extends WithAssetDataProps>(
   WrapperComponent: React.ComponentType<P>
 ) =>
+  // eslint-disable-next-line react/display-name
   class
     extends React.Component<
       Omit<P, keyof WithAssetDataProps> & WithAssetProps,

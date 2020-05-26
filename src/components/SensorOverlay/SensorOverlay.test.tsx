@@ -63,7 +63,7 @@ afterEach(() => {
   sdk.timeseries.retrieve.mockClear();
   sdk.datapoints.retrieveLatest.mockClear();
 });
-// tslint:disable:no-big-function
+
 describe('SensorOverlay', () => {
   it('Renders without exploding', () => {
     const wrapper = mount(

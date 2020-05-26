@@ -1,5 +1,5 @@
 import { CSSProperties, ReactNode } from 'react';
-import { AnyIfEmpty } from '../../interfaces';
+import { Theme } from '../../interfaces';
 import {
   AssetDocumentsPanelStyles,
   MetaDocProps,
@@ -66,5 +66,5 @@ export interface AssetMetaProps {
   /**
    * @ignore
    */
-  theme?: AnyIfEmpty<{}>;
+  theme?: Theme;
 }

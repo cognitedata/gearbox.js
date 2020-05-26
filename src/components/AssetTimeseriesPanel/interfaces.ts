@@ -1,6 +1,6 @@
 import React from 'react';
 import { WithAssetTimeseriesProps } from '../../hoc';
-import { AnyIfEmpty } from '../../interfaces';
+import { Theme } from '../../interfaces';
 import { TimeseriesChartMetaProps } from '../TimeseriesChartMeta';
 
 export interface AssetTimeseriesPanelStyles {
@@ -23,7 +23,7 @@ export interface MetaTimeseriesProps
   /**
    * @ignore
    */
-  theme?: AnyIfEmpty<{}>;
+  theme?: Theme;
 }
 
 export type AssetTimeseriesPanelProps = WithAssetTimeseriesProps &

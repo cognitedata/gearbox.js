@@ -1,4 +1,3 @@
-/* tslint:disable:no-duplicate-string */
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 
 const IAA_21PT1019: GetTimeSeriesMetadataDTO[] = [

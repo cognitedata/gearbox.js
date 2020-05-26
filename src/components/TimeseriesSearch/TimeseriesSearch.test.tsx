@@ -43,7 +43,6 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-// tslint:disable:no-big-function
 describe('TimeseriesSearch', () => {
   it('Renders without exploding', () => {
     const { onTimeserieSelectionChange } = propsCallbacks;

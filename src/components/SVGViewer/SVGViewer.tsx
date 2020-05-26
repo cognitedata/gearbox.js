@@ -409,7 +409,6 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     }
   };
 
-  // tslint:disable-next-line no-identical-functions
   onTouchEnd = () => {
     if (this.pinchZoom.current && !this.isOptimizationDisabled) {
       // @ts-ignore 'willChange' is not a part of 'CSSStyleDeclaration'
@@ -639,7 +638,6 @@ const SvgNode = styled.div`
   }
   ${(props: InternalThemedStyledProps) =>
     !props.customClassNames.searchResults &&
-    // tslint:disable-next-line: no-nested-template-literals
     `
   .search-result {
     &.metadata-container {
@@ -657,7 +655,6 @@ const SvgNode = styled.div`
   }`}
   ${(props: InternalThemedStyledProps) =>
     !props.customClassNames.currentSearchResult &&
-    // tslint:disable-next-line: no-nested-template-literals
     `
   .current-search-result {
     &.metadata-container {
@@ -706,7 +703,6 @@ const SvgNode = styled.div`
     }
     ${(props: InternalThemedStyledProps) =>
       !props.customClassNames.currentAsset &&
-      // tslint:disable-next-line: no-nested-template-literals
       `
     &.current-asset {
       outline: auto 2px #36a2c2;

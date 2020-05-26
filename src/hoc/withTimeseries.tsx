@@ -17,6 +17,7 @@ import {
 export const withTimeseries = <P extends WithTimeseriesDataProps>(
   WrapperComponent: React.ComponentType<P>
 ) =>
+  // eslint-disable-next-line react/display-name
   class
     extends React.Component<
       Omit<P, keyof WithTimeseriesDataProps> & WithTimeseriesProps,
