@@ -3,7 +3,10 @@ export type OnAdvancedSearchChange = (searchFields: AdvancedSearch) => void;
 export type Callback = (...args: any[]) => void;
 export type EmptyCallback = () => void;
 export type IdCallback = (id: number) => void;
-export type AnyIfEmpty<T extends object> = keyof T extends never ? any : T;
+export type UnknownDictionary = Record<string, unknown>;
+export type AnyIfEmpty<T extends UnknownDictionary> = keyof T extends never
+  ? any
+  : T;
 
 export interface EventHandlers {
   [name: string]: Callback[];
@@ -56,3 +59,5 @@ export interface ApiQuery {
   query: string;
   advancedSearch: AdvancedSearch | null;
 }
+
+export type Theme = AnyIfEmpty<UnknownDictionary>;

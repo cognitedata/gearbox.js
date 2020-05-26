@@ -30,7 +30,7 @@ describe('log proxy for cognite client', () => {
   });
 
   it("don't set sdk header on accessor", () => {
-    client.assets.retrieve; // tslint:disable-line
+    client.assets.retrieve;
     expect(client.setOneTimeSdkHeader).toBeCalledTimes(0);
   });
 

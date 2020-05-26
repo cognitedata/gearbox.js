@@ -1,6 +1,6 @@
 import { FormItemProps } from 'antd/lib/form/FormItem';
 import React, { CSSProperties } from 'react';
-import { AnyIfEmpty, PureObject } from '../../interfaces';
+import { PureObject, Theme } from '../../interfaces';
 
 export interface TenantSelectorStyles {
   button?: CSSProperties;
@@ -65,7 +65,7 @@ export interface TenantSelectorProps {
   /**
    * @ignore
    */
-  theme?: AnyIfEmpty<{}>;
+  theme?: Theme;
   /**
    * Customisable UI settings
    */

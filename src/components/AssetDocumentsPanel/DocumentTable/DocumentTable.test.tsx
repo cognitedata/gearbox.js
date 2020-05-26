@@ -15,7 +15,6 @@ configure({ adapter: new Adapter() });
 
 const ANT_COLLAPSE_HEADER = '.ant-collapse-header';
 
-// tslint:disable:no-big-function
 describe('DocumentTable', () => {
   it('Renders without exploding', () => {
     const wrapper = mount(<DocumentTable assetFiles={[]} />);

@@ -73,7 +73,7 @@ describe('Search', () => {
       .first()
       .props()
       // @ts-ignore
-      // tslint:disable-next-line: no-empty
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       .onPressEnter({ preventDefault: () => {} });
 
     expect(propsCallbacks.onPressEnter).toHaveBeenCalled();

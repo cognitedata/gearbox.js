@@ -20,7 +20,8 @@
     ],
     "typeRoots": ["node_modules/@types","src/@types"],
     "jsx": "react",
-    "rootDir": "src"
+    "rootDir": "src",
+    "skipLibCheck": true,
   },
   "include": [
     "src/**/*"

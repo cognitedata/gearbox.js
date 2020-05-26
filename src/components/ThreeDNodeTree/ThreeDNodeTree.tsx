@@ -135,7 +135,7 @@ class ThreeDNodeTree extends Component<NodeTreeProps, NodeTreeState> {
 
     threeDNodes.forEach(threeDNode => {
       const { parentId } = threeDNode;
-      // tslint:disable-next-line: no-useless-cast
+
       const node = nodes[parentId as number]; // casting is not a problem. It will return undefined if not found
       if (!node) {
         return;

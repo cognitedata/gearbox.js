@@ -5,7 +5,7 @@ import { createGlobalStyle } from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../../context/clientSDKProxyContext';
 import { withDefaultTheme } from '../../../hoc';
-import { AnyIfEmpty, IdCallback, PureObject } from '../../../interfaces';
+import { IdCallback, PureObject, Theme } from '../../../interfaces';
 import { defaultTheme } from '../../../theme/defaultTheme';
 
 export const defaultStrings: PureObject = {
@@ -24,7 +24,7 @@ export interface RootAssetSelectProps {
   strings: PureObject;
   onAssetSelected?: IdCallback;
   styles?: RootAssetSelectStyles;
-  theme?: AnyIfEmpty<{}>;
+  theme?: Theme;
 }
 
 interface RootAssetSelectState {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ThemeProvider, withTheme } from 'styled-components';
-import { AnyIfEmpty } from '../interfaces';
+import { Theme } from '../interfaces';
 import { defaultTheme } from '../theme/defaultTheme';
 import { GearboxTheme } from './interfaces';
 
@@ -8,7 +8,7 @@ const ThemeWrapper = ({
   theme,
   children,
 }: {
-  theme: AnyIfEmpty<{}> & { gearbox?: GearboxTheme };
+  theme: Theme & { gearbox?: GearboxTheme };
   children: React.ReactChild;
 }) => {
   const external = theme && theme.gearbox ? theme.gearbox : {};

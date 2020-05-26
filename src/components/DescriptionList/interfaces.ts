@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import { AnyIfEmpty } from '../../interfaces';
+import { Theme } from '../../interfaces';
 
 export interface ValueListType {
   key?: string;
@@ -46,5 +46,5 @@ export interface DescriptionListProps extends MetaDescriptionListProps {
   /**
    * @ignore
    */
-  theme?: AnyIfEmpty<{}>;
+  theme?: Theme;
 }

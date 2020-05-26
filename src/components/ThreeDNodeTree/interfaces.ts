@@ -1,7 +1,7 @@
 import { RevealNode3D } from '@cognite/sdk';
 import { AntTreeNodeProps } from 'antd/lib/tree';
 import { CSSProperties, MouseEvent } from 'react';
-import { AnyIfEmpty } from '../../interfaces';
+import { Theme } from '../../interfaces';
 
 export interface TreeNodeData {
   title: string;
@@ -62,5 +62,5 @@ export interface NodeTreeProps {
   /**
    * @ignore
    */
-  theme?: AnyIfEmpty<{}>;
+  theme?: Theme;
 }

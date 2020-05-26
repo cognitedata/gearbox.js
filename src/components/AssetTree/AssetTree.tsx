@@ -208,8 +208,9 @@ class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
             key={asset.id}
             isLeaf={isLeaf}
             style={styles && styles.list}
-            children={children && this.renderTreeNode(children)}
-          />
+          >
+            {children && this.renderTreeNode(children)}
+          </TreeNodeWrapper>
         )
       );
     });
@@ -235,8 +236,9 @@ class AssetTree extends Component<AssetTreeProps, AssetTreeState> {
         }
         expandedKeys={Object.keys(expandedKeys)}
         onExpand={onExpand}
-        children={renderTreeNode(rootAssetNodes)}
-      />
+      >
+        {renderTreeNode(rootAssetNodes)}
+      </Tree>
     );
   }
 

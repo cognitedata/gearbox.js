@@ -67,7 +67,7 @@ describe('AssetMeta', () => {
       expect(wrapper.find('h3')).toHaveLength(1);
       expect(wrapper.find('h3 + p')).toHaveLength(1);
       expect(wrapper.find('TabBar')).toHaveLength(1);
-      // tslint:disable-next-line: no-duplicate-string
+
       expect(wrapper.find('div.ant-tabs-tab')).toHaveLength(4);
       expect(wrapper.find('TabPane')).toHaveLength(4);
       done();
@@ -81,11 +81,9 @@ describe('AssetMeta', () => {
 
   it('should render "no asset" if assetId was not passed', () => {
     // @ts-ignore
+    const assetMeta = <AssetMeta />;
     const wrapper = mount(
-      <ClientSDKProvider client={sdk}>
-        // @ts-ignore
-        <AssetMeta />
-      </ClientSDKProvider>
+      <ClientSDKProvider client={sdk}>{assetMeta}</ClientSDKProvider>
     );
     expect(wrapper.exists()).toBe(true);
     expect(wrapper.find(AssetMeta)).toHaveLength(1);
@@ -95,11 +93,9 @@ describe('AssetMeta', () => {
 
   it('should fetch asset, events and documents if assetId was passed after creation', done => {
     // @ts-ignore
+    const assetMeta = <AssetMeta />;
     const wrapper = mount(
-      <ClientSDKProvider client={sdk}>
-        // @ts-ignore
-        <AssetMeta />
-      </ClientSDKProvider>
+      <ClientSDKProvider client={sdk}>{assetMeta}</ClientSDKProvider>
     );
     wrapper.setProps(
       {

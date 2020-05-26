@@ -2,7 +2,7 @@ import { Checkbox } from 'antd';
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { withDefaultTheme } from '../../../hoc';
-import { AnyIfEmpty } from '../../../interfaces';
+import { Theme } from '../../../interfaces';
 
 export interface DetailCheckboxProps {
   checked: boolean;
@@ -13,7 +13,7 @@ export interface DetailCheckboxProps {
   title: string;
   className: string;
   checkable: boolean;
-  theme?: AnyIfEmpty<{}>;
+  theme?: Theme;
 }
 
 const DetailCheckbox: FC<DetailCheckboxProps> = ({

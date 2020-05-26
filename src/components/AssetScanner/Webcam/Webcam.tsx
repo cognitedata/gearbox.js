@@ -162,7 +162,7 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
 
   render() {
     const { isDesktop, setRef, style } = this.props;
-    const videoStyles = isDesktop ? {} : { objectFit: 'cover' as 'cover' };
+    const videoStyles = isDesktop ? {} : { objectFit: 'cover' as const };
     return (
       <StyledVideo
         autoPlay={true}

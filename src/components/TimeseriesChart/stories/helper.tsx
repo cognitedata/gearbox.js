@@ -28,9 +28,7 @@ type DatapointsArray = (
 
 class FakeZoomableClient extends MockCogniteClient {
   timeseries: any = {
-    // tslint:disable-next-line: no-identical-functions
     retrieve: async (): Promise<GetTimeSeriesMetadataDTO[]> => {
-      // tslint:disable-next-line: no-identical-functions
       await sleep(1000);
       return [timeseriesListV2[0]];
     },

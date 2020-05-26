@@ -65,10 +65,12 @@ interface RightClickState {
   };
 }
 
-// tslint:disable-next-line:max-classes-per-file
-export class RightClickExample extends React.Component<{}, RightClickState> {
+export class RightClickExample extends React.Component<
+  Record<string, unknown>,
+  RightClickState
+> {
   menu: HTMLDivElement | null = null;
-  constructor(props: {}) {
+  constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
       visible: false,

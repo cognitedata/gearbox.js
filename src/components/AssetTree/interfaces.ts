@@ -1,6 +1,6 @@
 import { Asset } from '@cognite/sdk';
 import { AutoPagingToArrayOptions } from '@cognite/sdk/dist/src/autoPagination';
-import { AnyIfEmpty } from '../../interfaces';
+import { Theme } from '../../interfaces';
 
 export interface AssetTreeStyles {
   list?: React.CSSProperties;
@@ -42,7 +42,7 @@ export interface AssetTreeProps {
   /**
    * @ignore
    */
-  theme?: AnyIfEmpty<{}>;
+  theme?: Theme;
 
   autoPagingToArrayOptions?: AutoPagingToArrayOptions;
 }

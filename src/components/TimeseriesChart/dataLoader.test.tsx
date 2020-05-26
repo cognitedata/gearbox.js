@@ -28,7 +28,6 @@ const xAccessor: AccessorFunc = (d: GetAggregateDatapoint) => +d.timestamp;
 
 const dataLoader = new DataLoader(sdk);
 
-// tslint:disable:no-big-function
 describe('dataLoader', () => {
   describe('MergeInsert', () => {
     it('[base[0] <= toInsert[0] <= toInsert[1] <= base[1]]', () => {
@@ -192,7 +191,6 @@ describe('dataLoader', () => {
         }: {
           pps: number;
           expectedGranularity: string;
-          // tslint:disable-next-line: no-identical-functions
         }) => {
           const result = await dataLoader.cogniteloader({
             id: 123,
