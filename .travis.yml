@@ -36,5 +36,5 @@ deploy:
       branch: master
     skip_cleanup: true
     script:
-      - npx -p @semantic-release/changelog@4 -p @semantic-release/git@8 -p semantic-release semantic-release
+      - npx -p @semantic-release/changelog -p @semantic-release/git -p semantic-release semantic-release
 
