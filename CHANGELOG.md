@@ -1,3 +1,10 @@
+## [1.19.1](https://github.com/cognitedata/gearbox.js/compare/v1.19.0...v1.19.1) (2020-06-03)
+
+
+### Bug Fixes
+
+* **svg-viewer:** svg security vulnerability ([a34fcfc](https://github.com/cognitedata/gearbox.js/commit/a34fcfc7e1350a8535b27b08dd18ed98f75a5ebf))
+
 # [1.19.0](https://github.com/cognitedata/gearbox.js/compare/v1.18.1...v1.19.0) (2020-05-12)
 
 
