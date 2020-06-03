@@ -1,5 +1,5 @@
 # Gearbox.js
-[![Build Status](https://travis-ci.org/cognitedata/gearbox.js.svg?branch=master)](https://travis-ci.org/cognitedata/gearbox.js)
+[![Build Status](https://github.com/cognitedata/gearbox.js/workflows/Lint%20&%20Build%20&%20Test%20&%20Deploy/badge.svg)](https://github.com/cognitedata/gearbox.js/actions?query=branch:master)
 [![codecov](https://codecov.io/gh/cognitedata/gearbox.js/branch/master/graph/badge.svg)](https://codecov.io/gh/cognitedata/gearbox.js)
 [![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://cognitedata.github.io/gearbox.js/?path=/docs/assets-assetbreadcrumb--basic-usage)
 
