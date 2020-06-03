@@ -32,7 +32,9 @@
   "homepage": "https://github.com/cognitedata/gearbox.js#readme",
   "license": "Apache-2.0",
   "dependencies": {
+    "@types/dompurify": "^2.0.2",
     "d3": "^5.14.2",
+    "dompurify": "^2.0.11",
     "file-saver": "^2.0.2",
     "lodash": "^4.17.15",
     "ms": "^2.1.2",

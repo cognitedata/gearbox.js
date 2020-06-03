@@ -1,5 +1,5 @@
 export const SVG = `<svg xmlns="http://www.w3.org/2000/svg" 
-  xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1153 776" width="1153" height="776">
+  xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1153 776" width="1153" height="776" onload="alert('oh no, I am a security bug!')">
   <g id="Canvas" transform="scale(4) translate(-600 -200)">
     <g>
       <metadata>

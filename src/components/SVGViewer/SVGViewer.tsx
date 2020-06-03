@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
 import * as CustomIcon from './Icons';
+import DOMPurify from 'dompurify';
+
 import {
   CustomClassNames,
   PinchZoomInterface,
@@ -262,6 +264,9 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     }
     if (svgString) {
       const parser = new DOMParser();
+      // An SVG can contain Javascript, so run it through DOMPurify before
+      // embedding it in the DOM.
+      svgString = DOMPurify.sanitize(svgString);
       const svgFromUrl = parser.parseFromString(svgString, 'image/svg+xml');
       // if during parsing there was an error, svg will be rendered
       // inside html tag until the line where an error occured,
