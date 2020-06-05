@@ -95,7 +95,7 @@ export const withAssetEvents = <P extends WithAssetEventsDataProps>(
                 assetIds: [assetId],
               },
             })
-            .autoPagingToArray()
+            .autoPagingToArray({ limit: SDK_LIST_LIMIT })
         );
 
         if (!events || !Array.isArray(events)) {
