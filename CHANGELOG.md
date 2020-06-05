@@ -1,3 +1,10 @@
+## [1.19.2](https://github.com/cognitedata/gearbox.js/compare/v1.19.1...v1.19.2) (2020-06-05)
+
+
+### Bug Fixes
+
+* **asset-events:** increase limit to 1k ([#658](https://github.com/cognitedata/gearbox.js/issues/658)) ([462c843](https://github.com/cognitedata/gearbox.js/commit/462c84393c943d976d2d3dca4b4073d60e106b54))
+
 ## [1.19.1](https://github.com/cognitedata/gearbox.js/compare/v1.19.0...v1.19.1) (2020-06-03)
 
 
