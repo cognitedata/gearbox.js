@@ -71,6 +71,8 @@ export const seriesWithCustomYdomain = [
 
 export const ySubDomains = { 123: [-40, 40] };
 
+export const ysubDomainsForLiveUpdate = { 123: [-120, 120] };
+
 export const TimeseriesIdsComponentProps: FC<
   TimeseriesChartByTimeseriesId
 > = () => <></>;

@@ -11,6 +11,7 @@ import {
   handleMouseOut,
   handleBlur,
   series,
+  ysubDomainsForLiveUpdate,
   TimeseriesIdsComponentProps,
   SeriesComponentProps,
   seriesWithCustomYdomain,
@@ -287,6 +288,7 @@ const customContainerStyle = {
       endTime={Date.now()}
       liveUpdate={true}
       updateIntervalMillis={2000}
+      ySubDomains={ysubDomainsForLiveUpdate}
     />
   </Story>
 </Preview>
