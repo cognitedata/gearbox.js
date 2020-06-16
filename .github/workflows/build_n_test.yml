@@ -39,9 +39,8 @@ jobs:
     - run: yarn 
     - run: yarn lint
     - run: yarn build
-    - env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      run: yarn test && codecov
+    - run: yarn test
+    - uses: codecov/codecov-action@v1
     - run: yarn build-storybook
     - name: Deploy preview
       if: ${{ github.event_name == 'pull_request' }}
