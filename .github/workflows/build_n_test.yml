@@ -69,7 +69,7 @@ jobs:
       if: success() && github.ref == 'refs/heads/master'
       env: 
         NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_BOT_TOKEN }}
       run: npx -p @semantic-release/changelog@4 -p @semantic-release/git@8 -p semantic-release semantic-release
 
 
