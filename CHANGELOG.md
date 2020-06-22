@@ -1,3 +1,10 @@
+## [1.19.3](https://github.com/cognitedata/gearbox.js/compare/v1.19.2...v1.19.3) (2020-06-22)
+
+
+### Bug Fixes
+
+* sanitize SVGs with PNG ([0a002a6](https://github.com/cognitedata/gearbox.js/commit/0a002a62a07df8cdfae6e1394610e22973ca4835))
+
 ## [1.19.2](https://github.com/cognitedata/gearbox.js/compare/v1.19.1...v1.19.2) (2020-06-05)
 
 
