@@ -63,6 +63,7 @@ jobs:
       if: success() && github.ref == 'refs/heads/master'
       uses: peaceiris/actions-gh-pages@v3
       with:
+        github_token: ${{ secrets.SEMANTIC_RELEASE_BOT_TOKEN }}
         publish_dir: ./storybook-static
 
     - name: Deploy 🚀
