@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  GH_TOKEN: ${{ secrets.SEMANTIC_RELEASE_BOT_TOKEN }}
+
 jobs:
   build-and-deploy:
 
@@ -45,7 +48,6 @@ jobs:
     - name: Deploy preview
       if: ${{ github.event_name == 'pull_request' }}
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         encrypted_5b5408a8dfc4_key: ${{ secrets.ENCRYPTED_5B5408A8DFC4_KEY }}
         encrypted_5b5408a8dfc4_iv: ${{ secrets.ENCRYPTED_5B5408A8DFC4_IV }}
       run: |
@@ -61,14 +63,12 @@ jobs:
       if: success() && github.ref == 'refs/heads/master'
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./storybook-static
 
     - name: Deploy 🚀
       if: success() && github.ref == 'refs/heads/master'
       env: 
         NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_BOT_TOKEN }}
       run: npx -p @semantic-release/changelog@4 -p @semantic-release/git@8 -p semantic-release semantic-release
 
 
