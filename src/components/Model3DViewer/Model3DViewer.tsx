@@ -496,7 +496,7 @@ export class Model3DViewer extends Component<Model3DViewerProps> {
     if (length === 1) {
       const { nodeId } = this.nodes[0];
 
-      this.model.updateMatrixWorld(true);
+      this.model.updateMatrixWorld();
 
       const reusableBox = new THREE.Box3();
       const bb = this.model.getBoundingBox(nodeId, reusableBox);
