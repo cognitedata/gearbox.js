@@ -1,5 +1,4 @@
-import { Asset } from '@cognite/sdk';
-import { AutoPagingToArrayOptions } from '@cognite/sdk/dist/src/autoPagination';
+import { Asset, Limit } from '@cognite/sdk';
 import { Theme } from '../../interfaces';
 
 export interface AssetTreeStyles {
@@ -44,5 +43,5 @@ export interface AssetTreeProps {
    */
   theme?: Theme;
 
-  autoPagingToArrayOptions?: AutoPagingToArrayOptions;
+  autoPagingToArrayOptions?: Limit;
 }

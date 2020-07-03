@@ -1,5 +1,5 @@
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
-import { CogniteAsyncIterator } from '@cognite/sdk/dist/src/autoPagination';
+import { CogniteAsyncIterator } from '@cognite/sdk';
 import React, { FC } from 'react';
 import {
   MockDatapointsClientObject,

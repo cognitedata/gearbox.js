@@ -6,7 +6,7 @@ import {
 import {
   DatapointsGetAggregateDatapoint,
   GetDatapointMetadata,
-} from '@cognite/sdk/dist/src/types/types';
+} from '@cognite/sdk';
 import { Button, Checkbox, DatePicker, Form, Input, Modal, Radio } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { chunk, isFunction, range } from 'lodash';
