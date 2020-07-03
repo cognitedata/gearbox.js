@@ -1,3 +1,10 @@
+## [1.19.4](https://github.com/cognitedata/gearbox.js/compare/v1.19.3...v1.19.4) (2020-07-03)
+
+
+### Bug Fixes
+
+* **reveal:** bump @cognite/3d-viewer to 6.1.4 ([#664](https://github.com/cognitedata/gearbox.js/issues/664)) ([dab8643](https://github.com/cognitedata/gearbox.js/commit/dab864315f90b06af3f4d2383676613d245bd14f))
+
 ## [1.19.3](https://github.com/cognitedata/gearbox.js/compare/v1.19.2...v1.19.3) (2020-06-22)
 
 
