@@ -1866,16 +1866,15 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@cognite/3d-viewer@^6.0.2":
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/@cognite/3d-viewer/-/3d-viewer-6.0.2.tgz#8903d9b006174abd16b93ef2d3553a96f07f4ad9"
-  integrity sha512-pRbn8Hu7GPysiCyFM3WFQ0NvbUpKsTD7MhaCbeCvnnRgcEu0uqL89ZKgsHifzICtHtaLTGD2Nwfibl1/kNEfiw==
+"@cognite/3d-viewer@^6.1.4":
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/@cognite/3d-viewer/-/3d-viewer-6.1.4.tgz#19f9fe04d1d82343613d75a7195c492f23c667c6"
+  integrity sha512-2qH4aC7NbxYE+m3st8+c+S69bBzYR/p/ju0WBvIOhZgHX60A2oiwJIUPIrRciWR80d8N73JPhn43ZfVPu4ciaA==
   dependencies:
     "@babel/runtime" "^7.4.4"
-    "@cognite/3d-web-parser" "^0.12.2"
+    "@cognite/3d-web-parser" "^0.13.5"
     "@cognite/three-combo-controls" "^1.4.1"
     "@tweenjs/tween.js" "^17.2.0"
-    idb "^4.0.3"
     is-function "^1.0.1"
     mixpanel-browser "^2.27.1"
     mouse-event-offset "^3.0.2"
@@ -1884,10 +1883,10 @@
     simple-statistics "^7.0.2"
     three "0.98.0"
 
-"@cognite/3d-web-parser@^0.12.2":
-  version "0.12.2"
-  resolved "https://registry.yarnpkg.com/@cognite/3d-web-parser/-/3d-web-parser-0.12.2.tgz#42c5be02bd31d095d189775910300ef8090888f5"
-  integrity sha512-FoY1b7l+QfRAChYZr0+xURr0be4Bov/jG7AEycQWUtvte36mySY3+lqnhHDvPey9DyNWU2GZOW+3uRXMnzkf+A==
+"@cognite/3d-web-parser@^0.13.5":
+  version "0.13.5"
+  resolved "https://registry.yarnpkg.com/@cognite/3d-web-parser/-/3d-web-parser-0.13.5.tgz#9c3c47cbf5eeaa73744888bff2d8916cdbf6ff67"
+  integrity sha512-J/7KlOLw8S9vSVvFbElJC6dt6JKs41L425vzXD1XxBw8yT3o2V+wP8AtwUPJ/9k5E+aMAB9qxTZ9O/AE2Yb6gA==
   dependencies:
     protobufjs "^6.8.8"
 
@@ -8941,11 +8940,6 @@ icss-utils@^4.0.0, icss-utils@^4.1.1:
   integrity sha512-4aFq7wvWyMHKgxsH8QQtGpvbASCf+eM3wPRLI6R+MgAnTCZ6STYsRvttLvRWK0Nfif5piF394St3HeJDaljGPA==
   dependencies:
     postcss "^7.0.14"
-
-idb@^4.0.3:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/idb/-/idb-4.0.4.tgz#f0c06f58bd78fe557e4de944fd6ba6a3240faa8e"
-  integrity sha512-ZYsaBSNub2yAnjvmRKudQlMIPqZQIefAOwNIPeXC+RLIeXYFc0UNQqONKNuQeBNf8oBOV5L75yJ9zFISjHVj4g==
 
 ieee754@^1.1.4:
   version "1.1.13"
