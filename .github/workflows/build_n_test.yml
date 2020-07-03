@@ -19,7 +19,7 @@ jobs:
     - name: Checkout 
       uses: actions/checkout@v2
       with:
-        token: ${{ secrets.SEMANTIC_RELEASE_BOT_TOKEN }}
+        persist-credentials: false
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
