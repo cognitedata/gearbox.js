@@ -16,7 +16,10 @@ jobs:
         node-version: [10.x]
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout 
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.SEMANTIC_RELEASE_BOT_TOKEN }}
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
@@ -71,5 +74,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_BOT_TOKEN }}
         GH_TOKEN: ${{ secrets.SEMANTIC_RELEASE_BOT_TOKEN }}
       run: npx -p @semantic-release/changelog@4 -p @semantic-release/git@8 -p semantic-release semantic-release
-
 
