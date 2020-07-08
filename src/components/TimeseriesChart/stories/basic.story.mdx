@@ -11,7 +11,7 @@ import {
   handleMouseOut,
   handleBlur,
   series,
-  TimeseriesIdsComponentProps,
+  TimeseriesComponent,
   SeriesComponentProps,
   seriesWithCustomYdomain,
 } from './helper';
@@ -39,7 +39,9 @@ import { TimeseriesChart } from '@cognite/gearbox';
 
 <Preview>
   <Story name="Basic usage" >
-    <TimeseriesChart timeseriesIds={[123]} />
+    <TimeseriesChart
+      series={[814208809031578, 6227120530180250]}
+    />
   </Story>
 </Preview>
 
@@ -48,15 +50,8 @@ import { TimeseriesChart } from '@cognite/gearbox';
 ### Required
 Component has two ways of initialization. You should choose one of them to provide component data to render proper charts
 
-**via** `timeseriesIds`
-<Props of={TimeseriesIdsComponentProps} />
-
 **via** `series`
-<Props of={SeriesComponentProps} />
-
-### Optional
-
-<Props of={TimeseriesChart} />
+<Props of={TimeseriesComponent} />
 
 ### Types
 
@@ -115,7 +110,9 @@ interface ChartRulerConfig {
 
 <Preview>
   <Story name="Empty" >
-    <TimeseriesChart timeseriesIds={[]} />
+    <TimeseriesChart
+      series={[]}
+    />
   </Story>
 </Preview>
 
@@ -123,7 +120,9 @@ interface ChartRulerConfig {
 
 <Preview>
   <Story name="Single" >
-    <TimeseriesChart timeseriesIds={[123]} />
+    <TimeseriesChart
+      series={[123]}
+    />
   </Story>
 </Preview>
 
@@ -131,7 +130,9 @@ interface ChartRulerConfig {
 
 <Preview>
   <Story name="Multiple" >
-    <TimeseriesChart timeseriesIds={[123, 456]} />
+    <TimeseriesChart
+      series={[123, 456]}
+    />
   </Story>
 </Preview>
 
@@ -140,8 +141,7 @@ interface ChartRulerConfig {
 <Preview>
   <Story name="Hidden" >
     <TimeseriesChart
-      timeseriesIds={[123, 456]}
-      hiddenSeries={{ 123: true }}
+      series={[{id: 123, hidden: true}, {id: 456}]}
     />
   </Story>
 </Preview>
@@ -150,7 +150,11 @@ interface ChartRulerConfig {
 
 <Preview>
   <Story name="Height and width" >
-    <TimeseriesChart timeseriesIds={[123]} height={300} width={800} />
+    <TimeseriesChart
+      series={[123]}
+      height={300}
+      width={800}
+    />
   </Story>
 </Preview>
 
@@ -164,7 +168,7 @@ const customContainerStyle = {
 <Preview>
   <Story name="Custom container styles" >
     <TimeseriesChart
-      timeseriesIds={[123]}
+      series={[123]}
       styles={customContainerStyle}
     />
   </Story>
@@ -174,7 +178,10 @@ const customContainerStyle = {
 
 <Preview>
   <Story name="Left y-axis" >
-    <TimeseriesChart timeseriesIds={[123]} yAxisPlacement={'LEFT'} />
+    <TimeseriesChart
+      series={[123]}
+      yAxisPlacement={'LEFT'}
+    />
   </Story>
 </Preview>
 
@@ -182,7 +189,10 @@ const customContainerStyle = {
 
 <Preview>
   <Story name="No y-axis" >
-    <TimeseriesChart timeseriesIds={[123]} yAxisDisplayMode={'NONE'} />
+    <TimeseriesChart
+      series={[123]}
+      yAxisDisplayMode={'NONE'}
+     />
   </Story>
 </Preview>
 
@@ -191,7 +201,7 @@ const customContainerStyle = {
 <Preview>
   <Story name="Collapsed y-axis" >
     <TimeseriesChart
-      timeseriesIds={[123]}
+      series={[123]}
       yAxisDisplayMode={'COLLAPSED'}
     />
   </Story>
@@ -201,7 +211,10 @@ const customContainerStyle = {
 
 <Preview>
   <Story name="X-axis height" >
-    <TimeseriesChart timeseriesIds={[123]} xAxisHeight={100} />
+    <TimeseriesChart
+      series={[123]}
+      xAxisHeight={100}
+    />
   </Story>
 </Preview>
 
@@ -209,7 +222,10 @@ const customContainerStyle = {
 
 <Preview>
   <Story name="No x-axis" >
-    <TimeseriesChart timeseriesIds={[123]} xAxisHeight={0} />
+    <TimeseriesChart
+      series={[123]}
+      xAxisHeight={0}
+    />
   </Story>
 </Preview>
 
@@ -218,18 +234,10 @@ const customContainerStyle = {
 <Preview>
   <Story name="Start and end time" >
     <TimeseriesChart
-      timeseriesIds={[123]}
-      startTime={new Date(2019, 3, 1)}
-      endTime={new Date(2019, 4, 1)}
+      series={[123]}
+      start={new Date(2019, 3, 1)}
+      end={new Date(2019, 4, 1)}
     />
-  </Story>
-</Preview>
-
-### Crosshair
-
-<Preview>
-  <Story name="Crosshair" >
-    <TimeseriesChart timeseriesIds={[123]} crosshair={true} />
   </Story>
 </Preview>
 
@@ -238,9 +246,9 @@ const customContainerStyle = {
 <Preview>
   <Story name="Context chart" >
     <TimeseriesChart
-      timeseriesIds={[123]}
-      startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
-      endTime={Date.now()}
+      series={[123]}
+      start={Date.now() - 30 * 24 * 60 * 60 * 1000}
+      end={Date.now()}
       zoomable={true}
       contextChart={true}
     />
@@ -250,11 +258,11 @@ const customContainerStyle = {
 ### Zoomable
 
 <Preview>
-  <Story name="Zoomable" decorators={[zoomableClientDecorator]}>
+  <Story name="Zoomable">
     <TimeseriesChart
-      timeseriesIds={[123]}
-      startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
-      endTime={Date.now()}
+      series={[814208809031578, 6227120530180250]}
+      start={Date.now() - 180 * 24 * 60 * 60 * 1000}
+      end={Date.now()}
       zoomable={true}
       contextChart={true}
     />
@@ -266,9 +274,7 @@ const customContainerStyle = {
 <Preview>
   <Story name="Live update" decorators={[zoomableClientDecorator]}>
     <TimeseriesChart
-      timeseriesIds={[123]}
-      startTime={Date.now() - 30 * 24 * 60 * 60 * 1000}
-      endTime={Date.now()}
+      series={[123]}
       liveUpdate={true}
       updateIntervalMillis={2000}
     />
@@ -284,8 +290,7 @@ const timeSeriesColors = { 123: 'red', 456: '#00ff00' }
 <Preview>
   <Story name="Custom colors" >
    <TimeseriesChart
-      timeseriesIds={[123, 456]}
-      timeseriesColors={timeSeriesColors}
+      series={[{id: 123, color: '#00ff00'}, {id: 456, color:'#ff0000'}]}
     />
   </Story>
 </Preview>
@@ -305,13 +310,11 @@ const annotations = [
 <Preview>
   <Story name="Annotations" >
     <TimeseriesChart
-      timeseriesIds={[123]}
-      startTime={Date.now() - 60 * 1000}
-      endTime={Date.now()}
+      series={[123]}
       annotations={[
         {
           data: [Date.now() - 30 * 1000, Date.now() - 20 * 1000],
-          height: 30,
+          color: '#ff0000',
           id: 888,
         }
       ]}
@@ -344,9 +347,9 @@ Since both `yLabel` and `timeLabel` are optional. giving an empty object for `ru
 <Preview>
   <Story name="Ruler" >
     <TimeseriesChart
-      timeseriesIds={[123, 456]}
-      startTime={Date.now() - 60 * 1000}
-      endTime={Date.now()}
+      series={[{id:123, hidden: true}, {id:456}]}
+      start={Date.now() - 60 * 1000}
+      end={Date.now()}
       ruler={rulerProp}
       />
   </Story>
@@ -366,9 +369,7 @@ const handleBlur = (e: any) => console.log('onBlur', e)
 <Preview>
   <Story name="Mouse events" >
     <TimeseriesChart
-      timeseriesIds={[123]}
-      startTime={Date.now() - 60 * 1000}
-      endTime={Date.now()}
+      series={[123]}
       onMouseMove={handleMouseMove}
       onMouseOut={handleMouseOut}
       onBlur={handleBlur}
@@ -420,37 +421,36 @@ const ySubDomains = { 123: [-130, 130] };
 <Preview>
   <Story name="Define Y-axis Subdomain" >
     <TimeseriesChart
-      timeseriesIds={[123]}
-      ySubDomains = {ySubDomains}
+      series={[{id: 123, ySubDomain: [-130, 130]}]}
     />
   </Story>
 </Preview>
 
-### Define Y-axis Subdomain For Series
+<!-- ### Define Y-axis Subdomain For Series -->
 
-```jsx
-import { AxisDisplayMode } from '@cognite/griff-react';
+<!-- ```jsx -->
+<!-- import { AxisDisplayMode } from '@cognite/griff-react'; -->
 
-const seriesWithCustomYdomain = [
-  {
-    id: 123,
-    color: 'green',
-    yAxisDisplayMode: AxisDisplayMode.ALL,
-    hidden: false,
-    ySubDomain: [-150, 150],
-  },
-  {
-    id: 456,
-    color: 'red',
-    ySubDomain: [-120, 120],
-  },
-];
-```
+<!-- const seriesWithCustomYdomain = [ -->
+<!--   { -->
+<!--     id: 123, -->
+<!--     color: 'green', -->
+<!--     yAxisDisplayMode: AxisDisplayMode.ALL, -->
+<!--     hidden: false, -->
+<!--     ySubDomain: [-150, 150], -->
+<!--   }, -->
+<!--   { -->
+<!--     id: 456, -->
+<!--     color: 'red', -->
+<!--     ySubDomain: [-120, 120], -->
+<!--   }, -->
+<!-- ]; -->
+<!-- ``` -->
 
-<Preview>
-  <Story name="Define Y-axis Subdomain For Series" >
-    <TimeseriesChart
-      series={seriesWithCustomYdomain} 
-    />
-  </Story>
-</Preview>
+<!-- <Preview> -->
+<!--   <Story name="Define Y-axis Subdomain For Series" > -->
+<!--     <TimeseriesChart -->
+<!--       series={seriesWithCustomYdomain} -->
+<!--     /> -->
+<!--   </Story> -->
+<!-- </Preview> -->

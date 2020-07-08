@@ -6,7 +6,6 @@ import { datapointsList, sleep, timeseriesListV2 } from '../../mocks';
 import { MockCogniteClient } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { CursorOverview } from './components/CursorOverview';
-import { ChartRulerPoint } from './interfaces';
 import { TimeseriesChart } from './TimeseriesChart';
 
 configure({ adapter: new Adapter() });
@@ -40,7 +39,7 @@ describe('TimeseriesChart', () => {
   it('calls the sdk', async () => {
     const id = 123;
     const props = {
-      timeseriesIds: [id],
+      series: [id],
     };
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>
@@ -60,7 +59,7 @@ describe('TimeseriesChart', () => {
 
   it('renders correctly when ids are specified', async () => {
     const props = {
-      timeseriesIds: [timeseriesListV2[0].id],
+      series: [timeseriesListV2[0].id],
     };
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>
@@ -93,7 +92,7 @@ describe('TimeseriesChart', () => {
 
   it('renders context chart', async () => {
     const props = {
-      timeseriesIds: [timeseriesListV2[0].id],
+      series: [timeseriesListV2[0].id],
       contextChart: true,
     };
     const wrapper = mount(
@@ -107,49 +106,4 @@ describe('TimeseriesChart', () => {
   });
 });
 
-it('cursor overview renders with ruler specified', async () => {
-  const yLabel = jest.fn();
-  const timeLabel = jest.fn();
-  const eventMap: { [name: string]: any } = {};
-  const timeseriesPoints: { [name: string]: ChartRulerPoint } = {
-    [timeseriesListV2[0].id]: {
-      id: 1,
-      name: 'test',
-      value: 100,
-      color: '#000',
-      timestamp: Date.now(),
-      x: 100,
-      y: 100,
-    },
-  };
-  window.addEventListener = jest.fn((event: string, cb: any) => {
-    eventMap[event] = cb;
-  });
-  const props = {
-    timeseriesIds: [timeseriesListV2[0].id],
-    ruler: {
-      visible: true,
-      yLabel,
-      timeLabel,
-    },
-  };
-  const wrapper = mount(
-    <ClientSDKProvider client={sdk}>
-      <TimeseriesChart {...props} />
-    </ClientSDKProvider>
-  );
-  await sleep(300);
-  wrapper.update();
-
-  expect(wrapper.find(CursorOverview).exists()).toBeTruthy();
-
-  wrapper.find(TimeseriesChart).setState({
-    rulerPoints: timeseriesPoints,
-  });
-  wrapper.update();
-
-  eventMap.mousemove({ clientX: 100, clientY: 100 });
-
-  expect(yLabel).toHaveBeenCalled();
-  expect(timeLabel).toHaveBeenCalled();
-});
+// todo: add test for ruler

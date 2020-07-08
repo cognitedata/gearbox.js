@@ -131,11 +131,11 @@ export class TimeseriesChartMetaPure extends PureComponent<
         )}
         {showChart && (
           <TimeseriesChart
-            timeseriesIds={[timeseries.id]}
+            series={[timeseries.id]}
             liveUpdate={liveUpdate}
-            updateIntervalMillis={updateIntervalMillis}
-            startTime={basePeriod.startTime}
-            endTime={basePeriod.endTime}
+            updateInterval={updateIntervalMillis}
+            start={basePeriod.startTime}
+            end={basePeriod.endTime}
           />
         )}
         {showDatapoint && (

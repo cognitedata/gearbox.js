@@ -972,9 +972,13 @@ export const datapoints = [
   },
 ];
 
+export const datapointsWithTimestampDate = datapoints.map(d => ({
+  ...d,
+  timestamp: new Date(d.timestamp),
+}));
 export const datapointsList = {
   name: 'abc',
-  datapoints,
+  datapoints: datapointsWithTimestampDate,
 };
 
 const csvData = [

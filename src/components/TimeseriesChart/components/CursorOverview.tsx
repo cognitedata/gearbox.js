@@ -2,7 +2,11 @@ import moment from 'moment';
 import numeral from 'numeral';
 import React from 'react';
 import styled from 'styled-components';
-import { ChartRulerConfig, ChartRulerPoint } from '../interfaces';
+import {
+  TimeseriesChartRuler,
+  TimeseriesChartRulerPoint,
+  TimeseriesChartRulerPointsMap,
+} from '../interfaces';
 
 const Container = styled.div`
   position: relative;
@@ -65,9 +69,8 @@ interface CursorOverviewState {
 interface CursorOverviewProps {
   wrapperRef: HTMLElement | null;
   series: any;
-  hiddenSeries: { [id: number]: boolean };
-  ruler: ChartRulerConfig;
-  rulerPoints: { [key: string]: ChartRulerPoint };
+  ruler: TimeseriesChartRuler;
+  rulerPoints: TimeseriesChartRulerPointsMap;
   styles?: CursorOverviewStyles;
 }
 
@@ -122,7 +125,6 @@ export class CursorOverview extends React.Component<
   render() {
     const {
       series,
-      hiddenSeries,
       rulerPoints,
       ruler: { timeLabel, yLabel },
     } = this.props;
@@ -136,7 +138,7 @@ export class CursorOverview extends React.Component<
     }
 
     const newestTimestamp = Object.keys(rulerPoints).reduce((acc, id) => {
-      const rulerPoint: ChartRulerPoint = rulerPoints[id];
+      const rulerPoint = rulerPoints[Number(id)];
       return Math.max(rulerPoint.timestamp, acc);
     }, 0);
 
@@ -152,15 +154,15 @@ export class CursorOverview extends React.Component<
         })
       : formattedDate(newestTimestamp);
 
-    const yLabelFormatter: (point: ChartRulerPoint) => string = yLabel
+    const yLabelFormatter: (point: TimeseriesChartRulerPoint) => string = yLabel
       ? yLabel
-      : (point: ChartRulerPoint) => {
+      : (point: TimeseriesChartRulerPoint) => {
           return numeral(point.value).format('0[.]0[00] a');
         };
 
     const renderTag = ({ id, color }: { id: number; color: string }) =>
       rulerPoints[id] &&
-      !hiddenSeries[id] && (
+      !rulerPoints[id].hidden && (
         <Tag color={color} key={id}>
           {yLabelFormatter(rulerPoints[id])}
         </Tag>

@@ -16,10 +16,7 @@ import {
 } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DataLoader } from '../dataLoader';
-import {
-  TimeseriesChartBySeries,
-  TimeseriesChartByTimeseriesId,
-} from '../interfaces';
+import { TimeseriesChartProps } from '../interfaces';
 
 type DatapointsArray = (
   | DatapointsGetAggregateDatapoint
@@ -116,8 +113,4 @@ export const seriesWithCustomYdomain = [
 
 export const ySubDomains = { 123: [-130, 130] };
 
-export const TimeseriesIdsComponentProps: FC<
-  TimeseriesChartByTimeseriesId
-> = () => <></>;
-
-export const SeriesComponentProps: FC<TimeseriesChartBySeries> = () => <></>;
+export const TimeseriesComponent: FC<TimeseriesChartProps> = () => <></>;

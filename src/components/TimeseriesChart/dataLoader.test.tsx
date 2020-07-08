@@ -1,3 +1,4 @@
+import { DataLoaderDatapoint } from '@cognite/griff-react';
 import {
   GetAggregateDatapoint,
   GetDoubleDatapoint,
@@ -5,7 +6,7 @@ import {
 } from '@cognite/sdk';
 import { datapointsList, timeseriesListV2 } from '../../mocks';
 import { MockCogniteClient } from '../../mocks';
-import { AccessorFunc, DataLoader } from './dataLoader';
+import { DataLoader } from './dataLoader';
 
 const mockTimeseriesRetrieve = jest.fn();
 const mockDatapointsRetrieve = jest.fn();
@@ -23,8 +24,6 @@ const sdk = new CogniteClient({ appId: 'gearbox test' });
 
 const toPoints = (arr: number[], from: string): GetAggregateDatapoint[] =>
   arr.map((d: number) => ({ timestamp: new Date(d), value: from }));
-
-const xAccessor: AccessorFunc = (d: GetAggregateDatapoint) => +d.timestamp;
 
 const dataLoader = new DataLoader(sdk);
 
@@ -59,7 +58,12 @@ describe('dataLoader', () => {
           value: 'base',
         },
       ];
-      const merged = DataLoader.mergeInsert(base, toInsert, xAccessor, [5, 8]);
+      const merged = DataLoader.mergeInsert(
+        base,
+        toInsert,
+        DataLoader.xAccessor,
+        [5, 8]
+      );
       expect(merged).toEqual(expectedOutput);
     });
 
@@ -70,7 +74,12 @@ describe('dataLoader', () => {
         { timestamp: new Date(1), value: 'insert' },
         { timestamp: new Date(5), value: 'insert' },
       ];
-      const merged = DataLoader.mergeInsert(base, toInsert, xAccessor, [0, 5]);
+      const merged = DataLoader.mergeInsert(
+        base,
+        toInsert,
+        DataLoader.xAccessor,
+        [0, 5]
+      );
       expect(merged).toEqual(expectedOutput);
     });
 
@@ -81,7 +90,12 @@ describe('dataLoader', () => {
         { timestamp: new Date(1), value: 'base' },
         { timestamp: new Date(5), value: 'insert' },
       ];
-      const merged = DataLoader.mergeInsert(base, toInsert, xAccessor, [3, 5]);
+      const merged = DataLoader.mergeInsert(
+        base,
+        toInsert,
+        DataLoader.xAccessor,
+        [3, 5]
+      );
       expect(merged).toEqual(expectedOutput);
     });
   });
@@ -119,7 +133,14 @@ describe('dataLoader', () => {
             timeDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
             timeSubDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
             pointsPerSeries: pps,
-            oldSeries: {},
+            oldSeries: {
+              id: 123,
+              data: [],
+              xAccessor: DataLoader.xAccessor,
+              yAccessor: DataLoader.yAccessor,
+              y0Accessor: DataLoader.y0Accessor,
+              y1Accessor: DataLoader.y1Accessor,
+            },
             reason: 'MOUNTED',
           });
           expect(sdk.datapoints.retrieve).toHaveBeenCalledTimes(1);
@@ -146,7 +167,6 @@ describe('dataLoader', () => {
             value: 36.2421327365039,
           },
         ];
-        // @ts-ignore
         mockDatapointsRetrieve.mockResolvedValue([{ name: 'abc', datapoints }]);
 
         const startTime = Date.now() - 24 * 60 * 60 * 1000;
@@ -155,18 +175,25 @@ describe('dataLoader', () => {
           timeDomain: [startTime, Date.now()],
           timeSubDomain: [startTime, Date.now()],
           pointsPerSeries: 2000000,
-          oldSeries: {},
+          oldSeries: {
+            id: 123,
+            data: [],
+            xAccessor: DataLoader.xAccessor,
+            yAccessor: DataLoader.yAccessor,
+            y0Accessor: DataLoader.y0Accessor,
+            y1Accessor: DataLoader.y1Accessor,
+          },
           reason: 'MOUNTED',
         });
 
-        const expectedDatapoints: GetAggregateDatapoint[] = [
+        const expectedDatapoints: DataLoaderDatapoint[] = [
           {
             timestamp: new Date(1552726800000),
-            average: 36.26105251209135,
+            value: 36.26105251209135,
           },
           {
             timestamp: new Date(1552734000000),
-            average: 36.2421327365039,
+            value: 36.2421327365039,
           },
         ];
 
@@ -197,7 +224,14 @@ describe('dataLoader', () => {
             timeDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
             timeSubDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
             pointsPerSeries: pps,
-            oldSeries: {},
+            oldSeries: {
+              id: 123,
+              data: [],
+              xAccessor: DataLoader.xAccessor,
+              yAccessor: DataLoader.yAccessor,
+              y0Accessor: DataLoader.y0Accessor,
+              y1Accessor: DataLoader.y1Accessor,
+            },
             reason: 'INTERVAL',
           });
           expect(sdk.datapoints.retrieve).toHaveBeenCalledTimes(1);
@@ -235,6 +269,12 @@ describe('dataLoader', () => {
           timeSubDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
           pointsPerSeries: 200,
           oldSeries: {
+            id: 123,
+            data: [],
+            xAccessor: DataLoader.xAccessor,
+            yAccessor: DataLoader.yAccessor,
+            y0Accessor: DataLoader.y0Accessor,
+            y1Accessor: DataLoader.y1Accessor,
             drawPoints: true,
           },
           reason: 'INTERVAL',
@@ -242,12 +282,12 @@ describe('dataLoader', () => {
 
         const expectedDatapoints = [
           {
-            timestamp: 1552726800000,
-            average: 36.26105251209135,
+            timestamp: new Date(1552726800000),
+            value: 36.26105251209135,
           },
           {
-            timestamp: 1552734000000,
-            average: 36.2421327365039,
+            timestamp: new Date(1552734000000),
+            value: 36.2421327365039,
           },
         ];
 
@@ -269,7 +309,14 @@ describe('dataLoader', () => {
           timeDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
           timeSubDomain: [Date.now() - 24 * 60 * 60 * 1000, Date.now()],
           pointsPerSeries: 200,
-          oldSeries: {},
+          oldSeries: {
+            id: 123,
+            data: [],
+            xAccessor: DataLoader.xAccessor,
+            yAccessor: DataLoader.yAccessor,
+            y0Accessor: DataLoader.y0Accessor,
+            y1Accessor: DataLoader.y1Accessor,
+          },
           reason: 'UPDATE_SUBDOMAIN',
         });
 

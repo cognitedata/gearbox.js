@@ -1,23 +1,63 @@
 import {
   Annotation,
-  DataProviderSeries as ProviderSeries,
+  AxisDisplayModeKeys,
+  AxisPlacementKeys,
+  SeriesProps,
 } from '@cognite/griff-react';
 import React from 'react';
 
-type DataProviderSeries = ProviderSeries;
-interface TimeseriesChartPropsBase {
+export interface TimeseriesChartSeries extends SeriesProps {
+  id: number;
+  collectionId?: number;
+}
+
+export interface TimeseriesChartRulerPoint {
+  id: number;
+  name: string;
+  value: number | string;
+  color: string;
+  timestamp: number;
+  x: number;
+  y: number;
+  hidden?: boolean;
+}
+
+// TODO: should be refactored
+export interface TimeseriesChartRulerPointsMap {
+  [id: number]: TimeseriesChartRulerPoint;
+}
+
+export interface TimeseriesChartRuler {
+  visible: boolean;
+  timeLabel?: (point: TimeseriesChartRulerPoint) => string;
+  yLabel?: (point: TimeseriesChartRulerPoint) => string;
+}
+
+export interface TimeseriesChartStyles {
+  container?: React.CSSProperties;
+}
+
+export interface TimeseriesChartCollection extends SeriesProps {
+  id: number;
+}
+
+export interface TimeseriesChartProps {
   /**
-   * The time the timeseries should start from. Should be UNIX timestamp or Date
+   * Series array defined by timeseries ids or series objects
    */
-  startTime: number | Date;
+  series: number[] | TimeseriesChartSeries[];
+  /**
+   * Time which timeseries should start from
+   */
+  start?: number | Date;
   /**
    * The time the timeseries should end. Should be UNIX timestamp or Date
    */
-  endTime: number | Date;
+  end?: number | Date;
   /**
    * Whether the context chart should be showed
    */
-  contextChart: boolean;
+  contextChart?: boolean;
   /**
    * Custom styles for the component
    */
@@ -25,47 +65,35 @@ interface TimeseriesChartPropsBase {
   /**
    * The number of aggregated datapoints to show
    */
-  pointsPerSeries: number;
+  pointsPerSeries?: number;
   /**
    * Whether zooming on the chart is enabled
    */
-  zoomable: boolean;
+  zoomable?: boolean;
   /**
    * Whether live update of chart is enabled
    */
-  liveUpdate: boolean;
-  /**
-   * Whether crosshair should be shown
-   */
-  crosshair: boolean;
+  liveUpdate?: boolean;
   /**
    * The update interval when live update is enabled
    */
-  updateIntervalMillis: number;
-  /**
-   * Map of timeseries ids and color
-   */
-  timeseriesColors: { [id: number]: string };
-  /**
-   * Object desribing if timeseries id should be hidden
-   */
-  hiddenSeries: { [id: number]: boolean };
+  updateInterval?: number;
   /**
    * Display the ruler and configure custom label formatters
    */
-  ruler: ChartRulerConfig;
+  ruler?: TimeseriesChartRuler;
   /**
    * Height of x-axis container in pixels. 0 will hide it completely
    */
-  xAxisHeight: number;
+  xAxisHeight?: number;
   /**
-   * Display mode of the y-axis
+   * Default display mode of the y-axis
    */
-  yAxisDisplayMode: 'ALL' | 'COLLAPSED' | 'NONE';
+  yAxisDisplayMode?: AxisDisplayModeKeys;
   /**
-   * Placement of the y-axis
+   * Default placement of the y-axis
    */
-  yAxisPlacement: 'RIGHT' | 'LEFT' | 'BOTH';
+  yAxisPlacement?: AxisPlacementKeys;
   /**
    * Height of the chart
    */
@@ -74,10 +102,6 @@ interface TimeseriesChartPropsBase {
    * Width of the chart
    */
   width?: number;
-  /**
-   * Define y-Axis Subdomains (min, max values for each time series)
-   */
-  ySubDomains?: { [timeseriesId: number]: [number, number] };
   /**
    * Mouse move callback
    */
@@ -95,49 +119,22 @@ interface TimeseriesChartPropsBase {
    */
   onFetchDataError?: (e: Error) => void;
   /**
-   * @ignore
+   * Callback for domain update
+   * @param e
    */
-  annotations: Annotation[];
+  onDomainsUpdate?: (e: any) => void;
   /**
    * @ignore
    */
-  collections: any;
-}
-
-export interface ChartRulerPoint {
-  id: number | string;
-  name: string;
-  value: number | string;
-  color: string;
-  timestamp: number;
-  x: number;
-  y: number;
-}
-
-export interface ChartRulerConfig {
-  visible?: boolean;
-  timeLabel?: (point: ChartRulerPoint) => string;
-  yLabel?: (point: ChartRulerPoint) => string;
-}
-
-export interface TimeseriesChartStyles {
-  container?: React.CSSProperties;
-}
-
-export interface TimeseriesChartByTimeseriesId {
+  annotations?: Annotation[];
   /**
-   * Array of timeseries ids
+   * @ignore
    */
-  timeseriesIds: number[];
+  collections?: TimeseriesChartCollection[];
 }
 
-export interface TimeseriesChartBySeries {
-  /**
-   * Array of DataProviderSeries
-   */
-  series: DataProviderSeries[];
+export enum DataLoaderCallReasons {
+  MOUNTED = 'MOUNTED',
+  INTERVAL = 'INTERVAL',
+  UPDATE_SUBDOMAIN = 'UPDATE_SUBDOMAIN',
 }
-
-export type TimeseriesChartProps =
-  | (TimeseriesChartByTimeseriesId & TimeseriesChartPropsBase)
-  | (TimeseriesChartBySeries & TimeseriesChartPropsBase);
