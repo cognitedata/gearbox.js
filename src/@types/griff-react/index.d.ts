@@ -165,6 +165,10 @@ declare module '@cognite/griff-react' {
     onMouseMove?: (e: any) => void;
     onBlur?: (e: any) => void;
     onMouseOut?: (e: any) => void;
+    size?: {
+      width?: number;
+      height?: number;
+    };
   }
 
   export class LineChart extends Component<LineChartProps> {}

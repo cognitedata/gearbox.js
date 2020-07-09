@@ -1,3 +1,4 @@
+import sizeMe from 'react-sizeme';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
@@ -7,6 +8,9 @@ import { MockCogniteClient } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { CursorOverview } from './components/CursorOverview';
 import { TimeseriesChart } from './TimeseriesChart';
+import { TimeseriesChartSizeProvider } from './components/TimeseriesChartSizeProvider';
+
+sizeMe.noPlaceholders = true;
 
 configure({ adapter: new Adapter() });
 
@@ -61,9 +65,12 @@ describe('TimeseriesChart', () => {
     const props = {
       series: [timeseriesListV2[0].id],
     };
+
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>
-        <TimeseriesChart {...props} />
+        <TimeseriesChartSizeProvider width={500} height={300}>
+          <TimeseriesChart {...props} />
+        </TimeseriesChartSizeProvider>
       </ClientSDKProvider>
     );
     await sleep(300);
@@ -82,7 +89,9 @@ describe('TimeseriesChart', () => {
     };
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>
-        <TimeseriesChart {...props} />
+        <TimeseriesChartSizeProvider width={500} height={300}>
+          <TimeseriesChart {...props} />
+        </TimeseriesChartSizeProvider>
       </ClientSDKProvider>
     );
     await sleep(300);
@@ -97,7 +106,9 @@ describe('TimeseriesChart', () => {
     };
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>
-        <TimeseriesChart {...props} />
+        <TimeseriesChartSizeProvider width={500} height={300}>
+          <TimeseriesChart {...props} />
+        </TimeseriesChartSizeProvider>
       </ClientSDKProvider>
     );
     await sleep(300);

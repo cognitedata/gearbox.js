@@ -15,6 +15,7 @@ import React, {
   useState,
   useRef,
   useEffect,
+  useContext,
 } from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
@@ -22,6 +23,10 @@ import { useCogniteContext } from '../../context/clientSDKProxyContext';
 import { decimalTickFormatter } from '../../utils/axisSigFix';
 import { getColorByString } from '../../utils/colors';
 import { CursorOverview } from './components/CursorOverview';
+import {
+  SizeContext,
+  SizeContextType,
+} from './components/TimeseriesChartSizeProvider';
 import { DataLoader } from './dataLoader';
 import {
   TimeseriesChartCollection,
@@ -113,6 +118,11 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
   );
   const [hiddenSeries, setHiddenSeries] = useState<HiddenSeriesMap>({});
   const client = useCogniteContext(TimeseriesChart);
+
+  // this one is needed only in test purposes,
+  // to disable placeholder of react-sizeme
+  const { width: sw, height: sh } = useContext<SizeContextType>(SizeContext);
+  const size = sw && sh ? { width: sw, height: sh } : undefined;
 
   if (!client) {
     console.error(ERROR_NO_SDK_CLIENT);
@@ -221,6 +231,7 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
             onMouseMove={onMouseMove}
             onMouseOut={onMouseOut}
             onBlur={onBlur}
+            size={size}
           />
         </DataProvider>
       </Wrapper>
