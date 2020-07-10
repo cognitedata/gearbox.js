@@ -131,6 +131,7 @@ export class TimeseriesChartMetaPure extends PureComponent<
         )}
         {showChart && (
           <TimeseriesChart
+            data-test-id="timeseries-chart"
             series={[timeseries.id]}
             liveUpdate={liveUpdate}
             updateInterval={updateIntervalMillis}
