@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import { Asset, AssetSearchFilter } from '@cognite/sdk';
 import { CogniteClient } from '@cognite/sdk';
-import { AssetsAPI } from '@cognite/sdk/dist/src/resources/assets/assetsApi';
 import {
   ERROR_API_UNEXPECTED_RESULTS,
   ERROR_NO_SDK_CLIENT,
@@ -34,7 +33,7 @@ export class AssetSearch extends Component<AssetSearchProps, AssetSearchState> {
   static contextType = ClientSDKProxyContext;
   context!: React.ContextType<typeof ClientSDKProxyContext>;
   client!: CogniteClient;
-  assetsApi!: AssetsAPI;
+  assetsApi!: CogniteClient['assets'];
 
   constructor(props: AssetSearchProps) {
     super(props);
