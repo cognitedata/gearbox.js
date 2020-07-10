@@ -1,4 +1,3 @@
-import sizeMe from 'react-sizeme';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import lodash from 'lodash';
@@ -9,8 +8,6 @@ import { ClientSDKProvider } from '../ClientSDKProvider';
 import { CursorOverview } from './components/CursorOverview';
 import { TimeseriesChart } from './TimeseriesChart';
 import { TimeseriesChartSizeProvider } from './components/TimeseriesChartSizeProvider';
-
-sizeMe.noPlaceholders = true;
 
 configure({ adapter: new Adapter() });
 
