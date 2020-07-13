@@ -14,7 +14,7 @@ export interface TimeseriesChartSeries extends SeriesProps {
 export interface TimeseriesChartRulerPoint {
   id: number;
   name: string;
-  value: number | string;
+  value: number;
   color: string;
   timestamp: number;
   x: number;
@@ -29,8 +29,8 @@ export interface TimeseriesChartRulerPointsMap {
 
 export interface TimeseriesChartRuler {
   visible: boolean;
-  timeLabel?: (point: TimeseriesChartRulerPoint) => string;
-  yLabel?: (point: TimeseriesChartRulerPoint) => string;
+  timeFormatter?: (timestamp: number) => string;
+  valueFormatter?: (value: number) => string;
 }
 
 export interface TimeseriesChartStyles {

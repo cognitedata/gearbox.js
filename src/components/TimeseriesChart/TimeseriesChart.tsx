@@ -32,7 +32,6 @@ import {
   TimeseriesChartCollection,
   TimeseriesChartProps,
   TimeseriesChartRulerPoint,
-  TimeseriesChartRulerPointsMap,
   TimeseriesChartSeries,
 } from './interfaces';
 
@@ -113,8 +112,8 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
 }) => {
   const chartWrapper = useRef(null);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [rulerPoints, setRulerPoints] = useState<TimeseriesChartRulerPointsMap>(
-    {}
+  const [rulerPoints, setRulerPoints] = useState<TimeseriesChartRulerPoint[]>(
+    []
   );
   const [hiddenSeries, setHiddenSeries] = useState<HiddenSeriesMap>({});
   const client = useCogniteContext(TimeseriesChart);
@@ -152,16 +151,14 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
     (data: { points: TimeseriesChartRulerPoint[] }) => {
       const { onMouseMove: mouseMove } = props;
       const { points = [] } = data;
-      const rulerPoints: TimeseriesChartRulerPointsMap = {};
-
-      points
-        .filter(point => !hiddenSeries[point.id])
-        .forEach(point => (rulerPoints[point.id] = point));
+      const rulerPoints: TimeseriesChartRulerPoint[] = points.filter(
+        point => !hiddenSeries[point.id]
+      );
 
       setRulerPoints(rulerPoints);
 
       if (mouseMove) {
-        mouseMove(data);
+        mouseMove(points);
       }
     },
     [props.onMouseMove, hiddenSeries]
@@ -207,11 +204,10 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
           }
           onDomainsUpdate={onDomainsUpdate}
         >
-          {ruler && ruler.visible && (
+          {ruler && (
             <CursorOverview
-              wrapperRef={chartWrapper.current}
-              series={seriesToRender}
-              rulerPoints={rulerPoints}
+              wrapperEl={chartWrapper.current}
+              points={rulerPoints}
               ruler={ruler}
             />
           )}
