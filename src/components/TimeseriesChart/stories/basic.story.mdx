@@ -14,6 +14,7 @@ import {
   TimeseriesComponent,
   SeriesComponentProps,
   seriesWithCustomYdomain,
+  ComplexChart,
 } from './helper';
 
 <Meta title="Time Series/TimeseriesChart" decorators={decorators} />
@@ -422,6 +423,14 @@ const ySubDomains = { 123: [-130, 130] };
   <Story name="Define Y-axis Subdomain" >
     <TimeseriesChart
       series={[{id: 123, ySubDomain: [-130, 130]}]}
+    />
+  </Story>
+</Preview>
+
+<Preview>
+  <Story name="Complex Dynamic Chart" >
+    <ComplexChart
+      series={[]}
     />
   </Story>
 </Preview>

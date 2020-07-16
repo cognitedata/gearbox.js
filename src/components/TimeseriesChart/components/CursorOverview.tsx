@@ -35,7 +35,9 @@ const onMouseMove = (
     overviewEl.setAttribute(
       'style',
       `transform: translate(${event.offsetX}px,
-        ${event.offsetY - overviewEl.getBoundingClientRect().height / 2}px)`
+        ${event.offsetY -
+          overviewEl.getBoundingClientRect().height /
+            2}px); visibility: visible;`
     );
   }
 
@@ -44,8 +46,28 @@ const onMouseMove = (
     dateEl.setAttribute(
       'style',
       `transform: translate(${event.offsetX}px,
-        ${lineChartRect.height - dateEl.clientHeight - 55}px)`
+        ${lineChartRect.height -
+          dateEl.clientHeight -
+          55}px); visibility: visible;`
     );
+  }
+};
+
+const onMouseOut = (
+  wrapperEl: HTMLDivElement,
+  overviewEl: HTMLDivElement,
+  dateEl: HTMLDivElement
+) => {
+  if (!wrapperEl) {
+    return;
+  }
+
+  if (overviewEl) {
+    overviewEl.setAttribute('style', `visibility: hidden;`);
+  }
+
+  if (dateEl) {
+    dateEl.setAttribute('style', `visibility: hidden;`);
   }
 };
 
@@ -72,6 +94,17 @@ export const CursorOverview: React.FC<CursorOverviewProps> = ({
     onMouseMove(event, wrapperEl, overviewEl, dateEl);
   }, []);
 
+  const handleMouseOut = useCallback(() => {
+    const { current: overviewEl } = overviewContainer;
+    const { current: dateEl } = dateContainer;
+
+    if (!(wrapperEl && overviewEl && dateEl)) {
+      return;
+    }
+
+    onMouseOut(wrapperEl, overviewEl, dateEl);
+  }, []);
+
   const timeLabelFormatter = useCallback(
     (timestamp: number): string =>
       (timeFormatter || defaultTimeFormatter)(timestamp),
@@ -94,7 +127,11 @@ export const CursorOverview: React.FC<CursorOverviewProps> = ({
 
   useEffect(() => {
     wrapperEl!.addEventListener('mousemove', handleMouseMove);
-    return () => wrapperEl!.removeEventListener('mousemove', handleMouseMove);
+    wrapperEl!.addEventListener('mouseout', handleMouseOut);
+    return () => {
+      wrapperEl!.removeEventListener('mousemove', handleMouseMove);
+      wrapperEl!.removeEventListener('mouseout', handleMouseOut);
+    };
   }, [handleMouseMove]);
 
   return (
@@ -125,6 +162,7 @@ const Overview = styled.div`
   border-radius: 4px;
   border: 1px solid #888888;
   box-sizing: border-box;
+  visibility: hidden;
 `;
 const DateContainer = styled.div`
   position: absolute;
@@ -139,6 +177,7 @@ const DateContainer = styled.div`
   border-radius: 4px;
   border: 1px solid #888888;
   box-sizing: border-box;
+  visibility: hidden;
 `;
 const Tag = styled.div`
   color: black;

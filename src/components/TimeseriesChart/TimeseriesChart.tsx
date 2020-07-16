@@ -30,13 +30,14 @@ import {
 import { DataLoader } from './dataLoader';
 import {
   TimeseriesChartCollection,
+  TimeseriesChartDomainUpdate,
   TimeseriesChartProps,
   TimeseriesChartRulerPoint,
   TimeseriesChartSeries,
 } from './interfaces';
 
-interface HiddenSeriesMap {
-  [id: number]: boolean;
+interface SeriesDictionary {
+  [id: number]: DataProviderSeries;
 }
 
 // Don't allow updating faster than every 1000ms.
@@ -44,37 +45,59 @@ const MINIMUM_UPDATE_FREQUENCY_MILLIS = 1000;
 const DEFAULT_END_TIME = Date.now();
 const DEFAULT_START_TIME = DEFAULT_END_TIME - 60 * 60 * 24 * 1000;
 
-const setSeriesDefaults = (
-  series: TimeseriesChartSeries[],
+const getDefultSeriesObject = (
+  id: number,
   yAxisDisplayMode: AxisDisplayModeKeys,
   yAxisPlacement: AxisPlacementKeys
-): DataProviderSeries[] =>
-  series.map(s => ({
-    ...s,
-    color: s.color || getColorByString(s.id.toString()),
-    yAxisDisplayMode: AxisDisplayMode[s.yAxisDisplayMode || yAxisDisplayMode],
-    yAxisPlacement: AxisPlacement[s.yAxisPlacement || yAxisPlacement],
-    yAccessor: s.yAccessor || DataLoader.yAccessor,
-    y0Accessor: s.y0Accessor || DataLoader.y0Accessor,
-    y1Accessor: s.y1Accessor || DataLoader.y1Accessor,
-    xAccessor: s.xAccessor || DataLoader.xAccessor,
-  }));
+): DataProviderSeries => ({
+  id,
+  color: getColorByString(id.toString()),
+  yAxisDisplayMode: AxisDisplayMode[yAxisDisplayMode],
+  yAxisPlacement: AxisPlacement[yAxisPlacement],
+  yAccessor: DataLoader.yAccessor,
+  y0Accessor: DataLoader.y0Accessor,
+  y1Accessor: DataLoader.y1Accessor,
+  xAccessor: DataLoader.xAccessor,
+});
+
+const setSeriesDefaults = (
+  currentSeries: SeriesDictionary = {},
+  series: TimeseriesChartSeries[],
+  defaultYAxisDisplayMode: AxisDisplayModeKeys,
+  defaultYAxisPlacement: AxisPlacementKeys
+): SeriesDictionary => {
+  for (const s of series) {
+    const current = currentSeries[s.id] || {};
+    const { yAxisDisplayMode, yAxisPlacement, ...seriesProps } = s;
+    const axisMode = s.yAxisDisplayMode || defaultYAxisDisplayMode;
+    const axisPlacement = s.yAxisPlacement || defaultYAxisPlacement;
+    const defaultSeries = getDefultSeriesObject(s.id, axisMode, axisPlacement);
+
+    currentSeries[s.id] = { ...defaultSeries, ...current, ...seriesProps };
+  }
+
+  return currentSeries;
+};
 
 const setTimeseriesIdDefaults = (
+  currentSeries: SeriesDictionary = {},
   ids: number[],
   yAxisDisplayMode: AxisDisplayModeKeys,
   yAxisPlacement: AxisPlacementKeys
-): DataProviderSeries[] =>
-  ids.map(id => ({
-    id,
-    color: getColorByString(id.toString()),
-    yAxisDisplayMode: AxisDisplayMode[yAxisDisplayMode],
-    yAxisPlacement: AxisPlacement[yAxisPlacement],
-    yAccessor: DataLoader.yAccessor,
-    y0Accessor: DataLoader.y0Accessor,
-    y1Accessor: DataLoader.y1Accessor,
-    xAccessor: DataLoader.xAccessor,
-  }));
+): SeriesDictionary => {
+  for (const id of ids) {
+    const series = currentSeries[id] || {};
+    const defaultSeries = getDefultSeriesObject(
+      id,
+      yAxisDisplayMode,
+      yAxisPlacement
+    );
+
+    currentSeries[id] = { ...defaultSeries, ...series };
+  }
+
+  return currentSeries;
+};
 
 const setCollectionsDefaults = (
   collections: TimeseriesChartCollection[],
@@ -115,7 +138,9 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
   const [rulerPoints, setRulerPoints] = useState<TimeseriesChartRulerPoint[]>(
     []
   );
-  const [hiddenSeries, setHiddenSeries] = useState<HiddenSeriesMap>({});
+  const [seriesDict, setSeriesDict] = useState<{
+    [id: number]: DataProviderSeries;
+  }>({});
   const client = useCogniteContext(TimeseriesChart);
 
   // this one is needed only in test purposes,
@@ -133,26 +158,55 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
   }, []);
 
   useEffect(() => {
-    const hiddenSeriesMap: HiddenSeriesMap = {};
-    (series as TimeseriesChartSeries[]).forEach(
-      (s: TimeseriesChartSeries) => (hiddenSeriesMap[s.id] = !!s.hidden)
-    );
+    const seriesMap =
+      typeof series[0] === 'number'
+        ? setTimeseriesIdDefaults(
+            seriesDict,
+            series as number[],
+            yAxisDisplayMode,
+            yAxisPlacement
+          )
+        : setSeriesDefaults(
+            seriesDict,
+            series as TimeseriesChartSeries[],
+            yAxisDisplayMode,
+            yAxisPlacement
+          );
 
-    //todo: add collections support
-
-    setHiddenSeries(hiddenSeriesMap);
+    setSeriesDict({ ...seriesMap });
   }, [series]);
   const onFetchData = () => {
+    console.log('on fetch data');
     if (!isLoaded) {
       setIsLoaded(true);
     }
   };
+  const handleDomainsUpdate = useCallback(
+    (event: { [id: number]: TimeseriesChartDomainUpdate }) => {
+      for (const id in event) {
+        const {
+          y: [min, max],
+        } = event[id];
+        seriesDict[id] = {
+          ...seriesDict[id],
+          ySubDomain: [min, max],
+        };
+      }
+
+      setSeriesDict(seriesDict);
+
+      if (onDomainsUpdate) {
+        onDomainsUpdate(event);
+      }
+    },
+    [onDomainsUpdate, seriesDict]
+  );
   const onMouseMove = useCallback(
     (data: { points: TimeseriesChartRulerPoint[] }) => {
       const { onMouseMove: mouseMove } = props;
       const { points = [] } = data;
       const rulerPoints: TimeseriesChartRulerPoint[] = points.filter(
-        point => !hiddenSeries[point.id]
+        point => !seriesDict[point.id].hidden
       );
 
       setRulerPoints(rulerPoints);
@@ -161,27 +215,23 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
         mouseMove(points);
       }
     },
-    [props.onMouseMove, hiddenSeries]
+    [props.onMouseMove, seriesDict]
   );
 
   const showCrosshair: boolean = !!ruler && ruler.visible;
   const seriesToRender =
     typeof series[0] === 'number'
-      ? setTimeseriesIdDefaults(
-          series as number[],
-          yAxisDisplayMode,
-          yAxisPlacement
-        )
-      : setSeriesDefaults(
-          series as TimeseriesChartSeries[],
-          yAxisDisplayMode,
-          yAxisPlacement
-        );
+      ? (series as number[]).map(s => seriesDict[s]).filter(Boolean)
+      : (series as TimeseriesChartSeries[])
+          .map(({ id }) => seriesDict[id])
+          .filter(Boolean);
   const collectionToRender = setCollectionsDefaults(
     collections,
     yAxisDisplayMode,
     yAxisPlacement
   );
+
+  console.log('rerender');
 
   return seriesToRender.length ? (
     <Spin spinning={!isLoaded}>
@@ -202,7 +252,7 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
               ? Math.max(updateInterval, MINIMUM_UPDATE_FREQUENCY_MILLIS)
               : 0
           }
-          onDomainsUpdate={onDomainsUpdate}
+          onUpdateDomains={handleDomainsUpdate}
         >
           {ruler && (
             <CursorOverview

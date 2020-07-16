@@ -22,11 +22,6 @@ export interface TimeseriesChartRulerPoint {
   hidden?: boolean;
 }
 
-// TODO: should be refactored
-export interface TimeseriesChartRulerPointsMap {
-  [id: number]: TimeseriesChartRulerPoint;
-}
-
 export interface TimeseriesChartRuler {
   visible: boolean;
   timeFormatter?: (timestamp: number) => string;
@@ -39,6 +34,12 @@ export interface TimeseriesChartStyles {
 
 export interface TimeseriesChartCollection extends SeriesProps {
   id: number;
+}
+
+export interface TimeseriesChartDomainUpdate {
+  x: [number, number];
+  y: [number, number];
+  time: [number, number];
 }
 
 export interface TimeseriesChartProps {
@@ -122,15 +123,17 @@ export interface TimeseriesChartProps {
    * Callback for domain update
    * @param e
    */
-  onDomainsUpdate?: (e: any) => void;
+  onDomainsUpdate?: (e: {
+    [seriesId: number]: TimeseriesChartDomainUpdate;
+  }) => void;
+  /**
+   * Configuration to bind few series with single Y-axis
+   */
+  collections?: TimeseriesChartCollection[];
   /**
    * @ignore
    */
   annotations?: Annotation[];
-  /**
-   * @ignore
-   */
-  collections?: TimeseriesChartCollection[];
 }
 
 export enum DataLoaderCallReasons {

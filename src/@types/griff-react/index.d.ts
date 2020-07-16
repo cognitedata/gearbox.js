@@ -88,7 +88,7 @@ declare module '@cognite/griff-react' {
     timeDomain: number[];
     updateInterval: number;
     collections: DataProviderCollection[];
-    onDomainsUpdate?: (e: any) => void;
+    onUpdateDomains?: (e: any) => void;
   }
 
   export interface SeriesProps {
@@ -108,8 +108,8 @@ declare module '@cognite/griff-react' {
     yAccessor?: AccessorFunction;
     y0Accessor?: AccessorFunction;
     y1Accessor?: AccessorFunction;
-    yDomain?: Domain;
-    ySubDomain?: Domain;
+    yDomain?: [number, number];
+    ySubDomain?: [number, number];
     yAxisPlacement?: AxisPlacementKeys;
     yAxisDisplayMode?: AxisDisplayModeKeys;
     pointWidthAccessor?: AccessorFunction;
