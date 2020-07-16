@@ -80,50 +80,30 @@ const mergeTimeseriesIdDefaults = (
   return currentSeries;
 };
 
-const mergeSeriesDefaults = (
-  currentSeries: IdKeyDictionary<DataProviderSeries> = {},
-  series: TimeseriesChartSeries[],
+const mergeCollections = <
+  T extends { [id: number]: any },
+  R extends {
+    id: number;
+    yAxisDisplayMode?: AxisDisplayModeKeys;
+    yAxisPlacement?: AxisPlacementKeys;
+  }[]
+>(
+  currentDict: T,
+  collections: R,
   defaultYAxisDisplayMode: AxisDisplayModeKeys,
   defaultYAxisPlacement: AxisPlacementKeys
-): IdKeyDictionary<DataProviderSeries> => {
-  for (const s of series) {
-    const current = currentSeries[s.id] || {};
-    const { yAxisDisplayMode, yAxisPlacement, ...seriesProps } = s;
-    const axisMode = s.yAxisDisplayMode || defaultYAxisDisplayMode;
-    const axisPlacement = s.yAxisPlacement || defaultYAxisPlacement;
-    const defaultSeries = getDefultSeriesObject(s.id, axisMode, axisPlacement);
-
-    currentSeries[s.id] = { ...defaultSeries, ...current, ...seriesProps };
-  }
-
-  return currentSeries;
-};
-
-const mergeCollectionsDefaults = (
-  currentCollections: IdKeyDictionary<DataProviderCollection>,
-  collections: TimeseriesChartCollection[],
-  defaultYAxisDisplayMode: AxisDisplayModeKeys,
-  defaultYAxisPlacement: AxisPlacementKeys
-): IdKeyDictionary<DataProviderCollection> => {
+): T => {
   for (const c of collections) {
-    const current = currentCollections[c.id] || {};
-    const { yAxisDisplayMode, yAxisPlacement, ...collectionsProps } = c;
+    const current = currentDict[c.id] || {};
+    const { yAxisDisplayMode, yAxisPlacement, ...rest } = c;
+    const axisMode = yAxisDisplayMode || defaultYAxisDisplayMode;
+    const axisPlacement = yAxisPlacement || defaultYAxisPlacement;
+    const defaultSeries = getDefultSeriesObject(c.id, axisMode, axisPlacement);
 
-    const axisMode = c.yAxisDisplayMode || defaultYAxisDisplayMode;
-    const axisPlacement = c.yAxisPlacement || defaultYAxisPlacement;
-    const defaultCollections = getDefultSeriesObject(
-      c.id,
-      axisMode,
-      axisPlacement
-    );
-    currentCollections[c.id] = {
-      ...defaultCollections,
-      ...current,
-      ...collectionsProps,
-    };
+    currentDict[c.id] = { ...defaultSeries, ...current, ...rest };
   }
 
-  return currentCollections;
+  return currentDict;
 };
 
 export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
@@ -154,12 +134,12 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
   const [rulerPoints, setRulerPoints] = useState<TimeseriesChartRulerPoint[]>(
     []
   );
-  const [seriesDict, setSeriesDict] = useState<{
-    [id: number]: DataProviderSeries;
-  }>({});
-  const [collectionsDict, setCollectionsDict] = useState<{
-    [id: number]: DataProviderCollection;
-  }>({});
+  const [seriesDict, setSeriesDict] = useState<
+    IdKeyDictionary<DataProviderSeries>
+  >({});
+  const [collectionsDict, setCollectionsDict] = useState<
+    IdKeyDictionary<DataProviderCollection>
+  >({});
 
   const client = useCogniteContext(TimeseriesChart);
 
@@ -186,7 +166,10 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
             yAxisDisplayMode,
             yAxisPlacement
           )
-        : mergeSeriesDefaults(
+        : mergeCollections<
+            IdKeyDictionary<DataProviderSeries>,
+            TimeseriesChartSeries[]
+          >(
             seriesDict,
             series as TimeseriesChartSeries[],
             yAxisDisplayMode,
@@ -197,12 +180,10 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
   }, [series]);
 
   useEffect(() => {
-    const collectionsMap = mergeCollectionsDefaults(
-      collectionsDict,
-      collections,
-      yAxisDisplayMode,
-      yAxisPlacement
-    );
+    const collectionsMap = mergeCollections<
+      IdKeyDictionary<DataProviderCollection>,
+      TimeseriesChartCollection[]
+    >(collectionsDict, collections, yAxisDisplayMode, yAxisPlacement);
 
     setCollectionsDict(collectionsMap);
   }, [collections]);
