@@ -60,7 +60,7 @@ const getDefultSeriesObject = (
   xAccessor: DataLoader.xAccessor,
 });
 
-const setSeriesDefaults = (
+const mergeSeriesDefaults = (
   currentSeries: SeriesDictionary = {},
   series: TimeseriesChartSeries[],
   defaultYAxisDisplayMode: AxisDisplayModeKeys,
@@ -79,7 +79,7 @@ const setSeriesDefaults = (
   return currentSeries;
 };
 
-const setTimeseriesIdDefaults = (
+const mergeTimeseriesIdDefaults = (
   currentSeries: SeriesDictionary = {},
   ids: number[],
   yAxisDisplayMode: AxisDisplayModeKeys,
@@ -160,13 +160,13 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
   useEffect(() => {
     const seriesMap =
       typeof series[0] === 'number'
-        ? setTimeseriesIdDefaults(
+        ? mergeTimeseriesIdDefaults(
             seriesDict,
             series as number[],
             yAxisDisplayMode,
             yAxisPlacement
           )
-        : setSeriesDefaults(
+        : mergeSeriesDefaults(
             seriesDict,
             series as TimeseriesChartSeries[],
             yAxisDisplayMode,
@@ -176,7 +176,6 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
     setSeriesDict({ ...seriesMap });
   }, [series]);
   const onFetchData = () => {
-    console.log('on fetch data');
     if (!isLoaded) {
       setIsLoaded(true);
     }
@@ -193,6 +192,9 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
         };
       }
 
+      // Here we're not assigning new object to avoid unneeded rendering.
+      // Basically, `seriesDict` is used to merge internal series state
+      // with new series, provided via props
       setSeriesDict(seriesDict);
 
       if (onDomainsUpdate) {
@@ -230,8 +232,6 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
     yAxisDisplayMode,
     yAxisPlacement
   );
-
-  console.log('rerender');
 
   return seriesToRender.length ? (
     <Spin spinning={!isLoaded}>
