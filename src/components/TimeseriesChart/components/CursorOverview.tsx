@@ -18,6 +18,7 @@ interface CursorOverviewProps {
   wrapperEl: HTMLDivElement | null;
   ruler: TimeseriesChartRuler;
   points: TimeseriesChartRulerPoint[];
+  bottomDateLabelOffset: number;
   styles?: CursorOverviewStyles;
 }
 
@@ -25,7 +26,8 @@ const onMouseMove = (
   event: MouseEvent,
   wrapperEl: HTMLDivElement,
   overviewEl: HTMLDivElement,
-  dateEl: HTMLDivElement
+  dateEl: HTMLDivElement,
+  bottomOffset: number
 ): void => {
   if (!wrapperEl) {
     return;
@@ -48,7 +50,7 @@ const onMouseMove = (
       `transform: translate(${event.offsetX}px,
         ${lineChartRect.height -
           dateEl.clientHeight -
-          55}px); visibility: visible;`
+          (bottomOffset + 5)}px); visibility: visible;`
     );
   }
 };
@@ -75,6 +77,7 @@ export const CursorOverview: React.FC<CursorOverviewProps> = ({
   wrapperEl,
   ruler: { visible, timeFormatter, valueFormatter },
   points,
+  bottomDateLabelOffset,
 }: CursorOverviewProps) => {
   if (!visible || !points.length) {
     return null;
@@ -91,7 +94,7 @@ export const CursorOverview: React.FC<CursorOverviewProps> = ({
       return;
     }
 
-    onMouseMove(event, wrapperEl, overviewEl, dateEl);
+    onMouseMove(event, wrapperEl, overviewEl, dateEl, bottomDateLabelOffset);
   }, []);
 
   const handleMouseOut = useCallback(() => {

@@ -44,6 +44,7 @@ interface IdKeyDictionary<T> {
 const MINIMUM_UPDATE_FREQUENCY_MILLIS = 1000;
 const DEFAULT_END_TIME = Date.now();
 const DEFAULT_START_TIME = DEFAULT_END_TIME - 60 * 60 * 24 * 1000;
+const CONTEXT_CHART_DEFAULT_HEIGHT = 100;
 
 const getDefultSeriesObject = (
   id: number,
@@ -251,6 +252,9 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
   );
 
   const showCrosshair: boolean = !!ruler && ruler.visible;
+  const cursorOverviewOffset = contextChart
+    ? CONTEXT_CHART_DEFAULT_HEIGHT + xAxisHeight * 2
+    : xAxisHeight;
   const seriesToRender =
     typeof series[0] === 'number'
       ? (series as number[]).map(s => seriesDict[s]).filter(Boolean)
@@ -287,6 +291,7 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
               wrapperEl={chartWrapper.current}
               points={rulerPoints}
               ruler={ruler}
+              bottomDateLabelOffset={cursorOverviewOffset}
             />
           )}
           <LineChart
@@ -295,7 +300,7 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
             annotations={annotations}
             contextChart={{
               visible: contextChart,
-              height: 100,
+              height: CONTEXT_CHART_DEFAULT_HEIGHT,
               isDefault: true,
             }}
             height={props.height}
