@@ -36,8 +36,8 @@ import {
   TimeseriesChartSeries,
 } from './interfaces';
 
-interface SeriesDictionary {
-  [id: number]: DataProviderSeries;
+interface IdKeyDictionary<T> {
+  [id: number]: T;
 }
 
 // Don't allow updating faster than every 1000ms.
@@ -60,31 +60,12 @@ const getDefultSeriesObject = (
   xAccessor: DataLoader.xAccessor,
 });
 
-const mergeSeriesDefaults = (
-  currentSeries: SeriesDictionary = {},
-  series: TimeseriesChartSeries[],
-  defaultYAxisDisplayMode: AxisDisplayModeKeys,
-  defaultYAxisPlacement: AxisPlacementKeys
-): SeriesDictionary => {
-  for (const s of series) {
-    const current = currentSeries[s.id] || {};
-    const { yAxisDisplayMode, yAxisPlacement, ...seriesProps } = s;
-    const axisMode = s.yAxisDisplayMode || defaultYAxisDisplayMode;
-    const axisPlacement = s.yAxisPlacement || defaultYAxisPlacement;
-    const defaultSeries = getDefultSeriesObject(s.id, axisMode, axisPlacement);
-
-    currentSeries[s.id] = { ...defaultSeries, ...current, ...seriesProps };
-  }
-
-  return currentSeries;
-};
-
 const mergeTimeseriesIdDefaults = (
-  currentSeries: SeriesDictionary = {},
+  currentSeries: IdKeyDictionary<DataProviderSeries> = {},
   ids: number[],
   yAxisDisplayMode: AxisDisplayModeKeys,
   yAxisPlacement: AxisPlacementKeys
-): SeriesDictionary => {
+): IdKeyDictionary<DataProviderSeries> => {
   for (const id of ids) {
     const series = currentSeries[id] || {};
     const defaultSeries = getDefultSeriesObject(
@@ -99,16 +80,51 @@ const mergeTimeseriesIdDefaults = (
   return currentSeries;
 };
 
-const setCollectionsDefaults = (
+const mergeSeriesDefaults = (
+  currentSeries: IdKeyDictionary<DataProviderSeries> = {},
+  series: TimeseriesChartSeries[],
+  defaultYAxisDisplayMode: AxisDisplayModeKeys,
+  defaultYAxisPlacement: AxisPlacementKeys
+): IdKeyDictionary<DataProviderSeries> => {
+  for (const s of series) {
+    const current = currentSeries[s.id] || {};
+    const { yAxisDisplayMode, yAxisPlacement, ...seriesProps } = s;
+    const axisMode = s.yAxisDisplayMode || defaultYAxisDisplayMode;
+    const axisPlacement = s.yAxisPlacement || defaultYAxisPlacement;
+    const defaultSeries = getDefultSeriesObject(s.id, axisMode, axisPlacement);
+
+    currentSeries[s.id] = { ...defaultSeries, ...current, ...seriesProps };
+  }
+
+  return currentSeries;
+};
+
+const mergeCollectionsDefaults = (
+  currentCollections: IdKeyDictionary<DataProviderCollection>,
   collections: TimeseriesChartCollection[],
-  yAxisDisplayMode: AxisDisplayModeKeys,
-  yAxisPlacement: AxisPlacementKeys
-): DataProviderCollection[] =>
-  collections.map(c => ({
-    ...c,
-    yAxisDisplayMode: AxisDisplayMode[c.yAxisDisplayMode || yAxisDisplayMode],
-    yAxisPlacement: AxisPlacement[c.yAxisPlacement || yAxisPlacement],
-  }));
+  defaultYAxisDisplayMode: AxisDisplayModeKeys,
+  defaultYAxisPlacement: AxisPlacementKeys
+): IdKeyDictionary<DataProviderCollection> => {
+  for (const c of collections) {
+    const current = currentCollections[c.id] || {};
+    const { yAxisDisplayMode, yAxisPlacement, ...collectionsProps } = c;
+
+    const axisMode = c.yAxisDisplayMode || defaultYAxisDisplayMode;
+    const axisPlacement = c.yAxisPlacement || defaultYAxisPlacement;
+    const defaultCollections = getDefultSeriesObject(
+      c.id,
+      axisMode,
+      axisPlacement
+    );
+    currentCollections[c.id] = {
+      ...defaultCollections,
+      ...current,
+      ...collectionsProps,
+    };
+  }
+
+  return currentCollections;
+};
 
 export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
   series,
@@ -141,6 +157,10 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
   const [seriesDict, setSeriesDict] = useState<{
     [id: number]: DataProviderSeries;
   }>({});
+  const [collectionsDict, setCollectionsDict] = useState<{
+    [id: number]: DataProviderCollection;
+  }>({});
+
   const client = useCogniteContext(TimeseriesChart);
 
   // this one is needed only in test purposes,
@@ -175,6 +195,18 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
 
     setSeriesDict({ ...seriesMap });
   }, [series]);
+
+  useEffect(() => {
+    const collectionsMap = mergeCollectionsDefaults(
+      collectionsDict,
+      collections,
+      yAxisDisplayMode,
+      yAxisPlacement
+    );
+
+    setCollectionsDict(collectionsMap);
+  }, [collections]);
+
   const onFetchData = () => {
     if (!isLoaded) {
       setIsLoaded(true);
@@ -186,26 +218,43 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
         const {
           y: [min, max],
         } = event[id];
-        seriesDict[id] = {
-          ...seriesDict[id],
-          ySubDomain: [min, max],
-        };
+
+        if (collectionsDict[id]) {
+          collectionsDict[id] = {
+            ...collectionsDict[id],
+            ySubDomain: [min, max],
+          };
+        } else if (
+          seriesDict[id] &&
+          seriesDict[id].collectionId === undefined
+        ) {
+          seriesDict[id] = {
+            ...seriesDict[id],
+            ySubDomain: [min, max],
+          };
+        }
       }
 
       // Here we're not assigning new object to avoid unneeded rendering.
       // Basically, `seriesDict` is used to merge internal series state
       // with new series, provided via props
       setSeriesDict(seriesDict);
+      setCollectionsDict(collectionsDict);
 
       if (onDomainsUpdate) {
         onDomainsUpdate(event);
       }
     },
-    [onDomainsUpdate, seriesDict]
+    [onDomainsUpdate, seriesDict, collectionsDict]
   );
   const onMouseMove = useCallback(
     (data: { points: TimeseriesChartRulerPoint[] }) => {
       const { onMouseMove: mouseMove } = props;
+
+      if (!ruler && !mouseMove) {
+        return;
+      }
+
       const { points = [] } = data;
       const rulerPoints: TimeseriesChartRulerPoint[] = points.filter(
         point => !seriesDict[point.id].hidden
@@ -227,11 +276,9 @@ export const TimeseriesChart: React.FC<TimeseriesChartProps> = ({
       : (series as TimeseriesChartSeries[])
           .map(({ id }) => seriesDict[id])
           .filter(Boolean);
-  const collectionToRender = setCollectionsDefaults(
-    collections,
-    yAxisDisplayMode,
-    yAxisPlacement
-  );
+  const collectionToRender = collections
+    .map(c => collectionsDict[c.id])
+    .filter(Boolean);
 
   return seriesToRender.length ? (
     <Spin spinning={!isLoaded}>

@@ -1,12 +1,10 @@
 declare module '@cognite/griff-react' {
-  import {
-    GetAggregateDatapoint,
-    GetDoubleDatapoint,
-    GetStringDatapoint,
-    DatapointsGetAggregateDatapoint,
-    DatapointsGetDatapoint,
-  } from '@cognite/sdk';
+  import { GetAggregateDatapoint } from '@cognite/sdk';
   import { Component } from 'react';
+  import {
+    AccessorFunction,
+    DataLoaderDatapoints,
+  } from '../../components/TimeseriesChart';
 
   export type DataLoaderCallReasonsType =
     | 'MOUNTED'
@@ -20,17 +18,6 @@ declare module '@cognite/griff-react' {
     oldSeries: DataProviderSeriesWithDatapoints;
     reason: DataLoaderCallReasonsType;
   }
-  export type DataLoaderDatapoint =
-    | GetAggregateDatapoint
-    | GetDoubleDatapoint
-    | GetStringDatapoint;
-  export type DataLoaderDatapoints =
-    | GetAggregateDatapoint[]
-    | GetDoubleDatapoint[]
-    | GetStringDatapoint[];
-  export type DataLoaderFetchedDatapointsList =
-    | DatapointsGetAggregateDatapoint[]
-    | DatapointsGetDatapoint[];
 
   export interface DataProviderSeriesWithDatapoints extends DataProviderSeries {
     data: DataLoaderDatapoints;
@@ -65,12 +52,6 @@ declare module '@cognite/griff-react' {
     BOTTOM: AxisPlacementType;
     TOP: AxisPlacementType;
   };
-
-  export type AccessorFunction = (
-    datapoint: DataLoaderDatapoint,
-    index?: number,
-    arr?: DataLoaderDatapoint[]
-  ) => number;
 
   export interface Domain {
     start: number;
@@ -123,21 +104,13 @@ declare module '@cognite/griff-react' {
     yAxisPlacement?: AxisPlacementType;
     yAxisDisplayMode?: AxisDisplayModeType;
   }
-  export interface DataProviderCollection {
+  export interface DataProviderCollection extends SeriesProps {
     id: number;
     yAxisPlacement?: AxisPlacementType;
     yAxisDisplayMode?: AxisDisplayModeType;
   }
 
   export class DataProvider extends Component<DataProviderProps> {}
-
-  export interface Annotation {
-    id: number;
-    data: number[];
-    color: string;
-    height?: number;
-    fillOpacity?: number;
-  }
 
   export interface Ruler {
     visible?: boolean;

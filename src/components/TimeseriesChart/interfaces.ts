@@ -1,10 +1,59 @@
+import { AxisDisplayMode, AxisPlacement } from '@cognite/griff-react';
 import {
-  Annotation,
-  AxisDisplayModeKeys,
-  AxisPlacementKeys,
-  SeriesProps,
-} from '@cognite/griff-react';
+  DatapointsGetAggregateDatapoint,
+  DatapointsGetDatapoint,
+  GetAggregateDatapoint,
+  GetDoubleDatapoint,
+  GetStringDatapoint,
+} from '@cognite/sdk';
 import React from 'react';
+
+export type AxisDisplayModeKeys = keyof typeof AxisDisplayMode;
+export type AxisPlacementKeys = keyof typeof AxisPlacement;
+export type DataLoaderDatapoint =
+  | GetAggregateDatapoint
+  | GetDoubleDatapoint
+  | GetStringDatapoint;
+export type DataLoaderDatapoints =
+  | GetAggregateDatapoint[]
+  | GetDoubleDatapoint[]
+  | GetStringDatapoint[];
+export type DataLoaderFetchedDatapointsList =
+  | DatapointsGetAggregateDatapoint[]
+  | DatapointsGetDatapoint[];
+export type AccessorFunction = (
+  datapoint: DataLoaderDatapoint,
+  index?: number,
+  arr?: DataLoaderDatapoint[]
+) => number;
+
+export interface SeriesProps {
+  color?: string;
+  hidden?: boolean;
+  step?: boolean;
+  zoomable?: boolean;
+  name?: string;
+  timeAccessor?: AccessorFunction;
+  xAccessor?: AccessorFunction;
+  x0Accessor?: AccessorFunction;
+  x1Accessor?: AccessorFunction;
+  yAccessor?: AccessorFunction;
+  y0Accessor?: AccessorFunction;
+  y1Accessor?: AccessorFunction;
+  yDomain?: [number, number];
+  ySubDomain?: [number, number];
+  yAxisPlacement?: AxisPlacementKeys;
+  yAxisDisplayMode?: AxisDisplayModeKeys;
+  opacity?: number;
+}
+
+export interface Annotation {
+  id: number;
+  data: number[];
+  color: string;
+  height?: number;
+  fillOpacity?: number;
+}
 
 export interface TimeseriesChartSeries extends SeriesProps {
   id: number;
@@ -127,7 +176,8 @@ export interface TimeseriesChartProps {
     [seriesId: number]: TimeseriesChartDomainUpdate;
   }) => void;
   /**
-   * Configuration to bind few series with single Y-axis
+   * Configuration to group few series into one collection
+   * represented with single Y-axis
    */
   collections?: TimeseriesChartCollection[];
   /**

@@ -1,4 +1,3 @@
-import { DataLoaderDatapoint } from '@cognite/griff-react';
 import {
   GetAggregateDatapoint,
   GetDoubleDatapoint,
@@ -7,6 +6,7 @@ import {
 import { datapointsList, timeseriesListV2 } from '../../mocks';
 import { MockCogniteClient } from '../../mocks';
 import { DataLoader } from './dataLoader';
+import { DataLoaderDatapoint } from './interfaces';
 
 const mockTimeseriesRetrieve = jest.fn();
 const mockDatapointsRetrieve = jest.fn();

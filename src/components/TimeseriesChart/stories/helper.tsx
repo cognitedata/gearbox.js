@@ -99,7 +99,7 @@ export const series = [
   },
 ];
 
-export const seriesWithCustomYdomain = [
+export const seriesWithCustomYDomain = [
   {
     id: 123,
     color: 'green',
@@ -121,7 +121,7 @@ export const TimeseriesComponent: FC<TimeseriesChartProps> = () => <></>;
 const { RangePicker } = DatePicker;
 const { CheckableTag } = Tag;
 
-export const ComplexChart: FC = () => {
+export const DynamicSeries: FC = () => {
   const [series, setSeries] = useState<TimeseriesChartSeries[]>([]);
   const [end, setEnd] = useState<number>(Date.now());
   const [start, setStart] = useState<number>(end - 60 * 60 * 1000);
@@ -161,7 +161,8 @@ export const ComplexChart: FC = () => {
         <Button onClick={pushSeries}>Push Series</Button>
         <Button onClick={popSeries}>Pop Series</Button>
       </Row>
-      <Row>
+      <Row style={{ marginTop: '5px' }}>
+        <span>Series to render (hide/show on click):</span>
         {series.map((s, i) => (
           <CheckableTag
             key={s.id}
