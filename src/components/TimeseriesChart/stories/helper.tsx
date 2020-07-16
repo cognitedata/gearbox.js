@@ -6,7 +6,9 @@ import {
   DatapointsMultiQuery,
   GetTimeSeriesMetadataDTO,
 } from '@cognite/sdk';
-import React, { FC } from 'react';
+import { Button, DatePicker, Row, Tag } from 'antd';
+import { Moment } from 'moment';
+import React, { FC, SyntheticEvent, useState } from 'react';
 import {
   MockCogniteClient,
   randomData,
@@ -16,7 +18,8 @@ import {
 } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
 import { DataLoader } from '../dataLoader';
-import { TimeseriesChartProps } from '../interfaces';
+import { TimeseriesChartProps, TimeseriesChartSeries } from '../interfaces';
+import { TimeseriesChart } from '../TimeseriesChart';
 
 type DatapointsArray = (
   | DatapointsGetAggregateDatapoint
@@ -96,7 +99,7 @@ export const series = [
   },
 ];
 
-export const seriesWithCustomYdomain = [
+export const seriesWithCustomYDomain = [
   {
     id: 123,
     color: 'green',
@@ -114,3 +117,72 @@ export const seriesWithCustomYdomain = [
 export const ySubDomains = { 123: [-130, 130] };
 
 export const TimeseriesComponent: FC<TimeseriesChartProps> = () => <></>;
+
+const { RangePicker } = DatePicker;
+const { CheckableTag } = Tag;
+
+export const DynamicSeries: FC = () => {
+  const [series, setSeries] = useState<TimeseriesChartSeries[]>([]);
+  const [end, setEnd] = useState<number>(Date.now());
+  const [start, setStart] = useState<number>(end - 60 * 60 * 1000);
+  const ruler = { visible: true };
+
+  const onTimeRangeChanged = (range: (Moment | undefined)[]) => {
+    const [start, end] = range;
+    if (start) {
+      setStart(+start);
+    }
+    if (end) {
+      setEnd(+end);
+    }
+  };
+
+  const toggleSeries = (index: number) => {
+    series[index].hidden = !series[index].hidden;
+    setSeries([...series]);
+  };
+
+  const pushSeries = (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    setSeries([...series.concat({ id: series.length })]);
+  };
+
+  const popSeries = (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    setSeries([...series.slice(0, -1)]);
+  };
+
+  return (
+    <div style={{ width: '100%' }}>
+      <Row>
+        <RangePicker onChange={onTimeRangeChanged} />
+        <Button onClick={pushSeries}>Push Series</Button>
+        <Button onClick={popSeries}>Pop Series</Button>
+      </Row>
+      <Row style={{ marginTop: '5px' }}>
+        <span>Series to render (hide/show on click):</span>
+        {series.map((s, i) => (
+          <CheckableTag
+            key={s.id}
+            onChange={() => toggleSeries(i)}
+            checked={!s.hidden}
+          >
+            {s.id}
+          </CheckableTag>
+        ))}
+      </Row>
+      <div>
+        <TimeseriesChart
+          series={series}
+          start={start}
+          end={end}
+          ruler={ruler}
+          zoomable={true}
+          contextChart={true}
+        />
+      </div>
+    </div>
+  );
+};

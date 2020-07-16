@@ -7,6 +7,7 @@ import { MockCogniteClient } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
 import { CursorOverview } from './components/CursorOverview';
 import { TimeseriesChart } from './TimeseriesChart';
+import { TimeseriesChartSizeProvider } from './components/TimeseriesChartSizeProvider';
 
 configure({ adapter: new Adapter() });
 
@@ -61,9 +62,12 @@ describe('TimeseriesChart', () => {
     const props = {
       series: [timeseriesListV2[0].id],
     };
+
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>
-        <TimeseriesChart {...props} />
+        <TimeseriesChartSizeProvider width={500} height={300}>
+          <TimeseriesChart {...props} />
+        </TimeseriesChartSizeProvider>
       </ClientSDKProvider>
     );
     await sleep(300);
@@ -82,7 +86,9 @@ describe('TimeseriesChart', () => {
     };
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>
-        <TimeseriesChart {...props} />
+        <TimeseriesChartSizeProvider width={500} height={300}>
+          <TimeseriesChart {...props} />
+        </TimeseriesChartSizeProvider>
       </ClientSDKProvider>
     );
     await sleep(300);
@@ -97,7 +103,9 @@ describe('TimeseriesChart', () => {
     };
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>
-        <TimeseriesChart {...props} />
+        <TimeseriesChartSizeProvider width={500} height={300}>
+          <TimeseriesChart {...props} />
+        </TimeseriesChartSizeProvider>
       </ClientSDKProvider>
     );
     await sleep(300);

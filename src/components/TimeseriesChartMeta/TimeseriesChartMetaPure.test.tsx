@@ -7,6 +7,7 @@ import {
   timeseriesListV2,
 } from '../../mocks';
 import { ClientSDKProvider } from '../ClientSDKProvider';
+import { TimeseriesChartSizeProvider } from '../TimeseriesChart/components/TimeseriesChartSizeProvider';
 import { TimeseriesChartMetaPure } from './TimeseriesChartMetaPure';
 
 configure({ adapter: new Adapter() });
@@ -43,11 +44,13 @@ describe('TimeseriesChartMeta', () => {
   it('Should render without exploding', () => {
     const wrapper = mount(
       <ClientSDKProvider client={sdk}>
-        <TimeseriesChartMetaPure timeseries={timeseries} />
+        <TimeseriesChartSizeProvider width={500} height={300}>
+          <TimeseriesChartMetaPure timeseries={timeseries} />
+        </TimeseriesChartSizeProvider>
       </ClientSDKProvider>
     );
     expect(wrapper.find('RadioGroup')).toHaveLength(1);
-    expect(wrapper.find('TimeseriesChart')).toHaveLength(1);
+    expect(wrapper.find('[data-test-id="timeseries-chart"]')).toHaveLength(1);
     expect(wrapper.find('TimeseriesValue')).toHaveLength(2);
     expect(wrapper.find('[metaInfo]')).toHaveLength(1);
   });
@@ -55,17 +58,19 @@ describe('TimeseriesChartMeta', () => {
   it('Should not render elements if they are hidden', () => {
     const wrapper = shallow(
       <ClientSDKProvider client={sdk}>
-        <TimeseriesChartMetaPure
-          showPeriods={false}
-          showChart={false}
-          showDatapoint={false}
-          showMetadata={false}
-          timeseries={timeseries}
-        />
+        <TimeseriesChartSizeProvider width={500} height={300}>
+          <TimeseriesChartMetaPure
+            showPeriods={false}
+            showChart={false}
+            showDatapoint={false}
+            showMetadata={false}
+            timeseries={timeseries}
+          />
+        </TimeseriesChartSizeProvider>
       </ClientSDKProvider>
     );
     expect(wrapper.find('RadioGroup')).toHaveLength(0);
-    expect(wrapper.find('TimeseriesChart')).toHaveLength(0);
+    expect(wrapper.find('[data-test-id="timeseries-chart"]')).toHaveLength(0);
     expect(wrapper.find('TimeseriesValue')).toHaveLength(0);
     expect(wrapper.find('[metaInfo]')).toHaveLength(0);
   });

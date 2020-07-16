@@ -1,12 +1,151 @@
 import moment from 'moment';
 import numeral from 'numeral';
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import {
-  TimeseriesChartRuler,
-  TimeseriesChartRulerPoint,
-  TimeseriesChartRulerPointsMap,
-} from '../interfaces';
+import { TimeseriesChartRuler, TimeseriesChartRulerPoint } from '../interfaces';
+
+const defaultTimeFormatter = (timestamp: number): string =>
+  moment(timestamp).format('MMM D, YYYY HH:mm:ss');
+
+const defaultValueFormatter = (value: number): string =>
+  numeral(value).format('0[.]0[00] a');
+
+interface CursorOverviewStyles {
+  overview?: React.CSSProperties;
+  date?: React.CSSProperties;
+}
+interface CursorOverviewProps {
+  wrapperEl: HTMLDivElement | null;
+  ruler: TimeseriesChartRuler;
+  points: TimeseriesChartRulerPoint[];
+  bottomDateLabelOffset: number;
+  styles?: CursorOverviewStyles;
+}
+
+const onMouseMove = (
+  event: MouseEvent,
+  wrapperEl: HTMLDivElement,
+  overviewEl: HTMLDivElement,
+  dateEl: HTMLDivElement,
+  bottomOffset: number
+): void => {
+  if (!wrapperEl) {
+    return;
+  }
+
+  if (overviewEl) {
+    overviewEl.setAttribute(
+      'style',
+      `transform: translate(${event.offsetX}px,
+        ${event.offsetY -
+          overviewEl.getBoundingClientRect().height /
+            2}px); visibility: visible;`
+    );
+  }
+
+  if (dateEl) {
+    const lineChartRect = wrapperEl.getBoundingClientRect();
+    dateEl.setAttribute(
+      'style',
+      `transform: translate(${event.offsetX}px,
+        ${lineChartRect.height -
+          dateEl.clientHeight -
+          (bottomOffset + 5)}px); visibility: visible;`
+    );
+  }
+};
+
+const onMouseOut = (
+  wrapperEl: HTMLDivElement,
+  overviewEl: HTMLDivElement,
+  dateEl: HTMLDivElement
+) => {
+  if (!wrapperEl) {
+    return;
+  }
+
+  if (overviewEl) {
+    overviewEl.setAttribute('style', `visibility: hidden;`);
+  }
+
+  if (dateEl) {
+    dateEl.setAttribute('style', `visibility: hidden;`);
+  }
+};
+
+export const CursorOverview: React.FC<CursorOverviewProps> = ({
+  wrapperEl,
+  ruler: { visible, timeFormatter, valueFormatter },
+  points,
+  bottomDateLabelOffset,
+}: CursorOverviewProps) => {
+  if (!visible || !points.length) {
+    return null;
+  }
+
+  const overviewContainer = useRef<HTMLDivElement>(null);
+  const dateContainer = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = useCallback(event => {
+    const { current: overviewEl } = overviewContainer;
+    const { current: dateEl } = dateContainer;
+
+    if (!(wrapperEl && overviewEl && dateEl)) {
+      return;
+    }
+
+    onMouseMove(event, wrapperEl, overviewEl, dateEl, bottomDateLabelOffset);
+  }, []);
+
+  const handleMouseOut = useCallback(() => {
+    const { current: overviewEl } = overviewContainer;
+    const { current: dateEl } = dateContainer;
+
+    if (!(wrapperEl && overviewEl && dateEl)) {
+      return;
+    }
+
+    onMouseOut(wrapperEl, overviewEl, dateEl);
+  }, []);
+
+  const timeLabelFormatter = useCallback(
+    (timestamp: number): string =>
+      (timeFormatter || defaultTimeFormatter)(timestamp),
+    [timeFormatter]
+  );
+
+  const valueLabelFormatter = useCallback(
+    (value: number) => (valueFormatter || defaultValueFormatter)(value),
+    [valueFormatter]
+  );
+
+  const renderPointTag = useCallback(
+    ({ id, color, value }: TimeseriesChartRulerPoint) => (
+      <Tag color={color} key={id}>
+        {valueLabelFormatter(value)}
+      </Tag>
+    ),
+    [valueLabelFormatter]
+  );
+
+  useEffect(() => {
+    wrapperEl!.addEventListener('mousemove', handleMouseMove);
+    wrapperEl!.addEventListener('mouseout', handleMouseOut);
+    return () => {
+      wrapperEl!.removeEventListener('mousemove', handleMouseMove);
+      wrapperEl!.removeEventListener('mouseout', handleMouseOut);
+    };
+  }, [handleMouseMove]);
+
+  return (
+    <Container>
+      <Overview ref={overviewContainer}>{points.map(renderPointTag)}</Overview>
+      <DateContainer ref={dateContainer}>
+        {timeLabelFormatter(points[0].timestamp)}
+      </DateContainer>
+    </Container>
+  );
+};
 
 const Container = styled.div`
   position: relative;
@@ -14,7 +153,6 @@ const Container = styled.div`
   left: 0;
   z-index: 100;
 `;
-
 const Overview = styled.div`
   position: absolute;
   top: 0;
@@ -27,8 +165,8 @@ const Overview = styled.div`
   border-radius: 4px;
   border: 1px solid #888888;
   box-sizing: border-box;
+  visibility: hidden;
 `;
-
 const DateContainer = styled.div`
   position: absolute;
   top: 0;
@@ -42,8 +180,8 @@ const DateContainer = styled.div`
   border-radius: 4px;
   border: 1px solid #888888;
   box-sizing: border-box;
+  visibility: hidden;
 `;
-
 const Tag = styled.div`
   color: black;
   &:before {
@@ -56,127 +194,3 @@ const Tag = styled.div`
     background: ${props => (props.color ? props.color : '#6c6c6c')};
   }
 `;
-
-const formattedDate = (timestamp: number) =>
-  moment(timestamp).format('MMM D, YYYY HH:mm:ss');
-
-interface CursorOverviewStyles {
-  container?: React.CSSProperties;
-}
-interface CursorOverviewState {
-  overviewContainer: HTMLElement | null;
-}
-interface CursorOverviewProps {
-  wrapperRef: HTMLElement | null;
-  series: any;
-  ruler: TimeseriesChartRuler;
-  rulerPoints: TimeseriesChartRulerPointsMap;
-  styles?: CursorOverviewStyles;
-}
-
-export class CursorOverview extends React.Component<
-  CursorOverviewProps,
-  CursorOverviewState
-> {
-  overviewContainer: HTMLElement | null = null;
-  dateContainer: HTMLElement | null = null;
-
-  constructor(props: CursorOverviewProps) {
-    super(props);
-
-    this.state = {
-      overviewContainer: null,
-    };
-  }
-
-  componentDidMount = () => {
-    window.addEventListener('mousemove', this.handleMouseMove);
-  };
-
-  componentWillUnmount = () => {
-    window.removeEventListener('mousemove', this.handleMouseMove);
-  };
-
-  handleMouseMove = (e: MouseEvent) => {
-    const { wrapperRef } = this.props;
-    if (!wrapperRef) {
-      return;
-    }
-
-    if (this.overviewContainer) {
-      this.overviewContainer.setAttribute(
-        'style',
-        `transform: translate(${e.offsetX}px,
-        ${e.offsetY -
-          this.overviewContainer.getBoundingClientRect().height / 2}px)`
-      );
-    }
-
-    if (this.dateContainer && wrapperRef) {
-      const lineChartRect = wrapperRef.getBoundingClientRect();
-      this.dateContainer.setAttribute(
-        'style',
-        `transform: translate(${e.offsetX}px,
-        ${lineChartRect.height - this.dateContainer.clientHeight - 55}px)`
-      );
-    }
-  };
-
-  render() {
-    const {
-      series,
-      rulerPoints,
-      ruler: { timeLabel, yLabel },
-    } = this.props;
-    if (
-      !series ||
-      !series.length ||
-      !Object.keys(rulerPoints) ||
-      !Object.keys(rulerPoints).length
-    ) {
-      return null;
-    }
-
-    const newestTimestamp = Object.keys(rulerPoints).reduce((acc, id) => {
-      const rulerPoint = rulerPoints[Number(id)];
-      return Math.max(rulerPoint.timestamp, acc);
-    }, 0);
-
-    const timeLabelFormatted = timeLabel
-      ? timeLabel({
-          id: 0,
-          name: '',
-          value: 0,
-          color: '#ccddff',
-          timestamp: newestTimestamp,
-          x: 0,
-          y: 0,
-        })
-      : formattedDate(newestTimestamp);
-
-    const yLabelFormatter: (point: TimeseriesChartRulerPoint) => string = yLabel
-      ? yLabel
-      : (point: TimeseriesChartRulerPoint) => {
-          return numeral(point.value).format('0[.]0[00] a');
-        };
-
-    const renderTag = ({ id, color }: { id: number; color: string }) =>
-      rulerPoints[id] &&
-      !rulerPoints[id].hidden && (
-        <Tag color={color} key={id}>
-          {yLabelFormatter(rulerPoints[id])}
-        </Tag>
-      );
-
-    return (
-      <Container>
-        <Overview ref={ref => (this.overviewContainer = ref)}>
-          {series && series.map(renderTag)}
-        </Overview>
-        <DateContainer ref={ref => (this.dateContainer = ref)}>
-          {timeLabelFormatted}
-        </DateContainer>
-      </Container>
-    );
-  }
-}

@@ -1,10 +1,59 @@
+import { AxisDisplayMode, AxisPlacement } from '@cognite/griff-react';
 import {
-  Annotation,
-  AxisDisplayModeKeys,
-  AxisPlacementKeys,
-  SeriesProps,
-} from '@cognite/griff-react';
+  DatapointsGetAggregateDatapoint,
+  DatapointsGetDatapoint,
+  GetAggregateDatapoint,
+  GetDoubleDatapoint,
+  GetStringDatapoint,
+} from '@cognite/sdk';
 import React from 'react';
+
+export type AxisDisplayModeKeys = keyof typeof AxisDisplayMode;
+export type AxisPlacementKeys = keyof typeof AxisPlacement;
+export type DataLoaderDatapoint =
+  | GetAggregateDatapoint
+  | GetDoubleDatapoint
+  | GetStringDatapoint;
+export type DataLoaderDatapoints =
+  | GetAggregateDatapoint[]
+  | GetDoubleDatapoint[]
+  | GetStringDatapoint[];
+export type DataLoaderFetchedDatapointsList =
+  | DatapointsGetAggregateDatapoint[]
+  | DatapointsGetDatapoint[];
+export type AccessorFunction = (
+  datapoint: DataLoaderDatapoint,
+  index?: number,
+  arr?: DataLoaderDatapoint[]
+) => number;
+
+export interface SeriesProps {
+  color?: string;
+  hidden?: boolean;
+  step?: boolean;
+  zoomable?: boolean;
+  name?: string;
+  timeAccessor?: AccessorFunction;
+  xAccessor?: AccessorFunction;
+  x0Accessor?: AccessorFunction;
+  x1Accessor?: AccessorFunction;
+  yAccessor?: AccessorFunction;
+  y0Accessor?: AccessorFunction;
+  y1Accessor?: AccessorFunction;
+  yDomain?: [number, number];
+  ySubDomain?: [number, number];
+  yAxisPlacement?: AxisPlacementKeys;
+  yAxisDisplayMode?: AxisDisplayModeKeys;
+  opacity?: number;
+}
+
+export interface Annotation {
+  id: number;
+  data: number[];
+  color: string;
+  height?: number;
+  fillOpacity?: number;
+}
 
 export interface TimeseriesChartSeries extends SeriesProps {
   id: number;
@@ -14,7 +63,7 @@ export interface TimeseriesChartSeries extends SeriesProps {
 export interface TimeseriesChartRulerPoint {
   id: number;
   name: string;
-  value: number | string;
+  value: number;
   color: string;
   timestamp: number;
   x: number;
@@ -22,15 +71,10 @@ export interface TimeseriesChartRulerPoint {
   hidden?: boolean;
 }
 
-// TODO: should be refactored
-export interface TimeseriesChartRulerPointsMap {
-  [id: number]: TimeseriesChartRulerPoint;
-}
-
 export interface TimeseriesChartRuler {
   visible: boolean;
-  timeLabel?: (point: TimeseriesChartRulerPoint) => string;
-  yLabel?: (point: TimeseriesChartRulerPoint) => string;
+  timeFormatter?: (timestamp: number) => string;
+  valueFormatter?: (value: number) => string;
 }
 
 export interface TimeseriesChartStyles {
@@ -39,6 +83,12 @@ export interface TimeseriesChartStyles {
 
 export interface TimeseriesChartCollection extends SeriesProps {
   id: number;
+}
+
+export interface TimeseriesChartDomainUpdate {
+  x: [number, number];
+  y: [number, number];
+  time: [number, number];
 }
 
 export interface TimeseriesChartProps {
@@ -122,15 +172,18 @@ export interface TimeseriesChartProps {
    * Callback for domain update
    * @param e
    */
-  onDomainsUpdate?: (e: any) => void;
+  onDomainsUpdate?: (e: {
+    [seriesId: number]: TimeseriesChartDomainUpdate;
+  }) => void;
+  /**
+   * Configuration to group few series into one collection
+   * represented with single Y-axis
+   */
+  collections?: TimeseriesChartCollection[];
   /**
    * @ignore
    */
   annotations?: Annotation[];
-  /**
-   * @ignore
-   */
-  collections?: TimeseriesChartCollection[];
 }
 
 export enum DataLoaderCallReasons {

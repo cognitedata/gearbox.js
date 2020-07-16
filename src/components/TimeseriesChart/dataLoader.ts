@@ -1,7 +1,4 @@
 import {
-  AccessorFunction,
-  DataLoaderDatapoint,
-  DataLoaderFetchedDatapointsList,
   DataLoaderProps,
   DataProviderSeriesWithDatapoints,
 } from '@cognite/griff-react';
@@ -13,7 +10,12 @@ import {
   GetDoubleDatapoint,
   GetTimeSeriesMetadataDTO,
 } from '@cognite/sdk';
-import { DataLoaderCallReasons } from './interfaces';
+import {
+  AccessorFunction,
+  DataLoaderCallReasons,
+  DataLoaderDatapoint,
+  DataLoaderFetchedDatapointsList,
+} from './interfaces';
 
 interface SeriesState {
   firstSeries: GetAggregateDatapoint[];

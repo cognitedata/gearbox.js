@@ -1,12 +1,10 @@
 declare module '@cognite/griff-react' {
-  import {
-    GetAggregateDatapoint,
-    GetDoubleDatapoint,
-    GetStringDatapoint,
-    DatapointsGetAggregateDatapoint,
-    DatapointsGetDatapoint,
-  } from '@cognite/sdk';
+  import { GetAggregateDatapoint } from '@cognite/sdk';
   import { Component } from 'react';
+  import {
+    AccessorFunction,
+    DataLoaderDatapoints,
+  } from '../../components/TimeseriesChart';
 
   export type DataLoaderCallReasonsType =
     | 'MOUNTED'
@@ -20,17 +18,6 @@ declare module '@cognite/griff-react' {
     oldSeries: DataProviderSeriesWithDatapoints;
     reason: DataLoaderCallReasonsType;
   }
-  export type DataLoaderDatapoint =
-    | GetAggregateDatapoint
-    | GetDoubleDatapoint
-    | GetStringDatapoint;
-  export type DataLoaderDatapoints =
-    | GetAggregateDatapoint[]
-    | GetDoubleDatapoint[]
-    | GetStringDatapoint[];
-  export type DataLoaderFetchedDatapointsList =
-    | DatapointsGetAggregateDatapoint[]
-    | DatapointsGetDatapoint[];
 
   export interface DataProviderSeriesWithDatapoints extends DataProviderSeries {
     data: DataLoaderDatapoints;
@@ -66,12 +53,6 @@ declare module '@cognite/griff-react' {
     TOP: AxisPlacementType;
   };
 
-  export type AccessorFunction = (
-    datapoint: DataLoaderDatapoint,
-    index?: number,
-    arr?: DataLoaderDatapoint[]
-  ) => number;
-
   export interface Domain {
     start: number;
     end: number;
@@ -88,7 +69,7 @@ declare module '@cognite/griff-react' {
     timeDomain: number[];
     updateInterval: number;
     collections: DataProviderCollection[];
-    onDomainsUpdate?: (e: any) => void;
+    onUpdateDomains?: (e: any) => void;
   }
 
   export interface SeriesProps {
@@ -108,8 +89,8 @@ declare module '@cognite/griff-react' {
     yAccessor?: AccessorFunction;
     y0Accessor?: AccessorFunction;
     y1Accessor?: AccessorFunction;
-    yDomain?: Domain;
-    ySubDomain?: Domain;
+    yDomain?: [number, number];
+    ySubDomain?: [number, number];
     yAxisPlacement?: AxisPlacementKeys;
     yAxisDisplayMode?: AxisDisplayModeKeys;
     pointWidthAccessor?: AccessorFunction;
@@ -123,21 +104,13 @@ declare module '@cognite/griff-react' {
     yAxisPlacement?: AxisPlacementType;
     yAxisDisplayMode?: AxisDisplayModeType;
   }
-  export interface DataProviderCollection {
+  export interface DataProviderCollection extends SeriesProps {
     id: number;
     yAxisPlacement?: AxisPlacementType;
     yAxisDisplayMode?: AxisDisplayModeType;
   }
 
   export class DataProvider extends Component<DataProviderProps> {}
-
-  export interface Annotation {
-    id: number;
-    data: number[];
-    color: string;
-    height?: number;
-    fillOpacity?: number;
-  }
 
   export interface Ruler {
     visible?: boolean;
@@ -165,6 +138,10 @@ declare module '@cognite/griff-react' {
     onMouseMove?: (e: any) => void;
     onBlur?: (e: any) => void;
     onMouseOut?: (e: any) => void;
+    size?: {
+      width?: number;
+      height?: number;
+    };
   }
 
   export class LineChart extends Component<LineChartProps> {}
