@@ -1,12 +1,10 @@
 // Copyright 2020 Cognite AS
 import {
   DatapointsMultiQuery,
-  GetTimeSeriesMetadataDTO,
+  Timeseries,
   IdEither,
-} from '@cognite/sdk';
-import {
-  DatapointsGetAggregateDatapoint,
-  GetDatapointMetadata,
+  DatapointAggregates,
+  DatapointInfo,
 } from '@cognite/sdk';
 import { Button, Checkbox, DatePicker, Form, Input, Modal, Radio } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
@@ -64,7 +62,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
   } = props;
   const context = useCogniteContext(Component, true);
   const [loading, setLoading] = useState(false);
-  const [series, setSeries] = useState<GetTimeSeriesMetadataDTO[]>([]);
+  const [series, setSeries] = useState<Timeseries[]>([]);
   const lang = useMemo(
     () => ({
       ...defaultStrings,
@@ -132,7 +130,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
 
   const fetchDataPoints = async (
     request: DatapointsMultiQuery
-  ): Promise<DatapointsGetAggregateDatapoint[]> => {
+  ): Promise<DatapointAggregates[]> => {
     const { start = 0, end = 0 } = await getLimits(request);
     const numericGranularity = getGranularityInMS(granularity);
     const msPerRequest =
@@ -153,9 +151,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
       }))
       .map(params => context!.datapoints.retrieve(params));
 
-    const results: DatapointsGetAggregateDatapoint[][] = await Promise.all(
-      requests
-    );
+    const results: DatapointAggregates[][] = await Promise.all(requests);
 
     return results.reduce((result, datapointsChunk) => {
       return result.map((dp, index) => {
@@ -169,7 +165,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     });
   };
 
-  const getTimestamps = (arr: { datapoints: GetDatapointMetadata[] }[]) => {
+  const getTimestamps = (arr: { datapoints: DatapointInfo[] }[]) => {
     return arr.map(({ datapoints: [item] }) => item.timestamp.getTime());
   };
 

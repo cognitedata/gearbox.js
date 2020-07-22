@@ -1,11 +1,11 @@
 // Copyright 2020 Cognite AS
 import { AxisDisplayMode } from '@cognite/griff-react';
 import {
-  DatapointsGetAggregateDatapoint,
-  DatapointsGetDoubleDatapoint,
-  DatapointsGetStringDatapoint,
+  DatapointAggregates,
+  DatapointsDoubleDatapoint,
+  DatapointsStringDatapoint,
   DatapointsMultiQuery,
-  GetTimeSeriesMetadataDTO,
+  Timeseries,
 } from '@cognite/sdk';
 import React, { FC } from 'react';
 import {
@@ -23,13 +23,13 @@ import {
 } from '../interfaces';
 
 type DatapointsArray = (
-  | DatapointsGetAggregateDatapoint
-  | DatapointsGetStringDatapoint
-  | DatapointsGetDoubleDatapoint)[];
+  | DatapointAggregates
+  | DatapointsStringDatapoint
+  | DatapointsDoubleDatapoint)[];
 
 class FakeZoomableClient extends MockCogniteClient {
   timeseries: any = {
-    retrieve: async (): Promise<GetTimeSeriesMetadataDTO[]> => {
+    retrieve: async (): Promise<Timeseries[]> => {
       await sleep(1000);
       return [timeseriesListV2[0]];
     },

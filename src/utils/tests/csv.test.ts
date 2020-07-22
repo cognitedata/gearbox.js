@@ -1,5 +1,5 @@
 // Copyright 2020 Cognite AS
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import { Timeseries } from '@cognite/sdk';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import fileSaver from 'file-saver';
@@ -18,7 +18,7 @@ const timeseriesId = 123;
 const formatDate = 'YYYY-MM-DD HH:mm:ss';
 const currentDate = new Date();
 const formatedDate = moment(currentDate.getTime()).format(formatDate);
-const timeseries: GetTimeSeriesMetadataDTO[] = [
+const timeseries: Timeseries[] = [
   {
     id: timeseriesId,
     name: `Timeseries${timeseriesId}`,
@@ -29,7 +29,7 @@ const timeseries: GetTimeSeriesMetadataDTO[] = [
     lastUpdatedTime: new Date(),
   },
 ];
-const labelFormatter = (ts: GetTimeSeriesMetadataDTO) => {
+const labelFormatter = (ts: Timeseries) => {
   return ts.name!;
 };
 const data = [

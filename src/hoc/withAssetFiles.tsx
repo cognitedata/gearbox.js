@@ -89,9 +89,7 @@ export const withAssetFiles = <P extends WithAssetFilesDataProps>(
               limit: SDK_LIST_LIMIT,
               ...queryParams,
               filter: {
-                ...(queryParams && queryParams.filter
-                  ? queryParams.filter
-                  : {}),
+                ...(queryParams && queryParams.filter),
                 assetIds: [assetId],
               },
             })

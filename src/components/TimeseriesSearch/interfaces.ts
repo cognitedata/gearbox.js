@@ -1,5 +1,5 @@
 // Copyright 2020 Cognite AS
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import { Timeseries } from '@cognite/sdk';
 import React from 'react';
 import { PureObject } from '../../interfaces';
 
@@ -17,7 +17,7 @@ export interface TimeseriesSearchProps {
    */
   onTimeserieSelectionChange: (
     newTimeseriesIds: number[],
-    selectedTimeseries: GetTimeSeriesMetadataDTO | null
+    selectedTimeseries: Timeseries | null
   ) => void;
   /**
    * List of preselected timeseries
@@ -42,7 +42,7 @@ export interface TimeseriesSearchProps {
   /**
    * Custom rule to filter search results
    */
-  filterRule?: (timeseries: GetTimeSeriesMetadataDTO) => boolean;
+  filterRule?: (timeseries: Timeseries) => boolean;
   /**
    * Function called on fetch timeseries error
    */

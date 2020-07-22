@@ -1,15 +1,12 @@
 // Copyright 2020 Cognite AS
-import {
-  DatapointsGetAggregateDatapoint,
-  DatapointsGetDoubleDatapoint,
-} from '@cognite/sdk';
+import { DatapointAggregates, DoubleDatapoints } from '@cognite/sdk';
 
 export function randomData(
   start: number,
   end: number,
   n: number,
   granularity?: number
-): DatapointsGetAggregateDatapoint {
+): DatapointAggregates {
   const data = [];
 
   const dt = granularity ? granularity : (end - start) / n;
@@ -38,7 +35,7 @@ export function randomData(
 export const randomLatestDatapoint = (
   id = 0,
   name = 'Timeseries 0'
-): DatapointsGetDoubleDatapoint => {
+): DoubleDatapoints => {
   return {
     isString: false,
     isStep: false,
@@ -50,7 +47,7 @@ export const randomLatestDatapoint = (
         value: Math.floor(Math.random() * 10000) / 100,
       },
     ],
-  } as DatapointsGetDoubleDatapoint;
+  } as DoubleDatapoints;
 };
 
 export const datapoints = [

@@ -1,5 +1,5 @@
 // Copyright 2020 Cognite AS
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import { Timeseries } from '@cognite/sdk';
 import React from 'react';
 import { sleep, timeseriesListV2 as fakeTimeseries } from '../../../mocks';
 import { MockCogniteClient } from '../../../mocks';
@@ -9,7 +9,7 @@ import { SensorOverlay } from '../SensorOverlay';
 
 class CogniteClient extends MockCogniteClient {
   timeseries: any = {
-    retrieve: async (ids: any): Promise<GetTimeSeriesMetadataDTO[]> => {
+    retrieve: async (ids: any): Promise<Timeseries[]> => {
       await sleep(Math.random() * 2000);
       // @ts-ignore
       const timeserie = fakeTimeseries.find(ts => ts.id === ids[0].id);

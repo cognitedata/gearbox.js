@@ -1,11 +1,11 @@
 // Copyright 2020 Cognite AS
-import { FilesMetadata } from '@cognite/sdk';
+import { FileInfo } from '@cognite/sdk';
 import { CollapseProps } from 'antd/lib/collapse';
 import { CSSProperties, ReactNode } from 'react';
 import { WithAssetFilesDataProps, WithAssetFilesProps } from '../../hoc';
 import { Theme } from '../../interfaces';
 
-export type Document = FilesMetadata;
+export type Document = FileInfo;
 
 export type DocumentRenderer = (
   document: Document,

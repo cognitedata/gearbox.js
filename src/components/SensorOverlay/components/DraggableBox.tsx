@@ -1,9 +1,5 @@
 // Copyright 2020 Cognite AS
-import {
-  CogniteClient,
-  DatapointsGetDatapoint,
-  GetTimeSeriesMetadataDTO,
-} from '@cognite/sdk';
+import { CogniteClient, Datapoints, Timeseries } from '@cognite/sdk';
 import { Icon } from 'antd';
 import numeral from 'numeral';
 import React, { Component } from 'react';
@@ -85,7 +81,7 @@ interface DraggableBoxProps extends DragSourceProps {
 }
 
 interface DraggableBoxState {
-  tag: GetTimeSeriesMetadataDTO | null;
+  tag: Timeseries | null;
   dataPoint: Datapoint | null;
   hovering: boolean;
 }
@@ -199,7 +195,7 @@ export class DraggableBox
 
   updateValue = async () => {
     try {
-      const datapoints: DatapointsGetDatapoint[] = await connectPromiseToUnmountState(
+      const datapoints: Datapoints[] = await connectPromiseToUnmountState(
         this,
         this.client.datapoints.retrieveLatest([
           { id: this.props.id, before: 'now' },

@@ -1,9 +1,9 @@
 // Copyright 2020 Cognite AS
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import { Timeseries } from '@cognite/sdk';
 import { ReactNode } from 'react';
 
 export interface WithTimeseriesDataProps {
-  timeseries: GetTimeSeriesMetadataDTO;
+  timeseries: Timeseries;
 }
 
 export interface WithTimeseriesProps {
@@ -19,6 +19,6 @@ export interface WithTimeseriesProps {
 
 export interface WithTimeseriesState {
   isLoading: boolean;
-  timeseries: GetTimeSeriesMetadataDTO | null;
+  timeseries: Timeseries | null;
   timeseriesId: number;
 }

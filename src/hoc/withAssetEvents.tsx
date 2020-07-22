@@ -90,9 +90,7 @@ export const withAssetEvents = <P extends WithAssetEventsDataProps>(
               limit: SDK_LIST_LIMIT,
               ...queryParams,
               filter: {
-                ...(queryParams && queryParams.filter
-                  ? queryParams.filter
-                  : {}),
+                ...(queryParams && queryParams.filter),
                 assetIds: [assetId],
               },
             })

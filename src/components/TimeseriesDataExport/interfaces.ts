@@ -2,7 +2,7 @@
 import {
   Aggregate,
   DatapointsMultiQuery,
-  GetTimeSeriesMetadataDTO,
+  Timeseries,
   IdEither,
 } from '@cognite/sdk';
 import { ColProps } from 'antd/lib/grid';
@@ -16,9 +16,7 @@ export type FetchCSVCall = (
   opts: CsvParseOptions
 ) => Promise<string>;
 
-export type FetchTimeseriesCall = (
-  ids: IdEither[]
-) => Promise<GetTimeSeriesMetadataDTO[]>;
+export type FetchTimeseriesCall = (ids: IdEither[]) => Promise<Timeseries[]>;
 export type CSVLabelFormatter = LabelFormatter;
 
 export interface CsvParseOptions {

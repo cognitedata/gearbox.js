@@ -1,9 +1,5 @@
 // Copyright 2020 Cognite AS
-import {
-  GetDoubleDatapoint,
-  GetStringDatapoint,
-  GetTimeSeriesMetadataDTO,
-} from '@cognite/sdk';
+import { DoubleDatapoint, StringDatapoint, Timeseries } from '@cognite/sdk';
 import { Card, Dropdown, Icon, Menu } from 'antd';
 import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
@@ -17,7 +13,7 @@ import {
 } from './interfaces';
 
 interface GenarateDropdownMenuProps extends TimeseriesPreviewMenuConfig {
-  timeseries: GetTimeSeriesMetadataDTO;
+  timeseries: Timeseries;
   styles?: DropdownMenuStyles;
 }
 
@@ -73,10 +69,10 @@ const TimeseriesPreview: FC<TimeseriesPreviewProps> = ({
   const context = useCogniteContext(Component, true);
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [timeseries, setTimeseries] = useState<GetTimeSeriesMetadataDTO>();
+  const [timeseries, setTimeseries] = useState<Timeseries>();
   const [intervalPointer, setIntervalPointer] = useState<number | undefined>();
   const [latestDatapoint, setLatestDatapoint] = useState<
-    GetDoubleDatapoint | GetStringDatapoint
+    DoubleDatapoint | StringDatapoint
   >();
 
   const onVisibilityClick = () => {

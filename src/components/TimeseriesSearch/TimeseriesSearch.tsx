@@ -1,5 +1,5 @@
 // Copyright 2020 Cognite AS
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import { Timeseries } from '@cognite/sdk';
 import { CogniteClient } from '@cognite/sdk';
 import { Button, Spin } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
@@ -26,8 +26,8 @@ export const defaultStrings: PureObject = {
 interface TimeseriesSearchState {
   assetId?: number;
   fetching: boolean;
-  searchResults: GetTimeSeriesMetadataDTO[];
-  selectedTimeseries: GetTimeSeriesMetadataDTO[];
+  searchResults: Timeseries[];
+  selectedTimeseries: Timeseries[];
   lastFetchId: number;
   cursor?: number;
 }
@@ -97,13 +97,13 @@ export class TimeseriesSearch extends Component<
     this.setState({ assetId, searchResults: [] });
   };
 
-  onTimeSerieClicked = (timeseries: GetTimeSeriesMetadataDTO): void => {
+  onTimeSerieClicked = (timeseries: Timeseries): void => {
     const { allowStrings, single, onTimeserieSelectionChange } = this.props;
     if (!allowStrings && timeseries.isString) {
       return;
     }
 
-    let newTimeseries: GetTimeSeriesMetadataDTO[] = [];
+    let newTimeseries: Timeseries[] = [];
     if (single) {
       newTimeseries = [timeseries];
     } else if (!this.isChecked(timeseries.id)) {
@@ -145,7 +145,7 @@ export class TimeseriesSearch extends Component<
           query,
         },
       })
-      .then((data: GetTimeSeriesMetadataDTO[]): void => {
+      .then((data: Timeseries[]): void => {
         if (fetchId !== this.state.lastFetchId) {
           // for fetch callback order
           return;
@@ -243,7 +243,7 @@ export class TimeseriesSearch extends Component<
     const { allowStrings, onTimeserieSelectionChange } = this.props;
     const { searchResults, selectedTimeseries } = this.state;
     const newTimeseries = searchResults.filter(
-      (result: GetTimeSeriesMetadataDTO) =>
+      (result: Timeseries) =>
         !result.isString || (allowStrings && result.isString)
     );
     this.setState({
@@ -337,25 +337,23 @@ export class TimeseriesSearch extends Component<
         ) : null}
         <TagList style={styles && styles.list}>
           {fetching ? <CenteredSpin /> : null}
-          {searchResults.map(
-            (timeseries: GetTimeSeriesMetadataDTO, index: number) => (
-              <DetailCheckbox
-                className={`tag-search-result result-${timeseries.id} ${
-                  index === cursor ? 'active' : ''
-                }`}
-                key={`detail-checkbox--${timeseries.id}`}
-                title={timeseries.name || timeseries.id.toString()}
-                description={
-                  timeseries.description || timeseries.name || 'No description'
-                }
-                checkable={!single}
-                checked={this.isChecked(timeseries.id)}
-                onContainerClick={() => this.onTimeSerieClicked(timeseries)}
-                disabled={!allowStrings && !!timeseries.isString}
-                onContainerMouseOver={() => this.onTimeseriesMouseOver(index)}
-              />
-            )
-          )}
+          {searchResults.map((timeseries: Timeseries, index: number) => (
+            <DetailCheckbox
+              className={`tag-search-result result-${timeseries.id} ${
+                index === cursor ? 'active' : ''
+              }`}
+              key={`detail-checkbox--${timeseries.id}`}
+              title={timeseries.name || timeseries.id.toString()}
+              description={
+                timeseries.description || timeseries.name || 'No description'
+              }
+              checkable={!single}
+              checked={this.isChecked(timeseries.id)}
+              onContainerClick={() => this.onTimeSerieClicked(timeseries)}
+              disabled={!allowStrings && !!timeseries.isString}
+              onContainerMouseOver={() => this.onTimeseriesMouseOver(index)}
+            />
+          ))}
         </TagList>
       </Wrapper>
     );
