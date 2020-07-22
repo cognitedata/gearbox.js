@@ -1,6 +1,6 @@
 {
   "name": "@cognite/gearbox",
-  "version": "1.19.4",
+  "version": "1.20.0",
   "description": "GearBox will be a place for application developers to contribute useful, reusable components across applications",
   "contributors": [],
   "main": "dist/index.js",
@@ -33,6 +33,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@types/dompurify": "^2.0.2",
+    "antd": "^3.14.1",
     "d3": "^5.14.2",
     "dompurify": "^2.0.11",
     "file-saver": "^2.0.2",
@@ -75,7 +76,6 @@
     "@types/uuid": "^3.4.4",
     "@typescript-eslint/eslint-plugin": "^3.0.1",
     "@typescript-eslint/parser": "^3.0.1",
-    "antd": "^3.14.1",
     "babel-jest": "^24.1.0",
     "babel-loader": "^8.0.5",
     "babel-plugin-import": "^1.11.0",
@@ -112,7 +112,6 @@
   },
   "peerDependencies": {
     "@cognite/griff-react": "~0.4.2",
-    "antd": "^3.14.1",
     "moment": "^2.24.0",
     "react": "~16.8",
     "styled-components": "^4.1.3"
