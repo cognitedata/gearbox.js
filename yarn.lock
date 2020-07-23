@@ -1903,15 +1903,23 @@
     react-select "^1.2.1"
     react-sizeme "^2.5.2"
 
-"@cognite/sdk@^2.11.0":
-  version "2.12.0"
-  resolved "https://registry.npmjs.org/@cognite/sdk/-/sdk-2.12.0.tgz#463aee83972628848048bf27bdfa9921cfd2ac7a"
-  integrity sha512-r6ycJyekVWBNDPq7d2YAEC3zwKtHzgEAaMX8eLLMaV1Egu1r9IUHlqbEGE8kAv7Y/ekhNMpfcuQRyqN+UDWKQw==
+"@cognite/sdk-core@1.0.0-rc.0":
+  version "1.0.0-rc.0"
+  resolved "https://registry.yarnpkg.com/@cognite/sdk-core/-/sdk-core-1.0.0-rc.0.tgz#d94b2cc5658d55ec43f0826784eb2154c802d8d9"
+  integrity sha512-yP8k2PTKPveBBRx8QAVWA97Be3Lu/+NYMkEz58Ry8VIMJdZIL7hOKAopd1JVgafV9EM8GR77lkNmjiFKUzCbrw==
   dependencies:
     cross-fetch "^3.0.4"
     lodash "^4.17.11"
     query-string "^5.1.1"
     url "^0.11.0"
+
+"@cognite/sdk@^3.0.0-rc.1":
+  version "3.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@cognite/sdk/-/sdk-3.0.0-rc.1.tgz#40ff45798ff2da14d0c12bd4a692a40861eea8c0"
+  integrity sha512-LGwiwY7sSAYjn+ac7hrLjisohvbGe3geAiSfpd4+ENNqdtJnMpbyGvanxJI2QvBtO7iqKz7OOVjwkozQHMM2ow==
+  dependencies:
+    "@cognite/sdk-core" "1.0.0-rc.0"
+    lodash "^4.17.11"
 
 "@cognite/three-combo-controls@^1.4.1":
   version "1.4.1"
