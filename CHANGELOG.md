@@ -1,3 +1,10 @@
+# [1.20.0](https://github.com/cognitedata/gearbox.js/compare/v1.19.4...v1.20.0) (2020-07-29)
+
+
+### Features
+
+* **deps:** adjust react version and styled components v5 ([#671](https://github.com/cognitedata/gearbox.js/issues/671)) ([a16583f](https://github.com/cognitedata/gearbox.js/commit/a16583f77e94f43fbefca6ee4eb58c05bbb4c372))
+
 ## [1.19.4](https://github.com/cognitedata/gearbox.js/compare/v1.19.3...v1.19.4) (2020-07-03)
 
 
