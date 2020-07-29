@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Asset, CogniteInternalId } from '@cognite/sdk';
 
 export type FetchAssetCall = (assetId: CogniteInternalId) => Promise<Asset>;

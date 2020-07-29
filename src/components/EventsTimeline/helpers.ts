@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { ScaleTime, scaleTime } from 'd3-scale';
 import { Dictionary } from 'lodash';
 import { CogniteEventForTimeline } from './interfaces';

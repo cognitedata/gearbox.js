@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { FilesMetadata } from '@cognite/sdk';
 
 function generateDocumentBase(id: number): FilesMetadata {

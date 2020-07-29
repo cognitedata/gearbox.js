@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { GetTimeSeriesMetadataDTO, TimeseriesFilter } from '@cognite/sdk';
 import { ReactNode } from 'react';
 

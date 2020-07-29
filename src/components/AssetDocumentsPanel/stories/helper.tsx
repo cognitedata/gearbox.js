@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { FilesMetadata } from '@cognite/sdk';
 import React, { FC } from 'react';
 import { DOCUMENTS, MockCogniteClient, sleep } from '../../../mocks';

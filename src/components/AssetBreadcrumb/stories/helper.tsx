@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Asset, CogniteInternalId } from '@cognite/sdk';
 import React, { FC } from 'react';
 import {

@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 
 const IAA_21PT1019: GetTimeSeriesMetadataDTO[] = [

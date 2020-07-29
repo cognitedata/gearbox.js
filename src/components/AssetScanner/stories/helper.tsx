@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { message } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';

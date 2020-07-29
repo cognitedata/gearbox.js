@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { CogniteEvent } from '@cognite/sdk';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';

@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';

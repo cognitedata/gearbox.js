@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { CSSProperties } from 'react';
 import { WithAssetDataProps, WithAssetProps } from '../../hoc';
 import { MetaDescriptionListProps } from '../DescriptionList';

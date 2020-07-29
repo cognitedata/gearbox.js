@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { CogniteClient, CogniteEvent } from '@cognite/sdk';
 import { Spin } from 'antd';
 import React, { Component } from 'react';

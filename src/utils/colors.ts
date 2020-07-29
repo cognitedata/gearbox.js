@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 export const ColorList = [
   '#0097e6',
   '#e1b12c',

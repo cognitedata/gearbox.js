@@ -1,10 +1,4 @@
-/**
- * Mock wait for Promise resolve after @param timeout
- *
- * @param ms milliseconds timeout
- *
- * @return resolved Promise
- */
+// Copyright 2020 Cognite AS
 
 export const sleep = (ms: number): Promise<void> =>
   new Promise(resolve => setTimeout(resolve, ms));

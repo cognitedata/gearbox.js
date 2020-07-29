@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 declare module '@cognite/griff-react' {
   import { GetAggregateDatapoint, GetDoubleDatapoint } from '@cognite/sdk';
   import { Component } from 'react';

@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Icon } from 'antd';
 import React, { KeyboardEvent, MouseEvent } from 'react';
 import styled from 'styled-components';

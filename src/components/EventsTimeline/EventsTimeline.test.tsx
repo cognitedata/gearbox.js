@@ -1,4 +1,4 @@
-// should be placed before EventTimeline import
+// Copyright 2020 Cognite AS
 jest.mock('d3', () => ({
   event: {
     type: 'zoom',

@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import React from 'react';
 import { Event } from './Event';
 import { TimelineProps } from './interfaces';

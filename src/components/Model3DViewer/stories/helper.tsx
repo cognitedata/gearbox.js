@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { OnProgressData } from '@cognite/3d-viewer';
 import React from 'react';
 import * as THREE from 'three';

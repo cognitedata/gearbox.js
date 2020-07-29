@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { GetTimeSeriesMetadataDTO, InternalId } from '@cognite/sdk';
 import React from 'react';
 import { randomLatestDatapoint, singleTimeseries, sleep } from '../../../mocks';

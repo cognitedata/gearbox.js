@@ -1,10 +1,4 @@
-/**
- * Convert input into a safe CDP project name format ([a-z0-9\-]+)
- *
- * @param input possible CDP project name
- *
- * @return the sanitized CDP project name
- */
+// Copyright 2020 Cognite AS
 export const sanitizeTenant = (input: string): string =>
   input
     // CDP projects cannot have upper-case characters

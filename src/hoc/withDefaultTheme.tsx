@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import React from 'react';
 import { ThemeProvider, withTheme } from 'styled-components';
 import { Theme } from '../interfaces';

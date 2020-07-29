@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { CogniteEvent } from '@cognite/sdk';
 import React, { CSSProperties } from 'react';
 import { WithAssetEventsDataProps, WithAssetEventsProps } from '../../hoc';

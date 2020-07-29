@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { THREE } from '@cognite/3d-viewer';
 import { Callback } from '../../interfaces';
 

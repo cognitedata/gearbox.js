@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { CogniteClient } from '@cognite/sdk';
 import { version } from '../constants/replacedStrings';
 import { SDK_EXCLUDE_FROM_TRACKING_METHODS } from '../constants/sdk';

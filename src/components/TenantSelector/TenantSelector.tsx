@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Button, Collapse, Form, Input, Spin } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
 import { InputProps } from 'antd/lib/input';

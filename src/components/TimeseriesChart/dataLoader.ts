@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { DataProviderLoaderParams, Series } from '@cognite/griff-react';
 import { CogniteClient } from '@cognite/sdk';
 import {

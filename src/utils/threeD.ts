@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import {
   Cognite3DModel,
   Cognite3DViewer,

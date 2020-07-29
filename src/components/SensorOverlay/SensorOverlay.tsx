@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { omit, sortedIndex } from 'lodash';
 import React, { Component } from 'react';
 import {

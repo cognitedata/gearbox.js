@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { List3DNodesQuery } from '@cognite/sdk';
 import { Menu } from 'antd';
 import MenuItem from 'antd/lib/menu/MenuItem';

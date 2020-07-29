@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { PureObject } from '../../../interfaces';
 
 export const onTenantSelected = (

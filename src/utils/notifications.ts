@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { notification as antdNotification } from 'antd';
 
 export enum NotificationTypes {

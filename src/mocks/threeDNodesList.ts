@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { RevealNode3D } from '@cognite/sdk';
 
 const container = 'container_20_feet_01';

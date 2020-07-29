@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { GearboxTheme } from '../hoc';
 
 export const applyThemeFontFamily = (gearboxTheme: GearboxTheme) =>
