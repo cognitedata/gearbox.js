@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 /**
  * Mock wait for Promise resolve after @param timeout
  *

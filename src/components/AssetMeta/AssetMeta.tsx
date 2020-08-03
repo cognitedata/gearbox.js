@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Asset, CogniteClient } from '@cognite/sdk';
 import { Tabs } from 'antd';
 import React, { Component } from 'react';

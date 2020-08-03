@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { OcrRequest } from '../components/AssetScanner/interfaces';
 import { extractValidStrings } from '../utils/utils';
 

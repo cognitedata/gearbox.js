@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Button, Form, Icon, Input } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { SyntheticEvent } from 'react';

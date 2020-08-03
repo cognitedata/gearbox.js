@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 const countDecimals = (num: number) => {
   if (!Number.isNaN(num) && Math.floor(num) !== num) {
     return num.toString().split('.')[1].length || 0;

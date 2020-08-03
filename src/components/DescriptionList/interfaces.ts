@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { CSSProperties } from 'react';
 import { Theme } from '../../interfaces';
 

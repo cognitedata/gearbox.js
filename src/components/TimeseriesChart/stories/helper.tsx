@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { AxisDisplayMode } from '@cognite/griff-react';
 import {
   DatapointsGetAggregateDatapoint,

@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { FileLink, IdEither } from '@cognite/sdk';
 import React, { FC } from 'react';
 import styled from 'styled-components';

@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { CogniteClient } from '@cognite/sdk';
 import { ClientSDKCache } from '../cache/ClientSDKCache';
 import { ClientApiKeys, ClientApiTypes } from './types';

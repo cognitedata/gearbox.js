@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { WithTimeseriesProps } from '../../hoc';
 import { timeScales } from './TimeseriesChartMetaPure';
 

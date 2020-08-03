@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { mount } from 'enzyme';
 import React from 'react';
 import {

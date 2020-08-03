@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { FilesMetadata } from '@cognite/sdk';
 import { CollapseProps } from 'antd/lib/collapse';
 import { CSSProperties, ReactNode } from 'react';

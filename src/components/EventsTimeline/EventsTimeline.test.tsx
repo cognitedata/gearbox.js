@@ -1,3 +1,5 @@
+// Copyright 2020 Cognite AS
+
 // should be placed before EventTimeline import
 jest.mock('d3', () => ({
   event: {

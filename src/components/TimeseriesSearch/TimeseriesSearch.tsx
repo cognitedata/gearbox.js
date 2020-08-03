@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import { CogniteClient } from '@cognite/sdk';
 import { Button, Spin } from 'antd';

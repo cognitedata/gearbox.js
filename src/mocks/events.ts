@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { CogniteEvent } from '@cognite/sdk';
 import moment from 'moment';
 import { AssetDocumentsPanelStyles } from '../components/AssetDocumentsPanel';

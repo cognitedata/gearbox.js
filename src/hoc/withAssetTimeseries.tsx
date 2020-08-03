@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { CogniteClient, GetTimeSeriesMetadataDTO } from '@cognite/sdk';
 import React from 'react';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';

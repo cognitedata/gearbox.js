@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { CogniteEvent } from '@cognite/sdk';
 import { Button } from 'antd';
 import React from 'react';

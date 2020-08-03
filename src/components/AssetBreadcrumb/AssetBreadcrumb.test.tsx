@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Breadcrumb } from 'antd';
 import { configure, mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';

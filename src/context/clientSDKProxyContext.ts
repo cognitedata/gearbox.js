@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import React, { useContext } from 'react';
 import { ClientSDKContextType } from './clientSDKContext';
 

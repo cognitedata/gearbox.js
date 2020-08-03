@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 export * from './components/AssetBreadcrumb';
 export * from './components/AssetMeta';
 export * from './components/AssetScanner';

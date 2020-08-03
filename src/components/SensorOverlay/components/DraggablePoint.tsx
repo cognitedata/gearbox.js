@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import React, { Component } from 'react';
 import {
   ConnectDragPreview,

@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 export const defaultStrings = {
   title: 'Export chart data',
   labelRange: 'Range',

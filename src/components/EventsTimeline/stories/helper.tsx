@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import moment from 'moment';
 import React from 'react';
 import { MockCogniteClient, sleep } from '../../../mocks';

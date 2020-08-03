@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 export interface Conditions {
   condition: (metadataNode: Element) => boolean;
   className: string;

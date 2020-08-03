@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 export class CacheBase {
   private requests: { [name: string]: Map<string, Promise<any>> } = {};
   private responses: { [name: string]: Map<any, any> } = {};

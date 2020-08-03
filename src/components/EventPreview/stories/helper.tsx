@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { CogniteEvent, IdEither } from '@cognite/sdk';
 import React from 'react';
 import { fakeEvents, MockCogniteClient, sleep } from '../../../mocks';

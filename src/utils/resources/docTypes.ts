@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 export const docTypes = {
   AA: 'Accounting',
   AB: 'Administration (Project management)',

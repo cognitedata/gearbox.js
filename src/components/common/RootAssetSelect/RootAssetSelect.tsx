@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Asset, CogniteClient } from '@cognite/sdk';
 import { Select } from 'antd';
 import React from 'react';

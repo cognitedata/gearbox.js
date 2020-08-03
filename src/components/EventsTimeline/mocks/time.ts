@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { baseTimestamp } from '../../../mocks';
 
 export const start = baseTimestamp;

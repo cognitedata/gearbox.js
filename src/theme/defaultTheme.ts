@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 export const defaultTheme = {
   // ant design colors
   primaryColor: '#1890ff',

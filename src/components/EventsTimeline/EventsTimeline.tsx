@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Dictionary, groupBy } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';

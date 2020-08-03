@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Asset, CogniteClient } from '@cognite/sdk';
 import { Spin, Tree } from 'antd';
 import { AntTreeNode, AntTreeNodeProps } from 'antd/lib/tree';

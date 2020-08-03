@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Button, Icon, Input, Modal } from 'antd';
 import { NativeButtonProps } from 'antd/lib/button/button';
 import { debounce } from 'lodash';

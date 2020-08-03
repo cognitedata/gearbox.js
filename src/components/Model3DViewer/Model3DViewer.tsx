@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Cognite3DModel, Cognite3DViewer, THREE } from '@cognite/3d-viewer';
 import { AssetMapping3D, CogniteClient, Revision3D } from '@cognite/sdk';
 import { Button, Slider } from 'antd';

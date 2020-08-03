@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Radio } from 'antd';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import moment from 'moment';

@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { configure, mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React, { useRef } from 'react';
