@@ -52,15 +52,15 @@ import { TimeseriesPreview } from '@cognite/gearbox';
 
 ```typescript
 import {
-  DatapointsGetDatapoint,
-  GetTimeSeriesMetadataDTO,
+  Datapoints,
+  Timeseries,
   InternalId,
 } from '@cognite/sdk';
 import { PureObject } from '@cognite/gearbox';
 
 interface TimeseriesPreviewMenuConfig {
   config: PureObject;
-  onClick: (key: string, timeseries: GetTimeSeriesMetadataDTO) => void;
+  onClick: (key: string, timeseries: Timeseries) => void;
 }
 
 interface TimeseriesPreviewStyles {
@@ -82,11 +82,11 @@ interface DropdownMenuStyles {
 
 type FetchTimeserieCall = (
   timeseriesId: InternalId
-) => Promise<GetTimeSeriesMetadataDTO[]>;
+) => Promise<Timeseries[]>;
 
 type FetchLatestDatapointCall = (
   timeseriesId: InternalId
-) => Promise<DatapointsGetDatapoint[]>;
+) => Promise<Datapoints[]>;
 ```
 
 #### Default strings
@@ -159,7 +159,7 @@ const menuConfig = {
 
 const onMenuClick = (
   key: string,
-  timeseries: GetTimeSeriesMetadataDTO
+  timeseries: Timeseries
 ) => {/* ... */}
 
 const dropdown = { options: menuConfig, onClick: onMenuClick }
@@ -177,9 +177,9 @@ const dropdown = { options: menuConfig, onClick: onMenuClick }
 ### Callbacks
 
 ```typescript
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import { Timeseries } from '@cognite/sdk';
 
-const onToggleVisibility = (timeseries: GetTimeSeriesMetadataDTO) => { /* ... */ };
+const onToggleVisibility = (timeseries: Timeseries) => { /* ... */ };
 ```
 
 <Preview>
