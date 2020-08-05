@@ -1,10 +1,5 @@
 // Copyright 2020 Cognite AS
-import {
-  AssetList,
-  CogniteClient,
-  IdEither,
-  TimeSeriesList,
-} from '@cognite/sdk';
+import { Asset, CogniteClient, IdEither, Timeseries } from '@cognite/sdk';
 import { createContext } from 'react';
 
 export interface ClientSDKCacheContextType
@@ -14,11 +9,11 @@ export interface ClientSDKCacheContextType
 }
 
 export interface ClientSDKCacheAssets extends Partial<CogniteClient['assets']> {
-  retrieve: (ids: IdEither[]) => Promise<AssetList>;
+  retrieve: (ids: IdEither[]) => Promise<Asset[]>;
 }
 export interface ClientSDKCacheTimeseries
   extends Partial<CogniteClient['timeseries']> {
-  retrieve: (ids: IdEither[]) => Promise<TimeSeriesList>;
+  retrieve: (ids: IdEither[]) => Promise<Timeseries[]>;
 }
 
 export const ClientSDKCacheContext = createContext<ClientSDKCacheContextType | null>(

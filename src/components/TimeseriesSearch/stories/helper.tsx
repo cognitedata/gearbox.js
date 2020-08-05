@@ -1,8 +1,10 @@
 // Copyright 2020 Cognite AS
 import {
+  Asset,
+  AssetListScope,
   Timeseries,
   TimeseriesIdEither,
-  TimeSeriesSearchDTO,
+  TimeseriesSearchFilter,
 } from '@cognite/sdk';
 import { pick } from 'lodash';
 import React from 'react';
@@ -24,7 +26,7 @@ class CogniteClient extends MockCogniteClient {
       );
       return result || [];
     },
-    search: async (query: TimeSeriesSearchDTO): Promise<Timeseries[]> => {
+    search: async (query: TimeseriesSearchFilter): Promise<Timeseries[]> => {
       console.log('client.search', query);
       await sleep(1000);
       const result = timeseriesListV2.filter(
