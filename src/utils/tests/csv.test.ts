@@ -1,5 +1,5 @@
 // Copyright 2020 Cognite AS
-import { Timeseries } from '@cognite/sdk';
+import { DatapointAggregates, Timeseries } from '@cognite/sdk';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import fileSaver from 'file-saver';
@@ -32,9 +32,11 @@ const timeseries: Timeseries[] = [
 const labelFormatter = (ts: Timeseries) => {
   return ts.name!;
 };
-const data = [
+const data: DatapointAggregates[] = [
   {
     id: timeseriesId,
+    isStep: false,
+    isString: false,
     datapoints: [
       {
         timestamp: currentDate,

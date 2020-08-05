@@ -29,7 +29,7 @@ export function randomData(
     });
   }
 
-  return { datapoints: data, id: 1337 };
+  return { datapoints: data, id: 1337, isStep: false, isString: false };
 }
 
 export const randomLatestDatapoint = (
@@ -1074,12 +1074,12 @@ const csvData = [
   },
 ];
 
-export const csvExportData = csvData.map(tid => {
+export const csvExportData: DatapointAggregates[] = csvData.map(tid => {
   const { datapoints: dps, ...restTid } = tid;
   const resultDatapoints = dps.map(({ timestamp, ...rest }) => ({
     timestamp: new Date(timestamp),
     ...rest,
   }));
 
-  return { datapoints: resultDatapoints, ...restTid };
+  return { datapoints: resultDatapoints, ...restTid } as DatapointAggregates;
 });

@@ -151,7 +151,9 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
       }))
       .map(params => context!.datapoints.retrieve(params));
 
-    const results: DatapointAggregates[][] = await Promise.all(requests);
+    const results: DatapointAggregates[][] = (await Promise.all(
+      requests
+    )) as DatapointAggregates[][];
 
     return results.reduce((result, datapointsChunk) => {
       return result.map((dp, index) => {
