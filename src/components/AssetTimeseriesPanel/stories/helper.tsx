@@ -1,6 +1,5 @@
 // Copyright 2020 Cognite AS
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
-import { CogniteAsyncIterator } from '@cognite/sdk';
+import { Timeseries, CogniteAsyncIterator } from '@cognite/sdk';
 import React, { FC } from 'react';
 import {
   MockDatapointsClientObject,
@@ -15,7 +14,7 @@ import { AssetTimeseriesPanelProps } from '../interfaces';
 class CogniteClient extends TimeseriesMockClient {
   timeseries: any = {
     ...MockTimeseriesClientObject,
-    list: (): CogniteAsyncIterator<GetTimeSeriesMetadataDTO[]> => ({
+    list: (): CogniteAsyncIterator<Timeseries[]> => ({
       // @ts-ignore TODO - remove this ts-ignore after fixing SDK
       autoPagingToArray: async () => {
         await sleep(1000);
@@ -51,9 +50,8 @@ export const decorators = [
   ),
 ];
 
-export const handleAssetTimeseriesLoaded = (
-  files: GetTimeSeriesMetadataDTO[]
-) => console.log(files);
+export const handleAssetTimeseriesLoaded = (files: Timeseries[]) =>
+  console.log(files);
 
 export const customStyle = {
   wrapper: {

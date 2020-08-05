@@ -1,5 +1,5 @@
 // Copyright 2020 Cognite AS
-import { GetTimeSeriesMetadataDTO, InternalId } from '@cognite/sdk';
+import { Timeseries, InternalId } from '@cognite/sdk';
 import React from 'react';
 import { randomLatestDatapoint, singleTimeseries, sleep } from '../../../mocks';
 import { MockCogniteClient } from '../../../mocks/mockSdk';
@@ -51,14 +51,11 @@ export const formatValue = (value: number | string | undefined) => {
   return `${Math.floor(Number(value))} psi`;
 };
 
-export const onToggleVisibility = (timeseries: GetTimeSeriesMetadataDTO) => {
+export const onToggleVisibility = (timeseries: Timeseries) => {
   console.log('onToggleVisibility', timeseries);
 };
 
-export const onMenuClick = (
-  key: string,
-  timeseries: GetTimeSeriesMetadataDTO
-) => {
+export const onMenuClick = (key: string, timeseries: Timeseries) => {
   console.log('On menu click', key, timeseries);
 };
 

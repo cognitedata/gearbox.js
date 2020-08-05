@@ -24,7 +24,7 @@ class CogniteClient extends TimeseriesMockClient {
       },
     }),
   };
-  datapoint = {
+  datapoints: any = {
     ...MockDatapointsClientObject,
     retrieveLatest: async () => {
       await sleep(1000);

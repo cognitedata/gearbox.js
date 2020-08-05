@@ -1,5 +1,5 @@
 // Copyright 2020 Cognite AS
-import { FilesMetadata } from '@cognite/sdk';
+import { FileInfo } from '@cognite/sdk';
 import React, { FC } from 'react';
 import { DOCUMENTS, MockCogniteClient, sleep } from '../../../mocks';
 import { ClientSDKProvider } from '../../ClientSDKProvider';
@@ -28,7 +28,7 @@ export const decorators = [
   ),
 ];
 
-export const handleAssetFilesLoaded = (files: FilesMetadata[]) => {
+export const handleAssetFilesLoaded = (files: FileInfo[]) => {
   console.log(files);
 };
 

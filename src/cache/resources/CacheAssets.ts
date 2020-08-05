@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 import {
-  AssetList,
+  Asset,
   CogniteClient,
   ExternalId,
   IdEither,
@@ -17,7 +17,7 @@ export class CacheAssets extends CacheBase implements ClientSDKCacheAssets {
     this.client = client;
   }
 
-  retrieve = async (ids: IdEither[]): Promise<AssetList> => {
+  retrieve = async (ids: IdEither[]): Promise<Asset[]> => {
     const apiCall = 'retrieve';
     this.handleFirstCallToCache(apiCall);
 

@@ -143,10 +143,10 @@ const defaultStrings: PureObject = {
 ### Format label
 
 ```typescript
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import { Timeseries } from '@cognite/sdk';
 import { CSVLabelFormatter } from '@cognite/gearbox';
 
-const labelFormatter: CSVLabelFormatter = (ts: GetTimeSeriesMetadataDTO) => ts.name || \`timeserie-${ts.id}\`;
+const labelFormatter: CSVLabelFormatter = (ts: Timeseries) => ts.name || \`timeserie-${ts.id}\`;
 ```
 
 <Preview>
