@@ -1,3 +1,17 @@
+# [2.0.0](https://github.com/cognitedata/gearbox.js/compare/v1.20.0...v2.0.0) (2020-08-05)
+
+
+### Performance Improvements
+
+* upgrade to @cognite/sdk v3  ([#670](https://github.com/cognitedata/gearbox.js/issues/670)) ([867140d](https://github.com/cognitedata/gearbox.js/commit/867140deceee570ea1b1d30a26b48c3c09f2d9ac))
+
+
+### BREAKING CHANGES
+
+* requires @cognite/sdk v3
+
+Gearbox v1 compatible with @cognite/sdk v2 and Gearbox v2 version requires @cognite/sdk v3. This is the only breaking change that has been introduced with this major bump.
+
 # [1.20.0](https://github.com/cognitedata/gearbox.js/compare/v1.19.4...v1.20.0) (2020-07-29)
 
 
