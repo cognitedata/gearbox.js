@@ -140,7 +140,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     const endRange =
       ranges.length % 2 === 0 ? [end - msPerRequest, end] : [end];
     const chunks = chunk([...ranges, ...endRange], 2);
-    const limit = CELL_LIMIT / timeseriesIds.length;
+    const limit = Math.round(CELL_LIMIT / timeseriesIds.length);
 
     const requests = chunks
       .map(([chunkStart, chunkEnd]) => ({
