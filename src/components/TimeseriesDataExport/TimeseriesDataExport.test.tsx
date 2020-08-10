@@ -114,13 +114,13 @@ describe('TimeseriesDataExport', () => {
 
   it('should set proper limit value', async () => {
     const apiDatapointsLimit = 10000;
-    const seriesNumber = 4; // 2 timeseries ids and 2 external ids
+    const seriesNumber = 3; // 2 timeseries ids and 1 external ids
     const granularity = 2 * 1000; // 2s in milliseconds
     await act(async () => {
       wrapper = mountComponent({
         ...defaultProps,
         timeseriesIds: [0, 1],
-        timeseriesExternalIds: ['externalId-1', 'externalId-2'],
+        timeseriesExternalIds: ['externalId-1'],
         granularity: '2s',
       } as TimeseriesDataExportProps);
     });
@@ -138,10 +138,10 @@ describe('TimeseriesDataExport', () => {
       limit,
     } = sdk.datapoints.retrieve.mock.calls[1][0];
 
-    expect(limit).toEqual(apiDatapointsLimit / seriesNumber);
-    expect(chunkEnd - chunkStart + 1).toEqual(
-      (apiDatapointsLimit * granularity) / seriesNumber
-    );
+    const expectedLimit = Math.floor(apiDatapointsLimit / seriesNumber);
+
+    expect(limit).toEqual(expectedLimit);
+    expect(chunkEnd - chunkStart + 1).toEqual(expectedLimit * granularity);
   });
 
   it('should trigger onSuccess callback if provided', async () => {
