@@ -8,7 +8,7 @@ import {
 } from '@cognite/sdk';
 import { Button, Checkbox, DatePicker, Form, Input, Modal, Radio } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { chunk, isFunction, range } from 'lodash';
+import { isFunction, range, last } from 'lodash';
 import moment from 'moment';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';
@@ -132,15 +132,17 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     request: DatapointsMultiQuery
   ): Promise<DatapointAggregates[]> => {
     const { start = 0, end = 0 } = await getLimits(request);
-    const numericGranularity = getGranularityInMS(granularity);
-    const msPerRequest =
-      (numericGranularity * CELL_LIMIT) / timeseriesIds.length;
+    const numericGranularity = getGranularityInMS(request.granularity!);
+    const limit = Math.floor(CELL_LIMIT / seriesNumber);
+    const msPerRequest = limit * numericGranularity;
 
     const ranges = range(start, end, msPerRequest);
-    const endRange =
-      ranges.length % 2 === 0 ? [end - msPerRequest, end] : [end];
-    const chunks = chunk([...ranges, ...endRange], 2);
-    const limit = CELL_LIMIT / timeseriesIds.length;
+    const chunks = ranges.map(range => [range, range + msPerRequest - 1]);
+    const lastChunk = last(chunks);
+
+    if (lastChunk![1] > end) {
+      lastChunk![1] = end;
+    }
 
     const requests = chunks
       .map(([chunkStart, chunkEnd]) => ({

@@ -103,13 +103,45 @@ describe('TimeseriesDataExport', () => {
       form.simulate('submit');
     });
 
-    expect(sdk.datapoints.retrieve).toHaveBeenCalledTimes(3);
+    expect(sdk.datapoints.retrieve).toHaveBeenCalledTimes(4);
     expect(sdk.datapoints.retrieve.mock.calls[1][0].start).toEqual(
       dpStartTimestamp
     );
-    expect(sdk.datapoints.retrieve.mock.calls[2][0].end).toEqual(
+    expect(sdk.datapoints.retrieve.mock.calls[3][0].end).toEqual(
       dpEndTimestamp
     );
+  });
+
+  it('should set proper limit value', async () => {
+    const apiDatapointsLimit = 10000;
+    const seriesNumber = 3; // 2 timeseries ids and 1 external ids
+    const granularity = 2 * 1000; // 2s in milliseconds
+    await act(async () => {
+      wrapper = mountComponent({
+        ...defaultProps,
+        timeseriesIds: [0, 1],
+        timeseriesExternalIds: ['externalId-1'],
+        granularity: '2s',
+      } as TimeseriesDataExportProps);
+    });
+
+    wrapper.update();
+    const form = wrapper.find(formIdentificator);
+
+    await act(async () => {
+      form.simulate('submit');
+    });
+
+    const {
+      start: chunkStart,
+      end: chunkEnd,
+      limit,
+    } = sdk.datapoints.retrieve.mock.calls[1][0];
+
+    const expectedLimit = Math.floor(apiDatapointsLimit / seriesNumber);
+
+    expect(limit).toEqual(expectedLimit);
+    expect(chunkEnd - chunkStart + 1).toEqual(expectedLimit * granularity);
   });
 
   it('should trigger onSuccess callback if provided', async () => {
