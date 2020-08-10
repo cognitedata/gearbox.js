@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/cognitedata/gearbox.js/compare/v2.0.0...v2.0.1) (2020-08-10)
+
+
+### Bug Fixes
+
+* round API limit param to integer ([#674](https://github.com/cognitedata/gearbox.js/issues/674)) ([355e3ba](https://github.com/cognitedata/gearbox.js/commit/355e3ba0ef4aefc1267c2d1c0585d6b409ee679d))
+
 # [2.0.0](https://github.com/cognitedata/gearbox.js/compare/v1.20.0...v2.0.0) (2020-08-05)
 
 
