@@ -82,12 +82,12 @@ export interface GlobalSearchProps {
    */
   onItemHover?: ItemCallback;
   /**
-   * Render function for the search list
+   * Render function for the search list.
    * Defines how search list should be rendered
    */
   renderSearchResult?: RenderSearchResult;
   /**
-   * Render for each search element in the search list
+   * Render for each search element in the search list.
    * Defines how search item should be rendered inside the search list
    */
   renderSearchItem?: RenderSearchItem;
