@@ -41,6 +41,9 @@ export type RenderSearchItem = (
   strings: GlobalSearchStrings,
   item: SearchItem
 ) => React.ReactNode;
+export type RenderSearchResult = (
+  params: RenderSearchResultParams
+) => React.ReactNode;
 export type ItemCallback = (item: SearchItem) => void;
 
 export interface SearchForFilter {
@@ -70,10 +73,27 @@ export interface GlobalSearchProps {
    */
   searchForFilter?: SearchForFilter;
   strings?: Partial<GlobalSearchStrings>;
+  /**
+   * Callback, which triggers on search item click event
+   */
   onItemSelected?: ItemCallback;
+  /**
+   * Callback, which triggers on search item hover event
+   */
   onItemHover?: ItemCallback;
-  renderSearchResult?: (params: RenderSearchResultParams) => React.ReactNode;
+  /**
+   * Render function for the search list
+   * Defines how search list should be rendered
+   */
+  renderSearchResult?: RenderSearchResult;
+  /**
+   * Render for each search element in the search list
+   * Defines how search item should be rendered inside the search list
+   */
   renderSearchItem?: RenderSearchItem;
+  /**
+   * Callback, which triggers on each search result
+   */
   onSearchResults?: (results: SearchItem[]) => void;
 }
 export type GlobalSearchStrings = {
