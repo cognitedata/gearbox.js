@@ -92,14 +92,12 @@ function titleFromResource(
   item: SearchItem
 ) {
   switch (item.resourceType) {
-    case 'asset':
+    case 'assets':
+    case 'timeseries':
+    case 'files':
       return item.resource.name;
-    case 'timeSeries':
-      return item.resource.name;
-    case 'event':
+    case 'events':
       return item.resource.description || strings.noDescription;
-    case 'file':
-      return item.resource.name;
     default:
       return 'N/A';
   }
