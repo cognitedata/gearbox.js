@@ -1,8 +1,9 @@
 // Copyright 2020 Cognite AS
-import { configure, mount } from 'enzyme';
+import { configure, mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import lodash from 'lodash';
+import { act } from 'react-dom/test-utils';
 import {
   assetsList,
   timeseriesListV2,
@@ -57,63 +58,90 @@ class CogniteClient extends MockCogniteClient {
   };
 }
 
+let wrapper: ReactWrapper;
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
+beforeEach(() => {
+  wrapper = new ReactWrapper(<div />);
+});
+
+afterEach(() => {
+  wrapper.unmount();
+});
+
 describe('GlobalSearch', () => {
-  it('should render without exploding', done => {
-    const wrapper = mount(
-      <ClientSDKProvider client={sdk}>
-        <GlobalSearch />
-      </ClientSDKProvider>
-    );
-    setImmediate(() => {
-      wrapper.update();
-      expect(wrapper.find(GlobalSearch)).toHaveLength(1);
-      done();
+  it('should render without exploding', async () => {
+    await act(async () => {
+      wrapper = mount(
+        <ClientSDKProvider client={sdk}>
+          <GlobalSearch />
+        </ClientSDKProvider>
+      );
     });
+    wrapper.update();
+    expect(wrapper.find(GlobalSearch)).toHaveLength(1);
   });
 
-  it('should render loading spinner', done => {
-    const wrapper = mount(
-      <ClientSDKProvider client={sdk}>
-        <GlobalSearch />
-      </ClientSDKProvider>
-    );
-    wrapper.find('input').simulate('change', { target: { value: 'loading' } });
-    setImmediate(() => {
-      wrapper.update();
-      expect(wrapper.find('.anticon-loading')).toHaveLength(1);
-      done();
+  it('should render loading spinner', async () => {
+    await act(async () => {
+      wrapper = mount(
+        <ClientSDKProvider client={sdk}>
+          <GlobalSearch />
+        </ClientSDKProvider>
+      );
     });
+
+    const input = wrapper.find('input');
+
+    await act(async () => {
+      input.simulate('change', { target: { value: 'loading' } });
+    });
+
+    wrapper.update();
+
+    expect(wrapper.find('.anticon-loading')).toHaveLength(1);
   });
 
-  it('should pass error', done => {
+  it('should pass error', async () => {
     const handleError = jest.fn();
-    const wrapper = mount(
-      <ClientSDKProvider client={sdk}>
-        <GlobalSearch onError={handleError} />
-      </ClientSDKProvider>
-    );
-    wrapper.find('input').simulate('change', { target: { value: 'error' } });
-    setImmediate(() => {
-      wrapper.update();
-      expect(handleError).toBeCalled();
-      done();
+    await act(async () => {
+      wrapper = mount(
+        <ClientSDKProvider client={sdk}>
+          <GlobalSearch onError={handleError} />
+        </ClientSDKProvider>
+      );
     });
+    const input = wrapper.find('input');
+
+    await act(async () => {
+      input.simulate('change', { target: { value: 'error' } });
+    });
+
+    wrapper.update();
+
+    expect(handleError).toBeCalled();
   });
 
-  it('should call onSearchResults with results', done => {
+  it('should call onSearchResults with results', async () => {
     const handleSearchResults = jest.fn();
-    const wrapper = mount(
-      <ClientSDKProvider client={sdk}>
-        <GlobalSearch onSearchResults={handleSearchResults} />
-      </ClientSDKProvider>
-    );
-    wrapper.find('input').simulate('change', { target: { value: 'foo' } });
-    setImmediate(() => {
-      wrapper.update();
-      expect(handleSearchResults.mock.calls[0][0].length).toBeGreaterThan(0);
-      done();
+    let wrapper: ReactWrapper = new ReactWrapper(<div />);
+
+    await act(async () => {
+      wrapper = mount(
+        <ClientSDKProvider client={sdk}>
+          <GlobalSearch onSearchResults={handleSearchResults} />
+        </ClientSDKProvider>
+      );
     });
+
+    const input = wrapper.find('input');
+
+    await act(async () => {
+      input.simulate('change', { target: { value: 'foo' } });
+    });
+
+    wrapper.update();
+
+    expect(handleSearchResults.mock.calls[0][0].length).toBeGreaterThan(0);
   });
 });

@@ -1,15 +1,24 @@
 // Copyright 2020 Cognite AS
 import React, { useContext, useMemo, useState, useEffect } from 'react';
 import { ClientSDKContext } from '../../context/clientSDKContext';
-import { globalSearch, SearchItem, SearchForFilter } from './globalSearch';
+import { globalSearch } from './globalSearch';
 import { Search } from '../common/Search/Search';
-import { PureObject, ApiQuery } from '../..';
+import { ApiQuery } from '../..';
 import groupBy from 'lodash/groupBy';
 import styled from 'styled-components';
 import { Icon } from 'antd';
 import { withDefaultTheme } from '../../hoc';
+import {
+  GlobalSearchProps,
+  GlobalSearchStrings,
+  ItemCallback,
+  RenderSearchResultParams,
+  SearchForFilter,
+  SearchItem,
+  SearchItemResourceType,
+} from './interfaces';
 import { SearchResultList } from './SearchResultList';
-import { CogniteError } from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 
 class RefCounter {
   id: number;
@@ -26,16 +35,6 @@ class RefCounter {
   }
 }
 
-export type GlobalSearchStrings = {
-  assets: string;
-  timeSeries: string;
-  events: string;
-  files: string;
-  noDescription: string;
-  emptySearch: string;
-  searchPlaceholder: string;
-};
-
 const defaultStrings: GlobalSearchStrings = {
   assets: 'Assets',
   timeSeries: 'Time Series',
@@ -46,50 +45,14 @@ const defaultStrings: GlobalSearchStrings = {
   searchPlaceholder: 'Search for a resource',
 };
 
-export type RenderSearchItem = (
-  strings: GlobalSearchStrings,
-  item: SearchItem
-) => React.ReactNode;
-export type ItemCallback = (item: SearchItem) => void;
-export type RenderSearchResultParams = {
-  strings: GlobalSearchStrings;
-  isLoading: boolean;
-  searchForFilter: SearchForFilter;
-  onItemSelected: ItemCallback;
-  onItemHover: ItemCallback;
-  items: SearchItem[];
-  renderSearchItem: RenderSearchItem;
-};
-
-type GlobalSearchProps = {
-  onError?: (error: CogniteError) => void;
-  /**
-   * Sets search filters per resource.
-   * It is also used to toggle search for a resource, by setting any of the fields to null | undefined.
-   * For example this will only search for assets
-   * ```
-   * <GlobalSearch searchForFilter={{assets: {}}} />
-   * ```
-   */
-  searchForFilter?: SearchForFilter;
-  strings?: Partial<GlobalSearchStrings>;
-  onItemSelected?: ItemCallback;
-  onItemHover?: ItemCallback;
-  renderSearchResult?: (params: RenderSearchResultParams) => React.ReactNode;
-  renderSearchItem?: RenderSearchItem;
-  onSearchResults?: (results: SearchItem[]) => void;
-};
-
 function titleFromResource(strings: GlobalSearchStrings, item: SearchItem) {
   switch (item.resourceType) {
-    case 'asset':
+    case SearchItemResourceType.Asset:
+    case SearchItemResourceType.Timeseries:
+    case SearchItemResourceType.File:
       return item.resource.name;
-    case 'timeSeries':
-      return item.resource.name;
-    case 'event':
+    case SearchItemResourceType.Event:
       return item.resource.description || strings.noDescription;
-    case 'file':
-      return item.resource.name;
     default:
       return 'N/A';
   }
@@ -97,13 +60,13 @@ function titleFromResource(strings: GlobalSearchStrings, item: SearchItem) {
 
 function iconFromResource(item: SearchItem) {
   switch (item.resourceType) {
-    case 'asset':
+    case SearchItemResourceType.Asset:
       return <Icon type="deployment-unit" />;
-    case 'timeSeries':
+    case SearchItemResourceType.Timeseries:
       return <Icon type="line-chart" />;
-    case 'event':
+    case SearchItemResourceType.Event:
       return <Icon type="alert" />;
-    case 'file':
+    case SearchItemResourceType.File:
       return <Icon type="file" />;
   }
 }
@@ -133,58 +96,37 @@ function defaultRenderSearchResult({
 }: RenderSearchResultParams) {
   const itemsGroupedByResourceType = groupBy(items, item => item.resourceType);
 
-  const renderListIfNotNull = (
-    renderIfNotNull: any, // Can't use generic syntax for lambda functions in tsx files
-    title: string,
-    items: SearchItem[]
-  ) => {
-    if (renderIfNotNull != null) {
-      const itemsOrEmpty = items != null ? items : [];
-      const inner =
-        isLoading && itemsOrEmpty.length == 0 ? (
-          <i>Searching...</i>
-        ) : (
-          <SearchResultList
-            strings={strings}
-            onItemSelected={onItemSelected}
-            onItemHover={onItemHover}
-            items={itemsOrEmpty}
-            renderSearchItem={renderSearchItem}
-          ></SearchResultList>
-        );
-      return (
-        <>
-          <ResourceSectionHeader>{title.toUpperCase()}</ResourceSectionHeader>
-          {inner}
-        </>
+  const renderList = (title: string, items: SearchItem[]) => {
+    const inner =
+      isLoading && !items.length ? (
+        <i>Searching...</i>
+      ) : (
+        <SearchResultList
+          strings={strings}
+          onItemSelected={onItemSelected}
+          onItemHover={onItemHover}
+          items={items}
+          renderSearchItem={renderSearchItem}
+        />
       );
-    } else {
-      return null;
-    }
+    return (
+      <div key={title}>
+        <ResourceSectionHeader>{title.toUpperCase()}</ResourceSectionHeader>
+        {inner}
+      </div>
+    );
   };
 
   return (
     <>
-      {renderListIfNotNull(
-        searchForFilter.assets,
-        strings.assets,
-        itemsGroupedByResourceType.asset
-      )}
-      {renderListIfNotNull(
-        searchForFilter.timeSeries,
-        strings.timeSeries,
-        itemsGroupedByResourceType.timeSeries
-      )}
-      {renderListIfNotNull(
-        searchForFilter.events,
-        strings.events,
-        itemsGroupedByResourceType.event
-      )}
-      {renderListIfNotNull(
-        searchForFilter.files,
-        strings.files,
-        itemsGroupedByResourceType.file
-      )}
+      {Object.keys(searchForFilter)
+        .filter(key => itemsGroupedByResourceType[key as keyof SearchForFilter])
+        .map(key =>
+          renderList(
+            strings[key as keyof GlobalSearchStrings],
+            itemsGroupedByResourceType[key]
+          )
+        )}
     </>
   );
 }
@@ -199,15 +141,13 @@ export function GlobalSearch({
   onSearchResults,
   onItemHover: userOnItemHover,
 }: GlobalSearchProps) {
-  const [searchResults, setSearchResultsState] = useState<SearchItem[] | null>(
-    null
-  );
+  const [searchResults, setSearchResultsState] = useState<SearchItem[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const [searchCounter] = useState<RefCounter>(new RefCounter());
-  const [searchQuery, setSearchQuery] = useState<ApiQuery | null>();
+  const [searchQuery, setSearchQuery] = useState<ApiQuery>();
   const searchForFilter = useMemo(
     () =>
-      userSearchForFilter == null
+      !userSearchForFilter
         ? {
             assets: {},
             events: {},
@@ -218,9 +158,7 @@ export function GlobalSearch({
     [userSearchForFilter]
   );
   const client = useContext(ClientSDKContext);
-
   const strings = { ...defaultStrings, ...(userStrings || {}) };
-
   const renderSearchResult =
     userRenderSearchResult || defaultRenderSearchResult;
   const renderSearchItem = userRenderSearchItem || defaultRenderSearchItem;
@@ -236,7 +174,7 @@ export function GlobalSearch({
   };
 
   useEffect(() => {
-    if (onSearchResults && searchResults != null) {
+    if (onSearchResults && searchResults) {
       onSearchResults(searchResults);
     }
   }, [searchResults]);
@@ -244,66 +182,72 @@ export function GlobalSearch({
   const handleSearch = (searchQuery: ApiQuery) => {
     setSearchQuery(searchQuery);
   };
-  const setSearchResults = (items: SearchItem[] | null) => {
+  const setSearchResults = (items: SearchItem[]) => {
     setSearchResultsState(items);
     setLoading(false);
   };
 
+  const search = async (
+    searchId: number,
+    client: CogniteClient,
+    query: string,
+    filters: SearchForFilter,
+    limitPerItem: number = 50
+  ) => {
+    try {
+      const result = await globalSearch(client, query, filters, limitPerItem);
+
+      if (searchId === searchCounter.currentId()) {
+        setSearchResults(result);
+      }
+    } catch (e) {
+      if (searchId === searchCounter.currentId()) {
+        if (onError) {
+          onError(e);
+        }
+        setSearchResults([]);
+      }
+    }
+  };
+
   useEffect(() => {
-    if (searchQuery == null) {
+    if (!searchQuery) {
       return;
     }
 
-    if (client == null) {
+    if (client === null) {
       throw new Error(
         'Remember to add a ClientSDKProvider before using any Gearbox components.'
       );
     }
 
-    if (searchQuery.query == null || searchQuery.query === '') {
-      setSearchResults(null);
+    if (!searchQuery.query) {
+      setSearchResults([]);
+
       return;
     }
 
     setLoading(true);
     // The searchCounter prevents old search results from replacing newer search results
     const thisId = searchCounter.nextId();
-    // We are not using await here,
-    // because the useEffect function doesn't expect a Promise returned
-    globalSearch(client, searchQuery.query, searchForFilter, 50)
-      .then(res => {
-        if (thisId === searchCounter.currentId()) {
-          setSearchResults(res);
-        }
-      })
-      .catch(err => {
-        if (thisId === searchCounter.currentId()) {
-          if (onError) {
-            onError(err);
-          }
-          setSearchResults(null);
-        }
-      });
+
+    search(thisId, client, searchQuery.query, searchForFilter);
   }, [client, searchCounter, searchQuery, searchForFilter]);
 
   return (
     <>
-      <Search
-        loading={loading}
-        strings={strings as PureObject}
-        onSearch={handleSearch}
-      />
-      {searchResults == null
-        ? null
-        : renderSearchResult({
-            strings,
-            isLoading: loading,
-            searchForFilter,
-            onItemSelected,
-            onItemHover,
-            items: searchResults,
-            renderSearchItem,
-          })}
+      <Search loading={loading} strings={strings} onSearch={handleSearch} />
+      {searchResults &&
+        !!searchResults.length &&
+        renderSearchResult({
+          strings,
+          isLoading: loading,
+          searchForFilter,
+          onItemSelected,
+          onItemHover,
+          items: searchResults,
+          renderSearchItem,
+        })}
     </>
   );
 }

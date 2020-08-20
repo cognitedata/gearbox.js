@@ -1,5 +1,5 @@
 // Copyright 2020 Cognite AS
-import { SearchItem, RenderSearchItem, ItemCallback } from '.';
+import { SearchItem, RenderSearchItem, ItemCallback } from './interfaces';
 import React, { useState, useCallback } from 'react';
 import { withDefaultTheme } from '../../hoc';
 import styled from 'styled-components';
