@@ -135,13 +135,13 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     const { start = 0, end = 0 } = await getLimits(request);
     const numericGranularity = getGranularityInMS(granularity);
     const msPerRequest =
-      (numericGranularity * CELL_LIMIT) / timeseriesIds.length;
+      (numericGranularity * CELL_LIMIT) / seriesNumber;
 
     const ranges = range(start, end, msPerRequest);
     const endRange =
       ranges.length % 2 === 0 ? [end - msPerRequest, end] : [end];
     const chunks = chunk([...ranges, ...endRange], 2);
-    const limit = CELL_LIMIT / timeseriesIds.length;
+    const limit = CELL_LIMIT / seriesNumber;
 
     const requests = chunks
       .map(([chunkStart, chunkEnd]) => ({
