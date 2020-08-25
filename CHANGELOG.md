@@ -1,3 +1,10 @@
+## 1.20.1 (2020-08-26)
+
+
+### Bug Fixes
+
+* **timeseries-data-export:** requests chunking and limit calculations ([#675](https://github.com/cognitedata/gearbox.js/issues/675))
+
 # [1.20.0](https://github.com/cognitedata/gearbox.js/compare/v1.19.4...v1.20.0) (2020-07-29)
 
 
