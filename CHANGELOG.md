@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/cognitedata/gearbox.js/compare/v2.0.1...v2.1.0) (2020-08-26)
+
+
+### Features
+
+* **global-search:** add basic global search  ([#648](https://github.com/cognitedata/gearbox.js/issues/648)) ([af7beb3](https://github.com/cognitedata/gearbox.js/commit/af7beb36315e34ae7a8f294d815cd7f55630a580))
+
 ## [2.0.1](https://github.com/cognitedata/gearbox.js/compare/v2.0.0...v2.0.1) (2020-08-10)
 
 
