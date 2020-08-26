@@ -23,5 +23,6 @@ export * from './components/AssetTimeseriesPanel';
 export * from './components/TimeseriesDataExport';
 export * from './components/TimeseriesPreview';
 export * from './components/EventsTimeline';
+export * from './components/GlobalSearch';
 export * from './utils/documents';
 export * from './interfaces';
