@@ -1,7 +1,10 @@
+// Copyright 2020 Cognite AS
 import {
-  GetTimeSeriesMetadataDTO,
+  Asset,
+  AssetListScope,
+  Timeseries,
   TimeseriesIdEither,
-  TimeSeriesSearchDTO,
+  TimeseriesSearchFilter,
 } from '@cognite/sdk';
 import { pick } from 'lodash';
 import React from 'react';
@@ -15,23 +18,19 @@ import { ClientSDKProvider } from '../../ClientSDKProvider';
 
 class CogniteClient extends MockCogniteClient {
   timeseries: any = {
-    retrieve: async (
-      ids: TimeseriesIdEither[]
-    ): Promise<GetTimeSeriesMetadataDTO[]> => {
+    retrieve: async (ids: TimeseriesIdEither[]): Promise<Timeseries[]> => {
       const idsAsString = ids.map(x => x.toString());
       await sleep(1000);
-      const result = timeseriesListV2.filter((x: GetTimeSeriesMetadataDTO) =>
+      const result = timeseriesListV2.filter((x: Timeseries) =>
         idsAsString.includes(x.id.toString())
       );
       return result || [];
     },
-    search: async (
-      query: TimeSeriesSearchDTO
-    ): Promise<GetTimeSeriesMetadataDTO[]> => {
+    search: async (query: TimeseriesSearchFilter): Promise<Timeseries[]> => {
       console.log('client.search', query);
       await sleep(1000);
       const result = timeseriesListV2.filter(
-        (x: GetTimeSeriesMetadataDTO) =>
+        (x: Timeseries) =>
           // @ts-ignore
           x.name.toUpperCase().indexOf(query.search.query.toUpperCase()) >= 0
       );
@@ -66,7 +65,7 @@ export const decorators = [
 
 export const onTimeserieSelectionChange = (
   newTimeseriesIds: number[],
-  selectedTimeseries: GetTimeSeriesMetadataDTO
+  selectedTimeseries: Timeseries
 ) =>
   console.log(
     'newTimeseriesIds, selectedTimeseries',
@@ -76,7 +75,7 @@ export const onTimeserieSelectionChange = (
 
 export const names = timeseriesListV2.map(ts => ts.name).join(', ');
 
-export const filterRule = (timeseries: GetTimeSeriesMetadataDTO): boolean =>
+export const filterRule = (timeseries: Timeseries): boolean =>
   !timeseries.isString;
 
 export const customString = {

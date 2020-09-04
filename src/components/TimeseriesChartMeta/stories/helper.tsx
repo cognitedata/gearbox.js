@@ -1,4 +1,5 @@
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+// Copyright 2020 Cognite AS
+import { Timeseries } from '@cognite/sdk';
 import React, { FC } from 'react';
 import {
   MockDatapointsClientObject,
@@ -10,7 +11,7 @@ import { TimeseriesChartMetaProps } from '../interfaces';
 
 class CogniteClient extends TimeseriesMockClient {
   timeseries: any = {
-    retrieve: async (): Promise<GetTimeSeriesMetadataDTO[]> => {
+    retrieve: async (): Promise<Timeseries[]> => {
       await sleep(1000);
       return [
         {

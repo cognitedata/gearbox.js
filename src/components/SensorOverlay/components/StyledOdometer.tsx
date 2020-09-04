@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 /**
  * This is wrapper for react-odometerjs component that replaces
  * default odometer theme. Origin - https://github.com/HubSpot/odometer/blob/master/themes/odometer-theme-default.css

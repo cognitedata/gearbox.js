@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { IdEither } from '@cognite/sdk';
 import { MockCogniteClient } from '../mocks';
 import { wrapInProxies } from './clientSDKProxies';

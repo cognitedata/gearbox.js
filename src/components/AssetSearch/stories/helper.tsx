@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Asset, AssetListScope, AssetSearchFilter } from '@cognite/sdk';
 import { pick } from 'lodash';
 import React from 'react';

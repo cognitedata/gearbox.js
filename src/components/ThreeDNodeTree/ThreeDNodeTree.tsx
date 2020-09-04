@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { CogniteClient, List3DNodesQuery, RevealNode3D } from '@cognite/sdk';
 import { Tree } from 'antd';
 import {

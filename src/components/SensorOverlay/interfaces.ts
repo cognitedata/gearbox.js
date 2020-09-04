@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { ReactNode } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 

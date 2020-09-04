@@ -1,7 +1,8 @@
+// Copyright 2020 Cognite AS
 import {
-  GetAggregateDatapoint,
-  GetDoubleDatapoint,
-  GetStringDatapoint,
+  DatapointAggregate,
+  DoubleDatapoint,
+  StringDatapoint,
 } from '@cognite/sdk';
 import { datapointsList, timeseriesListV2 } from '../../mocks';
 import { MockCogniteClient } from '../../mocks';
@@ -21,10 +22,10 @@ class CogniteClient extends MockCogniteClient {
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
-const toPoints = (arr: number[], from: string): GetAggregateDatapoint[] =>
+const toPoints = (arr: number[], from: string): DatapointAggregate[] =>
   arr.map((d: number) => ({ timestamp: new Date(d), value: from }));
 
-const xAccessor: AccessorFunc = (d: GetAggregateDatapoint) => +d.timestamp;
+const xAccessor: AccessorFunc = (d: DatapointAggregate) => +d.timestamp;
 
 const dataLoader = new DataLoader(sdk);
 
@@ -33,7 +34,7 @@ describe('dataLoader', () => {
     it('[base[0] <= toInsert[0] <= toInsert[1] <= base[1]]', () => {
       const base = toPoints([1, 5, 10, 15], 'base');
       const toInsert = toPoints([6, 7, 8], 'insert');
-      const expectedOutput: GetStringDatapoint[] = [
+      const expectedOutput: StringDatapoint[] = [
         {
           timestamp: new Date(1),
           value: 'base',
@@ -66,7 +67,7 @@ describe('dataLoader', () => {
     it('Merge insert [empty base]', () => {
       const base = toPoints([], 'base');
       const toInsert = toPoints([1, 5], 'insert');
-      const expectedOutput: GetStringDatapoint[] = [
+      const expectedOutput: StringDatapoint[] = [
         { timestamp: new Date(1), value: 'insert' },
         { timestamp: new Date(5), value: 'insert' },
       ];
@@ -77,7 +78,7 @@ describe('dataLoader', () => {
     it('Merge insert [One insert point]', () => {
       const base = toPoints([1, 5], 'base');
       const toInsert = toPoints([5], 'insert');
-      const expectedOutput: GetStringDatapoint[] = [
+      const expectedOutput: StringDatapoint[] = [
         { timestamp: new Date(1), value: 'base' },
         { timestamp: new Date(5), value: 'insert' },
       ];
@@ -136,7 +137,7 @@ describe('dataLoader', () => {
       );
 
       it('should draw raw data points if total number of points is less than half of pointsPerSeries', async () => {
-        const datapoints: GetDoubleDatapoint[] = [
+        const datapoints: DoubleDatapoint[] = [
           {
             timestamp: new Date(1552726800000),
             value: 36.26105251209135,
@@ -159,7 +160,7 @@ describe('dataLoader', () => {
           reason: 'MOUNTED',
         });
 
-        const expectedDatapoints: GetAggregateDatapoint[] = [
+        const expectedDatapoints: DatapointAggregate[] = [
           {
             timestamp: new Date(1552726800000),
             average: 36.26105251209135,
@@ -212,7 +213,7 @@ describe('dataLoader', () => {
       );
 
       it('should fetch raw data when old series fetched raw data', async () => {
-        const datapoints: GetDoubleDatapoint[] = [
+        const datapoints: DoubleDatapoint[] = [
           {
             timestamp: new Date(1552726800000),
             value: 36.26105251209135,

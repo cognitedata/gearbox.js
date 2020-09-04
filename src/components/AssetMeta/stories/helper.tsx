@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import React from 'react';
 import {
   DOCUMENTS,
@@ -23,7 +24,7 @@ class CogniteClient extends TimeseriesMockClient {
       },
     }),
   };
-  datapoint = {
+  datapoints: any = {
     ...MockDatapointsClientObject,
     retrieveLatest: async () => {
       await sleep(1000);

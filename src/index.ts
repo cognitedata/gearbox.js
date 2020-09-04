@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 export * from './components/AssetBreadcrumb';
 export * from './components/AssetMeta';
 export * from './components/AssetScanner';
@@ -22,5 +23,6 @@ export * from './components/AssetTimeseriesPanel';
 export * from './components/TimeseriesDataExport';
 export * from './components/TimeseriesPreview';
 export * from './components/EventsTimeline';
+export * from './components/GlobalSearch';
 export * from './utils/documents';
 export * from './interfaces';

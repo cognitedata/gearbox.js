@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 export * from './Event';
 export * from './Ruler';
 export * from './Timeline';

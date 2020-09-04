@@ -1,7 +1,8 @@
+// Copyright 2020 Cognite AS
 import {
-  DatapointsGetAggregateDatapoint,
+  DatapointAggregates,
   DatapointsMultiQuery,
-  GetTimeSeriesMetadataDTO,
+  Timeseries,
 } from '@cognite/sdk';
 import React, { FC, useState } from 'react';
 import { randomData, timeseriesListV2 } from '../../../mocks';
@@ -12,7 +13,7 @@ import { CSVLabelFormatter, TimeseriesDataExportProps } from '../interfaces';
 import { TimeseriesDataExport } from '../TimeseriesDataExport';
 
 const MockTimeseriesClientObject = {
-  retrieve: async (): Promise<GetTimeSeriesMetadataDTO[]> => {
+  retrieve: async (): Promise<Timeseries[]> => {
     sleep(1000);
     return [timeseriesListV2[0]];
   },
@@ -20,7 +21,7 @@ const MockTimeseriesClientObject = {
 const MockDatapointsClientObject = {
   retrieve: async (
     query: DatapointsMultiQuery
-  ): Promise<DatapointsGetAggregateDatapoint[]> => {
+  ): Promise<DatapointAggregates[]> => {
     return [
       randomData(
         (query.start as number) || Date.now() - 24 * 60 * 60 * 1000,
@@ -63,8 +64,7 @@ export const decorators = [
   ),
 ];
 
-export const labelFormatter: CSVLabelFormatter = (
-  ts: GetTimeSeriesMetadataDTO
-) => ts.name || `timeserie-${ts.id}`;
+export const labelFormatter: CSVLabelFormatter = (ts: Timeseries) =>
+  ts.name || `timeserie-${ts.id}`;
 
 export const ComponentProps: FC<TimeseriesDataExportProps> = () => <></>;

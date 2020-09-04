@@ -116,9 +116,9 @@ const metaOptions = {
 ### Handle callbacks
 
 ```typescript
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import { Timeseries } from '@cognite/sdk';
 
-const handleAssetTimeseriesLoaded = (files: GetTimeSeriesMetadataDTO[]) => console.log(files);
+const handleAssetTimeseriesLoaded = (files: Timeseries[]) => console.log(files);
 ```
 <Preview>
   <Story name="Handle callback">

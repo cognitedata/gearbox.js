@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 export * from './assets';
 export * from './assetsList';
 export * from './assetsListV2';

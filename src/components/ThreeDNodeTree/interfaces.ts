@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { RevealNode3D } from '@cognite/sdk';
 import { AntTreeNodeProps } from 'antd/lib/tree';
 import { CSSProperties, MouseEvent } from 'react';

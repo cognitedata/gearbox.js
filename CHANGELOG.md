@@ -1,3 +1,31 @@
+# [2.1.0](https://github.com/cognitedata/gearbox.js/compare/v2.0.1...v2.1.0) (2020-08-26)
+
+
+### Features
+
+* **global-search:** add basic global search  ([#648](https://github.com/cognitedata/gearbox.js/issues/648)) ([af7beb3](https://github.com/cognitedata/gearbox.js/commit/af7beb36315e34ae7a8f294d815cd7f55630a580))
+
+## [2.0.1](https://github.com/cognitedata/gearbox.js/compare/v2.0.0...v2.0.1) (2020-08-10)
+
+
+### Bug Fixes
+
+* round API limit param to integer ([#674](https://github.com/cognitedata/gearbox.js/issues/674)) ([355e3ba](https://github.com/cognitedata/gearbox.js/commit/355e3ba0ef4aefc1267c2d1c0585d6b409ee679d))
+
+# [2.0.0](https://github.com/cognitedata/gearbox.js/compare/v1.20.0...v2.0.0) (2020-08-05)
+
+
+### Performance Improvements
+
+* upgrade to @cognite/sdk v3  ([#670](https://github.com/cognitedata/gearbox.js/issues/670)) ([867140d](https://github.com/cognitedata/gearbox.js/commit/867140deceee570ea1b1d30a26b48c3c09f2d9ac))
+
+
+### BREAKING CHANGES
+
+* requires @cognite/sdk v3
+
+Gearbox v1 compatible with @cognite/sdk v2 and Gearbox v2 version requires @cognite/sdk v3. This is the only breaking change that has been introduced with this major bump.
+
 # [1.20.0](https://github.com/cognitedata/gearbox.js/compare/v1.19.4...v1.20.0) (2020-07-29)
 
 

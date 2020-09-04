@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { ScaleTime } from 'd3-scale';
 import { Dictionary } from 'lodash';
 import { RefObject, SyntheticEvent } from 'react';

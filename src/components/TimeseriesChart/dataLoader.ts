@@ -1,34 +1,35 @@
+// Copyright 2020 Cognite AS
 import { DataProviderLoaderParams, Series } from '@cognite/griff-react';
 import { CogniteClient } from '@cognite/sdk';
 import {
-  DatapointsGetAggregateDatapoint,
-  DatapointsGetDatapoint,
-  GetAggregateDatapoint,
-  GetDoubleDatapoint,
-  GetStringDatapoint,
-  GetTimeSeriesMetadataDTO,
+  DatapointAggregates,
+  Datapoints,
+  DatapointAggregate,
+  DoubleDatapoint,
+  StringDatapoint,
+  Timeseries,
 } from '@cognite/sdk';
 
 interface GriffSeries {
-  firstSeries: GetAggregateDatapoint[];
+  firstSeries: DatapointAggregate[];
   subDomain: number[];
   granularity: string;
 }
 
-export declare type AccessorFunc = (point: GetAggregateDatapoint) => number;
+export declare type AccessorFunc = (point: DatapointAggregate) => number;
 
 export class DataLoader {
-  static determineIfIsGetDoubleDatapoint(
-    toBeDetermined: GetDoubleDatapoint | GetAggregateDatapoint
-  ): toBeDetermined is GetDoubleDatapoint {
-    if (typeof (toBeDetermined as GetDoubleDatapoint).value === 'number') {
+  static determineIfIsDoubleDatapoint(
+    toBeDetermined: DoubleDatapoint | DatapointAggregate
+  ): toBeDetermined is DoubleDatapoint {
+    if (typeof (toBeDetermined as DoubleDatapoint).value === 'number') {
       return true;
     }
     return false;
   }
 
-  static yAccessor = (d: GetDoubleDatapoint | GetAggregateDatapoint) => {
-    if (DataLoader.determineIfIsGetDoubleDatapoint(d)) {
+  static yAccessor = (d: DoubleDatapoint | DatapointAggregate) => {
+    if (DataLoader.determineIfIsDoubleDatapoint(d)) {
       return +d.value;
     }
     if (d.stepInterpolation !== undefined) {
@@ -43,10 +44,10 @@ export class DataLoader {
     return 0;
   };
 
-  static y0Accessor = (data: GetAggregateDatapoint) =>
+  static y0Accessor = (data: DatapointAggregate) =>
     data.min ? data.min : DataLoader.yAccessor(data);
 
-  static y1Accessor = (data: GetAggregateDatapoint) =>
+  static y1Accessor = (data: DatapointAggregate) =>
     data.max ? data.max : DataLoader.yAccessor(data);
 
   static calculateGranularity = (domain: number[], pps: number) => {
@@ -79,8 +80,8 @@ export class DataLoader {
   };
 
   static mergeInsert = (
-    base: GetAggregateDatapoint[],
-    toInsert: GetAggregateDatapoint[],
+    base: DatapointAggregate[],
+    toInsert: DatapointAggregate[],
     xAccessor: AccessorFunc,
     subDomain: number[]
   ) => {
@@ -89,7 +90,7 @@ export class DataLoader {
     }
 
     // Remove the points from base within the subdoconstn
-    const strippedBase: GetAggregateDatapoint[] = base.filter(
+    const strippedBase: DatapointAggregate[] = base.filter(
       point =>
         xAccessor(point) < subDomain[0] || xAccessor(point) > subDomain[1]
     );
@@ -99,8 +100,8 @@ export class DataLoader {
   };
 
   timeseries = {
-    results: new Map<number, Promise<GetTimeSeriesMetadataDTO>>(),
-    requests: new Map<number, Promise<GetTimeSeriesMetadataDTO>>(),
+    results: new Map<number, Promise<Timeseries>>(),
+    requests: new Map<number, Promise<Timeseries>>(),
   };
 
   SERIES_GETTERS: Map<number, GriffSeries> = new Map<number, GriffSeries>();
@@ -118,7 +119,7 @@ export class DataLoader {
       ? (this.SERIES_GETTERS.get(id) || { granularity: '1d' }).granularity
       : '1d';
 
-  getTimeSeries = (id: number): Promise<GetTimeSeriesMetadataDTO> => {
+  getTimeSeries = (id: number): Promise<Timeseries> => {
     if (this.timeseries.requests.has(id)) {
       // @ts-ignore - We're checking for undefined with the "has" check.
       return this.timeseries.requests.get(id);
@@ -129,7 +130,7 @@ export class DataLoader {
     }
     const promise = this.sdkClient.timeseries
       .retrieve([{ id }])
-      .then((timeseriesList: GetTimeSeriesMetadataDTO[]) => {
+      .then((timeseriesList: Timeseries[]) => {
         this.timeseries.results = this.timeseries.results.set(
           id,
           Promise.resolve(timeseriesList[0])
@@ -153,7 +154,7 @@ export class DataLoader {
     start: number;
     end: number;
     limit?: number;
-  }): Promise<GetAggregateDatapoint[]> =>
+  }): Promise<DatapointAggregate[]> =>
     this.sdkClient.datapoints
       .retrieve({
         items: [
@@ -165,21 +166,17 @@ export class DataLoader {
           },
         ],
       })
-      .then(
-        (
-          data: (DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]
-        ) => {
-          const temp = (data[0].datapoints as unknown) as GetDoubleDatapoint[];
-          return temp.map(
-            (d: GetDoubleDatapoint): GetAggregateDatapoint => {
-              return {
-                [`${step ? 'stepInterpolation' : 'average'}`]: d.value,
-                timestamp: d.timestamp,
-              };
-            }
-          );
-        }
-      );
+      .then((data: (DatapointAggregates | Datapoints)[]) => {
+        const temp = (data[0].datapoints as unknown) as DoubleDatapoint[];
+        return temp.map(
+          (d: DoubleDatapoint): DatapointAggregate => {
+            return {
+              [`${step ? 'stepInterpolation' : 'average'}`]: d.value,
+              timestamp: d.timestamp,
+            };
+          }
+        );
+      });
 
   cogniteloader = async ({
     id,
@@ -211,9 +208,7 @@ export class DataLoader {
         startTime = xAccessor(oldData[oldData.length - 1]) + 1;
       }
       const { step } = oldSeries;
-      const requestPromise: Promise<
-        GetAggregateDatapoint[]
-      > = oldSeries.drawPoints
+      const requestPromise: Promise<DatapointAggregate[]> = oldSeries.drawPoints
         ? this.getRawDataPoints({
             id,
             start: startTime,
@@ -237,15 +232,11 @@ export class DataLoader {
                 },
               ],
             })
-            .then(
-              (
-                data: (
-                  | DatapointsGetAggregateDatapoint
-                  | DatapointsGetDatapoint)[]
-              ) => (data.length === 0 ? [] : data[0].datapoints)
+            .then((data: (DatapointAggregates | Datapoints)[]) =>
+              data.length === 0 ? [] : data[0].datapoints
             );
       const newDatapoints = (await requestPromise).map(
-        (x: GetAggregateDatapoint) => ({
+        (x: DatapointAggregate) => ({
           ...x,
           timestamp: +x.timestamp,
         })
@@ -268,124 +259,110 @@ export class DataLoader {
       // Zooming REALLY far in (1 ms end to end)
       return oldSeries;
     }
-    return this.getTimeSeries(id).then(
-      (timeseriesResponse: GetTimeSeriesMetadataDTO) => {
-        const { isStep: step } = timeseriesResponse;
-        return (
-          this.sdkClient.datapoints
-            .retrieve({
-              items: [
-                {
-                  id,
-                  granularity,
-                  aggregates: [
-                    'count',
-                    'min',
-                    'max',
-                    step ? 'stepInterpolation' : 'average',
-                  ],
-                  start: fetchDomain[0],
-                  end: fetchDomain[1],
-                  limit: pointsPerSeries,
-                },
-              ],
-            })
-            .then(
-              async (
-                response: (
-                  | DatapointsGetAggregateDatapoint
-                  | DatapointsGetDatapoint)[]
+    return this.getTimeSeries(id).then((timeseriesResponse: Timeseries) => {
+      const { isStep: step } = timeseriesResponse;
+      return (
+        this.sdkClient.datapoints
+          .retrieve({
+            items: [
+              {
+                id,
+                granularity,
+                aggregates: [
+                  'count',
+                  'min',
+                  'max',
+                  step ? 'stepInterpolation' : 'average',
+                ],
+                start: fetchDomain[0],
+                end: fetchDomain[1],
+                limit: pointsPerSeries,
+              },
+            ],
+          })
+          .then(async (response: (DatapointAggregates | Datapoints)[]) => {
+            const { datapoints: points } = response[0];
+            // @ts-ignore
+            const numberOfPoints = points.reduce(
+              (
+                p: number,
+                c: DatapointAggregate | DoubleDatapoint | StringDatapoint
               ) => {
-                const { datapoints: points } = response[0];
                 // @ts-ignore
-                const numberOfPoints = points.reduce(
-                  (
-                    p: number,
-                    c:
-                      | GetAggregateDatapoint
-                      | GetDoubleDatapoint
-                      | GetStringDatapoint
-                  ) => {
-                    // @ts-ignore
-                    return p + (c.count || 0);
-                  },
-                  0
-                );
-                if (numberOfPoints < pointsPerSeries / 2) {
-                  // If there are less than x points, show raw values
-                  let data = await this.getRawDataPoints({
-                    id,
-                    step,
-                    start: fetchDomain[0],
-                    end: fetchDomain[1],
-                    limit: pointsPerSeries,
-                  });
-                  if (step && points.length) {
-                    // Use the last-known value from step-interpolation to create a fake point at the left-boundary
-                    if (
-                      data.length &&
-                      points[0].timestamp < data[0].timestamp
-                    ) {
-                      data = [points[0], ...data];
-                    } else if (!data.length) {
-                      data = [points[0]];
-                    }
-                  }
-                  return {
-                    data,
-                    drawPoints: true,
-                    step,
-                  };
+                return p + (c.count || 0);
+              },
+              0
+            );
+            if (numberOfPoints < pointsPerSeries / 2) {
+              // If there are less than x points, show raw values
+              let data = await this.getRawDataPoints({
+                id,
+                step,
+                start: fetchDomain[0],
+                end: fetchDomain[1],
+                limit: pointsPerSeries,
+              });
+              if (step && points.length) {
+                // Use the last-known value from step-interpolation to create a fake point at the left-boundary
+                if (data.length && points[0].timestamp < data[0].timestamp) {
+                  data = [points[0], ...data];
+                } else if (!data.length) {
+                  data = [points[0]];
                 }
-                return {
-                  // @ts-ignore
-                  data: points.map((x: GetAggregateDatapoint) => ({
-                    ...x,
-                    timestamp: +x.timestamp,
-                  })),
-                  step,
-                };
               }
-            )
-            .then((newSeries: any) => {
-              const { firstSeries } = seriesInfo;
-              const { xAccessor } = oldSeries;
-              if (reason === 'UPDATE_SUBDOMAIN') {
-                const val = this.SERIES_GETTERS.get(id);
-                this.SERIES_GETTERS.set(id, {
-                  ...val,
-                  firstSeries: val ? val.firstSeries : [],
-                  subDomain,
-                  granularity,
-                });
-                const data = DataLoader.mergeInsert(
-                  firstSeries,
-                  newSeries.data,
-                  xAccessor,
-                  subDomain
-                );
-                return { ...newSeries, data };
-              }
-              return newSeries;
-            })
-            .then((newSeries: Series) => {
-              if (reason === 'MOUNTED') {
-                const val = this.SERIES_GETTERS.get(id);
-                this.SERIES_GETTERS.set(id, {
-                  ...val,
-                  firstSeries: newSeries.data,
-                  subDomain,
-                  granularity,
-                });
-              }
-              return { ...newSeries, yAccessor: DataLoader.yAccessor };
-            })
-            // Do not crash the app in case of error, just return no data
-            .catch(() => {
-              return { data: [], step };
-            })
-        );
-      }
-    );
+              return {
+                data,
+                drawPoints: true,
+                step,
+              };
+            }
+            return {
+              // @ts-ignore
+              data: points.map((x: DatapointAggregate) => ({
+                ...x,
+                timestamp: +x.timestamp,
+              })),
+              step,
+            };
+          })
+          .then((newSeries: any) => {
+            const { firstSeries } = seriesInfo;
+            const { xAccessor } = oldSeries;
+            if (reason === 'UPDATE_SUBDOMAIN') {
+              const val = this.SERIES_GETTERS.get(id);
+              this.SERIES_GETTERS.set(id, {
+                ...val,
+                firstSeries: val ? val.firstSeries : [],
+                subDomain,
+                granularity,
+              });
+              const data = DataLoader.mergeInsert(
+                firstSeries,
+                newSeries.data,
+                xAccessor,
+                subDomain
+              );
+              return { ...newSeries, data };
+            }
+            return newSeries;
+          })
+          .then((newSeries: Series) => {
+            if (reason === 'MOUNTED') {
+              const val = this.SERIES_GETTERS.get(id);
+              this.SERIES_GETTERS.set(id, {
+                ...val,
+                firstSeries: newSeries.data,
+                subDomain,
+                granularity,
+              });
+            }
+            return { ...newSeries, yAccessor: DataLoader.yAccessor };
+          })
+          // Do not crash the app in case of error, just return no data
+          .catch(() => {
+            return { data: [], step };
+          })
+      );
+    });
   };
 }

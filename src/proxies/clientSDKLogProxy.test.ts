@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { version } from '../constants/replacedStrings';
 import { MockCogniteClient } from '../mocks';
 import { wrapInLogProxy } from './clientSDKLogProxy';

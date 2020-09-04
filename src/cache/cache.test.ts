@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Asset } from '@cognite/sdk';
 import { MockCogniteClient, singleTimeseries } from '../mocks';
 import { CacheAssets } from './resources/CacheAssets';

@@ -1,6 +1,7 @@
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+// Copyright 2020 Cognite AS
+import { Timeseries } from '@cognite/sdk';
 
-const IAA_21PT1019: GetTimeSeriesMetadataDTO[] = [
+const IAA_21PT1019: Timeseries[] = [
   {
     id: 8681821313339919,
     name: 'IA_21PT1019.AlarmByte',
@@ -353,7 +354,7 @@ const IAA_21PT1019: GetTimeSeriesMetadataDTO[] = [
 ];
 
 export const timeseriesListV2 = IAA_21PT1019.concat([]);
-export const singleTimeseries: GetTimeSeriesMetadataDTO[] = [
+export const singleTimeseries: Timeseries[] = [
   {
     id: 41852231325889,
     createdTime: new Date(),

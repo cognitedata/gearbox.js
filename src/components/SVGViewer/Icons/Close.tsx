@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import React from 'react';
 
 const Close = () => (

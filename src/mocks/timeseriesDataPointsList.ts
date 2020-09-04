@@ -1,14 +1,12 @@
-import {
-  DatapointsGetAggregateDatapoint,
-  DatapointsGetDoubleDatapoint,
-} from '@cognite/sdk';
+// Copyright 2020 Cognite AS
+import { DatapointAggregates, DoubleDatapoints } from '@cognite/sdk';
 
 export function randomData(
   start: number,
   end: number,
   n: number,
   granularity?: number
-): DatapointsGetAggregateDatapoint {
+): DatapointAggregates {
   const data = [];
 
   const dt = granularity ? granularity : (end - start) / n;
@@ -31,13 +29,13 @@ export function randomData(
     });
   }
 
-  return { datapoints: data, id: 1337 };
+  return { datapoints: data, id: 1337, isStep: false, isString: false };
 }
 
 export const randomLatestDatapoint = (
   id = 0,
   name = 'Timeseries 0'
-): DatapointsGetDoubleDatapoint => {
+): DoubleDatapoints => {
   return {
     isString: false,
     isStep: false,
@@ -49,7 +47,7 @@ export const randomLatestDatapoint = (
         value: Math.floor(Math.random() * 10000) / 100,
       },
     ],
-  } as DatapointsGetDoubleDatapoint;
+  } as DoubleDatapoints;
 };
 
 export const datapoints = [
@@ -1076,12 +1074,12 @@ const csvData = [
   },
 ];
 
-export const csvExportData = csvData.map(tid => {
+export const csvExportData: DatapointAggregates[] = csvData.map(tid => {
   const { datapoints: dps, ...restTid } = tid;
   const resultDatapoints = dps.map(({ timestamp, ...rest }) => ({
     timestamp: new Date(timestamp),
     ...rest,
   }));
 
-  return { datapoints: resultDatapoints, ...restTid };
+  return { datapoints: resultDatapoints, ...restTid } as DatapointAggregates;
 });

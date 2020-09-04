@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 export * from './interfaces';
 export * from './withAsset';
 export * from './withAssetEvents';

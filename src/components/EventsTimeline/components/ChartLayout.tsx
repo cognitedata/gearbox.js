@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { event as d3Event } from 'd3';
 import { select } from 'd3-selection';
 import {

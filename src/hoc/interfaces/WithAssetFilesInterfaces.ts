@@ -1,8 +1,9 @@
-import { FileRequestFilter, FilesMetadata } from '@cognite/sdk';
+// Copyright 2020 Cognite AS
+import { FileRequestFilter, FileInfo } from '@cognite/sdk';
 import { ReactNode } from 'react';
 
 export interface WithAssetFilesDataProps {
-  assetFiles: FilesMetadata[];
+  assetFiles: FileInfo[];
 }
 
 export interface WithAssetFilesProps {
@@ -22,11 +23,11 @@ export interface WithAssetFilesProps {
   /**
    * Function to be called after files have been fetched
    */
-  onAssetFilesLoaded?: (assetFiles: FilesMetadata[]) => void;
+  onAssetFilesLoaded?: (assetFiles: FileInfo[]) => void;
 }
 
 export interface WithAssetFilesState {
   isLoading: boolean;
-  assetFiles: FilesMetadata[] | null;
+  assetFiles: FileInfo[] | null;
   assetId: number;
 }

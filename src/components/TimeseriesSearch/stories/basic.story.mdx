@@ -28,14 +28,14 @@ import 'antd/dist/antd.css';
 
 import React from 'react';
 import { TimeseriesSearch } from '@cognite/gearbox';
-import { GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+import { Timeseries } from '@cognite/sdk';
 
 ```
 
 ```typescript
 const onTimeserieSelectionChange = (
   newTimeseriesIds: number[],
-  selectedTimeseries: GetTimeSeriesMetadataDTO
+  selectedTimeseries: Timeseries
 ) => { /* ... */ }
 ```
 
@@ -55,7 +55,7 @@ const onTimeserieSelectionChange = (
 
 ### Types
 
-#### GetTimeSeriesMetadataDTO
+#### Timeseries
 
 This type describes what the cognite API returns when fetching timeseries.
 It can be imported from `@cognite/sdk`.
@@ -148,7 +148,7 @@ See more details in `Custom styles` example.
 ### Custom filter rule
 
 ```typescript
-const filterRule = (timeseries: GetTimeSeriesMetadataDTO): boolean =>
+const filterRule = (timeseries: Timeseries): boolean =>
   !timeseries.isString;
 ```
 

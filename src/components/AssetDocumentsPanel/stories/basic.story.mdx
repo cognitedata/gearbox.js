@@ -46,7 +46,7 @@ import { FileRequestFilter } from `@cognite/sdk`;
 Types that come from `@cognite/gearbox`:
 
 ```typescript
-import { FilesMetadata } from `@cognite/sdk`;
+import { FileInfo } from `@cognite/sdk`;
 
 type OnDocumentClick = (
   document: Document,
@@ -55,9 +55,9 @@ type OnDocumentClick = (
 ) => void;
 
 type DocumentRenderer = (
-  document: FilesMetadata,
+  document: FileInfo,
   i: number,
-  documents: FilesMetadata[]
+  documents: FileInfo[]
 ) => React.ReactNode;
 ```
 
@@ -87,9 +87,9 @@ See more details in AssetMeta component documentation.
 A callback function can be provided to fire when the documents are loaded:
 
 ```typescript
-import { FilesMetadata } from '@cognite/sdk';
+import { FileInfo } from '@cognite/sdk';
 
-const handleAssetFilesLoaded = (files: FilesMetadata[]) => { /* ... */ };
+const handleAssetFilesLoaded = (files: FileInfo[]) => { /* ... */ };
 ```
 
 <Preview>

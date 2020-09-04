@@ -1,16 +1,13 @@
-import {
-  Aggregate,
-  DatapointsGetAggregateDatapoint,
-  GetTimeSeriesMetadataDTO,
-} from '@cognite/sdk';
+// Copyright 2020 Cognite AS
+import { Aggregate, DatapointAggregates, Timeseries } from '@cognite/sdk';
 import { saveAs } from 'file-saver';
 import moment from 'moment';
 import { getGranularityInMS } from './utils';
 
-export type LabelFormatter = (timeseries: GetTimeSeriesMetadataDTO) => string;
+export type LabelFormatter = (timeseries: Timeseries) => string;
 
 export interface DatapointsToCSVProps {
-  data: DatapointsGetAggregateDatapoint[];
+  data: DatapointAggregates[];
   granularity: string;
   aggregate?: Aggregate;
   delimiter?: Delimiters;
@@ -19,7 +16,7 @@ export interface DatapointsToCSVProps {
 }
 
 export interface LabelFormatterConfig {
-  timeseries: GetTimeSeriesMetadataDTO[];
+  timeseries: Timeseries[];
   labelFormatter: LabelFormatter;
 }
 
@@ -72,7 +69,7 @@ export function downloadCSV(src: string, filename: string = 'data.csv') {
 }
 
 function getStartEndAndIterationsTotal(
-  data: DatapointsGetAggregateDatapoint[]
+  data: DatapointAggregates[]
 ): [number, number, number] {
   let startTimestamp = Infinity;
   let endTimestamp = 0;

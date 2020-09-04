@@ -1,4 +1,5 @@
-import { CogniteClient, GetTimeSeriesMetadataDTO } from '@cognite/sdk';
+// Copyright 2020 Cognite AS
+import { CogniteClient, Timeseries } from '@cognite/sdk';
 import React from 'react';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
 import {
@@ -90,10 +91,13 @@ export const withAssetTimeseries = <P extends WithAssetTimeseriesDataProps>(
             .list({
               limit: SDK_LIST_LIMIT,
               ...queryParams,
-              assetIds: [assetId],
+              filter: {
+                ...(queryParams && queryParams.filter),
+                assetIds: [assetId],
+              },
             })
             .autoPagingToArray()
-        )) as any) as GetTimeSeriesMetadataDTO[];
+        )) as any) as Timeseries[];
         this.setState({
           isLoading: false,
           assetTimeseries,

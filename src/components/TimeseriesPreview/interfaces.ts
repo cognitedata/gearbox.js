@@ -1,8 +1,9 @@
+// Copyright 2020 Cognite AS
 import {
-  DatapointsGetDatapoint,
-  GetDoubleDatapoint,
-  GetStringDatapoint,
-  GetTimeSeriesMetadataDTO,
+  Datapoints,
+  DoubleDatapoint,
+  StringDatapoint,
+  Timeseries,
   InternalId,
 } from '@cognite/sdk';
 import { CSSProperties } from 'react';
@@ -10,11 +11,11 @@ import { PureObject } from '../../interfaces';
 
 export type FetchLatestDatapointCall = (
   timeseriesId: InternalId
-) => Promise<DatapointsGetDatapoint[]>;
+) => Promise<Datapoints[]>;
 
 export type FetchTimeserieCall = (
   timeseriesId: InternalId
-) => Promise<GetTimeSeriesMetadataDTO[]>;
+) => Promise<Timeseries[]>;
 
 export interface TimeseriesPreviewProps {
   /**
@@ -44,7 +45,7 @@ export interface TimeseriesPreviewProps {
   /**
    * Datapoint to be rendered instead of latest datapoint. Pause fetching latest datapoint if provided
    */
-  valueToDisplay?: GetDoubleDatapoint | GetStringDatapoint;
+  valueToDisplay?: DoubleDatapoint | StringDatapoint;
   /**
    * Configuration, that describes dropdown menu to be rendered
    */
@@ -64,7 +65,7 @@ export interface TimeseriesPreviewProps {
   /**
    * Callback that triggers in case of click on visibility icon
    */
-  onToggleVisibility?: (timeseries: GetTimeSeriesMetadataDTO) => void;
+  onToggleVisibility?: (timeseries: Timeseries) => void;
   /**
    * Styles, that can be provided to customize component view
    */
@@ -89,7 +90,7 @@ export interface TimeseriesPreviewStyles {
 
 export interface TimeseriesPreviewMenuConfig {
   options: PureObject;
-  onClick: (key: string, timeseries: GetTimeSeriesMetadataDTO) => void;
+  onClick: (key: string, timeseries: Timeseries) => void;
 }
 
 export interface DropdownMenuStyles {

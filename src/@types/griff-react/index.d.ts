@@ -1,5 +1,6 @@
+// Copyright 2020 Cognite AS
 declare module '@cognite/griff-react' {
-  import { GetAggregateDatapoint, GetDoubleDatapoint } from '@cognite/sdk';
+  import { DatapointAggregate, DoubleDatapoint } from '@cognite/sdk';
   import { Component } from 'react';
 
   export interface AxisDisplayModeType {
@@ -8,9 +9,7 @@ declare module '@cognite/griff-react' {
     toString: () => string;
   }
 
-  export type YAccessor = (
-    d: GetDoubleDatapoint | GetAggregateDatapoint
-  ) => number;
+  export type YAccessor = (d: DoubleDatapoint | DatapointAggregate) => number;
 
   export const AxisDisplayMode: {
     ALL: AxisDisplayModeType;
@@ -24,9 +23,9 @@ declare module '@cognite/griff-react' {
   }
 
   export interface Series {
-    data: GetAggregateDatapoint[];
+    data: DatapointAggregate[];
     step: boolean;
-    xAccessor: (point: GetAggregateDatapoint) => number;
+    xAccessor: (point: DatapointAggregate) => number;
   }
 
   export interface DataProviderLoaderParams {
@@ -101,8 +100,8 @@ declare module '@cognite/griff-react' {
 
   export interface Ruler {
     visible?: boolean;
-    timeLabel?: (point: GetAggregateDatapoint) => number;
-    yLabel?: (point: GetAggregateDatapoint) => string;
+    timeLabel?: (point: DatapointAggregate) => number;
+    yLabel?: (point: DatapointAggregate) => string;
     timestamp?: number;
     getTimeLabelPosition?: (defaultPosition: number, params: any) => number;
   }

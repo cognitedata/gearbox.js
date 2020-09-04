@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 export type ID = number | string;
 export type OnAdvancedSearchChange = (searchFields: AdvancedSearch) => void;
 export type Callback = (...args: any[]) => void;

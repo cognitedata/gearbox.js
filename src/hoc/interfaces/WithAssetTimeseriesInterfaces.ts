@@ -1,8 +1,9 @@
-import { GetTimeSeriesMetadataDTO, TimeseriesFilter } from '@cognite/sdk';
+// Copyright 2020 Cognite AS
+import { Timeseries, TimeseriesFilterQuery } from '@cognite/sdk';
 import { ReactNode } from 'react';
 
 export interface WithAssetTimeseriesDataProps {
-  assetTimeseries: GetTimeSeriesMetadataDTO[];
+  assetTimeseries: Timeseries[];
 }
 
 export interface WithAssetTimeseriesProps {
@@ -14,7 +15,7 @@ export interface WithAssetTimeseriesProps {
    * Additional parameters for SDK call. Please notice that assetId
    * provided in props will override the one in queryParams
    */
-  queryParams?: TimeseriesFilter;
+  queryParams?: TimeseriesFilterQuery;
   /**
    * A custom spinner to be shown in tabs while data is being loaded
    */
@@ -22,13 +23,11 @@ export interface WithAssetTimeseriesProps {
   /**
    * Function to be called after timeseries have been fetched
    */
-  onAssetTimeseriesLoaded?: (
-    assetTimeseries: GetTimeSeriesMetadataDTO[]
-  ) => void;
+  onAssetTimeseriesLoaded?: (assetTimeseries: Timeseries[]) => void;
 }
 
 export interface WithAssetTimeseriesState {
   isLoading: boolean;
-  assetTimeseries: GetTimeSeriesMetadataDTO[] | null;
+  assetTimeseries: Timeseries[] | null;
   assetId: number;
 }

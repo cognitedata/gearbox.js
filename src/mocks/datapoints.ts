@@ -1,9 +1,10 @@
+// Copyright 2020 Cognite AS
 import {
-  DatapointsGetAggregateDatapoint,
-  DatapointsGetDoubleDatapoint,
-  DatapointsGetStringDatapoint,
+  DatapointAggregates,
+  DoubleDatapoint,
+  StringDatapoint,
   DatapointsMultiQuery,
-  GetTimeSeriesMetadataDTO,
+  Timeseries,
 } from '@cognite/sdk';
 import { getGranularityInMS } from '../utils/utils';
 import { sleep } from './common';
@@ -12,12 +13,12 @@ import { randomData } from './timeseriesDataPointsList';
 import { timeseriesListV2 } from './timeseriesListV2';
 
 export type DatapointsArray = (
-  | DatapointsGetAggregateDatapoint
-  | DatapointsGetStringDatapoint
-  | DatapointsGetDoubleDatapoint)[];
+  | DatapointAggregates
+  | StringDatapoint
+  | DoubleDatapoint)[];
 
 export const MockTimeseriesClientObject = {
-  retrieve: async (): Promise<GetTimeSeriesMetadataDTO[]> => {
+  retrieve: async (): Promise<Timeseries[]> => {
     await sleep(1000);
     return [timeseriesListV2[0]];
   },

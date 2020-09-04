@@ -22,7 +22,8 @@
     "plugins": [
         "@typescript-eslint",
         "prettier",
-        "react"
+        "react",
+        "header"
     ],
     "rules": {
       "@typescript-eslint/explicit-module-boundary-types": "off",
@@ -33,5 +34,16 @@
       "react/prop-types": "off",
       "@typescript-eslint/no-unused-vars": "off",
       "no-restricted-imports": ["error", { "patterns": ["@cognite/sdk/**"] }]
-    }
+    },
+    "overrides": [{
+      "files": ["src/**"],
+      "rules": {
+          "header/header": ["error", "line",
+              [{
+                  "pattern": " Copyright \\d{4} Cognite AS",
+                  "template": " Copyright 2020 Cognite AS"
+              }]
+          ]
+      }
+  }]
 }

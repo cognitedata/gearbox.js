@@ -78,11 +78,15 @@ The Gearbox components are written in the [React](https://reactjs.org) front-end
 You can find example Gearbox applications in our [public repository](https://github.com/cognitedata/javascript-getting-started). Also, see our [YouTube channel](https://www.youtube.com/playlist?list=PLrRAbrQ_glsXGzl5OIen3eSS8bz-YFjTV) for Gearbox video tutorials.
 
 ## Storybook
+
 See the up-to-date storybook [here](https://cognitedata.github.io/gearbox.js/?path=/docs/assets-assetbreadcrumb--basic-usage).
 
 ## Contribution guidelines
 
 Feel free to contribute to the project, but first have a look at our [guidelines](./CONTRIBUTION.md)
+
+## Compatibility
+Gearbox v1 compatible with `@cognite/sdk` v2 and Gearbox v2 compatible with `@cognite/sdk` v3 packages.
 
 ## License
 

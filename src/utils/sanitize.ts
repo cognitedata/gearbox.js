@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 /**
  * Convert input into a safe CDP project name format ([a-z0-9\-]+)
  *

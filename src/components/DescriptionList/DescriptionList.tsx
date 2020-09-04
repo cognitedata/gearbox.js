@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Collapse } from 'antd';
 import { Dictionary, groupBy } from 'lodash';
 import React, { FC, Fragment } from 'react';

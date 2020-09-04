@@ -1,15 +1,14 @@
+// Copyright 2020 Cognite AS
 import {
   DatapointsMultiQuery,
-  GetTimeSeriesMetadataDTO,
+  Timeseries,
   IdEither,
-} from '@cognite/sdk';
-import {
-  DatapointsGetAggregateDatapoint,
-  GetDatapointMetadata,
+  DatapointAggregates,
+  DatapointInfo,
 } from '@cognite/sdk';
 import { Button, Checkbox, DatePicker, Form, Input, Modal, Radio } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { chunk, isFunction, range } from 'lodash';
+import { isFunction, range, last } from 'lodash';
 import moment from 'moment';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useCogniteContext } from '../../context/clientSDKProxyContext';
@@ -63,7 +62,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
   } = props;
   const context = useCogniteContext(Component, true);
   const [loading, setLoading] = useState(false);
-  const [series, setSeries] = useState<GetTimeSeriesMetadataDTO[]>([]);
+  const [series, setSeries] = useState<Timeseries[]>([]);
   const lang = useMemo(
     () => ({
       ...defaultStrings,
@@ -131,17 +130,19 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
 
   const fetchDataPoints = async (
     request: DatapointsMultiQuery
-  ): Promise<DatapointsGetAggregateDatapoint[]> => {
+  ): Promise<DatapointAggregates[]> => {
     const { start = 0, end = 0 } = await getLimits(request);
-    const numericGranularity = getGranularityInMS(granularity);
-    const msPerRequest =
-      (numericGranularity * CELL_LIMIT) / timeseriesIds.length;
+    const numericGranularity = getGranularityInMS(request.granularity!);
+    const limit = Math.floor(CELL_LIMIT / seriesNumber);
+    const msPerRequest = limit * numericGranularity;
 
     const ranges = range(start, end, msPerRequest);
-    const endRange =
-      ranges.length % 2 === 0 ? [end - msPerRequest, end] : [end];
-    const chunks = chunk([...ranges, ...endRange], 2);
-    const limit = CELL_LIMIT / timeseriesIds.length;
+    const chunks = ranges.map(range => [range, range + msPerRequest - 1]);
+    const lastChunk = last(chunks);
+
+    if (lastChunk![1] > end) {
+      lastChunk![1] = end;
+    }
 
     const requests = chunks
       .map(([chunkStart, chunkEnd]) => ({
@@ -152,9 +153,9 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
       }))
       .map(params => context!.datapoints.retrieve(params));
 
-    const results: DatapointsGetAggregateDatapoint[][] = await Promise.all(
+    const results: DatapointAggregates[][] = (await Promise.all(
       requests
-    );
+    )) as DatapointAggregates[][];
 
     return results.reduce((result, datapointsChunk) => {
       return result.map((dp, index) => {
@@ -168,7 +169,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     });
   };
 
-  const getTimestamps = (arr: { datapoints: GetDatapointMetadata[] }[]) => {
+  const getTimestamps = (arr: { datapoints: DatapointInfo[] }[]) => {
     return arr.map(({ datapoints: [item] }) => item.timestamp.getTime());
   };
 

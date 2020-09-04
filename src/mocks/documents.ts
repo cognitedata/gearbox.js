@@ -1,6 +1,7 @@
-import { FilesMetadata } from '@cognite/sdk';
+// Copyright 2020 Cognite AS
+import { FileInfo } from '@cognite/sdk';
 
-function generateDocumentBase(id: number): FilesMetadata {
+function generateDocumentBase(id: number): FileInfo {
   return {
     id,
     name: `file name ${id}`,
@@ -13,7 +14,7 @@ function generateDocumentBase(id: number): FilesMetadata {
 export function generateDocumentWithMetadata(
   id: number,
   metadata: { [key: string]: string }
-): FilesMetadata {
+): FileInfo {
   return {
     ...generateDocumentBase(id),
     metadata,
@@ -24,7 +25,7 @@ export function generateDocumentWithDocType(
   id: number,
   title: null | string,
   type: null | string
-): FilesMetadata {
+): FileInfo {
   const metadata: { [key: string]: string } = {};
   if (title) {
     metadata.DOC_TITLE = title;
@@ -106,7 +107,7 @@ const textConst7 = 'PIPE AND INSTRUMENT DIAGRAM (P&ID), A22 (NORSOK)';
 const textConst8 = 'Valhall plattform';
 const textConst9 = 'Benelux and Nordics';
 
-export const fakeFiles: FilesMetadata[] = [
+export const fakeFiles: FileInfo[] = [
   {
     id: 160124780466135,
     name: 'PH-ME-P-0160-001',

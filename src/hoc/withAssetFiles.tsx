@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { CogniteClient } from '@cognite/sdk';
 import React from 'react';
 import { LoadingBlock } from '../components/common/LoadingBlock/LoadingBlock';
@@ -88,9 +89,7 @@ export const withAssetFiles = <P extends WithAssetFilesDataProps>(
               limit: SDK_LIST_LIMIT,
               ...queryParams,
               filter: {
-                ...(queryParams && queryParams.filter
-                  ? queryParams.filter
-                  : {}),
+                ...(queryParams && queryParams.filter),
                 assetIds: [assetId],
               },
             })

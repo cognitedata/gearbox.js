@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React, { FC } from 'react';
@@ -141,13 +142,13 @@ describe('withAssetTimeseries', () => {
       <ClientSDKProvider client={sdk}>
         <WrappedComponent
           assetId={123}
-          queryParams={{ assetIds: [34234], limit: 78 }}
+          queryParams={{ filter: { assetIds: [34234] }, limit: 78 }}
         />
       </ClientSDKProvider>
     );
 
     expect(sdk.timeseries.list).toBeCalledWith({
-      assetIds: [123],
+      filter: { assetIds: [123] },
       limit: 78,
     });
   });
@@ -161,7 +162,7 @@ describe('withAssetTimeseries', () => {
     );
 
     expect(sdk.timeseries.list).toBeCalledWith({
-      assetIds: [123],
+      filter: { assetIds: [123] },
       limit: SDK_LIST_LIMIT,
     });
   });

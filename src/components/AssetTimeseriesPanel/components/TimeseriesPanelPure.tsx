@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Collapse } from 'antd';
 import React from 'react';
 import styled from 'styled-components';

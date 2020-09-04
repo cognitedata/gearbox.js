@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Asset } from '@cognite/sdk';
 import { ComponentType, CSSProperties, ReactNode } from 'react';
 import { Callback, CropSize, EmptyCallback } from '../../interfaces';

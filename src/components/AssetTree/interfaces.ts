@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Asset, Limit } from '@cognite/sdk';
 import { Theme } from '../../interfaces';
 

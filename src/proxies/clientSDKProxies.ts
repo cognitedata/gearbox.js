@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { ClientSDKCache } from '../cache/ClientSDKCache';
 import { ClientSDKContextType } from '../context/clientSDKContext';
 import { ClientSDKProxyContextType } from '../context/clientSDKProxyContext';

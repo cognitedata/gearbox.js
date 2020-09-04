@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { FormItemProps } from 'antd/lib/form/FormItem';
 import React, { CSSProperties } from 'react';
 import { PureObject, Theme } from '../../interfaces';

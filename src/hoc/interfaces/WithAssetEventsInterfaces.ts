@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { CogniteEvent, EventFilterRequest } from '@cognite/sdk';
 import { ReactNode } from 'react';
 

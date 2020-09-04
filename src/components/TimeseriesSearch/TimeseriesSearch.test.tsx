@@ -1,3 +1,4 @@
+// Copyright 2020 Cognite AS
 import { Button, Input, Tag } from 'antd';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
