@@ -170,7 +170,9 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
   };
 
   const getTimestamps = (arr: { datapoints: DatapointInfo[] }[]) => {
-    return arr.map(({ datapoints: [item] }) => item ? item.timestamp.getTime() : 0);
+    return arr.map(({ datapoints: [item] }) =>
+      item ? item.timestamp.getTime() : 0
+    );
   };
 
   const fetchCSVCall: FetchCSVCall = async (
