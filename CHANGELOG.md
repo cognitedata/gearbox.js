@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/cognitedata/gearbox.js/compare/v2.1.0...v2.2.0) (2020-11-17)
+
+
+### Features
+
+* support default selections in TimeseriesDataExport form ([#683](https://github.com/cognitedata/gearbox.js/issues/683)) ([7eda220](https://github.com/cognitedata/gearbox.js/commit/7eda220e53b365d33a2e7018ce140c81714353ba))
+
 # [2.1.0](https://github.com/cognitedata/gearbox.js/compare/v2.0.1...v2.1.0) (2020-08-26)
 
 
