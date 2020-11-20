@@ -141,7 +141,9 @@ describe('TimeseriesDataExport', () => {
     const expectedLimit = Math.floor(apiDatapointsLimit / seriesNumber);
 
     expect(limit).toEqual(expectedLimit);
-    expect(chunkEnd - chunkStart + 1).toEqual(expectedLimit * granularity);
+    expect(chunkEnd - chunkStart - granularity).toEqual(
+      expectedLimit * granularity
+    );
   });
 
   it('should trigger onSuccess callback if provided', async () => {
