@@ -139,11 +139,8 @@ describe('TimeseriesDataExport', () => {
     } = sdk.datapoints.retrieve.mock.calls[1][0];
 
     const expectedLimit = Math.floor(apiDatapointsLimit / seriesNumber);
-
     expect(limit).toEqual(expectedLimit);
-    expect(chunkEnd - chunkStart - granularity).toEqual(
-      expectedLimit * granularity
-    );
+    expect(chunkEnd - chunkStart).toEqual(expectedLimit * granularity);
   });
 
   it('should trigger onSuccess callback if provided', async () => {
