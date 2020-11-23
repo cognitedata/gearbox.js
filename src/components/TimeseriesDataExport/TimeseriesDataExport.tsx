@@ -59,6 +59,10 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     onSuccess,
     strings = defaultStrings,
     labelFormatter,
+    defaultFormSelections = {
+      readableDataChecked: false,
+      selectedDelimiter: Delimiters.Comma,
+    },
   } = props;
   const context = useCogniteContext(Component, true);
   const [loading, setLoading] = useState(false);
@@ -323,6 +327,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
         >
           {getFieldDecorator('readableDate', {
             valuePropName: 'checked',
+            initialValue: defaultFormSelections.readableDataChecked,
           })(<Checkbox />)}
         </Form.Item>
         <Form.Item
@@ -331,7 +336,7 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
           help={delimiterHelp}
         >
           {getFieldDecorator('delimiter', {
-            initialValue: ',',
+            initialValue: defaultFormSelections.selectedDelimiter,
             rules: [{ required: true }],
           })(
             <Radio.Group>

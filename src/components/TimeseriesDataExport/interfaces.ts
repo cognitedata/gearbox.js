@@ -38,6 +38,11 @@ export interface TimeseriesDataExportFormFields {
   readableDate: boolean;
 }
 
+export interface DefaultSelections {
+  readableDataChecked: boolean;
+  selectedDelimiter: Delimiters;
+}
+
 export interface TimeseriesDataExportProps {
   /**
    * Array of timeserie ids
@@ -103,6 +108,10 @@ export interface TimeseriesDataExportProps {
    * Strings, that can be customized
    */
   strings?: ((defaultStrings: Strings) => Partial<Strings>) | Partial<Strings>;
+  /**
+   * Fields that can have a default state set
+   */
+  defaultFormSelections?: Partial<DefaultSelections>;
   /**
    * @ignore
    */
