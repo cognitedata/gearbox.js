@@ -52,7 +52,7 @@ jobs:
         encrypted_5b5408a8dfc4_key: ${{ secrets.ENCRYPTED_5B5408A8DFC4_KEY }}
         encrypted_5b5408a8dfc4_iv: ${{ secrets.ENCRYPTED_5B5408A8DFC4_IV }}
       run: |
-        PR_ID=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+        PR_ID=$(echo $GITHUB_HEAD_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
         openssl aes-256-cbc -K $encrypted_5b5408a8dfc4_key -iv $encrypted_5b5408a8dfc4_iv \
         -in gcs-service-account.json.enc -out gcs-service-account.json -d
         GOOGLE_APPLICATION_CREDENTIALS=gcs-service-account.json preview upload storybook-static "gearboxjs/pr-${PR_ID}" && \
