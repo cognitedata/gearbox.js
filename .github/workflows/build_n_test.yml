@@ -46,7 +46,7 @@ jobs:
     - uses: codecov/codecov-action@v1
     - run: yarn build-storybook
     - name: Deploy preview
-      if: ${{ github.event_name == 'pull_request_target' }}
+      if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         encrypted_5b5408a8dfc4_key: ${{ secrets.ENCRYPTED_5B5408A8DFC4_KEY }}
