@@ -1,3 +1,11 @@
+## [2.2.1](https://github.com/cognitedata/gearbox.js/compare/v2.2.0...v2.2.1) (2020-12-01)
+
+
+### Bug Fixes
+
+* **timeseries-data-export:** add guard to avoid accessing undefined ([5379067](https://github.com/cognitedata/gearbox.js/commit/5379067db54662a46de57565bb4f3f2205143584))
+* **timeseries-data-export:** fix duplicate datapoints ([#685](https://github.com/cognitedata/gearbox.js/issues/685)) ([7610ebf](https://github.com/cognitedata/gearbox.js/commit/7610ebf17c09819a44dcf4ca70fba2c937678a2f))
+
 # [2.2.0](https://github.com/cognitedata/gearbox.js/compare/v2.1.0...v2.2.0) (2020-11-17)
 
 
