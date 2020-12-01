@@ -1,3 +1,10 @@
+## 1.20.2 (2020-12-01)
+
+
+### Bug Fixes
+
+* **timeseries-data-export:** add guard/default to avoid accessing undefined ([#686](https://github.com/cognitedata/gearbox.js/issues/686))
+
 ## 1.20.1 (2020-08-26)
 
 
