@@ -141,7 +141,10 @@ const TimeseriesDataExportFC: FC<TimeseriesDataExportFormProps> = (
     const msPerRequest = limit * numericGranularity;
 
     const ranges = range(start, end, msPerRequest);
-    const chunks = ranges.map(range => [range, range + msPerRequest - 1]);
+    const chunks = ranges.map(range => [
+      range,
+      range + msPerRequest - numericGranularity,
+    ]);
     const lastChunk = last(chunks);
 
     if (lastChunk![1] > end) {
