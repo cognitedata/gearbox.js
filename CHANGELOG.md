@@ -1,3 +1,10 @@
+## 1.20.3 (2020-12-02)
+
+
+### Bug Fixes
+
+* **timeseries-data-export:** change date export format to support MS Excel ([#687](https://github.com/cognitedata/gearbox.js/pull/687))
+
 ## 1.20.2 (2020-12-01)
 
 
