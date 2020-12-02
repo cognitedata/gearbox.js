@@ -33,7 +33,7 @@ type TimeseriesDataExportFormProps = TimeseriesDataExportProps &
 // TODO: Check tree shaking for TimeseriesDataExport component
 const { RangePicker } = DatePicker;
 const CELL_LIMIT = 10000;
-const formatData = 'YYYY-MM-DD_HH:mm:ss';
+const formatData = 'YYYY-MM-DD HH:mm:ss';
 const formItemLayoutDefault: FormItemLayout = {
   labelCol: { xs: { span: 24 }, sm: { span: 8 } },
   wrapperCol: { xs: { span: 24 }, sm: { span: 16 } },
