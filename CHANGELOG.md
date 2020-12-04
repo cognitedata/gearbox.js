@@ -1,3 +1,10 @@
+## [2.2.2](https://github.com/cognitedata/gearbox.js/compare/v2.2.1...v2.2.2) (2020-12-04)
+
+
+### Bug Fixes
+
+* **timeseries-data-export:** space instead of underscore in date format ([bba4778](https://github.com/cognitedata/gearbox.js/commit/bba4778c49ff56b3f52a80bb399a8eba81aa871c))
+
 ## [2.2.1](https://github.com/cognitedata/gearbox.js/compare/v2.2.0...v2.2.1) (2020-12-01)
 
 
