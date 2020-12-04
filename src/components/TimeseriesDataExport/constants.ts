@@ -5,7 +5,7 @@ export const defaultStrings = {
   labelGranularity: 'Label Granularity',
   labelGranularityHelp: 'Example inputs: 15s, 1m, 5h, 2d',
   formatTimestamp: 'Format timestamp?',
-  formatTimestampHelp: 'e.g. 2018-04-02_12:20:20',
+  formatTimestampHelp: 'e.g. 2018-04-02 12:20:20',
   delimiterLabel: 'Select delimiter',
   delimiterHelp: 'The character that will separate your data fields',
   csvDownload: 'Download as CSV',
