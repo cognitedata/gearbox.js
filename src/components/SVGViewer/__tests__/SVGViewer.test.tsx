@@ -11,6 +11,7 @@ import { SVGViewer } from '../SVGViewer';
 configure({ adapter: new Adapter() });
 
 const CANCEL_BUTTON_ATTR = '[data-test-id="close-svgviewer-btn"]';
+const DOWNLOAD_BUTTON_ATTR = '[data-test-id="download-button-svgviewer"]';
 
 class CogniteClient extends MockCogniteClient {
   files: any = {
@@ -43,6 +44,20 @@ describe('SVGViewer', () => {
     closeButton.first().simulate('click');
 
     expect(handleCancel.called).toBeTruthy();
+  });
+
+  it('should handle download button click', () => {
+    window.open = jest.fn();
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <SVGViewer documentId={0} downloadablePdf="path/to/file" />
+      </ClientSDKProvider>
+    );
+    const downloadButton = wrapper.find(DOWNLOAD_BUTTON_ATTR);
+    expect(downloadButton).toBeTruthy();
+    downloadButton.first().simulate('click');
+
+    expect(window.open).toHaveBeenCalledTimes(1);
   });
 
   it('Renders without exploding with a file', () => {

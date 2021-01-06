@@ -96,6 +96,13 @@ interface SvgViewerBasicProps {
    * Subscribe to SVGVieweSearch changes
    */
   handleSearchChange?: () => void;
+  /**
+   * A downloadable PDF version of the current file
+   * File content must be in string format
+   * If one is provided, a download button will appear
+   * on the top right hand side of the viewer
+   */
+  downloadablePdf?: string;
 }
 
 export interface SvgViewerDocumentIdProps {
