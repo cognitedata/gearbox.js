@@ -111,6 +111,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       description,
       customClassNames = {},
       handleSearchChange,
+      downloadablePdf = null,
     } = this.props;
     const isDesktop = this.state.width > minDesktopWidth;
     const hasCloseButton = !!this.props.handleCancel;
@@ -183,6 +184,14 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
                 >
                   <CustomIcon.FindInPage />
                 </ModalButton>
+                {downloadablePdf && (
+                  <ModalButton
+                    onClick={this.handleDownload}
+                    data-test-id="download-button-svgviewer"
+                  >
+                    <CustomIcon.Download />
+                  </ModalButton>
+                )}
                 {hasCloseButton && (
                   <CloseModalButton
                     onClick={this.handleCloseModal}
@@ -575,6 +584,10 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     this.setState({ isSearchVisible: true });
   };
 
+  handleDownload = async () => {
+    window.open(this.props.downloadablePdf, '_blank');
+  };
+
   handleCancelSearch = () => {
     this.setState({
       isSearchVisible: false,
@@ -769,6 +782,7 @@ const StyledHeaderDescription = styled(OverflowText)`
 
 const StyledHeaderButtonsContainer = styled.div`
   display: flex;
+  color: black;
 `;
 
 const StyledFileName = styled(OverflowText)`
@@ -783,6 +797,7 @@ const ModalButton = styled.button`
   cursor: pointer;
   @media (min-width: 992px) {
     display: inherit;
+    align-items: center;
   }
 `;
 

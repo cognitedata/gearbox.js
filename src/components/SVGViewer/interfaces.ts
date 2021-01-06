@@ -96,6 +96,10 @@ interface SvgViewerBasicProps {
    * Subscribe to SVGVieweSearch changes
    */
   handleSearchChange?: () => void;
+  /**
+   * Display option to download as PDF
+   */
+  downloadablePdf?: string;
 }
 
 export interface SvgViewerDocumentIdProps {
