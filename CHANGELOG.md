@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/cognitedata/gearbox.js/compare/v2.2.2...v2.3.0) (2021-01-06)
+
+
+### Features
+
+* **svg-viewer:** downloadable pdf version of file ([#692](https://github.com/cognitedata/gearbox.js/issues/692)) ([f6a8463](https://github.com/cognitedata/gearbox.js/commit/f6a84639ecee593e8b6cd7165d450aa62ae0cfbf))
+
 ## [2.2.2](https://github.com/cognitedata/gearbox.js/compare/v2.2.1...v2.2.2) (2020-12-04)
 
 
