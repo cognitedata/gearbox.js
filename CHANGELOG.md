@@ -1,3 +1,10 @@
+## [2.3.1](https://github.com/cognitedata/gearbox.js/compare/v2.3.0...v2.3.1) (2021-01-07)
+
+
+### Bug Fixes
+
+* wrong type in SVGViewer props ([#693](https://github.com/cognitedata/gearbox.js/issues/693)) ([5fddc55](https://github.com/cognitedata/gearbox.js/commit/5fddc558bb2ddb3d29c13febf66bb069cb3e11ef))
+
 # [2.3.0](https://github.com/cognitedata/gearbox.js/compare/v2.2.2...v2.3.0) (2021-01-06)
 
 
