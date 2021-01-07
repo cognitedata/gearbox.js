@@ -93,9 +93,9 @@ interface SvgViewerBasicProps {
    */
   handleDocumentLoadError?: (error: Error) => void;
   /**
-   * Subscribe to SVGVieweSearch changes
+   * Subscribe to SVGViewerSearch changes
    */
-  handleSearchChange?: () => void;
+  handleSearchChange?: (value?: string) => void;
   /**
    * A downloadable PDF version of the current file
    * File content must be in string format
