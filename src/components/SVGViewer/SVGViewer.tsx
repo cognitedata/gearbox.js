@@ -189,7 +189,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
                     onClick={this.handleDownload}
                     data-test-id="download-button-svgviewer"
                   >
-                    <CustomIcon.Download />
+                    <CustomIcon.PDF />
                   </ModalButton>
                 )}
                 {hasCloseButton && (
