@@ -1,3 +1,10 @@
+## [2.3.2](https://github.com/cognitedata/gearbox.js/compare/v2.3.1...v2.3.2) (2021-01-08)
+
+
+### Bug Fixes
+
+* **svg-viewer:** change download to pdf icon ([#694](https://github.com/cognitedata/gearbox.js/issues/694)) ([b828882](https://github.com/cognitedata/gearbox.js/commit/b82888265eeb40c6894f96d86254624a26d7d10e))
+
 ## [2.3.1](https://github.com/cognitedata/gearbox.js/compare/v2.3.0...v2.3.1) (2021-01-07)
 
 
