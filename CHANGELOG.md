@@ -1,3 +1,10 @@
+## [2.3.3](https://github.com/cognitedata/gearbox.js/compare/v2.3.2...v2.3.3) (2021-01-08)
+
+
+### Bug Fixes
+
+* change the icon AGAIN ([#695](https://github.com/cognitedata/gearbox.js/issues/695)) ([7bbffc6](https://github.com/cognitedata/gearbox.js/commit/7bbffc608d4e3b15f0f1c3772e5a9ac9980ff22e))
+
 ## [2.3.2](https://github.com/cognitedata/gearbox.js/compare/v2.3.1...v2.3.2) (2021-01-08)
 
 
