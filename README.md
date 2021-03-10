@@ -3,7 +3,7 @@
 [![codecov](https://codecov.io/gh/cognitedata/gearbox.js/branch/master/graph/badge.svg)](https://codecov.io/gh/cognitedata/gearbox.js)
 [![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://cognitedata.github.io/gearbox.js/?path=/docs/assets-assetbreadcrumb--basic-usage)
 
-[Gearbox](https://github.com/cognitedata/gearbox.js) is a set of open-source front-end components natively integrated with Cognite Data Fusion [(CDF)](https://docs.cognite.com/dev/). 
+[Gearbox](https://github.com/cognitedata/gearbox.js) is a set of open-source front-end components natively integrated with Cognite Data Fusion [(CDF)](https://docs.cognite.com/dev/).
 The Gearbox components are written in the [React](https://reactjs.org) front-end framework and make it easier to build web applications on top of CDF.
 
 ## DEPRECATION WARNING
@@ -31,21 +31,21 @@ This library is no longer actively maintained.
     ```js
     import { CogniteClient } from "@cognite/sdk";
     import { ClientSDKProvider } from "@cognite/gearbox";
-    
+
     // ...
-    
+
     const sdk = new CogniteClient({ appId: 'new-app' })
-    
+
     // ...
-    
+
     sdk.loginWithOAuth({ project: tenant }); // or other authentication methods
-    
+
     // ...
-    
+
     <ClientSDKProvider client={sdk}>
-    
+
     // The part of your app that uses Gearbox
-    
+
     </ClientSDKProvider>
     ```
 
@@ -75,7 +75,7 @@ This library is no longer actively maintained.
       TenantSelector
     } from "@cognite/gearbox/dist/components/TenantSelector";
     ```
-**NOTE:** You MUST use the Gearbox components inside the `ClientSDKProvider`. To learn more about context and why this is important, see [React Context](https://reactjs.org/docs/context.html).  
+**NOTE:** You MUST use the Gearbox components inside the `ClientSDKProvider`. To learn more about context and why this is important, see [React Context](https://reactjs.org/docs/context.html).
 
 ## Examples and tutorials
 
