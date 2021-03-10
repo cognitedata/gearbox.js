@@ -6,6 +6,10 @@
 [Gearbox](https://github.com/cognitedata/gearbox.js) is a set of open-source front-end components natively integrated with Cognite Data Fusion [(CDF)](https://docs.cognite.com/dev/). 
 The Gearbox components are written in the [React](https://reactjs.org) front-end framework and make it easier to build web applications on top of CDF.
 
+## DEPRECATION WARNING
+
+This library is no longer actively maintained.
+
 ## Install the Gearbox library and dependencies
 
 1. Install the library:
