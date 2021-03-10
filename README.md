@@ -19,8 +19,8 @@ This library is no longer actively maintained.
 
 2. Install additional dependencies:
 
-- **yarn**: `yarn add @cognite/sdk @cognite/griff-react@~0.4.2 antd styled-components`
-- **npm**: `npm install @cognite/sdk @cognite/griff-react@~0.4.2 antd styled-components --save`
+- **yarn**: `yarn add @cognite/sdk @cognite/griff-react@~0.4.2 antd@^3.14.1 styled-components`
+- **npm**: `npm install @cognite/sdk @cognite/griff-react@~0.4.2 antd@^3.14.1 styled-components --save`
 
 
 ## Getting started
