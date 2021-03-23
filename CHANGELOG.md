@@ -1,3 +1,10 @@
+## [2.3.4](https://github.com/cognitedata/gearbox.js/compare/v2.3.3...v2.3.4) (2021-03-23)
+
+
+### Bug Fixes
+
+* **svg-viewer:** add tags from contextualization to sanitize ([#699](https://github.com/cognitedata/gearbox.js/issues/699)) ([b8bd3db](https://github.com/cognitedata/gearbox.js/commit/b8bd3dba9345262b1ebb41b285da0aa164e5d704))
+
 ## [2.3.3](https://github.com/cognitedata/gearbox.js/compare/v2.3.2...v2.3.3) (2021-01-08)
 
 
