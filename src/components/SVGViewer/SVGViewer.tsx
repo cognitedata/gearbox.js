@@ -278,7 +278,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       // embedding it in the DOM.
       // Replace for svgs that has PNG inside
       svgString = DOMPurify.sanitize(svgString.replace(/ns1:href/g, 'href'), {
-        ADD_TAGS: ['id', 'entities', 'entity'],
+        ADD_TAGS: ['entities', 'entity'],
       });
       const svgFromUrl = parser.parseFromString(svgString, 'image/svg+xml');
       // if during parsing there was an error, svg will be rendered
