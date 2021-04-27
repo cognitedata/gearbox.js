@@ -1,3 +1,10 @@
+## [2.3.5](https://github.com/cognitedata/gearbox.js/compare/v2.3.4...v2.3.5) (2021-04-27)
+
+
+### Bug Fixes
+
+* remove id from allowed tags ([#702](https://github.com/cognitedata/gearbox.js/issues/702)) ([210d888](https://github.com/cognitedata/gearbox.js/commit/210d888014dae7893eeba7563e1fe73e6de5aaa3))
+
 ## [2.3.4](https://github.com/cognitedata/gearbox.js/compare/v2.3.3...v2.3.4) (2021-03-23)
 
 
