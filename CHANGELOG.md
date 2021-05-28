@@ -1,3 +1,10 @@
+## [2.3.6](https://github.com/cognitedata/gearbox.js/compare/v2.3.5...v2.3.6) (2021-05-28)
+
+
+### Bug Fixes
+
+* change class conditions logic to support new svgs ([#708](https://github.com/cognitedata/gearbox.js/issues/708)) ([9ec3900](https://github.com/cognitedata/gearbox.js/commit/9ec3900624181b2caf2df29017ea09d428ea11ab))
+
 ## [2.3.5](https://github.com/cognitedata/gearbox.js/compare/v2.3.4...v2.3.5) (2021-04-27)
 
 
