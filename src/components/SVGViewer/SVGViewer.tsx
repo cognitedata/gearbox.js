@@ -274,7 +274,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       // embedding it in the DOM.
       // Replace for svgs that has PNG inside
       svgString = DOMPurify.sanitize(svgString.replace(/ns1:href/g, 'href'), {
-        ADD_TAGS: ['entities', 'entity'],
+        ADD_TAGS: ['entities', 'entity', 'id'],
       });
       const svgFromUrl = parser.parseFromString(svgString, 'image/svg+xml');
       // if during parsing there was an error, svg will be rendered
@@ -437,13 +437,16 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     condition: (metadataNode: Element) => boolean;
     className: string;
   }) => {
-    const metadataArray = this.svg.querySelectorAll('metadata');
-    Array.from(metadataArray).forEach((metadata: SVGMetadataElement) => {
-      const metadataContainer = metadata.parentNode as HTMLElement;
+    const metadataArray = this.svg.querySelectorAll('.metadata-container');
+    Array.from(metadataArray).forEach((metadataContainer: Element) => {
       metadataContainer.classList.remove(className);
-      if (condition(metadata)) {
-        metadataContainer.classList.add(className);
-      }
+      Array.from(metadataContainer.querySelectorAll('metadata')).forEach(
+        (metadata: SVGMetadataElement) => {
+          if (condition(metadata)) {
+            metadataContainer.classList.add(className);
+          }
+        }
+      );
     });
   };
 
