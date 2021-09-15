@@ -1,3 +1,10 @@
+## [2.3.7](https://github.com/cognitedata/gearbox.js/compare/v2.3.6...v2.3.7) (2021-09-15)
+
+
+### Bug Fixes
+
+* **svg-viewer:** allow specifying initial zoom as prop ([#715](https://github.com/cognitedata/gearbox.js/issues/715)) ([94150a7](https://github.com/cognitedata/gearbox.js/commit/94150a71a064fa2fe8575f0512e4c33a05e20415))
+
 ## [2.3.6](https://github.com/cognitedata/gearbox.js/compare/v2.3.5...v2.3.6) (2021-05-28)
 
 
