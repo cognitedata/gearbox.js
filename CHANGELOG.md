@@ -1,3 +1,10 @@
+## [2.3.8](https://github.com/cognitedata/gearbox.js/compare/v2.3.7...v2.3.8) (2021-11-01)
+
+
+### Bug Fixes
+
+* call play after setting srcObject in WebCam ([#719](https://github.com/cognitedata/gearbox.js/issues/719)) ([a3df241](https://github.com/cognitedata/gearbox.js/commit/a3df2411ef96b05f2532a72e07825ef92b67db01))
+
 ## [2.3.7](https://github.com/cognitedata/gearbox.js/compare/v2.3.6...v2.3.7) (2021-09-15)
 
 
