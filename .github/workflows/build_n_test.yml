@@ -67,10 +67,12 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./storybook-static
 
+    - name: Setup node 14
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
     - name: Deploy 🚀
-      uses: actions/setup-node@v1
-      with:
-        node-version: 14.x
       if: success() && github.ref == 'refs/heads/master'
       env: 
         NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
