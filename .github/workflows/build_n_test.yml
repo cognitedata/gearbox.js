@@ -68,9 +68,9 @@ jobs:
         publish_dir: ./storybook-static
 
     - name: Setup node 14
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.x
 
     - name: Deploy 🚀
       if: success() && github.ref == 'refs/heads/master'
