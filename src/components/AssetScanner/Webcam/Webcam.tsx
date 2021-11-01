@@ -145,6 +145,7 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
 
       if (this.video) {
         this.video.srcObject = stream;
+        this.video.play();
       }
 
       this.setState({
