@@ -124,7 +124,6 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
 
         await this.sourceSelected(audioSource, videoSource);
       } catch (error) {
-        // todo: add error handling
         console.error(error);
       }
     }
