@@ -167,7 +167,7 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
     return (
       <StyledVideo
         autoPlay={true}
-        muted
+        muted={!this.props.audio}
         className={this.props.className}
         style={{
           ...videoStyles,
