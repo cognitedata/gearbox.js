@@ -142,11 +142,13 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
     }
     try {
       this.stream = stream;
-
-      if (this.video) {
-        this.video.srcObject = stream;
-        this.video.play();
-      }
+      // Original code worked fine in local but not in PR/Prod links
+      // if(this.video) {
+      //   this.video.srcObject = stream;
+      //   this.video.play();
+      // }
+      // Trying the minified version to see if it makes any difference
+      this.video && ((this.video.srcObject = stream), this.video.play());
 
       this.setState({
         hasUserMedia: true,
@@ -180,6 +182,7 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
             setRef(ref);
           }
         }}
+        src={this.state.src}
       />
     );
   }
