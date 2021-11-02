@@ -1,3 +1,10 @@
+## [2.3.9](https://github.com/cognitedata/gearbox.js/compare/v2.3.8...v2.3.9) (2021-11-02)
+
+
+### Bug Fixes
+
+* **scanner:** autoplay/mute combination not working properly on Edge ([#724](https://github.com/cognitedata/gearbox.js/issues/724)) ([f2b713b](https://github.com/cognitedata/gearbox.js/commit/f2b713be79e388301cb2927b965fd9e1f03e646e))
+
 ## [2.3.8](https://github.com/cognitedata/gearbox.js/compare/v2.3.7...v2.3.8) (2021-11-01)
 
 
