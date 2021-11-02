@@ -142,11 +142,7 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
     }
     try {
       this.stream = stream;
-
-      if (this.video) {
-        this.video.srcObject = stream;
-        this.video.play();
-      }
+      this.video && ((this.video.srcObject = stream), this.video.play());
 
       this.setState({
         hasUserMedia: true,
@@ -180,6 +176,7 @@ export class Webcam extends Component<WebcamProps, WebcamState> {
             setRef(ref);
           }
         }}
+        src={this.state.src}
       />
     );
   }
