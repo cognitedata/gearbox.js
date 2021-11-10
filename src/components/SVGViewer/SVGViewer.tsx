@@ -86,10 +86,6 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     const { maxZoom: prevMax, minZoom: prevMin } = prevProps;
     const { maxZoom: currMax, minZoom: currMin } = this.props;
 
-    if (this.svg) {
-      this.setCustomClasses();
-    }
-
     if (
       (currDocId !== undefined && currDocId !== prevDocId) ||
       (currFile !== undefined && currFile !== prevFile) ||
@@ -269,7 +265,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       }
     } catch (e) {
       if (this.props.handleDocumentLoadError) {
-        this.props.handleDocumentLoadError(e);
+        this.props.handleDocumentLoadError(e as Error);
       }
     }
     if (svgString) {
@@ -541,7 +537,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     if (!currentAsset || !this.pinchZoomInstance) {
       return;
     }
-    const defaultZoom = isDesktop ? zoomLevel * 3 : zoomLevel * 10;
+    const defaultZoom = isDesktop ? zoomLevel * 5 : zoomLevel * 10;
     this.pinchZoomInstance.zoomFactor = this.props.initialZoom || defaultZoom;
     // Need to wait until zoom applies to get proper offsets
     setTimeout(() => {
