@@ -274,7 +274,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       // embedding it in the DOM.
       // Replace for svgs that has PNG inside
       svgString = DOMPurify.sanitize(svgString.replace(/ns1:href/g, 'href'), {
-        ADD_TAGS: ['entities', 'entity', 'id'],
+        ADD_TAGS: ['entities', 'entity'],
       });
       const svgFromUrl = parser.parseFromString(svgString, 'image/svg+xml');
       // if during parsing there was an error, svg will be rendered
@@ -437,16 +437,13 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     condition: (metadataNode: Element) => boolean;
     className: string;
   }) => {
-    const metadataArray = this.svg.querySelectorAll('.metadata-container');
-    Array.from(metadataArray).forEach((metadataContainer: Element) => {
+    const metadataArray = this.svg.querySelectorAll('metadata');
+    Array.from(metadataArray).forEach((metadata: SVGMetadataElement) => {
+      const metadataContainer = metadata.parentNode as HTMLElement;
       metadataContainer.classList.remove(className);
-      Array.from(metadataContainer.querySelectorAll('metadata')).forEach(
-        (metadata: SVGMetadataElement) => {
-          if (condition(metadata)) {
-            metadataContainer.classList.add(className);
-          }
-        }
-      );
+      if (condition(metadata)) {
+        metadataContainer.classList.add(className);
+      }
     });
   };
 
@@ -537,8 +534,9 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     if (!currentAsset || !this.pinchZoomInstance) {
       return;
     }
-    const defaultZoom = isDesktop ? zoomLevel * 5 : zoomLevel * 10;
-    this.pinchZoomInstance.zoomFactor = this.props.initialZoom || defaultZoom;
+    this.pinchZoomInstance.zoomFactor = isDesktop
+      ? zoomLevel * 3
+      : zoomLevel * 10;
     // Need to wait until zoom applies to get proper offsets
     setTimeout(() => {
       const currentAssetPosition = currentAsset.getBoundingClientRect();
