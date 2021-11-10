@@ -1,3 +1,10 @@
+## [2.3.10](https://github.com/cognitedata/gearbox.js/compare/v2.3.9...v2.3.10) (2021-11-10)
+
+
+### Bug Fixes
+
+* **performance:** prevents setCustomClasses being called constantly ([#725](https://github.com/cognitedata/gearbox.js/issues/725)) ([d77f6d8](https://github.com/cognitedata/gearbox.js/commit/d77f6d87a67baa9f0cfde9d78c0f6845a98807c0))
+
 ## [2.3.9](https://github.com/cognitedata/gearbox.js/compare/v2.3.8...v2.3.9) (2021-11-02)
 
 
