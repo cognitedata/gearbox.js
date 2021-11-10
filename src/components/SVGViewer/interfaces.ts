@@ -65,10 +65,6 @@ interface SvgViewerBasicProps {
    */
   minZoom?: number;
   /**
-   * Initial zoom when the svg viewer is first opened
-   */
-  initialZoom?: number;
-  /**
    * Condition to locate and highlight current asset during first render
    */
   isCurrentAsset?: (metadataNode: Element) => boolean;

@@ -534,8 +534,9 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     if (!currentAsset || !this.pinchZoomInstance) {
       return;
     }
-    const defaultZoom = isDesktop ? zoomLevel * 5 : zoomLevel * 10;
-    this.pinchZoomInstance.zoomFactor = this.props.initialZoom || defaultZoom;
+    this.pinchZoomInstance.zoomFactor = isDesktop
+      ? zoomLevel * 3
+      : zoomLevel * 10;
     // Need to wait until zoom applies to get proper offsets
     setTimeout(() => {
       const currentAssetPosition = currentAsset.getBoundingClientRect();
