@@ -86,10 +86,6 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     const { maxZoom: prevMax, minZoom: prevMin } = prevProps;
     const { maxZoom: currMax, minZoom: currMin } = this.props;
 
-    if (this.svg) {
-      this.setCustomClasses();
-    }
-
     if (
       (currDocId !== undefined && currDocId !== prevDocId) ||
       (currFile !== undefined && currFile !== prevFile) ||
@@ -269,7 +265,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       }
     } catch (e) {
       if (this.props.handleDocumentLoadError) {
-        this.props.handleDocumentLoadError(e);
+        this.props.handleDocumentLoadError(e as Error);
       }
     }
     if (svgString) {
