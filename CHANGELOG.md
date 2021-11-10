@@ -1,3 +1,38 @@
+## [2.3.10](https://github.com/cognitedata/gearbox.js/compare/v2.3.9...v2.3.10) (2021-11-10)
+
+
+### Bug Fixes
+
+* **performance:** prevents setCustomClasses being called constantly ([#725](https://github.com/cognitedata/gearbox.js/issues/725)) ([d77f6d8](https://github.com/cognitedata/gearbox.js/commit/d77f6d87a67baa9f0cfde9d78c0f6845a98807c0))
+
+## [2.3.9](https://github.com/cognitedata/gearbox.js/compare/v2.3.8...v2.3.9) (2021-11-02)
+
+
+### Bug Fixes
+
+* **scanner:** autoplay/mute combination not working properly on Edge ([#724](https://github.com/cognitedata/gearbox.js/issues/724)) ([f2b713b](https://github.com/cognitedata/gearbox.js/commit/f2b713be79e388301cb2927b965fd9e1f03e646e))
+
+## [2.3.8](https://github.com/cognitedata/gearbox.js/compare/v2.3.7...v2.3.8) (2021-11-01)
+
+
+### Bug Fixes
+
+* call play after setting srcObject in WebCam ([#719](https://github.com/cognitedata/gearbox.js/issues/719)) ([a3df241](https://github.com/cognitedata/gearbox.js/commit/a3df2411ef96b05f2532a72e07825ef92b67db01))
+
+## [2.3.7](https://github.com/cognitedata/gearbox.js/compare/v2.3.6...v2.3.7) (2021-09-15)
+
+
+### Bug Fixes
+
+* **svg-viewer:** allow specifying initial zoom as prop ([#715](https://github.com/cognitedata/gearbox.js/issues/715)) ([94150a7](https://github.com/cognitedata/gearbox.js/commit/94150a71a064fa2fe8575f0512e4c33a05e20415))
+
+## [2.3.6](https://github.com/cognitedata/gearbox.js/compare/v2.3.5...v2.3.6) (2021-05-28)
+
+
+### Bug Fixes
+
+* change class conditions logic to support new svgs ([#708](https://github.com/cognitedata/gearbox.js/issues/708)) ([9ec3900](https://github.com/cognitedata/gearbox.js/commit/9ec3900624181b2caf2df29017ea09d428ea11ab))
+
 ## [2.3.5](https://github.com/cognitedata/gearbox.js/compare/v2.3.4...v2.3.5) (2021-04-27)
 
 
