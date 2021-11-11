@@ -1,3 +1,10 @@
+## [2.3.11](https://github.com/cognitedata/gearbox.js/compare/v2.3.10...v2.3.11) (2021-11-11)
+
+
+### Bug Fixes
+
+* **dompurify:** pin package version of DomPurify ([#729](https://github.com/cognitedata/gearbox.js/issues/729)) ([6c1c7ac](https://github.com/cognitedata/gearbox.js/commit/6c1c7ac1a92e1782da4c22817aa920aeb7aa4252))
+
 ## [2.3.10](https://github.com/cognitedata/gearbox.js/compare/v2.3.9...v2.3.10) (2021-11-10)
 
 
