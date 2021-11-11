@@ -3388,10 +3388,10 @@
     "@types/d3-voronoi" "*"
     "@types/d3-zoom" "*"
 
-"@types/dompurify@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@types/dompurify/-/dompurify-2.0.2.tgz#94b5c05dc9b8a682a0abb4a8d6f0b82df61baeac"
-  integrity sha512-WHoQQTziRHm5/Fw/KsUKyh2V+wd3k2QUpJyjUXo8K7d9kMJ5i5wQnGDkO4URkwulhY2HuM/gbX25nSooi6+wUA==
+"@types/dompurify@2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@types/dompurify/-/dompurify-2.0.4.tgz#25fce15f1f4b1bc0df0ad957040cf226416ac2d7"
+  integrity sha512-y6K7NyXTQvjr8hJNsAFAD8yshCsIJ0d+OYEFzULuIqWyWOKL2hRru1I+rorI5U0K4SLAROTNuSUFXPDTu278YA==
   dependencies:
     "@types/trusted-types" "*"
 
@@ -7120,7 +7120,7 @@ domhandler@^2.3.0:
   dependencies:
     domelementtype "1"
 
-dompurify@^2.0.11:
+dompurify@2.0.11:
   version "2.0.11"
   resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.0.11.tgz#cd47935774230c5e478b183a572e726300b3891d"
   integrity sha512-qVoGPjIW9IqxRij7klDQQ2j6nSe4UNWANBhZNLnsS7ScTtLb+3YdxkRY8brNTpkUiTtcXsCJO+jS0UCDfenLuA==
