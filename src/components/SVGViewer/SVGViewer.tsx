@@ -290,6 +290,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       // so we need to cover that case and show only svg
       this.svg = svgFromUrl.getElementsByTagName('svg')[0];
       if (this.svg) {
+        console.log('this is an svg', this.svg);
         this.initiateScale();
         this.initPinchToZoom();
         this.initAttributesForMetadataContainer();
@@ -315,9 +316,16 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       });
     }
     if (this.props.metadataClassesConditions) {
-      this.props.metadataClassesConditions.forEach(condition => {
-        this.addCssClassesToMetadataContainer(condition);
-      });
+      console.log(
+        'this.props.metadataClassesConditions',
+        this.props.metadataClassesConditions
+      );
+      this.addBulkClassesToMetadataContainer(
+        this.props.metadataClassesConditions
+      );
+      // this.props.metadataClassesConditions.forEach(condition => {
+      //   this.addCssClassesToMetadataContainer(condition);
+      // });
     }
   };
 
@@ -447,15 +455,60 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   }) => {
     const metadataArray = this.svg.querySelectorAll('.metadata-container');
     Array.from(metadataArray).forEach((metadataContainer: Element) => {
+      // remove class to g element
       metadataContainer.classList.remove(className);
       Array.from(metadataContainer.querySelectorAll('metadata')).forEach(
         (metadata: SVGMetadataElement) => {
           if (condition(metadata)) {
+            // if metadata meets the condition,
+            // add class to g element
             metadataContainer.classList.add(className);
           }
         }
       );
     });
+  };
+
+  addBulkClassesToMetadataContainer = (
+    metadataClassesAndConditions: {
+      condition: (metadataNode: Element) => boolean;
+      className: string;
+    }[]
+  ) => {
+    console.log('IN BULK');
+    console.log('metadataclasses and conditions', metadataClassesAndConditions);
+    // all the g elements
+    const gElements = Array.from(
+      this.svg.querySelectorAll('.metadata-container')
+    );
+    const modifyingArray = [];
+    // loop through each metadata element
+    // for each metadata element, loop through conditions and check if the metadata matches the condition
+    // if no, continue,
+    //  if yes,  add the modifyingObject { parent: gElement, className } to modifyingArray
+
+    // loop through all the g elements
+    for (let i = 0; i < gElements.length; i++) {
+      const gElement = gElements[i];
+      // for each g element, get all the metadata elements
+      const metadataElements = Array.from(
+        gElement.querySelectorAll('metadata')
+      );
+      for (let j = 0; j < metadataElements.length - 1; j++) {
+        const metadataElement = metadataElements[j];
+        for (let k = 0; k < metadataClassesAndConditions.length; k++) {
+          const conditionAndClass = metadataClassesAndConditions[k];
+          if (conditionAndClass.condition(metadataElement)) {
+            modifyingArray.push({
+              parent: gElement,
+              className: conditionAndClass.className,
+            });
+          }
+        }
+      }
+    }
+    console.log('modifyingArray', modifyingArray);
+    return modifyingArray;
   };
 
   addCssClassesToSvgText = ({
