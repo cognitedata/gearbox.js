@@ -316,16 +316,9 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       });
     }
     if (this.props.metadataClassesConditions) {
-      console.log(
-        'this.props.metadataClassesConditions',
-        this.props.metadataClassesConditions
-      );
       this.addBulkClassesToMetadataContainer(
         this.props.metadataClassesConditions
       );
-      // this.props.metadataClassesConditions.forEach(condition => {
-      //   this.addCssClassesToMetadataContainer(condition);
-      // });
     }
   };
 
@@ -455,13 +448,10 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   }) => {
     const metadataArray = this.svg.querySelectorAll('.metadata-container');
     Array.from(metadataArray).forEach((metadataContainer: Element) => {
-      // remove class to g element
       metadataContainer.classList.remove(className);
       Array.from(metadataContainer.querySelectorAll('metadata')).forEach(
         (metadata: SVGMetadataElement) => {
           if (condition(metadata)) {
-            // if metadata meets the condition,
-            // add class to g element
             metadataContainer.classList.add(className);
           }
         }
