@@ -475,40 +475,27 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       className: string;
     }[]
   ) => {
-    console.log('IN BULK');
-    console.log('metadataclasses and conditions', metadataClassesAndConditions);
-    // all the g elements
     const gElements = Array.from(
       this.svg.querySelectorAll('.metadata-container')
     );
-    const modifyingArray = [];
-    // loop through each metadata element
-    // for each metadata element, loop through conditions and check if the metadata matches the condition
-    // if no, continue,
-    //  if yes,  add the modifyingObject { parent: gElement, className } to modifyingArray
 
-    // loop through all the g elements
     for (let i = 0; i < gElements.length; i++) {
       const gElement = gElements[i];
-      // for each g element, get all the metadata elements
       const metadataElements = Array.from(
         gElement.querySelectorAll('metadata')
       );
-      for (let j = 0; j < metadataElements.length - 1; j++) {
+      const copy = [...metadataClassesAndConditions];
+      for (let j = 0; j < metadataElements.length - 1 && copy.length > 0; j++) {
         const metadataElement = metadataElements[j];
-        for (let k = 0; k < metadataClassesAndConditions.length; k++) {
-          const conditionAndClass = metadataClassesAndConditions[k];
+        for (let k = 0; k < copy.length - 1; k++) {
+          const conditionAndClass = copy[k];
           if (conditionAndClass.condition(metadataElement)) {
-            modifyingArray.push({
-              parent: gElement,
-              className: conditionAndClass.className,
-            });
+            gElement.classList.add(conditionAndClass.className);
+            copy.splice(k, 1);
           }
         }
       }
     }
-    console.log('modifyingArray', modifyingArray);
-    return modifyingArray;
   };
 
   addCssClassesToSvgText = ({
