@@ -290,7 +290,6 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       // so we need to cover that case and show only svg
       this.svg = svgFromUrl.getElementsByTagName('svg')[0];
       if (this.svg) {
-        console.log('this is an svg', this.svg);
         this.initiateScale();
         this.initPinchToZoom();
         this.initAttributesForMetadataContainer();
