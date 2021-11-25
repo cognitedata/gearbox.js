@@ -1,6 +1,6 @@
 {
   "name": "@cognite/gearbox",
-  "version": "2.3.10",
+  "version": "2.3.11",
   "description": "GearBox will be a place for application developers to contribute useful, reusable components across applications",
   "contributors": [],
   "main": "dist/index.js",
@@ -32,9 +32,9 @@
   "homepage": "https://github.com/cognitedata/gearbox.js#readme",
   "license": "Apache-2.0",
   "dependencies": {
-    "@types/dompurify": "^2.0.2",
+    "@types/dompurify": "2.0.4",
     "d3": "^5.14.2",
-    "dompurify": "^2.0.11",
+    "dompurify": "2.0.11",
     "file-saver": "^2.0.2",
     "lodash": "^4.17.15",
     "ms": "^2.1.2",
