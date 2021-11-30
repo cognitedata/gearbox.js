@@ -464,27 +464,35 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       className: string;
     }[]
   ) => {
-    const gElements = Array.from(
-      this.svg.querySelectorAll('.metadata-container')
-    );
+    const gElements = this.svg.querySelectorAll('.metadata-container');
 
-    for (let i = 0; i < gElements.length; i++) {
-      const gElement = gElements[i];
+    gElements.forEach(metadataContainer => {
       const metadataElements = Array.from(
-        gElement.querySelectorAll('metadata')
+        metadataContainer.querySelectorAll('metadata')
       );
-      const copy = [...metadataClassesAndConditions];
-      for (let j = 0; j < metadataElements.length - 1 && copy.length > 0; j++) {
-        const metadataElement = metadataElements[j];
-        for (let k = 0; k < copy.length - 1; k++) {
-          const conditionAndClass = copy[k];
-          if (conditionAndClass.condition(metadataElement)) {
-            gElement.classList.add(conditionAndClass.className);
-            copy.splice(k, 1);
+
+      const unmetConditions = [...metadataClassesAndConditions];
+
+      // reset classes in case this method is being called more than once for the same document
+      // avoid resetting all the classses, as they may contain currentAsset class that affects zoom
+      unmetConditions.forEach(({ className }) => {
+        metadataContainer.classList.remove(className);
+      });
+
+      for (const metadataElement of metadataElements) {
+        if (!unmetConditions.length) {
+          // metadataContainer satisfies to all passed conditions, nothing left to look for
+          break;
+        }
+        for (let k = 0; k < unmetConditions.length - 1; k++) {
+          const { condition, className } = unmetConditions[k];
+          if (condition(metadataElement)) {
+            metadataContainer.classList.add(className);
+            unmetConditions.splice(k, 1);
           }
         }
       }
-    }
+    });
   };
 
   addCssClassesToSvgText = ({
