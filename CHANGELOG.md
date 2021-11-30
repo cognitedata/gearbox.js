@@ -1,3 +1,10 @@
+## [2.4.1](https://github.com/cognitedata/gearbox.js/compare/v2.4.0...v2.4.1) (2021-11-30)
+
+
+### Bug Fixes
+
+* **svgviewer:** improve opening performance by applying styling conditions in bulk ([#730](https://github.com/cognitedata/gearbox.js/issues/730)) ([c9b9cf1](https://github.com/cognitedata/gearbox.js/commit/c9b9cf113434d7180d7d15d4bf6a5a2c71a5b2c2))
+
 # [2.4.0](https://github.com/cognitedata/gearbox.js/compare/v2.3.11...v2.4.0) (2021-11-30)
 
 
