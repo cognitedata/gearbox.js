@@ -76,6 +76,13 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     this.presetSVG();
     window.addEventListener('resize', this.initiateScale);
     window.addEventListener('resize', this.updateWindowDimensions);
+    if (this.svgParentNode.current) {
+      this.svgParentNode.current.addEventListener(
+        'wheel',
+        this.handleTrackpadZoom,
+        { passive: false }
+      );
+    }
   }
 
   componentDidUpdate(prevProps: SvgViewerProps) {
@@ -97,6 +104,12 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   }
 
   componentWillUnmount() {
+    if (this.svgParentNode.current) {
+      this.svgParentNode.current.removeEventListener(
+        'wheel',
+        this.handleTrackpadZoom
+      );
+    }
     window.removeEventListener('resize', this.initiateScale);
     window.removeEventListener('resize', this.updateWindowDimensions);
   }
@@ -138,7 +151,6 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
           // disable tap to search functionality for Android
           // https://developers.google.com/web/updates/2015/10/tap-to-search
           tabIndex={-1}
-          onWheel={this.handleTrackpadZoom}
           customClassNames={customClassNames}
           data-test-id="svg-viewer"
         >
@@ -315,9 +327,9 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       });
     }
     if (this.props.metadataClassesConditions) {
-      this.props.metadataClassesConditions.forEach(condition => {
-        this.addCssClassesToMetadataContainer(condition);
-      });
+      this.addBulkClassesToMetadataContainer(
+        this.props.metadataClassesConditions
+      );
     }
   };
 
@@ -458,6 +470,43 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     });
   };
 
+  addBulkClassesToMetadataContainer = (
+    metadataClassesAndConditions: {
+      condition: (metadataNode: Element) => boolean;
+      className: string;
+    }[]
+  ) => {
+    const gElements = this.svg.querySelectorAll('.metadata-container');
+
+    gElements.forEach(metadataContainer => {
+      const metadataElements = Array.from(
+        metadataContainer.querySelectorAll('metadata')
+      );
+
+      const unmetConditions = [...metadataClassesAndConditions];
+
+      // reset classes in case this method is being called more than once for the same document
+      // avoid resetting all the classses, as they may contain currentAsset class that affects zoom
+      unmetConditions.forEach(({ className }) => {
+        metadataContainer.classList.remove(className);
+      });
+
+      for (const metadataElement of metadataElements) {
+        if (!unmetConditions.length) {
+          // metadataContainer satisfies to all passed conditions, nothing left to look for
+          break;
+        }
+        for (let k = 0; k < unmetConditions.length - 1; k++) {
+          const { condition, className } = unmetConditions[k];
+          if (condition(metadataElement)) {
+            metadataContainer.classList.add(className);
+            unmetConditions.splice(k, 1);
+          }
+        }
+      }
+    });
+  };
+
   addCssClassesToSvgText = ({
     condition,
     className,
@@ -493,7 +542,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     e.stopPropagation();
   };
 
-  handleTrackpadZoom = (e: React.WheelEvent<HTMLDivElement>) => {
+  handleTrackpadZoom = (e: WheelEvent) => {
     if (e.ctrlKey) {
       e.preventDefault();
       e.stopPropagation();
