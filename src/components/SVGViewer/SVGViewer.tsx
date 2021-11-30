@@ -239,6 +239,14 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
               >
                 <CustomIcon.FindInPage />
               </MobileSearchButton>
+              {downloadablePdf && (
+                <MobileSearchButton
+                  onClick={this.handleDownload}
+                  data-test-id="download-button-svgviewer"
+                >
+                  <CustomIcon.PDF />
+                </MobileSearchButton>
+              )}
             </ModalMobileFooter>
           ) : null}
         </SvgNode>
