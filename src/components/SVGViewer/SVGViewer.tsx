@@ -76,6 +76,13 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     this.presetSVG();
     window.addEventListener('resize', this.initiateScale);
     window.addEventListener('resize', this.updateWindowDimensions);
+    if (this.svgParentNode.current) {
+      this.svgParentNode.current.addEventListener(
+        'wheel',
+        this.handleTrackpadZoom,
+        { passive: false }
+      );
+    }
   }
 
   componentDidUpdate(prevProps: SvgViewerProps) {
@@ -97,6 +104,12 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   }
 
   componentWillUnmount() {
+    if (this.svgParentNode.current) {
+      this.svgParentNode.current.removeEventListener(
+        'wheel',
+        this.handleTrackpadZoom
+      );
+    }
     window.removeEventListener('resize', this.initiateScale);
     window.removeEventListener('resize', this.updateWindowDimensions);
   }
@@ -138,7 +151,6 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
           // disable tap to search functionality for Android
           // https://developers.google.com/web/updates/2015/10/tap-to-search
           tabIndex={-1}
-          onWheel={this.handleTrackpadZoom}
           customClassNames={customClassNames}
           data-test-id="svg-viewer"
         >
@@ -530,7 +542,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     e.stopPropagation();
   };
 
-  handleTrackpadZoom = (e: React.WheelEvent<HTMLDivElement>) => {
+  handleTrackpadZoom = (e: WheelEvent) => {
     if (e.ctrlKey) {
       e.preventDefault();
       e.stopPropagation();
