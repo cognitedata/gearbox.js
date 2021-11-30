@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/cognitedata/gearbox.js/compare/v2.3.11...v2.4.0) (2021-11-30)
+
+
+### Features
+
+* **svgviewer:** show pdf button on mobile ([#731](https://github.com/cognitedata/gearbox.js/issues/731)) ([3509a1c](https://github.com/cognitedata/gearbox.js/commit/3509a1cd34ef3e5afe3cd1f71f0d92df410fcbcb))
+
 ## [2.3.11](https://github.com/cognitedata/gearbox.js/compare/v2.3.10...v2.3.11) (2021-11-11)
 
 
