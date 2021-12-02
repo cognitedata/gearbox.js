@@ -38,6 +38,8 @@ export interface PinchZoomInterface {
 interface SvgViewerBasicProps {
   /**
    * List of classes and conditions on when they should be applied for equipment
+   * When condition returns `true` for <metadata> element,
+   * passed className is applied to '.metadata-container' element
    */
   metadataClassesConditions?: Conditions[];
   /**

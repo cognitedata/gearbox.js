@@ -326,7 +326,10 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
           (this.props.customClassNames || {}).currentAsset,
       });
     }
-    if (this.props.metadataClassesConditions) {
+    if (
+      this.props.metadataClassesConditions &&
+      this.props.metadataClassesConditions.length
+    ) {
       this.addBulkClassesToMetadataContainer(
         this.props.metadataClassesConditions
       );
@@ -476,31 +479,39 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       className: string;
     }[]
   ) => {
-    const gElements = this.svg.querySelectorAll('.metadata-container');
+    const metadataContainers = this.svg.querySelectorAll('.metadata-container');
+    metadataContainers.forEach(metaContainer => {
+      // reset classes in case this method is being called more than once for the same document
+      // avoid resetting all the classes, as they may contain currentAsset class that affects zoom
+      metadataClassesAndConditions.forEach(({ className }) => {
+        metaContainer.classList.remove(className);
+      });
 
-    gElements.forEach(metadataContainer => {
       const metadataElements = Array.from(
-        metadataContainer.querySelectorAll('metadata')
+        metaContainer.querySelectorAll('metadata')
       );
 
+      // for the sake of performance we need to execute conditions as little as possible, to achieve it:
+      // - we don't execute condition for a metadata el if condition was met before
+      // - we don't iterate metadata anymore if all conditions are met
       const unmetConditions = [...metadataClassesAndConditions];
-
-      // reset classes in case this method is being called more than once for the same document
-      // avoid resetting all the classses, as they may contain currentAsset class that affects zoom
-      unmetConditions.forEach(({ className }) => {
-        metadataContainer.classList.remove(className);
-      });
 
       for (const metadataElement of metadataElements) {
         if (!unmetConditions.length) {
           // metadataContainer satisfies to all passed conditions, nothing left to look for
           break;
         }
-        for (let k = 0; k < unmetConditions.length - 1; k++) {
-          const { condition, className } = unmetConditions[k];
+
+        let unmetConditionIndex = 0;
+        while (unmetConditionIndex < unmetConditions.length) {
+          const { condition, className } = unmetConditions[unmetConditionIndex];
           if (condition(metadataElement)) {
-            metadataContainer.classList.add(className);
-            unmetConditions.splice(k, 1);
+            metaContainer.classList.add(className);
+            unmetConditions.splice(unmetConditionIndex, 1);
+            // no need to increment because we removed current element,
+            // so next iteration will have another element or exit
+          } else {
+            unmetConditionIndex++;
           }
         }
       }
