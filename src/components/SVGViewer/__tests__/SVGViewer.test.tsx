@@ -87,4 +87,120 @@ describe('SVGViewer', () => {
       }
     );
   });
+
+  describe('metadataClassesConditions tests', () => {
+    const getConditionImplementation = (testId: number) => (meta: Element) => {
+      const idEl = meta.querySelector('id');
+      if (!idEl) {
+        return false;
+      }
+      return Number(idEl.textContent) === testId;
+    };
+
+    // gave up on searching of svg elements within enzyme output
+    // and used string parsing of html() that correctly contains svg
+    const hasStringExactlyOnce = (source: string, search: string) => {
+      return (
+        source.indexOf(search) > -1 &&
+        source.indexOf(search) === source.lastIndexOf(search)
+      );
+    };
+
+    it('executes all the passed conditions', () => {
+      const testId0 = 123;
+      const fn0 = jest
+        .fn()
+        .mockImplementation(getConditionImplementation(testId0));
+
+      const testId1 = 456;
+      const fn1 = jest
+        .fn()
+        .mockImplementation(getConditionImplementation(testId1));
+
+      const classesAndConditions = [
+        {
+          className: 'class0',
+          condition: fn0,
+        },
+        {
+          className: 'class1',
+          condition: fn1,
+        },
+      ];
+      const wrapper = mount(
+        <ClientSDKProvider client={sdk}>
+          <SVGViewer
+            metadataClassesConditions={classesAndConditions}
+            file={`<svg>
+                  <g class='metadata-container'>
+                    <metadata><id>${testId0}</id></metadata>
+                  </g>
+                  <g class='metadata-container'>
+                    <metadata><id>${testId1}</id></metadata>
+                  </g>
+                </svg>
+              `}
+          />
+        </ClientSDKProvider>
+      );
+
+      expect(fn0).toHaveBeenCalledTimes(2);
+      expect(fn1).toHaveBeenCalledTimes(2);
+
+      expect(
+        hasStringExactlyOnce(wrapper.html(), classesAndConditions[0].className)
+      ).toBe(true);
+      expect(
+        hasStringExactlyOnce(wrapper.html(), classesAndConditions[1].className)
+      ).toBe(true);
+    });
+
+    it('passed conditions are not executed more than needed', () => {
+      // e.g. when metadata-container already satisfies passed condition, that condition
+      // should not be checked for other metadata items
+      const getMockImplementation = (testId: number) => (meta: Element) => {
+        const idEl = meta.querySelector('id');
+        if (!idEl) {
+          return false;
+        }
+        return Number(idEl.textContent) === testId;
+      };
+
+      const testId0 = 123;
+      const fn0 = jest.fn().mockImplementation(getMockImplementation(testId0));
+
+      const testId1 = 456;
+      const fn1 = jest.fn().mockImplementation(getMockImplementation(testId1));
+
+      const classesAndConditions = [
+        {
+          className: 'class0',
+          condition: fn0,
+        },
+        {
+          className: 'class1',
+          condition: fn1,
+        },
+      ];
+
+      mount(
+        <ClientSDKProvider client={sdk}>
+          <SVGViewer
+            metadataClassesConditions={classesAndConditions}
+            file={`<svg>
+                  <g class='metadata-container'>
+                    <metadata><id>${testId0}</id></metadata>
+                    <metadata><id>${testId1}</id></metadata>
+                    <metadata><id>Meaningless</id></metadata>
+                  </g>
+                  </svg>
+              `}
+          />
+        </ClientSDKProvider>
+      );
+
+      expect(fn0).toHaveBeenCalledTimes(1);
+      expect(fn1).toHaveBeenCalledTimes(2);
+    });
+  });
 });
