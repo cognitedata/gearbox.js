@@ -1,3 +1,10 @@
+## [2.4.2](https://github.com/cognitedata/gearbox.js/compare/v2.4.1...v2.4.2) (2021-12-02)
+
+
+### Bug Fixes
+
+* **svgviewer:** execute all passed conditions ([#732](https://github.com/cognitedata/gearbox.js/issues/732)) ([5463130](https://github.com/cognitedata/gearbox.js/commit/546313037ad790caf4da8390ea75a586304faa33))
+
 ## [2.4.1](https://github.com/cognitedata/gearbox.js/compare/v2.4.0...v2.4.1) (2021-11-30)
 
 
