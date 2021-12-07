@@ -317,22 +317,19 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   };
 
   setCustomClasses = () => {
+    const classesAndConditions = [
+      ...(this.props.metadataClassesConditions || []),
+    ];
     if (this.props.isCurrentAsset) {
-      this.addCssClassesToMetadataContainer({
+      classesAndConditions.push({
         condition: this.props.isCurrentAsset,
         className:
           currentAssetClassName ||
           (this.props.customClassNames || {}).currentAsset,
       });
     }
-    if (
-      this.props.metadataClassesConditions &&
-      this.props.metadataClassesConditions.length
-    ) {
-      this.addBulkClassesToMetadataContainer(
-        this.props.metadataClassesConditions
-      );
-    }
+
+    this.addBulkClassesToMetadataContainer(classesAndConditions);
   };
 
   initiateScale = () => {
