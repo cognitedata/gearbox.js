@@ -308,11 +308,10 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
         this.shouldDisableOptimization();
         this.setCustomClasses();
         this.svg.addEventListener('click', this.handleItemClick);
-        this.zoomOnCurrentAsset(
-          document.querySelector(
-            `.${currentAssetClassName || (customClassNames || {}).currentAsset}`
-          )
-        );
+        const currentAssetElement = document.querySelector(
+          `.${currentAssetClassName || (customClassNames || {}).currentAsset}`
+        )!;
+        this.zoomOnCurrentAsset(currentAssetElement);
       }
     }
   };
@@ -600,16 +599,45 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     }
   };
 
-  zoomOnCurrentAsset = (currentAsset: Element | null) => {
+  // used to overcome the issue when an element is in the DOM
+  // but its position changes over time, so you can't use it until it's stable
+  getStableBoundingClientRect = (
+    el: Element,
+    maxAttempts = 10
+  ): Promise<DOMRect | null> => {
+    return new Promise(resolve => {
+      if (!el) {
+        resolve(null);
+      }
+      const isStabilized = (element: Element) => {
+        const rect1 = element.getBoundingClientRect();
+        setTimeout(() => {
+          maxAttempts--;
+          const rect2 = element.getBoundingClientRect();
+          if (
+            (rect1.left === rect2.left && rect1.top === rect2.top) ||
+            maxAttempts === 0
+          ) {
+            resolve(rect2);
+          } else {
+            isStabilized(element);
+          }
+        }, 100);
+      };
+
+      isStabilized(el);
+    });
+  };
+
+  zoomOnCurrentAsset = async (currentAsset: Element | null) => {
     const isDesktop = this.state.width > minDesktopWidth;
     if (!currentAsset || !this.pinchZoomInstance) {
       return;
     }
     const defaultZoom = isDesktop ? zoomLevel * 5 : zoomLevel * 10;
     this.pinchZoomInstance.zoomFactor = this.props.initialZoom || defaultZoom;
-    // Need to wait until zoom applies to get proper offsets
-    setTimeout(() => {
-      const currentAssetPosition = currentAsset.getBoundingClientRect();
+
+    const zoom = (currentAssetPosition: DOMRect | null) => {
       if (currentAssetPosition) {
         this.pinchZoomInstance.offset = {
           x:
@@ -621,11 +649,27 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
             this.pinchZoomInstance.container.clientHeight / 2 +
             this.pinchZoomInstance.offset.y,
         };
+
         // Zoom may create invalid position
         this.pinchZoomInstance.offset = this.pinchZoomInstance.sanitizeOffset(
           this.pinchZoomInstance.offset
         );
         this.pinchZoomInstance.update();
+      }
+    };
+
+    // try to zoom almost immediately
+    // but adjust later in case if asset DOM element position has changed
+    setTimeout(async () => {
+      const initialRect = currentAsset.getBoundingClientRect();
+      zoom(initialRect);
+      const stableRect = await this.getStableBoundingClientRect(currentAsset);
+      if (
+        stableRect &&
+        stableRect.left !== initialRect.left &&
+        stableRect.top !== initialRect.top
+      ) {
+        zoom(stableRect);
       }
     });
   };
