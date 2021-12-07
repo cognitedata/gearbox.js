@@ -1,3 +1,10 @@
+## [2.4.3](https://github.com/cognitedata/gearbox.js/compare/v2.4.2...v2.4.3) (2021-12-07)
+
+
+### Bug Fixes
+
+* **svgviewer:** more consistent zoom on current-asset ([#733](https://github.com/cognitedata/gearbox.js/issues/733)) ([a7b3dbc](https://github.com/cognitedata/gearbox.js/commit/a7b3dbc61c71750e66944e85194fffe46bc5110f))
+
 ## [2.4.2](https://github.com/cognitedata/gearbox.js/compare/v2.4.1...v2.4.2) (2021-12-02)
 
 
