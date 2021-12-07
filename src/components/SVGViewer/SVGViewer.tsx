@@ -22,7 +22,7 @@ import { getDocumentDownloadLink } from './utils';
 
 const zoomLevel = 0.7;
 const wheelZoomLevel = 0.15;
-const currentAssetClassName = 'current-asset';
+const defaultCurrentAssetClassName = 'current-asset';
 const minDesktopWidth = 992;
 
 interface SvgViewerState {
@@ -272,8 +272,14 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     });
   };
 
+  getCurrentAssetClassName = () => {
+    return (
+      (this.props.customClassNames || {}).currentAsset ||
+      defaultCurrentAssetClassName
+    );
+  };
+
   presetSVG = async () => {
-    const { customClassNames } = this.props;
     let svgString;
     try {
       const { documentId } = this.props as SvgViewerDocumentIdProps;
@@ -309,7 +315,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
         this.setCustomClasses();
         this.svg.addEventListener('click', this.handleItemClick);
         const currentAssetElement = document.querySelector(
-          `.${currentAssetClassName || (customClassNames || {}).currentAsset}`
+          `.${this.getCurrentAssetClassName()}`
         )!;
         this.zoomOnCurrentAsset(currentAssetElement);
       }
@@ -323,9 +329,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     if (this.props.isCurrentAsset) {
       classesAndConditions.push({
         condition: this.props.isCurrentAsset,
-        className:
-          currentAssetClassName ||
-          (this.props.customClassNames || {}).currentAsset,
+        className: this.getCurrentAssetClassName(),
       });
     }
 
@@ -819,7 +823,7 @@ const SvgNode = styled.div`
     ${(props: InternalThemedStyledProps) =>
       !props.customClassNames.currentAsset &&
       `
-    &.current-asset {
+    &.${defaultCurrentAssetClassName} {
       outline: auto 2px #36a2c2;
       cursor: default;
       > {
