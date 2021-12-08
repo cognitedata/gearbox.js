@@ -1,3 +1,10 @@
+## [2.4.4](https://github.com/cognitedata/gearbox.js/compare/v2.4.3...v2.4.4) (2021-12-08)
+
+
+### Bug Fixes
+
+* **svgviewer:** don't ignore customClassNames.currentAsset ([#734](https://github.com/cognitedata/gearbox.js/issues/734)) ([ea288af](https://github.com/cognitedata/gearbox.js/commit/ea288af2623b3673ff96d6976b591c0c99bf5424))
+
 ## [2.4.3](https://github.com/cognitedata/gearbox.js/compare/v2.4.2...v2.4.3) (2021-12-07)
 
 
