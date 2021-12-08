@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 import { CogniteClient } from '@cognite/sdk';
 import { Icon } from 'antd';
-import PinchZoom from 'pinch-zoom-js';
+import PinchZoom from './pinchzoom';
 import React, { Component, KeyboardEvent, RefObject } from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
@@ -352,6 +352,8 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     if (this.pinchZoom.current) {
       this.pinchZoom.current.innerHTML = '';
       this.pinchZoom.current.appendChild(this.svg);
+
+      // @ts-ignore
       this.pinchZoomInstance = new PinchZoom(this.pinchZoom.current, {
         animationDuration: 0,
         tapZoomFactor: 8,
