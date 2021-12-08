@@ -21,6 +21,15 @@ class CogniteClient extends MockCogniteClient {
 
 const sdk = new CogniteClient({ appId: 'gearbox test' });
 
+// gave up on searching of svg elements within enzyme output
+// and used string parsing of html() that correctly contains svg
+const hasStringExactlyOnce = (source: string, search: string) => {
+  return (
+    source.includes(search) &&
+    source.indexOf(search) === source.lastIndexOf(search)
+  );
+};
+
 describe('SVGViewer', () => {
   it('Renders without exploding', () => {
     const wrapper = mount(
@@ -88,6 +97,40 @@ describe('SVGViewer', () => {
     );
   });
 
+  it('adds .current-asset class by default', () => {
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <SVGViewer
+          file={`<svg><g class='metadata-container'><metadata></metadata></g></svg>`}
+          isCurrentAsset={() => true}
+        />
+      </ClientSDKProvider>
+    );
+
+    expect(hasStringExactlyOnce(wrapper.html(), 'current-asset')).toBe(true);
+  });
+
+  it('adds custom class for currentAsset when passed', () => {
+    const customCurrentAssetClassName = 'customCurrentAssetClassName';
+
+    const wrapper = mount(
+      <ClientSDKProvider client={sdk}>
+        <SVGViewer
+          file={`<svg><g class='metadata-container'><metadata></metadata></g></svg>`}
+          isCurrentAsset={() => true}
+          customClassNames={{
+            currentAsset: customCurrentAssetClassName,
+          }}
+        />
+      </ClientSDKProvider>
+    );
+
+    expect(hasStringExactlyOnce(wrapper.html(), 'current-asset')).toBe(false);
+    expect(
+      hasStringExactlyOnce(wrapper.html(), customCurrentAssetClassName)
+    ).toBe(true);
+  });
+
   describe('metadataClassesConditions tests', () => {
     const getConditionImplementation = (testId: number) => (meta: Element) => {
       const idEl = meta.querySelector('id');
@@ -95,15 +138,6 @@ describe('SVGViewer', () => {
         return false;
       }
       return Number(idEl.textContent) === testId;
-    };
-
-    // gave up on searching of svg elements within enzyme output
-    // and used string parsing of html() that correctly contains svg
-    const hasStringExactlyOnce = (source: string, search: string) => {
-      return (
-        source.indexOf(search) > -1 &&
-        source.indexOf(search) === source.lastIndexOf(search)
-      );
     };
 
     it('executes all the passed conditions', () => {
