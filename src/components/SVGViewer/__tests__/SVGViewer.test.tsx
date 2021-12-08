@@ -25,7 +25,7 @@ const sdk = new CogniteClient({ appId: 'gearbox test' });
 // and used string parsing of html() that correctly contains svg
 const hasStringExactlyOnce = (source: string, search: string) => {
   return (
-    source.indexOf(search) > -1 &&
+    source.includes(search) &&
     source.indexOf(search) === source.lastIndexOf(search)
   );
 };
