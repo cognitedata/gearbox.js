@@ -22,7 +22,7 @@ import { getDocumentDownloadLink } from './utils';
 
 const zoomLevel = 0.7;
 const wheelZoomLevel = 0.15;
-const currentAssetClassName = 'current-asset';
+const defaultCurrentAssetClassName = 'current-asset';
 const minDesktopWidth = 992;
 
 interface SvgViewerState {
@@ -272,8 +272,14 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     });
   };
 
+  getCurrentAssetClassName = () => {
+    return (
+      (this.props.customClassNames || {}).currentAsset ||
+      defaultCurrentAssetClassName
+    );
+  };
+
   presetSVG = async () => {
-    const { customClassNames } = this.props;
     let svgString;
     try {
       const { documentId } = this.props as SvgViewerDocumentIdProps;
@@ -309,7 +315,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
         this.setCustomClasses();
         this.svg.addEventListener('click', this.handleItemClick);
         const currentAssetElement = document.querySelector(
-          `.${currentAssetClassName || (customClassNames || {}).currentAsset}`
+          `.${this.getCurrentAssetClassName()}`
         )!;
         this.zoomOnCurrentAsset(currentAssetElement);
       }
@@ -317,22 +323,17 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   };
 
   setCustomClasses = () => {
+    const classesAndConditions = [
+      ...(this.props.metadataClassesConditions || []),
+    ];
     if (this.props.isCurrentAsset) {
-      this.addCssClassesToMetadataContainer({
+      classesAndConditions.push({
         condition: this.props.isCurrentAsset,
-        className:
-          currentAssetClassName ||
-          (this.props.customClassNames || {}).currentAsset,
+        className: this.getCurrentAssetClassName(),
       });
     }
-    if (
-      this.props.metadataClassesConditions &&
-      this.props.metadataClassesConditions.length
-    ) {
-      this.addBulkClassesToMetadataContainer(
-        this.props.metadataClassesConditions
-      );
-    }
+
+    this.addBulkClassesToMetadataContainer(classesAndConditions);
   };
 
   initiateScale = () => {
@@ -478,6 +479,9 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       className: string;
     }[]
   ) => {
+    if (!metadataClassesAndConditions.length) {
+      return;
+    }
     const metadataContainers = this.svg.querySelectorAll('.metadata-container');
     metadataContainers.forEach(metaContainer => {
       // reset classes in case this method is being called more than once for the same document
@@ -490,30 +494,13 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
         metaContainer.querySelectorAll('metadata')
       );
 
-      // for the sake of performance we need to execute conditions as little as possible, to achieve it:
-      // - we don't execute condition for a metadata el if condition was met before
-      // - we don't iterate metadata anymore if all conditions are met
-      const unmetConditions = [...metadataClassesAndConditions];
-
-      for (const metadataElement of metadataElements) {
-        if (!unmetConditions.length) {
-          // metadataContainer satisfies to all passed conditions, nothing left to look for
-          break;
-        }
-
-        let unmetConditionIndex = 0;
-        while (unmetConditionIndex < unmetConditions.length) {
-          const { condition, className } = unmetConditions[unmetConditionIndex];
-          if (condition(metadataElement)) {
-            metaContainer.classList.add(className);
-            unmetConditions.splice(unmetConditionIndex, 1);
-            // no need to increment because we removed current element,
-            // so next iteration will have another element or exit
-          } else {
-            unmetConditionIndex++;
-          }
-        }
-      }
+      metadataClassesAndConditions
+        .filter(({ condition }) =>
+          // check if any metadataElement satisfies condition,
+          // one is enough to put className on the metadata container
+          metadataElements.some(condition)
+        )
+        .forEach(({ className }) => metaContainer.classList.add(className));
     });
   };
 
@@ -836,7 +823,7 @@ const SvgNode = styled.div`
     ${(props: InternalThemedStyledProps) =>
       !props.customClassNames.currentAsset &&
       `
-    &.current-asset {
+    &.${defaultCurrentAssetClassName} {
       outline: auto 2px #36a2c2;
       cursor: default;
       > {
