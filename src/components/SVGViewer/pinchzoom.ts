@@ -1,52 +1,7 @@
-// Copyright 2020 Cognite AS
+// Copyright 2021 Cognite AS
 
 // @ts-nocheck
 /* eslint-disable */
-if (typeof Object.assign != 'function') {
-  // Must be writable: true, enumerable: false, configurable: true
-  Object.defineProperty(Object, 'assign', {
-    value: function assign(target, varArgs) {
-      // .length of function is 2
-      if (target == null) {
-        // TypeError if undefined or null
-        throw new TypeError('Cannot convert undefined or null to object');
-      }
-
-      const to = Object(target);
-
-      for (let index = 1; index < arguments.length; index++) {
-        const nextSource = arguments[index];
-
-        if (nextSource != null) {
-          // Skip over if undefined or null
-          for (const nextKey in nextSource) {
-            // Avoid bugs when hasOwnProperty is shadowed
-            if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-              to[nextKey] = nextSource[nextKey];
-            }
-          }
-        }
-      }
-      return to;
-    },
-    writable: true,
-    configurable: true,
-  });
-}
-
-if (typeof Array.from != 'function') {
-  Array.from = function(object) {
-    return [].slice.call(object);
-  };
-}
-
-// utils
-const buildElement = function(str) {
-  // empty string as title argument required by IE and Edge
-  const tmp = document.implementation.createHTMLDocument('');
-  tmp.body.innerHTML = str;
-  return Array.from(tmp.body.children)[0];
-};
 
 const definePinchZoom = function() {
   /**
@@ -160,6 +115,7 @@ const definePinchZoom = function() {
     /**
      * Event handler for 'zoom'
      * @param event
+     * @param newScale
      */
     handleZoom: function(event, newScale) {
       // a relative scale factor is used
@@ -270,6 +226,7 @@ const definePinchZoom = function() {
      * @return {Object} the sanitized offset
      */
     sanitizeOffset: function(offset) {
+      // fixme: slow reads
       const elWidth =
         this.el.offsetWidth * this.getInitialZoomFactor() * this.zoomFactor;
       const elHeight =
@@ -492,6 +449,7 @@ const definePinchZoom = function() {
      * @return {number} the initial zoom factor
      */
     getInitialZoomFactor: function() {
+      // fixme: slow read
       const xZoomFactor = this.container.offsetWidth / this.el.offsetWidth;
       const yZoomFactor = this.container.offsetHeight / this.el.offsetHeight;
 
@@ -533,6 +491,7 @@ const definePinchZoom = function() {
      */
     getTouches: function(event) {
       const rect = this.container.getBoundingClientRect();
+      // TODO: slow reads
       const scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop;
       const scrollLeft =
@@ -540,6 +499,7 @@ const definePinchZoom = function() {
       const posTop = rect.top + scrollTop;
       const posLeft = rect.left + scrollLeft;
 
+      // TODO slow touch.pageX, pageY ?
       return Array.prototype.slice.call(event.touches).map(function(touch) {
         return {
           x: touch.pageX - posLeft,
@@ -621,12 +581,15 @@ const definePinchZoom = function() {
      * Creates the expected html structure
      */
     setupMarkup: function() {
-      this.container = buildElement('<div class="pinch-zoom-container"></div>');
+      this.container = document.createElement('div');
+      this.container.classList.add('pinch-zoom-container');
+
       this.el.parentNode.insertBefore(this.container, this.el);
       this.container.appendChild(this.el);
 
       this.container.style.overflow = 'hidden';
       this.container.style.position = 'relative';
+      this.container.style.contain = 'strict';
 
       this.el.style.webkitTransformOrigin = '0% 0%';
       this.el.style.mozTransformOrigin = '0% 0%';
@@ -709,6 +672,8 @@ const definePinchZoom = function() {
              offsetY +
              'px)';
 
+         // TODO: takes a lot of time to set this one
+         // todo: do we need 3d here?
          this.el.style.webkitTransform = transform3d;
          this.el.style.mozTransform = transform2d;
          this.el.style.msTransform = transform2d;
@@ -773,6 +738,7 @@ const definePinchZoom = function() {
       },
       targetTouches = function(touches) {
         return Array.from(touches).map(function(touch) {
+          // TODO slow read
           return {
             x: touch.pageX,
             y: touch.pageY,
