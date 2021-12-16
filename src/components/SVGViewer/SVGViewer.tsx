@@ -120,9 +120,21 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     } = this.props;
     const { isDesktop } = this.state;
     const hasCloseButton = !!this.props.handleCancel;
-
     return (
-      <SVGViewerContainer onKeyDown={this.handleKeyDown} tabIndex={0}>
+      <SVGViewerContainer
+        onKeyDown={this.handleKeyDown}
+        tabIndex={0}
+        onFocus={() => {
+          if (this.pinchZoom.current) {
+            this.pinchZoom.current.style.willChange = 'transform';
+          }
+        }}
+        onBlur={() => {
+          if (this.pinchZoom.current) {
+            this.pinchZoom.current.style.willChange = 'auto';
+          }
+        }}
+      >
         <SvgNode
           ref={this.svgParentNode}
           onMouseDown={this.onMouseDown}
@@ -211,6 +223,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
           />
           {/* move pinchZoomContainer if search is visible on mobile */}
           <div
+            id={'pinchZoomContainer'}
             ref={this.pinchZoomContainer}
             style={
               !isDesktop && this.state.isSearchVisible
@@ -218,11 +231,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
                 : {}
             }
           >
-            <div
-              ref={this.pinchZoom}
-              onTouchStart={this.onTouchStart}
-              onTouchEnd={this.onTouchEnd}
-            />
+            <div ref={this.pinchZoom} id={'pinch-zoom'} />
           </div>
           {!isDesktop && !this.state.isSearchFocused ? (
             <ModalMobileFooter>
@@ -413,23 +422,6 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     this.dragging = false;
     this.prevMoveDistanceX = 0;
     this.prevMoveDistanceY = 0;
-  };
-
-  // we need to remove and add back optimization as suggested here
-  // https://developer.mozilla.org/en-US/docs/Web/CSS/will-change
-  // so all the items will be rendered not blurry
-  onTouchStart = () => {
-    if (this.pinchZoom.current && !this.isOptimizationDisabled) {
-      // @ts-ignore 'willChange' is not a part of 'CSSStyleDeclaration'
-      this.pinchZoom.current.style.willChange = 'transform';
-    }
-  };
-
-  onTouchEnd = () => {
-    if (this.pinchZoom.current && !this.isOptimizationDisabled) {
-      // @ts-ignore 'willChange' is not a part of 'CSSStyleDeclaration'
-      this.pinchZoom.current.style.willChange = 'auto';
-    }
   };
 
   addCssClassesToMetadataContainer = ({
