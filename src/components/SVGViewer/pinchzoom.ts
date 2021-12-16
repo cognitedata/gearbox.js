@@ -226,7 +226,6 @@ const definePinchZoom = function() {
      * @return {Object} the sanitized offset
      */
     sanitizeOffset: function(offset) {
-      // fixme: slow reads
       const elWidth =
         this.el.offsetWidth * this.getInitialZoomFactor() * this.zoomFactor;
       const elHeight =
@@ -449,7 +448,6 @@ const definePinchZoom = function() {
      * @return {number} the initial zoom factor
      */
     getInitialZoomFactor: function() {
-      // fixme: slow read
       const xZoomFactor = this.container.offsetWidth / this.el.offsetWidth;
       const yZoomFactor = this.container.offsetHeight / this.el.offsetHeight;
 
@@ -491,7 +489,6 @@ const definePinchZoom = function() {
      */
     getTouches: function(event) {
       const rect = this.container.getBoundingClientRect();
-      // TODO: slow reads
       const scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop;
       const scrollLeft =
@@ -499,7 +496,6 @@ const definePinchZoom = function() {
       const posTop = rect.top + scrollTop;
       const posLeft = rect.left + scrollLeft;
 
-      // TODO slow touch.pageX, pageY ?
       return Array.prototype.slice.call(event.touches).map(function(touch) {
         return {
           x: touch.pageX - posLeft,
@@ -517,12 +513,12 @@ const definePinchZoom = function() {
      * @param callback
      */
     animate: function(duration, framefn, timefn, callback) {
-      var startTime = new Date().getTime(),
+      var startTime = Date.now(),
         renderFrame = function() {
           if (!this.inAnimation) {
             return;
           }
-          let frameTime = new Date().getTime() - startTime,
+          let frameTime = Date.now() - startTime,
             progress = frameTime / duration;
           if (frameTime >= duration) {
             framefn(1);
@@ -591,10 +587,6 @@ const definePinchZoom = function() {
       this.container.style.position = 'relative';
       this.container.style.contain = 'strict';
 
-      this.el.style.webkitTransformOrigin = '0% 0%';
-      this.el.style.mozTransformOrigin = '0% 0%';
-      this.el.style.msTransformOrigin = '0% 0%';
-      this.el.style.oTransformOrigin = '0% 0%';
       this.el.style.transformOrigin = '0% 0%';
 
       this.el.style.position = 'absolute';
@@ -648,37 +640,8 @@ const definePinchZoom = function() {
 
          const zoomFactor = this.getInitialZoomFactor() * this.zoomFactor,
            offsetX = -this.offset.x / zoomFactor,
-           offsetY = -this.offset.y / zoomFactor,
-           transform3d =
-             'scale3d(' +
-             zoomFactor +
-             ', ' +
-             zoomFactor +
-             ',1) ' +
-             'translate3d(' +
-             offsetX +
-             'px,' +
-             offsetY +
-             'px,0px)',
-           transform2d =
-             'scale(' +
-             zoomFactor +
-             ', ' +
-             zoomFactor +
-             ') ' +
-             'translate(' +
-             offsetX +
-             'px,' +
-             offsetY +
-             'px)';
-
-         // TODO: takes a lot of time to set this one
-         // todo: do we need 3d here?
-         this.el.style.webkitTransform = transform3d;
-         this.el.style.mozTransform = transform2d;
-         this.el.style.msTransform = transform2d;
-         this.el.style.oTransform = transform2d;
-         this.el.style.transform = transform3d;
+           offsetY = -this.offset.y / zoomFactor;
+         this.el.style.transform = `scale(${zoomFactor}, ${zoomFactor}) translate(${offsetX}px, ${offsetY}px)`;
        }
       );
     },
@@ -738,7 +701,6 @@ const definePinchZoom = function() {
       },
       targetTouches = function(touches) {
         return Array.from(touches).map(function(touch) {
-          // TODO slow read
           return {
             x: touch.pageX,
             y: touch.pageY,
