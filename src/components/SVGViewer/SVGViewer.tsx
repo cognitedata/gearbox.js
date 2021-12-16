@@ -1,8 +1,8 @@
-// Copyright 2020 Cognite AS
+// Copyright 2021 Cognite AS
 import { CogniteClient } from '@cognite/sdk';
 import { Icon } from 'antd';
 import PinchZoom from './pinchzoom';
-import React, { Component, KeyboardEvent, RefObject } from 'react';
+import React, { Component, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
 import { ClientSDKProxyContext } from '../../context/clientSDKProxyContext';
@@ -28,8 +28,7 @@ const minDesktopWidth = 992;
 interface SvgViewerState {
   isSearchVisible: boolean;
   isSearchFocused: boolean;
-  width: number;
-  handleKeyDown: boolean;
+  isDesktop: boolean;
 }
 
 export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
@@ -46,7 +45,6 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   dragging: boolean = false;
   startMouse!: ZoomCenter;
   pinchZoomInstance!: PinchZoomInterface;
-  inputWrapper: RefObject<HTMLInputElement>;
   svg!: SVGSVGElement;
   pinchZoom: React.RefObject<HTMLDivElement>;
   pinchZoomContainer: React.RefObject<HTMLDivElement>;
@@ -57,14 +55,12 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     this.state = {
       isSearchVisible: false,
       isSearchFocused: false,
-      handleKeyDown: false,
-      width: window.innerWidth,
+      isDesktop: window.innerWidth > minDesktopWidth,
     };
 
     this.pinchZoom = React.createRef();
     this.pinchZoomContainer = React.createRef();
     this.svgParentNode = React.createRef();
-    this.inputWrapper = React.createRef();
   }
 
   componentDidMount() {
@@ -122,27 +118,11 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       handleSearchChange,
       downloadablePdf = null,
     } = this.props;
-    const isDesktop = this.state.width > minDesktopWidth;
+    const { isDesktop } = this.state;
     const hasCloseButton = !!this.props.handleCancel;
 
     return (
-      <SVGViewerContainer
-        onClick={this.onContainerClick}
-        onKeyDown={this.handleKeyDown}
-      >
-        {isDesktop && (
-          <input
-            type="text"
-            onBlur={this.onContainerBlur}
-            onFocus={this.onContainerFocus}
-            ref={this.inputWrapper}
-            style={{
-              opacity: 0,
-              position: 'absolute',
-              pointerEvents: 'none',
-            }}
-          />
-        )}
+      <SVGViewerContainer onKeyDown={this.handleKeyDown} tabIndex={0}>
         <SvgNode
           ref={this.svgParentNode}
           onMouseDown={this.onMouseDown}
@@ -211,6 +191,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
               </StyledHeaderButtonsContainer>
             </StyledHeaderContainer>
           )}
+          {/* todo(INFIELD-2720) make search focused on repeated ctrl+F or click on search button */}
           <SVGViewerSearch
             visible={this.state.isSearchVisible}
             svg={this.svg}
@@ -268,7 +249,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
 
   updateWindowDimensions = () => {
     this.setState({
-      width: window.innerWidth,
+      isDesktop: window.innerWidth > minDesktopWidth,
     });
   };
 
@@ -429,10 +410,6 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   };
 
   onMouseUp = () => {
-    const isDesktop = this.state.width > minDesktopWidth;
-    if (isDesktop && this.inputWrapper.current) {
-      this.inputWrapper.current.focus();
-    }
     this.dragging = false;
     this.prevMoveDistanceX = 0;
     this.prevMoveDistanceY = 0;
@@ -619,11 +596,10 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   };
 
   zoomOnCurrentAsset = async (currentAsset: Element | null) => {
-    const isDesktop = this.state.width > minDesktopWidth;
     if (!currentAsset || !this.pinchZoomInstance) {
       return;
     }
-    const defaultZoom = isDesktop ? zoomLevel * 5 : zoomLevel * 10;
+    const defaultZoom = this.state.isDesktop ? zoomLevel * 5 : zoomLevel * 10;
     this.pinchZoomInstance.zoomFactor = this.props.initialZoom || defaultZoom;
 
     const zoom = (currentAssetPosition: DOMRect | null) => {
@@ -709,26 +685,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     this.setState({ isSearchFocused: false });
   };
 
-  onContainerClick = () => {
-    const isDesktop = this.state.width > minDesktopWidth;
-    if (isDesktop && this.inputWrapper.current) {
-      this.inputWrapper.current.focus();
-    }
-  };
-
-  onContainerBlur = () => {
-    this.setState({ handleKeyDown: false });
-  };
-
-  onContainerFocus = () => {
-    this.setState({ handleKeyDown: true });
-  };
-
   handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (!this.state.handleKeyDown) {
-      return;
-    }
-
     // Overriding ctrl+F
     const FKeyCode = 70;
     if ((e.ctrlKey || e.metaKey) && e.keyCode === FKeyCode) {
