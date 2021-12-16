@@ -691,6 +691,7 @@ const SVGViewerContainer = styled.div`
   height: 100%;
   width: 100%;
   position: relative;
+  contain: strict;
 `;
 
 interface InternalThemedStyledProps {

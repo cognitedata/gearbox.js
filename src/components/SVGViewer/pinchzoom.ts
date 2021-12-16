@@ -585,7 +585,6 @@ const definePinchZoom = function() {
 
       this.container.style.overflow = 'hidden';
       this.container.style.position = 'relative';
-      this.container.style.contain = 'strict';
 
       this.el.style.transformOrigin = '0% 0%';
 
