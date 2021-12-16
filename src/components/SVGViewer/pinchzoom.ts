@@ -2,6 +2,8 @@
 
 // @ts-nocheck
 /* eslint-disable */
+// original code is take from here https://github.com/manuelstofer/pinchzoom
+// modified to optimize performance (removed root node cloning, some unused polyfils and vendor prefixes)
 
 const definePinchZoom = function() {
   /**
