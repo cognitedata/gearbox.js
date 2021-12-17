@@ -39,7 +39,6 @@
     "lodash": "^4.17.15",
     "ms": "^2.1.2",
     "numeral": "^2.0.6",
-    "pinch-zoom-js": "^2.3.4",
     "react-dnd": "^7.4.5",
     "react-dnd-html5-backend": "^7.4.4",
     "react-odometerjs": "^2.1.1",
