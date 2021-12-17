@@ -1,3 +1,10 @@
+## [2.4.5](https://github.com/cognitedata/gearbox.js/compare/v2.4.4...v2.4.5) (2021-12-17)
+
+
+### Performance Improvements
+
+* **svgviewer:** optimize interactions on mobile ([#735](https://github.com/cognitedata/gearbox.js/issues/735)) ([c066752](https://github.com/cognitedata/gearbox.js/commit/c066752ca668b88636d114a849b3baffd4229ee5))
+
 ## [2.4.4](https://github.com/cognitedata/gearbox.js/compare/v2.4.3...v2.4.4) (2021-12-08)
 
 
