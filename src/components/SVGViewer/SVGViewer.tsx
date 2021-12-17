@@ -1,7 +1,7 @@
 // Copyright 2021 Cognite AS
 import { CogniteClient } from '@cognite/sdk';
 import { Icon } from 'antd';
-import PinchZoom from './pinchzoom';
+import { PinchZoom } from './pinchzoom';
 import React, { Component, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 import { ERROR_NO_SDK_CLIENT } from '../../constants/errorMessages';
@@ -11,7 +11,6 @@ import DOMPurify from 'dompurify';
 
 import {
   CustomClassNames,
-  PinchZoomInterface,
   SvgViewerDocumentIdProps,
   SvgViewerFileProps,
   SvgViewerProps,
@@ -44,7 +43,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
   prevMoveDistanceY: number = 0;
   dragging: boolean = false;
   startMouse!: ZoomCenter;
-  pinchZoomInstance!: PinchZoomInterface;
+  pinchZoomInstance!: PinchZoom;
   svg!: SVGSVGElement;
   pinchZoom: React.RefObject<HTMLDivElement>;
   pinchZoomContainer: React.RefObject<HTMLDivElement>;
@@ -223,7 +222,6 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
           />
           {/* move pinchZoomContainer if search is visible on mobile */}
           <div
-            id={'pinchZoomContainer'}
             ref={this.pinchZoomContainer}
             style={
               !isDesktop && this.state.isSearchVisible
@@ -231,7 +229,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
                 : {}
             }
           >
-            <div ref={this.pinchZoom} id={'pinch-zoom'} />
+            <div ref={this.pinchZoom} />
           </div>
           {!isDesktop && !this.state.isSearchFocused ? (
             <ModalMobileFooter>
@@ -343,7 +341,6 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       this.pinchZoom.current.innerHTML = '';
       this.pinchZoom.current.appendChild(this.svg);
 
-      // @ts-ignore
       this.pinchZoomInstance = new PinchZoom(this.pinchZoom.current, {
         animationDuration: 0,
         tapZoomFactor: 8,

@@ -4,7 +4,9 @@
 // modified to optimize performance (removed root node cloning, some unused polyfils and vendor prefixes)
 // also ported to TS
 
-type Options = {
+type Coordinates = { x: number; y: number };
+
+export type PinchZoomOptions = {
   tapZoomFactor: number;
   zoomOutFactor: number;
   animationDuration: number;
@@ -24,8 +26,8 @@ type Options = {
   onDragUpdate?: ((...args: any) => unknown) | null;
   onDoubleTap?: ((...args: any) => unknown) | null;
 };
-type Coordinates = { x: number; y: number };
-const defaultOptions: Options = {
+
+export const defaultPinchZoomOptions: Readonly<PinchZoomOptions> = {
   tapZoomFactor: 2,
   zoomOutFactor: 1.3,
   animationDuration: 300,
@@ -46,24 +48,20 @@ const defaultOptions: Options = {
   onDoubleTap: null,
 };
 
-export default class PinchZoom {
-  // making everything public as it was all public originally and used by SVG viewer
-  public el: HTMLElement;
+export class PinchZoom {
+  // made everything, except what SVGViewer uses, private
   public container = document.createElement('div');
   public zoomFactor = 1;
-  public lastScale = 1;
+  public options: PinchZoomOptions;
   public offset = {
     x: 0,
     y: 0,
   };
-  public initialOffset = {
-    x: 0,
-    y: 0,
-  };
-  public options: Options;
-  public isDoubleTap = false;
-  public enabled = false;
 
+  private el: HTMLElement;
+  private lastScale = 1;
+  private initialOffset = { x: 0, y: 0 };
+  private isDoubleTap = false;
   private lastDragPosition: Coordinates | null = null;
   private lastZoomCenter: Coordinates | null = null;
   private hasInteraction = false;
@@ -72,10 +70,13 @@ export default class PinchZoom {
   private inAnimation = false;
   private _isOffsetsSet = false;
 
-  constructor(el: HTMLElement, options: Partial<Options>) {
+  constructor(el: HTMLElement, options: Partial<PinchZoomOptions>) {
     this.el = el;
 
-    this.options = Object.assign({}, defaultOptions, options);
+    this.options = {
+      ...defaultPinchZoomOptions,
+      ...options,
+    };
     this.setupMarkup();
     this.bindEvents();
     this.update();
@@ -86,11 +87,9 @@ export default class PinchZoom {
       this.updateAspectRatio();
       this.setupOffsets();
     }
-
-    this.enable();
   }
 
-  public isCloseTo(value: number, expected: number) {
+  private static isCloseTo(value: number, expected: number) {
     return value > expected - 0.01 && value < expected + 0.01;
   }
 
@@ -98,7 +97,7 @@ export default class PinchZoom {
    * Event handler for 'dragstart'
    * @param event
    */
-  public handleDragStart(event: TouchEvent) {
+  private handleDragStart(event: TouchEvent) {
     if (typeof this.options.onDragStart == 'function') {
       this.options.onDragStart(this, event);
     }
@@ -112,14 +111,14 @@ export default class PinchZoom {
    * Event handler for 'drag'
    * @param event
    */
-  public handleDrag(event: TouchEvent) {
+  private handleDrag(event: TouchEvent) {
     const touch = this.getTouches(event)[0];
     this.drag(touch, this.lastDragPosition);
     this.offset = this.sanitizeOffset(this.offset);
     this.lastDragPosition = touch;
   }
 
-  public handleDragEnd(event: TouchEvent) {
+  private handleDragEnd(event: TouchEvent) {
     if (typeof this.options.onDragEnd == 'function') {
       this.options.onDragEnd(this, event);
     }
@@ -130,7 +129,7 @@ export default class PinchZoom {
    * Event handler for 'zoomstart'
    * @param event
    */
-  public handleZoomStart(event: TouchEvent) {
+  private handleZoomStart(event: TouchEvent) {
     if (typeof this.options.onZoomStart == 'function') {
       this.options.onZoomStart(this, event);
     }
@@ -146,9 +145,9 @@ export default class PinchZoom {
    * @param event
    * @param newScale
    */
-  public handleZoom(event: TouchEvent, newScale: number) {
+  private handleZoom(event: TouchEvent, newScale: number) {
     // a relative scale factor is used
-    const touchCenter = this.getTouchCenter(this.getTouches(event)),
+    const touchCenter = PinchZoom.getTouchCenter(this.getTouches(event)),
       scale = newScale / this.lastScale;
     this.lastScale = newScale;
 
@@ -161,7 +160,7 @@ export default class PinchZoom {
     this.lastZoomCenter = touchCenter;
   }
 
-  public handleZoomEnd(event: TouchEvent) {
+  private handleZoomEnd(event: TouchEvent) {
     if (typeof this.options.onZoomEnd == 'function') {
       this.options.onZoomEnd(this, event);
     }
@@ -172,7 +171,7 @@ export default class PinchZoom {
    * Event handler for 'doubletap'
    * @param event
    */
-  public handleDoubleTap(event: TouchEvent) {
+  private handleDoubleTap(event: TouchEvent) {
     let center = this.getTouches(event)[0];
     const zoomFactor = this.zoomFactor > 1 ? 1 : this.options.tapZoomFactor;
     const startZoomFactor = this.zoomFactor;
@@ -205,7 +204,7 @@ export default class PinchZoom {
    *
    * the element should be centered in the container upon initialization
    */
-  public computeInitialOffset() {
+  private computeInitialOffset() {
     this.initialOffset = {
       x:
         -Math.abs(
@@ -223,7 +222,7 @@ export default class PinchZoom {
   /**
    * Reset current image offset to that of the initial offset
    */
-  public resetOffset() {
+  private resetOffset() {
     this.offset.x = this.initialOffset.x;
     this.offset.y = this.initialOffset.y;
   }
@@ -231,7 +230,7 @@ export default class PinchZoom {
   /**
    * Determine if image is loaded
    */
-  public isImageLoaded(el: HTMLElement) {
+  private isImageLoaded(el: HTMLElement) {
     if (el.nodeName === 'IMG') {
       const imageEl = el as HTMLImageElement;
       return imageEl.complete && imageEl.naturalHeight !== 0;
@@ -240,7 +239,7 @@ export default class PinchZoom {
     }
   }
 
-  public setupOffsets() {
+  private setupOffsets() {
     if (this.options.setOffsetsOnce && this._isOffsetsSet) {
       return;
     }
@@ -289,14 +288,14 @@ export default class PinchZoom {
    * @param scale
    * @param center
    */
-  public scale(scale: number, center: Coordinates) {
+  private scale(scale: number, center: Coordinates) {
     scale = this.scaleZoomFactor(scale);
     this.addOffset({
       x: (scale - 1) * (center.x + this.offset.x),
       y: (scale - 1) * (center.y + this.offset.y),
     });
     if (typeof this.options.onZoomUpdate == 'function') {
-      this.options.onZoomUpdate(this, event);
+      this.options.onZoomUpdate(this, center);
     }
   }
 
@@ -305,7 +304,7 @@ export default class PinchZoom {
    * @param scale
    * @return the actual scale (can differ because of max min zoom factor)
    */
-  public scaleZoomFactor(scale: number) {
+  private scaleZoomFactor(scale: number) {
     const originalZoomFactor = this.zoomFactor;
     this.zoomFactor *= scale;
     this.zoomFactor = Math.min(
@@ -323,9 +322,9 @@ export default class PinchZoom {
    *
    * @return {Boolean}
    */
-  public canDrag() {
+  private canDrag() {
     return (
-      this.options.draggableUnzoomed || !this.isCloseTo(this.zoomFactor, 1)
+      this.options.draggableUnzoomed || !PinchZoom.isCloseTo(this.zoomFactor, 1)
     );
   }
 
@@ -334,7 +333,7 @@ export default class PinchZoom {
    * @param center
    * @param lastCenter
    */
-  public drag(center: Coordinates, lastCenter: Coordinates | null) {
+  private drag(center: Coordinates, lastCenter: Coordinates | null) {
     if (lastCenter) {
       if (this.options.lockDragAxis) {
         // lock scroll to position that was changed the most
@@ -358,7 +357,7 @@ export default class PinchZoom {
         });
       }
       if (typeof this.options.onDragUpdate == 'function') {
-        this.options.onDragUpdate(this, event);
+        this.options.onDragUpdate(this, lastCenter);
       }
     }
   }
@@ -368,14 +367,14 @@ export default class PinchZoom {
    * @param touches
    * @return {Object}
    */
-  public getTouchCenter(touches: Coordinates[]) {
-    return this.getVectorAvg(touches);
+  private static getTouchCenter(touches: Coordinates[]) {
+    return PinchZoom.getVectorAvg(touches);
   }
 
   /**
    * Calculates the average of multiple vectors (x, y values)
    */
-  public getVectorAvg(vectors: Coordinates[]) {
+  private static getVectorAvg(vectors: Coordinates[]) {
     const sum = (a: number, b: number) => {
       return a + b;
     };
@@ -390,14 +389,14 @@ export default class PinchZoom {
    * @param offset the offset to add
    * @return return true when the offset change was accepted
    */
-  public addOffset(offset: Coordinates) {
+  private addOffset(offset: Coordinates) {
     this.offset = {
       x: this.offset.x + offset.x,
       y: this.offset.y + offset.y,
     };
   }
 
-  public sanitize() {
+  private sanitize() {
     if (this.zoomFactor < this.options.zoomOutFactor) {
       this.zoomOutAnimation();
     } else if (this.isInsaneOffset(this.offset)) {
@@ -410,7 +409,7 @@ export default class PinchZoom {
    * @param offset
    * @return {Boolean}
    */
-  public isInsaneOffset(offset: Coordinates) {
+  private isInsaneOffset(offset: Coordinates) {
     const sanitizedOffset = this.sanitizeOffset(offset);
     return sanitizedOffset.x !== offset.x || sanitizedOffset.y !== offset.y;
   }
@@ -418,7 +417,7 @@ export default class PinchZoom {
   /**
    * Creates an animation moving to a sane offset
    */
-  public sanitizeOffsetAnimation() {
+  private sanitizeOffsetAnimation() {
     const targetOffset = this.sanitizeOffset(this.offset);
     const startOffset = {
       x: this.offset.x,
@@ -443,7 +442,7 @@ export default class PinchZoom {
    * Zooms back to the original position,
    * (no offset and zoom factor 1)
    */
-  public zoomOutAnimation() {
+  private zoomOutAnimation() {
     if (this.zoomFactor === 1) {
       return;
     }
@@ -471,7 +470,7 @@ export default class PinchZoom {
    * Any previous container height must be cleared before re-measuring the
    * parent height, since it depends implicitly on the height of any of its children
    */
-  public updateAspectRatio() {
+  private updateAspectRatio() {
     this.unsetContainerY();
     if (this.container.parentElement) {
       this.setContainerY(this.container.parentElement.offsetHeight);
@@ -482,7 +481,7 @@ export default class PinchZoom {
    * Calculates the initial zoom factor (for the element to fit into the container)
    * @return {number} the initial zoom factor
    */
-  public getInitialZoomFactor() {
+  private getInitialZoomFactor() {
     const xZoomFactor = this.container.offsetWidth / this.el.offsetWidth;
     const yZoomFactor = this.container.offsetHeight / this.el.offsetHeight;
 
@@ -490,19 +489,11 @@ export default class PinchZoom {
   }
 
   /**
-   * Calculates the aspect ratio of the element
-   * @return the aspect ratio
-   */
-  public getAspectRatio() {
-    return this.el.offsetWidth / this.el.offsetHeight;
-  }
-
-  /**
    * Calculates the virtual zoom center for the current offset and zoom factor
    * (used for reverse zoom)
    * @return {Object} the current zoom center
    */
-  public getCurrentZoomCenter() {
+  private getCurrentZoomCenter() {
     const offsetLeft = this.offset.x - this.initialOffset.x;
     const centerX = -1 * this.offset.x - offsetLeft / (1 / this.zoomFactor - 1);
 
@@ -520,7 +511,7 @@ export default class PinchZoom {
    * @param event
    * @return array touches
    */
-  public getTouches(event: TouchEvent): Coordinates[] {
+  private getTouches(event: TouchEvent): Coordinates[] {
     const rect = this.container.getBoundingClientRect();
     const scrollTop =
       document.documentElement.scrollTop || document.body.scrollTop;
@@ -595,26 +586,26 @@ export default class PinchZoom {
     return -Math.cos(p * Math.PI) / 2 + 0.5;
   }
 
-  public getContainerX() {
+  private getContainerX() {
     return this.container.offsetWidth;
   }
 
-  public getContainerY() {
+  private getContainerY() {
     return this.container.offsetHeight;
   }
 
-  public setContainerY(y: number) {
+  private setContainerY(y: number) {
     return (this.container.style.height = y + 'px');
   }
 
-  public unsetContainerY() {
+  private unsetContainerY() {
     this.container.style.removeProperty('height');
   }
 
   /**
    * Creates the expected html structure
    */
-  public setupMarkup() {
+  private setupMarkup() {
     this.container.classList.add('pinch-zoom-container');
 
     if (this.el.parentNode) {
@@ -630,7 +621,7 @@ export default class PinchZoom {
     this.el.style.position = 'absolute';
   }
 
-  public end() {
+  private end() {
     this.hasInteraction = false;
     this.sanitize();
     this.update();
@@ -639,7 +630,7 @@ export default class PinchZoom {
   /**
    * Binds all required event listeners
    */
-  public bindEvents() {
+  private bindEvents() {
     this.detectGestures();
 
     window.addEventListener('resize', this.update.bind(this));
@@ -679,20 +670,6 @@ export default class PinchZoom {
         offsetY = -this.offset.y / zoomFactor;
       this.el.style.transform = `scale(${zoomFactor}, ${zoomFactor}) translate(${offsetX}px, ${offsetY}px)`;
     });
-  }
-
-  /**
-   * Enables event handling for gestures
-   */
-  public enable() {
-    this.enabled = true;
-  }
-
-  /**
-   * Disables event handling for gestures
-   */
-  public disable() {
-    this.enabled = false;
   }
 
   private detectGestures() {
@@ -791,15 +768,13 @@ export default class PinchZoom {
     let firstMove = true;
 
     const handleTouchStart = (event: TouchEvent) => {
-      if (this.enabled) {
-        firstMove = true;
-        fingers = event.touches.length;
-        detectDoubleTap(event);
-      }
+      firstMove = true;
+      fingers = event.touches.length;
+      detectDoubleTap(event);
     };
 
     const handleTouchMove = (event: TouchEvent) => {
-      if (this.enabled && !this.isDoubleTap) {
+      if (!this.isDoubleTap) {
         if (firstMove) {
           updateInteraction(event);
           if (interaction) {
@@ -834,10 +809,8 @@ export default class PinchZoom {
       }
     };
     const handleTouchEnd = (event: TouchEvent) => {
-      if (this.enabled) {
-        fingers = event.touches.length;
-        updateInteraction(event);
-      }
+      fingers = event.touches.length;
+      updateInteraction(event);
     };
 
     this.container.addEventListener('touchstart', handleTouchStart.bind(this), {
