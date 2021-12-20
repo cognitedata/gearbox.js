@@ -17,7 +17,7 @@ interface ComponentProps {
   searchClassName: string;
   currentSearchClassName: string;
   openSearch: () => void;
-  zoomOnCurrentAsset: (currentAsset: Element | null) => void;
+  onSearchResult: (foundElement: Element | null) => void;
   handleCancelSearch: () => void;
   addCssClassesToMetadataContainer: ({
     condition,
@@ -193,7 +193,7 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
     const { currentResult, amountOfResults } = this.state;
     const {
       svg,
-      zoomOnCurrentAsset,
+      onSearchResult,
       searchClassName,
       currentSearchClassName,
     } = this.props;
@@ -211,7 +211,7 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
     currentSearchResult.classList.remove(currentSearchClassName);
     searchResults[nextResult - 1].classList.add(currentSearchClassName);
     this.setState({ currentResult: nextResult });
-    zoomOnCurrentAsset(searchResults[nextResult - 1]);
+    onSearchResult(searchResults[nextResult - 1]);
   };
 
   handleCancelSearch = () => {
@@ -226,7 +226,7 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
       svg,
       addCssClassesToMetadataContainer,
       addCssClassesToSvgText,
-      zoomOnCurrentAsset,
+      onSearchResult,
       searchClassName,
       currentSearchClassName,
       handleSearchChange,
@@ -236,7 +236,6 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
       this.resetSearch();
     } else {
       const regexp = new RegExp(`(${value})`, 'gi');
-      let amountOfResults = 0;
       let currentResult = 0;
       const isMatchingSearchPhrase = (textNode: Element) =>
         !!(textNode.textContent && textNode.textContent.match(regexp));
@@ -251,19 +250,18 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
 
       // count all results and set current search result for navigation
       const searchResults = svg.querySelectorAll(`.${searchClassName}`);
-      amountOfResults = searchResults.length;
-      if (amountOfResults) {
+      if (searchResults.length) {
         currentResult = 1;
         searchResults.forEach(item => {
           item.classList.remove(currentSearchClassName);
         });
         const currentSearchResult = searchResults[0];
         currentSearchResult.classList.add(currentSearchClassName);
-        zoomOnCurrentAsset(searchResults[0]);
+        onSearchResult(searchResults[0]);
       }
       this.setState({
         searchPhrase: value,
-        amountOfResults,
+        amountOfResults: searchResults.length,
         currentResult,
       });
     }

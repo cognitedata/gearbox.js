@@ -342,6 +342,22 @@ const isCurrentAsset = metadata => (metadata.textContent || '').replace(/\s/g, '
   </Story>
 </Preview>
 
+### Customize search zoom level
+
+By default, initial zoom level is used for showing search results.
+You can override this by passing `searchZoom` prop.
+
+<Preview>
+  <Story name='Custom search zoom level'>
+    <div style={{height: '75vh' }}>
+      <SVGViewer
+        documentId={5185355395511590}
+        initialZoom={1}
+        searchZoom={3}
+      />
+    </div>
+  </Story>
+</Preview>
 
 ### File
 

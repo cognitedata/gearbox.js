@@ -19,7 +19,7 @@ import {
 import SVGViewerSearch from './SVGViewerSearch';
 import { getDocumentDownloadLink } from './utils';
 
-const zoomLevel = 0.7;
+const defaultZoomLevel = 0.7;
 const wheelZoomLevel = 0.15;
 const defaultCurrentAssetClassName = 'current-asset';
 const minDesktopWidth = 992;
@@ -207,7 +207,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
             visible={this.state.isSearchVisible}
             svg={this.svg}
             openSearch={this.openSearch}
-            zoomOnCurrentAsset={this.zoomOnCurrentAsset}
+            onSearchResult={this.handleSearchResult}
             handleCancelSearch={this.handleCancelSearch}
             addCssClassesToMetadataContainer={
               this.addCssClassesToMetadataContainer
@@ -305,7 +305,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
         const currentAssetElement = document.querySelector(
           `.${this.getCurrentAssetClassName()}`
         )!;
-        this.zoomOnCurrentAsset(currentAssetElement);
+        this.zoomOnElement(currentAssetElement, this.props.initialZoom);
       }
     }
   };
@@ -584,22 +584,35 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     });
   };
 
-  zoomOnCurrentAsset = async (currentAsset: Element | null) => {
-    if (!currentAsset || !this.pinchZoomInstance) {
+  handleSearchResult = (foundElement: Element | null) => {
+    this.zoomOnElement(
+      foundElement,
+      this.props.searchZoom || this.props.initialZoom
+    );
+  };
+
+  /**
+   * @param element - any annotation element on SVG, typically asset or document
+   * @param zoomLevel
+   */
+  zoomOnElement = (element: Element | null, zoomLevel?: number) => {
+    if (!element || !this.pinchZoomInstance) {
       return;
     }
-    const defaultZoom = this.state.isDesktop ? zoomLevel * 5 : zoomLevel * 10;
-    this.pinchZoomInstance.zoomFactor = this.props.initialZoom || defaultZoom;
+    const defaultZoom = this.state.isDesktop
+      ? defaultZoomLevel * 5
+      : defaultZoomLevel * 10;
+    this.pinchZoomInstance.zoomFactor = zoomLevel || defaultZoom;
 
-    const zoom = (currentAssetPosition: DOMRect | null) => {
-      if (currentAssetPosition) {
+    const zoom = (elementPosition: DOMRect | null) => {
+      if (elementPosition) {
         this.pinchZoomInstance.offset = {
           x:
-            currentAssetPosition.left -
+            elementPosition.left -
             this.pinchZoomInstance.container.clientWidth / 2 +
             this.pinchZoomInstance.offset.x,
           y:
-            currentAssetPosition.top -
+            elementPosition.top -
             this.pinchZoomInstance.container.clientHeight / 2 +
             this.pinchZoomInstance.offset.y,
         };
@@ -615,9 +628,9 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     // try to zoom almost immediately
     // but adjust later in case if asset DOM element position has changed
     setTimeout(async () => {
-      const initialRect = currentAsset.getBoundingClientRect();
+      const initialRect = element.getBoundingClientRect();
       zoom(initialRect);
-      const stableRect = await this.getStableBoundingClientRect(currentAsset);
+      const stableRect = await this.getStableBoundingClientRect(element);
       if (
         stableRect &&
         stableRect.left !== initialRect.left &&
@@ -628,8 +641,17 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     });
   };
 
+  /** @deprecated as class component methods are kind of part of public API,
+   * not removing it right away. Remove it in the next major */
+  zoomOnCurrentAsset = (currentAsset: Element | null) => {
+    console.warn(
+      'SVGViewer: zoomOnCurrentAsset is deprecated, use zoomOnElement(asset: Element | null, zoomLevel?: number)'
+    );
+    this.zoomOnElement(currentAsset, this.props.initialZoom);
+  };
+
   zoomIn = () => {
-    this.animateZoom(zoomLevel, 'topbar');
+    this.animateZoom(defaultZoomLevel, 'topbar');
   };
 
   zoomOut = () => {
@@ -638,8 +660,8 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     }
     let zoomFactor;
     const startZoomFactor = this.pinchZoomInstance.zoomFactor;
-    if (startZoomFactor - zoomLevel > 1) {
-      zoomFactor = startZoomFactor - zoomLevel;
+    if (startZoomFactor - defaultZoomLevel > 1) {
+      zoomFactor = startZoomFactor - defaultZoomLevel;
     } else {
       zoomFactor = 1;
     }
