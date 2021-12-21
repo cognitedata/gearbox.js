@@ -19,10 +19,10 @@ import {
 import SVGViewerSearch from './SVGViewerSearch';
 import { getDocumentDownloadLink } from './utils';
 
-const zoomLevel = 0.7;
-const wheelZoomLevel = 0.15;
-const defaultCurrentAssetClassName = 'current-asset';
-const minDesktopWidth = 992;
+const ZOOM_STEP = 0.7;
+const ZOOM_STEP_WHEEL = 0.15;
+const CURRENT_ASSET_CLASSNAME = 'current-asset';
+const MIN_DESKTOP_WIDTH = 992;
 
 interface SvgViewerState {
   isSearchVisible: boolean;
@@ -54,7 +54,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     this.state = {
       isSearchVisible: false,
       isSearchFocused: false,
-      isDesktop: window.innerWidth > minDesktopWidth,
+      isDesktop: window.innerWidth > MIN_DESKTOP_WIDTH,
     };
 
     this.pinchZoom = React.createRef();
@@ -207,7 +207,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
             visible={this.state.isSearchVisible}
             svg={this.svg}
             openSearch={this.openSearch}
-            zoomOnCurrentAsset={this.zoomOnCurrentAsset}
+            onSearchResult={this.handleSearchResult}
             handleCancelSearch={this.handleCancelSearch}
             addCssClassesToMetadataContainer={
               this.addCssClassesToMetadataContainer
@@ -256,14 +256,14 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
 
   updateWindowDimensions = () => {
     this.setState({
-      isDesktop: window.innerWidth > minDesktopWidth,
+      isDesktop: window.innerWidth > MIN_DESKTOP_WIDTH,
     });
   };
 
   getCurrentAssetClassName = () => {
     return (
       (this.props.customClassNames || {}).currentAsset ||
-      defaultCurrentAssetClassName
+      CURRENT_ASSET_CLASSNAME
     );
   };
 
@@ -304,8 +304,10 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
         this.svg.addEventListener('click', this.handleItemClick);
         const currentAssetElement = document.querySelector(
           `.${this.getCurrentAssetClassName()}`
-        )!;
-        this.zoomOnCurrentAsset(currentAssetElement);
+        );
+        if (currentAssetElement) {
+          this.zoomOnElement(currentAssetElement);
+        }
       }
     }
   };
@@ -515,7 +517,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
         return;
       }
       this.animateZoom(
-        e.deltaY < 0 ? wheelZoomLevel : -wheelZoomLevel,
+        e.deltaY < 0 ? ZOOM_STEP_WHEEL : -ZOOM_STEP_WHEEL,
         'trackpad',
         {
           x: e.clientX,
@@ -584,22 +586,35 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     });
   };
 
-  zoomOnCurrentAsset = async (currentAsset: Element | null) => {
-    if (!currentAsset || !this.pinchZoomInstance) {
+  handleSearchResult = (foundElement: Element) => {
+    this.zoomOnElement(foundElement, this.props.searchZoom);
+  };
+
+  /**
+   * @param element - any annotation element on SVG, typically asset or document
+   * @param zoomLevel
+   */
+  zoomOnElement = (
+    element: Element,
+    zoomLevel: number | undefined = this.props.initialZoom
+  ) => {
+    if (!this.pinchZoomInstance) {
       return;
     }
-    const defaultZoom = this.state.isDesktop ? zoomLevel * 5 : zoomLevel * 10;
-    this.pinchZoomInstance.zoomFactor = this.props.initialZoom || defaultZoom;
+    const zoomLevelDefault = this.state.isDesktop
+      ? ZOOM_STEP * 5
+      : ZOOM_STEP * 10;
+    this.pinchZoomInstance.zoomFactor = zoomLevel || zoomLevelDefault;
 
-    const zoom = (currentAssetPosition: DOMRect | null) => {
-      if (currentAssetPosition) {
+    const zoom = (elementPosition: DOMRect | null) => {
+      if (elementPosition) {
         this.pinchZoomInstance.offset = {
           x:
-            currentAssetPosition.left -
+            elementPosition.left -
             this.pinchZoomInstance.container.clientWidth / 2 +
             this.pinchZoomInstance.offset.x,
           y:
-            currentAssetPosition.top -
+            elementPosition.top -
             this.pinchZoomInstance.container.clientHeight / 2 +
             this.pinchZoomInstance.offset.y,
         };
@@ -615,9 +630,9 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     // try to zoom almost immediately
     // but adjust later in case if asset DOM element position has changed
     setTimeout(async () => {
-      const initialRect = currentAsset.getBoundingClientRect();
+      const initialRect = element.getBoundingClientRect();
       zoom(initialRect);
-      const stableRect = await this.getStableBoundingClientRect(currentAsset);
+      const stableRect = await this.getStableBoundingClientRect(element);
       if (
         stableRect &&
         stableRect.left !== initialRect.left &&
@@ -628,8 +643,20 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     });
   };
 
+  /** @deprecated as class component methods are kind of part of public API,
+   * not removing it right away. Remove it in the next major */
+  zoomOnCurrentAsset = (currentAsset: Element | null) => {
+    console.warn(
+      'SVGViewer: zoomOnCurrentAsset is deprecated, use zoomOnElement(asset: Element | null, zoomLevel?: number)'
+    );
+    if (!currentAsset) {
+      return;
+    }
+    this.zoomOnElement(currentAsset);
+  };
+
   zoomIn = () => {
-    this.animateZoom(zoomLevel, 'topbar');
+    this.animateZoom(ZOOM_STEP, 'topbar');
   };
 
   zoomOut = () => {
@@ -638,8 +665,8 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     }
     let zoomFactor;
     const startZoomFactor = this.pinchZoomInstance.zoomFactor;
-    if (startZoomFactor - zoomLevel > 1) {
-      zoomFactor = startZoomFactor - zoomLevel;
+    if (startZoomFactor - ZOOM_STEP > 1) {
+      zoomFactor = startZoomFactor - ZOOM_STEP;
     } else {
       zoomFactor = 1;
     }
@@ -772,7 +799,7 @@ const SvgNode = styled.div`
     ${(props: InternalThemedStyledProps) =>
       !props.customClassNames.currentAsset &&
       `
-    &.${defaultCurrentAssetClassName} {
+    &.${CURRENT_ASSET_CLASSNAME} {
       outline: auto 2px #36a2c2;
       cursor: default;
       > {
