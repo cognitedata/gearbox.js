@@ -17,7 +17,7 @@ interface ComponentProps {
   searchClassName: string;
   currentSearchClassName: string;
   openSearch: () => void;
-  onSearchResult: (foundElement: Element | null) => void;
+  onSearchResult: (foundElement: Element) => void;
   handleCancelSearch: () => void;
   addCssClassesToMetadataContainer: ({
     condition,
@@ -208,10 +208,14 @@ class SVGViewerSearch extends React.Component<ComponentProps, ComponentState> {
     } else if (move === -1 && nextResult === 0) {
       nextResult = amountOfResults;
     }
+    const newSearchResult = searchResults[nextResult - 1];
+    if (!newSearchResult) {
+      return;
+    }
     currentSearchResult.classList.remove(currentSearchClassName);
-    searchResults[nextResult - 1].classList.add(currentSearchClassName);
+    newSearchResult.classList.add(currentSearchClassName);
     this.setState({ currentResult: nextResult });
-    onSearchResult(searchResults[nextResult - 1]);
+    onSearchResult(newSearchResult);
   };
 
   handleCancelSearch = () => {

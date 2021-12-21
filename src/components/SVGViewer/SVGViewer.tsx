@@ -19,10 +19,10 @@ import {
 import SVGViewerSearch from './SVGViewerSearch';
 import { getDocumentDownloadLink } from './utils';
 
-const defaultZoomLevel = 0.7;
-const wheelZoomLevel = 0.15;
-const defaultCurrentAssetClassName = 'current-asset';
-const minDesktopWidth = 992;
+const ZOOM_STEP = 0.7;
+const ZOOM_STEP_WHEEL = 0.15;
+const CURRENT_ASSET_CLASSNAME = 'current-asset';
+const MIN_DESKTOP_WIDTH = 992;
 
 interface SvgViewerState {
   isSearchVisible: boolean;
@@ -54,7 +54,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     this.state = {
       isSearchVisible: false,
       isSearchFocused: false,
-      isDesktop: window.innerWidth > minDesktopWidth,
+      isDesktop: window.innerWidth > MIN_DESKTOP_WIDTH,
     };
 
     this.pinchZoom = React.createRef();
@@ -256,14 +256,14 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
 
   updateWindowDimensions = () => {
     this.setState({
-      isDesktop: window.innerWidth > minDesktopWidth,
+      isDesktop: window.innerWidth > MIN_DESKTOP_WIDTH,
     });
   };
 
   getCurrentAssetClassName = () => {
     return (
       (this.props.customClassNames || {}).currentAsset ||
-      defaultCurrentAssetClassName
+      CURRENT_ASSET_CLASSNAME
     );
   };
 
@@ -304,8 +304,10 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
         this.svg.addEventListener('click', this.handleItemClick);
         const currentAssetElement = document.querySelector(
           `.${this.getCurrentAssetClassName()}`
-        )!;
-        this.zoomOnElement(currentAssetElement, this.props.initialZoom);
+        );
+        if (currentAssetElement) {
+          this.zoomOnElement(currentAssetElement);
+        }
       }
     }
   };
@@ -515,7 +517,7 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
         return;
       }
       this.animateZoom(
-        e.deltaY < 0 ? wheelZoomLevel : -wheelZoomLevel,
+        e.deltaY < 0 ? ZOOM_STEP_WHEEL : -ZOOM_STEP_WHEEL,
         'trackpad',
         {
           x: e.clientX,
@@ -584,25 +586,25 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     });
   };
 
-  handleSearchResult = (foundElement: Element | null) => {
-    this.zoomOnElement(
-      foundElement,
-      this.props.searchZoom || this.props.initialZoom
-    );
+  handleSearchResult = (foundElement: Element) => {
+    this.zoomOnElement(foundElement, this.props.searchZoom);
   };
 
   /**
    * @param element - any annotation element on SVG, typically asset or document
    * @param zoomLevel
    */
-  zoomOnElement = (element: Element | null, zoomLevel?: number) => {
-    if (!element || !this.pinchZoomInstance) {
+  zoomOnElement = (
+    element: Element,
+    zoomLevel: number | undefined = this.props.initialZoom
+  ) => {
+    if (!this.pinchZoomInstance) {
       return;
     }
-    const defaultZoom = this.state.isDesktop
-      ? defaultZoomLevel * 5
-      : defaultZoomLevel * 10;
-    this.pinchZoomInstance.zoomFactor = zoomLevel || defaultZoom;
+    const zoomLevelDefault = this.state.isDesktop
+      ? ZOOM_STEP * 5
+      : ZOOM_STEP * 10;
+    this.pinchZoomInstance.zoomFactor = zoomLevel || zoomLevelDefault;
 
     const zoom = (elementPosition: DOMRect | null) => {
       if (elementPosition) {
@@ -647,11 +649,14 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     console.warn(
       'SVGViewer: zoomOnCurrentAsset is deprecated, use zoomOnElement(asset: Element | null, zoomLevel?: number)'
     );
-    this.zoomOnElement(currentAsset, this.props.initialZoom);
+    if (!currentAsset) {
+      return;
+    }
+    this.zoomOnElement(currentAsset);
   };
 
   zoomIn = () => {
-    this.animateZoom(defaultZoomLevel, 'topbar');
+    this.animateZoom(ZOOM_STEP, 'topbar');
   };
 
   zoomOut = () => {
@@ -660,8 +665,8 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     }
     let zoomFactor;
     const startZoomFactor = this.pinchZoomInstance.zoomFactor;
-    if (startZoomFactor - defaultZoomLevel > 1) {
-      zoomFactor = startZoomFactor - defaultZoomLevel;
+    if (startZoomFactor - ZOOM_STEP > 1) {
+      zoomFactor = startZoomFactor - ZOOM_STEP;
     } else {
       zoomFactor = 1;
     }
@@ -794,7 +799,7 @@ const SvgNode = styled.div`
     ${(props: InternalThemedStyledProps) =>
       !props.customClassNames.currentAsset &&
       `
-    &.${defaultCurrentAssetClassName} {
+    &.${CURRENT_ASSET_CLASSNAME} {
       outline: auto 2px #36a2c2;
       cursor: default;
       > {
