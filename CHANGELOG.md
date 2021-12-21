@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/cognitedata/gearbox.js/compare/v2.4.5...v2.5.0) (2021-12-21)
+
+
+### Features
+
+* **svgviewer:** add searchZoom prop [INFIELD-2716] ([#736](https://github.com/cognitedata/gearbox.js/issues/736)) ([5748b6a](https://github.com/cognitedata/gearbox.js/commit/5748b6ab334006ffb49cc73f2b3aa5053f3cf2c4))
+
 ## [2.4.5](https://github.com/cognitedata/gearbox.js/compare/v2.4.4...v2.4.5) (2021-12-17)
 
 
