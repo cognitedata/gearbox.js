@@ -109,6 +109,11 @@ interface SvgViewerBasicProps {
    * on the top right hand side of the viewer
    */
   downloadablePdf?: string;
+  /**
+   * Zoom-factor to use when search result is found.
+   * `initialZoom` is used if not specified.
+   */
+  searchZoom?: number;
 }
 
 export interface SvgViewerDocumentIdProps {

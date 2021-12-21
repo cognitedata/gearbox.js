@@ -23,7 +23,7 @@ describe('SVGViewerSearch', () => {
         svg={document.createElementNS(svgSource, 'svg')}
         isDesktop={true}
         openSearch={() => null}
-        zoomOnCurrentAsset={() => null}
+        onSearchResult={() => null}
         handleCancelSearch={() => null}
         addCssClassesToMetadataContainer={() => null}
         addCssClassesToSvgText={() => null}
@@ -42,7 +42,7 @@ describe('SVGViewerSearch', () => {
         svg={document.createElementNS(svgSource, 'svg')}
         isDesktop={true}
         openSearch={() => null}
-        zoomOnCurrentAsset={() => null}
+        onSearchResult={() => null}
         handleCancelSearch={() => null}
         addCssClassesToMetadataContainer={addCssClassesToMetadataContainer}
         addCssClassesToSvgText={() => null}
@@ -68,7 +68,7 @@ describe('SVGViewerSearch', () => {
         svg={document.createElementNS(svgSource, 'svg')}
         isDesktop={true}
         openSearch={() => null}
-        zoomOnCurrentAsset={() => null}
+        onSearchResult={() => null}
         handleCancelSearch={() => null}
         addCssClassesToMetadataContainer={() => null}
         addCssClassesToSvgText={addCssClassesToSvgText}
