@@ -541,19 +541,23 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
       y: this.pinchZoomInstance.container.clientHeight / 2,
     };
     const updateProgress = (progress: number) => {
-      this.pinchZoomInstance.scaleTo(
-        startZoomFactor + progress * zoomProgress,
-        center
-      );
+      const zoomFactor = startZoomFactor + progress * zoomProgress;
+      const zoomFactorPrecisionTwo = Math.round(zoomFactor * 100) / 100;
+      this.pinchZoomInstance.scaleTo(zoomFactorPrecisionTwo, center);
+      if (this.props.handleAnimateZoom) {
+        this.props.handleAnimateZoom({
+          zoomProgress,
+          zoomCenter,
+          zoomFactor: zoomFactorPrecisionTwo,
+          source,
+        });
+      }
     };
     this.pinchZoomInstance.animate(
       this.pinchZoomInstance.options.animationDuration,
       updateProgress,
       this.pinchZoomInstance.swing
     );
-    if (this.props.handleAnimateZoom) {
-      this.props.handleAnimateZoom({ zoomProgress, source, zoomCenter });
-    }
   };
 
   // used to overcome the issue when an element is in the DOM
@@ -663,13 +667,8 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     if (!this.pinchZoomInstance) {
       return;
     }
-    let zoomFactor;
-    const startZoomFactor = this.pinchZoomInstance.zoomFactor;
-    if (startZoomFactor - ZOOM_STEP > 1) {
-      zoomFactor = startZoomFactor - ZOOM_STEP;
-    } else {
-      zoomFactor = 1;
-    }
+    const { zoomFactor: startZoomFactor } = this.pinchZoomInstance;
+    const zoomFactor = Math.max(startZoomFactor - ZOOM_STEP, 1);
     this.animateZoom(zoomFactor - startZoomFactor, 'topbar');
   };
 
