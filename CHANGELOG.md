@@ -1,3 +1,10 @@
+# [2.6.0](https://github.com/cognitedata/gearbox.js/compare/v2.5.0...v2.6.0) (2022-01-21)
+
+
+### Features
+
+* **test:** trigger a new release ([#739](https://github.com/cognitedata/gearbox.js/issues/739)) ([e0e3a63](https://github.com/cognitedata/gearbox.js/commit/e0e3a63604d917ca0a3ab278d885d47f86ba3fa2))
+
 # [2.5.0](https://github.com/cognitedata/gearbox.js/compare/v2.4.5...v2.5.0) (2021-12-21)
 
 
