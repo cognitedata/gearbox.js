@@ -84,10 +84,12 @@ interface SvgViewerBasicProps {
   handleAnimateZoom?: ({
     zoomProgress,
     source,
+    zoomFactor,
     zoomCenter,
   }: {
     zoomProgress: number;
     source: string;
+    zoomFactor: number;
     zoomCenter?: ZoomCenter;
   }) => void;
   /**
