@@ -543,12 +543,14 @@ export class SVGViewer extends Component<SvgViewerProps, SvgViewerState> {
     const updateProgress = (progress: number) => {
       const zoomFactor = startZoomFactor + progress * zoomProgress;
       const zoomFactorPrecisionTwo = Math.round(zoomFactor * 100) / 100;
-      this.pinchZoomInstance.scaleTo(
-        zoomFactorPrecisionTwo,
-        center
-      );
+      this.pinchZoomInstance.scaleTo(zoomFactorPrecisionTwo, center);
       if (this.props.handleAnimateZoom) {
-        this.props.handleAnimateZoom({ zoomProgress, zoomCenter, zoomFactor: zoomFactorPrecisionTwo, source });
+        this.props.handleAnimateZoom({
+          zoomProgress,
+          zoomCenter,
+          zoomFactor: zoomFactorPrecisionTwo,
+          source,
+        });
       }
     };
     this.pinchZoomInstance.animate(
